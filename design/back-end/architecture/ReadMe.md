@@ -3,8 +3,11 @@
 
 ### A. Availability
 #### Definition:
+The tool should always be available for all users and any unavailability communicated. 
 #### Acceptance Criteria:
-
+- The website and application should have an uptime of **90%**
+- Any planned mantainance will occure outside of normal university hours
+- Planned downtime will be indicated or communicated with clear UI changes.
 ### B. Scalability
 #### Definition: 
 The product should be at first able to scale to accommodate for typical traffic that would be expected by an institutions during peak times, then this should extend out to multiple institutions per region.
@@ -51,12 +54,3 @@ The software should be stable and present reliable and varified data, with low d
 - Lectures will be asked to confirm their scheduled events prior to upload
 - Students will be asked to confirm their courses after selection
 - Error logging will be perfomed so that the nature can be assessed and prevented in the future.
-# Component Design
-## 1. Authentication and Authorization 
-## 2. File Upload
-### A. Campus Map
-### B. Main Annual/Semi-annual Schedule
-### C. Transform Schedule to Standard Schema
-## 3. Notifications
-## 4. Reminders
-## 5. Campus Navigation
