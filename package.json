@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@react-navigation/native": "^6.1.6",
+    "@react-navigation/stack": "^6.3.16",
+    "moment": "^2.29.4",
+    "react-native-table-component": "^1.2.2"
+  },
+  "devDependencies": {
+    "react-native-sass-transformer": "^2.0.0"
+  }
+}

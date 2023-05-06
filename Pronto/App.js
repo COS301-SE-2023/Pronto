@@ -1,12 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import Timetable from './screens/Timetable/Timetable';
+
+
 
 export default function App() {
   return (
+
     <View style={styles.container}>
-      <Text>This will be the Pronto App!</Text>
-      <StatusBar style="auto" />
+        <Timetable />
+        <StatusBar style="auto" />
     </View>
+
   );
 }
 
