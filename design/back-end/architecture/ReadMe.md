@@ -26,3 +26,21 @@ Users should be able to navigate and interact with the main features of the tool
 - The reviews will be conducted anonymously using a google form for data collection and rating
 - Seperate aspects will be scored seperately
 - We are aiming for a **80% satisfactory rate**
+
+## 3. Security
+#### Definition:
+User data should be secured at rest and in transition in order to prevent unothorized access and comply with local laws and regulations.
+#### Acceptance Criteria:
+- User data will be incrypted at transition and incrypted at rest.
+- Users will be grouped into user pools during sign up. 
+- This will provide limited access to data modification and accessing as per use case.
+
+## 4. Maintainability
+#### Definition: 
+The software should be easily mantainable by both internal, or new external party, with clear concise documentation and code.
+#### Acceptance Criteria:
+- Code linters and standard linting rules will be apllied to ensure code uniformality.
+- A 3-person review procedure will be used to ensure that all solutions provided are effecient and employ the best procedures.
+- New features implemented will be explained thouroghly with each **Pull Request**, which will alos be tested and evluated by at least 3 parties prior to deployment.
+- This will be a serverless application in it's core, which means that other than optimizing implementation, there won't be a server to mantain.
+
