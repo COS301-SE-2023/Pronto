@@ -1,5 +1,6 @@
 import {StyleSheet, View,} from 'react-native';
 import Timetable from './screens/Timetable/Timetable';
+import UniversityPage from "./screens/University_Page/University";
 
 
 export default function App() {
@@ -7,8 +8,7 @@ export default function App() {
    return (
 
     <View style={styles.container}>
-     <Timetable />
-
+       <Timetable/>
     </View>
 
   );
