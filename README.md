@@ -1,4 +1,5 @@
 ## To install the and run the app
+
 1. Clone the repo
 2. Run `npm install`
 3. Run `npm start`
@@ -10,3 +11,9 @@
 -> Scan the QR code to run the app on your device
 -> Ensure that your network configuration is set to Private and not Public
 ```
+
+## Jest UI Testing
+
+->npm test
+Tests completed:
+-> Timetable tests

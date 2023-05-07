@@ -5,7 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 const ScheduleTable = () => {
 
    return (
-       <View style={styles.container}>
+       <View style={styles.container} testID={'scheduleTable'}>
 
            {/* Row 1 */}
            <View style={styles.row}>
@@ -151,16 +151,15 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     text: {
-        fontSize: '80%',
         fontWeight: 'bold',
     },
     lecture: {
         backgroundColor: '#d37b40',
-        borderRadius: 5,
+        borderRadius: 20,
         maxWidth: '100%',
     },
     lectureText: {
-        fontSize: '20%',
+        fontSize: 8,
         fontWeight: 'bold',
         textAlign: 'center',
 

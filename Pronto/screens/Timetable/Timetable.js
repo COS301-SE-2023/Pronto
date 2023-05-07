@@ -74,17 +74,17 @@ export default function Timetable() {
             <Text style={styles.welcomeText}>
 
                 {/* This is the menu button */}
-                <Ionicons name="ios-menu" size={30} color="black" onPress={handleMenuClick}/>{' '}
+                <Ionicons testID={'menuButton'} name="ios-menu" size={30} color="black" onPress={handleMenuClick}/>{' '}
 
                 Timetable
 
                 {/* This is the notification button */}
-                <Ionicons name="ios-notifications" size={30} color="black" style={styles.icon} onPress={handleNotificationClick} />
+                <Ionicons  testID={'notificationButton'} name="ios-notifications" size={30} color="black" style={styles.icon} onPress={handleNotificationClick} />
 
             </Text>
 
             {/* This is the timetable format. It returns the grid like layout */}
-            <ScheduleTable />
+            <ScheduleTable/>
 
             {/* This is the side panel for the menu button */}
             <Animated.View
@@ -95,6 +95,7 @@ export default function Timetable() {
                     height: '100%',
                     backgroundColor: '#fff',
                 }}
+                testID={'sidePanel'}
             >
                 {/* These are the buttons the side panel */}
                 <TouchableOpacity style={styles.navbarRow}>
@@ -120,6 +121,7 @@ export default function Timetable() {
                     height: '100%',
                     backgroundColor: '#fff',
                 }}
+                testID={'notificationPanel'}
             >
                 <TouchableOpacity style={styles.navbarRow}>
                     <Text ><Ionicons name="ios-close" size={30} color="black" onPress={handleClose} style={styles.icon} /></Text>
