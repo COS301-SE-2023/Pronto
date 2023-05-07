@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
 import { View, Text, StyleSheet } from 'react-native';
-import moment from 'moment';
+
 
 const ScheduleTable = () => {
 
    return (
        <View style={styles.container}>
+
            {/* Row 1 */}
            <View style={styles.row}>
                <View style={styles.cell}><Text style={styles.text}>Time</Text></View>
@@ -108,7 +109,9 @@ const ScheduleTable = () => {
 
            {/* Row 10 */}
            <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>18:30 - <br/>19:20</Text></View>
+               <View style={styles.cell}>
+                   <Text style={styles.text}>18:30 - <br/>19:20</Text>
+               </View>
                <View style={styles.cell}></View>
                <View style={styles.cell}></View>
                <View style={styles.cell}></View>
@@ -133,15 +136,14 @@ const ScheduleTable = () => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F5FCFF',
-        maxWidth: '83.5%',
+        width: '100%',
     },
     row: {
         flexDirection: 'row',
 
     },
     cell: {
-        width: '20%',
-
+        width: '17%',
         borderWidth: 1,
         borderColor: '#ccc',
         justifyContent: 'center',
@@ -164,6 +166,5 @@ const styles = StyleSheet.create({
 
     }
 });
-
 
 export default ScheduleTable;
