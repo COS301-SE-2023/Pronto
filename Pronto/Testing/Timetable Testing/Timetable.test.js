@@ -4,7 +4,7 @@ import { render, fireEvent, act } from '@testing-library/react-native';
 
 //import timetable and create extensive UI tests
 
-import Timetable from "../screens/Timetable/Timetable";
+import Timetable from "../../screens/Timetable/Timetable";
 
 describe('Timetable', () => {
     //Test that the UI renders correctly
