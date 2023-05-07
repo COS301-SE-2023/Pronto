@@ -56,11 +56,19 @@ The software should be stable and present reliable and varified data, with low d
 - Error logging will be perfomed so that the nature can be assessed and prevented in the future.
 
 # Component Design
-## 1. Authentication and Authorization 
-## 2. File Upload
-### A. Campus Map
-### B. Main Annual/Semi-annual Schedule
-### C. Transform Schedule to Standard Schema
-## 3. Notifications
-## 4. Reminders
-## 5. Campus Navigation
+### 1. Authentication and Authorization 
+
+### 2. File Upload
+#### A. Campus Map
+
+#### B. Main Annual/Semi-annual Schedule
+
+#### C. Transform Schedule to Standard Schema
+
+### 3. Notifications
+
+### 4. Reminders
+
+### 5. Campus Navigation
+
+## High level System Architecture
