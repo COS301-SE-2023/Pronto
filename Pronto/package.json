@@ -35,7 +35,8 @@
     "react-test-renderer": "^18.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@testing-library/react-native": "^12.1.2"
   },
   "private": true
 }

@@ -105,7 +105,10 @@ export default function Timetable() {
 
                 <TouchableOpacity style={styles.navbarRow}>
                     <View style={styles.pageName}>
-                        <Text >Home Page</Text>
+                        <Text >Account Details</Text>
+                        <Text >Notifications</Text>
+                        <Text >Edit Timetable</Text>
+                        <Text >Logout</Text>
                     </View>
                 </TouchableOpacity>
 
@@ -176,26 +179,25 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-
     },
     icon: {
         position: 'absolute',
         right: 0,
     },
-    navbarRow: {
+    navbarRow: 
+    {
         width: '100%',
         flexDirection: 'row',
         marginBottom: 20,
         backgroundColor: '#ffffff',
         marginTop: 10,
-
     },
-    pageName: {
+    pageName: 
+    {
         fontSize: 90,
         fontWeight: 'bolder',
         color: '#000000',
-        backgroundColor: '#7e7c7c',
-        padding: 10,
+        padding: 30,
         borderRadius: 5,
         width: '100%',
         textAlign: 'center',
