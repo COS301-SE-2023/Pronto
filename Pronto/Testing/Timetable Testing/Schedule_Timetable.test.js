@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from '@testing-library/react-native';
 
-//import schedule timetable create extensive UI tests
+
 
 import ScheduleTable from "../../screens/Timetable/ScheduleTable";
 

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import {StyleSheet, Text, View, Picker} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
-
+import {Picker} from '@react-native-picker/picker';
 
 
 export default function UniversityPage(){
@@ -18,6 +18,7 @@ export default function UniversityPage(){
 
                     {/* Picker for user to enter academic institution */}
                     <Picker
+                        testID={'universityPicker'}
                         style={styles.dropdown}
                         selectedValue={selectedValue}
                         onValueChange={(itemValue) =>
@@ -31,7 +32,7 @@ export default function UniversityPage(){
 
                     {/* Button to be used in future to 'submit' the details */}
                     <View style={{marginTop: 20}}>
-                      <Ionicons name={'ios-arrow-forward'} size={50} color={'black'} />
+                      <Ionicons name={'ios-arrow-forward'} size={50} color={'black'} testID={'arrowButton'}/>
                     </View>
 
                 </View>

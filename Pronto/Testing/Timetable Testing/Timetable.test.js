@@ -2,7 +2,6 @@ import React from "react";
 import renderer from "react-test-renderer";
 import { render, fireEvent, act } from '@testing-library/react-native';
 
-//import timetable and create extensive UI tests
 
 import Timetable from "../../screens/Timetable/Timetable";
 
