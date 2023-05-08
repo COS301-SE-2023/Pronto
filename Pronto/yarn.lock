@@ -1481,7 +1481,7 @@
 
 "@expo/vector-icons@^13.0.0":
   version "13.0.0"
-  resolved "https://registry.yarnpkg.com/@expo/vector-icons/-/vector-icons-13.0.0.tgz#e2989b85e95a82bce216f88cf8fb583ab050ec95"
+  resolved "https://registry.npmjs.org/@expo/vector-icons/-/vector-icons-13.0.0.tgz"
   integrity sha512-TI+l71+5aSKnShYclFa14Kum+hQMZ86b95SH6tQUG3qZEmLTarvWpKwqtTwQKqvlJSJrpFiSFu3eCuZokY6zWA==
 
 "@expo/webpack-config@^18.0.1":
@@ -2031,6 +2031,13 @@
     prompts "^2.4.0"
     semver "^6.3.0"
 
+"@react-native-community/datetimepicker@>=6.7.0":
+  version "7.0.1"
+  resolved "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-7.0.1.tgz"
+  integrity sha512-EllGpk6kbEUCvBDDTnHNLJhfkPOI2Yy+KWj3ImOeM9lAA6CkmFlj/mXGCEbfD/Ddu1U7egO/AwqOmG/Bx3IcEQ==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"
@@ -2133,8 +2140,6 @@
   dependencies:
     "@sinonjs/commons" "^2.0.0"
 
-<<<<<<< Updated upstream
-=======
 "@testing-library/react-native@^12.1.2":
   version "12.1.2"
   resolved "https://registry.npmjs.org/@testing-library/react-native/-/react-native-12.1.2.tgz"
@@ -2142,7 +2147,6 @@
   dependencies:
     pretty-format "^29.0.0"
 
->>>>>>> Stashed changes
 "@tootallnate/once@2":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-2.0.0.tgz"
@@ -8350,8 +8354,6 @@ pretty-format@^26.5.2, pretty-format@^26.6.2:
     ansi-styles "^4.0.0"
     react-is "^17.0.1"
 
-<<<<<<< Updated upstream
-=======
 pretty-format@^29.0.0:
   version "29.5.0"
   resolved "https://registry.npmjs.org/pretty-format/-/pretty-format-29.5.0.tgz"
@@ -8361,7 +8363,6 @@ pretty-format@^29.0.0:
     ansi-styles "^5.0.0"
     react-is "^18.0.0"
 
->>>>>>> Stashed changes
 pretty-format@^29.5.0:
   version "29.5.0"
   resolved "https://registry.npmjs.org/pretty-format/-/pretty-format-29.5.0.tgz"
@@ -8608,6 +8609,13 @@ react-native-gradle-plugin@^0.71.17:
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.17.tgz"
   integrity sha512-OXXYgpISEqERwjSlaCiaQY6cTY5CH6j73gdkWpK0hedxtiWMWgH+i5TOi4hIGYitm9kQBeyDu+wim9fA8ROFJA==
 
+react-native-modal-datetime-picker@^15.0.0:
+  version "15.0.0"
+  resolved "https://registry.npmjs.org/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-15.0.0.tgz"
+  integrity sha512-cHeFEYHUhyIk+Mt9C6RVseg/VMGR4XcxdU9SibF5RMCXiXhrwMkFy7203xg1S331pzCF/Oqhvi4Jh0pYMrTFtQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-ratings@8.0.4:
   version "8.0.4"
   resolved "https://registry.npmjs.org/react-native-ratings/-/react-native-ratings-8.0.4.tgz"
@@ -8664,7 +8672,7 @@ react-native-web@^0.18.12:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.2"
 
-react-native@*, react-native@>=0.59, react-native@0.71.7:
+react-native@*, react-native@>=0.59, react-native@>=0.65.0, react-native@0.71.7:
   version "0.71.7"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.71.7.tgz"
   integrity sha512-Id6iRLS581fJMFGbBl1jP5uSmjExtGOvw5Gvh7694zISXjsRAsFMmU+izs0pyCLqDBoHK7y4BT7WGPGw693nYw==
