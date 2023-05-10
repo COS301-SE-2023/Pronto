@@ -4,11 +4,6 @@ import {Agenda} from 'react-native-calendars';
 import {Card} from 'react-native-paper';
 
 
-const timeToString = (time) => {
-  const date = new Date(time);
-  return date.toISOString().split('T')[0];
-};
-
 const ScheduleTable = () => 
 {
   const [items, setItems] = useState({});
@@ -20,6 +15,7 @@ const ScheduleTable = () =>
       const year = time.getFullYear();
       const month = String(time.getMonth() + 1).padStart(2, '0');
       const dayOfMonth = String(time.getDate()).padStart(2, '0');
+      
       const strTime = `${year}-${month}-${dayOfMonth}`;
       if (!items[strTime]) 
       {
@@ -60,12 +56,13 @@ const ScheduleTable = () =>
   };
 
   const windowHeight = Dimensions.get('window').height;
+  const windowWidth = Dimensions.get('window').width;
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
 
   return (
-    <View style={{height: windowHeight}}>
+    <View style={{height: windowHeight, width: windowWidth}}>
       <Agenda
         items={items}
         loadItemsForMonth={loadItems}
