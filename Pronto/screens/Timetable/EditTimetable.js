@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Dimensions, Text } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Dimensions, Text, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { ScrollView } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -22,8 +23,14 @@ const SearchBar = ({ onSearch }) => {
     setModules(newModules);
   };
 
+  const handleDots = () => { 
+    //bring up option to edit timetable
+  };
+
   return (
-    <View style={styles.container}>
+
+    
+    <SafeAreaView style={styles.container}>
       <Text style = {styles.heading}>Edit your timetable</Text>
       <View style={styles.searchBox}>
         <TextInput
@@ -36,7 +43,9 @@ const SearchBar = ({ onSearch }) => {
         <TouchableOpacity onPress={handleSearch}>
           <MaterialIcons name="search" size={24} color="black" />
         </TouchableOpacity>
+        
       </View>
+      <ScrollView>
       {modules.map((module, index) => (
         <TouchableOpacity style={styles.moduleBox} key={module.code}>
           <View style={styles.moduleInfo}>
@@ -53,7 +62,8 @@ const SearchBar = ({ onSearch }) => {
           </View>
         </TouchableOpacity>
       ))}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -68,15 +78,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    border: "2px solid black",
     borderRadius: 5,
     width: width - 20, // subtracting horizontal padding
     maxWidth: 600, // limiting to 600 width for tablet layouts
+    borderWidth: 2,
+    borderRadius: "50%",
+    marginBottom: 15,
+    paddingRight: 10,
   },
   input: {
     flex: 1,
     height: 40,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   heading:
   {
