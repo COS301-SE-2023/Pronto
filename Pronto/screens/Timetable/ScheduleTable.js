@@ -1,169 +1,79 @@
-import React from "react";
-import { View, Text, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import {View, TouchableOpacity, Text, Dimensions} from 'react-native';
+import {Agenda} from 'react-native-calendars';
+import {Card} from 'react-native-paper';
 
 
-const ScheduleTable = () => {
-
-   return (
-       <View style={styles.container} testID={'scheduleTable'}>
-
-           {/* Row 1 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>Time</Text></View>
-               <View style={styles.cell}><Text style={styles.text}>Mon</Text></View>
-               <View style={styles.cell}><Text style={styles.text}>Tues</Text></View>
-               <View style={styles.cell}><Text style={styles.text}>Wed</Text></View>
-               <View style={styles.cell}><Text style={styles.text}>Thurs</Text></View>
-               <View style={styles.cell}><Text style={styles.text}>Fri</Text></View>
-           </View>
-
-           {/* Row 2 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>07:30 - <br/>08:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 3 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>08:30 - <br/>09:20</Text></View>
-               <View style={[styles.cell, styles.lecture]}><Text style={styles.lectureText} >COS301 <br/> L1 <br/> Informatorium <br/>IT 2-26</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 4 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>09:30 - <br/>10:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 5 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>11:30 - <br/>12:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 6 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>12:30 - <br/>13:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 7 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>13:30 - <br/>14:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 7 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>15:30 - <br/>16:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 8 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>16:30 - <br/>17:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 9 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>17:30 - <br/>18:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 10 */}
-           <View style={styles.row}>
-               <View style={styles.cell}>
-                   <Text style={styles.text}>18:30 - <br/>19:20</Text>
-               </View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-           {/* Row 10 */}
-           <View style={styles.row}>
-               <View style={styles.cell}><Text style={styles.text}>19:30 - <br/>20:20</Text></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-               <View style={styles.cell}></View>
-           </View>
-
-       </View>
-   )
+const timeToString = (time) => {
+  const date = new Date(time);
+  return date.toISOString().split('T')[0];
 };
 
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#F5FCFF',
-        width: '100%',
-    },
-    row: {
-        flexDirection: 'row',
+const ScheduleTable = () => 
+{
+  const [items, setItems] = useState({});
+  const loadItems = (day) => 
+  {
 
-    },
-    cell: {
-        width: '17%',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 8,
-    },
-    text: {
-        fontWeight: 'bold',
-    },
-    lecture: {
-        backgroundColor: '#d37b40',
-        borderRadius: 20,
-        maxWidth: '100%',
-    },
-    lectureText: {
-        fontSize: 8,
-        fontWeight: 'bold',
-        textAlign: 'center',
-
+    for (let i = -5; i < 10; i++) {
+      const time = new Date(day.timestamp + i * 24 * 60 * 60 * 1000);
+      const year = time.getFullYear();
+      const month = String(time.getMonth() + 1).padStart(2, '0');
+      const dayOfMonth = String(time.getDate()).padStart(2, '0');
+      const strTime = `${year}-${month}-${dayOfMonth}`;
+      if (!items[strTime]) 
+      {
+        items[strTime] = [];
+        for (let j = 0; j < 5; j++) 
+        {
+          items[strTime].push({
+            name: "Module Code",
+            venue: "Location",
+            time: "Time"
+          });
+        }
+      }
     }
-});
+  };
+  
+
+  const renderItem = (item) => 
+  {
+    return (
+      <TouchableOpacity style={{marginRight: 20, marginTop: 30}}>
+        <Card style={{backgroundColor: "white" }}>
+          <Card.Content >
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}>
+              <Text>{item.name}</Text>
+              <Text>{item.venue}</Text>
+              <Text>{item.time}</Text>
+            </View>
+          </Card.Content>
+        </Card>
+      </TouchableOpacity>
+    );
+  };
+
+  const windowHeight = Dimensions.get('window').height;
+  var date = new Date().getDate();
+  var month = new Date().getMonth() + 1;
+  var year = new Date().getFullYear();
+
+  return (
+    <View style={{height: windowHeight}}>
+      <Agenda
+        items={items}
+        loadItemsForMonth={loadItems}
+        selected={year + '-' + month + '-' + date}
+        renderItem={renderItem}
+      />
+    </View>
+  );
+};
 
 export default ScheduleTable;
