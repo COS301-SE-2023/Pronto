@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Dimensions, Text, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native';
+import {Card} from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
 
@@ -48,11 +49,13 @@ const SearchBar = ({ onSearch }) => {
       <ScrollView>
       {modules.map((module, index) => (
         <TouchableOpacity style={styles.moduleBox} key={module.code}>
-          <View style={styles.moduleInfo}>
+          <Card>
+            <Card.Content style ={{backgroundColor: "white" }}>
+           
             <Text style={styles.moduleCode}>{module.code}</Text>
             <Text style={styles.moduleName}>{module.name}</Text>
-          </View>
-          <View style={styles.moduleActions}>
+          
+            <View style={styles.moduleActions}>
             <TouchableOpacity onPress={() => handleDelete(index)}>
               <MaterialIcons name="delete" size={24} color="black" />
             </TouchableOpacity>
@@ -60,6 +63,9 @@ const SearchBar = ({ onSearch }) => {
               <MaterialIcons name="more-vert" size={24} color="black" />
             </TouchableOpacity>
           </View>
+            </Card.Content>
+          </Card>
+         
         </TouchableOpacity>
       ))}
       </ScrollView>

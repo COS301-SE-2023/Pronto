@@ -2,38 +2,11 @@ import React, {useState} from 'react';
 import {View, TouchableOpacity, Text, Dimensions} from 'react-native';
 import {Agenda} from 'react-native-calendars';
 import {Card} from 'react-native-paper';
-
+import modules from "../../assets/data/modules.json";
 
 const ScheduleTable = () => 
 {
-  const [items, setItems] = useState({});
-  const loadItems = (day) => 
-  {
-
-    for (let i = -5; i < 10; i++) {
-      const time = new Date(day.timestamp + i * 24 * 60 * 60 * 1000);
-      const year = time.getFullYear();
-      const month = String(time.getMonth() + 1).padStart(2, '0');
-      const dayOfMonth = String(time.getDate()).padStart(2, '0');
-      
-      const strTime = `${year}-${month}-${dayOfMonth}`;
-      if (!items[strTime]) 
-      {
-        items[strTime] = [];
-        for (let j = 0; j < 5; j++) 
-        {
-          items[strTime].push({
-            name: "Module Code",
-            venue: "Location",
-            time: "Time"
-          });
-        }
-      }
-    }
-  };
-  
-
-  const renderItem = (item) => 
+  const renderItem = (module) => 
   {
     return (
       <TouchableOpacity style={{marginRight: 20, marginTop: 30}}>
@@ -45,9 +18,9 @@ const ScheduleTable = () =>
                 justifyContent: 'space-between',
                 alignItems: 'center'
               }}>
-              <Text>{item.name}</Text>
-              <Text>{item.venue}</Text>
-              <Text>{item.time}</Text>
+              <Text>{module.code}</Text>
+              <Text>{module.venue}</Text>
+              <Text>{module.time}</Text>
             </View>
           </Card.Content>
         </Card>
@@ -64,8 +37,7 @@ const ScheduleTable = () =>
   return (
     <View style={{height: windowHeight, width: windowWidth}}>
       <Agenda
-        items={items}
-        loadItemsForMonth={loadItems}
+        items={modules}
         selected={year + '-' + month + '-' + date}
         renderItem={renderItem}
       />
