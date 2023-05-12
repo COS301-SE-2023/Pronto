@@ -53,8 +53,15 @@ function createScheduleArray(module)
   return scheduleArray;
 }
 
-var scheduleArray = createScheduleArray(modules);
-console.log(scheduleArray);
+
+for (const moduleKey in modules) 
+{
+ 
+  var scheduleArray = createScheduleArray(modules[moduleKey]);
+
+}
+
+
 
 const ScheduleTable = () => 
 {
