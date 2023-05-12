@@ -1,0 +1,23 @@
+{
+  "COS301":
+    {
+      "id": "1",
+      "code": "COS301",
+      "time": "11:00-11:20",
+      "frequency": 1,
+      "venue": "IT 2-27",
+      "day": "Friday",
+      "height": 50
+    },
+  "IMY310": 
+    {
+      "id": "1",
+      "code": "COS301",
+      "time": "11:00-11:20",
+      "frequency": 1,
+      "venue": "IT 2-27",
+      "day": "Thursday",
+      "height": 50
+    }
+}
+
