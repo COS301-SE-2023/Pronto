@@ -8,7 +8,7 @@ import modules from "../../assets/data/mock/modules.json";
 function getDatesForDayOfWeek(dayOfWeek) {
   const date = new Date();
   const year = date.getFullYear();
-  const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'Thursday', 'Friday', 'saturday'].indexOf(dayOfWeek);
+  const dayIndex = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(dayOfWeek);
   const results = [];
 
   // Loop through each month of the year
@@ -57,7 +57,7 @@ var scheduleArray = createScheduleArray(modules);
 
 
 //scheduleArray.concat(createScheduleArray(modules["COS301"]));
-console.log(scheduleArray);
+//console.log(scheduleArray);
 
 
 const ScheduleTable = () => 
