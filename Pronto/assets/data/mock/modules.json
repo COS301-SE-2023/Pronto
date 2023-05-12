@@ -18,6 +18,17 @@
       "venue": "IT 2-27",
       "day": "Thursday",
       "height": 50
+    },
+    "COS216": 
+    {
+      "id": "1",
+      "code": "COS216",
+      "time": "11:00-11:20",
+      "frequency": 1,
+      "venue": "IT 2-27",
+      "day": "Thursday",
+      "height": 50
     }
+    
 }
 

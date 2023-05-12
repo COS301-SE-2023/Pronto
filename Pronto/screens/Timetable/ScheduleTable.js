@@ -31,30 +31,25 @@ function getDatesForDayOfWeek(dayOfWeek) {
   return results;
 }
 
-
-function createScheduleArray(modules) 
-{
-
+function createScheduleArray(modules) {
   const scheduleArray = {};
-    for (const moduleKey in modules) 
-    {
-      const dates = getDatesForDayOfWeek(modules[moduleKey].day);
-      dates.forEach(date => {
-        scheduleArray[date] = [{
-          id: modules[moduleKey].id,
-          code: modules[moduleKey].code,
-          time: modules[moduleKey].time,
-          frequency: modules[moduleKey].frequency,
-          venue: modules[moduleKey].venue,
-          day: modules[moduleKey].day,
-          height: 50,
-        }];
+  for (const moduleKey in modules) {
+    const dates = getDatesForDayOfWeek(modules[moduleKey].day);
+    dates.forEach(date => {
+      if (!scheduleArray[date]) {
+        scheduleArray[date] = [];
+      }
+      scheduleArray[date].push({
+        id: modules[moduleKey].id,
+        code: modules[moduleKey].code,
+        time: modules[moduleKey].time,
+        frequency: modules[moduleKey].frequency,
+        venue: modules[moduleKey].venue,
+        day: modules[moduleKey].day,
+        height: 50,
       });
-    }
-
-
-  
-
+    });
+  }
   return scheduleArray;
 }
 
@@ -102,6 +97,7 @@ const ScheduleTable = () =>
         items={scheduleArray}
         selected={year + '-' + month + '-' + date}
         renderItem={renderItem}
+        showOnlySelectedDayItems = {true}
       />
     </View>
   );
