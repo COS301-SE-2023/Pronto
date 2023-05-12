@@ -8,7 +8,7 @@ import modules from "../../assets/data/mock/modules.json";
 function getDatesForDayOfWeek(dayOfWeek) {
   const date = new Date();
   const year = date.getFullYear();
-  const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'Friday', 'saturday'].indexOf(dayOfWeek);
+  const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'Thursday', 'Friday', 'saturday'].indexOf(dayOfWeek);
   const results = [];
 
   // Loop through each month of the year
@@ -32,35 +32,37 @@ function getDatesForDayOfWeek(dayOfWeek) {
 }
 
 
-function createScheduleArray(module) 
+function createScheduleArray(modules) 
 {
-  const dates = getDatesForDayOfWeek(module.day);
 
   const scheduleArray = {};
+    for (const moduleKey in modules) 
+    {
+      const dates = getDatesForDayOfWeek(modules[moduleKey].day);
+      dates.forEach(date => {
+        scheduleArray[date] = [{
+          id: modules[moduleKey].id,
+          code: modules[moduleKey].code,
+          time: modules[moduleKey].time,
+          frequency: modules[moduleKey].frequency,
+          venue: modules[moduleKey].venue,
+          day: modules[moduleKey].day,
+          height: 50,
+        }];
+      });
+    }
 
-  dates.forEach(date => {
-    scheduleArray[date] = [{
-      id: module.id,
-      code: module.code,
-      time: module.time,
-      frequency: module.frequency,
-      venue: module.venue,
-      day: module.day,
-      height: 50,
-    }];
-  });
+
+  
 
   return scheduleArray;
 }
 
+var scheduleArray = createScheduleArray(modules);
 
-for (const moduleKey in modules) 
-{
- 
-  var scheduleArray = createScheduleArray(modules[moduleKey]);
 
-}
-
+//scheduleArray.concat(createScheduleArray(modules["COS301"]));
+console.log(scheduleArray);
 
 
 const ScheduleTable = () => 
