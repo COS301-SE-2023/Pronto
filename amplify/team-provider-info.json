@@ -15,8 +15,8 @@
       "api": {
         "pronto": {}
       },
-      "auth": {
-        "pronto": {}
+      "storage": {
+        "s3prontoblobestore": {}
       }
     }
   }
