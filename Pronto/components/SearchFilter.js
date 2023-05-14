@@ -14,7 +14,7 @@ const SearchFilter = ({ data, input, setInput }) => {
           ) {
             return (
               <View style={{ margin: 20 }}>
-                <Card style={{ height: 150, backgroundColor: "white" }}>
+                <Card style={{ height: 50, backgroundColor: "white" }}>
                   <Card.Content>
                     <View>
                       <Text
@@ -24,12 +24,10 @@ const SearchFilter = ({ data, input, setInput }) => {
                           textAlign: "center",
                         }}
                       >
-                        {item.code}
+                        {item.code} : {item.name}
                       </Text>
                       <Text
                         style={{
-                          borderColor: "gray",
-                          borderWidth: 1,
                           height: 1,
                           marginTop: 5,
                         }}

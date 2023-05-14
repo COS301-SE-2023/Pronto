@@ -20,17 +20,20 @@ const SearchBar = ({ onSearch }) => {
     {
       id: 1,
       code: "COS301",
+      name: "Software Engineering",
     },
     {
       id: 2,
       code: "COS332",
+      name: "Computer Networks",
     },
     {
       id: 3,
       code: "COS341",
+      name: "Compiler Construction",
     },
-    { id: 4, code: "IMY310" },
-    { id: 5, code: "COS216" },
+    { id: 4, code: "IMY310", name: "Human Computer Interaction" },
+    { id: 5, code: "COS216", name: "Netcentric Computer Programming" },
   ];
 
   const [input, setInput] = useState("");
