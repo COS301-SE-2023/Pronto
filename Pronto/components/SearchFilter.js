@@ -1,14 +1,11 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Alert } from "react-native";
 import React, { useState } from "react";
 import { Card } from "react-native-paper";
 
-addToModules = () => {};
-
-const SearchFilter = ({ data, input, setInput }) => {
+const SearchFilter = ({ data, input, setInput, addToModules }) => {
   return (
     <View style={{ marginTop: 10 }}>
       <FlatList
-      
         data={data}
         renderItem={({ item }) => {
           if (
@@ -19,7 +16,7 @@ const SearchFilter = ({ data, input, setInput }) => {
               <View style={{ margin: 20 }}>
                 <Card
                   style={{ height: 50, backgroundColor: "white" }}
-                  onPress={addToModules}
+                  onPress={() => addToModules(item)}
                 >
                   <Card.Content>
                     <View>

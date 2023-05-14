@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { View, TextInput, Dimensions, Text, SafeAreaView } from "react-native";
+import {
+  View,
+  TextInput,
+  Dimensions,
+  Text,
+  SafeAreaView,
+  Alert,
+} from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Card } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
-
-const { width } = Dimensions.get("window").width;
-const { height } = Dimensions.get("window").height;
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
@@ -29,25 +33,16 @@ const EditTimetable = ({ onSearch }) => {
     { id: 5, code: "COS216", name: "Netcentric Computer Programming" },
   ];
 
-  const selectedModules = [
-    /*   {
-      id: 1,
-      code: "COS301",
-      name: "Software Engineering",
-    },
-    {
-      id: 2,
-      code: "COS332",
-      name: "Computer Networks",
-    },
-    {
-      id: 3,
-      code: "COS341",
-      name: "Compiler Construction",
-    },
-    { id: 4, code: "IMY310", name: "Human Computer Interaction" },
-    { id: 5, code: "COS216", name: "Netcentric Computer Programming" }, */
-  ];
+  const [selectedModules, setSelectedModules] = useState([]);
+
+  const addToModules = (module) => {
+    if (!selectedModules.some((m) => m.id === module.id)) {
+      setSelectedModules((prevModules) => [...prevModules, module]);
+    } else {
+      Alert.alert("Module already added");
+    }
+    setInput("");
+  };
 
   const [input, setInput] = useState("");
 
@@ -108,7 +103,12 @@ const EditTimetable = ({ onSearch }) => {
           placeholder="Search for your modules"
         />
       </View>
-      <SearchFilter data={modules} input={input} setInput={setInput} />
+      <SearchFilter
+        data={modules}
+        input={input}
+        setInput={setInput}
+        addToModules={addToModules}
+      />
 
       <FlatList
         data={selectedModules}
