@@ -1,23 +1,16 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Text,
-  SafeAreaView,
-} from "react-native";
+import { View, TextInput, Dimensions, Text, SafeAreaView } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { ScrollView } from "react-native";
 import { Card } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
+import { FlatList } from "react-native";
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get("window").width;
+const { height } = Dimensions.get("window").height;
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
-    {
+    /* {
       id: 1,
       code: "COS301",
       name: "Software Engineering",
@@ -33,10 +26,41 @@ const EditTimetable = ({ onSearch }) => {
       name: "Compiler Construction",
     },
     { id: 4, code: "IMY310", name: "Human Computer Interaction" },
-    { id: 5, code: "COS216", name: "Netcentric Computer Programming" },
+    { id: 5, code: "COS216", name: "Netcentric Computer Programming" }, */
   ];
 
   const [input, setInput] = useState("");
+
+  const oneModule = ({ item }) => {
+    return (
+      <View style={{ margin: 20 }}>
+        <Card
+          style={{ height: 200, backgroundColor: "white" }}
+          onPress={addToModules}
+        >
+          <Card.Content>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                {item.code} : {item.name}
+              </Text>
+              <Text
+                style={{
+                  height: 1,
+                  marginTop: 5,
+                }}
+              ></Text>
+            </View>
+          </Card.Content>
+        </Card>
+      </View>
+    );
+  };
 
   return (
     <View>
@@ -64,6 +88,25 @@ const EditTimetable = ({ onSearch }) => {
           placeholder="Search for your modules"
         />
       </View>
+
+      <FlatList
+        data={modules}
+        renderItem={oneModule}
+        ListEmptyComponent={
+          <View
+            style={{
+              flexDirection: "row",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              You have no modules
+            </Text>
+          </View>
+        }
+      />
       <SearchFilter data={modules} input={input} setInput={setInput} />
     </View>
   );

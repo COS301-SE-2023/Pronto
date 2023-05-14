@@ -48,6 +48,16 @@
       "venue": "Law 1-54",
       "day": "Monday",
       "height": 50
+    },
+    "M6": 
+    {
+      "id": "5",
+      "code": "COS216",
+      "time": "08:30-09:20",
+      "frequency": 1,
+      "venue": "Law 1-54",
+      "day": "Sunday",
+      "height": 50
     }
 }
 
