@@ -6,11 +6,14 @@ import {
   Text,
   SafeAreaView,
   Alert,
+  TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { Card } from "react-native-paper";
+import { Card, Button } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
@@ -38,8 +41,6 @@ const EditTimetable = ({ onSearch }) => {
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [...prevModules, module]);
-    } else {
-      Alert.alert("Module already added");
     }
     setInput("");
   };
@@ -47,38 +48,49 @@ const EditTimetable = ({ onSearch }) => {
   const [input, setInput] = useState("");
 
   const oneModule = ({ item }) => {
+    const handleDelete = () => {
+      setSelectedModules((prevModules) =>
+        prevModules.filter((module) => module.id !== item.id)
+      );
+    };
+
     return (
       <View style={{ margin: 20 }}>
-        <Card
-          style={{ height: 200, backgroundColor: "white" }}
-          onPress={addToModules}
-        >
-          <Card.Content>
-            <View>
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: "bold",
-                  textAlign: "center",
-                }}
-              >
-                {item.code} : {item.name}
-              </Text>
-              <Text
-                style={{
-                  height: 1,
-                  marginTop: 5,
-                }}
-              ></Text>
-            </View>
-          </Card.Content>
-        </Card>
+        <TouchableWithoutFeedback onPress={() => addToModules(item)}>
+          <Card style={{ height: 200, backgroundColor: "white" }}>
+            <Card.Content>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
+                  {item.code} : {item.name}
+                </Text>
+                <Text
+                  style={{
+                    height: 1,
+                    marginTop: 5,
+                  }}
+                ></Text>
+                <Button
+                  onPress={handleDelete}
+                  style={{ marginLeft: "85%", marginTop: "35%" }}
+                >
+                  <MaterialIcons name="delete" size={24} color="black" />
+                </Button>
+              </View>
+            </Card.Content>
+          </Card>
+        </TouchableWithoutFeedback>
       </View>
     );
   };
 
   return (
-    <View>
+    <ScrollView>
       <View
         style={{
           padding: 10,
@@ -99,10 +111,11 @@ const EditTimetable = ({ onSearch }) => {
         <TextInput
           value={input}
           onChangeText={(text) => setInput(text)}
-          style={{ fontSize: 15 }}
+          style={{ fontSize: 15, width: "100%" }}
           placeholder="Search for your modules"
         />
       </View>
+
       <SearchFilter
         data={modules}
         input={input}
@@ -137,7 +150,7 @@ const EditTimetable = ({ onSearch }) => {
           )
         }
       />
-    </View>
+    </ScrollView>
   );
 };
 
