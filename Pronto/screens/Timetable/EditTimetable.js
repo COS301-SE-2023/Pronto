@@ -15,7 +15,7 @@ import SearchFilter from "../../components/SearchFilter";
 
 const { width } = Dimensions.get("window");
 
-const SearchBar = ({ onSearch }) => {
+const EditTimetable = ({ onSearch }) => {
   const modules = [
     {
       id: 1,
@@ -69,4 +69,4 @@ const SearchBar = ({ onSearch }) => {
   );
 };
 
-export default SearchBar;
+export default EditTimetable;
