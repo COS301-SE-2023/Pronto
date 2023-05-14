@@ -1,0 +1,34 @@
+type Institution @model {
+  id: ID!
+  name:String!
+  location: String
+  pageUrl:String
+  campusMapUrl:String
+  openingTime: timestamptz
+  closingTime:timestamptz
+  minimumDuration: number
+  lectureremails:[String]
+  coursecodes:[String]
+  admin: Admin @connection(keyName: "byUser", fields: ["id"])
+  user: [User] @connection(keyName: "byUser", fields: ["id"])
+}
+
+type Admin @model
+ @key(name: "byInstitution", fields: ["institutionId"]){
+  ld: String!
+  firstname: String!
+  lastname: String!
+  userRole:String!
+  email: String!
+  institution: Institution! @connection(fields: ["institutionId"])
+}
+
+type Student @model
+ @key(name: "byInstitution", fields: ["institutionId"]){
+  ld: String!
+  firstname: String!
+  lastname: String!
+  userRole:String!
+  email: String!
+  institution: Institution! @connection(fields: ["institutionId"])
+}

@@ -4,13 +4,15 @@ filePaths = {
 	'mainSource': 'universitiesNamesAndDomainsData.json',
 	'names':'universityNames.json',
 	'domains':'universityDomains.json',
-	'namesWithDomains': 'universityNamesWithDomains.json'
+	'namesWithDomains': 'universityNamesWithDomains.json',
+	'country': 'countriesList.json'
 }
 
 universityData:dict
 univerityNames = []
 universityDomains = []
 universityNamesWithDomains = []
+countries = []
 with open(filePaths['mainSource'], 'r') as json_file:
 	universityData = json.load(json_file)
 
@@ -23,6 +25,8 @@ for universityInfo in universityData:
 	univerityNames.append(universityInfo['name'])
 	universityDomains.extend(universityInfo['domains'])
 	universityNamesWithDomains.append(universityInfo)
+	if universityInfo['country'] not in countries:
+		countries.append(universityInfo['country'])
 	
 # Output as JSON
 with open(filePaths['names'], "w") as outfile:
@@ -33,3 +37,6 @@ with open(filePaths['domains'], "w") as outfile:
 
 with open(filePaths['namesWithDomains'], "w") as outfile:
     outfile.write(json.dumps(universityNamesWithDomains,ensure_ascii=False,indent=4))
+
+with open(filePaths['country'], "w") as outfile:
+    outfile.write(json.dumps(countries,ensure_ascii=False,indent=4))
