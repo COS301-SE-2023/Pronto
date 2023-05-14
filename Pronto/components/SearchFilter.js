@@ -8,6 +8,7 @@ const SearchFilter = ({ data, input, setInput }) => {
   return (
     <View style={{ marginTop: 10 }}>
       <FlatList
+      
         data={data}
         renderItem={({ item }) => {
           if (

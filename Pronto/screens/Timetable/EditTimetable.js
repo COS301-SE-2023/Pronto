@@ -10,7 +10,27 @@ const { height } = Dimensions.get("window").height;
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
-    /* {
+    {
+      id: 1,
+      code: "COS301",
+      name: "Software Engineering",
+    },
+    {
+      id: 2,
+      code: "COS332",
+      name: "Computer Networks",
+    },
+    {
+      id: 3,
+      code: "COS341",
+      name: "Compiler Construction",
+    },
+    { id: 4, code: "IMY310", name: "Human Computer Interaction" },
+    { id: 5, code: "COS216", name: "Netcentric Computer Programming" },
+  ];
+
+  const selectedModules = [
+    /*   {
       id: 1,
       code: "COS301",
       name: "Software Engineering",
@@ -88,26 +108,35 @@ const EditTimetable = ({ onSearch }) => {
           placeholder="Search for your modules"
         />
       </View>
+      <SearchFilter data={modules} input={input} setInput={setInput} />
 
       <FlatList
-        data={modules}
+        data={selectedModules}
         renderItem={oneModule}
         ListEmptyComponent={
-          <View
-            style={{
-              flexDirection: "row",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              You have no modules
-            </Text>
-          </View>
+          !input &&
+          selectedModules.length === 0 && ( // Render only when input is empty and no modules are selected
+            <View
+              style={{
+                flexDirection: "row",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: "bold",
+                  color: "black",
+                }}
+              >
+                You have no modules
+              </Text>
+            </View>
+          )
         }
       />
-      <SearchFilter data={modules} input={input} setInput={setInput} />
     </View>
   );
 };
