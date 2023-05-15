@@ -23,22 +23,32 @@ type Admin @model
   institution: Institution! @connection(fields: ["institutionId"])
 }
 
-type Student @model
- @key(name: "byInstitution", fields: ["institutionId"]) {
+type Student @model @key(name: "byInstitution", fields: ["institutionId"]) {
   ld: String!
   firstname: String!
   lastname: String!
   userRole: String!
   email: String!
   institution: Institution! @connection(fields: ["institutionId"])
-  courses: [Course] @connection(keyName: "byCourse", fields: ["CourseId"])
+  enrollments: [Enrollment] @connection(keyName: "byStudent", fields: ["id"])
 }
 
-type Course @model
-@key(name: "byStudent",fields:["StudentId"]){
-  id:String!
-  coursecode:String!
-  coursename:String!
-  semester:number
-  students:[Student] @connection(fields: ["StudentId"]
+type Enrollment
+  @model(queries: null)
+  @key(name: "byStudent", fields: ["studentId", "courseId"])
+  @key(name: "byCourse", fields: ["courseId", "studentId"]) {
+  id: String!
+  studentId: String!
+  courseId: String!
+  year: number
+  student: Student! @connection(fields: ["studentId"])
+  course: Course! @connection(fields: ["courseId"])
+}
+
+type Course @model {
+  id: String!
+  coursecode: String!
+  coursename: String!
+  semester: number
+  enrollments: [Enrollment] @connection(keyname: "byCourse", fields: ["id"])
 }
