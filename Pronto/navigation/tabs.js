@@ -29,11 +29,107 @@ const Tabs = () => {
       }}
       {...{ screenOptions }}
     >
-      <Tab.Screen name="Schedule" component={ScheduleTable} />
-      <Tab.Screen name="Navigation" component={NavigationScreen} />
+      <Tab.Screen
+        name="Schedule"
+        component={ScheduleTable}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                top: 10,
+              }}
+            >
+              <Image
+                source={require("../assets/icons/schedule.png")}
+                resizeMode="contain"
+                style={{
+                  width: 25,
+                  height: 25,
+                  tintColor: focused ? "#e32f45" : "#748c94",
+                }}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Navigation"
+        component={NavigationScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                top: 10,
+              }}
+            >
+              <Image
+                source={require("../assets/icons/map.png")}
+                resizeMode="contain"
+                style={{
+                  width: 25,
+                  height: 25,
+                  tintColor: focused ? "#e32f45" : "#748c94",
+                }}
+              />
+            </View>
+          ),
+        }}
+      />
       <Tab.Screen name="Search" component={EditTimetable} />
-      <Tab.Screen name="Notifications" component={Notifications} />
-      <Tab.Screen name="Account" component={AccountSettings} />
+      <Tab.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                top: 10,
+              }}
+            >
+              <Image
+                source={require("../assets/icons/bell.png")}
+                resizeMode="contain"
+                style={{
+                  width: 25,
+                  height: 25,
+                  tintColor: focused ? "#e32f45" : "#748c94",
+                }}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountSettings}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                top: 10,
+              }}
+            >
+              <Image
+                source={require("../assets/icons/user.png")}
+                resizeMode="contain"
+                style={{
+                  width: 25,
+                  height: 25,
+                  tintColor: focused ? "#e32f45" : "#748c94",
+                }}
+              />
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };
