@@ -51,7 +51,8 @@ type Course @model {
   coursename: String!
   semester: number
   enrollments: [Enrollment] @connection(keyName: "byCourse", fields: ["id"])
-  activity:[Activity] @connection(keyName: "byCourse",fields["id]")
+  activity:[Activity] @connection(keyName: "byCourse",fields["id"])
+  assessments:[Assessment] @connection(keyName:"byCourse",fields["id"])
 }
 
 type Activity @model
@@ -65,5 +66,18 @@ type Activity @model
   venue:String!
   group:String!
   frequency:number!
-  course: Course @connection(fields:["courseId"])
+  course: Course! @connection(fields:["courseId"])
+}
+
+
+type Assessment @model
+@key(name:"byCourse",fields:["courseId"]){
+  id:String!
+  courseId:String!
+  assementType:String!
+  start:timestamptz!
+  end:timestamptz!
+  date:timestamptz!
+  venue:String!
+  course: Course! @connection(fields: ["courseId"])
 }
