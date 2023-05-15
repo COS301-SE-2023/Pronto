@@ -129,6 +129,21 @@ const ScheduleTable = () => {
         renderItem={renderItem}
         showOnlySelectedDayItems={true}
         renderEmptyData={renderEmptyDate}
+        theme={{
+          todayTextColor: "#e32f45", // today in calendar
+          selectedDayBackgroundColor: "#e32f45", // calendar sel date
+          dotColor: "#e32f45", // dots
+
+          //further styling options if needed
+          //  textDisabledColor: "#e32f45",
+          //   agendaTodayColor: "#e32f45", // today in list
+          //   monthTextColor: "#e32f45", // name in calendar
+          //    textDefaultColor: "#e32f45",
+          // todayBackgroundColor: "#e32f45",
+          // selectedDayTextColor: "#e32f45", // calendar sel date
+          //  dayTextColor: "#e32f45", // calendar day
+          //  textSectionTitleColor: "#e32f45",
+        }}
       />
     </View>
   );
