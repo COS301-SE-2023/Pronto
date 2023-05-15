@@ -90,7 +90,7 @@ const EditTimetable = ({ onSearch }) => {
   };
 
   return (
-    <ScrollView>
+    <SafeAreaView>
       <View
         style={{
           padding: 10,
@@ -150,7 +150,7 @@ const EditTimetable = ({ onSearch }) => {
           )
         }
       />
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
