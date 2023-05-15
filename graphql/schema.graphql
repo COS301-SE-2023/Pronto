@@ -24,11 +24,21 @@ type Admin @model
 }
 
 type Student @model
- @key(name: "byInstitution", fields: ["institutionId"]){
+ @key(name: "byInstitution", fields: ["institutionId"]) {
   ld: String!
   firstname: String!
   lastname: String!
-  userRole:String!
+  userRole: String!
   email: String!
   institution: Institution! @connection(fields: ["institutionId"])
+  courses: [Course] @connection(keyName: "byCourse", fields: ["CourseId"])
+}
+
+type Course @model
+@key(name: "byStudent",fields:["StudentId"]){
+  id:String!
+  coursecode:String!
+  coursename:String!
+  semester:number
+  students:[Student] @connection(fields: ["StudentId"]
 }
