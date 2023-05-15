@@ -23,14 +23,9 @@ const screenOptions = {
 
 const Tabs = () => {
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        showLabel: false,
-      }}
-      {...{ screenOptions }}
-    >
+    <Tab.Navigator {...{ screenOptions }}>
       <Tab.Screen
-        name="Schedule"
+        name="Timetable"
         component={ScheduleTable}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -52,6 +47,7 @@ const Tabs = () => {
               />
             </View>
           ),
+          tabBarLabelStyle: { display: "none" },
         }}
       />
       <Tab.Screen
@@ -77,6 +73,7 @@ const Tabs = () => {
               />
             </View>
           ),
+          tabBarLabelStyle: { display: "none" },
         }}
       />
       <Tab.Screen
@@ -102,6 +99,7 @@ const Tabs = () => {
               />
             </View>
           ),
+          tabBarLabelStyle: { display: "none" },
         }}
       />
       <Tab.Screen
@@ -127,6 +125,7 @@ const Tabs = () => {
               />
             </View>
           ),
+          tabBarLabelStyle: { display: "none" },
         }}
       />
       <Tab.Screen
@@ -152,6 +151,7 @@ const Tabs = () => {
               />
             </View>
           ),
+          tabBarLabelStyle: { display: "none" },
         }}
       />
     </Tab.Navigator>
@@ -159,16 +159,3 @@ const Tabs = () => {
 };
 
 export default Tabs;
-
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: "#7f5df0",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
-    elevation: 5,
-  },
-});
