@@ -50,5 +50,20 @@ type Course @model {
   coursecode: String!
   coursename: String!
   semester: number
-  enrollments: [Enrollment] @connection(keyname: "byCourse", fields: ["id"])
+  enrollments: [Enrollment] @connection(keyName: "byCourse", fields: ["id"])
+  activity:[Activity] @connection(keyName: "byCourse",fields["id]")
+}
+
+type Activity @model
+@key(name:"byCourse",fields:["courseId"]){
+  id:String!
+  activityname:String!
+  courseId:String!
+  day:String!
+  start:timestamptz
+  end:timestamptz
+  venue:String!
+  group:String!
+  frequency:number!
+  course: Course @connection(fields:["courseId"])
 }
