@@ -1,14 +1,22 @@
-import React, {useState} from 'react';
-import {View, TouchableOpacity, Text, Dimensions} from 'react-native';
-import {Agenda} from 'react-native-calendars';
-import {Card} from 'react-native-paper';
+import React, { useState } from "react";
+import { View, TouchableOpacity, Text, Dimensions } from "react-native";
+import { Agenda } from "react-native-calendars";
+import { Card } from "react-native-paper";
 import modules from "../../assets/data/mock/modules.json";
 
 //function to take in a day, and give all dates of the year that a day occurs
 function getDatesForDayOfWeek(dayOfWeek) {
   const date = new Date();
   const year = date.getFullYear();
-  const dayIndex = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(dayOfWeek);
+  const dayIndex = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ].indexOf(dayOfWeek);
   const results = [];
 
   // Loop through each month of the year
@@ -22,7 +30,9 @@ function getDatesForDayOfWeek(dayOfWeek) {
 
     // Loop through the rest of the month, adding dates for the specified day of the week
     while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
-      const dateString = `${year}-${(month + 1).toString().padStart(2, '0')}-${dayOfMonth.toString().padStart(2, '0')}`;
+      const dateString = `${year}-${(month + 1)
+        .toString()
+        .padStart(2, "0")}-${dayOfMonth.toString().padStart(2, "0")}`;
       results.push(dateString);
       dayOfMonth += 7;
     }
@@ -35,7 +45,7 @@ function createScheduleArray(modules) {
   const scheduleArray = {};
   for (const moduleKey in modules) {
     const dates = getDatesForDayOfWeek(modules[moduleKey].day);
-    dates.forEach(date => {
+    dates.forEach((date) => {
       if (!scheduleArray[date]) {
         scheduleArray[date] = [];
       }
@@ -55,25 +65,22 @@ function createScheduleArray(modules) {
 
 var scheduleArray = createScheduleArray(modules);
 
-
 //scheduleArray.concat(createScheduleArray(modules["COS301"]));
 //console.log(scheduleArray);
 
-
-const ScheduleTable = () => 
-{
-  const renderItem = (module) => 
-  {
+const ScheduleTable = () => {
+  const renderItem = (module) => {
     return (
-      <TouchableOpacity style={{marginRight: 20, marginTop: 30}}>
-        <Card style={{backgroundColor: "white" }}>
-          <Card.Content >
+      <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
+        <Card style={{ backgroundColor: "white" }}>
+          <Card.Content>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <Text>{module.code}</Text>
               <Text>{module.venue}</Text>
               <Text>{module.time}</Text>
@@ -83,21 +90,45 @@ const ScheduleTable = () =>
       </TouchableOpacity>
     );
   };
-  const windowHeight = Dimensions.get('window').height;
-  const windowWidth = Dimensions.get('window').width;
+
+  const renderEmptyDate = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          paddingBottom: "50%",
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 25,
+            color: "#748c94",
+          }}
+          // #1E90FF
+        >
+          No events today
+        </Text>
+      </View>
+    );
+  };
+
+  const windowHeight = Dimensions.get("window").height;
+  const windowWidth = Dimensions.get("window").width;
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
- 
 
-  
   return (
-    <View style={{height: windowHeight, width: windowWidth}}>
+    <View style={{ height: windowHeight, width: windowWidth }}>
       <Agenda
         items={scheduleArray}
-        selected={year + '-' + month + '-' + date}
+        selected={year + "-" + month + "-" + date}
         renderItem={renderItem}
-        showOnlySelectedDayItems = {true}
+        showOnlySelectedDayItems={true}
+        renderEmptyData={renderEmptyDate}
       />
     </View>
   );

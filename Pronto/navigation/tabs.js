@@ -79,7 +79,31 @@ const Tabs = () => {
           ),
         }}
       />
-      <Tab.Screen name="Search" component={EditTimetable} />
+      <Tab.Screen
+        name="Search"
+        component={EditTimetable}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                top: 10,
+              }}
+            >
+              <Image
+                source={require("../assets/icons/search.png")}
+                resizeMode="contain"
+                style={{
+                  width: 25,
+                  height: 25,
+                  tintColor: focused ? "#e32f45" : "#748c94",
+                }}
+              />
+            </View>
+          ),
+        }}
+      />
       <Tab.Screen
         name="Notifications"
         component={Notifications}
@@ -135,3 +159,16 @@ const Tabs = () => {
 };
 
 export default Tabs;
+
+const styles = StyleSheet.create({
+  shadow: {
+    shadowColor: "#7f5df0",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 5,
+  },
+});
