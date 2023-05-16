@@ -13,7 +13,7 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Card, Button } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import ActivityPicker from "../../components/ActivityPicker";
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
@@ -69,6 +69,7 @@ const EditTimetable = ({ onSearch }) => {
                 >
                   {item.code} : {item.name}
                 </Text>
+
                 <Text
                   style={{
                     height: 1,
