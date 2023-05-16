@@ -13,7 +13,7 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Card, Button } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
-import ActivityPicker from "../../components/ActivityPicker";
+import RNPickerSelect from "react-native-picker-select";
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
@@ -21,22 +21,86 @@ const EditTimetable = ({ onSearch }) => {
       id: 1,
       code: "COS301",
       name: "Software Engineering",
+      numLecturesPerWeek: 2,
     },
     {
       id: 2,
       code: "COS332",
       name: "Computer Networks",
+      numLecturesPerWeek: 1,
     },
     {
       id: 3,
       code: "COS341",
       name: "Compiler Construction",
+      numLecturesPerWeek: 1,
     },
-    { id: 4, code: "IMY310", name: "Human Computer Interaction" },
-    { id: 5, code: "COS216", name: "Netcentric Computer Programming" },
+    {
+      id: 4,
+      code: "IMY310",
+      name: "Human Computer Interaction",
+      numLecturesPerWeek: 1,
+    },
+    {
+      id: 5,
+      code: "COS216",
+      name: "Netcentric Computer Programming",
+      numLecturesPerWeek: 1,
+    },
+  ];
+
+  const moduleTimes = [
+    {
+      id: 1,
+      code: "COS301",
+      name: "Software Engineering",
+      times: [
+        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
+        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 2 times
+      ],
+    },
+    {
+      code: "COS332",
+      name: "Computer Networks",
+      times: [
+        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
+      ],
+    },
+    {
+      code: "COS341",
+      name: "Compiler Construction",
+      times: [
+        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
+      ],
+    },
+    {
+      code: "IMY310",
+      name: "Human Computer Interaction",
+      times: [
+        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
+      ],
+    },
+    {
+      code: "COS216",
+      name: "Netcentric Computer Programming",
+      times: [
+        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
+      ],
+    },
   ];
 
   const [selectedModules, setSelectedModules] = useState([]);
+
+  const [selectedTime, setSelectedTime] = useState(() => {
+    const initialSelectedTime = {};
+    selectedModules.forEach((module) => {
+      initialSelectedTime[module.id] = Array.from(
+        { length: module.numLecturesPerWeek },
+        () => ""
+      );
+    });
+    return initialSelectedTime;
+  });
 
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
@@ -52,6 +116,20 @@ const EditTimetable = ({ onSearch }) => {
       setSelectedModules((prevModules) =>
         prevModules.filter((module) => module.id !== item.id)
       );
+    };
+
+    const handleTimeSelection = (time, lectureIndex) => {
+      setSelectedTime((prevSelectedTime) => {
+        const updatedSelectedTime = { ...prevSelectedTime };
+        if (!updatedSelectedTime[item.id]) {
+          updatedSelectedTime[item.id] = Array.from(
+            { length: item.numLecturesPerWeek },
+            () => ""
+          );
+        }
+        updatedSelectedTime[item.id][lectureIndex] = time;
+        return updatedSelectedTime;
+      });
     };
 
     return (
@@ -76,6 +154,38 @@ const EditTimetable = ({ onSearch }) => {
                     marginTop: 5,
                   }}
                 ></Text>
+
+                {selectedModules.some((module) => module.id === item.id) && (
+                  <>
+                    {Array.from(
+                      { length: item.numLecturesPerWeek },
+                      (_, index) => (
+                        <RNPickerSelect
+                          key={index}
+                          value={
+                            selectedTime[item.id]
+                              ? selectedTime[item.id][index]
+                              : ""
+                          }
+                          onValueChange={(value) =>
+                            handleTimeSelection(value, index)
+                          }
+                          placeholder={{
+                            label: "Select a time",
+                            value: "",
+                          }}
+                          items={moduleTimes
+                            .find((module) => module.code === item.code)
+                            .times[index].map((time, index) => ({
+                              label: time,
+                              value: time,
+                            }))}
+                        />
+                      )
+                    )}
+                  </>
+                )}
+
                 <Button
                   onPress={handleDelete}
                   style={{ marginLeft: "85%", marginTop: "35%" }}

@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { ScrollView } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
 
 const SettingsComponent = ({ settingsOptions }) => {
   return (
