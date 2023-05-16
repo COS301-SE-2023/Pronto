@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { Card, Button } from "react-native-paper";
+import { Card, Button, IconButton } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
@@ -54,6 +54,7 @@ const EditTimetable = ({ onSearch }) => {
       id: 1,
       code: "COS301",
       name: "Software Engineering",
+      days: ["Monday", "Tuesday"],
       times: [
         ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
         ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 2 times
@@ -62,6 +63,7 @@ const EditTimetable = ({ onSearch }) => {
     {
       code: "COS332",
       name: "Computer Networks",
+      days: ["Monday"],
       times: [
         ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
       ],
@@ -69,6 +71,7 @@ const EditTimetable = ({ onSearch }) => {
     {
       code: "COS341",
       name: "Compiler Construction",
+      days: ["Thursday"],
       times: [
         ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
       ],
@@ -76,6 +79,7 @@ const EditTimetable = ({ onSearch }) => {
     {
       code: "IMY310",
       name: "Human Computer Interaction",
+      days: ["Tuesday"],
       times: [
         ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
       ],
@@ -83,6 +87,7 @@ const EditTimetable = ({ onSearch }) => {
     {
       code: "COS216",
       name: "Netcentric Computer Programming",
+      days: ["Monday"],
       times: [
         ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
       ],
@@ -135,52 +140,91 @@ const EditTimetable = ({ onSearch }) => {
     return (
       <View style={{ margin: 20 }}>
         <TouchableWithoutFeedback onPress={() => addToModules(item)}>
-          <Card style={{ height: 200, backgroundColor: "white" }}>
+          <Card
+            style={{
+              height: 200,
+              backgroundColor: "white",
+              justifyContent: "center",
+            }}
+          >
+            <Card.Title
+              title={item.code}
+              titleStyle={{
+                fontSize: 20,
+                fontWeight: "bold",
+                justifyContent: "center",
+                textAlign: "center",
+                marginLeft: 30,
+              }}
+              subtitle={item.name}
+              subtitleStyle={{
+                fontSize: 15,
+
+                justifyContent: "center",
+                textAlign: "center",
+                marginBottom: 10,
+                marginLeft: 30,
+              }}
+              right={(props) => (
+                <IconButton {...props} icon="delete" onPress={handleDelete} />
+              )}
+            />
             <Card.Content>
               <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  {item.code} : {item.name}
-                </Text>
-
-                <Text
-                  style={{
-                    height: 1,
-                    marginTop: 5,
-                  }}
-                ></Text>
-
                 {selectedModules.some((module) => module.id === item.id) && (
                   <>
                     {Array.from(
                       { length: item.numLecturesPerWeek },
                       (_, index) => (
-                        <RNPickerSelect
+                        <View
                           key={index}
-                          value={
-                            selectedTime[item.id]
-                              ? selectedTime[item.id][index]
-                              : ""
-                          }
-                          onValueChange={(value) =>
-                            handleTimeSelection(value, index)
-                          }
-                          placeholder={{
-                            label: "Select a time",
-                            value: "",
-                          }}
-                          items={moduleTimes
-                            .find((module) => module.code === item.code)
-                            .times[index].map((time, index) => ({
-                              label: time,
-                              value: time,
-                            }))}
-                        />
+                          style={{ flexDirection: "row", alignItems: "center" }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              textAlign: "center",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              marginRight: 10,
+                              marginBottom: 10,
+                            }}
+                          >
+                            Lecture {index + 1}:{" "}
+                          </Text>
+                          <RNPickerSelect
+                            value={
+                              selectedTime[item.id]
+                                ? selectedTime[item.id][index]
+                                : ""
+                            }
+                            onValueChange={(value) =>
+                              handleTimeSelection(value, index)
+                            }
+                            placeholder={{
+                              label: "Select a time",
+                              value: "",
+                            }}
+                            items={moduleTimes
+                              .find((module) => module.code === item.code)
+                              .times[index].map((time, index) => ({
+                                label: time,
+                                value: time,
+                              }))}
+                            style={pickerSelectStyles} // Apply the styles here
+                            useNativeAndroidPickerStyle={false} // Required for Android to apply custom styles
+                            Icon={() => {
+                              return (
+                                <Feather
+                                  name="chevron-down"
+                                  size={25}
+                                  color="black"
+                                  style={{ marginRight: 10 }}
+                                />
+                              );
+                            }}
+                          />
+                        </View>
                       )
                     )}
                   </>
@@ -266,3 +310,31 @@ const EditTimetable = ({ onSearch }) => {
 };
 
 export default EditTimetable;
+
+const pickerSelectStyles = {
+  inputIOS: {
+    fontSize: 15,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 4,
+    color: "black",
+    paddingRight: 40,
+    marginBottom: 10,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    borderColor: "gray",
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderRadius: 8,
+    color: "black",
+    paddingRight: 30,
+    borderColor: "gray",
+  },
+};
