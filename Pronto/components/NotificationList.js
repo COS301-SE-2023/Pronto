@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, View, StyleSheet } from "react-native";
+import { Alert, View, StyleSheet, Text } from "react-native";
 import { List, Card, Avatar } from "react-native-paper";
 import { ScrollView } from "react-native";
 
@@ -28,8 +28,31 @@ const NotificationList = () => {
           onPress={handlePress1}
           style={{ backgroundColor: "white" }}
         >
-          <List.Item title="Reminder 1" onPress={showFullMessage} />
-          <List.Item title="Reminder 2" />
+          <Card
+            style={{
+              margin: 10,
+              backgroundColor: "white",
+            }}
+            onPress={showFullMessage}
+          >
+            <Card.Content>
+              <Text>
+                COS 301: Lecture venue changed from North Hall to IT 2-27
+              </Text>
+            </Card.Content>
+          </Card>
+
+          <Card
+            style={{
+              margin: 10,
+              backgroundColor: "white",
+            }}
+            onPress={showFullMessage}
+          >
+            <Card.Content>
+              <Text>COS 332: Change in lecture time</Text>
+            </Card.Content>
+          </Card>
         </List.Accordion>
 
         <List.Accordion
@@ -41,8 +64,17 @@ const NotificationList = () => {
           onPress={handlePress2}
           style={{ backgroundColor: "white" }}
         >
-          <List.Item title="Due Date 1" onPress={showFullMessage} />
-          <List.Item title="Due Date 2" />
+          <Card
+            style={{
+              margin: 10,
+              backgroundColor: "white",
+            }}
+            onPress={showFullMessage}
+          >
+            <Card.Content>
+              <Text>COS216: Assignment due soon</Text>
+            </Card.Content>
+          </Card>
         </List.Accordion>
 
         <List.Accordion
@@ -52,8 +84,17 @@ const NotificationList = () => {
           onPress={handlePress3}
           style={{ backgroundColor: "white" }}
         >
-          <List.Item title="Other 1" onPress={showFullMessage} />
-          <List.Item title="Other 2" />
+          <Card
+            style={{
+              margin: 10,
+              backgroundColor: "white",
+            }}
+            onPress={showFullMessage}
+          >
+            <Card.Content>
+              <Text>IMY310: Remeber your pens for the semester test</Text>
+            </Card.Content>
+          </Card>
         </List.Accordion>
       </List.Section>
 
