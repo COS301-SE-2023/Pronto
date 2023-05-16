@@ -89,11 +89,11 @@ const Tabs = () => {
               }}
             >
               <Image
-                source={require("../assets/icons/search.png")}
+                source={require("../assets/icons/planning.png")}
                 resizeMode="contain"
                 style={{
-                  width: 25,
-                  height: 25,
+                  width: 30,
+                  height: 30,
                   tintColor: focused ? "#e32f45" : "#748c94",
                 }}
               />
