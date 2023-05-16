@@ -2,7 +2,7 @@
 
 [![Codecov](https://img.shields.io/codecov/c/github/COS301-SE-2023/Pronto.svg?style=flat-square)](https://codecov.io/gh/COS301-SE-2023/Pronto)
 
-[![Requirements Status](https://requires.io/github/COS301-SE-2023/Pronto/requirements.svg?branch=frontend-dev)](https://requires.io/github/COS301-SE-2023/Pronto/requirements/?branch=BRANCH)
+[![Requirements Status](https://requires.io/github/COS301-SE-2023/Pronto/requirements.svg?branch=frontend-dev)](https://requires.io/github/COS301-SE-2023/Pronto/requirements/?branch=frontend-dev)
 
 [![Open Issues](https://img.shields.io/github/issues/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues)
 
