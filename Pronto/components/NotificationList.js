@@ -24,6 +24,7 @@ const NotificationList = () => {
           left={(props) => <List.Icon {...props} icon="brain" />}
           expanded={expanded1}
           onPress={handlePress1}
+          style={{ backgroundColor: "white" }}
         >
           <List.Item title="Reminder 1" onPress={showFullMessage} />
           <List.Item title="Reminder 2" />
@@ -34,6 +35,7 @@ const NotificationList = () => {
           left={(props) => <List.Icon {...props} icon="clock" />}
           expanded={expanded2}
           onPress={handlePress2}
+          style={{ backgroundColor: "white" }}
         >
           <List.Item title="Due Date 1" onPress={showFullMessage} />
           <List.Item title="Due Date 2" />
@@ -44,6 +46,7 @@ const NotificationList = () => {
           left={(props) => <List.Icon {...props} icon="menu" />}
           expanded={expanded3}
           onPress={handlePress3}
+          style={{ backgroundColor: "white" }}
         >
           <List.Item title="Other 1" onPress={showFullMessage} />
           <List.Item title="Other 2" />
