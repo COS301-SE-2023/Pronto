@@ -21,7 +21,9 @@ const NotificationList = () => {
       <List.Section title="Announcements" style={{ margin: 10 }}>
         <List.Accordion
           title="Reminders"
-          left={(props) => <List.Icon {...props} icon="brain" />}
+          left={(props) => (
+            <List.Icon {...props} icon="brain" color="#e32f45" />
+          )}
           expanded={expanded1}
           onPress={handlePress1}
           style={{ backgroundColor: "white" }}
@@ -32,7 +34,9 @@ const NotificationList = () => {
 
         <List.Accordion
           title="Due Dates"
-          left={(props) => <List.Icon {...props} icon="clock" />}
+          left={(props) => (
+            <List.Icon {...props} icon="clock" color="#e32f45" />
+          )}
           expanded={expanded2}
           onPress={handlePress2}
           style={{ backgroundColor: "white" }}
@@ -43,7 +47,7 @@ const NotificationList = () => {
 
         <List.Accordion
           title="Other"
-          left={(props) => <List.Icon {...props} icon="menu" />}
+          left={(props) => <List.Icon {...props} icon="menu" color="#e32f45" />}
           expanded={expanded3}
           onPress={handlePress3}
           style={{ backgroundColor: "white" }}
