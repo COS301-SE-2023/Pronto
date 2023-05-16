@@ -1,10 +1,61 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { ScrollView } from "react-native";
+import { Button } from "react-native-paper";
 
-const SettingsComponent = () => {
+const SettingsComponent = ({ settingsOptions }) => {
   return (
-    <View>
-      <Text>SettingsComponent</Text>
+    <View style={{ height: "100%" }}>
+      <ScrollView>
+        {settingsOptions.map(({ title, subTitle, onPress }) => (
+          <TouchableOpacity key={title}>
+            <View
+              style={{
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+                paddingTop: 20,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 17,
+                }}
+              >
+                {title}
+              </Text>
+              {subTitle && (
+                <Text
+                  style={{
+                    fontSize: 14,
+                    opacity: 0.5,
+                    paddingTop: 5,
+                  }}
+                >
+                  {subTitle}
+                </Text>
+              )}
+            </View>
+
+            <View style={{ height: 0.5, backgroundColor: "grey" }} />
+          </TouchableOpacity>
+        ))}
+
+        <View style={{ height: "100%" }}>
+          <Button
+            icon="logout"
+            mode="contained"
+            style={{
+              backgroundColor: "#e32f45",
+              marginVertical: 40,
+              marginHorizontal: 20,
+            }}
+            outlined={true}
+            //  onPress={() => console.log("log out")}
+          >
+            Logout
+          </Button>
+        </View>
+      </ScrollView>
     </View>
   );
 };
