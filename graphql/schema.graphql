@@ -30,6 +30,7 @@ type Student @model @key(name: "byInstitution", fields: ["institutionId"]) {
   userRole: String!
   email: String!
   institution: Institution! @connection(fields: ["institutionId"])
+  timetable:[Timetable] @connection(keyName: "byStudent", fields: ["id"])
   enrollments: [Enrollment] @connection(keyName: "byStudent", fields: ["id"])
 }
 
@@ -55,6 +56,16 @@ type Course @model {
   assessments:[Assessment] @connection(keyName:"byCourse",fields["id"])
 }
 
+type Timetable @model(queries: null)
+@key(name:"byStudent",fields:["studentId","activityId"])
+@key(name: "byActivity", fields: ["actvivityId","studentId"]){ 
+  id:String!
+  studentId:String!
+  activityId:String!
+  student: Student! @connnection(fields: ["studentId"])
+  activity: Activity! @connection(fields: ["activityId"])
+} 
+   
 type Activity @model
 @key(name:"byCourse",fields:["courseId"]){
   id:String!
@@ -67,8 +78,8 @@ type Activity @model
   group:String!
   frequency:number!
   course: Course! @connection(fields:["courseId"])
+  timetable: [Timetable] @connection(keyName: "byActivity",fields: ["id"])
 }
-
 
 type Assessment @model
 @key(name:"byCourse",fields:["courseId"]){
