@@ -1,6 +1,6 @@
 projects:
   pronto:
-    schemaPath: graphql/schema.json
+    schemaPath: graphql/schema.graphql
     includes:
       - graphql/**/*.graphql
     excludes:
