@@ -6,7 +6,7 @@ import { ScrollView } from "react-native";
 const NotificationList = () => {
   const [expanded1, setExpanded1] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
-  const [expanded3, setExpanded3] = useState(false);
+  const [expanded3, setExpanded3] = useState(true);
 
   const handlePress1 = () => setExpanded1(!expanded1);
   const handlePress2 = () => setExpanded2(!expanded2);
@@ -21,6 +21,7 @@ const NotificationList = () => {
       <List.Section title="Announcements" style={{ margin: 10 }}>
         <List.Accordion
           title="Reminders"
+          titleStyle={{ color: "black" }}
           left={(props) => (
             <List.Icon {...props} icon="brain" color="#e32f45" />
           )}
@@ -57,6 +58,7 @@ const NotificationList = () => {
 
         <List.Accordion
           title="Due Dates"
+          titleStyle={{ color: "black" }}
           left={(props) => (
             <List.Icon {...props} icon="clock" color="#e32f45" />
           )}
@@ -78,8 +80,11 @@ const NotificationList = () => {
         </List.Accordion>
 
         <List.Accordion
-          title="Other"
-          left={(props) => <List.Icon {...props} icon="menu" color="#e32f45" />}
+          title="Unread"
+          titleStyle={{ color: "black" }}
+          left={(props) => (
+            <List.Icon {...props} icon="inbox" color="#e32f45" />
+          )}
           expanded={expanded3}
           onPress={handlePress3}
           style={{ backgroundColor: "white" }}
@@ -100,7 +105,7 @@ const NotificationList = () => {
 
       <Card.Content>
         <List.Section title="Recent Announcements">
-          <ScrollView>
+          <ScrollView style={{ height: "100%" }}>
             <Card
               style={{
                 marginBottom: 10,
@@ -184,7 +189,7 @@ const NotificationList = () => {
                   left={(props) => (
                     <Avatar.Icon
                       {...props}
-                      icon="menu"
+                      icon="brain"
                       color="#e32f45"
                       style={{ backgroundColor: "white" }}
                     />
