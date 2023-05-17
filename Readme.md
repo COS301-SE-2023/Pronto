@@ -1,8 +1,9 @@
-<img src="Images/ProntoLogo.png" alt="Alt text" title="Optional title"> 
+<p align = "center">
+<img src="Images/ProntoLogo.png" alt="Alt text" title="Optional title">
+</p> 
 
 # Pronto
 
-[![](https://github.com/COS301-SE-2023/Pronto/actions/workflows/index.yml/badge.svg)](https://github.com/COS-301/graduates/actions/workflows/index.yml)
 [![GitHub Repo Size in Bytes](https://img.shields.io/github/languages/code-size/COS301-SE-2023/Pronto)](https://github.com/COS301-SE-2023/Pronto)
 [![GitHub Commit Activity](https://img.shields.io/github/commit-activity/w/COS301-SE-2023/Pronto)](https://github.com/COS301-SE-2023/Pronto)
 
