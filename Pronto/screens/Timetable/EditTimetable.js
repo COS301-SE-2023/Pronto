@@ -229,14 +229,14 @@ const EditTimetable = ({ onSearch }) => {
                     )}
                   </>
                 )}
-
-                <Button
-                  onPress={handleDelete}
-                  style={{ marginLeft: "85%", marginTop: "35%" }}
-                >
-                  <MaterialIcons name="delete" size={24} color="black" />
-                </Button>
               </View>
+
+              <Button
+                onPress={handleDelete}
+                style={{ marginLeft: "85%", marginTop: "35%" }}
+              >
+                <MaterialIcons name="delete" size={24} color="black" />
+              </Button>
             </Card.Content>
           </Card>
         </TouchableWithoutFeedback>
