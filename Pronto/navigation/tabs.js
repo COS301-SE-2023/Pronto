@@ -23,9 +23,10 @@ const screenOptions = {
 
 const Tabs = () => {
   return (
-    <Tab.Navigator {...{ screenOptions }}>
+    <Tab.Navigator {...{ screenOptions }} >
       <Tab.Screen
         name="Timetable"
+        testID="tabs"
         component={ScheduleTable}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -44,6 +45,7 @@ const Tabs = () => {
                   height: 25,
                   tintColor: focused ? "#e32f45" : "#748c94",
                 }}
+
               />
             </View>
           ),

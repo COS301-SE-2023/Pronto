@@ -8,7 +8,7 @@ const SettingsComponent = ({ settingsOptions }) => {
     <View style={{ height: "100%" }}>
       <ScrollView>
         {settingsOptions.map(({ title, subTitle, onPress }) => (
-          <TouchableOpacity key={title}>
+          <TouchableOpacity key={title} testID="option">
             <View
               style={{
                 paddingHorizontal: 20,
@@ -20,6 +20,7 @@ const SettingsComponent = ({ settingsOptions }) => {
                 style={{
                   fontSize: 17,
                 }}
+                testID="option-title"
               >
                 {title}
               </Text>
@@ -30,6 +31,7 @@ const SettingsComponent = ({ settingsOptions }) => {
                     opacity: 0.5,
                     paddingTop: 5,
                   }}
+                  testID="option-subtitle"
                 >
                   {subTitle}
                 </Text>
@@ -51,6 +53,7 @@ const SettingsComponent = ({ settingsOptions }) => {
             }}
             outlined={true}
             //  onPress={() => console.log("log out")}
+            testID="logout-button"
           >
             Logout
           </Button>
