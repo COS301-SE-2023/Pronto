@@ -1,4 +1,4 @@
-![alt text](https://github.com/Tymac15/TymacPrac/tree/main/Images/ProntoLogo.png) 
+<img src="Images/ProntoLogo.png" alt="Alt text" title="Optional title"> 
 
 # Pronto
 
