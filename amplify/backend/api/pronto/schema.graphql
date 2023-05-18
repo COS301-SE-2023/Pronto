@@ -1,4 +1,4 @@
-type Institution @model {
+type Institution @model @auth(rules: [{ allow: owner,  ownerField: "admin" }]){
   name:String!
   location: String
   pageUrl:String
@@ -15,7 +15,7 @@ type Institution @model {
   lecturer: [Lecturer] @hasMany
 }
 
-type Admin @model{
+type Admin @model @auth(rules: [{ allow: owner }]){
   institutionId:ID!
   firstname: String!
   lastname: String!
@@ -24,24 +24,24 @@ type Admin @model{
   institution: Institution! @belongsTo
 }
 
-type Lecturer @model{
+type Lecturer @model @auth(rules: [ { allow: public, operations: [read]}, { allow: owner }]) {
   institutionId:ID!
   firstname: String!
   lastname: String!
   userRole: String!
   email: String!
   institution: Institution! @belongsTo
-  presents: [Enrollment] @hasMany
+  presents: [Present] @hasMany
 }
 
-type Present @model(queries:null){
+type Present @model @auth(rules: [ { allow: public, operations: [read]}, { allow: owner, ownerField: "lecturer" }]){
   lecturerId:ID!
   courseId:ID!
   lecturer: Lecturer! @hasOne
   course: Course! @hasOne
 }
 
-type Student @model {
+type Student @model @auth(rules: [{ allow: owner }]){
   institutionId:ID!
   firstname: String!
   lastname: String!
@@ -52,7 +52,7 @@ type Student @model {
   enrollments: [Enrollment] @hasMany
 }
 
-type Enrollment @model{
+type Enrollment @model @auth(rules: [{ allow: owner,  ownerField: "student" }]){
   studentId: ID!
   courseId: ID!
   year: Int
@@ -60,7 +60,7 @@ type Enrollment @model{
   course: Course! @hasOne
 }
 
-type Course @model @searchable{
+type Course @model @searchable @auth(rules: [{ allow: owner, ownerField: "presents" }]) {
   coursecode: String!
   coursename: String!
   semester: Int
@@ -70,14 +70,14 @@ type Course @model @searchable{
   presents:[Present] @hasMany
 }
 
-type Timetable @model{ 
+type Timetable @model @auth(rules: [{ allow: owner, ownerField: "student" }]){ 
   studentId:String!
   activityId:String!
   student: Student! @hasOne
   activity: Activity! @hasOne
 } 
    
-type Activity @model @searchable{
+type Activity @model @searchable @auth(rules: [{ allow: owner, ownerField: "course" }]){
   courseId:ID!
   activityname:String!
   day:String!
@@ -90,7 +90,7 @@ type Activity @model @searchable{
   timetable: [Timetable] @hasMany
 }
 
-type Announcement @model @searchable{
+type Announcement @model @searchable @auth(rules: [{ allow: owner, ownerField: "course" }]) {
   courseId:ID! 
   description:String!
   start:String!
