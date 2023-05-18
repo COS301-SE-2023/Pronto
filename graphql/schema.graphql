@@ -11,7 +11,7 @@ type Institution @model {
   coursecodes:[String]
   domains:[String]
   admin: Admin @connection(keyName: "byInstitution", fields: ["id"])
-  courses:[Course] @connection(keyName:"byInstitution",fields["id"])
+  courses:[Course] @connection(keyName:"byInstitution",fields: ["id"])
   students: [Student] @connection(keyName: "byInstitution",fields: ["id"])
   lecturer: [Lecturer] @connection(keyName: "byInstitution", fields: ["id"])
 }

@@ -11,3 +11,6 @@ projects:
         generatedFileName: API.swift
         docsFilePath: graphql
         version: 3
+extensions:
+  amplify:
+    version: 3

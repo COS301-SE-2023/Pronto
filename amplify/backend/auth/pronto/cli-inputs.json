@@ -28,7 +28,7 @@
       "name",
       "family_name",
       "email",
-      "birthdate"
+      "address"
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
@@ -38,6 +38,7 @@
     "userpoolClientLambdaRole": "pronto84a75f49_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "sharedId": "84a75f49",
+     
     "resourceName": "pronto",
     "authSelections": "identityPoolAndUserPool",
     "serviceName": "Cognito",
