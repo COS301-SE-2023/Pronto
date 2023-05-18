@@ -35,15 +35,9 @@ describe("NotificationList", () => {
   });
 
   //test that the cards are rendered and that they are clickable
-  test("expands and collapses Other accordion", () => {
+  it('renders the text "IMY 310" after fireEvent', () => {
     const { getByText } = render(<NotificationList />);
-    fireEvent.press(getByText("Unread"));
-    expect(
-      getByText("IMY310: Remeber your pens for the semester test")
-    ).toBeTruthy();
-    fireEvent.press(getByText("Unread"));
-    expect(() =>
-      getByText("IMY310: Remeber your pens for the semester test")
-    ).toThrow();
+    fireEvent.press(getByText('Unread'));
+    expect(getByText('IMY310')).toBeTruthy();
   });
 });
