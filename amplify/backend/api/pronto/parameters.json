@@ -8,4 +8,5 @@
       "Outputs.UserPoolId"
     ]
   }
+  "DynamoDBEnableServerSideEncryption": false
 }
