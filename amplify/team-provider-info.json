@@ -13,10 +13,35 @@
     },
     "categories": {
       "api": {
-        "pronto": {}
+        "pronto": {
+          "OpenSearchInstanceType": "c5.large.search"
+        }
       },
       "storage": {
         "s3prontoblobestore": {}
+      },
+      "auth": {
+        "pronto": {}
+      }
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pronto-prod-95641-authRole",
+      "UnauthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-prod-95641-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-prod-95641-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-pronto-prod-95641-deployment",
+      "UnauthRoleName": "amplify-pronto-prod-95641-unauthRole",
+      "StackName": "amplify-pronto-prod-95641",
+      "StackId": "arn:aws:cloudformation:us-east-1:915206092794:stack/amplify-pronto-prod-95641/9cf659a0-f551-11ed-be01-0afd497892d5",
+      "AmplifyAppId": "d1kit50gzhvboi"
+    },
+    "categories": {
+      "api": {
+        "pronto": {
+          "OpenSearchInstanceType": "c5.large.search"
+        }
       },
       "auth": {
         "pronto": {}

@@ -39,7 +39,7 @@
           "NAME",
           "FAMILY_NAME",
           "EMAIL",
-          "BIRTHDATE"
+          "ADDRESS"
         ],
         "socialProviders": [],
         "usernameAttributes": [
@@ -51,6 +51,32 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    },
+    "userPoolGroups": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito-UserPool-Groups"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_api_pronto_OpenSearchInstanceType": {
+      "usedBy": [
+        {
+          "category": "api",
+          "resourceName": "pronto"
+        }
+      ]
     }
   },
   "storage": {

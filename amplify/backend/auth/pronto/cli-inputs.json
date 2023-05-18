@@ -38,7 +38,6 @@
     "userpoolClientLambdaRole": "pronto84a75f49_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "sharedId": "84a75f49",
-     
     "resourceName": "pronto",
     "authSelections": "identityPoolAndUserPool",
     "serviceName": "Cognito",
@@ -47,11 +46,29 @@
     ],
     "useDefault": "manual",
     "userPoolGroups": false,
-    "userPoolGroupList": [],
+    "userPoolGroupList": [
+      "adminUserGroup",
+      "lecturerUserGroup",
+      "studentUserGroup"
+    ],
     "adminQueries": false,
     "thirdPartyAuth": false,
     "authProviders": [],
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": []
   }
 }
