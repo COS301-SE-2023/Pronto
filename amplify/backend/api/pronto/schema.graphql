@@ -31,7 +31,7 @@ type Lecturer @model @auth(rules: [ { allow: public, operations: [read]}, { allo
   userRole: String!
   email: String!
   institution: Institution! @belongsTo
-  presents: [Present] @hasMany
+  presents: [Enrollment] @hasMany
 }
 
 type Present @model @auth(rules: [ { allow: public, operations: [read]}, { allow: owner, ownerField: "lecturer" }]){
@@ -91,7 +91,7 @@ type Activity @model @searchable @auth(rules: [{ allow: owner, ownerField: "cour
 }
 
 type Announcement @model @searchable @auth(rules: [{ allow: owner, ownerField: "course" }]) {
-  courseId:ID! 
+  courseId:ID!
   description:String!
   start:String!
   end:String!

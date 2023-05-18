@@ -9,18 +9,24 @@
       "UnauthRoleName": "amplify-pronto-dev-153713-unauthRole",
       "StackName": "amplify-pronto-dev-153713",
       "StackId": "arn:aws:cloudformation:us-east-1:915206092794:stack/amplify-pronto-dev-153713/9dd4dde0-ee6e-11ed-b2ee-0eea86a96083",
-      "AmplifyAppId": "d1kit50gzhvboi"
+      "AmplifyAppId": "d1kit50gzhvboi",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-pronto-dev-153713-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
-      "api": {
-        "pronto": {
-          "OpenSearchInstanceType": "c5.large.search"
-        }
-      },
       "storage": {
         "s3prontoblobestore": {}
       },
       "auth": {
+        "prontoAuth": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "prontoAuthPostConfirmation": {
+          "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
+          "s3Key": "amplify-builds/prontoAuthPostConfirmation-4d63544a6b496b697570-build.zip"
+        }
+      },
+      "api": {
         "pronto": {}
       }
     }

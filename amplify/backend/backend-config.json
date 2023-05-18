@@ -1,14 +1,22 @@
 {
   "api": {
     "pronto": {
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "prontoAuth"
+        }
+      ],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "authpronto"
+                "userPoolId": "authprontoAuth"
               }
             }
           ],
@@ -25,28 +33,33 @@
     }
   },
   "auth": {
-    "pronto": {
+    "prontoAuth": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
           "SMS"
         ],
         "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [
-            "REQUIRES_LOWERCASE",
-            "REQUIRES_NUMBERS",
-            "REQUIRES_SYMBOLS",
-            "REQUIRES_UPPERCASE"
-          ],
+          "passwordPolicyCharacters": [],
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-          "NAME",
-          "FAMILY_NAME",
+          "ADDRESS",
           "EMAIL",
-          "ADDRESS"
+          "FAMILY_NAME",
+          "NAME"
         ],
         "socialProviders": [],
         "usernameAttributes": [
@@ -69,11 +82,36 @@
             "IdentityPoolId"
           ],
           "category": "auth",
-          "resourceName": "pronto"
+          "resourceName": "prontoAuth"
         }
       ],
       "providerPlugin": "awscloudformation",
       "service": "Cognito-UserPool-Groups"
+    }
+  },
+  "function": {
+    "prontoAuthPostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
     }
   },
   "storage": {

@@ -7,7 +7,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "auth": {
-    "pronto": {
+    "prontoAuth": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -17,9 +17,18 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolName": "string"
     },
     "userPoolGroups": {
-      "adminUserGroupGroupRole": "string",
-      "lecturerUserGroupGroupRole": "string",
-      "studentUserGroupGroupRole": "string"
+      "adminUserPoolGroupRole": "string",
+      "lecturerUserPoolGroupRole": "string",
+      "studentUserPoolGroupRole": "string"
+    }
+  },
+  "function": {
+    "prontoAuthPostConfirmation": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
     }
   },
   "storage": {

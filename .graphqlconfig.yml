@@ -1,6 +1,6 @@
 projects:
   pronto:
-    schemaPath: graphql/schema.graphql
+    schemaPath: graphql/schema.json
     includes:
       - graphql/**/*.graphql
     excludes:
@@ -10,7 +10,3 @@ projects:
         codeGenTarget: swift
         generatedFileName: API.swift
         docsFilePath: graphql
-        version: 3
-extensions:
-  amplify:
-    version: 3

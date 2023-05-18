@@ -1,0 +1,1230 @@
+# this is an auto generated file. This will be overwritten
+query GetInstitution($id: ID!) {
+  getInstitution(id: $id) {
+    name
+    location
+    pageUrl
+    campusMapUrl
+    openingTime
+    closingTime
+    minimumDuration
+    lectureremails
+    coursecodes
+    domains
+    admin {
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      institution {
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        domains
+        id
+        createdAt
+        updatedAt
+        institutionAdminId
+      }
+      id
+      createdAt
+      updatedAt
+      adminInstitutionId
+      owner
+    }
+    courses {
+      items {
+        coursecode
+        coursename
+        semester
+        id
+        createdAt
+        updatedAt
+        institutionCoursesId
+      }
+      nextToken
+    }
+    students {
+      items {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        institutionStudentsId
+        studentInstitutionId
+        owner
+      }
+      nextToken
+    }
+    lecturer {
+      items {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        institutionLecturerId
+        owner
+      }
+      nextToken
+    }
+    id
+    createdAt
+    updatedAt
+    institutionAdminId
+  }
+}
+query ListInstitutions(
+  $filter: ModelInstitutionFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      admin {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        adminInstitutionId
+        owner
+      }
+      courses {
+        nextToken
+      }
+      students {
+        nextToken
+      }
+      lecturer {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionAdminId
+    }
+    nextToken
+  }
+}
+query GetAdmin($id: ID!) {
+  getAdmin(id: $id) {
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      admin {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        adminInstitutionId
+        owner
+      }
+      courses {
+        nextToken
+      }
+      students {
+        nextToken
+      }
+      lecturer {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionAdminId
+    }
+    id
+    createdAt
+    updatedAt
+    adminInstitutionId
+    owner
+  }
+}
+query ListAdmins(
+  $filter: ModelAdminFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAdmins(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      institution {
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        domains
+        id
+        createdAt
+        updatedAt
+        institutionAdminId
+      }
+      id
+      createdAt
+      updatedAt
+      adminInstitutionId
+      owner
+    }
+    nextToken
+  }
+}
+query GetLecturer($id: ID!) {
+  getLecturer(id: $id) {
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      admin {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        adminInstitutionId
+        owner
+      }
+      courses {
+        nextToken
+      }
+      students {
+        nextToken
+      }
+      lecturer {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionAdminId
+    }
+    presents {
+      items {
+        studentId
+        courseId
+        year
+        id
+        createdAt
+        updatedAt
+        lecturerPresentsId
+        studentEnrollmentsId
+        courseEnrollmentsId
+        enrollmentStudentId
+        enrollmentCourseId
+      }
+      nextToken
+    }
+    id
+    createdAt
+    updatedAt
+    institutionLecturerId
+    owner
+  }
+}
+query ListLecturers(
+  $filter: ModelLecturerFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listLecturers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      institution {
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        domains
+        id
+        createdAt
+        updatedAt
+        institutionAdminId
+      }
+      presents {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionLecturerId
+      owner
+    }
+    nextToken
+  }
+}
+query GetPresent($id: ID!) {
+  getPresent(id: $id) {
+    lecturerId
+    courseId
+    lecturer {
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      institution {
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        domains
+        id
+        createdAt
+        updatedAt
+        institutionAdminId
+      }
+      presents {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionLecturerId
+      owner
+    }
+    course {
+      coursecode
+      coursename
+      semester
+      enrollments {
+        nextToken
+      }
+      activity {
+        nextToken
+      }
+      announcents {
+        nextToken
+      }
+      presents {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionCoursesId
+    }
+    id
+    createdAt
+    updatedAt
+    coursePresentsId
+    presentLecturerId
+    presentCourseId
+  }
+}
+query ListPresents(
+  $filter: ModelPresentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listPresents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      lecturerId
+      courseId
+      lecturer {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        institutionLecturerId
+        owner
+      }
+      course {
+        coursecode
+        coursename
+        semester
+        id
+        createdAt
+        updatedAt
+        institutionCoursesId
+      }
+      id
+      createdAt
+      updatedAt
+      coursePresentsId
+      presentLecturerId
+      presentCourseId
+    }
+    nextToken
+  }
+}
+query GetStudent($id: ID!) {
+  getStudent(id: $id) {
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      admin {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        adminInstitutionId
+        owner
+      }
+      courses {
+        nextToken
+      }
+      students {
+        nextToken
+      }
+      lecturer {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionAdminId
+    }
+    timetable {
+      items {
+        studentId
+        activityId
+        id
+        createdAt
+        updatedAt
+        studentTimetableId
+        activityTimetableId
+        timetableStudentId
+        timetableActivityId
+      }
+      nextToken
+    }
+    enrollments {
+      items {
+        studentId
+        courseId
+        year
+        id
+        createdAt
+        updatedAt
+        lecturerPresentsId
+        studentEnrollmentsId
+        courseEnrollmentsId
+        enrollmentStudentId
+        enrollmentCourseId
+      }
+      nextToken
+    }
+    id
+    createdAt
+    updatedAt
+    institutionStudentsId
+    studentInstitutionId
+    owner
+  }
+}
+query ListStudents(
+  $filter: ModelStudentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listStudents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      institution {
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        domains
+        id
+        createdAt
+        updatedAt
+        institutionAdminId
+      }
+      timetable {
+        nextToken
+      }
+      enrollments {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionStudentsId
+      studentInstitutionId
+      owner
+    }
+    nextToken
+  }
+}
+query GetEnrollment($id: ID!) {
+  getEnrollment(id: $id) {
+    studentId
+    courseId
+    year
+    student {
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      institution {
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        domains
+        id
+        createdAt
+        updatedAt
+        institutionAdminId
+      }
+      timetable {
+        nextToken
+      }
+      enrollments {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionStudentsId
+      studentInstitutionId
+      owner
+    }
+    course {
+      coursecode
+      coursename
+      semester
+      enrollments {
+        nextToken
+      }
+      activity {
+        nextToken
+      }
+      announcents {
+        nextToken
+      }
+      presents {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionCoursesId
+    }
+    id
+    createdAt
+    updatedAt
+    lecturerPresentsId
+    studentEnrollmentsId
+    courseEnrollmentsId
+    enrollmentStudentId
+    enrollmentCourseId
+  }
+}
+query ListEnrollments(
+  $filter: ModelEnrollmentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listEnrollments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      studentId
+      courseId
+      year
+      student {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        institutionStudentsId
+        studentInstitutionId
+        owner
+      }
+      course {
+        coursecode
+        coursename
+        semester
+        id
+        createdAt
+        updatedAt
+        institutionCoursesId
+      }
+      id
+      createdAt
+      updatedAt
+      lecturerPresentsId
+      studentEnrollmentsId
+      courseEnrollmentsId
+      enrollmentStudentId
+      enrollmentCourseId
+    }
+    nextToken
+  }
+}
+query GetCourse($id: ID!) {
+  getCourse(id: $id) {
+    coursecode
+    coursename
+    semester
+    enrollments {
+      items {
+        studentId
+        courseId
+        year
+        id
+        createdAt
+        updatedAt
+        lecturerPresentsId
+        studentEnrollmentsId
+        courseEnrollmentsId
+        enrollmentStudentId
+        enrollmentCourseId
+      }
+      nextToken
+    }
+    activity {
+      items {
+        courseId
+        activityname
+        day
+        start
+        end
+        venue
+        group
+        frequency
+        id
+        createdAt
+        updatedAt
+        courseActivityId
+        activityCourseId
+      }
+      nextToken
+    }
+    announcents {
+      items {
+        courseId
+        description
+        start
+        end
+        date
+        venue
+        id
+        createdAt
+        updatedAt
+        courseAnnouncentsId
+        announcementCourseId
+      }
+      nextToken
+    }
+    presents {
+      items {
+        lecturerId
+        courseId
+        id
+        createdAt
+        updatedAt
+        coursePresentsId
+        presentLecturerId
+        presentCourseId
+      }
+      nextToken
+    }
+    id
+    createdAt
+    updatedAt
+    institutionCoursesId
+  }
+}
+query ListCourses(
+  $filter: ModelCourseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCourses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      coursecode
+      coursename
+      semester
+      enrollments {
+        nextToken
+      }
+      activity {
+        nextToken
+      }
+      announcents {
+        nextToken
+      }
+      presents {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionCoursesId
+    }
+    nextToken
+  }
+}
+query SearchCourses(
+  $filter: SearchableCourseFilterInput
+  $sort: [SearchableCourseSortInput]
+  $limit: Int
+  $nextToken: String
+  $from: Int
+  $aggregates: [SearchableCourseAggregationInput]
+) {
+  searchCourses(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+    aggregates: $aggregates
+  ) {
+    items {
+      coursecode
+      coursename
+      semester
+      enrollments {
+        nextToken
+      }
+      activity {
+        nextToken
+      }
+      announcents {
+        nextToken
+      }
+      presents {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionCoursesId
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
+query GetTimetable($id: ID!) {
+  getTimetable(id: $id) {
+    studentId
+    activityId
+    student {
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      institution {
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        domains
+        id
+        createdAt
+        updatedAt
+        institutionAdminId
+      }
+      timetable {
+        nextToken
+      }
+      enrollments {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionStudentsId
+      studentInstitutionId
+      owner
+    }
+    activity {
+      courseId
+      activityname
+      day
+      start
+      end
+      venue
+      group
+      frequency
+      course {
+        coursecode
+        coursename
+        semester
+        id
+        createdAt
+        updatedAt
+        institutionCoursesId
+      }
+      timetable {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      courseActivityId
+      activityCourseId
+    }
+    id
+    createdAt
+    updatedAt
+    studentTimetableId
+    activityTimetableId
+    timetableStudentId
+    timetableActivityId
+  }
+}
+query ListTimetables(
+  $filter: ModelTimetableFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listTimetables(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      studentId
+      activityId
+      student {
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        id
+        createdAt
+        updatedAt
+        institutionStudentsId
+        studentInstitutionId
+        owner
+      }
+      activity {
+        courseId
+        activityname
+        day
+        start
+        end
+        venue
+        group
+        frequency
+        id
+        createdAt
+        updatedAt
+        courseActivityId
+        activityCourseId
+      }
+      id
+      createdAt
+      updatedAt
+      studentTimetableId
+      activityTimetableId
+      timetableStudentId
+      timetableActivityId
+    }
+    nextToken
+  }
+}
+query GetActivity($id: ID!) {
+  getActivity(id: $id) {
+    courseId
+    activityname
+    day
+    start
+    end
+    venue
+    group
+    frequency
+    course {
+      coursecode
+      coursename
+      semester
+      enrollments {
+        nextToken
+      }
+      activity {
+        nextToken
+      }
+      announcents {
+        nextToken
+      }
+      presents {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionCoursesId
+    }
+    timetable {
+      items {
+        studentId
+        activityId
+        id
+        createdAt
+        updatedAt
+        studentTimetableId
+        activityTimetableId
+        timetableStudentId
+        timetableActivityId
+      }
+      nextToken
+    }
+    id
+    createdAt
+    updatedAt
+    courseActivityId
+    activityCourseId
+  }
+}
+query ListActivities(
+  $filter: ModelActivityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listActivities(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      courseId
+      activityname
+      day
+      start
+      end
+      venue
+      group
+      frequency
+      course {
+        coursecode
+        coursename
+        semester
+        id
+        createdAt
+        updatedAt
+        institutionCoursesId
+      }
+      timetable {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      courseActivityId
+      activityCourseId
+    }
+    nextToken
+  }
+}
+query SearchActivities(
+  $filter: SearchableActivityFilterInput
+  $sort: [SearchableActivitySortInput]
+  $limit: Int
+  $nextToken: String
+  $from: Int
+  $aggregates: [SearchableActivityAggregationInput]
+) {
+  searchActivities(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+    aggregates: $aggregates
+  ) {
+    items {
+      courseId
+      activityname
+      day
+      start
+      end
+      venue
+      group
+      frequency
+      course {
+        coursecode
+        coursename
+        semester
+        id
+        createdAt
+        updatedAt
+        institutionCoursesId
+      }
+      timetable {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      courseActivityId
+      activityCourseId
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
+query GetAnnouncement($id: ID!) {
+  getAnnouncement(id: $id) {
+    courseId
+    description
+    start
+    end
+    date
+    venue
+    course {
+      coursecode
+      coursename
+      semester
+      enrollments {
+        nextToken
+      }
+      activity {
+        nextToken
+      }
+      announcents {
+        nextToken
+      }
+      presents {
+        nextToken
+      }
+      id
+      createdAt
+      updatedAt
+      institutionCoursesId
+    }
+    id
+    createdAt
+    updatedAt
+    courseAnnouncentsId
+    announcementCourseId
+  }
+}
+query ListAnnouncements(
+  $filter: ModelAnnouncementFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      courseId
+      description
+      start
+      end
+      date
+      venue
+      course {
+        coursecode
+        coursename
+        semester
+        id
+        createdAt
+        updatedAt
+        institutionCoursesId
+      }
+      id
+      createdAt
+      updatedAt
+      courseAnnouncentsId
+      announcementCourseId
+    }
+    nextToken
+  }
+}
+query SearchAnnouncements(
+  $filter: SearchableAnnouncementFilterInput
+  $sort: [SearchableAnnouncementSortInput]
+  $limit: Int
+  $nextToken: String
+  $from: Int
+  $aggregates: [SearchableAnnouncementAggregationInput]
+) {
+  searchAnnouncements(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+    aggregates: $aggregates
+  ) {
+    items {
+      courseId
+      description
+      start
+      end
+      date
+      venue
+      course {
+        coursecode
+        coursename
+        semester
+        id
+        createdAt
+        updatedAt
+        institutionCoursesId
+      }
+      id
+      createdAt
+      updatedAt
+      courseAnnouncentsId
+      announcementCourseId
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
