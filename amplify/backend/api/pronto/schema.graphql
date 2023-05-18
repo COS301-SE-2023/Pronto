@@ -1,5 +1,4 @@
 type Institution @model {
-  id: ID! @primaryKey
   name:String!
   location: String
   pageUrl:String
@@ -18,7 +17,6 @@ type Institution @model {
 
 type Admin @model
 @key(name: "byInstitution", fields: ["institutionId"]){
-  id: ID! @primaryKey
   institutionId:ID!
   firstname: String!
   lastname: String!
@@ -29,7 +27,6 @@ type Admin @model
 
 type Lecturer @model
 @key(name:"byInstitution",fields: ["institutionId"]){
-  id: ID! @primaryKey
   institutionId:ID!
   firstname: String!
   lastname: String!
@@ -42,7 +39,6 @@ type Lecturer @model
 type Present @model(queries:null)
 @key(name:"byLecturer", fields:["lecturerId"])
 @key(name:"byCourse" ,fields:["courseId"]){
-  id:ID! @primaryKey
   lecturerId:ID!
   courseId:ID!
   lecturer: Lecturer! @connection(fields: ["lecturerId"])
@@ -51,7 +47,6 @@ type Present @model(queries:null)
 
 type Student @model 
 @key(name: "byInstitution", fields: ["institutionId"]) {
-  id: ID! @primaryKey
   institutionId:ID!
   firstname: String!
   lastname: String!
@@ -65,7 +60,6 @@ type Student @model
 type Enrollment @model(queries: null)
 @key(name: "byStudent", fields: ["studentId", "courseId"])
 @key(name: "byCourse", fields: ["courseId", "studentId"]) {
-  id: ID! @primaryKey
   studentId: ID!
   courseId: ID!
   year: Int
@@ -75,7 +69,6 @@ type Enrollment @model(queries: null)
 
 type Course @model @searchable
 @key(name: "byInstitution",fields: ["institutionId"]) {
-  id: ID! @primaryKey
   coursecode: String!
   coursename: String!
   semester: Int
@@ -88,7 +81,6 @@ type Course @model @searchable
 type Timetable @model(queries: null)
 @key(name:"byStudent",fields:["studentId","activityId"])
 @key(name: "byActivity", fields: ["actvivityId","studentId"]){ 
-  id:ID! @primaryKey
   studentId:String!
   activityId:String!
   student: Student! @connnection(fields: ["studentId"])
@@ -97,7 +89,6 @@ type Timetable @model(queries: null)
    
 type Activity @model @searchable
 @key(name:"byCourse",fields:["courseId"]){
-  id:ID! @primaryKey
   courseId:ID!
   activityname:String!
   day:String!
@@ -112,7 +103,6 @@ type Activity @model @searchable
 
 type Announcement @model @searchable
 @key(name:"byCourse",fields:["courseId"]){
-  id:ID! @primaryKey
   courseId:ID! 
   description:String!
   start:String!
