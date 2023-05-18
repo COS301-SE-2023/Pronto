@@ -4,7 +4,14 @@
       "dependsOn": [],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [],
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authpronto"
+              }
+            }
+          ],
           "defaultAuthentication": {
             "apiKeyConfig": {
               "apiKeyExpirationDays": 7
@@ -67,16 +74,6 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Cognito-UserPool-Groups"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_api_pronto_OpenSearchInstanceType": {
-      "usedBy": [
-        {
-          "category": "api",
-          "resourceName": "pronto"
-        }
-      ]
     }
   },
   "storage": {
