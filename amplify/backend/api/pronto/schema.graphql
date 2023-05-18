@@ -9,86 +9,75 @@ type Institution @model {
   lectureremails:[String]
   coursecodes:[String]
   domains:[String]
-  admin: Admin @connection(keyName: "byInstitution", fields: ["id"])
-  courses:[Course] @connection(keyName:"byInstitution",fields: ["id"])
-  students: [Student] @connection(keyName: "byInstitution",fields: ["id"])
-  lecturer: [Lecturer] @connection(keyName: "byInstitution", fields: ["id"])
+  admin: Admin @hasOne
+  courses:[Course] @hasMany
+  students: [Student] @hasMany
+  lecturer: [Lecturer] @hasMany
 }
 
-type Admin @model
-@key(name: "byInstitution", fields: ["institutionId"]){
+type Admin @model{
   institutionId:ID!
   firstname: String!
   lastname: String!
   userRole:String!
   email: String!
-  institution: Institution! @connection(fields: ["institutionId"])
+  institution: Institution! @belongsTo
 }
 
-type Lecturer @model
-@key(name:"byInstitution",fields: ["institutionId"]){
+type Lecturer @model{
   institutionId:ID!
   firstname: String!
   lastname: String!
   userRole: String!
   email: String!
-  institution: Institution! @connection(fields: ["institutionId"])
-  presents: [Enrollment] @connection(keyName: "byLecturer", fields: ["id"])
+  institution: Institution! @belongsTo
+  presents: [Enrollment] @hasMany
 }
 
-type Present @model(queries:null)
-@key(name:"byLecturer", fields:["lecturerId"])
-@key(name:"byCourse" ,fields:["courseId"]){
+type Present @model(queries:null){
   lecturerId:ID!
   courseId:ID!
-  lecturer: Lecturer! @connection(fields: ["lecturerId"])
-  course: Course! @connection(fields: ["courseId"])
+  lecturer: Lecturer! @hasOne
+  course: Course! @hasOne
 }
 
-type Student @model 
-@key(name: "byInstitution", fields: ["institutionId"]) {
+type Student @model {
   institutionId:ID!
   firstname: String!
   lastname: String!
   userRole: String!
   email: String!
-  institution: Institution! @connection(fields: ["institutionId"])
-  timetable:[Timetable] @connection(keyName: "byStudent", fields: ["id"])
-  enrollments: [Enrollment] @connection(keyName: "byStudent", fields: ["id"])
+  institution: Institution! @hasOne
+  timetable:[Timetable] @hasMany
+  enrollments: [Enrollment] @hasMany
 }
 
-type Enrollment @model(queries: null)
-@key(name: "byStudent", fields: ["studentId", "courseId"])
-@key(name: "byCourse", fields: ["courseId", "studentId"]) {
+type Enrollment @model(queries: null) {
   studentId: ID!
   courseId: ID!
   year: Int
-  student: Student! @connection(fields: ["studentId"])
-  course: Course! @connection(fields: ["courseId"])
+  student: Student! @hasOne
+  course: Course! @hasOne
 }
 
-type Course @model @searchable
-@key(name: "byInstitution",fields: ["institutionId"]) {
+type Course @model @searchable{
   coursecode: String!
   coursename: String!
   semester: Int
-  enrollments: [Enrollment] @connection(keyName: "byCourse", fields: ["id"])
-  activity:[Activity] @connection(keyName: "byCourse",fields: ["id"])
-  announcents:[Announcement] @connection(keyName:"byCourse",fields: ["id"])
-  presents:[Present] @connection(keyName:"byCourse",fields: ["id"])
+  enrollments: [Enrollment] @hasMany
+  activity:[Activity] @hasMany
+  announcents:[Announcement] @hasMany
+  presents:[Present] @hasMany
 }
 
-type Timetable @model(queries: null)
-@key(name:"byStudent",fields:["studentId","activityId"])
-@key(name: "byActivity", fields: ["actvivityId","studentId"]){ 
+type Timetable @model(queries: null){ 
   studentId:String!
   activityId:String!
   student: Student! @connnection(fields: ["studentId"])
   activity: Activity! @connection(fields: ["activityId"])
 } 
    
-type Activity @model @searchable
-@key(name:"byCourse",fields:["courseId"]){
+type Activity @model @searchable{
   courseId:ID!
   activityname:String!
   day:String!
@@ -101,8 +90,7 @@ type Activity @model @searchable
   timetable: [Timetable] @connection(keyName: "byActivity",fields: ["id"])
 }
 
-type Announcement @model @searchable
-@key(name:"byCourse",fields:["courseId"]){
+type Announcement @model @searchable{
   courseId:ID! 
   description:String!
   start:String!
