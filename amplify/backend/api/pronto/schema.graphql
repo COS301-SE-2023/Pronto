@@ -52,7 +52,7 @@ type Student @model {
   enrollments: [Enrollment] @hasMany
 }
 
-type Enrollment @model(queries: null) {
+type Enrollment @model{
   studentId: ID!
   courseId: ID!
   year: Int
@@ -70,11 +70,11 @@ type Course @model @searchable{
   presents:[Present] @hasMany
 }
 
-type Timetable @model(queries: null){ 
+type Timetable @model{ 
   studentId:String!
   activityId:String!
-  student: Student! @connnection(fields: ["studentId"])
-  activity: Activity! @connection(fields: ["activityId"])
+  student: Student! @hasOne
+  activity: Activity! @hasOne
 } 
    
 type Activity @model @searchable{
@@ -86,8 +86,8 @@ type Activity @model @searchable{
   venue:String!
   group:String!
   frequency:Int
-  course: Course! @connection(fields:["courseId"])
-  timetable: [Timetable] @connection(keyName: "byActivity",fields: ["id"])
+  course: Course! @hasOne
+  timetable: [Timetable] @hasMany
 }
 
 type Announcement @model @searchable{
@@ -97,5 +97,5 @@ type Announcement @model @searchable{
   end:String!
   date:String!
   venue:String!
-  course: Course! @connection(fields: ["courseId"])
+  course: Course! @hasOne
 }
