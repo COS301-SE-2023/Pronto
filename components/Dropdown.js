@@ -4,8 +4,8 @@ import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 const data = [
-  { label: "Item 1", value: "1" },
-  { label: "Item 2", value: "2" },
+  { label: "Monday: 11:30-12:20", value: "1" },
+  { label: "Tuesday: 13:30-14:20", value: "2" },
   { label: "Item 3", value: "3" },
   { label: "Item 4", value: "4" },
   { label: "Item 5", value: "5" },
@@ -14,15 +14,15 @@ const data = [
   { label: "Item 8", value: "8" },
 ];
 
-const DropdownComponent = () => {
+const DropdownComponent = ({ activity, lectureNumber }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderLabel = () => {
     if (value || isFocus) {
       return (
-        <Text style={[styles.label, isFocus && { color: "blue" }]}>
-          Dropdown label
+        <Text style={[styles.label, isFocus && { color: "#e32f45" }]}>
+          {activity} {lectureNumber}
         </Text>
       );
     }
@@ -33,18 +33,16 @@ const DropdownComponent = () => {
     <View style={styles.container}>
       {renderLabel()}
       <Dropdown
-        style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+        style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         data={data}
-        search
-        maxHeight={300}
+        maxHeight={220}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? "Select item" : "..."}
-        searchPlaceholder="Search..."
+        placeholder={!isFocus ? "Select time" : "..."}
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
@@ -55,8 +53,8 @@ const DropdownComponent = () => {
         renderLeftIcon={() => (
           <AntDesign
             style={styles.icon}
-            color={isFocus ? "blue" : "black"}
-            name="Safety"
+            color={isFocus ? "#e32f45" : "black"}
+            name="book"
             size={20}
           />
         )}
@@ -74,6 +72,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 50,
+    width: 250,
     borderColor: "gray",
     borderWidth: 0.5,
     borderRadius: 8,

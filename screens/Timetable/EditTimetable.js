@@ -262,7 +262,23 @@ const EditTimetable = ({ onSearch }) => {
               <View key={selectedModule.code}>
                 <Text style={styles.moduleCode}>{selectedModule.code}</Text>
                 <Text style={styles.moduleName}>{selectedModule.name}</Text>
-                <DropdownComponent />
+                <DropdownComponent activity={"Lecture"} lectureNumber={1} />
+                <DropdownComponent activity={"Lecture"} lectureNumber={2} />
+                <DropdownComponent activity={"Practical"} lectureNumber={1} />
+                <Button
+                  icon="check"
+                  mode="contained"
+                  style={{
+                    backgroundColor: "#e32f45",
+                    marginVertical: 10,
+                    marginHorizontal: 20,
+                  }}
+                  outlined={true}
+                  onPress={toggleModal}
+                  testID="save-button"
+                >
+                  Save
+                </Button>
               </View>
             )}
           </View>
