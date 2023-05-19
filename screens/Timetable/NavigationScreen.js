@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, Buttons, StyleSheet, Dimensions } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 const { width, height } = Dimensions.get("window");
 
@@ -15,15 +14,7 @@ const INITIAL_POSITION = {
 };
 
 export default function NavigationScreen() {
-  return (
-    <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={INITIAL_POSITION}
-      />
-    </View>
-  );
+  return <View style={styles.container}></View>;
 }
 
 const styles = StyleSheet.create({

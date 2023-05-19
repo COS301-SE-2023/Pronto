@@ -14,6 +14,7 @@ import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Card, Button, IconButton } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
@@ -94,50 +95,11 @@ const EditTimetable = ({ onSearch }) => {
     },
   ];
 
-  const modulePracticals = [
-    {
-      code: "AIM 111",
-      practicals: [
-        {
-          name: "P1",
-          day: "Wednesday",
-          time: "15:00-16:20",
-          semester: "S1",
-          group: "G01",
-          location: "Venue A",
-        },
-        {
-          name: "P1",
-          day: "Wed",
-          time: "15:00-16:20",
-          location: "Venue B",
-        },
-        {
-          name: "P1",
-          day: "Wed",
-          time: "15:00-16:20",
-          location: "Venue C",
-        },
-        {
-          name: "P2",
-          day: "Thu",
-          time: "09:00-10:20",
-          location: "Venue D",
-        },
-        {
-          name: "P3",
-          day: "Wed",
-          time: "15:00-16:20",
-          location: "Venue E",
-        },
-      ],
-    },
-  ];
-
-  //code to trigger modal
   const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedModule, setSelectedModule] = useState(null);
 
-  const toggleModal = () => {
+  const toggleModal = (module) => {
+    setSelectedModule(module);
     setModalVisible(!isModalVisible);
   };
 
@@ -170,20 +132,6 @@ const EditTimetable = ({ onSearch }) => {
       );
     };
 
-    const handleTimeSelection = (time, lectureIndex) => {
-      setSelectedTime((prevSelectedTime) => {
-        const updatedSelectedTime = { ...prevSelectedTime };
-        if (!updatedSelectedTime[item.id]) {
-          updatedSelectedTime[item.id] = Array.from(
-            { length: item.numLecturesPerWeek },
-            () => ""
-          );
-        }
-        updatedSelectedTime[item.id][lectureIndex] = time;
-        return updatedSelectedTime;
-      });
-    };
-
     return (
       <View style={{ margin: 20 }}>
         <TouchableWithoutFeedback onPress={() => addToModules(item)}>
@@ -206,7 +154,6 @@ const EditTimetable = ({ onSearch }) => {
               subtitle={item.name}
               subtitleStyle={{
                 fontSize: 15,
-
                 justifyContent: "center",
                 textAlign: "center",
                 marginBottom: 10,
@@ -218,7 +165,7 @@ const EditTimetable = ({ onSearch }) => {
                     {...props}
                     icon="plus"
                     iconColor="#e32f45"
-                    onPress={toggleModal}
+                    onPress={() => toggleModal(item)}
                     style={{ marginRight: 10 }}
                   />
                   <IconButton
@@ -278,7 +225,7 @@ const EditTimetable = ({ onSearch }) => {
         renderItem={oneModule}
         ListEmptyComponent={
           !input &&
-          selectedModules.length === 0 && ( // Render only when input is empty and no modules are selected
+          selectedModules.length === 0 && (
             <View
               style={{
                 flexDirection: "row",
@@ -310,14 +257,13 @@ const EditTimetable = ({ onSearch }) => {
             color="#000000"
           />
 
-          {/* Modal content */}
           <View style={styles.modalContent}>
-            {selectedModules.map((module) => (
-              <View key={module.id}>
-                <Text style={styles.moduleCode}>{module.code}</Text>
-                <Text style={styles.moduleName}>{module.name}</Text>
+            {selectedModule && (
+              <View key={selectedModule.code}>
+                <Text style={styles.moduleCode}>{selectedModule.code}</Text>
+                <Text style={styles.moduleName}>{selectedModule.name}</Text>
               </View>
-            ))}
+            )}
           </View>
         </View>
       </Modal>
@@ -347,6 +293,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 50,
     marginBottom: 20,
+    width: "80%",
   },
   moduleCode: {
     fontSize: 20,
@@ -368,31 +315,3 @@ const styles = StyleSheet.create({
 });
 
 export default EditTimetable;
-
-const pickerSelectStyles = {
-  inputIOS: {
-    fontSize: 15,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderRadius: 4,
-    color: "black",
-    paddingRight: 40,
-    marginBottom: 10,
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    textAlign: "center",
-    borderColor: "gray",
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderRadius: 8,
-    color: "black",
-    paddingRight: 30,
-    borderColor: "gray",
-  },
-};
