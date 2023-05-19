@@ -6,12 +6,9 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 const data = [
   { label: "Monday: 11:30-12:20", value: "1" },
   { label: "Tuesday: 13:30-14:20", value: "2" },
-  { label: "Item 3", value: "3" },
-  { label: "Item 4", value: "4" },
-  { label: "Item 5", value: "5" },
-  { label: "Item 6", value: "6" },
-  { label: "Item 7", value: "7" },
-  { label: "Item 8", value: "8" },
+  { label: "Wednesday: 13:30-14:20", value: "3" },
+  { label: "Thursday: 10:30-11:20", value: "4" },
+  { label: "Friday: 12:30-13:20", value: "5" },
 ];
 
 const DropdownComponent = ({ activity, lectureNumber }) => {
