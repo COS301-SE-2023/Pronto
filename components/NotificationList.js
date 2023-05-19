@@ -105,99 +105,101 @@ const NotificationList = () => {
 
       <Card.Content>
         <List.Section title="Recent Announcements">
-          <ScrollView style={{ height: "100%" }}>
-            <Card
-              style={{
-                marginBottom: 10,
-                backgroundColor: "white",
-              }}
-              onPress={showFullMessage}
-            >
-              <Card.Content>
-                <Card.Title
-                  title="COS301"
-                  subtitle="Lecture venue changed from North Hall to IT 2-27"
-                  left={(props) => (
-                    <Avatar.Icon
-                      {...props}
-                      icon="brain"
-                      color="#e32f45"
-                      style={{ backgroundColor: "white" }}
-                    />
-                  )}
-                />
-              </Card.Content>
-            </Card>
+          <View>
+            <ScrollView style={{ height: "100%" }}>
+              <Card
+                style={{
+                  marginBottom: 10,
+                  backgroundColor: "white",
+                }}
+                onPress={showFullMessage}
+              >
+                <Card.Content>
+                  <Card.Title
+                    title="COS301"
+                    subtitle="Lecture venue changed from North Hall to IT 2-27"
+                    left={(props) => (
+                      <Avatar.Icon
+                        {...props}
+                        icon="brain"
+                        color="#e32f45"
+                        style={{ backgroundColor: "white" }}
+                      />
+                    )}
+                  />
+                </Card.Content>
+              </Card>
 
-            <Card
-              style={{
-                marginBottom: 10,
-                backgroundColor: "white",
-              }}
-              onPress={showFullMessage}
-            >
-              <Card.Content>
-                <Card.Title
-                  title="COS332"
-                  subtitle="Change in Lecture Time"
-                  left={(props) => (
-                    <Avatar.Icon
-                      {...props}
-                      icon="brain"
-                      color="#e32f45"
-                      style={{ backgroundColor: "white" }}
-                    />
-                  )}
-                />
-              </Card.Content>
-            </Card>
+              <Card
+                style={{
+                  marginBottom: 10,
+                  backgroundColor: "white",
+                }}
+                onPress={showFullMessage}
+              >
+                <Card.Content>
+                  <Card.Title
+                    title="COS332"
+                    subtitle="Change in Lecture Time"
+                    left={(props) => (
+                      <Avatar.Icon
+                        {...props}
+                        icon="brain"
+                        color="#e32f45"
+                        style={{ backgroundColor: "white" }}
+                      />
+                    )}
+                  />
+                </Card.Content>
+              </Card>
 
-            <Card
-              style={{
-                marginBottom: 10,
-                backgroundColor: "white",
-              }}
-              onPress={showFullMessage}
-            >
-              <Card.Content>
-                <Card.Title
-                  title="COS216"
-                  subtitle="Assignment due soon"
-                  left={(props) => (
-                    <Avatar.Icon
-                      {...props}
-                      icon="clock"
-                      color="#e32f45"
-                      style={{ backgroundColor: "white" }}
-                    />
-                  )}
-                />
-              </Card.Content>
-            </Card>
+              <Card
+                style={{
+                  marginBottom: 10,
+                  backgroundColor: "white",
+                }}
+                onPress={showFullMessage}
+              >
+                <Card.Content>
+                  <Card.Title
+                    title="COS216"
+                    subtitle="Assignment due soon"
+                    left={(props) => (
+                      <Avatar.Icon
+                        {...props}
+                        icon="clock"
+                        color="#e32f45"
+                        style={{ backgroundColor: "white" }}
+                      />
+                    )}
+                  />
+                </Card.Content>
+              </Card>
 
-            <Card
-              style={{
-                marginBottom: 10,
-                backgroundColor: "white",
-              }}
-              onPress={showFullMessage}
-            >
-              <Card.Content>
-                <Card.Title
-                  title="IMY310"
-                  subtitle="Remember your pens for the test"
-                  left={(props) => (
-                    <Avatar.Icon
-                      {...props}
-                      icon="brain"
-                      color="#e32f45"
-                      style={{ backgroundColor: "white" }}
-                    />
-                  )}
-                />
-              </Card.Content>
-            </Card>
-          </ScrollView>
+              <Card
+                style={{
+                  marginBottom: 10,
+                  backgroundColor: "white",
+                }}
+                onPress={showFullMessage}
+              >
+                <Card.Content>
+                  <Card.Title
+                    title="IMY310"
+                    subtitle="Remember your pens for the test"
+                    left={(props) => (
+                      <Avatar.Icon
+                        {...props}
+                        icon="brain"
+                        color="#e32f45"
+                        style={{ backgroundColor: "white" }}
+                      />
+                    )}
+                  />
+                </Card.Content>
+              </Card>
+            </ScrollView>
+          </View>
         </List.Section>
       </Card.Content>
     </View>

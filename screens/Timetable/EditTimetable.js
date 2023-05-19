@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import {
   View,
   TextInput,
-  Dimensions,
   Text,
   SafeAreaView,
   Alert,
   TouchableWithoutFeedback,
-  ScrollView,
+  Modal,
+  TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Card, Button, IconButton } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
@@ -94,6 +94,53 @@ const EditTimetable = ({ onSearch }) => {
     },
   ];
 
+  const modulePracticals = [
+    {
+      code: "AIM 111",
+      practicals: [
+        {
+          name: "P1",
+          day: "Wednesday",
+          time: "15:00-16:20",
+          semester: "S1",
+          group: "G01",
+          location: "Venue A",
+        },
+        {
+          name: "P1",
+          day: "Wed",
+          time: "15:00-16:20",
+          location: "Venue B",
+        },
+        {
+          name: "P1",
+          day: "Wed",
+          time: "15:00-16:20",
+          location: "Venue C",
+        },
+        {
+          name: "P2",
+          day: "Thu",
+          time: "09:00-10:20",
+          location: "Venue D",
+        },
+        {
+          name: "P3",
+          day: "Wed",
+          time: "15:00-16:20",
+          location: "Venue E",
+        },
+      ],
+    },
+  ];
+
+  //code to trigger modal
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const [selectedModules, setSelectedModules] = useState([]);
 
   const [selectedTime, setSelectedTime] = useState(() => {
@@ -166,77 +213,25 @@ const EditTimetable = ({ onSearch }) => {
                 marginLeft: 30,
               }}
               right={(props) => (
-                <IconButton {...props} icon="delete" onPress={handleDelete} />
+                <View style={{ flexDirection: "column" }}>
+                  <IconButton
+                    {...props}
+                    icon="plus"
+                    iconColor="#e32f45"
+                    onPress={toggleModal}
+                    style={{ marginRight: 10 }}
+                  />
+                  <IconButton
+                    {...props}
+                    icon="delete"
+                    onPress={handleDelete}
+                    iconColor="#e32f45"
+                  />
+                </View>
               )}
             />
             <Card.Content>
-              <View>
-                {selectedModules.some((module) => module.id === item.id) && (
-                  <>
-                    {Array.from(
-                      { length: item.numLecturesPerWeek },
-                      (_, index) => (
-                        <View
-                          key={index}
-                          style={{ flexDirection: "row", alignItems: "center" }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 16,
-                              textAlign: "center",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              marginRight: 10,
-                              marginBottom: 10,
-                            }}
-                          >
-                            Lecture {index + 1}:{" "}
-                          </Text>
-                          <RNPickerSelect
-                            value={
-                              selectedTime[item.id]
-                                ? selectedTime[item.id][index]
-                                : ""
-                            }
-                            onValueChange={(value) =>
-                              handleTimeSelection(value, index)
-                            }
-                            placeholder={{
-                              label: "Select a time",
-                              value: "",
-                            }}
-                            items={moduleTimes
-                              .find((module) => module.code === item.code)
-                              .times[index].map((time, index) => ({
-                                label: time,
-                                value: time,
-                              }))}
-                            style={pickerSelectStyles} // Apply the styles here
-                            useNativeAndroidPickerStyle={false} // Required for Android to apply custom styles
-                            Icon={() => {
-                              return (
-                                <Feather
-                                  name="chevron-down"
-                                  size={25}
-                                  color="black"
-                                  style={{ marginRight: 10 }}
-                                />
-                              );
-                            }}
-                          />
-                        </View>
-                      )
-                    )}
-                  </>
-                )}
-              </View>
-
-              <Button
-                onPress={handleDelete}
-                style={{ marginLeft: "85%", marginTop: "35%" }}
-              >
-                <MaterialIcons name="delete" size={24} color="black" />
-              </Button>
+              <View></View>
             </Card.Content>
           </Card>
         </TouchableWithoutFeedback>
@@ -305,9 +300,72 @@ const EditTimetable = ({ onSearch }) => {
           )
         }
       />
+
+      <Modal visible={isModalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <IconButton
+            icon="close"
+            onPress={toggleModal}
+            style={styles.closeIcon}
+            color="#000000"
+          />
+
+          {/* Modal content */}
+          <View style={styles.modalContent}>
+            {selectedModules.map((module) => (
+              <View key={module.id}>
+                <Text style={styles.moduleCode}>{module.code}</Text>
+                <Text style={styles.moduleName}>{module.name}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    marginVertical: 200,
+    marginHorizontal: 10,
+    borderRadius: "50%",
+    backgroundColor: "white",
+    elevation: 5,
+    shadowColor: "black",
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 4,
+  },
+  modalContent: {
+    alignItems: "center",
+    marginTop: 50,
+    marginBottom: 20,
+  },
+  moduleCode: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  moduleName: {
+    fontSize: 15,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  closeIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
+});
 
 export default EditTimetable;
 

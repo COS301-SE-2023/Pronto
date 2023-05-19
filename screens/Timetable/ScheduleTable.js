@@ -133,7 +133,9 @@ const ScheduleTable = () => {
           todayTextColor: "#e32f45", // today in calendar
           selectedDayBackgroundColor: "#e32f45", // calendar sel date
           dotColor: "#e32f45", // dots
-
+          agendaDayTextColor: "#e32f45",
+          agendaDayNumColor: "#e32f45",
+          agendaTodayColor: "#e32f45",
           //further styling options if needed
           //  textDisabledColor: "#e32f45",
           //   agendaTodayColor: "#e32f45", // today in list
