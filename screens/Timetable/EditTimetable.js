@@ -4,16 +4,15 @@ import {
   TextInput,
   Text,
   SafeAreaView,
-  Alert,
   TouchableWithoutFeedback,
   Modal,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Card, Button, IconButton } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
+import DropdownComponent from "../../components/Dropdown";
 
 const EditTimetable = ({ onSearch }) => {
   const modules = [
@@ -98,8 +97,10 @@ const EditTimetable = ({ onSearch }) => {
   const [selectedModule, setSelectedModule] = useState(null);
 
   const toggleModal = (module) => {
-    setSelectedModule(module);
-    setModalVisible(!isModalVisible);
+    if (module) {
+      setSelectedModule(module);
+      setModalVisible(!isModalVisible);
+    }
   };
 
   const [selectedModules, setSelectedModules] = useState([]);
@@ -261,7 +262,7 @@ const EditTimetable = ({ onSearch }) => {
               <View key={selectedModule.code}>
                 <Text style={styles.moduleCode}>{selectedModule.code}</Text>
                 <Text style={styles.moduleName}>{selectedModule.name}</Text>
-                {/* Add more dropdowns for lecture times if needed */}
+                <DropdownComponent />
               </View>
             )}
           </View>
