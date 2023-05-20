@@ -11,19 +11,16 @@ const data = [
   { label: "Friday: 12:30-13:20", value: "5" },
 ];
 
-const DropdownComponent = ({ activity, lectureNumber }) => {
+const DropdownComponent = ({ activity, activityNumber }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderLabel = () => {
-    if (value || isFocus) {
-      return (
-        <Text style={[styles.label, isFocus && { color: "#e32f45" }]}>
-          {activity} {lectureNumber}
-        </Text>
-      );
-    }
-    return null;
+    return (
+      <Text style={[styles.label, isFocus && { color: "#e32f45" }]}>
+        {activity} {activityNumber}
+      </Text>
+    );
   };
 
   return (

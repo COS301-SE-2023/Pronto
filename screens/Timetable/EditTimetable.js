@@ -105,17 +105,6 @@ const EditTimetable = ({ onSearch }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-  const [selectedTime, setSelectedTime] = useState(() => {
-    const initialSelectedTime = {};
-    selectedModules.forEach((module) => {
-      initialSelectedTime[module.id] = Array.from(
-        { length: module.numLecturesPerWeek },
-        () => ""
-      );
-    });
-    return initialSelectedTime;
-  });
-
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [...prevModules, module]);
@@ -262,9 +251,9 @@ const EditTimetable = ({ onSearch }) => {
               <View key={selectedModule.code}>
                 <Text style={styles.moduleCode}>{selectedModule.code}</Text>
                 <Text style={styles.moduleName}>{selectedModule.name}</Text>
-                <DropdownComponent activity={"Lecture"} lectureNumber={1} />
-                <DropdownComponent activity={"Lecture"} lectureNumber={2} />
-                <DropdownComponent activity={"Practical"} lectureNumber={1} />
+                <DropdownComponent activity={"Lecture"} activityNumber={1} />
+                <DropdownComponent activity={"Lecture"} activityNumber={2} />
+                <DropdownComponent activity={"Practical"} activityNumber={1} />
                 <Button
                   icon="check"
                   mode="contained"
