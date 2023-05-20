@@ -1,0 +1,27 @@
+# Expo
+node_modules/
+.expo/
+.cache/
+.git/
+*.log
+*.tgz
+.DS_Store
+
+# WebStorm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS and editor files
+.DS_Store
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*.bak
+*.tmp
+*.tmp.*
+*.~*
+*.DS_Store?

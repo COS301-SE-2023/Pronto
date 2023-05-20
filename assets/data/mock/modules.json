@@ -1,0 +1,63 @@
+{
+  "M1":
+    {
+      "id": "1",
+      "code": "COS301",
+      "time": "11:00-11:20",
+      "frequency": 1,
+      "venue": "IT 2-27",
+      "day": "Friday",
+      "height": 50
+    },
+  "M2": 
+    {
+      "id": "2",
+      "code": "IMY310",
+      "time": "11:00-11:20",
+      "frequency": 1,
+      "venue": "IT 2-27",
+      "day": "Thursday",
+      "height": 50
+    },
+    "M3": 
+    {
+      "id": "3",
+      "code": "COS216",
+      "time": "11:00-11:20",
+      "frequency": 1,
+      "venue": "Law 1-54",
+      "day": "Thursday",
+      "height": 50
+    },
+    "M4": 
+    {
+      "id": "4",
+      "code": "COS216",
+      "time": "11:00-11:20",
+      "frequency": 1,
+      "venue": "Law 1-54",
+      "day": "Monday",
+      "height": 50
+    },
+    "M5": 
+    {
+      "id": "5",
+      "code": "COS216",
+      "time": "08:30-09:20",
+      "frequency": 1,
+      "venue": "Law 1-54",
+      "day": "Monday",
+      "height": 50
+    },
+    "M6": 
+    {
+      "id": "5",
+      "code": "COS216",
+      "time": "08:30-09:20",
+      "frequency": 1,
+      "venue": "Law 1-54",
+      "day": "Sunday",
+      "height": 50
+    }
+}
+
