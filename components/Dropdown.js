@@ -11,7 +11,7 @@ const data = [
   { label: "Friday: 12:30-13:20", value: "5" },
 ];
 
-const DropdownComponent = ({ activity, activityNumber }) => {
+const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -22,7 +22,6 @@ const DropdownComponent = ({ activity, activityNumber }) => {
       </Text>
     );
   };
-
   return (
     <View style={styles.container}>
       {renderLabel()}
@@ -32,7 +31,7 @@ const DropdownComponent = ({ activity, activityNumber }) => {
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={data}
+        data={moduleContent}
         maxHeight={220}
         labelField="label"
         valueField="value"

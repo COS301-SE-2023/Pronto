@@ -18,78 +18,135 @@ const EditTimetable = ({ onSearch }) => {
   const modules = [
     {
       id: 1,
-      code: "COS301",
+      code: "COS 301",
       name: "Software Engineering",
-      numLecturesPerWeek: 2,
+      value: "COS 301",
+      semester: "Y",
+      groups: ["G01"],
+
+      lectureDays: ["Monday", "Tuesday"],
+      lectureActivity: ["L1", "L2"],
+      lectureTimes: {
+        Monday: ["11:30-12:20"],
+        Tuesday: ["14:30-15:20"],
+      },
+      lectureVenues: ["IT 2-27", "IT 2-27"],
+
+      practicalActivity: null,
+      practicalDays: null,
+      practicalTimes: null,
+      practicalVenues: null,
+
+      tutorialActivity: null,
+      tutorialDays: null,
+      tutorialTimes: null,
+      tutorialVenues: null,
     },
     {
       id: 2,
-      code: "COS332",
+      code: "COS 332",
       name: "Computer Networks",
-      numLecturesPerWeek: 1,
+      value: "COS 332",
+      semester: "S1",
+      groups: ["G01"],
+
+      lectureDays: ["Monday", "Wednesday"],
+      lectureActivity: ["L1", "L2"],
+      lectureTimes: {
+        Monday: ["12:30-13:20"],
+        Wednesday: ["14:30-15:20"],
+      },
+      lectureVenues: ["IT 2-26", "IT 2-26"],
+
+      practicalActivity: ["P1"],
+      practicalTimes: [
+        ["Tuesday", "14:30-17:20"],
+        ["Friday", "08:30-11:20"],
+      ],
+      practicalVenues: ["Green Lab", "Blue Lab"],
+
+      tutorialActivity: null,
+      tutorialDays: null,
+      tutorialTimes: null,
+      tutorialVenues: null,
     },
     {
       id: 3,
-      code: "COS341",
+      code: "COS 341",
       name: "Compiler Construction",
-      numLecturesPerWeek: 1,
+      value: "COS 341",
+      semester: "S1",
+      groups: ["G01"],
+
+      lectureDays: ["Monday", "Wednesday"],
+      lectureActivity: ["L1", "L2"],
+      lectureTimes: {
+        Monday: ["12:30-13:20"],
+        Tuesday: ["14:30-15:20"],
+      },
+      lectureVenues: ["IT 2-26", "IT 2-26"],
+
+      practicalActivity: ["P01", "P02"],
+      practicalDays: ["Tuesday", "Friday"],
+      practicalTimes: ["14:30-17:20", "08:30-11:20"],
+      practicalVenues: ["Green Lab", "Blue Lab"],
+
+      tutorialActivity: null,
+      tutorialDays: null,
+      tutorialTimes: null,
+      tutorialVenues: null,
     },
     {
       id: 4,
-      code: "IMY310",
+      code: "IMY 310",
       name: "Human Computer Interaction",
-      numLecturesPerWeek: 1,
+      value: "IMY 310",
+      semester: "S1",
+      groups: ["G01"],
+
+      lectureDays: ["Monday", "Wednesday"],
+      lectureActivity: ["L1", "L2"],
+      lectureTimes: {
+        Monday: ["12:30-13:20"],
+        Tuesday: ["14:30-15:20"],
+      },
+      lectureVenues: ["IT 2-26", "IT 2-26"],
+
+      practicalActivity: ["P01", "P02"],
+      practicalDays: ["Tuesday", "Friday"],
+      practicalTimes: ["14:30-17:20", "08:30-11:20"],
+      practicalVenues: ["Green Lab", "Blue Lab"],
+
+      tutorialActivity: null,
+      tutorialDays: null,
+      tutorialTimes: null,
+      tutorialVenues: null,
     },
     {
       id: 5,
-      code: "COS216",
+      code: "COS 216",
       name: "Netcentric Computer Programming",
-      numLecturesPerWeek: 1,
-    },
-  ];
+      value: "COS 216",
+      semester: "S1",
+      groups: ["G01"],
 
-  const moduleTimes = [
-    {
-      id: 1,
-      code: "COS301",
-      name: "Software Engineering",
-      days: ["Monday", "Tuesday"],
-      times: [
-        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
-        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 2 times
-      ],
-    },
-    {
-      code: "COS332",
-      name: "Computer Networks",
-      days: ["Monday"],
-      times: [
-        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
-      ],
-    },
-    {
-      code: "COS341",
-      name: "Compiler Construction",
-      days: ["Thursday"],
-      times: [
-        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
-      ],
-    },
-    {
-      code: "IMY310",
-      name: "Human Computer Interaction",
-      days: ["Tuesday"],
-      times: [
-        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
-      ],
-    },
-    {
-      code: "COS216",
-      name: "Netcentric Computer Programming",
-      days: ["Monday"],
-      times: [
-        ["11:30-12:20", "14:30-15:20", "15:30-16:20", "16:30-17:20"], // Lecture 1 times
-      ],
+      lectureDays: ["Monday", "Wednesday"],
+      lectureActivity: ["L1", "L2"],
+      lectureTimes: {
+        Monday: ["12:30-13:20"],
+        Tuesday: ["14:30-15:20"],
+      },
+      lectureVenues: ["IT 2-26", "IT 2-26"],
+
+      practicalActivity: ["P01", "P02"],
+      practicalDays: ["Tuesday", "Friday"],
+      practicalTimes: ["14:30-17:20", "08:30-11:20"],
+      practicalVenues: ["Green Lab", "Blue Lab"],
+
+      tutorialActivity: null,
+      tutorialDays: null,
+      tutorialTimes: null,
+      tutorialVenues: null,
     },
   ];
 
@@ -99,7 +156,10 @@ const EditTimetable = ({ onSearch }) => {
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module);
-      setModalVisible(!isModalVisible);
+      setModalVisible(true);
+    } else {
+      setSelectedModule(null);
+      setModalVisible(false);
     }
   };
 
@@ -241,7 +301,7 @@ const EditTimetable = ({ onSearch }) => {
         <View style={styles.modalContainer}>
           <IconButton
             icon="close"
-            onPress={toggleModal}
+            onPress={() => toggleModal(null)}
             style={styles.closeIcon}
             color="#000000"
           />
@@ -251,9 +311,63 @@ const EditTimetable = ({ onSearch }) => {
               <View key={selectedModule.code}>
                 <Text style={styles.moduleCode}>{selectedModule.code}</Text>
                 <Text style={styles.moduleName}>{selectedModule.name}</Text>
-                <DropdownComponent activity={"Lecture"} activityNumber={1} />
-                <DropdownComponent activity={"Lecture"} activityNumber={2} />
-                <DropdownComponent activity={"Practical"} activityNumber={1} />
+                {/* Check if there are lectures */}
+                {selectedModule.lectureActivity &&
+                  selectedModule.lectureDays &&
+                  selectedModule.lectureDays.map((day, index) => (
+                    <DropdownComponent
+                      key={index}
+                      activity={"Lecture"}
+                      moduleContent={selectedModule.lectureTimes[day].map(
+                        (time, index) => ({
+                          label: `${day}: ${time}`,
+                          value: `${index + 1}`,
+                        })
+                      )}
+                      activityNumber={index + 1}
+                    />
+                  ))}
+
+                {/* Check if there are practicals */}
+                {selectedModule.practicalActivity &&
+                  selectedModule.practicalTimes &&
+                  selectedModule.practicalActivity.map(
+                    (practicalActivity, index) => {
+                      const practicalTimes = selectedModule.practicalTimes;
+
+                      return (
+                        <DropdownComponent
+                          key={index}
+                          activity={"Practical"}
+                          activityNumber={index + 1}
+                          moduleContent={practicalTimes.map(
+                            (time, timeIndex) => ({
+                              label: `${time[0]}: ${time[1]}`,
+                              value: `${timeIndex + 1}`,
+                            })
+                          )}
+                        />
+                      );
+                    }
+                  )}
+
+                {/* Check if there are tutorials */}
+                {selectedModule.tutorialActivity &&
+                  selectedModule.tutorialDays &&
+                  selectedModule.tutorialDays.map((day, index) => (
+                    <DropdownComponent
+                      key={index}
+                      activity={"Tutorial"}
+                      activityNumber={index + 1}
+                      moduleContent={selectedModule.tutorialTimes[day].map(
+                        (time, index) => ({
+                          label: `${day}: ${time}`,
+                          value: `${index + 1}`,
+                        })
+                      )}
+                    />
+                  ))}
+
                 <Button
                   icon="check"
                   mode="contained"
@@ -263,7 +377,7 @@ const EditTimetable = ({ onSearch }) => {
                     marginHorizontal: 20,
                   }}
                   outlined={true}
-                  onPress={toggleModal}
+                  onPress={() => toggleModal(null)}
                   testID="save-button"
                 >
                   Save
