@@ -100,7 +100,7 @@ const EditTimetable = ({ onSearch }) => {
       id: 4,
       code: "IMY 310",
       name: "Human Computer Interaction",
-      value: "IMY 310",
+      value: "IMY310",
       semester: "S1",
       groups: ["G01"],
 
@@ -108,19 +108,17 @@ const EditTimetable = ({ onSearch }) => {
       lectureActivity: ["L1", "L2"],
       lectureTimes: {
         Monday: ["12:30-13:20"],
-        Tuesday: ["14:30-15:20"],
+        Wednesday: ["14:30-15:20"],
       },
       lectureVenues: ["IT 2-26", "IT 2-26"],
 
-      practicalActivity: ["P01", "P02"],
-      practicalDays: ["Tuesday", "Friday"],
-      practicalTimes: ["14:30-17:20", "08:30-11:20"],
-      practicalVenues: ["Green Lab", "Blue Lab"],
+      practicalActivity: null,
+      practicalTimes: null,
+      practicalVenues: null,
 
-      tutorialActivity: null,
-      tutorialDays: null,
-      tutorialTimes: null,
-      tutorialVenues: null,
+      tutorialActivity: ["T1"],
+      tutorialTimes: [["Friday", "14:30-17:20"]],
+      tutorialVenues: ["SIT Lab"],
     },
     {
       id: 5,
@@ -353,20 +351,26 @@ const EditTimetable = ({ onSearch }) => {
 
                 {/* Check if there are tutorials */}
                 {selectedModule.tutorialActivity &&
-                  selectedModule.tutorialDays &&
-                  selectedModule.tutorialDays.map((day, index) => (
-                    <DropdownComponent
-                      key={index}
-                      activity={"Tutorial"}
-                      activityNumber={index + 1}
-                      moduleContent={selectedModule.tutorialTimes[day].map(
-                        (time, index) => ({
-                          label: `${day}: ${time}`,
-                          value: `${index + 1}`,
-                        })
-                      )}
-                    />
-                  ))}
+                  selectedModule.tutorialTimes &&
+                  selectedModule.tutorialActivity.map(
+                    (tutorialActivity, index) => {
+                      const tutorialTimes = selectedModule.tutorialTimes;
+
+                      return (
+                        <DropdownComponent
+                          key={index}
+                          activity={"Tutorial"}
+                          activityNumber={index + 1}
+                          moduleContent={tutorialTimes.map(
+                            (time, timeIndex) => ({
+                              label: `${time[0]}: ${time[1]}`,
+                              value: `${timeIndex + 1}`,
+                            })
+                          )}
+                        />
+                      );
+                    }
+                  )}
 
                 <Button
                   icon="check"
