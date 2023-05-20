@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Modal,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { Card, Button, IconButton } from "react-native-paper";
@@ -82,13 +83,15 @@ const EditTimetable = ({ onSearch }) => {
       lectureActivity: ["L1", "L2"],
       lectureTimes: {
         Monday: ["12:30-13:20"],
-        Tuesday: ["14:30-15:20"],
+        Wednesday: ["14:30-15:20"],
       },
       lectureVenues: ["IT 2-26", "IT 2-26"],
 
-      practicalActivity: ["P01", "P02"],
-      practicalDays: ["Tuesday", "Friday"],
-      practicalTimes: ["14:30-17:20", "08:30-11:20"],
+      practicalActivity: ["P1"],
+      practicalTimes: [
+        ["Tuesday", "14:30-17:20"],
+        ["Friday", "08:30-11:20"],
+      ],
       practicalVenues: ["Green Lab", "Blue Lab"],
 
       tutorialActivity: null,
@@ -132,13 +135,15 @@ const EditTimetable = ({ onSearch }) => {
       lectureActivity: ["L1", "L2"],
       lectureTimes: {
         Monday: ["12:30-13:20"],
-        Tuesday: ["14:30-15:20"],
+        Wednesday: ["14:30-15:20"],
       },
       lectureVenues: ["IT 2-26", "IT 2-26"],
 
-      practicalActivity: ["P01", "P02"],
-      practicalDays: ["Tuesday", "Friday"],
-      practicalTimes: ["14:30-17:20", "08:30-11:20"],
+      practicalActivity: ["P1"],
+      practicalTimes: [
+        ["Tuesday", "14:30-17:20"],
+        ["Friday", "08:30-11:20"],
+      ],
       practicalVenues: ["Green Lab", "Blue Lab"],
 
       tutorialActivity: null,
@@ -234,7 +239,7 @@ const EditTimetable = ({ onSearch }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View
         style={{
           padding: 10,
@@ -293,6 +298,7 @@ const EditTimetable = ({ onSearch }) => {
             </View>
           )
         }
+        style={styles.moduleList} // Set a specific height for FlatList
       />
 
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
@@ -312,26 +318,29 @@ const EditTimetable = ({ onSearch }) => {
                 {/* Check if there are lectures */}
                 {selectedModule.lectureActivity &&
                   selectedModule.lectureDays &&
+                  selectedModule.lectureTimes &&
+                  selectedModule.lectureVenues &&
                   selectedModule.lectureDays.map((day, index) => (
                     <DropdownComponent
                       key={index}
                       activity={"Lecture"}
                       moduleContent={selectedModule.lectureTimes[day].map(
-                        (time, index) => ({
-                          label: `${day}: ${time}`,
+                        (time, timeIndex) => ({
+                          label: `${day}: ${time} (${selectedModule.lectureVenues[timeIndex]})`,
                           value: `${index + 1}`,
                         })
                       )}
                       activityNumber={index + 1}
                     />
                   ))}
-
                 {/* Check if there are practicals */}
                 {selectedModule.practicalActivity &&
                   selectedModule.practicalTimes &&
+                  selectedModule.practicalVenues &&
                   selectedModule.practicalActivity.map(
                     (practicalActivity, index) => {
                       const practicalTimes = selectedModule.practicalTimes;
+                      const practicalVenues = selectedModule.practicalVenues;
 
                       return (
                         <DropdownComponent
@@ -340,7 +349,7 @@ const EditTimetable = ({ onSearch }) => {
                           activityNumber={index + 1}
                           moduleContent={practicalTimes.map(
                             (time, timeIndex) => ({
-                              label: `${time[0]}: ${time[1]}`,
+                              label: `${time[0]}: ${time[1]} (${practicalVenues[timeIndex]})`,
                               value: `${timeIndex + 1}`,
                             })
                           )}
@@ -352,10 +361,11 @@ const EditTimetable = ({ onSearch }) => {
                 {/* Check if there are tutorials */}
                 {selectedModule.tutorialActivity &&
                   selectedModule.tutorialTimes &&
+                  selectedModule.tutorialVenues &&
                   selectedModule.tutorialActivity.map(
                     (tutorialActivity, index) => {
                       const tutorialTimes = selectedModule.tutorialTimes;
-
+                      const tutorialVenues = selectedModule.tutorialVenues;
                       return (
                         <DropdownComponent
                           key={index}
@@ -363,7 +373,7 @@ const EditTimetable = ({ onSearch }) => {
                           activityNumber={index + 1}
                           moduleContent={tutorialTimes.map(
                             (time, timeIndex) => ({
-                              label: `${time[0]}: ${time[1]}`,
+                              label: `${time[0]}: ${time[1]} (${tutorialVenues[timeIndex]})`,
                               value: `${timeIndex + 1}`,
                             })
                           )}
@@ -402,7 +412,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 200,
     marginHorizontal: 10,
-    borderRadius: "50%",
+    borderRadius: "50",
     backgroundColor: "white",
     elevation: 5,
     shadowColor: "black",
@@ -435,6 +445,13 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
     zIndex: 1,
+  },
+  moduleList: {
+    flex: 1, // Fill the available space
+    marginBottom: 70,
+  },
+  container: {
+    flex: 1,
   },
 });
 

@@ -106,7 +106,7 @@ const NotificationList = () => {
       <Card.Content>
         <List.Section title="Recent Announcements">
           <View>
-            <ScrollView style={{ height: "100%" }}>
+            <ScrollView style={{ height: 250 }}>
               <Card
                 style={{
                   marginBottom: 10,
