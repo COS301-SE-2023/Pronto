@@ -1,21 +1,3 @@
-UI Wireframe designs as of 14/05/2023 (designs in prep for demo 1 and implementation)
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-- The designs folder structure has changed, separating the student application views from the institutional web app views.
-- The Instituiotion page view, lecturer home page view and edit module information page designs have been added.
-
-*** Extra info on the Institution view:
-An institution will have options to edit their information such as email addresses that the institution page is tied to/admined by and important contact information. The institutional 
-account also has the ability to upload the spreadsheet of their entire timetable which will be used by students belonging to that institution, and will also be able to upload other 
-important student files such as campus maps. The last important ability that the institution has is the ability to add lecturers to the database. This table of entries will be used to 
-verify lecturer account authentication, as well as appointing lecturers to their respective modules. This table can be searched and edited by institutions at any time.
-
-***Extra info on the lecturer view:
-Currently the lecturers account title is displayed and they have the option to edit their personal information (contact numbers, etc) as well as to edit module information. Since lecturers 
-may take more than one module at a time they first have to choose which module they want to edit, and then they will be taken to the page that allows posts and edits for that specific 
-module. Here they can fill in the fields and post either updates (announcements/reminders) as well as assignment due dates. It is not shown in the diagram but the lecturer will  be able 
-to scroll down this page and be presented with options to add/edit lecture venue coordinates, as well as managing/deleting old updates and due assignment posts. 
-
-
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 UI Wireframe designs as of 04/05/2023 (designs to be shown for the Kickstarter meeting)
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -50,8 +32,6 @@ UI Wireframe designs as of 04/05/2023 (designs to be shown for the Kickstarter m
 	   changes to assignments such as deadline extensions. Only lecturers will be able to post these assignment details and important announcements, and by adding a module
 	   to their timetable a student will automatically subscribe to these event updates. They can choose their notification preferences in the menu.
 
-*** This summarises the initial designs up to this point in time, and further updates or decisions can be added to this readme at the top of the page in future, with the relative details 
+*** This summarises the initial designs up to this point in time, and further updates or decisions can be added to this readme below the line in future, with the relative details 
     such as date of changes and decisions. ***
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-

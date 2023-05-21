@@ -1,3 +1,4 @@
+
 .vscode
 .env
 
@@ -22,7 +23,7 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-=======
+
 # dependencies
 /node_modules
 
@@ -50,3 +51,31 @@ yarn-error.log*
 
 # AWS User-specific
 .idea/**/aws.xml
+
+# Expo
+node_modules/
+.expo/
+.cache/
+.git/
+*.log
+*.tgz
+.DS_Store
+
+# WebStorm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS and editor files
+.DS_Store
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*.bak
+*.tmp
+*.tmp.*
+*.~*
+*.DS_Store?
