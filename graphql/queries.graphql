@@ -1,4 +1,3 @@
-# this is an auto generated file. This will be overwritten
 query GetInstitution($id: ID!) {
   getInstitution(id: $id) {
     id
