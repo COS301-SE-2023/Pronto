@@ -3,14 +3,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-const data = [
-  { label: "Monday: 11:30-12:20", value: "1" },
-  { label: "Tuesday: 13:30-14:20", value: "2" },
-  { label: "Wednesday: 13:30-14:20", value: "3" },
-  { label: "Thursday: 10:30-11:20", value: "4" },
-  { label: "Friday: 12:30-13:20", value: "5" },
-];
-
 const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);

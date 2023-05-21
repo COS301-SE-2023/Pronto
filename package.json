@@ -34,7 +34,6 @@
     "react-native": "0.71.7",
     "react-native-button": "^3.0.1",
     "react-native-calendars": "^1.1295.0",
-    "react-native-card-flip": "^1.0.7",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-dropdown-select-list": "^2.0.4",
     "react-native-element-dropdown": "^2.9.0",

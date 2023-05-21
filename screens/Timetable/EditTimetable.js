@@ -24,7 +24,6 @@ const EditTimetable = ({ onSearch }) => {
       value: "COS 301",
       semester: "Y",
       groups: ["G01"],
-
       lectureDays: ["Monday", "Tuesday"],
       lectureActivity: ["L1", "L2"],
       lectureTimes: {
