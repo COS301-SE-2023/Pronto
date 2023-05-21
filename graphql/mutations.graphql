@@ -1,4 +1,3 @@
-# this is an auto generated file. This will be overwritten
 mutation CreateInstitution(
   $input: CreateInstitutionInput!
   $condition: ModelInstitutionConditionInput
@@ -1170,5 +1169,6 @@ mutation DeleteAnnouncement(
     _version
     _deleted
     _lastChangedAt
+
   }
 }

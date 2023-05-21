@@ -20,6 +20,7 @@
               }
             }
           ],
+
           "defaultAuthentication": {
             "apiKeyConfig": {
               "apiKeyExpirationDays": 7
@@ -46,13 +47,19 @@
           "triggerProvider": "Cognito"
         }
       ],
+
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
           "SMS"
         ],
         "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
+            "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ],
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
@@ -94,6 +101,7 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+
     }
   },
   "storage": {
