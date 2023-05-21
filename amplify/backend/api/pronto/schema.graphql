@@ -1,4 +1,5 @@
 type Institution @model @auth(rules: [{ allow: owner,  ownerField: "admin" }]){
+  id:ID!
   name:String!
   location: String
   pageUrl:String
@@ -9,76 +10,80 @@ type Institution @model @auth(rules: [{ allow: owner,  ownerField: "admin" }]){
   lectureremails:[String]
   coursecodes:[String]
   domains:[String]
-  admin: Admin @hasOne
-  courses:[Course] @hasMany
-  students: [Student] @hasMany
-  lecturer: [Lecturer] @hasMany
+  admin: Admin @hasOne(fields: ["adminId"])
+  adminId: ID!
+  courses:[Course] @hasMany(indexName: "byCourse", fields: ["id"])
+  students: [Student] @hasMany(indexName: "byStudent", fields: ["id"])
+  lecturer: [Lecturer] @hasMany(indexName: "byLecturer", fields: ["id"])
 }
 
 type Admin @model @auth(rules: [{ allow: owner }]){
-  institutionId:ID!
+  id:ID! 
+  institutionId:ID 
   firstname: String!
   lastname: String!
   userRole:String!
   email: String!
-  institution: Institution! @belongsTo
+  institution: Institution @belongsTo(fields: ["institutionId"])
 }
 
 type Lecturer @model @auth(rules: [ { allow: public, operations: [read]}, { allow: owner }]) {
-  institutionId:ID!
+  id:ID! 
+  institutionId:ID! @index(name: "byLecturer")
   firstname: String!
   lastname: String!
   userRole: String!
   email: String!
-  institution: Institution! @belongsTo
-  presents: [Enrollment] @hasMany
-}
-
-type Present @model @auth(rules: [ { allow: public, operations: [read]}, { allow: owner, ownerField: "lecturer" }]){
-  lecturerId:ID!
-  courseId:ID!
-  lecturer: Lecturer! @hasOne
-  course: Course! @hasOne
+  institution: Institution! @belongsTo(fields: ["institutionId"])
+  courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
 }
 
 type Student @model @auth(rules: [{ allow: owner }]){
-  institutionId:ID!
+  institutionId:ID! @index(name: "byStudent")
+  id: ID!
   firstname: String!
   lastname: String!
   userRole: String!
   email: String!
-  institution: Institution! @hasOne
-  timetable:[Timetable] @hasMany
-  enrollments: [Enrollment] @hasMany
+  institution: Institution! @belongsTo(fields: ["institutionId"])
+  timetable:Timetable @hasOne
+  enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
 }
 
 type Enrollment @model @auth(rules: [{ allow: owner,  ownerField: "student" }]){
-  studentId: ID!
+  id:ID! 
+  studentId: ID! @index(name: "byEnrollment")
   courseId: ID!
   year: Int
-  student: Student! @hasOne
-  course: Course! @hasOne
+  student: Student! @belongsTo(fields: ["studentId"])
+  course: Course! @belongsTo(fields: ["courseId"])
 }
 
-type Course @model @searchable @auth(rules: [{ allow: owner, ownerField: "presents" }]) {
+type Course @model @searchable @auth(rules: [{ allow: owner, ownerField: "institutionId" }, { allow: public, operations: [read]}]) {
+  id:ID! 
+  institutionId: ID! @index(name: "byCourse")
+  lecturerId: ID
   coursecode: String!
   coursename: String!
   semester: Int
-  enrollments: [Enrollment] @hasMany
-  activity:[Activity] @hasMany
-  announcents:[Announcement] @hasMany
-  presents:[Present] @hasMany
+  enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"]) 
+  activity:[Activity] @hasMany(indexName: "byActivity", fields: ["id"])
+  announcents:[Announcement] @hasMany(indexName: "byAnnouncement", fields: ["id"])
+  lecturer:Lecturer @belongsTo(fields: ["lecturerId"])
+  institution: Institution! @belongsTo(fields: ["institutionId"])
 }
 
 type Timetable @model @auth(rules: [{ allow: owner, ownerField: "student" }]){ 
-  studentId:String!
+  id:ID! 
+  studentId:ID!
   activityId:String!
-  student: Student! @hasOne
-  activity: Activity! @hasOne
+  student: Student! @belongsTo(fields: ["studentId"])
+  activities: [Activity]! @hasMany(indexName: "byActivity", fields: ["id"])
 } 
    
-type Activity @model @searchable @auth(rules: [{ allow: owner, ownerField: "course" }]){
-  courseId:ID!
+type Activity @model @searchable @auth(rules: [{ allow: owner, ownerField: "courseId" }]){
+  id:ID! 
+  courseId:ID! @index(name: "byActivity")
   activityname:String!
   day:String!
   start:String!
@@ -86,16 +91,20 @@ type Activity @model @searchable @auth(rules: [{ allow: owner, ownerField: "cour
   venue:String!
   group:String!
   frequency:Int
-  course: Course! @hasOne
-  timetable: [Timetable] @hasMany
-}
+  description: String!
+  course: Course @belongsTo(fields: ["courseId"])
+} 
 
 type Announcement @model @searchable @auth(rules: [{ allow: owner, ownerField: "course" }]) {
-  courseId:ID!
+  id:ID! 
+  courseId:ID! @index(name: "byAnnouncement")
   description:String!
   start:String!
   end:String!
   date:String!
   venue:String!
-  course: Course! @hasOne
+  course: Course! @belongsTo(fields: ["courseId"])
 }
+
+# Failing Relations
+# There are some relations that are failing, model needs to be improved

@@ -1,6 +1,7 @@
 # this is an auto generated file. This will be overwritten
 query GetInstitution($id: ID!) {
   getInstitution(id: $id) {
+    id
     name
     location
     pageUrl
@@ -12,80 +13,37 @@ query GetInstitution($id: ID!) {
     coursecodes
     domains
     admin {
+      id
       institutionId
       firstname
       lastname
       userRole
       email
-      institution {
-        name
-        location
-        pageUrl
-        campusMapUrl
-        openingTime
-        closingTime
-        minimumDuration
-        lectureremails
-        coursecodes
-        domains
-        id
-        createdAt
-        updatedAt
-        institutionAdminId
-      }
-      id
       createdAt
       updatedAt
-      adminInstitutionId
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
+    adminId
     courses {
-      items {
-        coursecode
-        coursename
-        semester
-        id
-        createdAt
-        updatedAt
-        institutionCoursesId
-      }
       nextToken
+      startedAt
     }
     students {
-      items {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        institutionStudentsId
-        studentInstitutionId
-        owner
-      }
       nextToken
+      startedAt
     }
     lecturer {
-      items {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        institutionLecturerId
-        owner
-      }
       nextToken
+      startedAt
     }
-    id
     createdAt
     updatedAt
-    institutionAdminId
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 query ListInstitutions(
@@ -95,6 +53,7 @@ query ListInstitutions(
 ) {
   listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
       name
       location
       pageUrl
@@ -105,43 +64,62 @@ query ListInstitutions(
       lectureremails
       coursecodes
       domains
-      admin {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        adminInstitutionId
-        owner
-      }
-      courses {
-        nextToken
-      }
-      students {
-        nextToken
-      }
-      lecturer {
-        nextToken
-      }
-      id
+      adminId
       createdAt
       updatedAt
-      institutionAdminId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
+  }
+}
+query SyncInstitutions(
+  $filter: ModelInstitutionFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncInstitutions(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
   }
 }
 query GetAdmin($id: ID!) {
   getAdmin(id: $id) {
+    id
     institutionId
     firstname
     lastname
     userRole
     email
     institution {
+      id
       name
       location
       pageUrl
@@ -152,36 +130,18 @@ query GetAdmin($id: ID!) {
       lectureremails
       coursecodes
       domains
-      admin {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        adminInstitutionId
-        owner
-      }
-      courses {
-        nextToken
-      }
-      students {
-        nextToken
-      }
-      lecturer {
-        nextToken
-      }
-      id
+      adminId
       createdAt
       updatedAt
-      institutionAdminId
+      _version
+      _deleted
+      _lastChangedAt
     }
-    id
     createdAt
     updatedAt
-    adminInstitutionId
+    _version
+    _deleted
+    _lastChangedAt
     owner
   }
 }
@@ -192,44 +152,63 @@ query ListAdmins(
 ) {
   listAdmins(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
       institutionId
       firstname
       lastname
       userRole
       email
-      institution {
-        name
-        location
-        pageUrl
-        campusMapUrl
-        openingTime
-        closingTime
-        minimumDuration
-        lectureremails
-        coursecodes
-        domains
-        id
-        createdAt
-        updatedAt
-        institutionAdminId
-      }
-      id
       createdAt
       updatedAt
-      adminInstitutionId
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
     nextToken
+    startedAt
+  }
+}
+query SyncAdmins(
+  $filter: ModelAdminFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncAdmins(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    nextToken
+    startedAt
   }
 }
 query GetLecturer($id: ID!) {
   getLecturer(id: $id) {
+    id
     institutionId
     firstname
     lastname
     userRole
     email
     institution {
+      id
       name
       location
       pageUrl
@@ -240,52 +219,22 @@ query GetLecturer($id: ID!) {
       lectureremails
       coursecodes
       domains
-      admin {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        adminInstitutionId
-        owner
-      }
-      courses {
-        nextToken
-      }
-      students {
-        nextToken
-      }
-      lecturer {
-        nextToken
-      }
-      id
+      adminId
       createdAt
       updatedAt
-      institutionAdminId
+      _version
+      _deleted
+      _lastChangedAt
     }
-    presents {
-      items {
-        studentId
-        courseId
-        year
-        id
-        createdAt
-        updatedAt
-        lecturerPresentsId
-        studentEnrollmentsId
-        courseEnrollmentsId
-        enrollmentStudentId
-        enrollmentCourseId
-      }
+    courses {
       nextToken
+      startedAt
     }
-    id
     createdAt
     updatedAt
-    institutionLecturerId
+    _version
+    _deleted
+    _lastChangedAt
     owner
   }
 }
@@ -296,151 +245,95 @@ query ListLecturers(
 ) {
   listLecturers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
       institutionId
       firstname
       lastname
       userRole
       email
-      institution {
-        name
-        location
-        pageUrl
-        campusMapUrl
-        openingTime
-        closingTime
-        minimumDuration
-        lectureremails
-        coursecodes
-        domains
-        id
-        createdAt
-        updatedAt
-        institutionAdminId
-      }
-      presents {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionLecturerId
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
     nextToken
+    startedAt
   }
 }
-query GetPresent($id: ID!) {
-  getPresent(id: $id) {
-    lecturerId
-    courseId
-    lecturer {
+query SyncLecturers(
+  $filter: ModelLecturerFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncLecturers(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
       institutionId
       firstname
       lastname
       userRole
       email
-      institution {
-        name
-        location
-        pageUrl
-        campusMapUrl
-        openingTime
-        closingTime
-        minimumDuration
-        lectureremails
-        coursecodes
-        domains
-        id
-        createdAt
-        updatedAt
-        institutionAdminId
-      }
-      presents {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionLecturerId
+      _version
+      _deleted
+      _lastChangedAt
       owner
     }
-    course {
-      coursecode
-      coursename
-      semester
-      enrollments {
-        nextToken
-      }
-      activity {
-        nextToken
-      }
-      announcents {
-        nextToken
-      }
-      presents {
-        nextToken
-      }
-      id
-      createdAt
-      updatedAt
-      institutionCoursesId
-    }
-    id
-    createdAt
-    updatedAt
-    coursePresentsId
-    presentLecturerId
-    presentCourseId
+    nextToken
+    startedAt
   }
 }
-query ListPresents(
-  $filter: ModelPresentFilterInput
+query LecturersByInstitutionId(
+  $institutionId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelLecturerFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listPresents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  lecturersByInstitutionId(
+    institutionId: $institutionId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
     items {
-      lecturerId
-      courseId
-      lecturer {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        institutionLecturerId
-        owner
-      }
-      course {
-        coursecode
-        coursename
-        semester
-        id
-        createdAt
-        updatedAt
-        institutionCoursesId
-      }
       id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
       createdAt
       updatedAt
-      coursePresentsId
-      presentLecturerId
-      presentCourseId
+      _version
+      _deleted
+      _lastChangedAt
+      owner
     }
     nextToken
+    startedAt
   }
 }
 query GetStudent($id: ID!) {
   getStudent(id: $id) {
     institutionId
+    id
     firstname
     lastname
     userRole
     email
     institution {
+      id
       name
       location
       pageUrl
@@ -451,67 +344,33 @@ query GetStudent($id: ID!) {
       lectureremails
       coursecodes
       domains
-      admin {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        adminInstitutionId
-        owner
-      }
-      courses {
-        nextToken
-      }
-      students {
-        nextToken
-      }
-      lecturer {
-        nextToken
-      }
-      id
+      adminId
       createdAt
       updatedAt
-      institutionAdminId
+      _version
+      _deleted
+      _lastChangedAt
     }
     timetable {
-      items {
-        studentId
-        activityId
-        id
-        createdAt
-        updatedAt
-        studentTimetableId
-        activityTimetableId
-        timetableStudentId
-        timetableActivityId
-      }
-      nextToken
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
     enrollments {
-      items {
-        studentId
-        courseId
-        year
-        id
-        createdAt
-        updatedAt
-        lecturerPresentsId
-        studentEnrollmentsId
-        courseEnrollmentsId
-        enrollmentStudentId
-        enrollmentCourseId
-      }
       nextToken
+      startedAt
     }
-    id
     createdAt
     updatedAt
-    institutionStudentsId
-    studentInstitutionId
+    _version
+    _deleted
+    _lastChangedAt
+    studentTimetableId
     owner
   }
 }
@@ -523,111 +382,126 @@ query ListStudents(
   listStudents(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       institutionId
+      id
       firstname
       lastname
       userRole
       email
-      institution {
-        name
-        location
-        pageUrl
-        campusMapUrl
-        openingTime
-        closingTime
-        minimumDuration
-        lectureremails
-        coursecodes
-        domains
-        id
-        createdAt
-        updatedAt
-        institutionAdminId
-      }
-      timetable {
-        nextToken
-      }
-      enrollments {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionStudentsId
-      studentInstitutionId
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
       owner
     }
     nextToken
+    startedAt
+  }
+}
+query SyncStudents(
+  $filter: ModelStudentFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncStudents(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+    }
+    nextToken
+    startedAt
+  }
+}
+query StudentsByInstitutionId(
+  $institutionId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelStudentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  studentsByInstitutionId(
+    institutionId: $institutionId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+    }
+    nextToken
+    startedAt
   }
 }
 query GetEnrollment($id: ID!) {
   getEnrollment(id: $id) {
+    id
     studentId
     courseId
     year
     student {
       institutionId
+      id
       firstname
       lastname
       userRole
       email
-      institution {
-        name
-        location
-        pageUrl
-        campusMapUrl
-        openingTime
-        closingTime
-        minimumDuration
-        lectureremails
-        coursecodes
-        domains
-        id
-        createdAt
-        updatedAt
-        institutionAdminId
-      }
-      timetable {
-        nextToken
-      }
-      enrollments {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionStudentsId
-      studentInstitutionId
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
       owner
     }
     course {
+      id
+      institutionId
+      lecturerId
       coursecode
       coursename
       semester
-      enrollments {
-        nextToken
-      }
-      activity {
-        nextToken
-      }
-      announcents {
-        nextToken
-      }
-      presents {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionCoursesId
+      _version
+      _deleted
+      _lastChangedAt
     }
-    id
     createdAt
     updatedAt
-    lecturerPresentsId
-    studentEnrollmentsId
-    courseEnrollmentsId
-    enrollmentStudentId
-    enrollmentCourseId
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 query ListEnrollments(
@@ -637,115 +511,134 @@ query ListEnrollments(
 ) {
   listEnrollments(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
       studentId
       courseId
       year
-      student {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        institutionStudentsId
-        studentInstitutionId
-        owner
-      }
-      course {
-        coursecode
-        coursename
-        semester
-        id
-        createdAt
-        updatedAt
-        institutionCoursesId
-      }
-      id
       createdAt
       updatedAt
-      lecturerPresentsId
-      studentEnrollmentsId
-      courseEnrollmentsId
-      enrollmentStudentId
-      enrollmentCourseId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
+  }
+}
+query SyncEnrollments(
+  $filter: ModelEnrollmentFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncEnrollments(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      studentId
+      courseId
+      year
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query EnrollmentsByStudentId(
+  $studentId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelEnrollmentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  enrollmentsByStudentId(
+    studentId: $studentId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      studentId
+      courseId
+      year
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
   }
 }
 query GetCourse($id: ID!) {
   getCourse(id: $id) {
+    id
+    institutionId
+    lecturerId
     coursecode
     coursename
     semester
     enrollments {
-      items {
-        studentId
-        courseId
-        year
-        id
-        createdAt
-        updatedAt
-        lecturerPresentsId
-        studentEnrollmentsId
-        courseEnrollmentsId
-        enrollmentStudentId
-        enrollmentCourseId
-      }
       nextToken
+      startedAt
     }
     activity {
-      items {
-        courseId
-        activityname
-        day
-        start
-        end
-        venue
-        group
-        frequency
-        id
-        createdAt
-        updatedAt
-        courseActivityId
-        activityCourseId
-      }
       nextToken
+      startedAt
     }
     announcents {
-      items {
-        courseId
-        description
-        start
-        end
-        date
-        venue
-        id
-        createdAt
-        updatedAt
-        courseAnnouncentsId
-        announcementCourseId
-      }
       nextToken
+      startedAt
     }
-    presents {
-      items {
-        lecturerId
-        courseId
-        id
-        createdAt
-        updatedAt
-        coursePresentsId
-        presentLecturerId
-        presentCourseId
-      }
-      nextToken
+    lecturer {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
     }
-    id
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
     createdAt
     updatedAt
-    institutionCoursesId
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 query ListCourses(
@@ -755,27 +648,80 @@ query ListCourses(
 ) {
   listCourses(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
+      institutionId
+      lecturerId
       coursecode
       coursename
       semester
-      enrollments {
-        nextToken
-      }
-      activity {
-        nextToken
-      }
-      announcents {
-        nextToken
-      }
-      presents {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionCoursesId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
+  }
+}
+query SyncCourses(
+  $filter: ModelCourseFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncCourses(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query CoursesByInstitutionId(
+  $institutionId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelCourseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  coursesByInstitutionId(
+    institutionId: $institutionId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
   }
 }
 query SearchCourses(
@@ -795,25 +741,17 @@ query SearchCourses(
     aggregates: $aggregates
   ) {
     items {
+      id
+      institutionId
+      lecturerId
       coursecode
       coursename
       semester
-      enrollments {
-        nextToken
-      }
-      activity {
-        nextToken
-      }
-      announcents {
-        nextToken
-      }
-      presents {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionCoursesId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
     total
@@ -835,77 +773,33 @@ query SearchCourses(
 }
 query GetTimetable($id: ID!) {
   getTimetable(id: $id) {
+    id
     studentId
     activityId
     student {
       institutionId
+      id
       firstname
       lastname
       userRole
       email
-      institution {
-        name
-        location
-        pageUrl
-        campusMapUrl
-        openingTime
-        closingTime
-        minimumDuration
-        lectureremails
-        coursecodes
-        domains
-        id
-        createdAt
-        updatedAt
-        institutionAdminId
-      }
-      timetable {
-        nextToken
-      }
-      enrollments {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionStudentsId
-      studentInstitutionId
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
       owner
     }
-    activity {
-      courseId
-      activityname
-      day
-      start
-      end
-      venue
-      group
-      frequency
-      course {
-        coursecode
-        coursename
-        semester
-        id
-        createdAt
-        updatedAt
-        institutionCoursesId
-      }
-      timetable {
-        nextToken
-      }
-      id
-      createdAt
-      updatedAt
-      courseActivityId
-      activityCourseId
+    activities {
+      nextToken
+      startedAt
     }
-    id
     createdAt
     updatedAt
-    studentTimetableId
-    activityTimetableId
-    timetableStudentId
-    timetableActivityId
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 query ListTimetables(
@@ -915,49 +809,48 @@ query ListTimetables(
 ) {
   listTimetables(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
       studentId
       activityId
-      student {
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        id
-        createdAt
-        updatedAt
-        institutionStudentsId
-        studentInstitutionId
-        owner
-      }
-      activity {
-        courseId
-        activityname
-        day
-        start
-        end
-        venue
-        group
-        frequency
-        id
-        createdAt
-        updatedAt
-        courseActivityId
-        activityCourseId
-      }
-      id
       createdAt
       updatedAt
-      studentTimetableId
-      activityTimetableId
-      timetableStudentId
-      timetableActivityId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
+  }
+}
+query SyncTimetables(
+  $filter: ModelTimetableFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncTimetables(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
   }
 }
 query GetActivity($id: ID!) {
   getActivity(id: $id) {
+    id
     courseId
     activityname
     day
@@ -966,46 +859,25 @@ query GetActivity($id: ID!) {
     venue
     group
     frequency
+    description
     course {
+      id
+      institutionId
+      lecturerId
       coursecode
       coursename
       semester
-      enrollments {
-        nextToken
-      }
-      activity {
-        nextToken
-      }
-      announcents {
-        nextToken
-      }
-      presents {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionCoursesId
+      _version
+      _deleted
+      _lastChangedAt
     }
-    timetable {
-      items {
-        studentId
-        activityId
-        id
-        createdAt
-        updatedAt
-        studentTimetableId
-        activityTimetableId
-        timetableStudentId
-        timetableActivityId
-      }
-      nextToken
-    }
-    id
     createdAt
     updatedAt
-    courseActivityId
-    activityCourseId
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 query ListActivities(
@@ -1015,6 +887,7 @@ query ListActivities(
 ) {
   listActivities(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
       courseId
       activityname
       day
@@ -1023,25 +896,83 @@ query ListActivities(
       venue
       group
       frequency
-      course {
-        coursecode
-        coursename
-        semester
-        id
-        createdAt
-        updatedAt
-        institutionCoursesId
-      }
-      timetable {
-        nextToken
-      }
-      id
+      description
       createdAt
       updatedAt
-      courseActivityId
-      activityCourseId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
+  }
+}
+query SyncActivities(
+  $filter: ModelActivityFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncActivities(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      courseId
+      activityname
+      day
+      start
+      end
+      venue
+      group
+      frequency
+      description
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query ActivitiesByCourseId(
+  $courseId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelActivityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  activitiesByCourseId(
+    courseId: $courseId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      courseId
+      activityname
+      day
+      start
+      end
+      venue
+      group
+      frequency
+      description
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
   }
 }
 query SearchActivities(
@@ -1061,6 +992,7 @@ query SearchActivities(
     aggregates: $aggregates
   ) {
     items {
+      id
       courseId
       activityname
       day
@@ -1069,23 +1001,12 @@ query SearchActivities(
       venue
       group
       frequency
-      course {
-        coursecode
-        coursename
-        semester
-        id
-        createdAt
-        updatedAt
-        institutionCoursesId
-      }
-      timetable {
-        nextToken
-      }
-      id
+      description
       createdAt
       updatedAt
-      courseActivityId
-      activityCourseId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
     total
@@ -1107,6 +1028,7 @@ query SearchActivities(
 }
 query GetAnnouncement($id: ID!) {
   getAnnouncement(id: $id) {
+    id
     courseId
     description
     start
@@ -1114,31 +1036,23 @@ query GetAnnouncement($id: ID!) {
     date
     venue
     course {
+      id
+      institutionId
+      lecturerId
       coursecode
       coursename
       semester
-      enrollments {
-        nextToken
-      }
-      activity {
-        nextToken
-      }
-      announcents {
-        nextToken
-      }
-      presents {
-        nextToken
-      }
-      id
       createdAt
       updatedAt
-      institutionCoursesId
+      _version
+      _deleted
+      _lastChangedAt
     }
-    id
     createdAt
     updatedAt
-    courseAnnouncentsId
-    announcementCourseId
+    _version
+    _deleted
+    _lastChangedAt
   }
 }
 query ListAnnouncements(
@@ -1148,28 +1062,83 @@ query ListAnnouncements(
 ) {
   listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      id
       courseId
       description
       start
       end
       date
       venue
-      course {
-        coursecode
-        coursename
-        semester
-        id
-        createdAt
-        updatedAt
-        institutionCoursesId
-      }
-      id
       createdAt
       updatedAt
-      courseAnnouncentsId
-      announcementCourseId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
+    startedAt
+  }
+}
+query SyncAnnouncements(
+  $filter: ModelAnnouncementFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncAnnouncements(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      courseId
+      description
+      start
+      end
+      date
+      venue
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query AnnouncementsByCourseId(
+  $courseId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelAnnouncementFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  announcementsByCourseId(
+    courseId: $courseId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      courseId
+      description
+      start
+      end
+      date
+      venue
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
   }
 }
 query SearchAnnouncements(
@@ -1189,26 +1158,18 @@ query SearchAnnouncements(
     aggregates: $aggregates
   ) {
     items {
+      id
       courseId
       description
       start
       end
       date
       venue
-      course {
-        coursecode
-        coursename
-        semester
-        id
-        createdAt
-        updatedAt
-        institutionCoursesId
-      }
-      id
       createdAt
       updatedAt
-      courseAnnouncentsId
-      announcementCourseId
+      _version
+      _deleted
+      _lastChangedAt
     }
     nextToken
     total

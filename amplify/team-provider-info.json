@@ -17,13 +17,13 @@
         "s3prontoblobestore": {}
       },
       "auth": {
-        "prontoAuth": {},
-        "userPoolGroups": {}
+        "prontoAuth": {}
       },
       "function": {
         "prontoAuthPostConfirmation": {
           "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
-          "s3Key": "amplify-builds/prontoAuthPostConfirmation-4d63544a6b496b697570-build.zip"
+          "s3Key": "amplify-builds/prontoAuthPostConfirmation-4d63544a6b496b697570-build.zip",
+          "GROUP": ""
         }
       },
       "api": {
