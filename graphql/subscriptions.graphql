@@ -1,0 +1,1174 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateInstitution(
+  $filter: ModelSubscriptionInstitutionFilterInput
+  $admin: String
+) {
+  onCreateInstitution(filter: $filter, admin: $admin) {
+    id
+    name
+    location
+    pageUrl
+    campusMapUrl
+    openingTime
+    closingTime
+    minimumDuration
+    lectureremails
+    coursecodes
+    domains
+    admin {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    adminId
+    courses {
+      nextToken
+      startedAt
+    }
+    students {
+      nextToken
+      startedAt
+    }
+    lecturer {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateInstitution(
+  $filter: ModelSubscriptionInstitutionFilterInput
+  $admin: String
+) {
+  onUpdateInstitution(filter: $filter, admin: $admin) {
+    id
+    name
+    location
+    pageUrl
+    campusMapUrl
+    openingTime
+    closingTime
+    minimumDuration
+    lectureremails
+    coursecodes
+    domains
+    admin {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    adminId
+    courses {
+      nextToken
+      startedAt
+    }
+    students {
+      nextToken
+      startedAt
+    }
+    lecturer {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteInstitution(
+  $filter: ModelSubscriptionInstitutionFilterInput
+  $admin: String
+) {
+  onDeleteInstitution(filter: $filter, admin: $admin) {
+    id
+    name
+    location
+    pageUrl
+    campusMapUrl
+    openingTime
+    closingTime
+    minimumDuration
+    lectureremails
+    coursecodes
+    domains
+    admin {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    adminId
+    courses {
+      nextToken
+      startedAt
+    }
+    students {
+      nextToken
+      startedAt
+    }
+    lecturer {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateAdmin(
+  $filter: ModelSubscriptionAdminFilterInput
+  $owner: String
+) {
+  onCreateAdmin(filter: $filter, owner: $owner) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    owner
+  }
+}
+subscription OnUpdateAdmin(
+  $filter: ModelSubscriptionAdminFilterInput
+  $owner: String
+) {
+  onUpdateAdmin(filter: $filter, owner: $owner) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    owner
+  }
+}
+subscription OnDeleteAdmin(
+  $filter: ModelSubscriptionAdminFilterInput
+  $owner: String
+) {
+  onDeleteAdmin(filter: $filter, owner: $owner) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    owner
+  }
+}
+subscription OnCreateLecturer(
+  $filter: ModelSubscriptionLecturerFilterInput
+  $owner: String
+) {
+  onCreateLecturer(filter: $filter, owner: $owner) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    courses {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    owner
+  }
+}
+subscription OnUpdateLecturer(
+  $filter: ModelSubscriptionLecturerFilterInput
+  $owner: String
+) {
+  onUpdateLecturer(filter: $filter, owner: $owner) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    courses {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    owner
+  }
+}
+subscription OnDeleteLecturer(
+  $filter: ModelSubscriptionLecturerFilterInput
+  $owner: String
+) {
+  onDeleteLecturer(filter: $filter, owner: $owner) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    courses {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    owner
+  }
+}
+subscription OnCreateStudent(
+  $filter: ModelSubscriptionStudentFilterInput
+  $owner: String
+) {
+  onCreateStudent(filter: $filter, owner: $owner) {
+    institutionId
+    id
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    timetable {
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    enrollments {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    studentTimetableId
+    owner
+  }
+}
+subscription OnUpdateStudent(
+  $filter: ModelSubscriptionStudentFilterInput
+  $owner: String
+) {
+  onUpdateStudent(filter: $filter, owner: $owner) {
+    institutionId
+    id
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    timetable {
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    enrollments {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    studentTimetableId
+    owner
+  }
+}
+subscription OnDeleteStudent(
+  $filter: ModelSubscriptionStudentFilterInput
+  $owner: String
+) {
+  onDeleteStudent(filter: $filter, owner: $owner) {
+    institutionId
+    id
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    timetable {
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    enrollments {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    studentTimetableId
+    owner
+  }
+}
+subscription OnCreateEnrollment(
+  $filter: ModelSubscriptionEnrollmentFilterInput
+  $student: String
+) {
+  onCreateEnrollment(filter: $filter, student: $student) {
+    id
+    studentId
+    courseId
+    year
+    student {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+    }
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateEnrollment(
+  $filter: ModelSubscriptionEnrollmentFilterInput
+  $student: String
+) {
+  onUpdateEnrollment(filter: $filter, student: $student) {
+    id
+    studentId
+    courseId
+    year
+    student {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+    }
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteEnrollment(
+  $filter: ModelSubscriptionEnrollmentFilterInput
+  $student: String
+) {
+  onDeleteEnrollment(filter: $filter, student: $student) {
+    id
+    studentId
+    courseId
+    year
+    student {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+    }
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateCourse(
+  $filter: ModelSubscriptionCourseFilterInput
+  $institutionId: String
+) {
+  onCreateCourse(filter: $filter, institutionId: $institutionId) {
+    id
+    institutionId
+    lecturerId
+    coursecode
+    coursename
+    semester
+    enrollments {
+      nextToken
+      startedAt
+    }
+    activity {
+      nextToken
+      startedAt
+    }
+    announcents {
+      nextToken
+      startedAt
+    }
+    lecturer {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateCourse(
+  $filter: ModelSubscriptionCourseFilterInput
+  $institutionId: String
+) {
+  onUpdateCourse(filter: $filter, institutionId: $institutionId) {
+    id
+    institutionId
+    lecturerId
+    coursecode
+    coursename
+    semester
+    enrollments {
+      nextToken
+      startedAt
+    }
+    activity {
+      nextToken
+      startedAt
+    }
+    announcents {
+      nextToken
+      startedAt
+    }
+    lecturer {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteCourse(
+  $filter: ModelSubscriptionCourseFilterInput
+  $institutionId: String
+) {
+  onDeleteCourse(filter: $filter, institutionId: $institutionId) {
+    id
+    institutionId
+    lecturerId
+    coursecode
+    coursename
+    semester
+    enrollments {
+      nextToken
+      startedAt
+    }
+    activity {
+      nextToken
+      startedAt
+    }
+    announcents {
+      nextToken
+      startedAt
+    }
+    lecturer {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateTimetable(
+  $filter: ModelSubscriptionTimetableFilterInput
+  $student: String
+) {
+  onCreateTimetable(filter: $filter, student: $student) {
+    id
+    studentId
+    activityId
+    student {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+    }
+    activities {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateTimetable(
+  $filter: ModelSubscriptionTimetableFilterInput
+  $student: String
+) {
+  onUpdateTimetable(filter: $filter, student: $student) {
+    id
+    studentId
+    activityId
+    student {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+    }
+    activities {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteTimetable(
+  $filter: ModelSubscriptionTimetableFilterInput
+  $student: String
+) {
+  onDeleteTimetable(filter: $filter, student: $student) {
+    id
+    studentId
+    activityId
+    student {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+    }
+    activities {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateActivity(
+  $filter: ModelSubscriptionActivityFilterInput
+  $courseId: String
+) {
+  onCreateActivity(filter: $filter, courseId: $courseId) {
+    id
+    courseId
+    activityname
+    day
+    start
+    end
+    venue
+    group
+    frequency
+    description
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateActivity(
+  $filter: ModelSubscriptionActivityFilterInput
+  $courseId: String
+) {
+  onUpdateActivity(filter: $filter, courseId: $courseId) {
+    id
+    courseId
+    activityname
+    day
+    start
+    end
+    venue
+    group
+    frequency
+    description
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteActivity(
+  $filter: ModelSubscriptionActivityFilterInput
+  $courseId: String
+) {
+  onDeleteActivity(filter: $filter, courseId: $courseId) {
+    id
+    courseId
+    activityname
+    day
+    start
+    end
+    venue
+    group
+    frequency
+    description
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateAnnouncement(
+  $filter: ModelSubscriptionAnnouncementFilterInput
+  $course: String
+) {
+  onCreateAnnouncement(filter: $filter, course: $course) {
+    id
+    courseId
+    description
+    start
+    end
+    date
+    venue
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateAnnouncement(
+  $filter: ModelSubscriptionAnnouncementFilterInput
+  $course: String
+) {
+  onUpdateAnnouncement(filter: $filter, course: $course) {
+    id
+    courseId
+    description
+    start
+    end
+    date
+    venue
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteAnnouncement(
+  $filter: ModelSubscriptionAnnouncementFilterInput
+  $course: String
+) {
+  onDeleteAnnouncement(filter: $filter, course: $course) {
+    id
+    courseId
+    description
+    start
+    end
+    date
+    venue
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
