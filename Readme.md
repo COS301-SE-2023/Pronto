@@ -6,7 +6,8 @@
 
 [![GitHub Repo Size in Bytes](https://img.shields.io/github/languages/code-size/COS301-SE-2023/Pronto)](https://github.com/COS301-SE-2023/Pronto)
 [![GitHub Commit Activity](https://img.shields.io/github/commit-activity/w/COS301-SE-2023/Pronto)](https://github.com/COS301-SE-2023/Pronto)
-[![Codecov](https://img.shields.io/codecov/c/github/COS301-SE-2023/Pronto.svg?style=flat-square)](https://codecov.io/gh/COS301-SE-2023/Pronto)
+
+[![codecov](https://codecov.io/gh/COS301-SE-2023/Pronto/branch/frontend-dev/graph/badge.svg?token=E5XAZ3LOGP)](https://codecov.io/gh/COS301-SE-2023/Pronto)
 [![Open Issues](https://img.shields.io/github/issues/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues?q=is%3Aissue+is%3Aclosed)
 [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595?style=flat-square)](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595)
@@ -18,12 +19,11 @@ Pronto is a React Native application that helps students to create their timetab
 
 ## Documentation
 
-<div><a href="https://github.com/Tymac15" target="_blank">🧾 Demo 1 Document</a></div>
-<div><a href="https://github.com/Tymac15">🧾 Architectural Requirements</a></div>
+<div><a href="https://drive.google.com/file/d/1fCV8T3spQrg4OAzxC2IXdsMGs2QsVS-M/view?usp=share_link" target="_blank">🧾 Demo 1 Document</a></div>
 
 ## Demo Recordings
 
-<div><a href="https://github.com/Tymac15">📽️ Demo 1</a></div>
+<div><a href="https://drive.google.com/file/d/1HWyxFvWtt6HvSSNpiXuQ2BRM43qTEhgU/view?usp=share_link">📽️ Demo 1</a></div>
 
 ## Project Management
 
@@ -42,3 +42,23 @@ Pronto is a React Native application that helps students to create their timetab
 ## Extra Information
 
 All other information regarding the project can be found on the [wiki page](https://github.com/COS301-SE-2023/Pronto/wiki).
+=======
+## To install the and run the app
+
+1. Clone the repo
+2. Run `npm install`
+3. Run `npm start`
+4. Select 'a' for android
+
+```
+-> The app will run on your android device
+-> Ensure you have Expo Go installed on your device
+-> Scan the QR code to run the app on your device
+-> Ensure that your network configuration is set to Private and not Public
+```
+
+## Jest UI Testing
+
+->npm test
+Tests completed:
+-> Timetable tests
