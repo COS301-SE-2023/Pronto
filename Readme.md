@@ -6,6 +6,7 @@
 
 [![GitHub Repo Size in Bytes](https://img.shields.io/github/languages/code-size/COS301-SE-2023/Pronto)](https://github.com/COS301-SE-2023/Pronto)
 [![GitHub Commit Activity](https://img.shields.io/github/commit-activity/w/COS301-SE-2023/Pronto)](https://github.com/COS301-SE-2023/Pronto)
+
 [![codecov](https://codecov.io/gh/COS301-SE-2023/Pronto/branch/frontend-dev/graph/badge.svg?token=E5XAZ3LOGP)](https://codecov.io/gh/COS301-SE-2023/Pronto)
 [![Open Issues](https://img.shields.io/github/issues/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues?q=is%3Aissue+is%3Aclosed)
