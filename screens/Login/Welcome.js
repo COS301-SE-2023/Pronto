@@ -67,6 +67,13 @@ const WelcomeScreen = () => {
             width: "48%",
             borderRadius: 10,
             marginRight: "4%",
+            shadowColor: "#e32f45",
+            shadowOffset: {
+              width: 0,
+              height: 10,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 8,
           }}
         >
           <Text
