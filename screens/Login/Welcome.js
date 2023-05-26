@@ -20,7 +20,8 @@ const WelcomeScreen = () => {
           height: height / 2.5,
         }}
         resizeMode="contain"
-        source={require("../../assets/icons/ProntoLogo.png")}
+        //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+        source={require("../../assets/icons/Welcome.png")}
       />
       <View
         style={{
@@ -53,8 +54,9 @@ const WelcomeScreen = () => {
 
       <View
         style={{
-          paddingVertical: 50,
-          paddingHorizontal: 10,
+          paddingTop: 70,
+          paddingHorizontal: 20,
+          flexDirection: "row",
         }}
       >
         <TouchableOpacity
@@ -64,6 +66,7 @@ const WelcomeScreen = () => {
             paddingHorizontal: 10,
             width: "48%",
             borderRadius: 10,
+            marginRight: "4%",
           }}
         >
           <Text
@@ -75,6 +78,28 @@ const WelcomeScreen = () => {
             }}
           >
             Login
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            paddingVertical: 15,
+            paddingHorizontal: 10,
+            width: "48%",
+            borderWidth: 1,
+
+            borderRadius: 10,
+          }}
+        >
+          <Text
+            style={{
+              color: "black",
+              fontWeight: "bold",
+              fontSize: 18,
+              textAlign: "center",
+            }}
+          >
+            Register
           </Text>
         </TouchableOpacity>
       </View>
