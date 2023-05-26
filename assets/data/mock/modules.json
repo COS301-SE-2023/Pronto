@@ -1,0 +1,83 @@
+{
+  "M1":
+    {
+      "id": "1",
+      "code": "COS 216",
+      "time": "08:30-09:20",
+      "frequency": 1,
+      "venue": "Law 1-54",
+      "day": "Monday",
+      "height": 50
+    },
+  "M2": 
+  {
+    "id": "1",
+    "code": "COS 301",
+    "time": "11:30-12:20",
+    "frequency": 1,
+    "venue": "IT 2-27",
+    "day": "Monday",
+    "height": 50
+  },
+    "M3": 
+    {
+      "id": "3",
+      "code": "COS 210",
+      "time": "08:30-09:20",
+      "frequency": 1,
+      "venue": "IT 2-26",
+      "day": "Wednesday",
+      "height": 50
+    },
+    "M4": 
+    {
+      "id": "3",
+      "code": "COS 216",
+      "time": "10:30-11:20",
+      "frequency": 1,
+      "venue": "Law 1-54",
+      "day": "Wednesday",
+      "height": 50
+    },
+    "M5": 
+    {
+      "id": "3",
+      "code": "IMY 310",
+      "time": "15:30-16:20",
+      "frequency": 1,
+      "venue": "SIT Labs",
+      "day": "Wednesday",
+      "height": 50
+    },
+    "M6": 
+    {
+      "id": "3",
+      "code": "COS 216",
+      "time": "09:30-10:20",
+      "frequency": 1,
+      "venue": "Law 1-54",
+      "day": "Thursday",
+      "height": 50
+    },
+    "M7": 
+    {
+      "id": "3",
+      "code": "IMY 310",
+      "time": "13:30-14:20",
+      "frequency": 1,
+      "venue": "SIT Labs",
+      "day": "Friday",
+      "height": 50
+    },
+    "M8": 
+    {
+      "id": "3",
+      "code": "COS 210",
+      "time": "15:30-16:20",
+      "frequency": 1,
+      "venue": "IT 2-26",
+      "day": "Friday",
+      "height": 50
+    }
+}
+
