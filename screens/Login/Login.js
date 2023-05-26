@@ -5,9 +5,13 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  ImageBackground,
+  Dimensions,
 } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
+
+const { height } = Dimensions.get("window");
 
 const Login = ({ navigation }) => {
   return (
@@ -24,23 +28,37 @@ const Login = ({ navigation }) => {
         >
           <Text
             style={{
-              fontSize: 30,
+              fontSize: 40,
               color: "#e32f45",
               fontWeight: "bold",
-              marginVertical: 20,
+              marginTop: 20,
+              opacity: 0.9,
             }}
           >
             Login here
           </Text>
+
+          <ImageBackground
+            style={{
+              height: height / 5,
+              width: "100%",
+              alignSelf: "center",
+            }}
+            resizeMode="contain"
+            source={require("../../assets/icons/ProntoLogo.png")}
+          />
+
           <Text
             style={{
               fontWeight: "bold",
               textAlign: "center",
+              fontSize: 15,
             }}
           >
             Welcome back, sign in to access all your features!
           </Text>
         </View>
+
         <View
           style={{
             marginVertical: 40,
@@ -115,6 +133,7 @@ const Login = ({ navigation }) => {
           style={{
             padding: 10,
           }}
+          onPress={() => navigation.navigate("Register")}
         >
           <Text
             style={{
@@ -127,41 +146,6 @@ const Login = ({ navigation }) => {
             Create new account
           </Text>
         </TouchableOpacity>
-
-        <View
-          style={{
-            marginVertical: 30,
-          }}
-        >
-          <Text
-            style={{
-              color: "#e32f45",
-              textAlign: "center",
-              fontSize: 15,
-              fontWeight: "bold",
-            }}
-          >
-            Or continue with
-          </Text>
-
-          <View
-            style={{
-              marginTop: 20,
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                padding: 20,
-                backgroundColor: "#d1d1d1",
-                borderRadius: 10,
-              }}
-            >
-              <Ionicons name="logo-google" color={"black"} />
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
     </SafeAreaView>
   );
