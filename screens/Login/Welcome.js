@@ -9,10 +9,12 @@ import {
 } from "react-native";
 import React from "react";
 import { ImageBackground } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const { height } = Dimensions.get("window");
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ImageBackground
@@ -75,6 +77,7 @@ const WelcomeScreen = () => {
             shadowOpacity: 0.25,
             shadowRadius: 8,
           }}
+          onPress={() => navigation.navigate("Login")}
         >
           <Text
             style={{
@@ -94,9 +97,9 @@ const WelcomeScreen = () => {
             paddingHorizontal: 10,
             width: "48%",
             borderWidth: 1,
-
             borderRadius: 10,
           }}
+          onPress={() => navigation.navigate("Register")}
         >
           <Text
             style={{
