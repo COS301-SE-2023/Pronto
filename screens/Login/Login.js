@@ -7,6 +7,7 @@ import {
   TextInput,
 } from "react-native";
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 const Login = ({ navigation }) => {
   return (
@@ -109,6 +110,58 @@ const Login = ({ navigation }) => {
             Sign in
           </Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            padding: 10,
+          }}
+        >
+          <Text
+            style={{
+              color: "black",
+              textAlign: "center",
+              fontSize: 15,
+              fontWeight: "bold",
+            }}
+          >
+            Create new account
+          </Text>
+        </TouchableOpacity>
+
+        <View
+          style={{
+            marginVertical: 30,
+          }}
+        >
+          <Text
+            style={{
+              color: "#e32f45",
+              textAlign: "center",
+              fontSize: 15,
+              fontWeight: "bold",
+            }}
+          >
+            Or continue with
+          </Text>
+
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                padding: 20,
+                backgroundColor: "#d1d1d1",
+                borderRadius: 10,
+              }}
+            >
+              <Ionicons name="logo-google" color={"black"} />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
