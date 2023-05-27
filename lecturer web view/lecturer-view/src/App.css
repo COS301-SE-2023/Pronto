@@ -83,9 +83,63 @@
   display: fixed;
   justify-content: center;
   align-items: center;
+  margin-left: 25px;
 }
 
 .lechead{
   margin-top: 30px;
   margin-left: 60px;
+}
+
+.dropdown {
+  width: 95%;
+  height: 100px;
+  border-radius: 50px;
+  background-color: white;
+  border: 1px solid black;
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  width: 95%;
+  height: 100px;
+  border-radius: 50px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+  font-weight: bold;
+  margin-left: 25px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  width: 95%;
+  background-color: white;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+  font-weight: bold;
+  margin-left: 25px;
+}
+
+.dropdown-menu form {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-menu h2 {
+  text-align: center;
+}
+
+.dropdown-menu div {
+  margin-bottom: 10px;
+}
+
+.dropdown-menu label {
+  font-weight:100;
 }

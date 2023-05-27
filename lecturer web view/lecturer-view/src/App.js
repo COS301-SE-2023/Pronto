@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import logo from "./images/logo.jpg";
 
-const App = () => {
+const NavBar = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
   return (
     <div className="container">
       <div className="navbar">
@@ -12,7 +18,7 @@ const App = () => {
         <div className="lecturer">Stefan Gruner</div>
 
         <div className="buttons">
-          <a href="/edit-module">
+          <a href="./edit-module.js">
             <button>Edit module information</button>
           </a>
 
@@ -27,20 +33,33 @@ const App = () => {
           </a>
         </div>
       </div>
-      
+
       <div className="content">
-        <h1 className="lechead">Modules</h1>
         <div className="subjects">
-          <a href="/compiler">
-          <button className="content-button">COS341- Compiler Construction</button>
-          </a>
-          <a href="/imperative">
-          <button className="content-button">COS132- Imperative Programming</button>
-          </a>
+          <div className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
+            <button className="dropdown-button" onClick={toggleDropdown}>
+              Post an update
+            </button>
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                <form>
+                  <div>
+                    <label htmlFor="title">Title:</label>
+                    <input type="text" id="title" required />
+                  </div>  
+                  <div>
+                    <label htmlFor="body">Body:</label>
+                    <input type="text" id="body" required />
+                  </div>
+                  <button className="post-button">Post</button>
+                </form>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default App;
+export default NavBar;
