@@ -27,7 +27,10 @@ const App = () => {
       </div>
       
       <div className="content">
-        {/* Your content goes here */}
+        <div className="subjects">
+          <button className="content-button">COS341- Compiler Construction</button>
+          <button className="content-button">COS132- Imperative Programming</button>
+        </div>
       </div>
     </div>
   );
