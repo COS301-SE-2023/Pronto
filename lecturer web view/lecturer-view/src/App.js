@@ -22,15 +22,21 @@ const App = () => {
         </div>
         
         <div className="logout">
+          <a href="/logout">
           <button className="logout-button">Logout</button>
+          </a>
         </div>
       </div>
       
       <div className="content">
         <h1 className="lechead">Modules</h1>
         <div className="subjects">
+          <a href="/compiler">
           <button className="content-button">COS341- Compiler Construction</button>
+          </a>
+          <a href="/imperative">
           <button className="content-button">COS132- Imperative Programming</button>
+          </a>
         </div>
       </div>
     </div>

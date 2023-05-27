@@ -65,8 +65,8 @@
 
 .content-button {
   width: 95%;
-  height: 120px;
-  border-radius: 60px;
+  height: 100px;
+  border-radius: 50px;
   background-color: white;
   border: 1px solid black;
   display: flex;
@@ -79,12 +79,13 @@
 }
 
 .subjects {
-  padding-top: 40px;
+  padding-top: 25px;
   display: fixed;
   justify-content: center;
   align-items: center;
 }
 
 .lechead{
+  margin-top: 30px;
   margin-left: 60px;
 }
