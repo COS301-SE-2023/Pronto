@@ -13,47 +13,51 @@ import { Ionicons } from "@expo/vector-icons";
 
 const { height } = Dimensions.get("window");
 
-const Login = ({ navigation }) => {
+const VerifyCode = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.centered}>
-          <Text style={styles.title}>Login here</Text>
+          <Text style={styles.title}>Reset Password</Text>
           <Text style={styles.subtitle}>
-            Welcome back, sign in to access all your features!
+            Enter the code sent to your email and pick a new password.
           </Text>
         </View>
 
         <View style={styles.inputContainer}>
           <TextInput
-            placeholder="Email"
+            placeholder="Code"
             placeholderTextColor={"#666666"}
             style={styles.input}
           />
 
           <TextInput
-            placeholder="Password"
+            placeholder="New Password"
+            placeholderTextColor={"#666666"}
+            secureTextEntry={true}
+            style={styles.input}
+          />
+
+          <TextInput
+            placeholder="Confirm New Password"
             placeholderTextColor={"#666666"}
             secureTextEntry={true}
             style={styles.input}
           />
         </View>
 
-        <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")}>
-          <View>
-            <Text style={styles.forgotPassword}>Forgot your password?</Text>
-          </View>
-        </TouchableOpacity>
-
         <TouchableOpacity style={styles.signInButton}>
-          <Text style={styles.signInButtonText}>Sign in</Text>
+          <Text style={styles.signInButtonText}>Reset Password</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.createAccountButton}
-          onPress={() => navigation.navigate("Register")}
+          style={styles.haveAccountButton}
+          onPress={() => navigation.navigate("Login")}
         >
-          <Text style={styles.createAccountButtonText}>Create new account</Text>
+          <Text style={styles.haveAccountButtonText}>
+            {" "}
+            &#x2190; Back to sign in
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -128,6 +132,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
   },
+  haveAccountButton: {
+    padding: 10,
+  },
+  haveAccountButtonText: {
+    color: "black",
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
 });
 
-export default Login;
+export default VerifyCode;

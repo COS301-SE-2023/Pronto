@@ -8,52 +8,52 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 const { height } = Dimensions.get("window");
 
-const Login = ({ navigation }) => {
+const ResetPassword = ({ navigation }) => {
+  const [focusedEmail, setFocusedEmail] = useState(false);
+  const [focusedPassword, setFocusedPassword] = useState(false);
+  const [focusedConfirm, setFocusedConfirm] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.centered}>
-          <Text style={styles.title}>Login here</Text>
+          <Text style={styles.title}>Reset Password</Text>
           <Text style={styles.subtitle}>
-            Welcome back, sign in to access all your features!
+            Forgot your password? No problem, just reset it here!
           </Text>
         </View>
 
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
+            onFocus={() => setFocusedEmail(true)}
+            onBlur={() => setFocusedEmail(false)}
             placeholderTextColor={"#666666"}
-            style={styles.input}
-          />
-
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor={"#666666"}
-            secureTextEntry={true}
-            style={styles.input}
+            style={[styles.input, focusedEmail && styles.inputFocused]}
           />
         </View>
 
-        <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")}>
-          <View>
-            <Text style={styles.forgotPassword}>Forgot your password?</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.signInButton}>
-          <Text style={styles.signInButtonText}>Sign in</Text>
+        <TouchableOpacity
+          style={styles.signUpButton}
+          onPress={() => navigation.navigate("VerifyCode")}
+        >
+          <Text style={styles.signUpButtonText}>Send code</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.createAccountButton}
-          onPress={() => navigation.navigate("Register")}
+          style={styles.haveAccountButton}
+          onPress={() => navigation.navigate("Login")}
         >
-          <Text style={styles.createAccountButtonText}>Create new account</Text>
+          <Text style={styles.haveAccountButtonText}>
+            {" "}
+            &#x2190; Back to sign in
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -78,13 +78,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 20,
     opacity: 0.9,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   subtitle: {
-    fontWeight: "bold",
     textAlign: "center",
     fontSize: 15,
-    maxWidth: "70%",
+    maxWidth: "80%",
   },
   inputContainer: {
     marginVertical: 40,
@@ -97,13 +96,15 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     marginVertical: 10,
   },
-  forgotPassword: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "#e32f45",
-    alignSelf: "flex-end",
+  inputFocused: {
+    borderWidth: 2,
+    borderColor: "#e32f45",
+    shadowOffset: { width: 4 },
+    shadowColor: "#e32f45",
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
   },
-  signInButton: {
+  signUpButton: {
     padding: 20,
     backgroundColor: "#e32f45",
     marginVertical: 20,
@@ -113,16 +114,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowRadius: 10,
   },
-  signInButtonText: {
+  signUpButtonText: {
     color: "#fff",
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
   },
-  createAccountButton: {
+  haveAccountButton: {
     padding: 10,
   },
-  createAccountButtonText: {
+  haveAccountButtonText: {
     color: "black",
     textAlign: "center",
     fontSize: 15,
@@ -130,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default ResetPassword;

@@ -17,6 +17,7 @@ const Register = ({ navigation }) => {
   const [focusedEmail, setFocusedEmail] = useState(false);
   const [focusedPassword, setFocusedPassword] = useState(false);
   const [focusedConfirm, setFocusedConfirm] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(true);
 
   return (
     <SafeAreaView style={styles.container}>
