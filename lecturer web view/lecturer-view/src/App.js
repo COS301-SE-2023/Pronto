@@ -27,6 +27,7 @@ const App = () => {
       </div>
       
       <div className="content">
+        <h1 className="lechead">Modules</h1>
         <div className="subjects">
           <button className="content-button">COS341- Compiler Construction</button>
           <button className="content-button">COS132- Imperative Programming</button>
