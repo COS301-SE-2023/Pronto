@@ -96,13 +96,13 @@
   height: 100px;
   border-radius: 50px;
   background-color: white;
-  border: 1px solid black;
+  
   position: relative;
   display: inline-block;
 }
 
 .dropdown-button {
-  width: 95%;
+  width: 100%;
   height: 100px;
   border-radius: 50px;
   background-color: white;
@@ -111,7 +111,7 @@
   align-items: center;
   font-size: large;
   font-weight: bold;
-  margin-left: 25px;
+  
 }
 
 .dropdown-menu {

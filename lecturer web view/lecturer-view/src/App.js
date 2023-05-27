@@ -1,14 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import logo from "./images/logo.jpg";
 
-const NavBar = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
+const App = () => {
   return (
     <div className="container">
       <div className="navbar">
@@ -18,7 +12,7 @@ const NavBar = () => {
         <div className="lecturer">Stefan Gruner</div>
 
         <div className="buttons">
-          <a href="./edit-module.js">
+          <a href="./edit-module">
             <button>Edit module information</button>
           </a>
 
@@ -33,33 +27,20 @@ const NavBar = () => {
           </a>
         </div>
       </div>
-
+      
       <div className="content">
+        <h1 className="lechead">Modules</h1>
         <div className="subjects">
-          <div className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
-            <button className="dropdown-button" onClick={toggleDropdown}>
-              Post an update
-            </button>
-            {dropdownOpen && (
-              <div className="dropdown-menu">
-                <form>
-                  <div>
-                    <label htmlFor="title">Title:</label>
-                    <input type="text" id="title" required />
-                  </div>  
-                  <div>
-                    <label htmlFor="body">Body:</label>
-                    <input type="text" id="body" required />
-                  </div>
-                  <button className="post-button">Post</button>
-                </form>
-              </div>
-            )}
-          </div>
+          <a href="./EditModule.js">
+          <button className="content-button">COS341- Compiler Construction</button>
+          </a>
+          <a href="/imperative">
+          <button className="content-button">COS132- Imperative Programming</button>
+          </a>
         </div>
       </div>
     </div>
   );
 };
 
-export default NavBar;
+export default App;
