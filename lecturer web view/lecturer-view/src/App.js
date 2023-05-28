@@ -49,8 +49,9 @@ const NavBar = () => {
                     <input type="text" id="title" maxLength="50" required />
                   </div>  
                   <div className="dropdown-body">
-                    <label htmlFor="body">Body: </label>
-                    <input type="text" id="body" maxLength="300" required />
+                    <label htmlFor="body">Body: 
+                     <textarea id = "body" rows = "6" cols = "60" name = "body"></textarea>
+                    </label>
                   </div>
                   <button className="post-button">Post</button>
                 </form>

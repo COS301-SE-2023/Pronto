@@ -92,7 +92,7 @@
 }
 
 .dropdown {
-  width: 98%;
+  width: 96%;
   height: 80px;
   border-radius: 40px;
   
@@ -140,28 +140,32 @@
 
 #title{
   height: 20px !important;
-  width: 90%;
+  width: 70%;
+  margin-bottom:10px;
   }
 
 #body{
-  height: 100px !important;
-  width: 90%;
+  height: 100% !important;
+  width: 70%;
+  resize: none;
 }
 
 .dropdown-title {
-  margin-left: 5%;
+  margin-left: 20%;
   margin-top: 10px;
   margin-bottom: 15px;
   width:100%;
 }
 
 .dropdown-body {
-  margin-left: 4%;
+  margin-left: 20%;
   margin-bottom: 15px;
   width:100%;
 }
 
 .dropdown-menu label {
+  text-align: center;
+  justify-self: center;
   font-weight:bold;
 }
 
@@ -171,4 +175,9 @@
   border-radius: 12.5px;
   background-color: #e32f45;
   color: white;
+  margin-top:10px ;
+}
+
+label textarea{
+  vertical-align: top;
 }
