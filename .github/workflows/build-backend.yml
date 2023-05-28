@@ -7,10 +7,13 @@ on:
 jobs: 
   build:
     runs_on: windows-latest
+    with: 
+      node-version: '16'
     steps:
       -name: setup 
         run:
-            npm install -g @aws-amplify/cli
-            amplify init -y
-      -name: build          
-      amplify serve
+          npm install -g @aws-amplify/cli
+          amplify init -y
+      -name: build 
+        run:         
+          amplify serve
