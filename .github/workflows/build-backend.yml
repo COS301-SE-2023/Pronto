@@ -19,7 +19,7 @@ jobs:
 
       - name: Build
         run: |
-          amplify init  --projectName Pronto --appId {{secrets.APP_ID}} --envName {{secrets.ENV_NAME}}
+          amplify init  --projectName Pronto --appId {{secrets.APP_ID}} --envName {{secrets.ENV_NAME}} --defaultEditor Visual Studio
           amplify pull
           amplify add api
           amplify push --simple
