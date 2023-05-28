@@ -19,7 +19,7 @@ jobs:
 
       - name: Build
         run: |
-          amplify init  y
+          amplify init  --projectName Pronto
           amplify pull
           amplify add api
           amplify push --simple
