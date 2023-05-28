@@ -7,13 +7,14 @@ on:
 jobs: 
   build:
     runs_on: ubuntu-latest
-    with: 
-      node-version: '16'
     steps:
       steps:
       - name: Checkout source code
         uses: actions/checkout@v2
-        
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  
       -name: setup 
         run: |
           npm install -g @aws-amplify/cli
