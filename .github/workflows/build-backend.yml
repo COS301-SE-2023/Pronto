@@ -1,8 +1,7 @@
 name: Build-backend
 on: 
   pull_request:
-    branches: [backend,main]
-  workflow_dispatch: {}     
+    branches: [dev,main]
 
 jobs: 
   build:
