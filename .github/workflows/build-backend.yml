@@ -22,4 +22,4 @@ jobs:
           amplify init  --projectName Pronto --appId {{secrets.APP_ID}} --envName {{secrets.ENV_NAME}} --defaultEditor Visual Studio --useProfile true --profileName {{secrets.PROFILE}}
           amplify pull
           amplify add api
-          amplify push --simple
+          amplify build
