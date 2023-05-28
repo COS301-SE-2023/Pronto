@@ -10,10 +10,14 @@ jobs:
     with: 
       node-version: '16'
     steps:
+      steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        
       -name: setup 
-        run:
+        run: |
           npm install -g @aws-amplify/cli
           amplify init -y
       -name: build 
-        run:         
+        run: |        
           amplify serve
