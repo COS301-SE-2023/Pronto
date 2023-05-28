@@ -3,3 +3,7 @@ on:
   pull_request:
     branches: [backend,dev,main]
   workflow_dispatch:     
+
+jobs: 
+  build:
+    runs_on: windows-latest    
