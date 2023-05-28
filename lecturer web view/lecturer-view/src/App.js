@@ -35,6 +35,7 @@ const NavBar = () => {
       </div>
 
       <div className="content">
+      <h1 className="lechead">COS341- Compiler Construction</h1>
         <div className="subjects">
           <div className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
             <button className="dropdown-button" onClick={toggleDropdown}>
@@ -45,11 +46,11 @@ const NavBar = () => {
                 <form>
                   <div className="dropdown-title">
                     <label htmlFor="title">Title: </label>
-                    <input type="text" id="title" required />
+                    <input type="text" id="title" maxLength="50" required />
                   </div>  
                   <div className="dropdown-body">
                     <label htmlFor="body">Body: </label>
-                    <input type="text" id="body" required />
+                    <input type="text" id="body" maxLength="300" required />
                   </div>
                   <button className="post-button">Post</button>
                 </form>

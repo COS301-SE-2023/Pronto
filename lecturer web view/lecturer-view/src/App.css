@@ -87,12 +87,12 @@
 }
 
 .lechead{
-  margin-top: 30px;
-  margin-left: 60px;
+  margin-top: 2%;
+  margin-left: 2%;
 }
 
 .dropdown {
-  width: 97%;
+  width: 98%;
   height: 80px;
   border-radius: 40px;
   
@@ -115,8 +115,8 @@
 }
 
 .dropdown-menu {
-  position: flex;
-  width: 95%;
+  position: absolute;
+  width: 100%;
   border-radius:10px;
   background-color: white;
   border-bottom: 1px solid black;
@@ -127,8 +127,6 @@
   align-items: center;
   font-size: large;
   font-weight: bold;
-  padding-left:5%;
-  
 }
 
 .dropdown-menu form {
@@ -136,22 +134,35 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 200px;
+  height: 250px;
   width:90%;
 }
 
+#title{
+  height: 20px !important;
+  width: 90%;
+  }
+
+#body{
+  height: 100px !important;
+  width: 90%;
+}
+
 .dropdown-title {
+  margin-left: 5%;
+  margin-top: 10px;
   margin-bottom: 15px;
   width:100%;
 }
 
 .dropdown-body {
+  margin-left: 4%;
   margin-bottom: 15px;
   width:100%;
 }
 
 .dropdown-menu label {
-  font-weight:100;
+  font-weight:bold;
 }
 
 .post-button{
