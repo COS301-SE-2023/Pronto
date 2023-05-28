@@ -19,7 +19,7 @@ jobs:
 
       - name: Build
         run: |
-          amplify init  --projectName Pronto
+          amplify init  --projectName Pronto --appID {{secrets.APP_ID}} 
           amplify pull
           amplify add api
           amplify push --simple
