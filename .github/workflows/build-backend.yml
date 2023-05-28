@@ -3,12 +3,15 @@ on:
   pull_request:
     branches: [dev,main]
 workflow_dispatch: {}
+
 jobs: 
   build:
-    runs_on: ubuntu-latest
+    runs_on: windows-latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
           with:
