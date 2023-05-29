@@ -20,9 +20,7 @@ jobs:
       - name: Install Amplify CLI
         run: npm install -g @aws-amplify/cli
 
-      - name: Mock API
+      - name: Build
         run: |
-          amplify init  --projectName Pronto --appId {{secrets.APP_ID}} --envName {{secrets.ENV_NAME}} --defaultEditor Visual Studio --useProfile true --profileName {{secrets.PROFILE_NAME}}
-          amplify pull
-          amplify add api
-          amplify mock api
+          amplify init  --projectName pronto --appId {{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio --useProfile true --profileName {{secrets.PROFILE_NAME}}
+          amplify build
