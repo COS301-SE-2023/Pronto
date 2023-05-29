@@ -6,10 +6,17 @@ import arrow from "./images/arrow.png";
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownClick, setDropdownClick] = useState(false);
+  const [dropdownOpen2, setDropdownOpen2] = useState(false);
+  const [dropdownClick2, setDropdownClick2] = useState(false);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
     setDropdownClick(!dropdownClick);
+  };
+
+  const toggleDropdown2 = () => {
+    setDropdownOpen(!dropdownOpen2);
+    setDropdownClick(!dropdownClick2);
   };
 
   return (
@@ -62,6 +69,30 @@ const NavBar = () => {
               </div>
             )}
           </div>
+
+          <div className={`dropdown ${dropdownOpen2 ? 'open' : ''}`}>
+            <button className="dropdown-button" onClick={toggleDropdown2}>
+              Post an upcoming assignment
+              <img src={arrow} className={!dropdownClick2 ? 'arrowup' : 'arrowdown'} alt="Logo" width="30" height="35"/>
+            </button>
+            {dropdownOpen2 && (
+              <div className="dropdown-menu">
+                <form>
+                  <div className="dropdown-title">
+                    <label htmlFor="title">Title: </label>
+                    <input type="text" id="title" maxLength="50" required />
+                  </div>  
+                  <div className="dropdown-body">
+                    <label htmlFor="body">Body: 
+                     <textarea id = "body" rows = "6" cols = "60" name = "body"></textarea>
+                    </label>
+                  </div>
+                  <button className="post-button">Post</button>
+                </form>
+              </div>
+            )}
+          </div>
+          
         </div>
       </div>
     </div>
