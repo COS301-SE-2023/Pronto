@@ -76,6 +76,7 @@ const NavBar = () => {
           </div>
         </div>
 
+        <div className="space"></div>
         <div className="subjects">
           <div className={`dropdown ${dropdownOpen2 ? 'open' : ''}`}>
             <button className="dropdown-button" onClick={toggleDropdown2}>

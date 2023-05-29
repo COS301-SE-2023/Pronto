@@ -79,7 +79,7 @@
 }
 
 .subjects {
-  padding-top: 25px;
+  padding-top: 5px;
   display: fixed;
   justify-content: center;
   align-items: center;
@@ -87,13 +87,13 @@
 }
 
 .lechead{
-  margin-top: 2%;
-  margin-left: 2%;
+  margin-top: 1%;
+  margin-left: 1%;
 }
 
 .dropdown {
   width: 96%;
-  height: 80px;
+  height: 60px;
   border-radius: 40px;
   
   position: relative;
@@ -102,7 +102,7 @@
 
 .dropdown-button {
   width: 100%;
-  height: 80px;
+  height: 60px;
   border-radius:10px;
   
   background-color: white;
@@ -139,18 +139,18 @@
 #title{
   height: 20px !important;
   width: 70%;
-  margin-bottom:20px;
+  margin-bottom:15px;
   }
 
 #body{
   height: 100% !important;
   width: 70%;
   resize: none;
-  margin-bottom:20px;
+  margin-bottom:15px;
 }
 
 #date{
-  height: 20px !important;
+  height: 15px !important;
   width: 70%;
   }
 
@@ -188,8 +188,7 @@
   border-radius: 12.5px;
   background-color: #e32f45;
   color: white;
-  margin-top:5px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 label textarea{
@@ -212,4 +211,9 @@ label textarea{
 .arrowdown2{
   margin-left: 71%;
   transform: rotate(-90deg);
+}
+
+.space{
+  width:100%; 
+  height: 270px;
 }
