@@ -25,6 +25,5 @@ jobs:
 
       - name: Amplify Build
         run: |
-          amplify init  --projectName prontobackup --appId ${{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio Code --useProfile true --profileName ${{secrets.PROFILE_NAME}}
-          amplify pull
+          amplify pull  --projectName pronto --appId ${{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio Code --useProfile true --profileName ${{secrets.PROFILE_NAME}}
           amplify build
