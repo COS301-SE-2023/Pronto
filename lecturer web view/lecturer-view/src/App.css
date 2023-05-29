@@ -111,7 +111,6 @@
   align-items: center;
   font-size: large;
   font-weight: bold;
-  
 }
 
 .dropdown-menu {
@@ -134,30 +133,44 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 250px;
   width:90%;
 }
 
 #title{
   height: 20px !important;
   width: 70%;
-  margin-bottom:10px;
+  margin-bottom:20px;
   }
 
 #body{
   height: 100% !important;
   width: 70%;
   resize: none;
+  margin-bottom:20px;
 }
+
+#date{
+  height: 20px !important;
+  width: 70%;
+  }
 
 .dropdown-title {
   margin-left: 20%;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  margin-top: 20px;
   width:100%;
 }
 
 .dropdown-body {
+  margin-left: 20%;
+  width:100%;
+}
+
+.dropdown-description {
+  margin-right: 4%;
+  width:100%;
+}
+
+.dropdown-date{
   margin-left: 20%;
   margin-bottom: 15px;
   width:100%;
@@ -175,7 +188,8 @@
   border-radius: 12.5px;
   background-color: #e32f45;
   color: white;
-  margin-top:10px ;
+  margin-top:5px;
+  margin-bottom: 20px;
 }
 
 label textarea{
@@ -188,5 +202,14 @@ label textarea{
 
 .arrowdown{
   margin-left: 82%;
+  transform: rotate(-90deg);
+}
+
+.arrowup2{
+  margin-left: 71%;
+}
+
+.arrowdown2{
+  margin-left: 71%;
   transform: rotate(-90deg);
 }

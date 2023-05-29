@@ -15,8 +15,8 @@ const NavBar = () => {
   };
 
   const toggleDropdown2 = () => {
-    setDropdownOpen(!dropdownOpen2);
-    setDropdownClick(!dropdownClick2);
+    setDropdownOpen2(!dropdownOpen2);
+    setDropdownClick2(!dropdownClick2);
   };
 
   return (
@@ -45,57 +45,70 @@ const NavBar = () => {
       </div>
 
       <div className="content">
-      <h1 className="lechead">COS341- Compiler Construction</h1>
+        <h1 className="lechead">COS341- Compiler Construction</h1>
         <div className="subjects">
           <div className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
             <button className="dropdown-button" onClick={toggleDropdown}>
-              Post an update
+              Post a reminder
               <img src={arrow} className={!dropdownClick ? 'arrowup' : 'arrowdown'} alt="Logo" width="30" height="35"/>
             </button>
             {dropdownOpen && (
               <div className="dropdown-menu">
                 <form>
                   <div className="dropdown-title">
-                    <label htmlFor="title">Title: </label>
+                    <label htmlFor="title">Title:  </label>
                     <input type="text" id="title" maxLength="50" required />
                   </div>  
                   <div className="dropdown-body">
                     <label htmlFor="body">Body: 
-                     <textarea id = "body" rows = "6" cols = "60" name = "body"></textarea>
+                     <textarea id = "body" rows = "6" cols = "60" name = "body" required></textarea>
                     </label>
                   </div>
+                  <div className="dropdown-date">
+                  <label htmlFor="date">Date:  </label>
+                  <input type="date" id="date" />
+                  </div>
+
                   <button className="post-button">Post</button>
                 </form>
               </div>
             )}
           </div>
+        </div>
 
+        <div className="subjects">
           <div className={`dropdown ${dropdownOpen2 ? 'open' : ''}`}>
             <button className="dropdown-button" onClick={toggleDropdown2}>
               Post an upcoming assignment
-              <img src={arrow} className={!dropdownClick2 ? 'arrowup' : 'arrowdown'} alt="Logo" width="30" height="35"/>
+              <img src={arrow} className={!dropdownClick2 ? 'arrowup2' : 'arrowdown2'} alt="Logo" width="30" height="35"/>
             </button>
             {dropdownOpen2 && (
               <div className="dropdown-menu">
+
                 <form>
                   <div className="dropdown-title">
-                    <label htmlFor="title">Title: </label>
+                    <label htmlFor="title">Title:  </label>
                     <input type="text" id="title" maxLength="50" required />
                   </div>  
-                  <div className="dropdown-body">
-                    <label htmlFor="body">Body: 
+                  <div className="dropdown-description">
+                    <label htmlFor="body">Extra info (optional)   
                      <textarea id = "body" rows = "6" cols = "60" name = "body"></textarea>
-                    </label>
+                     </label>
                   </div>
+                  <div className="dropdown-date">
+                  <label htmlFor="date">Date: </label>
+                  <input type="date" id="date" required />
+                  </div>
+
                   <button className="post-button">Post</button>
                 </form>
               </div>
             )}
+            </div>  
           </div>
-          
         </div>
+
       </div>
-    </div>
   );
 };
 
