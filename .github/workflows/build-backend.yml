@@ -1,28 +1,30 @@
-name: Build-Status
+name: Amplify Build
 
-on: 
-  push:
+on:
+  pull_request:
     branches:
-      -build/fix
-
-jobs: 
+      ['dev','main']
+  push: 
+    branches: 
+      ['build/fix']    
+  workflow_dispatch: 
+jobs:
   build:
-    runs_on: ubuntu-latest
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
-          with:
-            node-version: '16'  
+        with:
+          node-version: '14'
 
       - name: Install Amplify CLI
         run: npm install -g @aws-amplify/cli
 
-      - name: Build
+      - name: Amplify Deployment
         run: |
-          amplify init  --projectName pronto --appId ${{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio Code --useProfile true --profileName ${{secrets.PROFILE_NAME}}
+          amplify init  --projectName prontobackup --appId ${{secrets.APP_ID}} --envName ${{secrets.ENV_NAME}} --defaultEditor Visual Studio Code --useProfile true --profileName ${{secrets.PROFILE_NAME}}
           amplify pull
           amplify build
