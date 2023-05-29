@@ -5,9 +5,11 @@ import arrow from "./images/arrow.png";
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownClick, setDropdownClick] = useState(false);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
+    setDropdownClick(!dropdownClick);
   };
 
   return (
@@ -41,7 +43,7 @@ const NavBar = () => {
           <div className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
             <button className="dropdown-button" onClick={toggleDropdown}>
               Post an update
-              <img src={arrow} className="arrow" alt="Logo" width="35" height="25"/>
+              <img src={arrow} className={!dropdownClick ? 'arrowup' : 'arrowdown'} alt="Logo" width="30" height="35"/>
             </button>
             {dropdownOpen && (
               <div className="dropdown-menu">

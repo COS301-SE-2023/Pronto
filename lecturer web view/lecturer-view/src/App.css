@@ -182,6 +182,11 @@ label textarea{
   vertical-align: top;
 }
 
-.arrow{
+.arrowup{
   margin-left: 82%;
+}
+
+.arrowdown{
+  margin-left: 82%;
+  transform: rotate(-90deg);
 }
