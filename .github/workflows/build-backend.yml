@@ -2,7 +2,8 @@ name: Build-Status
 
 on: 
   pull_request:
-    branches: ['dev','main']
+    branches:
+      ['dev','main']
   workflow_dispatch: {}
 
 jobs: 
@@ -23,5 +24,6 @@ jobs:
 
       - name: Build
         run: |
-          amplify init  --projectName pronto --appId ${{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio --useProfile true --profileName ${{secrets.PROFILE_NAME}}
+          amplify init  --projectName pronto --appId ${{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio Code --useProfile true --profileName ${{secrets.PROFILE_NAME}}
+          amplify pull
           amplify build
