@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import logo from "./images/logo.jpg";
+import arrow from "./images/arrow.png";
 
 const NavBar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -40,6 +41,7 @@ const NavBar = () => {
           <div className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
             <button className="dropdown-button" onClick={toggleDropdown}>
               Post an update
+              <img src={arrow} className="arrow" alt="Logo" width="35" height="25"/>
             </button>
             {dropdownOpen && (
               <div className="dropdown-menu">
