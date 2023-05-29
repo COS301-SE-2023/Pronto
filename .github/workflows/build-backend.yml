@@ -23,8 +23,8 @@ jobs:
       - name: Install Amplify CLI
         run: npm install -g @aws-amplify/cli
 
-      - name: Amplify Deployment
+      - name: Amplify Build
         run: |
-          amplify init  --projectName prontobackup --appId ${{secrets.APP_ID}} --envName ${{secrets.ENV_NAME}} --defaultEditor Visual Studio Code --useProfile true --profileName ${{secrets.PROFILE_NAME}}
+          amplify init  --projectName prontobackup --appId ${{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio Code --useProfile true --profileName ${{secrets.PROFILE_NAME}}
           amplify pull
           amplify build
