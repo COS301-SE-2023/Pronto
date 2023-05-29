@@ -32,6 +32,14 @@ const NavBar = () => {
             <button>Edit module information</button>
           </a>
 
+          <a href="/recent-announcements">
+            <button>Recent announcements</button>
+          </a>
+
+          <a href="/add-venue">
+            <button>Add lecture venue</button>
+          </a>
+
           <a href="/edit-personal">
             <button>Edit personal information</button>
           </a>
