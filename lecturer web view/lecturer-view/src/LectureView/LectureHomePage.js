@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import LectureNavigation from "./LectureNavigation";
+import PostReminder from "./PostReminder";
 import "./LectureHome.css";
 
 const LectureHomePage = () => {
@@ -9,9 +10,9 @@ const LectureHomePage = () => {
       <div className="content">
         <h1 className="lechead">Modules</h1>
         <div className="subjects">
-          <Link to="./PostReminder.js">
+          <a href={PostReminder}>
           <button className="content-button">COS341- Compiler Construction</button>
-          </Link>
+          </a>
           <a href="/imperative">
           <button className="content-button">COS132- Imperative Programming</button>
           </a>
