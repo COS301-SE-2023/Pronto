@@ -1,124 +1,18 @@
-import React, { useState } from 'react';
-import './App.css';
-import logo from "./images/logo.jpg";
-import arrow from "./images/arrow.png";
+import React from 'react';
+//import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
+import LectureHomePage from "./LectureView/LectureHomePage";
 
-const NavBar = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [dropdownClick, setDropdownClick] = useState(false);
-  const [dropdownOpen2, setDropdownOpen2] = useState(false);
-  const [dropdownClick2, setDropdownClick2] = useState(false);
-
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-    setDropdownClick(!dropdownClick);
-  };
-
-  const toggleDropdown2 = () => {
-    setDropdownOpen2(!dropdownOpen2);
-    setDropdownClick2(!dropdownClick2);
-  };
+const Home = () => {
 
   return (
-    <div className="container">
-      <div className="navbar">
-        <div className="logo">
-          <img src={logo} alt="Logo" width="228" height="222" />
-        </div>
-        <div className="lecturer">Stefan Gruner</div>
-
-        <div className="buttons">
-          <a href="./edit-module.js">
-            <button>Edit module information</button>
-          </a>
-
-          <a href="/recent-announcements">
-            <button>Recent announcements</button>
-          </a>
-
-          <a href="/add-venue">
-            <button>Add lecture venue</button>
-          </a>
-
-          <a href="/edit-personal">
-            <button>Edit personal information</button>
-          </a>
-        </div>
-        
-        <div className="logout">
-          <a href="/logout">
-          <button className="logout-button">Logout</button>
-          </a>
-        </div>
+      <div>
+           <LectureHomePage />
+          {/* <InstitutionHomePage />*/}
       </div>
 
-      <div className="content">
-        <h1 className="lechead">COS341- Compiler Construction</h1>
-        <div className="subjects">
-          <div className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
-            <button className="dropdown-button" onClick={toggleDropdown}>
-              Post a reminder
-              <img src={arrow} className={!dropdownClick ? 'arrowup' : 'arrowdown'} alt="Logo" width="30" height="35"/>
-            </button>
-            {dropdownOpen && (
-              <div className="dropdown-menu">
-                <form>
-                  <div className="dropdown-title">
-                    <label htmlFor="title">Title:  </label>
-                    <input type="text" id="title" maxLength="50" required />
-                  </div>  
-                  <div className="dropdown-body">
-                    <label htmlFor="body">Body: 
-                     <textarea id = "body" rows = "6" cols = "60" name = "body" required></textarea>
-                    </label>
-                  </div>
-                  <div className="dropdown-date">
-                  <label htmlFor="date">Date:  </label>
-                  <input type="date" id="date" />
-                  </div>
 
-                  <button className="post-button">Post</button>
-                </form>
-              </div>
-            )}
-          </div>
-        </div>
 
-        <div className="space"></div>
-        <div className="subjects">
-          <div className={`dropdown ${dropdownOpen2 ? 'open' : ''}`}>
-            <button className="dropdown-button" onClick={toggleDropdown2}>
-              Post an upcoming assignment
-              <img src={arrow} className={!dropdownClick2 ? 'arrowup2' : 'arrowdown2'} alt="Logo" width="30" height="35"/>
-            </button>
-            {dropdownOpen2 && (
-              <div className="dropdown-menu">
-
-                <form>
-                  <div className="dropdown-title">
-                    <label htmlFor="title">Title:  </label>
-                    <input type="text" id="title" maxLength="50" required />
-                  </div>  
-                  <div className="dropdown-description">
-                    <label htmlFor="body">Extra info (optional)   
-                     <textarea id = "body" rows = "6" cols = "60" name = "body"></textarea>
-                     </label>
-                  </div>
-                  <div className="dropdown-date">
-                  <label htmlFor="date">Date: </label>
-                  <input type="date" id="date" required />
-                  </div>
-
-                  <button className="post-button">Post</button>
-                </form>
-              </div>
-            )}
-            </div>  
-          </div>
-        </div>
-
-      </div>
   );
 };
 
-export default NavBar;
+export default Home;
