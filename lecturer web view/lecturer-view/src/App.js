@@ -1,17 +1,15 @@
-import React from 'react';
+import React from "react";
 //import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
-import LectureHomePage from "./LectureView/LectureHomePage";
+//import LectureHomePage from "./LectureView/LectureHomePage";
+import Login from "./Authentication/LecturerLogin/Login";
 
 const Home = () => {
-
   return (
-      <div>
-           <LectureHomePage />
-          {/* <InstitutionHomePage />*/}
-      </div>
-
-
-
+    <div>
+      <Login />
+      {/* <LectureHomePage />*/}
+      {/* <InstitutionHomePage />*/}
+    </div>
   );
 };
 
