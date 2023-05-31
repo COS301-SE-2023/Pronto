@@ -166,7 +166,7 @@
 }
 
 .dropdown-description {
-    margin-right: 4%;
+    margin-left: 13.3%;
     width:100%;
 }
 
@@ -189,6 +189,7 @@
     background-color: #e32f45;
     color: white;
     margin-bottom: 15px;
+    margin-left:50%;
 }
 
 label textarea{
