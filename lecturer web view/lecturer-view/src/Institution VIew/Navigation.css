@@ -1,0 +1,29 @@
+.vertical-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100vh;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+.navbar-nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin-bottom: 15px;
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 1.4rem;
+}
+
+.nav-link:hover {
+    color: #e32f45;
+}

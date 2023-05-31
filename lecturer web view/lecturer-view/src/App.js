@@ -13,12 +13,11 @@ const Home = () => {
         <div>
             <Router >
                     <Routes>
-                        <Route path="/" element={<InstitutionHomePage />} classname={"mt-5"}/>
+                        <Route path="/" element={<InstitutionHomePage />} />
                         <Route path="/login" element={<Login/>} />
                         <Route path="/lecture-homepage" element={<LectureHomePage />} />
                     </Routes>
             </Router>
-
         </div>
 
 
