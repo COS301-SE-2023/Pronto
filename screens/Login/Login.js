@@ -13,6 +13,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 const { height } = Dimensions.get("window");
 
+const onSignInPressed = (data) => {};
+
 const Login = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
