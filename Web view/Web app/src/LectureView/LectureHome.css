@@ -1,31 +1,21 @@
-.content {
-    flex: 1;
-    background-color: #e8e8e8;
-    justify-content: center;
-    align-items: center;
-}
-
 .content-button {
     width: 55rem;
     height: 5rem;
-    border-radius: 50px;
+    border-radius: 2.5rem;
     background-color: white;
     border: 1px solid black;
-    display: flex;
-    justify-content: center;
     align-items: center;
     font-size: large;
     font-weight: bold;
-    margin-bottom: 30px;
-    margin-left: 25px;
+    margin-bottom: 2%;
+    margin-left: 2%;
 }
 
 .subjects {
-    padding-top: 2.5px;
-    display: fixed;
+    padding-top: 1%;
     justify-content: center;
     align-items: center;
-    margin-left: 25px;
+    margin-left: 2%;
 }
 
 .moduleHead{
@@ -48,32 +38,23 @@
 }
 
 .assignment-info{
-    margin-left:3.5%;
+    margin-left:1%;
 }
 
 #title{
-    height: 20px !important;
+    height: 1.5rem;
     width: 80%;
     margin-bottom:2%;
 }
 
 #body{
-    height: 100% !important;
-    width: 80%;
+    width: 79%;
     resize: none;
     margin-bottom:2%;
-}
-
-#info{
-    height: 100% !important;
-    width: 80%;
-    resize: none;
-    margin-bottom:2%;
-    margin-right:5%;
 }
 
 #date{
-    height: 20px !important;
+    height: 1.5rem;
     width: 80%;
     margin-bottom: 2%;
 }

@@ -66,7 +66,7 @@ export default function PostAccordion() {
             </div>
             <div className="assignment-info">
                 <label htmlFor="body">Information:
-                    <textarea id="info" rows="6" cols="95" name="body"></textarea>
+                    <textarea id="body" rows="6" cols="68" name="body"></textarea>
                 </label>
             </div>
             <div className="assignment-date">
