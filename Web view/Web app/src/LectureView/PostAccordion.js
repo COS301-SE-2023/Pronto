@@ -28,19 +28,24 @@ export default function PostAccordion() {
         </AccordionSummary>
         <AccordionDetails>
         <form>
-          <div className = "postReminder">
-            <div className="dropdown-title">
-                <label htmlFor="title">Title: </label>
-                <input type="text" id="title" maxLength="50" required/>
+          <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label">Title: </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="colFormLabel"></input>
             </div>
-            <div className="dropdown-body">
-                <label htmlFor="body">Body:
-                    <textarea id="body" rows="6" cols="100" name="body" required></textarea>
-                </label>
+          </div>
+
+          <div class="form-group row">
+            <label for="body" class="col-sm-2 col-form-label">Body: </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="colFormLabel"></input>
             </div>
-            <div className="dropdown-date">
-                <label htmlFor="date">Date: </label>
-                <input type="date" id="date"/>
+          </div>
+
+          <div class="form-group row">
+            <label for="date" class="col-sm-2 col-form-label">Date: </label>
+            <div class="col-sm-10">
+              <input type="date" class="form-control" id="colFormLabel"></input>
             </div>
           </div>
 
@@ -60,19 +65,26 @@ export default function PostAccordion() {
         </AccordionSummary>
         <AccordionDetails>
         <form>
-            <div className="assignment-title">
-                <label htmlFor="title">Title: </label>
-                <input type="text" id="title" maxLength="50" required/>
+          <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label">Title: </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="colFormLabel"></input>
             </div>
-            <div className="assignment-info">
-                <label htmlFor="body">Information:
-                    <textarea id="body" rows="6" cols="68" name="body"></textarea>
-                </label>
+          </div>
+
+          <div class="form-group row">
+            <label for="body" class="col-sm-2 col-form-label">Information: </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="colFormLabel"></input>
             </div>
-            <div className="assignment-date">
-                <label htmlFor="date">Date: </label>
-                <input type="date" id="date" required/>
+          </div>
+
+          <div class="form-group row">
+            <label for="date" class="col-sm-2 col-form-label">Date: </label>
+            <div class="col-sm-10">
+              <input type="date" class="form-control" id="colFormLabel"></input>
             </div>
+          </div>
 
             <button className="post-button">Post</button>
         </form>

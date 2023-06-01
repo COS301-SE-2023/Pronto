@@ -4,11 +4,9 @@
     border-radius: 2.5rem;
     background-color: white;
     border: 1px solid black;
-    align-items: center;
     font-size: large;
     font-weight: bold;
-    margin-bottom: 2%;
-    margin-left: 2%;
+    margin-bottom: 5%;
 }
 
 .subjects {
@@ -20,43 +18,7 @@
 
 .moduleHead{
     margin-top: 2%;
-    margin-bottom:2%;
-}
-
-.subjHead{
-    margin-top: 2%;
-    margin-bottom:2%;
-    margin-left:7%;
-}
-
-.assignment-title{
-    margin-left:10%;
-}
-
-.assignment-date{
-    margin-left:10%;
-}
-
-.assignment-info{
-    margin-left:1%;
-}
-
-#title{
-    height: 1.5rem;
-    width: 80%;
-    margin-bottom:2%;
-}
-
-#body{
-    width: 79%;
-    resize: none;
-    margin-bottom:2%;
-}
-
-#date{
-    height: 1.5rem;
-    width: 80%;
-    margin-bottom: 2%;
+    margin-bottom:5%;
 }
 
 .post-button{
@@ -65,15 +27,5 @@
     border-radius: 0.8rem;
     background-color: #e32f45;
     color: white;
-    margin-left:42%;
-}
-
-label textarea{
-    vertical-align: top;
-}
-
-.postReminder{
-    align-items: center;
-    align-content: center;
-    margin-left:10%;
+    margin-left:41%;
 }
