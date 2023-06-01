@@ -7,7 +7,7 @@ import {Person} from "@mui/icons-material";
 export default function InstitutionNavigation() {
     return (
         <div className={'grid'}>
-            <nav className="vertical-navbar col-4 " style={{"backgroundColor": "gray"}}>
+            <nav className="vertical-navbar col-4 p-4" >
                 <ul className="navbar-nav">
                     <li className="nav-item ">
                         <img src={logo} alt="Logo" className="logo offset-3" width={'120px'} height={'120px'}/>
@@ -44,7 +44,7 @@ export default function InstitutionNavigation() {
                             <button className={'btn btn-danger btn-lg btn-block'}>Log Out</button>
                         </a>
                     </li>
-                    <div style={{'backgroundColor': '#e32f45', 'height':'2px', 'width': '100%'}}></div>
+
                 </ul>
 
             </nav>

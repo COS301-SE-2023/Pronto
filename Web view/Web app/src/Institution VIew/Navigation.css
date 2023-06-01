@@ -4,7 +4,7 @@
     left: 0;
     width: 20%;
     height: 100vh;
-    background-color: #f2f2f2;
+    background-color: #ffffff;
     padding: 20px;
 }
 
@@ -22,8 +22,10 @@
     color: #333;
     text-decoration: none;
     font-size: 1.4rem;
+    border-bottom: 1px solid transparent;
 }
 
 .nav-link:hover {
     color: #e32f45;
+    border-bottom: 1px solid #e32f45;
 }
