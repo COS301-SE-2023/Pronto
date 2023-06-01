@@ -27,7 +27,7 @@ jobs:
       - name: Amplify Build
         run: |
           
-          amplify init  --projectName pronto --appId ${{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio Code --useProfile false --accessKeyId ${{secrets.AWS_ACCESS_KEY_ID}} --secretAccessKey ${{secrets.SECRET_ACCESS_KEY}} --region us-east-1
+          amplify init  --projectName pronto --appId ${{secrets.APP_ID}} --envName dev --defaultEditor Visual Studio Code --useProfile false --accessKeyId ${{secrets.AWS_ACCESS_KEY_ID}} --secretAccessKey ${{secrets.AWS_SECRET_ACCESS_KEY}} --region us-east-1
           amplify pull
           amplify build
 
