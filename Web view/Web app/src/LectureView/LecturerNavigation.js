@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../Institution VIew/Navigation.css';
+import '../Institution VIew/Navigation/Navigation.css';
 import logo from '../images/logo.jpg';
 import {Person} from "@mui/icons-material";
 

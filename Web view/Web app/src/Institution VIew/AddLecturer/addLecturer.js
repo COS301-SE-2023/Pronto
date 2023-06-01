@@ -1,7 +1,9 @@
 import React from "react";
-import InstitutionNavigation from "../InstitutionNavigation";
+import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 
 const AddLecturer = () => {
+
+
 
     return (
         <div style={{ display: 'inline-flex' }}>
@@ -69,7 +71,7 @@ const AddLecturer = () => {
                            aria-label="Search for a lecturer" aria-describedby="button-addon2"/>
                     <div className="input-group-append">
                         <button className="btn btn-outline-primary" type="button" id="button-addon2">
-                            <i className="material-icons">search</i>
+
                         </button>
                         {/*a dropdown filter for the search*/}
                         <select className="custom-select" id="inputGroupSelect01">
@@ -87,7 +89,7 @@ const AddLecturer = () => {
                             <thead>
                             <tr>
                                 <th scope="col">First Name</th>
-                                <th scope="col">Last name</th>
+                                <th scope="col">Last Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Module Code</th>
                                 <th scope="col">Delete</th>

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import LecturerNavigation from "./LecturerNavigation";
 import PostAccordion from "./PostAccordion";
 import "./LectureHome.css";
