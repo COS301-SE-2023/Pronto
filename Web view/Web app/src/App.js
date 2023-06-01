@@ -14,10 +14,10 @@ const Home = () => {
         <div>
             <Router >
                     <Routes>
-                        <Route path="/" element={<InstitutionHomePage />} />
+                        <Route path="/" element={<LectureHomePage />} />
                         <Route path="/login" element={<Login/>} />
                         <Route path="/lecture-homepage" element={<LectureHomePage />} />
-                        <Route path="/add-lecturer" element={<AddLecturer />} />
+                        <Route path="/post-reminder" element={<PostReminder />} />
                     </Routes>
             </Router>
         </div>

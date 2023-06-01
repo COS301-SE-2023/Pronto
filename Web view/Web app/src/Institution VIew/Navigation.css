@@ -6,12 +6,13 @@
     height: 100vh;
     background-color: #ffffff;
     padding: 20px;
+    border-right:  1px solid black;
 }
 
 .navbar-nav {
     list-style-type: none;
     padding: 0;
-    margin: 0;
+    margin-top: 0;
 }
 
 .nav-item {
@@ -21,11 +22,23 @@
 .nav-link {
     color: #333;
     text-decoration: none;
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     border-bottom: 1px solid transparent;
 }
 
 .nav-link:hover {
     color: #e32f45;
     border-bottom: 1px solid #e32f45;
+}
+
+.lecturer{
+    margin-top: 10%;
+    font-size: medium;
+    font-weight: bold;
+    color: #464646;
+    text-align: center;
+}
+
+.top{
+    margin-bottom:60%;
 }
