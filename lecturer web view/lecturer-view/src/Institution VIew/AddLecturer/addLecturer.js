@@ -64,18 +64,26 @@ const AddLecturer = () => {
                 {/* Display content */}
                 <h1 className={'text-center'}>Lecturers</h1>
                 {/* Search bar with search material ui icon and border radius of 20px*/}
-                <div className="input-group mb-3">
+                <div className="input-group mb-3 p-1">
                     <input type="text" className="form-control" placeholder="Search for a lecturer"
                            aria-label="Search for a lecturer" aria-describedby="button-addon2"/>
                     <div className="input-group-append">
-                        <button className="btn btn-outline-secondary" type="button" id="button-addon2">
+                        <button className="btn btn-outline-primary" type="button" id="button-addon2">
                             <i className="material-icons">search</i>
                         </button>
+                        {/*a dropdown filter for the search*/}
+                        <select className="custom-select" id="inputGroupSelect01">
+                            <option selected>Filter by</option>
+                            <option value="1">First Name</option>
+                            <option value="2">Last Name</option>
+                            <option value="3">Email</option>
+                            <option value="4">Module Code</option>
+                        </select>
                     </div>
                 </div>
                 <div className="card shadow w-100" style={{'width' : '500px'}}>
                     <div className="card-body">
-                        <table className="table table-hover">
+                        <table className="table table-hover " style={{alignItems: 'center'}}>
                             <thead>
                             <tr>
                                 <th scope="col">First Name</th>
@@ -91,12 +99,12 @@ const AddLecturer = () => {
                                 <td>Doe</td>
                                 <td>
                                     <a href="mailto:">
-
+                                        john.doe@up.ac.za
                                     </a>
                                 </td>
                                 <td>COS132</td>
                                 <td>
-                                    <button type="button" className="btn btn-danger">Delete</button>
+                                    <button type="button" className="btn btn-danger w-100">Delete</button>
                                 </td>
                             </tr>
                             </tbody>
