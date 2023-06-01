@@ -54,7 +54,7 @@ function DropzoneComponent(props) {
         isDragReject
     } = useDropzone({
         onDrop,
-        accept: 'image/jpeg, image/png, application/pdf'
+        accept: 'application/pdf'
     });
 
     const style = useMemo(() => ({

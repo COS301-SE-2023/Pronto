@@ -24,7 +24,7 @@ export default function InstitutionNavigation() {
                     </li>
                     <li className="nav-item text-center">
 
-                        <a href="src/Institution VIew/Navigation/InstitutionNavigation#" className="nav-link p-2">
+                        <a href="/upload-student-files" className="nav-link p-2">
                             <b>Upload Student Files</b>
 
                         </a>

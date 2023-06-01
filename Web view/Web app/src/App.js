@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
+import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
 
 
 
@@ -24,6 +25,7 @@ const Home = () => {
                         <Route path="/add-lecturer" element={<AddLecturer />} />
                         <Route path="/institution-homepage" element={<InstitutionHomePage />} />
                         <Route path="/upload-schedule" element={<FileUploadPage />} />
+                        <Route path="/upload-student-files" element={<StudentFileUploadPage />} />
                     </Routes>
             </Router>
         </div>
