@@ -9,9 +9,11 @@ const AddLecturer = () => {
                 {/* Navigation bar content */}
                 <InstitutionNavigation />
             </nav>
-            <main style={{ width: '100%',marginTop: '30px' }}>
+            <main style={{ width: '900px',marginTop: '30px' }}>
                 {/* Input forms content */}
                 <h1 className={'text-center'}>Add a lecturer</h1>
+
+
                 <div className="card shadow">
                     <div className="card-body">
                         <form>
@@ -58,6 +60,50 @@ const AddLecturer = () => {
                         </form>
                     </div>
                 </div>
+
+                {/* Display content */}
+                <h1 className={'text-center'}>Lecturers</h1>
+                {/* Search bar with search material ui icon and border radius of 20px*/}
+                <div className="input-group mb-3">
+                    <input type="text" className="form-control" placeholder="Search for a lecturer"
+                           aria-label="Search for a lecturer" aria-describedby="button-addon2"/>
+                    <div className="input-group-append">
+                        <button className="btn btn-outline-secondary" type="button" id="button-addon2">
+                            <i className="material-icons">search</i>
+                        </button>
+                    </div>
+                </div>
+                <div className="card shadow w-100" style={{'width' : '500px'}}>
+                    <div className="card-body">
+                        <table className="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Module Code</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>John</td>
+                                <td>Doe</td>
+                                <td>
+                                    <a href="mailto:">
+
+                                    </a>
+                                </td>
+                                <td>COS132</td>
+                                <td>
+                                    <button type="button" className="btn btn-danger">Delete</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
 
 
             </main>
