@@ -30,7 +30,7 @@ export default function InstitutionNavigation() {
                         </a>
                     </li>
                     <li className="nav-item text-center">
-                        <a href="#" className="nav-link">
+                        <a href="/add-lecturer" className="nav-link">
                             <b>Add/Remove Lecturer</b>
                         </a>
                     </li>
