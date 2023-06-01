@@ -14,7 +14,7 @@ AMPLIFY="{\
 \"projectName\":\"pronto\",\
 \"appId\":\"d1kit50gzhvboi\",\
 \"envName\":\"dev\",\
-\"defaultEditor\":\"Visual Studio Code\"\
+\"defaultEditor\":\"code\"\
 }"
 FRONTEND="{\
 \"frontend\":\"ios\"
@@ -22,18 +22,9 @@ FRONTEND="{\
 PROVIDERS="{\
 \"awscloudformation\":$AWSCLOUDFORMATIONCONFIG\
 }"
-CODEGEN="{\
-\"generateCode\":true,\
-\"codeLanguage\":\"swift\",\
-\"fileNamePattern\":\"graphql/**/*.graphql\",\
-\"generatedFileName\":\"API.swift\",\
-\"generateDocs\":true,\
-\"maxDepth\":2\
-}"
 
 amplify init \
 --amplify $AMPLIFY \
 --frontend $FRONTEND \
 --providers $PROVIDERS \
---codegen $CODEGEN \
 --yes
