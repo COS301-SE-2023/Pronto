@@ -16,6 +16,7 @@
     ]
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^4.6.4",
     "@expo/metro-config": "^0.7.1",
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^18.0.1",

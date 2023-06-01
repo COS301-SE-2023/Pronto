@@ -7,15 +7,35 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { Auth } from "aws-amplify";
 
 const { height } = Dimensions.get("window");
 
-const onSignInPressed = (data) => {};
-
 const Login = ({ navigation }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const onSignInPressed = async (data) => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await Auth.signIn(username, password);
+      //  navigation.navigate("Timetable");
+    } catch (e) {
+      Alert.alert("Error...", e.message);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
@@ -31,6 +51,8 @@ const Login = ({ navigation }) => {
             placeholder="Email"
             placeholderTextColor={"#666666"}
             style={styles.input}
+            value={username}
+            onChangeText={setUsername}
           />
 
           <TextInput
@@ -38,6 +60,8 @@ const Login = ({ navigation }) => {
             placeholderTextColor={"#666666"}
             secureTextEntry={true}
             style={styles.input}
+            value={password}
+            onChangeText={setPassword}
           />
         </View>
 
@@ -47,8 +71,10 @@ const Login = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.signInButton}>
-          <Text style={styles.signInButtonText}>Sign in</Text>
+        <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>
+          <Text style={styles.signInButtonText}>
+            {loading ? "Signing in..." : "Sign in"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity

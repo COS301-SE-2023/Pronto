@@ -6,8 +6,12 @@ import Register from "./screens/Login/Register";
 import Login from "./screens/Login/Login";
 import ResetPassword from "./screens/Login/ResetPassword";
 import VerifyCode from "./screens/Login/VerifyCode";
-import Amplify from "aws-amplify";
+import { Amplify } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import config from "./src/aws-exports";
+
+Amplify.configure(config);
+Auth.configure(config);
 
 const Stack = createNativeStackNavigator();
 
