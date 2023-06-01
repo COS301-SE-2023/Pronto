@@ -20,6 +20,7 @@ const Home = () => {
 
                         <Route path="/login" element={<Login/>} />
                         <Route path="/lecture-homepage" element={<LectureHomePage />} />
+                        <Route path="post-reminder" element={<PostReminder/>} />
 
                         {/*Institution pages routing*/}
                         <Route path="/add-lecturer" element={<AddLecturer />} />

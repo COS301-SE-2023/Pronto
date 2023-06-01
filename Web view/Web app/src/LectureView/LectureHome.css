@@ -9,13 +9,6 @@
     margin-bottom: 5%;
 }
 
-.subjects {
-    padding-top: 1%;
-    justify-content: center;
-    align-items: center;
-    margin-left: 2%;
-}
-
 .moduleHead{
     margin-top: 2%;
     margin-bottom:5%;
@@ -27,5 +20,5 @@
     border-radius: 0.8rem;
     background-color: #e32f45;
     color: white;
-    margin-left:41%;
+    margin-left:37%;
 }

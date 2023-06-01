@@ -13,17 +13,14 @@ const LectureHomePage = () => {
       <main style={{ width: '900px',marginTop: '30px' }}>
         <h1 className="moduleHead">Modules</h1>
 
-        <div className="subjects">
-          
-          <a href="./post-reminder">
-          <button className="content-button">COS341- Compiler Construction</button>
-          </a>
+        <a href="./post-reminder">
+        <button className="content-button">COS341- Compiler Construction</button>
+        </a>
 
-          <a href="/imperative">
-          <button className="content-button">COS132- Imperative Programming</button>
-          </a>
-
-        </div>
+        <a href="/imperative">
+        <button className="content-button">COS132- Imperative Programming</button>
+        </a>
+        
       </main>
 
     </div>
