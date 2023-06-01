@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './Navigation.css';
-import logo from '../images/logo.jpg';
-import {Person} from "@mui/icons-material";
+import logo from '../../images/logo.jpg';
+//import {Person} from "@mui/icons-material";
 
 
 export default function InstitutionNavigation() {
@@ -13,18 +13,18 @@ export default function InstitutionNavigation() {
                         <img src={logo} alt="Logo" className="logo offset-3" width={'120px'} height={'120px'}/>
                     </li>
                     <li className="nav-item text-center">
-                        <a href="#" className="nav-link">
+                        <a href="src/Institution VIew/Navigation/InstitutionNavigation#" className="nav-link">
                             <b>Dashboard</b>
                         </a>
                     </li>
                     <li className="nav-item text-center">
-                        <a href="#" className="nav-link">
+                        <a href="/upload-schedule" className="nav-link">
                            <b>Upload Schedule</b>
                         </a>
                     </li>
                     <li className="nav-item text-center">
 
-                        <a href="#" className="nav-link p-2">
+                        <a href="/upload-student-files" className="nav-link p-2">
                             <b>Upload Student Files</b>
 
                         </a>
@@ -35,12 +35,12 @@ export default function InstitutionNavigation() {
                         </a>
                     </li>
                     <li className="nav-item text-center">
-                        <a href="#" className="nav-link">
+                        <a href="src/Institution VIew/Navigation/InstitutionNavigation#" className="nav-link">
                             <b>Edit University Info</b>
                         </a>
                     </li>
                     <li className="nav-item text-center">
-                        <a href="#" className="nav-link">
+                        <a href="src/Institution VIew/Navigation/InstitutionNavigation#" className="nav-link">
                             <button className={'btn btn-danger btn-lg btn-block'}>Log Out</button>
                         </a>
                     </li>
