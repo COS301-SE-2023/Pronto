@@ -65,23 +65,27 @@ const Login = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")}>
-          <View>
-            <Text style={styles.forgotPassword}>Forgot your password?</Text>
-          </View>
-        </TouchableOpacity>
-
         <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>
           <Text style={styles.signInButtonText}>
             {loading ? "Signing in..." : "Sign in"}
           </Text>
         </TouchableOpacity>
 
+        <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")}>
+          <View>
+            <Text style={styles.forgotPassword}>
+              Forgot your password? &#x2192;
+            </Text>
+          </View>
+        </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.createAccountButton}
           onPress={() => navigation.navigate("Register")}
         >
-          <Text style={styles.createAccountButtonText}>Create new account</Text>
+          <Text style={styles.createAccountButtonText}>
+            Create new account &#x2192;
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -114,9 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     maxWidth: "70%",
   },
-  inputContainer: {
-    marginVertical: 40,
-  },
+  inputContainer: {},
   input: {
     fontSize: 15,
     padding: 20,
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#e32f45",
     alignSelf: "flex-end",
+    marginBottom: 15,
   },
   signInButton: {
     padding: 20,
@@ -152,7 +155,7 @@ const styles = StyleSheet.create({
   },
   createAccountButtonText: {
     color: "black",
-    textAlign: "center",
+    alignSelf: "flex-end",
     fontSize: 15,
     fontWeight: "bold",
   },
