@@ -9,7 +9,7 @@ import ResetPassword from "./screens/Login/ResetPassword";
 import VerifyCode from "./screens/Login/VerifyCode";
 import ConfirmEmail from "./screens/Login/ConfirmEmail";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, View, Alert } from "react-native";
+import { ActivityIndicator, View, Text } from "react-native";
 
 import { Amplify } from "aws-amplify";
 import { Auth } from "aws-amplify";
@@ -38,16 +38,29 @@ export default function App() {
     checkUser();
   }, []);
 
-  if (user == undefined) {
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <ActivityIndicator />
-    </View>;
+  if (user === undefined) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            color: "#e32f45",
+            fontSize: 30,
+            fontWeight: "bold",
+            marginBottom: 20,
+            textAlign: "center",
+          }}
+        >
+          Loading...
+        </Text>
+        <ActivityIndicator color={"#e32f45"} size={"large"} />
+      </View>
+    );
   }
 
   return (
