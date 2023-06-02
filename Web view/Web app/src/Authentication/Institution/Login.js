@@ -42,7 +42,9 @@ function Login() {
           <Input type="password" placeholder="Password" />
 
           <Button>Sign In</Button>
-          <Anchor href="#">Forgot your password?</Anchor>
+          <Anchor href="/institution-forgot-password">
+            Forgot your password?
+          </Anchor>
         </Form>
       </SignInContainer>
       <OverlayContainer signin={signIn}>
