@@ -11,6 +11,15 @@ const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient({});
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
 exports.handler = async (event) => {
+  let GroupName;
+  switch (event.clientId) {
+    case process.env.AppClientId:
+      GroupName = process.env.StudentsGroupName;
+      break;
+    
+    case process.env.AppClientIdWeb:
+      break;
+  }
   const groupParams = {
     GroupName: process.env.GROUP,
     UserPoolId: event.userPoolId,
