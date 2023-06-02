@@ -1,9 +1,7 @@
 name: Build Amplify
 on:
   pull_request:
-    branches: [ main,dev ] 
-  push: 
-    branches: [build/fix] 
+    branches: [ backend,main,dev ] 
   workflow_dispatch:   
 jobs:
   build:
