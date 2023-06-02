@@ -7,30 +7,31 @@ import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
-
+import RecenetAnnouncement from "./LectureView/RecentAnnouncement";
 
 
 const Home = () => {
   return (
 
-        <div>
-            <Router >
-                    <Routes>
+    <div>
+        <Router >
+                <Routes>
 
+                  {/*Lecturer pages routing*/}
+                  <Route path="/login" element={<Login/>} />
+                  <Route path="/lecture-homepage" element={<LectureHomePage />} />
+                  <Route path="edit-module" element={<EditModuleInfo/>} />
+                  <Route path="recent-announcement" element={<RecenetAnnouncement/>} />
 
-                        <Route path="/login" element={<Login/>} />
-                        <Route path="/lecture-homepage" element={<LectureHomePage />} />
-                        <Route path="edit-module" element={<EditModuleInfo/>} />
+                  {/*Institution pages routing*/}
+                  <Route path="/add-lecturer" element={<AddLecturer />} />
+                  <Route path="/institution-homepage" element={<InstitutionHomePage />} />
+                  <Route path="/upload-schedule" element={<FileUploadPage />} />
+                  <Route path="/upload-student-files" element={<StudentFileUploadPage />} />
 
-                        {/*Institution pages routing*/}
-                        <Route path="/add-lecturer" element={<AddLecturer />} />
-                        <Route path="/institution-homepage" element={<InstitutionHomePage />} />
-                        <Route path="/upload-schedule" element={<FileUploadPage />} />
-                        <Route path="/upload-student-files" element={<StudentFileUploadPage />} />
-                    </Routes>
-            </Router>
-        </div>
-
+                </Routes>
+        </Router>
+    </div>
 
   );
 };

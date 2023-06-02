@@ -24,7 +24,7 @@ export default function LecturerNavigation() {
               </a>
             </li>
             <li className="nav-item text-center">
-              <a href="#" className="nav-link">
+              <a href="recent-announcement" className="nav-link">
                 <b>Recent Announcements</b>
               </a>
             </li>

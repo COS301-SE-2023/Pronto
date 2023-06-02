@@ -1,5 +1,5 @@
 .content-button {
-    width: 55rem;
+    width: 100%;
     height: 5rem;
     border-radius: 2.5rem;
     background-color: white;
@@ -41,4 +41,44 @@
 .map{
     width: 100%;
     height: 50vh;
+}
+
+
+
+#demo-customized-button{
+    background-color: #e32f45;
+    float: right;
+}
+
+.announcement{
+    width: 100%;
+    height:125px;
+    border-radius: 1rem;
+    padding:1%;
+    background-color: white;
+    border: 1px solid black;
+    margin-bottom: 5%;
+}
+
+.Title{
+    float:left;
+    width: 80%;
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 1%;
+}
+
+.Description{
+    float:left;
+    width: 80%;
+    text-align: center;
+    font-size: medium;
+}
+
+.subject{
+    float:right 5%;
+    text-align: center;
+    font-size: small;
+    color: #464646;
 }

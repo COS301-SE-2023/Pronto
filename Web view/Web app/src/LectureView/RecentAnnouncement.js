@@ -68,7 +68,20 @@ export default function RecentAnnouncement() {
       </nav>
     
         <main style={{ width: '900px',marginTop: '30px' }}>
-            <Button
+            <h1 className="moduleHead">Recent Announcements</h1>
+
+            <div className="announcement">
+                <div className="Title">
+                    Date of final exam
+                </div>
+
+                <div className = "Description">
+                    Please note that the exam date is the 15th of June at 09.30. The exam will be 3 hours.
+                </div>
+
+                <div className="subject">COS341</div>
+
+                <Button 
                 id="demo-customized-button"
                 aria-controls={open ? 'demo-customized-menu' : undefined}
                 aria-haspopup="true"
@@ -79,27 +92,76 @@ export default function RecentAnnouncement() {
                 endIcon={<KeyboardArrowDownIcon />}
                 >
                 Options
-            </Button>
+                </Button>
 
-            <StyledMenu
-                id="demo-customized-menu"
-                MenuListProps={{
-                'aria-labelledby': 'demo-customized-button',
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
+                <StyledMenu
+                    id="demo-customized-menu"
+                    MenuListProps={{
+                    'aria-labelledby': 'demo-customized-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    >
+                    <MenuItem onClick={handleClose} disableRipple>
+                    <EditIcon />
+                    Edit
+                    </MenuItem>
+                    <MenuItem onClick={handleClose} disableRipple>
+                    <DeleteIcon />
+                    Delete
+                    </MenuItem>
+                </StyledMenu>
+                
+            </div>
+
+            <div className="announcement">
+                <div className="Title">
+                    No class from Thursday 1 June
+                </div>
+
+                <div className = "Description">
+                    Please note that due to the completeion of the sylabus in this mornings lecture,
+                    there will be no class tomorrow or from here forth:) 
+                </div>
+
+                <div className="subject">COS132</div>
+
+                <Button 
+                id="demo-customized-button"
+                aria-controls={open ? 'demo-customized-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                variant="contained"
+                disableElevation
+                onClick={handleClick}
+                endIcon={<KeyboardArrowDownIcon />}
                 >
-                <MenuItem onClick={handleClose} disableRipple>
-                <EditIcon />
-                Edit
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                <DeleteIcon />
-                Delete
-                </MenuItem>
-            </StyledMenu>
+                Options
+                </Button>
+
+                <StyledMenu
+                    id="demo-customized-menu"
+                    MenuListProps={{
+                    'aria-labelledby': 'demo-customized-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    >
+                    <MenuItem onClick={handleClose} disableRipple>
+                    <EditIcon />
+                    Edit
+                    </MenuItem>
+                    <MenuItem onClick={handleClose} disableRipple>
+                    <DeleteIcon />
+                    Delete
+                    </MenuItem>
+                </StyledMenu>
+                
+            </div>
         </main>
+
     </div>
   );
 }
