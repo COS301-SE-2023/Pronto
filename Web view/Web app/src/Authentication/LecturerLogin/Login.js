@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import "./styles.css";
+import ProntoLogo from "./ProntoLogo.png";
 
 function Login() {
   const [signIn, toggle] = React.useState(true);
@@ -15,17 +16,27 @@ function Login() {
           <Button>Sign Up</Button>
         </Form>
       </SignUpContainer>
-
       <SignInContainer signin={signIn}>
         <Form>
-          <Title>Sign in</Title>
+          <LogoContainer>
+            <img
+              src={ProntoLogo}
+              alt="Logo"
+              style={{
+                width: "50%",
+                height: "auto",
+                objectFit: "cover",
+              }}
+            />
+          </LogoContainer>
+          <Subtitle>Lecturer Login</Subtitle>
+
           <Input type="email" placeholder="Email" />
           <Input type="password" placeholder="Password" />
           <Anchor href="#">Forgot your password?</Anchor>
           <Button>Sign In</Button>
         </Form>
       </SignInContainer>
-
       <OverlayContainer signin={signIn}>
         <Overlay signin={signIn}>
           <LeftOverlayPanel signin={signIn}>
@@ -53,7 +64,7 @@ const Container = styled.div`
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  position: relative;
+  display: relative;
   overflow: hidden;
   width: 700px;
   max-width: 100%;
@@ -77,6 +88,22 @@ const SignUpContainer = styled.div`
     z-index: 5;
   `
       : null}
+`;
+
+const Subtitle = styled.p`
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 const SignInContainer = styled.div`
