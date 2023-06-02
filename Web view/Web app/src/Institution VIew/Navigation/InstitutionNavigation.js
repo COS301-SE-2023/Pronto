@@ -10,7 +10,7 @@ export default function InstitutionNavigation() {
             <nav className="vertical-navbar col-4 p-4" >
                 <ul className="navbar-nav">
                     <li className="nav-item ">
-                        <img src={logo} alt="Logo" className="logo offset-3" width={'120px'} height={'120px'}/>
+                        <img src={logo} alt="Logo" className="logo offset-2 img-fluid mr-3" width={'175px'} height={'155px'}/>
                     </li>
                     <li className="nav-item text-center">
                         <a href="src/Institution VIew/Navigation/InstitutionNavigation#" className="nav-link">
@@ -39,16 +39,14 @@ export default function InstitutionNavigation() {
                             <b>Edit University Info</b>
                         </a>
                     </li>
-                    <li className="nav-item text-center">
-                        <a href="src/Institution VIew/Navigation/InstitutionNavigation#" className="nav-link">
-                            <button className={'btn btn-danger btn-lg btn-block'}>Log Out</button>
-                        </a>
-                    </li>
+
 
                 </ul>
 
             </nav>
-
+            <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
+                <button className={"btn btn-danger btn-lg btn-block"}>Log Out</button>
+            </div>
 
         </div>
 
