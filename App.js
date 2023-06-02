@@ -12,7 +12,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, Text } from "react-native";
 
 import { Amplify } from "aws-amplify";
-import { Auth } from "aws-amplify";
+import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
 
 Amplify.configure(config);
@@ -36,6 +36,16 @@ export default function App() {
 
   useEffect(() => {
     checkUser();
+  }, []);
+
+  useEffect(() => {
+    const listener = (data) => {
+      if (data.payload.event === "signIn" || data.payload.event === "signOut") {
+        checkUser();
+      }
+    };
+    Hub.listen("auth", listener);
+    return () => Hub.remove("auth", listener);
   }, []);
 
   if (user === undefined) {
