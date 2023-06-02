@@ -34,6 +34,15 @@ const ConfirmEmail = ({ navigation }) => {
     }
   };
 
+  const onResendPressed = async () => {
+    try {
+      response = await Auth.resendSignUp(email);
+      Alert.alert("Success", "Code was resent to: " + email);
+    } catch (e) {
+      Alert.alert("Error", e.message);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
