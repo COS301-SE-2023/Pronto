@@ -33,8 +33,9 @@ function Login() {
 
           <Input type="email" placeholder="Email" />
           <Input type="password" placeholder="Password" />
-          <Anchor href="#">Forgot your password?</Anchor>
+
           <Button>Sign In</Button>
+          <Anchor href="#">Forgot your password?</Anchor>
         </Form>
       </SignInContainer>
       <OverlayContainer signin={signIn}>
