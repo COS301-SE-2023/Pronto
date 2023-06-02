@@ -9,11 +9,18 @@ function Login() {
     <Container>
       <SignUpContainer signin={signIn}>
         <Form>
-          <Title>Create Account</Title>
-          <Input type="email" placeholder="Email" />
+          <Title
+            style={{
+              marginBottom: "20px",
+            }}
+          >
+            Create Institution Account
+          </Title>
+          <Input type="text" placeholder="University Name" />
+          <Input type="email" placeholder="Adminsitration Email" />
           <Input type="password" placeholder="Password" />
           <Input type="password" placeholder="Confirm Password" />
-          <Button>Sign Up</Button>
+          <Button>Apply</Button>
         </Form>
       </SignUpContainer>
       <SignInContainer signin={signIn}>
@@ -29,7 +36,7 @@ function Login() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Lecturer Login</Subtitle>
+          <Subtitle>Institution Login</Subtitle>
 
           <Input type="email" placeholder="Email" />
           <Input type="password" placeholder="Password" />
@@ -50,8 +57,10 @@ function Login() {
 
           <RightOverlayPanel signin={signIn}>
             <Title>No Account?</Title>
-            <Paragraph>Click here to verify a lecturer account</Paragraph>
-            <GhostButton onClick={() => toggle(false)}>Sign Up</GhostButton>
+            <Paragraph>
+              Click here to apply for an institution account
+            </Paragraph>
+            <GhostButton onClick={() => toggle(false)}>Apply</GhostButton>
           </RightOverlayPanel>
         </Overlay>
       </OverlayContainer>
