@@ -18,6 +18,7 @@ exports.handler = async (event) => {
       break;
     
     case process.env.AppClientIdWeb:
+      GroupName = process.env.LecturersGroupName;
       break;
   }
   const groupParams = {
