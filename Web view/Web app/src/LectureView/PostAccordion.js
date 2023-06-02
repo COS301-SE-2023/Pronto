@@ -128,7 +128,7 @@ export default function PostAccordion() {
           </div>
 
           <div className = "map">
-            <div style={{ height: '22rem', width: '100%' }}>
+            <div style={{ height: '50vh', width: '100%' }}>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: "" }}
                 defaultCenter={defaultProps.center}
