@@ -5,6 +5,7 @@ const {
   CreateGroupCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
 
+const Roles = require('./roles');
 const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient({});
 
 /**
@@ -19,7 +20,7 @@ exports.handler = async (event) => {
     
     case process.env.AppClientIdWeb:
       // missing: check if lecturer is in institution lecturers list
-      GroupName = process.env.LecturersGroupName;
+      GroupName = event.clientMetadata?.role==Roles.Lecture ? process.env.LecturersGroupName : process.env.AdminGroupName;
       break;
   }
   const groupParams = {
