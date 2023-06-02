@@ -7,7 +7,8 @@ import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
-import RecenetAnnouncement from "./LectureView/RecentAnnouncement";
+import RecentAnnouncement from "./LectureView/RecentAnnouncement";
+import PersonalInformation from "./LectureView/Personal-info";
 
 
 const Home = () => {
@@ -21,7 +22,8 @@ const Home = () => {
                   <Route path="/login" element={<Login/>} />
                   <Route path="/lecture-homepage" element={<LectureHomePage />} />
                   <Route path="edit-module" element={<EditModuleInfo/>} />
-                  <Route path="recent-announcement" element={<RecenetAnnouncement/>} />
+                  <Route path="recent-announcement" element={<RecentAnnouncement/>} />
+                  <Route path="personal-info" element={<PersonalInformation/>} />
 
                   {/*Institution pages routing*/}
                   <Route path="/add-lecturer" element={<AddLecturer />} />
