@@ -91,6 +91,21 @@ export default function PostAccordion() {
         </form>
         </AccordionDetails>
       </Accordion>
+
+      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}}/>}
+          aria-controls="panel3bh-content"
+          id="panel3bh-header"
+        >
+          <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }}  >Add lecture venue</Typography>
+          
+        </AccordionSummary>
+        <AccordionDetails>
+        
+        </AccordionDetails>
+      </Accordion>
+
     </div>
   );
 }

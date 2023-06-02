@@ -29,11 +29,6 @@ export default function LecturerNavigation() {
               </a>
             </li>
             <li className="nav-item text-center">
-              <a href="#" className="nav-link p-2">
-                <b>Add Lecture Venue</b>
-              </a>
-            </li>
-            <li className="nav-item text-center">
               <a href="#" className="nav-link">
                 <b>Edit Personal Information</b>
               </a>

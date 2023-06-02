@@ -1,5 +1,5 @@
 import React from "react";
-import PostReminder from "./LectureView/PostReminder";
+import EditModuleInfo from "./LectureView/EditModuleInfo";
 import LectureHomePage from "./LectureView/LectureHomePage";
 import Login from "./Authentication/LecturerLogin/Login";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -20,7 +20,7 @@ const Home = () => {
 
                         <Route path="/login" element={<Login/>} />
                         <Route path="/lecture-homepage" element={<LectureHomePage />} />
-                        <Route path="post-reminder" element={<PostReminder/>} />
+                        <Route path="edit-module" element={<EditModuleInfo/>} />
 
                         {/*Institution pages routing*/}
                         <Route path="/add-lecturer" element={<AddLecturer />} />
