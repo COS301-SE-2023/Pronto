@@ -7,6 +7,7 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
+  Alert,
 } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +18,22 @@ import { Auth } from "aws-amplify";
 const { height } = Dimensions.get("window");
 
 const VerifyCode = ({ navigation }) => {
+  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
+
+  const route = useRoute();
+  let email = route.params.email;
+
+  const onResetPasswordPressed = async () => {
+    try {
+      await Auth.forgotPasswordSubmit(email, code, password);
+      Alert.alert("Success", "Password succesfully changed!");
+      navigation.navigate("Login");
+    } catch (e) {
+      Alert.alert("Error", e.message);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
@@ -31,6 +48,8 @@ const VerifyCode = ({ navigation }) => {
           <TextInput
             placeholder="Code"
             placeholderTextColor={"#666666"}
+            value={code}
+            onChangeText={setCode}
             style={styles.input}
           />
 
@@ -38,6 +57,8 @@ const VerifyCode = ({ navigation }) => {
             placeholder="New Password"
             placeholderTextColor={"#666666"}
             secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
             style={styles.input}
           />
 
@@ -49,7 +70,10 @@ const VerifyCode = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity style={styles.signInButton}>
+        <TouchableOpacity
+          style={styles.signInButton}
+          onPress={onResetPasswordPressed}
+        >
           <Text style={styles.signInButtonText}>Reset Password</Text>
         </TouchableOpacity>
 
