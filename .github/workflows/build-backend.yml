@@ -43,5 +43,5 @@ jobs:
         run: |     
           npm install -g @aws-amplify/cli 
           bash scripts/initialise-amplify.sh
-          amplify pull
+          amplify pull --yes
           amplify build
