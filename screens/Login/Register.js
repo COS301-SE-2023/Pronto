@@ -7,9 +7,11 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { Auth } from "aws-amplify";
 
 const { height } = Dimensions.get("window");
 
@@ -17,7 +19,30 @@ const Register = ({ navigation }) => {
   const [focusedEmail, setFocusedEmail] = useState(false);
   const [focusedPassword, setFocusedPassword] = useState(false);
   const [focusedConfirm, setFocusedConfirm] = useState(false);
+  const [focusedName, setFocusedName] = useState(false);
+  const [focusedSurname, setFocusedSurname] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(true);
+
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  var address = "";
+
+  const onSignUpPressed = async () => {
+    try {
+      navigation.navigate("ConfirmEmail", { email });
+      await Auth.signUp({
+        username: email,
+        password,
+        attributes: { address, email, family_name: surname, name },
+      });
+
+      navigation.navigate("ConfirmEmail", { email });
+    } catch (e) {
+      Alert.alert("Error", e.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,10 +56,32 @@ const Register = ({ navigation }) => {
 
         <View style={styles.inputContainer}>
           <TextInput
+            placeholder="Name"
+            onFocus={() => setFocusedName(true)}
+            onBlur={() => setFocusedName(false)}
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor={"#666666"}
+            style={[styles.input, focusedName && styles.inputFocused]}
+          />
+
+          <TextInput
+            placeholder="Surname"
+            onFocus={() => setFocusedSurname(true)}
+            onBlur={() => setFocusedSurname(false)}
+            value={surname}
+            onChangeText={setSurname}
+            placeholderTextColor={"#666666"}
+            style={[styles.input, focusedSurname && styles.inputFocused]}
+          />
+
+          <TextInput
             placeholder="Email"
             onFocus={() => setFocusedEmail(true)}
             onBlur={() => setFocusedEmail(false)}
             placeholderTextColor={"#666666"}
+            value={email}
+            onChangeText={setEmail}
             style={[styles.input, focusedEmail && styles.inputFocused]}
           />
 
@@ -44,6 +91,8 @@ const Register = ({ navigation }) => {
             secureTextEntry={true}
             onFocus={() => setFocusedPassword(true)}
             onBlur={() => setFocusedPassword(false)}
+            value={password}
+            onChangeText={setPassword}
             style={[styles.input, focusedPassword && styles.inputFocused]}
           />
 
@@ -57,7 +106,7 @@ const Register = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity style={styles.signUpButton}>
+        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed}>
           <Text style={styles.signUpButtonText}>Sign up</Text>
         </TouchableOpacity>
 

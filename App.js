@@ -2,10 +2,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Tabs from "./navigation/tabs";
 import WelcomeScreen from "./screens/Login/Welcome";
+import NotificationPreferences from "./screens/Notifications/NotificationPreferences";
 import Register from "./screens/Login/Register";
 import Login from "./screens/Login/Login";
 import ResetPassword from "./screens/Login/ResetPassword";
 import VerifyCode from "./screens/Login/VerifyCode";
+import ConfirmEmail from "./screens/Login/ConfirmEmail";
+
 import { Amplify } from "aws-amplify";
 import { Auth } from "aws-amplify";
 import config from "./src/aws-exports";
@@ -58,11 +61,34 @@ export default function App() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="ConfirmEmail"
+          component={ConfirmEmail}
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="NotificationPreferences"
+          component={NotificationPreferences}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
 
-    // <NavigationContainer>
-    //   <Tabs />
-    // </NavigationContainer>
+    /* <NavigationContainer>
+      <Tabs />
+
+      <Stack.Screen
+        name="NotificationPreferences"
+        component={NotificationPreferences}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </NavigationContainer> */
   );
 }

@@ -8,7 +8,7 @@ const SettingsComponent = ({ settingsOptions }) => {
     <View style={{ height: "100%" }}>
       <ScrollView>
         {settingsOptions.map(({ title, subTitle, onPress }) => (
-          <TouchableOpacity key={title} testID="option">
+          <TouchableOpacity key={title} testID="option" onPress={onPress}>
             <View
               style={{
                 paddingHorizontal: 20,
