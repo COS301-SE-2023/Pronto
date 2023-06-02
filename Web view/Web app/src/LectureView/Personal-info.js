@@ -11,7 +11,8 @@ const PersonalInfoPage = () => {
         </nav>
   
         <main style={{ width: '900px',marginTop: '30px' }}>
-          
+            <h1 className="moduleHead">Personal Information</h1>
+
           
         </main>
   
