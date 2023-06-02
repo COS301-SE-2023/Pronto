@@ -12,35 +12,32 @@ const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient({});
  */
 exports.handler = async (event) => {
   let GroupName;
-  switch (event.clientId) {
+  switch (event.callerContext.clientId) {
     case process.env.AppClientId:
       GroupName = process.env.StudentsGroupName;
       break;
     
     case process.env.AppClientIdWeb:
+      // missing: check if lecturer is in institution lecturers list
       GroupName = process.env.LecturersGroupName;
       break;
   }
   const groupParams = {
-    GroupName: process.env.GROUP,
+    GroupName: GroupName,
     UserPoolId: event.userPoolId,
   };
   const addUserParams = {
-    GroupName: process.env.GROUP,
+    GroupName: GroupName,
     UserPoolId: event.userPoolId,
     Username: event.userName,
   };
-  /**
-   * Check if the group exists; if it doesn't, create it.
-   */
+  console.debug(GroupName);
+  //add user to user group
   try {
     await cognitoIdentityServiceProvider.send(new GetGroupCommand(groupParams));
   } catch (e) {
     await cognitoIdentityServiceProvider.send(new CreateGroupCommand(groupParams));
   }
-  /**
-   * Then, add the user to the group.
-   */
   await cognitoIdentityServiceProvider.send(new AdminAddUserToGroupCommand(addUserParams));
 
   return event;
