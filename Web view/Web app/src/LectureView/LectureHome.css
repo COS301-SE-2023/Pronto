@@ -9,14 +9,28 @@
     margin-bottom: 5%;
 }
 
+.venue{
+    width:100%;
+    padding:1%;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.delete-btn{
+    left: 85%;
+}
+
 .moduleHead{
     margin-top: 2%;
-    margin-bottom:5%;
+    margin-bottom:4%;
 }
 
 .post-button{
     width: 10rem;
-    height: 1.7rem;
+    height: 1.9rem;
     border-radius: 0.8rem;
     background-color: #e32f45;
     color: white;

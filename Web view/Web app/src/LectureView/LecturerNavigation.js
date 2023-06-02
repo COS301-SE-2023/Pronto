@@ -10,7 +10,7 @@ export default function LecturerNavigation() {
             <img
               src={logo}
               alt="Logo"
-              className="logo offset-3 img-fluid mr-1"
+              className="logo offset-2 img-fluid mr-1"
               width={"175px"}
               height={"155px"}
             />
