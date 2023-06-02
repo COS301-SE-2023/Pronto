@@ -36,7 +36,7 @@ export default function LecturerNavigation() {
           </ul>
         </nav>
         <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
-          <button className={"btn btn-danger btn-lg btn-block"}>Log Out</button>
+          <button className={"btn btn-danger btn-lg btn-block"} style={{"border-radius":"25px"}} >Log Out</button>
         </div>
       </div>
     );
