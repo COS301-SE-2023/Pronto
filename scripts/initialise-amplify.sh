@@ -23,7 +23,7 @@ PROVIDERS="{\
 \"awscloudformation\":$AWSCLOUDFORMATIONCONFIG\
 }"
 
-amplify pull \
+amplify init \
 --amplify $AMPLIFY \
 --frontend $FRONTEND \
 --providers $PROVIDERS \
