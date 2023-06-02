@@ -26,7 +26,7 @@ const ConfirmEmail = ({ navigation }) => {
     try {
       response = await Auth.confirmSignUp(email, code);
 
-      //need to add user to a user group here
+      //need to add user to a user group here?
 
       navigation.navigate("Login");
     } catch (e) {
@@ -67,7 +67,7 @@ const ConfirmEmail = ({ navigation }) => {
           <Text style={styles.signInButtonText}>Verify Account</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.resendButton}>
+        <TouchableOpacity style={styles.resendButton} onPress={onResendPressed}>
           <Text style={styles.resendButtonText}>Resend Code</Text>
         </TouchableOpacity>
 

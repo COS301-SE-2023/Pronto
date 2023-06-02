@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
+import { useState } from "react";
+import { Auth } from "aws-amplify";
 
 const { height } = Dimensions.get("window");
 

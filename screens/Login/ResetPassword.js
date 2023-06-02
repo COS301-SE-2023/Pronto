@@ -7,17 +7,26 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { Auth } from "aws-amplify";
 
 const { height } = Dimensions.get("window");
 
 const ResetPassword = ({ navigation }) => {
   const [focusedEmail, setFocusedEmail] = useState(false);
-  const [focusedPassword, setFocusedPassword] = useState(false);
-  const [focusedConfirm, setFocusedConfirm] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(true);
+  const [email, setEmail] = useState("");
+
+  const onResetPasswordPressed = async () => {
+    try {
+      await Auth.forgotPassword(email);
+      navigation.navigate("VerifyCode", { email });
+    } catch (e) {
+      Alert.alert("Error", e.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,6 +43,8 @@ const ResetPassword = ({ navigation }) => {
             placeholder="Email"
             onFocus={() => setFocusedEmail(true)}
             onBlur={() => setFocusedEmail(false)}
+            onChangeText={setEmail}
+            value={email}
             placeholderTextColor={"#666666"}
             style={[styles.input, focusedEmail && styles.inputFocused]}
           />
@@ -41,7 +52,7 @@ const ResetPassword = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.signUpButton}
-          onPress={() => navigation.navigate("VerifyCode")}
+          onPress={onResetPasswordPressed}
         >
           <Text style={styles.signUpButtonText}>Send code</Text>
         </TouchableOpacity>
