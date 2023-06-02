@@ -1,0 +1,53 @@
+## [Start] Authorization Steps. **
+$util.qr($ctx.stash.put("hasAuth", true))
+#set( $isAuthorized = false )
+#set( $primaryFieldMap = {} )
+#if( $util.authType() == "API Key Authorization" )
+  #set( $isAuthorized = true )
+#end
+#if( $util.authType() == "User Pool Authorization" )
+  #set( $institutionIdClaim = $util.defaultIfNull($ctx.identity.claims.get("sub"), null) )
+  #set( $currentClaim1 = $util.defaultIfNull($ctx.identity.claims.get("username"), $util.defaultIfNull($ctx.identity.claims.get("cognito:username"), null)) )
+  #if( !$util.isNull($institutionIdClaim) && !$util.isNull($currentClaim1) )
+    #set( $institutionIdClaim = "$institutionIdClaim::$currentClaim1" )
+    #set( $ownerClaimsList0 = [] )
+    $util.qr($ownerClaimsList0.add($util.defaultIfNull($ctx.identity.claims.get("sub"), null)))
+    $util.qr($ownerClaimsList0.add($util.defaultIfNull($ctx.identity.claims.get("username"), $util.defaultIfNull($ctx.identity.claims.get("cognito:username"), null))))
+    $util.qr($ownerClaimsList0.add($institutionIdClaim))
+    #if( !$util.isNull($ctx.args.institutionId) )
+      #if( $util.isString($ctx.args.institutionId) )
+        #set( $institutionIdCondition = (($institutionIdClaim == $ctx.args.institutionId) || $ownerClaimsList0.contains($ctx.args.institutionId)) )
+      #else
+        #set( $institutionIdCondition = ($institutionIdClaim == $util.defaultIfNull($ctx.args.institutionId.get("eq"), null) || $ownerClaimsList0.contains($util.defaultIfNull($ctx.args.institutionId.get("eq"), null))) )
+        #if( !$institutionIdCondition )
+          #set( $entityValues = 0 )
+          #foreach( $argEntity in $ctx.args.institutionId.get("eq") )
+            #if( $ownerClaimsList0.contains($argEntity) )
+              #set( $entityValues = $entityValues + 1 )
+            #end
+          #end
+          #if( $entityValues == $ctx.args.institutionId.get("eq").size() )
+            #set( $institutionIdCondition = true )
+          #end
+        #end
+      #end
+      #if( $institutionIdCondition )
+        #set( $isAuthorized = true )
+        $util.qr($ctx.stash.put("authFilter", null))
+      #end
+    #else
+      $util.qr($primaryFieldMap.put("institutionId", $ownerClaimsList0))
+    #end
+  #end
+  #if( !$isAuthorized && $util.isNull($ctx.stash.authFilter) && !$primaryFieldMap.isEmpty() )
+    #foreach( $entry in $primaryFieldMap.entrySet() )
+      $util.qr($ctx.args.put($entry.key, $entry.value))
+      #set( $isAuthorized = true )
+    #end
+  #end
+#end
+#if( !$isAuthorized && $util.isNull($ctx.stash.authFilter) )
+$util.unauthorized()
+#end
+$util.toJson({"version":"2018-05-29","payload":{}})
+## [End] Authorization Steps. **

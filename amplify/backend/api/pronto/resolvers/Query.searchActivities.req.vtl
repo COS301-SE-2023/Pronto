@@ -1,0 +1,105 @@
+#set( $args = $util.defaultIfNull($ctx.stash.transformedArgs, $ctx.args) )
+#set( $indexPath = "/activity/_search" )
+#set( $allowedAggFields = $util.defaultIfNull($ctx.stash.allowedAggFields, []) )
+#set( $aggFieldsFilterMap = $util.defaultIfNull($ctx.stash.aggFieldsFilterMap, {}) )
+#set( $nonKeywordFields = ["frequency", "createdAt", "updatedAt"] )
+#set( $keyFields = ["id"] )
+#set( $sortValues = [] )
+#set( $sortFields = [] )
+#set( $aggregateValues = {} )
+#set( $primaryKey = "id" )
+#if( !$util.isNullOrEmpty($args.sort) )
+  #foreach( $sortItem in $args.sort )
+    #if( $util.isNullOrEmpty($sortItem.field) )
+      $util.qr($sortFields.add($primaryKey))
+    #else
+      $util.qr($sortFields.add($sortItem.field))
+    #end
+    #if( $util.isNullOrEmpty($sortItem.field) )
+      #if( $nonKeywordFields.contains($primaryKey) )
+        #set( $sortField = $util.toJson($primaryKey) )
+      #else
+        #set( $sortField = $util.toJson("${primaryKey}.keyword") )
+      #end
+    #else
+      #if( $nonKeywordFields.contains($sortItem.field) )
+        #set( $sortField = $util.toJson($sortItem.field) )
+      #else
+        #set( $sortField = $util.toJson("${sortItem.field}.keyword") )
+      #end
+    #end
+    #if( $util.isNullOrEmpty($sortItem.direction) )
+      #set( $sortDirection = $util.toJson({"order": "desc"}) )
+    #else
+      #set( $sortDirection = $util.toJson({"order": $sortItem.direction}) )
+    #end
+    $util.qr($sortValues.add("{$sortField: $sortDirection}"))
+  #end
+#end
+#foreach( $keyItem in $keyFields )
+  #if( !$sortFields.contains($keyItem) )
+    #if( $nonKeywordFields.contains($keyItem) )
+      #set( $sortField = $util.toJson($keyItem) )
+    #else
+      #set( $sortField = $util.toJson("${keyItem}.keyword") )
+    #end
+    #set( $sortDirection = $util.toJson({"order": "desc"}) )
+    $util.qr($sortValues.add("{$sortField: $sortDirection}"))
+  #end
+#end
+#foreach( $aggItem in $args.aggregates )
+  #if( $allowedAggFields.contains($aggItem.field) )
+    #set( $aggFilter = { "match_all": {} } )
+  #elseif( $aggFieldsFilterMap.containsKey($aggItem.field) )
+    #set( $aggFilter = { "bool": { "should": $aggFieldsFilterMap.get($aggItem.field) } } )
+  #else
+    $util.error("Unauthorized to run aggregation on field: ${aggItem.field}", "Unauthorized")
+  #end
+  #set( $aggregateValue = {} )
+  $util.qr($aggregateValue.put("filter", $aggFilter))
+  #set( $aggsValue = {} )
+  #set( $aggItemType = {} )
+  #if( $nonKeywordFields.contains($aggItem.field) )
+    $util.qr($aggItemType.put("$aggItem.type", { "field": "$aggItem.field" }))
+  #else
+    $util.qr($aggItemType.put("$aggItem.type", { "field": "${aggItem.field}.keyword" }))
+  #end
+  $util.qr($aggsValue.put("$aggItem.name", $aggItemType))
+  $util.qr($aggregateValue.put("aggs", $aggsValue))
+  $util.qr($aggregateValues.put("$aggItem.name", $aggregateValue))
+#end
+#if( !$util.isNullOrEmpty($ctx.stash.authFilter) )
+  #set( $filter = $ctx.stash.authFilter )
+  #if( !$util.isNullOrEmpty($args.filter) )
+    #set( $filter = {
+  "bool": {
+      "must":     [$ctx.stash.authFilter, $util.parseJson($util.transform.toElasticsearchQueryDSL($args.filter))]
+  }
+} )
+  #end
+#else
+  #if( !$util.isNullOrEmpty($args.filter) )
+    #set( $filter = $util.parseJson($util.transform.toElasticsearchQueryDSL($args.filter)) )
+  #end
+#end
+#if( $util.isNullOrEmpty($filter) )
+  #set( $filter = {
+  "match_all": {}
+} )
+#end
+{
+  "version": "2018-05-29",
+  "operation": "GET",
+  "path": "$indexPath",
+  "params": {
+      "body":     {
+                #if( $context.args.nextToken )"search_after": $util.base64Decode($args.nextToken), #end
+                #if( $context.args.from )"from": $args.from, #end
+                "size": #if( $args.limit ) $args.limit #else 100 #end,
+                "sort": $sortValues,
+                "version": true,
+                "query": $util.toJson($filter),
+                "aggs": $util.toJson($aggregateValues)
+                }
+  }
+}
