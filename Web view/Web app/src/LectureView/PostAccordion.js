@@ -4,13 +4,24 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { FormControl } from '@mui/material'
+import GoogleMapReact from 'google-map-react';
 
 export default function PostAccordion() {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+  };
+
+  const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
+  const defaultProps = {
+    center: 
+    {
+      lat:-25.753899044547357,
+      lng: 28.23134724523217
+    },
+    zoom: 16
   };
 
   return (
@@ -30,21 +41,21 @@ export default function PostAccordion() {
         <AccordionDetails>
         <form>
           <div class="form-group row">
-            <label for="title" class="col-sm-2 col-form-label">Title: </label>
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Title: </label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="colFormLabel" required></input>
             </div>
           </div>
 
           <div class="form-group row">
-            <label for="body" class="col-sm-2 col-form-label">Body: </label>
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Body: </label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="colFormLabel" required></input>
             </div>
           </div>
 
           <div class="form-group row">
-            <label for="date" class="col-sm-2 col-form-label">Date: </label>
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Date: </label>
             <div class="col-sm-10">
               <input type="date" class="form-control" id="colFormLabel"></input>
             </div>
@@ -67,21 +78,21 @@ export default function PostAccordion() {
         <AccordionDetails>
         <form>
           <div class="form-group row">
-            <label for="title" class="col-sm-2 col-form-label">Title: </label>
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Title: </label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="colFormLabel" required></input>
             </div>
           </div>
 
           <div class="form-group row">
-            <label for="body" class="col-sm-2 col-form-label">Information: </label>
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Information: </label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="colFormLabel"></input>
             </div>
           </div>
 
           <div class="form-group row">
-            <label for="date" class="col-sm-2 col-form-label">Date: </label>
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Date: </label>
             <div class="col-sm-10">
               <input type="date" class="form-control" id="colFormLabel" required></input>
             </div>
@@ -102,7 +113,32 @@ export default function PostAccordion() {
           
         </AccordionSummary>
         <AccordionDetails>
-        
+        <form>
+          <div class="form-group row">
+            <label for="colFormLabel" class="col-sm-2 col-form-label">Venue: </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="colFormLabel" required></input>
+            </div>
+          </div>
+
+          <div className = "map">
+            <div style={{ height: '22rem', width: '100%' }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{ key: "" }}
+                defaultCenter={defaultProps.center}
+                defaultZoom={defaultProps.zoom}
+              >
+                <AnyReactComponent
+                  lat={59.955413}
+                  lng={30.337844}
+                  text="My Marker"
+                />
+              </GoogleMapReact>
+            </div>
+          </div>
+          <button className="post-button">add venue</button>
+
+        </form>
         </AccordionDetails>
       </Accordion>
 
