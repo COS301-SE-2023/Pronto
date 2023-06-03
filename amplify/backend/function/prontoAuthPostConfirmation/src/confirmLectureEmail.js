@@ -11,6 +11,7 @@ const getLectureEmailsFromInstitution = async (institutionID) =>{
       }
     }
     `;
+    
       const options = {
         method: 'POST',
         headers: {
@@ -19,4 +20,18 @@ const getLectureEmailsFromInstitution = async (institutionID) =>{
         },
         body: JSON.stringify({ query })
       };
-}
+      
+      const request = new Request(GRAPHQL_ENDPOINT, options);
+      let body;
+      let response;
+      
+      try {
+        response = await fetch(request);
+        body = await response.json();
+      } catch (getEmailsQueryError) {
+        return {
+            'error': `Failed To retrieve emails from institution with id=${institutionID}.
+             Info: ${getEmailsQueryError}`
+        };
+      }
+    }
