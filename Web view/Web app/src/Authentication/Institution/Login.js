@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import "./styles.css";
+import ProntoLogo from "./ProntoLogo.png";
 
 function Login() {
   const [signIn, toggle] = React.useState(true);
@@ -8,24 +9,44 @@ function Login() {
     <Container>
       <SignUpContainer signin={signIn}>
         <Form>
-          <Title>Create Account</Title>
-          <Input type="email" placeholder="Email" />
+          <Title
+            style={{
+              marginBottom: "20px",
+            }}
+          >
+            Create Institution Account
+          </Title>
+          <Input type="text" placeholder="University Name" />
+          <Input type="email" placeholder="Adminsitration Email" />
           <Input type="password" placeholder="Password" />
           <Input type="password" placeholder="Confirm Password" />
-          <Button>Sign Up</Button>
+          <Button>Apply</Button>
         </Form>
       </SignUpContainer>
-
       <SignInContainer signin={signIn}>
         <Form>
-          <Title>Sign in</Title>
+          <LogoContainer>
+            <img
+              src={ProntoLogo}
+              alt="Logo"
+              style={{
+                width: "50%",
+                height: "auto",
+                objectFit: "cover",
+              }}
+            />
+          </LogoContainer>
+          <Subtitle>Institution Login</Subtitle>
+
           <Input type="email" placeholder="Email" />
           <Input type="password" placeholder="Password" />
-          <Anchor href="#">Forgot your password?</Anchor>
+
           <Button>Sign In</Button>
+          <Anchor href="/institution-forgot-password">
+            Forgot your password?
+          </Anchor>
         </Form>
       </SignInContainer>
-
       <OverlayContainer signin={signIn}>
         <Overlay signin={signIn}>
           <LeftOverlayPanel signin={signIn}>
@@ -38,8 +59,10 @@ function Login() {
 
           <RightOverlayPanel signin={signIn}>
             <Title>No Account?</Title>
-            <Paragraph>Click here to verify a lecturer account</Paragraph>
-            <GhostButton onClick={() => toggle(false)}>Sign Up</GhostButton>
+            <Paragraph>
+              Click here to apply for an institution account
+            </Paragraph>
+            <GhostButton onClick={() => toggle(false)}>Apply</GhostButton>
           </RightOverlayPanel>
         </Overlay>
       </OverlayContainer>
@@ -53,7 +76,7 @@ const Container = styled.div`
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  position: relative;
+  display: relative;
   overflow: hidden;
   width: 700px;
   max-width: 100%;
@@ -77,6 +100,22 @@ const SignUpContainer = styled.div`
     z-index: 5;
   `
       : null}
+`;
+
+const Subtitle = styled.p`
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 const SignInContainer = styled.div`
