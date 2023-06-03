@@ -4,4 +4,4 @@ Roles = {
     Student: 'Student',
     Admin: 'Admin'
 }
-module.exports = Roles;
+module.exports = { Roles };
