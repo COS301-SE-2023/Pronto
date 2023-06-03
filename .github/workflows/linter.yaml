@@ -3,9 +3,9 @@ name: Lint Code Base
 
 on:
   push:
-    branches-ignore: [main,dev,backend,frontend]
+    branches-ignore: [main,dev,back-end,front-end]
   pull_request:
-    branches: [main,dev,backend,frontend]
+    branches: [main,dev,back-end,front-end]
   workflow_dispatch: {}  
 
 jobs:
