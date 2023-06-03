@@ -28,10 +28,21 @@ const getLectureEmailsFromInstitution = async (institutionID) =>{
       try {
         response = await fetch(request);
         body = await response.json();
+        if (body.errors)
+            return {
+                'error': `Failed To retrieve emails from institution with id=${institutionID}.
+                 Info: ${body.errors}`
+            };
+        return body.data.getInstitution?.lectureremails;
       } catch (getEmailsQueryError) {
         return {
             'error': `Failed To retrieve emails from institution with id=${institutionID}.
              Info: ${getEmailsQueryError}`
         };
       }
-    }
+}
+    
+export const isEmailPartOfInstitution = async(email,nstitutionID) =>{
+    const emailList = await getLectureEmailsFromInstitution(institutionID);
+    return !emailList.error ? emailList.includes(email) : emailList.error;
+}
