@@ -70,16 +70,14 @@ export default function RecentAnnouncement() {
         <main style={{ width: '900px',marginTop: '30px' }}>
             <h1 className="moduleHead">Recent Announcements</h1>
 
-            <div className="announcement">
-                <div className="Title">
-                    Date of final exam
-                </div>
-
-                <div className = "Description">
-                    Please note that the exam date is the 15th of June at 09.30. The exam will be 3 hours.
-                </div>
-
-                <div className="subject">COS341</div>
+            <div class="card">
+              <div class="card-header">
+                COS132
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">No class from Thursday 1 June</h5>
+                <p class="card-text">Please note that due to the completeion of the sylabus in this mornings lecture,
+                    there will be no class tomorrow or from here forth:) </p>
 
                 <Button 
                 id="demo-customized-button"
@@ -112,20 +110,16 @@ export default function RecentAnnouncement() {
                     Delete
                     </MenuItem>
                 </StyledMenu>
-                
+              </div>
             </div>
 
-            <div className="announcement">
-                <div className="Title">
-                    No class from Thursday 1 June
-                </div>
-
-                <div className = "Description">
-                    Please note that due to the completeion of the sylabus in this mornings lecture,
-                    there will be no class tomorrow or from here forth:) 
-                </div>
-
-                <div className="subject">COS132</div>
+            <div class="card">
+              <div class="card-header">
+                COS341
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Date of final exam</h5>
+                <p class="card-text">Please note that the exam date is the 15th of June at 09.30. The exam will be 3 hours.</p>
 
                 <Button 
                 id="demo-customized-button"
@@ -158,7 +152,7 @@ export default function RecentAnnouncement() {
                     Delete
                     </MenuItem>
                 </StyledMenu>
-                
+              </div>
             </div>
         </main>
 
