@@ -1,6 +1,6 @@
 import React from "react";
-import EditModuleInfo from "./LectureView/EditModuleInfo";
-import LectureHomePage from "./LectureView/LectureHomePage";
+import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
+import LectureHomePage from "./LectureView/Edit Module/LectureHomePage";
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import InstitutionLogin from "./Authentication/Institution/Login";

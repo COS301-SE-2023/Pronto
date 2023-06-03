@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import LecturerNavigation from "./LecturerNavigation";
-import "./LectureHome.css";
+import LecturerNavigation from "../LecturerNavigation";
+import "../LectureHome.css";
 
 const LectureHomePage = () => {
   return (
