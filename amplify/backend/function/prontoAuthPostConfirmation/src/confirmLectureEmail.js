@@ -42,7 +42,10 @@ const getLectureEmailsFromInstitution = async (institutionID) =>{
       }
 }
     
-export const isEmailPartOfInstitution = async(email,nstitutionID) =>{
+export const isEmailPartOfInstitution = async(email, institutionID) =>{
     const emailList = await getLectureEmailsFromInstitution(institutionID);
     return !emailList.error ? emailList.includes(email) : emailList.error;
+}
+module.exports ={
+    isEmailPartOfInstitution
 }
