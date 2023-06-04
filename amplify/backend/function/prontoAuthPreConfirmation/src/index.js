@@ -26,7 +26,7 @@ exports.handler = async (event) => {
             case ROLES.Admin:
                 if(isAdminAllocated(event.request.clientMetadata.institutionId)){
                     event.response.autoConfirmUser = false;
-                    throw new Error(`Institution has an admin already. institutionId=${institutionId}`);
+                    throw new Error(`Institution has an admin already. institutionId=${event.request.clientMetadata.institutionId}`);
                 }
                 event.response.autoConfirmUser = true;
                 break;
@@ -39,7 +39,7 @@ exports.handler = async (event) => {
                     event.response.autoConfirmUser = true;
                 }
                 event.response.autoConfirmUser = false;
-                throw new Error(`Lecturer email is not part of the Institution. institutionId=${institutionId}`);
+                throw new Error(`Lecturer email is not part of the Institution. institutionId=${event.request.clientMetadata.institutionId}`);
             case ROLES.Student:
                 //call api
                 //get email domains for the institution
