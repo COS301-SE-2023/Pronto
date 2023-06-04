@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import AddLecturer from './AddLecturer';
+import AddLecturer from '../Institution VIew/AddLecturer/AddLecturer';
 
 describe('AddLecturer', () => {
 
@@ -77,7 +77,7 @@ describe('AddLecturer', () => {
         expect(firstName.value).toBe('test');
         expect(lastName.value).toBe('test');
         expect(email.value).toBe('test');
-        
+
     });
 
 

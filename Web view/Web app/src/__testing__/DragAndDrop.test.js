@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import DropzoneComponent from './DragandDrop';
+import DropzoneComponent from '../Institution VIew/FileUpload/DragandDrop';
 
 describe('DropzoneComponent', () => {
     it('renders without errors', () => {
