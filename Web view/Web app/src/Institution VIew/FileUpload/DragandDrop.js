@@ -87,7 +87,7 @@ function DropzoneComponent(props) {
                     <a href={file.preview} target="_blank" rel="noopener noreferrer">
                         View PDF
                     </a>
-                    <IconButton onClick={() => removeFile(file)}>
+                    <IconButton onClick={() => removeFile(file)} name={'Remove'}>
                         <CloseIcon/>
                     </IconButton>
                 </div>
