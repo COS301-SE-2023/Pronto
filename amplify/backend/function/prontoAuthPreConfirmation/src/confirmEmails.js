@@ -49,7 +49,7 @@ const getLectureEmailsFromInstitution = async (institutionID) => {
     const results = await getAndSetInstitutionDetails(institutionID);
     if(!results.error)
       return institutionDetails.lectureremails;
-    throw new Error(results.error);
+    throw new Error(results);
   }
   return institutionDetails.lectureremails;
 }
@@ -59,7 +59,7 @@ const getInstitutionAdminId = async (institutionID) => {
     const results = await getAndSetInstitutionDetails(institutionID);
     if(!results.error)
       return institutionDetails.adminId;
-    throw new Error(results.error);
+    throw new Error(results);
   }
   return institutionDetails.adminId;
 }
@@ -69,7 +69,7 @@ const isLectureEmailPartOfInstitution = async(email, institutionID) =>{
     const emailList = await getLectureEmailsFromInstitution(institutionID);
     return emailList.includes(email);
   } catch (getLectureEmailsFromInstitutionError) {
-    throw new Error(getLectureEmailsFromInstitutionError.message)
+    throw new Error(getLectureEmailsFromInstitutionError)
   }
 }
 
