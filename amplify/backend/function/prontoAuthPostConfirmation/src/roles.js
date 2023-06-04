@@ -1,7 +1,7 @@
 
-Roles = {
+const ROLES = {
     Lecture: 'Lecture',
     Student: 'Student',
     Admin: 'Admin'
-}
-module.exports = { Roles };
+};
+module.exports = { ROLES };
