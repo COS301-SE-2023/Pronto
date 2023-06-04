@@ -1,0 +1,13 @@
+{
+    "AppSyncApiName": "pronto",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authprontoAuth",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "S3DeploymentBucket": "amplify-pronto-dev-153713-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/739f13761c49324b8bee5a9ad680394e87c98787"
+}
