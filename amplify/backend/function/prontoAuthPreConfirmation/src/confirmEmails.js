@@ -32,13 +32,13 @@ const getAndSetInstitutionDetails = async(institutionID) => {
     body = await response.json();
     if (body.errors)
         return {
-            'error': `Failed To retrieve institution details. id=${institutionID}.
+            error: `Failed To retrieve institution details. id=${institutionID}.
              Info: ${body.errors}`
         };
     return institutionDetails = body.data.getInstitution;
   } catch (getEmailsQueryError) {
     return {
-        'error': `Failed To retrieve institution details. id=${institutionID}.
+        error: `Failed To retrieve institution details. id=${institutionID}.
          Info: ${getEmailsQueryError}`
     };
   }
@@ -49,6 +49,7 @@ const getLectureEmailsFromInstitution = async (institutionID) => {
     const results = await getAndSetInstitutionDetails(institutionID);
     if(!results.error)
       return institutionDetails.lectureremails;
+    throw new Error(results.error);
   }
   return institutionDetails.lectureremails;
 }
@@ -58,15 +59,21 @@ const getInstitutionAdminId = async (institutionID) => {
     const results = await getAndSetInstitutionDetails(institutionID);
     if(!results.error)
       return institutionDetails.lectureremails;
+    throw new Error(results.error);
   }
   return institutionDetails.adminId;
 }
     
-export const isLectureEmailPartOfInstitution = async(email, institutionID) =>{
+const isLectureEmailPartOfInstitution = async(email, institutionID) =>{
+  try {
     const emailList = await getLectureEmailsFromInstitution(institutionID);
-    return !emailList.error ? emailList.includes(email) : emailList.error;
+    return emailList.includes(email);
+  } catch (getLectureEmailsFromInstitutionError) {
+    throw new Error(getLectureEmailsFromInstitutionError.message)
+  }
 }
 
 module.exports ={
-    isLectureEmailPartOfInstitution
+    isLectureEmailPartOfInstitution,
+    getInstitutionAdminId
 }
