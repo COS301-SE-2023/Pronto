@@ -73,7 +73,16 @@ const isLectureEmailPartOfInstitution = async(email, institutionID) =>{
   }
 }
 
+const isAdminAllocated = function(institutionID) {
+  try {
+    const adminId = getInstitutionAdminId(institutionId);
+    return adminId != null;
+  } catch (error) {
+    
+  }
+}
+
 module.exports ={
     isLectureEmailPartOfInstitution,
-    getInstitutionAdminId
+    isAdminAllocated
 }
