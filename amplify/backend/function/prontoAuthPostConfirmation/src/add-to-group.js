@@ -18,8 +18,10 @@ exports.handler = async (event) => {
       GroupName = process.env.StudentsGroupName;
       break;
     case process.env.AppClientIdWeb:
-      GroupName = event.clientMetadata?.role==Roles.Lecture ? process.env.LecturersGroupName : process.env.AdminGroupName;
+      GroupName = event.request.clientMetadata?.role==Roles.Lecture ? process.env.LecturersGroupName : process.env.AdminGroupName;
       break;
+    default: 
+      throw new Error(`Unrecognised user pool app client ID=${event.callerContext.clientId}`);
   }
   const groupParams = {
     GroupName: GroupName,
