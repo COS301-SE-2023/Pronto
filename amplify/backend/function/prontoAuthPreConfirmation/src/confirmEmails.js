@@ -53,8 +53,13 @@ const getLectureEmailsFromInstitution = async (institutionID) => {
   return institutionDetails.lectureremails;
 }
 
-const getInstitutionadminId = async (institutionID) => {
-  
+const getInstitutionAdminId = async (institutionID) => {
+  if(!institutionDetails){
+    const results = await getAndSetInstitutionDetails(institutionID);
+    if(!results.error)
+      return institutionDetails.lectureremails;
+  }
+  return institutionDetails.adminId;
 }
     
 export const isLectureEmailPartOfInstitution = async(email, institutionID) =>{
