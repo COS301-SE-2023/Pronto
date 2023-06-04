@@ -27,7 +27,7 @@ const ConfirmEmail = ({ navigation }) => {
       response = await Auth.confirmSignUp(email, code);
 
       //need to add user to a user group here?
-
+      Alert.alert("Success", "Login to access your account.");
       navigation.navigate("Login");
     } catch (e) {
       Alert.alert("Error", e.message);
