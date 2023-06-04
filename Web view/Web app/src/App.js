@@ -12,6 +12,7 @@ import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
+import ConfirmAccount from "./Authentication/Lecturer/ConfirmAccount";
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
         <Routes>
           {/*Lecturer pages routing*/}
           <Route path="/lecturer-login" element={<LecturerLogin />} />
+          <Route path="/confirm-account" element={<ConfirmAccount />} />
           <Route
             path="/lecturer-forgot-password"
             element={<LecturerForgotPassword />}

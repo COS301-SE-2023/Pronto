@@ -1,152 +1,53 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import UserPool from "../../UserPool";
-import { useNavigate } from "react-router-dom";
 
-function Login() {
-  const [signIn, toggle] = React.useState(true);
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
-
-  const UserAttributes = [
-    {
-      Name: "address",
-      Value: "",
-    },
-    {
-      Name: "email",
-      Value: email,
-    },
-    {
-      Name: "family_name",
-      Value: surname,
-    },
-    {
-      Name: "name",
-      Value: name,
-    },
-  ];
-
-  const signUpPressed = (event) => {
-    event.preventDefault();
-    UserPool.signUp(email, password, UserAttributes, null, (err, data) => {
-      if (err) {
-        //add an error handling message component
-        console.log(err);
-      } else {
-        navigate("/confirm-account");
-      }
-    });
-  };
+function ConfirmAccount() {
+  const [email, setEmail] = React.useState("");
+  const [code, setCode] = React.useState("");
 
   return (
     <Container>
-      <SignUpContainer signin={signIn}>
-        <Form>
-          <Title
+      <Form>
+        <LogoContainer>
+          <img
+            src={ProntoLogo}
+            alt="Logo"
             style={{
-              marginBottom: "20px",
+              width: "50%",
+              height: "auto",
+              objectFit: "cover",
             }}
-          >
-            Create Lecturer Account
-          </Title>
-          <Input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
           />
+        </LogoContainer>
+        <Subtitle>Verify Code</Subtitle>
 
-          <Input
-            type="text"
-            placeholder="Surname"
-            value={surname}
-            onChange={(event) => setSurname(event.target.value)}
-          />
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
-          />
-          <Button onClick={signUpPressed}>Sign Up</Button>
-        </Form>
-      </SignUpContainer>
-      <SignInContainer signin={signIn}>
-        <Form>
-          <LogoContainer>
-            <img
-              src={ProntoLogo}
-              alt="Logo"
-              style={{
-                width: "50%",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </LogoContainer>
-          <Subtitle>Lecturer Login</Subtitle>
+        <Input type="text" placeholder="Verification Code" value={code} />
 
-          <Input type="email" placeholder="Email" />
-          <Input type="password" placeholder="Password" />
-
-          <Button>Sign In</Button>
-          <Anchor href="/lecturer-forgot-password">
-            Forgot your password?
-          </Anchor>
-        </Form>
-      </SignInContainer>
-      <OverlayContainer signin={signIn}>
-        <Overlay signin={signIn}>
-          <LeftOverlayPanel signin={signIn}>
-            <Title>Have an account?</Title>
-            <Paragraph>
-              Please sign in to access all of Pronto's features
-            </Paragraph>
-            <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
-          </LeftOverlayPanel>
-
-          <RightOverlayPanel signin={signIn}>
-            <Title>No Account?</Title>
-            <Paragraph>Click here to verify a lecturer account</Paragraph>
-            <GhostButton onClick={() => toggle(false)}>Sign Up</GhostButton>
-          </RightOverlayPanel>
-        </Overlay>
-      </OverlayContainer>
+        <Button>Verify Account</Button>
+      </Form>
     </Container>
   );
 }
 
-//styles
-
+// styles...
 const Container = styled.div`
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  display: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
   width: 700px;
   max-width: 100%;
   min-height: 400px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const SignUpContainer = styled.div`
@@ -315,4 +216,4 @@ const Paragraph = styled.p`
   margin: 20px 0 30px;
 `;
 
-export default Login;
+export default ConfirmAccount;
