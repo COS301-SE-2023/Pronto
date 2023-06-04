@@ -58,7 +58,7 @@ const getInstitutionAdminId = async (institutionID) => {
   if(!institutionDetails){
     const results = await getAndSetInstitutionDetails(institutionID);
     if(!results.error)
-      return institutionDetails.lectureremails;
+      return institutionDetails.adminId;
     throw new Error(results.error);
   }
   return institutionDetails.adminId;
