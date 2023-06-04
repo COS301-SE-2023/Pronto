@@ -1,5 +1,13 @@
 {
-  "key1": "value1",
-  "key2": "value2",
-  "key3": "value3"
+  "request": {
+      "userAttributes": {
+          "email": "testuser@example.com",
+          "custom:domain": "example.com"
+      },
+      "clientMetadata":{
+        "role":"role",
+        "institutionId":"institutionId"
+      }
+},
+  "response": {}
 }
