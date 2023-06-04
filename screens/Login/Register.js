@@ -77,6 +77,7 @@ const Register = ({ navigation }) => {
 
           <TextInput
             placeholder="Email"
+            autoCapitalize="none"
             onFocus={() => setFocusedEmail(true)}
             onBlur={() => setFocusedEmail(false)}
             placeholderTextColor={"#666666"}
@@ -87,6 +88,7 @@ const Register = ({ navigation }) => {
 
           <TextInput
             placeholder="Password"
+            autoCapitalize="none"
             placeholderTextColor={"#666666"}
             secureTextEntry={true}
             onFocus={() => setFocusedPassword(true)}
@@ -98,6 +100,7 @@ const Register = ({ navigation }) => {
 
           <TextInput
             placeholder="Confirm Password"
+            autoCapitalize="none"
             placeholderTextColor={"#666666"}
             secureTextEntry={true}
             onFocus={() => setFocusedConfirm(true)}

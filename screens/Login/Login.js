@@ -49,6 +49,7 @@ const Login = ({ navigation }) => {
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
+            autoCapitalize="none"
             placeholderTextColor={"#666666"}
             style={styles.input}
             value={username}
@@ -57,6 +58,7 @@ const Login = ({ navigation }) => {
 
           <TextInput
             placeholder="Password"
+            autoCapitalize="none"
             placeholderTextColor={"#666666"}
             secureTextEntry={true}
             style={styles.input}
