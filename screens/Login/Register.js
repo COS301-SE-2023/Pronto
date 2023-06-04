@@ -36,6 +36,7 @@ const Register = ({ navigation }) => {
         username: email,
         password,
         attributes: { address, email, family_name: surname, name },
+        clientMetadata: { ROLES: "Student" },
       });
 
       navigation.navigate("ConfirmEmail", { email });
