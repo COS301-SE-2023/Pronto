@@ -4,7 +4,7 @@ const {
   GetGroupCommand,
   CreateGroupCommand,
 } = require('@aws-sdk/client-cognito-identity-provider');
-const ROLES = require('./ROLES');
+const ROLES = require('./roles');
 
 const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient({});
 
@@ -15,7 +15,7 @@ exports.handler = async (event) => {
   if (!event.request.clientMetadata.role)
     throw new Error('User role not provided on ClientMetadata')
   let GroupName;
-  switch (event.callerContext.clientId) {
+  switch (event.request.callerContext.clientId) {
     case process.env.AppClientId:
       GroupName = process.env.StudentsGroupName;
       break;
@@ -23,7 +23,7 @@ exports.handler = async (event) => {
       GroupName = event.request.clientMetadata.role==ROLES.Lecture ? process.env.LecturersGroupName : process.env.AdminGroupName;
       break;
     default: 
-      throw new Error(`Unrecognised user pool app client ID=${event.callerContext.clientId}`);
+      throw new Error(`Unrecognised user pool app client ID=${event.request.callerContext.clientId}`);
   }
   const groupParams = {
     GroupName: GroupName,
