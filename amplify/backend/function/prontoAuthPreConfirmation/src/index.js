@@ -9,7 +9,7 @@
 	LecturersGroupName
 	AdminGroupName
 Amplify Params - DO NOT EDIT */
-const { ROLES } = require('../../prontoAuthPostConfirmation/src/roles');
+const { ROLES } = require('roles');
 const { isLectureEmailPartOfInstitution,
         isAdminAllocated
 } = require('./confirmEmails');
