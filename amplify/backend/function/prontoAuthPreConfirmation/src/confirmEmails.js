@@ -3,9 +3,9 @@ import { default as fetch, Request } from 'node-fetch';
 const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEYOUTPUT;
 let institutionDetails;
-const getAndSetInstitutionDetails = async(institutionID) => {
+const getAndSetInstitutionDetails = async(institutionId) => {
   const query = /* GraphQL */ `
-      query MyQuery($id: ID = ${institutionID}) {
+      query MyQuery($id: ID = ${institutionId}) {
         getInstitution(id: $id) {
           adminId
           domains
@@ -32,21 +32,21 @@ const getAndSetInstitutionDetails = async(institutionID) => {
     body = await response.json();
     if (body.errors)
         return {
-            error: `Failed To retrieve institution details. id=${institutionID}.
+            error: `Failed To retrieve institution details. id=${institutionId}.
              Info: ${body.errors}`
         };
     return institutionDetails = body.data.getInstitution;
   } catch (getEmailsQueryError) {
     return {
-        error: `Failed To retrieve institution details. id=${institutionID}.
+        error: `Failed To retrieve institution details. id=${institutionId}.
          Info: ${getEmailsQueryError}`
     };
   }
 }
 
-const getLectureEmailsFromInstitution = async (institutionID) => {
+const getLectureEmailsFromInstitution = async (institutionId) => {
   if(!institutionDetails){
-    const results = await getAndSetInstitutionDetails(institutionID);
+    const results = await getAndSetInstitutionDetails(institutionId);
     if(!results.error)
       return institutionDetails.lectureremails;
     throw new Error(results);
@@ -54,9 +54,9 @@ const getLectureEmailsFromInstitution = async (institutionID) => {
   return institutionDetails.lectureremails;
 }
 
-const getInstitutionAdminId = async (institutionID) => {
+const getInstitutionAdminId = async (institutionId) => {
   if(!institutionDetails){
-    const results = await getAndSetInstitutionDetails(institutionID);
+    const results = await getAndSetInstitutionDetails(institutionId);
     if(!results.error)
       return institutionDetails.adminId;
     throw new Error(results);
@@ -64,16 +64,16 @@ const getInstitutionAdminId = async (institutionID) => {
   return institutionDetails.adminId;
 }
     
-const isLectureEmailPartOfInstitution = async(email, institutionID) =>{
+const isLectureEmailPartOfInstitution = async(email, institutionId) =>{
   try {
-    const emailList = await getLectureEmailsFromInstitution(institutionID);
+    const emailList = await getLectureEmailsFromInstitution(institutionId);
     return emailList.includes(email);
   } catch (getLectureEmailsFromInstitutionError) {
     throw new Error(getLectureEmailsFromInstitutionError)
   }
 }
 
-const isAdminAllocated = function(institutionID) {
+const isAdminAllocated = function(institutionId) {
   try {
     const adminId = getInstitutionAdminId(institutionId);
     return adminId != null;
