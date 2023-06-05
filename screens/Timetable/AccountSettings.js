@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import SettingsComponent from "../../components/SettingsComponent";
 
-const AccountSettings = () => {
+const AccountSettings = ({ navigation }) => {
   const settingsOptions = [
     {
       title: "My profile",
@@ -12,7 +12,7 @@ const AccountSettings = () => {
     {
       title: "Notification Preferences",
       subTitle: "Change your notification preferences",
-      onPress: () => {},
+      onPress: () => navigation.navigate("NotificationPreferences"),
     },
     {
       title: "Security",

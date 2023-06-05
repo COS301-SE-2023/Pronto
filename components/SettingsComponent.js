@@ -2,13 +2,18 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
+import { Auth } from "aws-amplify";
 
 const SettingsComponent = ({ settingsOptions }) => {
+  const onLogoutPressed = () => {
+    Auth.signOut();
+  };
+
   return (
     <View style={{ height: "100%" }}>
       <ScrollView>
         {settingsOptions.map(({ title, subTitle, onPress }) => (
-          <TouchableOpacity key={title} testID="option">
+          <TouchableOpacity key={title} testID="option" onPress={onPress}>
             <View
               style={{
                 paddingHorizontal: 20,
@@ -52,7 +57,7 @@ const SettingsComponent = ({ settingsOptions }) => {
               marginHorizontal: 20,
             }}
             outlined={true}
-            //  onPress={() => console.log("log out")}
+            onPress={onLogoutPressed}
             testID="logout-button"
           >
             Logout
