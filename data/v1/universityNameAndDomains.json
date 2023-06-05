@@ -1,0 +1,37 @@
+[
+    {
+        "name": "University of Johannesburg",
+        "domains": [
+            "uj.ac.za"
+        ],
+        "country": "South Africa"
+    },    
+    {
+        "name": "University of Pretoria",
+        "domains": [
+            "up.ac.za"
+        ],
+        "country": "South Africa"
+    },
+    {
+        "name": "University of Witwatersrand",
+        "domains": [
+            "wits.ac.za"
+        ],
+        "country": "South Africa"
+    },
+    {
+        "name": "Univerisity of Mpumalanga",
+        "domains": [
+            "ump.ac.za"
+        ],
+        "country": "South Africa"
+    },
+    {
+        "name": "University of Zululand",
+        "domains": [
+            "unizulu.ac.za"
+        ],
+        "country": "South Africa"
+    }
+]
