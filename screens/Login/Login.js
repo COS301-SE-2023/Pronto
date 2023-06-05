@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
 
+
 const { height } = Dimensions.get("window");
 
 const Login = ({ navigation }) => {
@@ -36,6 +37,7 @@ const Login = ({ navigation }) => {
     setLoading(false);
   };
 
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
@@ -54,6 +56,7 @@ const Login = ({ navigation }) => {
             style={styles.input}
             value={username}
             onChangeText={setUsername}
+
           />
 
           <TextInput
@@ -80,7 +83,6 @@ const Login = ({ navigation }) => {
             </Text>
           </View>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.createAccountButton}
           onPress={() => navigation.navigate("Register")}
@@ -88,6 +90,7 @@ const Login = ({ navigation }) => {
           <Text style={styles.createAccountButtonText}>
             Create new account &#x2192;
           </Text>
+
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -121,6 +124,7 @@ const styles = StyleSheet.create({
     maxWidth: "70%",
   },
   inputContainer: {},
+
   input: {
     fontSize: 15,
     padding: 20,
@@ -135,6 +139,7 @@ const styles = StyleSheet.create({
     color: "#e32f45",
     alignSelf: "flex-end",
     marginBottom: 15,
+
   },
   signInButton: {
     padding: 20,
@@ -158,6 +163,7 @@ const styles = StyleSheet.create({
   createAccountButtonText: {
     color: "black",
     alignSelf: "flex-end",
+
     fontSize: 15,
     fontWeight: "bold",
   },

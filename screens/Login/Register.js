@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
 
+
 const { height } = Dimensions.get("window");
 
 const Register = ({ navigation }) => {
@@ -90,12 +91,14 @@ const Register = ({ navigation }) => {
           <TextInput
             placeholder="Password"
             autoCapitalize="none"
+
             placeholderTextColor={"#666666"}
             secureTextEntry={true}
             onFocus={() => setFocusedPassword(true)}
             onBlur={() => setFocusedPassword(false)}
             value={password}
             onChangeText={setPassword}
+
             style={[styles.input, focusedPassword && styles.inputFocused]}
           />
 

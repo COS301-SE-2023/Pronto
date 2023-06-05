@@ -33,7 +33,6 @@ const VerifyCode = ({ navigation }) => {
       Alert.alert("Error", e.message);
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
