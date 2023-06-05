@@ -1,0 +1,1345 @@
+type Institution @aws_cognito_user_pools {
+  id: ID!
+  name: String!
+  location: String
+  pageUrl: String
+  campusMapUrl: String
+  openingTime: String
+  closingTime: String
+  minimumDuration: Int
+  lectureremails: [String]
+  coursecodes: [String]
+  domains: [String]
+  admin: Admin
+  adminId: ID!
+  courses(filter: ModelCourseFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCourseConnection
+  students(filter: ModelStudentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelStudentConnection
+  lecturer(filter: ModelLecturerFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelLecturerConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Admin @aws_cognito_user_pools {
+  id: ID!
+  institutionId: ID
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: String!
+  institution: Institution
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  owner: String
+}
+
+type Lecturer @aws_cognito_user_pools @aws_api_key {
+  id: ID!
+  institutionId: ID!
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: String!
+  institution: Institution!
+  courses(filter: ModelCourseFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCourseConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  owner: String
+}
+
+type Student @aws_cognito_user_pools {
+  institutionId: ID!
+  id: ID!
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: String!
+  institution: Institution!
+  timetable: Timetable
+  enrollments(filter: ModelEnrollmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEnrollmentConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  studentTimetableId: ID
+  owner: String
+}
+
+type Enrollment @aws_cognito_user_pools {
+  id: ID!
+  studentId: ID!
+  courseId: ID!
+  year: Int
+  student: Student!
+  course: Course!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Course @aws_cognito_user_pools @aws_api_key {
+  id: ID!
+  institutionId: ID!
+  lecturerId: ID
+  coursecode: String!
+  coursename: String!
+  semester: Int
+  enrollments(filter: ModelEnrollmentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEnrollmentConnection
+  activity(filter: ModelActivityFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelActivityConnection
+  announcents(filter: ModelAnnouncementFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAnnouncementConnection
+  lecturer: Lecturer
+  institution: Institution!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Timetable @aws_cognito_user_pools {
+  id: ID!
+  studentId: ID!
+  activityId: String!
+  student: Student!
+  activities(filter: ModelActivityFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelActivityConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Activity @aws_cognito_user_pools {
+  id: ID!
+  courseId: ID!
+  activityname: String!
+  day: String!
+  start: String!
+  end: String!
+  venue: String!
+  group: String!
+  frequency: Int
+  description: String!
+  course: Course
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type Announcement @aws_cognito_user_pools {
+  id: ID!
+  courseId: ID!
+  description: String!
+  start: String!
+  end: String!
+  date: String!
+  venue: String!
+  course: Course!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  _version: Int!
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+}
+
+type SearchableCourseConnection @aws_api_key @aws_cognito_user_pools {
+  items: [Course]!
+  nextToken: String
+  total: Int
+  aggregateItems: [SearchableAggregateResult]!
+}
+
+type SearchableAggregateResult @aws_cognito_user_pools @aws_api_key {
+  name: String!
+  result: SearchableAggregateGenericResult
+}
+
+type SearchableAggregateScalarResult @aws_cognito_user_pools @aws_api_key {
+  value: Float!
+}
+
+type SearchableAggregateBucketResult @aws_cognito_user_pools @aws_api_key {
+  buckets: [SearchableAggregateBucketResultItem]
+}
+
+type SearchableAggregateBucketResultItem @aws_cognito_user_pools @aws_api_key {
+  key: String!
+  doc_count: Int!
+}
+
+union SearchableAggregateGenericResult = SearchableAggregateScalarResult | SearchableAggregateBucketResult
+
+type Query {
+  getInstitution(id: ID!): Institution @aws_cognito_user_pools
+  listInstitutions(filter: ModelInstitutionFilterInput, limit: Int, nextToken: String): ModelInstitutionConnection @aws_cognito_user_pools
+  syncInstitutions(filter: ModelInstitutionFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelInstitutionConnection @aws_cognito_user_pools
+  getAdmin(id: ID!): Admin @aws_cognito_user_pools
+  listAdmins(filter: ModelAdminFilterInput, limit: Int, nextToken: String): ModelAdminConnection @aws_cognito_user_pools
+  syncAdmins(filter: ModelAdminFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelAdminConnection @aws_cognito_user_pools
+  getLecturer(id: ID!): Lecturer @aws_api_key @aws_cognito_user_pools
+  listLecturers(filter: ModelLecturerFilterInput, limit: Int, nextToken: String): ModelLecturerConnection @aws_api_key @aws_cognito_user_pools
+  syncLecturers(filter: ModelLecturerFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelLecturerConnection @aws_api_key @aws_cognito_user_pools
+  lecturersByInstitutionId(institutionId: ID!, sortDirection: ModelSortDirection, filter: ModelLecturerFilterInput, limit: Int, nextToken: String): ModelLecturerConnection @aws_api_key @aws_cognito_user_pools
+  getStudent(id: ID!): Student @aws_cognito_user_pools
+  listStudents(filter: ModelStudentFilterInput, limit: Int, nextToken: String): ModelStudentConnection @aws_cognito_user_pools
+  syncStudents(filter: ModelStudentFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelStudentConnection @aws_cognito_user_pools
+  studentsByInstitutionId(institutionId: ID!, sortDirection: ModelSortDirection, filter: ModelStudentFilterInput, limit: Int, nextToken: String): ModelStudentConnection @aws_cognito_user_pools
+  getEnrollment(id: ID!): Enrollment @aws_cognito_user_pools
+  listEnrollments(filter: ModelEnrollmentFilterInput, limit: Int, nextToken: String): ModelEnrollmentConnection @aws_cognito_user_pools
+  syncEnrollments(filter: ModelEnrollmentFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelEnrollmentConnection @aws_cognito_user_pools
+  enrollmentsByStudentId(studentId: ID!, sortDirection: ModelSortDirection, filter: ModelEnrollmentFilterInput, limit: Int, nextToken: String): ModelEnrollmentConnection @aws_cognito_user_pools
+  getCourse(id: ID!): Course @aws_api_key @aws_cognito_user_pools
+  listCourses(filter: ModelCourseFilterInput, limit: Int, nextToken: String): ModelCourseConnection @aws_api_key @aws_cognito_user_pools
+  syncCourses(filter: ModelCourseFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelCourseConnection @aws_api_key @aws_cognito_user_pools
+  coursesByInstitutionId(institutionId: ID!, sortDirection: ModelSortDirection, filter: ModelCourseFilterInput, limit: Int, nextToken: String): ModelCourseConnection @aws_api_key @aws_cognito_user_pools
+  searchCourses(filter: SearchableCourseFilterInput, sort: [SearchableCourseSortInput], limit: Int, nextToken: String, from: Int, aggregates: [SearchableCourseAggregationInput]): SearchableCourseConnection @aws_api_key @aws_cognito_user_pools
+  getTimetable(id: ID!): Timetable @aws_cognito_user_pools
+  listTimetables(filter: ModelTimetableFilterInput, limit: Int, nextToken: String): ModelTimetableConnection @aws_cognito_user_pools
+  syncTimetables(filter: ModelTimetableFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelTimetableConnection @aws_cognito_user_pools
+  getActivity(id: ID!): Activity @aws_cognito_user_pools
+  listActivities(filter: ModelActivityFilterInput, limit: Int, nextToken: String): ModelActivityConnection @aws_cognito_user_pools
+  syncActivities(filter: ModelActivityFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelActivityConnection @aws_cognito_user_pools
+  activitiesByCourseId(courseId: ID!, sortDirection: ModelSortDirection, filter: ModelActivityFilterInput, limit: Int, nextToken: String): ModelActivityConnection @aws_cognito_user_pools
+  searchActivities(filter: SearchableActivityFilterInput, sort: [SearchableActivitySortInput], limit: Int, nextToken: String, from: Int, aggregates: [SearchableActivityAggregationInput]): SearchableActivityConnection @aws_cognito_user_pools
+  getAnnouncement(id: ID!): Announcement @aws_cognito_user_pools
+  listAnnouncements(filter: ModelAnnouncementFilterInput, limit: Int, nextToken: String): ModelAnnouncementConnection @aws_cognito_user_pools
+  syncAnnouncements(filter: ModelAnnouncementFilterInput, limit: Int, nextToken: String, lastSync: AWSTimestamp): ModelAnnouncementConnection @aws_cognito_user_pools
+  announcementsByCourseId(courseId: ID!, sortDirection: ModelSortDirection, filter: ModelAnnouncementFilterInput, limit: Int, nextToken: String): ModelAnnouncementConnection @aws_cognito_user_pools
+  searchAnnouncements(filter: SearchableAnnouncementFilterInput, sort: [SearchableAnnouncementSortInput], limit: Int, nextToken: String, from: Int, aggregates: [SearchableAnnouncementAggregationInput]): SearchableAnnouncementConnection @aws_cognito_user_pools
+}
+
+type SearchableActivityConnection @aws_cognito_user_pools {
+  items: [Activity]!
+  nextToken: String
+  total: Int
+  aggregateItems: [SearchableAggregateResult]!
+}
+
+type SearchableAnnouncementConnection @aws_cognito_user_pools {
+  items: [Announcement]!
+  nextToken: String
+  total: Int
+  aggregateItems: [SearchableAggregateResult]!
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  in: [String]
+  notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  in: [Int]
+  notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  in: [Float]
+  notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+  ne: Boolean
+  eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  in: [ID]
+  notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelInstitutionConnection @aws_cognito_user_pools {
+  items: [Institution]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelInstitutionFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  location: ModelStringInput
+  pageUrl: ModelStringInput
+  campusMapUrl: ModelStringInput
+  openingTime: ModelStringInput
+  closingTime: ModelStringInput
+  minimumDuration: ModelIntInput
+  lectureremails: ModelStringInput
+  coursecodes: ModelStringInput
+  domains: ModelStringInput
+  adminId: ModelIDInput
+  and: [ModelInstitutionFilterInput]
+  or: [ModelInstitutionFilterInput]
+  not: ModelInstitutionFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelInstitutionConditionInput {
+  name: ModelStringInput
+  location: ModelStringInput
+  pageUrl: ModelStringInput
+  campusMapUrl: ModelStringInput
+  openingTime: ModelStringInput
+  closingTime: ModelStringInput
+  minimumDuration: ModelIntInput
+  lectureremails: ModelStringInput
+  coursecodes: ModelStringInput
+  domains: ModelStringInput
+  adminId: ModelIDInput
+  and: [ModelInstitutionConditionInput]
+  or: [ModelInstitutionConditionInput]
+  not: ModelInstitutionConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateInstitutionInput {
+  id: ID
+  name: String!
+  location: String
+  pageUrl: String
+  campusMapUrl: String
+  openingTime: String
+  closingTime: String
+  minimumDuration: Int
+  lectureremails: [String]
+  coursecodes: [String]
+  domains: [String]
+  adminId: ID!
+  _version: Int
+}
+
+input UpdateInstitutionInput {
+  id: ID!
+  name: String
+  location: String
+  pageUrl: String
+  campusMapUrl: String
+  openingTime: String
+  closingTime: String
+  minimumDuration: Int
+  lectureremails: [String]
+  coursecodes: [String]
+  domains: [String]
+  adminId: ID
+  _version: Int
+}
+
+input DeleteInstitutionInput {
+  id: ID!
+  _version: Int
+}
+
+type Mutation {
+  createInstitution(input: CreateInstitutionInput!, condition: ModelInstitutionConditionInput): Institution @aws_cognito_user_pools
+  updateInstitution(input: UpdateInstitutionInput!, condition: ModelInstitutionConditionInput): Institution @aws_cognito_user_pools
+  deleteInstitution(input: DeleteInstitutionInput!, condition: ModelInstitutionConditionInput): Institution @aws_cognito_user_pools
+  createAdmin(input: CreateAdminInput!, condition: ModelAdminConditionInput): Admin @aws_cognito_user_pools
+  updateAdmin(input: UpdateAdminInput!, condition: ModelAdminConditionInput): Admin @aws_cognito_user_pools
+  deleteAdmin(input: DeleteAdminInput!, condition: ModelAdminConditionInput): Admin @aws_cognito_user_pools
+  createLecturer(input: CreateLecturerInput!, condition: ModelLecturerConditionInput): Lecturer @aws_cognito_user_pools
+  updateLecturer(input: UpdateLecturerInput!, condition: ModelLecturerConditionInput): Lecturer @aws_cognito_user_pools
+  deleteLecturer(input: DeleteLecturerInput!, condition: ModelLecturerConditionInput): Lecturer @aws_cognito_user_pools
+  createStudent(input: CreateStudentInput!, condition: ModelStudentConditionInput): Student @aws_cognito_user_pools
+  updateStudent(input: UpdateStudentInput!, condition: ModelStudentConditionInput): Student @aws_cognito_user_pools
+  deleteStudent(input: DeleteStudentInput!, condition: ModelStudentConditionInput): Student @aws_cognito_user_pools
+  createEnrollment(input: CreateEnrollmentInput!, condition: ModelEnrollmentConditionInput): Enrollment @aws_cognito_user_pools
+  updateEnrollment(input: UpdateEnrollmentInput!, condition: ModelEnrollmentConditionInput): Enrollment @aws_cognito_user_pools
+  deleteEnrollment(input: DeleteEnrollmentInput!, condition: ModelEnrollmentConditionInput): Enrollment @aws_cognito_user_pools
+  createCourse(input: CreateCourseInput!, condition: ModelCourseConditionInput): Course @aws_cognito_user_pools
+  updateCourse(input: UpdateCourseInput!, condition: ModelCourseConditionInput): Course @aws_cognito_user_pools
+  deleteCourse(input: DeleteCourseInput!, condition: ModelCourseConditionInput): Course @aws_cognito_user_pools
+  createTimetable(input: CreateTimetableInput!, condition: ModelTimetableConditionInput): Timetable @aws_cognito_user_pools
+  updateTimetable(input: UpdateTimetableInput!, condition: ModelTimetableConditionInput): Timetable @aws_cognito_user_pools
+  deleteTimetable(input: DeleteTimetableInput!, condition: ModelTimetableConditionInput): Timetable @aws_cognito_user_pools
+  createActivity(input: CreateActivityInput!, condition: ModelActivityConditionInput): Activity @aws_cognito_user_pools
+  updateActivity(input: UpdateActivityInput!, condition: ModelActivityConditionInput): Activity @aws_cognito_user_pools
+  deleteActivity(input: DeleteActivityInput!, condition: ModelActivityConditionInput): Activity @aws_cognito_user_pools
+  createAnnouncement(input: CreateAnnouncementInput!, condition: ModelAnnouncementConditionInput): Announcement @aws_cognito_user_pools
+  updateAnnouncement(input: UpdateAnnouncementInput!, condition: ModelAnnouncementConditionInput): Announcement @aws_cognito_user_pools
+  deleteAnnouncement(input: DeleteAnnouncementInput!, condition: ModelAnnouncementConditionInput): Announcement @aws_cognito_user_pools
+}
+
+input ModelSubscriptionInstitutionFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  location: ModelSubscriptionStringInput
+  pageUrl: ModelSubscriptionStringInput
+  campusMapUrl: ModelSubscriptionStringInput
+  openingTime: ModelSubscriptionStringInput
+  closingTime: ModelSubscriptionStringInput
+  minimumDuration: ModelSubscriptionIntInput
+  lectureremails: ModelSubscriptionStringInput
+  coursecodes: ModelSubscriptionStringInput
+  domains: ModelSubscriptionStringInput
+  adminId: ModelSubscriptionIDInput
+  and: [ModelSubscriptionInstitutionFilterInput]
+  or: [ModelSubscriptionInstitutionFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type Subscription {
+  onCreateInstitution(filter: ModelSubscriptionInstitutionFilterInput, admin: String): Institution @aws_subscribe(mutations: ["createInstitution"]) @aws_cognito_user_pools
+  onUpdateInstitution(filter: ModelSubscriptionInstitutionFilterInput, admin: String): Institution @aws_subscribe(mutations: ["updateInstitution"]) @aws_cognito_user_pools
+  onDeleteInstitution(filter: ModelSubscriptionInstitutionFilterInput, admin: String): Institution @aws_subscribe(mutations: ["deleteInstitution"]) @aws_cognito_user_pools
+  onCreateAdmin(filter: ModelSubscriptionAdminFilterInput, owner: String): Admin @aws_subscribe(mutations: ["createAdmin"]) @aws_cognito_user_pools
+  onUpdateAdmin(filter: ModelSubscriptionAdminFilterInput, owner: String): Admin @aws_subscribe(mutations: ["updateAdmin"]) @aws_cognito_user_pools
+  onDeleteAdmin(filter: ModelSubscriptionAdminFilterInput, owner: String): Admin @aws_subscribe(mutations: ["deleteAdmin"]) @aws_cognito_user_pools
+  onCreateLecturer(filter: ModelSubscriptionLecturerFilterInput, owner: String): Lecturer @aws_subscribe(mutations: ["createLecturer"]) @aws_api_key @aws_cognito_user_pools
+  onUpdateLecturer(filter: ModelSubscriptionLecturerFilterInput, owner: String): Lecturer @aws_subscribe(mutations: ["updateLecturer"]) @aws_api_key @aws_cognito_user_pools
+  onDeleteLecturer(filter: ModelSubscriptionLecturerFilterInput, owner: String): Lecturer @aws_subscribe(mutations: ["deleteLecturer"]) @aws_api_key @aws_cognito_user_pools
+  onCreateStudent(filter: ModelSubscriptionStudentFilterInput, owner: String): Student @aws_subscribe(mutations: ["createStudent"]) @aws_cognito_user_pools
+  onUpdateStudent(filter: ModelSubscriptionStudentFilterInput, owner: String): Student @aws_subscribe(mutations: ["updateStudent"]) @aws_cognito_user_pools
+  onDeleteStudent(filter: ModelSubscriptionStudentFilterInput, owner: String): Student @aws_subscribe(mutations: ["deleteStudent"]) @aws_cognito_user_pools
+  onCreateEnrollment(filter: ModelSubscriptionEnrollmentFilterInput, student: String): Enrollment @aws_subscribe(mutations: ["createEnrollment"]) @aws_cognito_user_pools
+  onUpdateEnrollment(filter: ModelSubscriptionEnrollmentFilterInput, student: String): Enrollment @aws_subscribe(mutations: ["updateEnrollment"]) @aws_cognito_user_pools
+  onDeleteEnrollment(filter: ModelSubscriptionEnrollmentFilterInput, student: String): Enrollment @aws_subscribe(mutations: ["deleteEnrollment"]) @aws_cognito_user_pools
+  onCreateCourse(filter: ModelSubscriptionCourseFilterInput, institutionId: String): Course @aws_subscribe(mutations: ["createCourse"]) @aws_api_key @aws_cognito_user_pools
+  onUpdateCourse(filter: ModelSubscriptionCourseFilterInput, institutionId: String): Course @aws_subscribe(mutations: ["updateCourse"]) @aws_api_key @aws_cognito_user_pools
+  onDeleteCourse(filter: ModelSubscriptionCourseFilterInput, institutionId: String): Course @aws_subscribe(mutations: ["deleteCourse"]) @aws_api_key @aws_cognito_user_pools
+  onCreateTimetable(filter: ModelSubscriptionTimetableFilterInput, student: String): Timetable @aws_subscribe(mutations: ["createTimetable"]) @aws_cognito_user_pools
+  onUpdateTimetable(filter: ModelSubscriptionTimetableFilterInput, student: String): Timetable @aws_subscribe(mutations: ["updateTimetable"]) @aws_cognito_user_pools
+  onDeleteTimetable(filter: ModelSubscriptionTimetableFilterInput, student: String): Timetable @aws_subscribe(mutations: ["deleteTimetable"]) @aws_cognito_user_pools
+  onCreateActivity(filter: ModelSubscriptionActivityFilterInput, courseId: String): Activity @aws_subscribe(mutations: ["createActivity"]) @aws_cognito_user_pools
+  onUpdateActivity(filter: ModelSubscriptionActivityFilterInput, courseId: String): Activity @aws_subscribe(mutations: ["updateActivity"]) @aws_cognito_user_pools
+  onDeleteActivity(filter: ModelSubscriptionActivityFilterInput, courseId: String): Activity @aws_subscribe(mutations: ["deleteActivity"]) @aws_cognito_user_pools
+  onCreateAnnouncement(filter: ModelSubscriptionAnnouncementFilterInput, course: String): Announcement @aws_subscribe(mutations: ["createAnnouncement"]) @aws_cognito_user_pools
+  onUpdateAnnouncement(filter: ModelSubscriptionAnnouncementFilterInput, course: String): Announcement @aws_subscribe(mutations: ["updateAnnouncement"]) @aws_cognito_user_pools
+  onDeleteAnnouncement(filter: ModelSubscriptionAnnouncementFilterInput, course: String): Announcement @aws_subscribe(mutations: ["deleteAnnouncement"]) @aws_cognito_user_pools
+}
+
+type ModelAdminConnection @aws_cognito_user_pools {
+  items: [Admin]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelAdminFilterInput {
+  id: ModelIDInput
+  institutionId: ModelIDInput
+  firstname: ModelStringInput
+  lastname: ModelStringInput
+  userRole: ModelStringInput
+  email: ModelStringInput
+  and: [ModelAdminFilterInput]
+  or: [ModelAdminFilterInput]
+  not: ModelAdminFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelAdminConditionInput {
+  institutionId: ModelIDInput
+  firstname: ModelStringInput
+  lastname: ModelStringInput
+  userRole: ModelStringInput
+  email: ModelStringInput
+  and: [ModelAdminConditionInput]
+  or: [ModelAdminConditionInput]
+  not: ModelAdminConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateAdminInput {
+  id: ID
+  institutionId: ID
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: String!
+  _version: Int
+}
+
+input UpdateAdminInput {
+  id: ID!
+  institutionId: ID
+  firstname: String
+  lastname: String
+  userRole: String
+  email: String
+  _version: Int
+}
+
+input DeleteAdminInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionAdminFilterInput {
+  id: ModelSubscriptionIDInput
+  institutionId: ModelSubscriptionIDInput
+  firstname: ModelSubscriptionStringInput
+  lastname: ModelSubscriptionStringInput
+  userRole: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  and: [ModelSubscriptionAdminFilterInput]
+  or: [ModelSubscriptionAdminFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelLecturerConnection @aws_cognito_user_pools @aws_api_key {
+  items: [Lecturer]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelLecturerFilterInput {
+  id: ModelIDInput
+  institutionId: ModelIDInput
+  firstname: ModelStringInput
+  lastname: ModelStringInput
+  userRole: ModelStringInput
+  email: ModelStringInput
+  and: [ModelLecturerFilterInput]
+  or: [ModelLecturerFilterInput]
+  not: ModelLecturerFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelLecturerConditionInput {
+  institutionId: ModelIDInput
+  firstname: ModelStringInput
+  lastname: ModelStringInput
+  userRole: ModelStringInput
+  email: ModelStringInput
+  and: [ModelLecturerConditionInput]
+  or: [ModelLecturerConditionInput]
+  not: ModelLecturerConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateLecturerInput {
+  id: ID
+  institutionId: ID!
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: String!
+  _version: Int
+}
+
+input UpdateLecturerInput {
+  id: ID!
+  institutionId: ID
+  firstname: String
+  lastname: String
+  userRole: String
+  email: String
+  _version: Int
+}
+
+input DeleteLecturerInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionLecturerFilterInput {
+  id: ModelSubscriptionIDInput
+  institutionId: ModelSubscriptionIDInput
+  firstname: ModelSubscriptionStringInput
+  lastname: ModelSubscriptionStringInput
+  userRole: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  and: [ModelSubscriptionLecturerFilterInput]
+  or: [ModelSubscriptionLecturerFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelStudentConnection @aws_cognito_user_pools {
+  items: [Student]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelStudentFilterInput {
+  institutionId: ModelIDInput
+  id: ModelIDInput
+  firstname: ModelStringInput
+  lastname: ModelStringInput
+  userRole: ModelStringInput
+  email: ModelStringInput
+  and: [ModelStudentFilterInput]
+  or: [ModelStudentFilterInput]
+  not: ModelStudentFilterInput
+  _deleted: ModelBooleanInput
+  studentTimetableId: ModelIDInput
+}
+
+input ModelStudentConditionInput {
+  institutionId: ModelIDInput
+  firstname: ModelStringInput
+  lastname: ModelStringInput
+  userRole: ModelStringInput
+  email: ModelStringInput
+  and: [ModelStudentConditionInput]
+  or: [ModelStudentConditionInput]
+  not: ModelStudentConditionInput
+  _deleted: ModelBooleanInput
+  studentTimetableId: ModelIDInput
+}
+
+input CreateStudentInput {
+  institutionId: ID!
+  id: ID
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: String!
+  _version: Int
+  studentTimetableId: ID
+}
+
+input UpdateStudentInput {
+  institutionId: ID
+  id: ID!
+  firstname: String
+  lastname: String
+  userRole: String
+  email: String
+  _version: Int
+  studentTimetableId: ID
+}
+
+input DeleteStudentInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionStudentFilterInput {
+  institutionId: ModelSubscriptionIDInput
+  id: ModelSubscriptionIDInput
+  firstname: ModelSubscriptionStringInput
+  lastname: ModelSubscriptionStringInput
+  userRole: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  and: [ModelSubscriptionStudentFilterInput]
+  or: [ModelSubscriptionStudentFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelEnrollmentConnection @aws_cognito_user_pools @aws_api_key {
+  items: [Enrollment]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelEnrollmentFilterInput {
+  id: ModelIDInput
+  studentId: ModelIDInput
+  courseId: ModelIDInput
+  year: ModelIntInput
+  and: [ModelEnrollmentFilterInput]
+  or: [ModelEnrollmentFilterInput]
+  not: ModelEnrollmentFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelEnrollmentConditionInput {
+  studentId: ModelIDInput
+  courseId: ModelIDInput
+  year: ModelIntInput
+  and: [ModelEnrollmentConditionInput]
+  or: [ModelEnrollmentConditionInput]
+  not: ModelEnrollmentConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateEnrollmentInput {
+  id: ID
+  studentId: ID!
+  courseId: ID!
+  year: Int
+  _version: Int
+}
+
+input UpdateEnrollmentInput {
+  id: ID!
+  studentId: ID
+  courseId: ID
+  year: Int
+  _version: Int
+}
+
+input DeleteEnrollmentInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionEnrollmentFilterInput {
+  id: ModelSubscriptionIDInput
+  studentId: ModelSubscriptionIDInput
+  courseId: ModelSubscriptionIDInput
+  year: ModelSubscriptionIntInput
+  and: [ModelSubscriptionEnrollmentFilterInput]
+  or: [ModelSubscriptionEnrollmentFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelCourseConnection @aws_cognito_user_pools @aws_api_key {
+  items: [Course]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelCourseFilterInput {
+  id: ModelIDInput
+  institutionId: ModelIDInput
+  lecturerId: ModelIDInput
+  coursecode: ModelStringInput
+  coursename: ModelStringInput
+  semester: ModelIntInput
+  and: [ModelCourseFilterInput]
+  or: [ModelCourseFilterInput]
+  not: ModelCourseFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelCourseConditionInput {
+  institutionId: ModelIDInput
+  lecturerId: ModelIDInput
+  coursecode: ModelStringInput
+  coursename: ModelStringInput
+  semester: ModelIntInput
+  and: [ModelCourseConditionInput]
+  or: [ModelCourseConditionInput]
+  not: ModelCourseConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateCourseInput {
+  id: ID
+  institutionId: ID!
+  lecturerId: ID
+  coursecode: String!
+  coursename: String!
+  semester: Int
+  _version: Int
+}
+
+input UpdateCourseInput {
+  id: ID!
+  institutionId: ID
+  lecturerId: ID
+  coursecode: String
+  coursename: String
+  semester: Int
+  _version: Int
+}
+
+input DeleteCourseInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionCourseFilterInput {
+  id: ModelSubscriptionIDInput
+  lecturerId: ModelSubscriptionIDInput
+  coursecode: ModelSubscriptionStringInput
+  coursename: ModelSubscriptionStringInput
+  semester: ModelSubscriptionIntInput
+  and: [ModelSubscriptionCourseFilterInput]
+  or: [ModelSubscriptionCourseFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelTimetableConnection @aws_cognito_user_pools {
+  items: [Timetable]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelTimetableFilterInput {
+  id: ModelIDInput
+  studentId: ModelIDInput
+  activityId: ModelStringInput
+  and: [ModelTimetableFilterInput]
+  or: [ModelTimetableFilterInput]
+  not: ModelTimetableFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelTimetableConditionInput {
+  studentId: ModelIDInput
+  activityId: ModelStringInput
+  and: [ModelTimetableConditionInput]
+  or: [ModelTimetableConditionInput]
+  not: ModelTimetableConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateTimetableInput {
+  id: ID
+  studentId: ID!
+  activityId: String!
+  _version: Int
+}
+
+input UpdateTimetableInput {
+  id: ID!
+  studentId: ID
+  activityId: String
+  _version: Int
+}
+
+input DeleteTimetableInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionTimetableFilterInput {
+  id: ModelSubscriptionIDInput
+  studentId: ModelSubscriptionIDInput
+  activityId: ModelSubscriptionStringInput
+  and: [ModelSubscriptionTimetableFilterInput]
+  or: [ModelSubscriptionTimetableFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelActivityConnection @aws_cognito_user_pools @aws_api_key {
+  items: [Activity]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelActivityFilterInput {
+  id: ModelIDInput
+  courseId: ModelIDInput
+  activityname: ModelStringInput
+  day: ModelStringInput
+  start: ModelStringInput
+  end: ModelStringInput
+  venue: ModelStringInput
+  group: ModelStringInput
+  frequency: ModelIntInput
+  description: ModelStringInput
+  and: [ModelActivityFilterInput]
+  or: [ModelActivityFilterInput]
+  not: ModelActivityFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelActivityConditionInput {
+  courseId: ModelIDInput
+  activityname: ModelStringInput
+  day: ModelStringInput
+  start: ModelStringInput
+  end: ModelStringInput
+  venue: ModelStringInput
+  group: ModelStringInput
+  frequency: ModelIntInput
+  description: ModelStringInput
+  and: [ModelActivityConditionInput]
+  or: [ModelActivityConditionInput]
+  not: ModelActivityConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateActivityInput {
+  id: ID
+  courseId: ID!
+  activityname: String!
+  day: String!
+  start: String!
+  end: String!
+  venue: String!
+  group: String!
+  frequency: Int
+  description: String!
+  _version: Int
+}
+
+input UpdateActivityInput {
+  id: ID!
+  courseId: ID
+  activityname: String
+  day: String
+  start: String
+  end: String
+  venue: String
+  group: String
+  frequency: Int
+  description: String
+  _version: Int
+}
+
+input DeleteActivityInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionActivityFilterInput {
+  id: ModelSubscriptionIDInput
+  activityname: ModelSubscriptionStringInput
+  day: ModelSubscriptionStringInput
+  start: ModelSubscriptionStringInput
+  end: ModelSubscriptionStringInput
+  venue: ModelSubscriptionStringInput
+  group: ModelSubscriptionStringInput
+  frequency: ModelSubscriptionIntInput
+  description: ModelSubscriptionStringInput
+  and: [ModelSubscriptionActivityFilterInput]
+  or: [ModelSubscriptionActivityFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+type ModelAnnouncementConnection @aws_cognito_user_pools @aws_api_key {
+  items: [Announcement]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+input ModelAnnouncementFilterInput {
+  id: ModelIDInput
+  courseId: ModelIDInput
+  description: ModelStringInput
+  start: ModelStringInput
+  end: ModelStringInput
+  date: ModelStringInput
+  venue: ModelStringInput
+  and: [ModelAnnouncementFilterInput]
+  or: [ModelAnnouncementFilterInput]
+  not: ModelAnnouncementFilterInput
+  _deleted: ModelBooleanInput
+}
+
+input ModelAnnouncementConditionInput {
+  courseId: ModelIDInput
+  description: ModelStringInput
+  start: ModelStringInput
+  end: ModelStringInput
+  date: ModelStringInput
+  venue: ModelStringInput
+  and: [ModelAnnouncementConditionInput]
+  or: [ModelAnnouncementConditionInput]
+  not: ModelAnnouncementConditionInput
+  _deleted: ModelBooleanInput
+}
+
+input CreateAnnouncementInput {
+  id: ID
+  courseId: ID!
+  description: String!
+  start: String!
+  end: String!
+  date: String!
+  venue: String!
+  _version: Int
+}
+
+input UpdateAnnouncementInput {
+  id: ID!
+  courseId: ID
+  description: String
+  start: String
+  end: String
+  date: String
+  venue: String
+  _version: Int
+}
+
+input DeleteAnnouncementInput {
+  id: ID!
+  _version: Int
+}
+
+input ModelSubscriptionAnnouncementFilterInput {
+  id: ModelSubscriptionIDInput
+  courseId: ModelSubscriptionIDInput
+  description: ModelSubscriptionStringInput
+  start: ModelSubscriptionStringInput
+  end: ModelSubscriptionStringInput
+  date: ModelSubscriptionStringInput
+  venue: ModelSubscriptionStringInput
+  and: [ModelSubscriptionAnnouncementFilterInput]
+  or: [ModelSubscriptionAnnouncementFilterInput]
+  _deleted: ModelBooleanInput
+}
+
+input SearchableStringFilterInput {
+  ne: String
+  gt: String
+  lt: String
+  gte: String
+  lte: String
+  eq: String
+  match: String
+  matchPhrase: String
+  matchPhrasePrefix: String
+  multiMatch: String
+  exists: Boolean
+  wildcard: String
+  regexp: String
+  range: [String]
+}
+
+input SearchableIntFilterInput {
+  ne: Int
+  gt: Int
+  lt: Int
+  gte: Int
+  lte: Int
+  eq: Int
+  range: [Int]
+}
+
+input SearchableFloatFilterInput {
+  ne: Float
+  gt: Float
+  lt: Float
+  gte: Float
+  lte: Float
+  eq: Float
+  range: [Float]
+}
+
+input SearchableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input SearchableIDFilterInput {
+  ne: ID
+  gt: ID
+  lt: ID
+  gte: ID
+  lte: ID
+  eq: ID
+  match: ID
+  matchPhrase: ID
+  matchPhrasePrefix: ID
+  multiMatch: ID
+  exists: Boolean
+  wildcard: ID
+  regexp: ID
+  range: [ID]
+}
+
+input SearchableCourseFilterInput {
+  id: SearchableIDFilterInput
+  institutionId: SearchableIDFilterInput
+  lecturerId: SearchableIDFilterInput
+  coursecode: SearchableStringFilterInput
+  coursename: SearchableStringFilterInput
+  semester: SearchableIntFilterInput
+  createdAt: SearchableStringFilterInput
+  updatedAt: SearchableStringFilterInput
+  _version: SearchableIntFilterInput
+  _deleted: SearchableBooleanFilterInput
+  _lastChangedAt: SearchableIntFilterInput
+  and: [SearchableCourseFilterInput]
+  or: [SearchableCourseFilterInput]
+  not: SearchableCourseFilterInput
+}
+
+enum SearchableSortDirection {
+  asc
+  desc
+}
+
+enum SearchableCourseSortableFields {
+  id
+  institutionId
+  lecturerId
+  coursecode
+  coursename
+  semester
+  createdAt
+  updatedAt
+  _version
+  _deleted
+  _lastChangedAt
+}
+
+input SearchableCourseSortInput {
+  field: SearchableCourseSortableFields
+  direction: SearchableSortDirection
+}
+
+enum SearchableAggregateType {
+  terms
+  avg
+  min
+  max
+  sum
+}
+
+enum SearchableCourseAggregateField {
+  id
+  institutionId
+  lecturerId
+  coursecode
+  coursename
+  semester
+  createdAt
+  updatedAt
+  _version
+  _deleted
+  _lastChangedAt
+}
+
+input SearchableCourseAggregationInput {
+  name: String!
+  type: SearchableAggregateType!
+  field: SearchableCourseAggregateField!
+}
+
+input SearchableActivityFilterInput {
+  id: SearchableIDFilterInput
+  courseId: SearchableIDFilterInput
+  activityname: SearchableStringFilterInput
+  day: SearchableStringFilterInput
+  start: SearchableStringFilterInput
+  end: SearchableStringFilterInput
+  venue: SearchableStringFilterInput
+  group: SearchableStringFilterInput
+  frequency: SearchableIntFilterInput
+  description: SearchableStringFilterInput
+  createdAt: SearchableStringFilterInput
+  updatedAt: SearchableStringFilterInput
+  _version: SearchableIntFilterInput
+  _deleted: SearchableBooleanFilterInput
+  _lastChangedAt: SearchableIntFilterInput
+  and: [SearchableActivityFilterInput]
+  or: [SearchableActivityFilterInput]
+  not: SearchableActivityFilterInput
+}
+
+enum SearchableActivitySortableFields {
+  id
+  courseId
+  activityname
+  day
+  start
+  end
+  venue
+  group
+  frequency
+  description
+  createdAt
+  updatedAt
+  _version
+  _deleted
+  _lastChangedAt
+}
+
+input SearchableActivitySortInput {
+  field: SearchableActivitySortableFields
+  direction: SearchableSortDirection
+}
+
+enum SearchableActivityAggregateField {
+  id
+  courseId
+  activityname
+  day
+  start
+  end
+  venue
+  group
+  frequency
+  description
+  createdAt
+  updatedAt
+  _version
+  _deleted
+  _lastChangedAt
+}
+
+input SearchableActivityAggregationInput {
+  name: String!
+  type: SearchableAggregateType!
+  field: SearchableActivityAggregateField!
+}
+
+input SearchableAnnouncementFilterInput {
+  id: SearchableIDFilterInput
+  courseId: SearchableIDFilterInput
+  description: SearchableStringFilterInput
+  start: SearchableStringFilterInput
+  end: SearchableStringFilterInput
+  date: SearchableStringFilterInput
+  venue: SearchableStringFilterInput
+  createdAt: SearchableStringFilterInput
+  updatedAt: SearchableStringFilterInput
+  _version: SearchableIntFilterInput
+  _deleted: SearchableBooleanFilterInput
+  _lastChangedAt: SearchableIntFilterInput
+  and: [SearchableAnnouncementFilterInput]
+  or: [SearchableAnnouncementFilterInput]
+  not: SearchableAnnouncementFilterInput
+}
+
+enum SearchableAnnouncementSortableFields {
+  id
+  courseId
+  description
+  start
+  end
+  date
+  venue
+  createdAt
+  updatedAt
+  _version
+  _deleted
+  _lastChangedAt
+}
+
+input SearchableAnnouncementSortInput {
+  field: SearchableAnnouncementSortableFields
+  direction: SearchableSortDirection
+}
+
+enum SearchableAnnouncementAggregateField {
+  id
+  courseId
+  description
+  start
+  end
+  date
+  venue
+  createdAt
+  updatedAt
+  _version
+  _deleted
+  _lastChangedAt
+}
+
+input SearchableAnnouncementAggregationInput {
+  name: String!
+  type: SearchableAggregateType!
+  field: SearchableAnnouncementAggregateField!
+}
