@@ -8,6 +8,7 @@ export default function LecturerNavigation() {
     alert("You have been logged out");
       window.location.href = '/login';
   }
+
     return (
       <div className={"grid"}>
         <nav className="vertical-navbar col-4 p-4">
@@ -18,9 +19,11 @@ export default function LecturerNavigation() {
               className="logo offset-2 img-fluid mr-1"
               width={"175px"}
               height={"155px"}
+              data-testid={'UniversityImage'}
             />
             <div className="lecturer-name">Stefan Gruner</div>
           </div>
+
           <ul className="navbar-nav">
             
             <li className="nav-item text-center">
@@ -40,9 +43,11 @@ export default function LecturerNavigation() {
             </li>
           </ul>
         </nav>
+
         <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
           <button className={"btn btn-danger btn-lg btn-block"} style={{"border-radius":"25px"}} >Log Out</button>
         </div>
+        
       </div>
     );
 }

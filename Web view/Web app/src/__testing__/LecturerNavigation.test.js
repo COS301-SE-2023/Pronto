@@ -1,8 +1,8 @@
 import {render, screen, cleanup, fireEvent} from "@testing-library/react";
-import InstitutionNavigation from "../Institution VIew/Navigation/InstitutionNavigation";
+import LecturerNavigation from "../LectureView/LecturerNavigation";
 
 beforeEach(() => {
-    render(<InstitutionNavigation/>);
+    render(<LecturerNavigation/>);
 });
 
 // get the list on the navigation bar and check that they are present by testID
