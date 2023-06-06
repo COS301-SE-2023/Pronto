@@ -3,6 +3,11 @@ import '../Institution VIew/Navigation/Navigation.css';
 import logo from '../images/logo.jpg';
 
 export default function LecturerNavigation() {
+
+  function Logout() {
+    alert("You have been logged out");
+      window.location.href = '/login';
+  }
     return (
       <div className={"grid"}>
         <nav className="vertical-navbar col-4 p-4">
