@@ -26,18 +26,18 @@ export default function LecturerNavigation() {
 
           <ul className="navbar-nav">
             
-            <li className="nav-item text-center">
-              <a href="/lecture-homepage" className="nav-link">
+            <li className="nav-item text-center"  data-testid={EditModuleInfo}>
+              <a href="/lecture-homepage" className="nav-link"  data-testid={EditModuleInfoLink}>
                 <b>Edit Module Information</b>
               </a>
             </li>
-            <li className="nav-item text-center">
-              <a href="recent-announcement" className="nav-link">
+            <li className="nav-item text-center"  data-testid={RecentAnnouncements}>
+              <a href="recent-announcement" className="nav-link"  data-testid={RecentAnnouncementsLink}>
                 <b>Recent Announcements</b>
               </a>
             </li>
-            <li className="nav-item text-center">
-              <a href="personal-info" className="nav-link">
+            <li className="nav-item text-center"  data-testid={EditPersonalInfo}>
+              <a href="personal-info" className="nav-link"  data-testid={EditPersonalInfoLink}>
                 <b>Edit Personal Information</b>
               </a>
             </li>
@@ -45,9 +45,9 @@ export default function LecturerNavigation() {
         </nav>
 
         <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
-          <button className={"btn btn-danger btn-lg btn-block"} style={{"border-radius":"25px"}} >Log Out</button>
+          <button className={"btn btn-danger btn-lg btn-block"} style={{"border-radius":"25px"}} data-testid={'LogoutButton'} onClick={Logout}>Log Out</button>
         </div>
-        
+
       </div>
     );
 }

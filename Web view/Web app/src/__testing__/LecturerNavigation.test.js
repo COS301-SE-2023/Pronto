@@ -7,10 +7,10 @@ beforeEach(() => {
 
 // get the list on the navigation bar and check that they are present by testID
 test('Test if the navigation bar has the correct links', () => {
-    const dashboard = screen.getByTestId('Dashboard');
-    expect(dashboard).toBeInTheDocument();
+    const editmodule = screen.getByTestId('EditModuleInfo');
+    expect(editmodule).toBeInTheDocument();
 
-    const uploadSchedule = screen.getByTestId('UploadSchedule');
+    const announcements = screen.getByTestId('RecentAnnouncements');
     expect(uploadSchedule).toBeInTheDocument();
 
     const uploadStudentFiles = screen.getByTestId('UploadStudentFiles');
