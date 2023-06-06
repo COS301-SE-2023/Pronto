@@ -11,34 +11,22 @@ test('Test if the navigation bar has the correct links', () => {
     expect(editmodule).toBeInTheDocument();
 
     const announcements = screen.getByTestId('RecentAnnouncements');
-    expect(uploadSchedule).toBeInTheDocument();
+    expect(announcements).toBeInTheDocument();
 
-    const uploadStudentFiles = screen.getByTestId('UploadStudentFiles');
-    expect(uploadStudentFiles).toBeInTheDocument();
-
-    const addLecturer = screen.getByTestId('AddLecturer');
-    expect(addLecturer).toBeInTheDocument();
-
-    const editUniversityInfo = screen.getByTestId('EditUniversityInfo');
-    expect(editUniversityInfo).toBeInTheDocument();
+    const personal = screen.getByTestId('EditPersonalInfo');
+    expect(personal).toBeInTheDocument();
 });
 
 // Test if the navigation bar list items are in the document
 test('Test if the navigation bar list items have an <a> tag', () => {
-    const dashboardLink = screen.getByTestId('dashboardLink');
-    expect(dashboardLink).toBeInTheDocument();
+    const editmoduleLink = screen.getByTestId('EditModuleInfoLink');
+    expect(editmoduleLink).toBeInTheDocument();
 
-    const uploadScheduleLink = screen.getByTestId('UploadScheduleLink');
-    expect(uploadScheduleLink).toBeInTheDocument();
+    const announcementsLink = screen.getByTestId('RecentAnnouncementsLink');
+    expect(announcementsLink).toBeInTheDocument();
 
-    const uploadStudentFilesLink = screen.getByTestId('UploadStudentFilesLink');
-    expect(uploadStudentFilesLink).toBeInTheDocument();
-
-    const addLecturerLink = screen.getByTestId('AddLecturerLink');
-    expect(addLecturerLink).toBeInTheDocument();
-
-    const editUniversityInfoLink = screen.getByTestId('EditUniversityInfoLink');
-    expect(editUniversityInfoLink).toBeInTheDocument();
+    const personalLink = screen.getByTestId('EditPersonalInfoLink');
+    expect(personalLink).toBeInTheDocument();
 });
 
 //check that the <a> tags have the correct href
