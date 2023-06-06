@@ -31,20 +31,15 @@ test('Test if the navigation bar list items have an <a> tag', () => {
 
 //check that the <a> tags have the correct href
 test('Test if the <a> tags have the correct href', () => {
-    const dashboardLink = screen.getByTestId('dashboardLink');
-    expect(dashboardLink).toHaveAttribute('href', '/');
 
-    const uploadScheduleLink = screen.getByTestId('UploadScheduleLink');
-    expect(uploadScheduleLink).toHaveAttribute('href', '/upload-schedule');
+    const editmoduleLink = screen.getByTestId('EditModuleInfoLink');
+    expect(editmoduleLink).toHaveAttribute('href', '/lecture-homepage');
 
-    const uploadStudentFilesLink = screen.getByTestId('UploadStudentFilesLink');
-    expect(uploadStudentFilesLink).toHaveAttribute('href', '/upload-student-files');
+    const announcementsLink = screen.getByTestId('RecentAnnouncementsLink');
+    expect(announcementsLink).toHaveAttribute('href', '/recent-announcement');
 
-    const addLecturerLink = screen.getByTestId('AddLecturerLink');
-    expect(addLecturerLink).toHaveAttribute('href', '/add-lecturer');
-
-    const editUniversityInfoLink = screen.getByTestId('EditUniversityInfoLink');
-    expect(editUniversityInfoLink).toHaveAttribute('href', 'src/Institution VIew/Navigation/InstitutionNavigation#');
+    const personalLink = screen.getByTestId('EditPersonalInfoLink');
+    expect(personalLink).toHaveAttribute('href', '/personal-info');
 });
 
 // Test that uses fireEvent to check if the logout button is clickable and redirects to the login page by calling the logout function
