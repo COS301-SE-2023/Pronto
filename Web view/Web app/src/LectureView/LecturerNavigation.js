@@ -26,18 +26,18 @@ export default function LecturerNavigation() {
 
           <ul className="navbar-nav">
             
-            <li className="nav-item text-center"  data-testid={EditModuleInfo}>
-              <a href="/lecture-homepage" className="nav-link"  data-testid={EditModuleInfoLink}>
+            <li className="nav-item text-center"  data-testid={'EditModuleInfo'}>
+              <a href="/lecture-homepage" className="nav-link"  data-testid={'EditModuleInfoLink'}>
                 <b>Edit Module Information</b>
               </a>
             </li>
-            <li className="nav-item text-center"  data-testid={RecentAnnouncements}>
-              <a href="recent-announcement" className="nav-link"  data-testid={RecentAnnouncementsLink}>
+            <li className="nav-item text-center"  data-testid={'RecentAnnouncements'}>
+              <a href="recent-announcement" className="nav-link"  data-testid={'RecentAnnouncementsLink'}>
                 <b>Recent Announcements</b>
               </a>
             </li>
-            <li className="nav-item text-center"  data-testid={EditPersonalInfo}>
-              <a href="personal-info" className="nav-link"  data-testid={EditPersonalInfoLink}>
+            <li className="nav-item text-center"  data-testid={'EditPersonalInfo'}>
+              <a href="personal-info" className="nav-link"  data-testid={'EditPersonalInfoLink'}>
                 <b>Edit Personal Information</b>
               </a>
             </li>
