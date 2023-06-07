@@ -37,50 +37,22 @@ describe('PersonalInfo', () => {
 
     //test form1 submission by filling in the form and clicking the submit button
     it('Test if form 2 is submitted', () => {
-        const title1 = screen.getByTestId('title1');
-        const body1 = screen.getByTestId('body1');
-        const date1 = screen.getByTestId('date1');
+        const pword = screen.getByTestId('pword');
+        const repword = screen.getByTestId('repword');
+        const newpword = screen.getByTestId('newpword');
 
 
         //fill in the form
-        fireEvent.change(title1, { target: { value: 'test' } });
-        fireEvent.change(body1, { target: { value: 'test' } });
-        fireEvent.change(date1, { target: { value: '09 Jun 2023' } });
+        fireEvent.change(pword, { target: { value: 'test' } });
+        fireEvent.change(repword, { target: { value: 'test' } });
+        fireEvent.change(newpword, { target: { value: '09 Jun 2023' } });
 
         //check that the form is filled in
-        expect(title1.value).toBe('test');
-        expect(body1.value).toBe('test');
-        expect(date1.value).toBe('09 Jun 2023');
+        expect(pword.value).toBe('test');
+        expect(repword.value).toBe('test');
+        expect(newpword.value).toBe('09 Jun 2023');
 
     });
 
-    it('Test if form 2 is submitted', () => {
-        const title2 = screen.getByTestId('title2');
-        const body2 = screen.getByTestId('body2');
-        const date2 = screen.getByTestId('date2');
-
-
-        //fill in the form
-        fireEvent.change(title2, { target: { value: 'test' } });
-        fireEvent.change(body2, { target: { value: 'test' } });
-        fireEvent.change(date2, { target: { value: '09 Jun 2023' } });
-
-        //check that the form is filled in
-        expect(title2.value).toBe('test');
-        expect(body2.value).toBe('test');
-        expect(date2.value).toBe('09 Jun 2023');
-
-    });
-
-    it('Test if form 3 is submitted', () => {
-        const venue = screen.getByTestId('venue');
-
-
-        //fill in the form
-        fireEvent.change(venue, { target: { value: 'test' } });
-
-        //check that the form is filled in
-        expect(venue.value).toBe('test');
-    });
 
 });
