@@ -16,10 +16,15 @@ describe('RecentAnnouncement', () => {
         expect(navigation).toBeInTheDocument();
     });
 
-    //test if accordions render
-    it('Test if change password Accordion is rendered', () => {
-        const paccordion = screen.getByTestId('paccordion');
-        expect(paccordion).toBeInTheDocument();
+    //test if cards render
+    it('Test if card 1 is rendered', () => {
+        const card1 = screen.getByTestId('card1');
+        expect(card1).toBeInTheDocument();
+    });
+
+    it('Test if card 2 is rendered', () => {
+        const card2 = screen.getByTestId('card2');
+        expect(card2).toBeInTheDocument();
     });
 
 

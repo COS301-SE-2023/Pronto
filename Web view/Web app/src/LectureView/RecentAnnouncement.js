@@ -63,7 +63,7 @@ export default function RecentAnnouncement() {
 
   return (
     <div style={{ display: 'inline-flex' }}>
-      <nav style={{ width: '20%' }}>
+      <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
           {/* Navigation bar content */}
           <LecturerNavigation />
       </nav>
@@ -71,7 +71,7 @@ export default function RecentAnnouncement() {
         <main style={{ width: '900px',marginTop: '30px' }}>
             <h1 className="moduleHead">Recent Announcements</h1>
 
-            <div class="card">
+            <div class="card" data-testid="card1">
               <div class="card-header">
                 COS132
               </div>
@@ -114,7 +114,7 @@ export default function RecentAnnouncement() {
               </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-testid="card2">
               <div class="card-header">
                 COS341
               </div>

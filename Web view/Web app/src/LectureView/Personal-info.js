@@ -16,7 +16,7 @@ const PersonalInfoPage = () => {
 
     return (
       <div style={{ display: 'inline-flex' }}>
-        <nav style={{ width: '20%' }}>
+        <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
             {/* Navigation bar content */}
             <LecturerNavigation />
         </nav>
