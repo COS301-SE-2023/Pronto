@@ -7,6 +7,7 @@ describe('PostAccordion', () => {
     beforeEach(() => {
         render(<PostAccordion />);
     });
+    
 //create sets of tests for each testID
 
     //test if accordions render
@@ -39,12 +40,28 @@ describe('PostAccordion', () => {
         fireEvent.click(dropDown1);
     });
 
-    it('Test if drop down menu 1 is rendered', () => {
-        const dropDown1 = screen.getByTestId('accordionDrop1');
-        expect(dropDown1).toBeInTheDocument();
+    it('Test if drop down menu 2 is rendered', () => {
+        const dropDown2 = screen.getByTestId('accordionDrop2');
+        expect(dropDown2).toBeInTheDocument();
 
         //check that the dropdown menu is clickable
-        fireEvent.click(dropDown1);
+        fireEvent.click(dropDown2);
+    });
+
+    it('Test if drop down menu 3 is rendered', () => {
+        const dropDown3 = screen.getByTestId('accordionDrop3');
+        expect(dropDown3).toBeInTheDocument();
+
+        //check that the dropdown menu is clickable
+        fireEvent.click(dropDown3);
+    });
+
+    it('Test if drop down menu 4 is rendered', () => {
+        const dropDown4 = screen.getByTestId('accordionDrop4');
+        expect(dropDown4).toBeInTheDocument();
+
+        //check that the dropdown menu is clickable
+        fireEvent.click(dropDown4);
     });
 
 
