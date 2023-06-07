@@ -32,7 +32,7 @@ export default function PostAccordion() {
 
   return (
     <div>
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={accordion1}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}} />}
           aria-controls="panel1bh-content"
@@ -72,7 +72,7 @@ export default function PostAccordion() {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} data-testid={accordion2}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}}/>}
           aria-controls="panel2bh-content"
@@ -109,7 +109,7 @@ export default function PostAccordion() {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} data-testid={accordion3}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}}/>}
           aria-controls="panel3bh-content"
@@ -150,7 +150,7 @@ export default function PostAccordion() {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
+      <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')} data-testid={accordion4}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}}/>}
           aria-controls="panel4bh-content"
