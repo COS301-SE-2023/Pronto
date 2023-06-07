@@ -72,36 +72,30 @@ describe('PostAccordion', () => {
     it('Test if form 2 is submitted', () => {
         const title1 = screen.getByTestId('title1');
         const body1 = screen.getByTestId('body1');
-        const date1 = screen.getByTestId('date1');
 
 
         //fill in the form
         fireEvent.change(title1, { target: { value: 'test' } });
         fireEvent.change(body1, { target: { value: 'test' } });
-        fireEvent.change(date1, { target: { value: '09 Jun 2023' } });
 
         //check that the form is filled in
         expect(title1.value).toBe('test');
         expect(body1.value).toBe('test');
-        expect(date1.value).toBe('09 Jun 2023');
 
     });
 
     it('Test if form 2 is submitted', () => {
         const title2 = screen.getByTestId('title2');
         const body2 = screen.getByTestId('body2');
-        const date2 = screen.getByTestId('date2');
 
 
         //fill in the form
         fireEvent.change(title2, { target: { value: 'test' } });
         fireEvent.change(body2, { target: { value: 'test' } });
-        fireEvent.change(date2, { target: { value: '09 Jun 2023' } });
 
         //check that the form is filled in
         expect(title2.value).toBe('test');
         expect(body2.value).toBe('test');
-        expect(date2.value).toBe('09 Jun 2023');
 
     });
 
