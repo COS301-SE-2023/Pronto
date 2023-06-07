@@ -30,5 +30,22 @@ describe('PostAccordion', () => {
         expect(accordion4).toBeInTheDocument();
     });
 
+    //test the dropdowns
+    it('Test if drop down menu 1 is rendered', () => {
+        const dropDown1 = screen.getByTestId('accordionDrop1');
+        expect(dropDown1).toBeInTheDocument();
+
+        //check that the dropdown menu is clickable
+        fireEvent.click(dropDown1);
+    });
+
+    it('Test if drop down menu 1 is rendered', () => {
+        const dropDown1 = screen.getByTestId('accordionDrop1');
+        expect(dropDown1).toBeInTheDocument();
+
+        //check that the dropdown menu is clickable
+        fireEvent.click(dropDown1);
+    });
+
 
 });

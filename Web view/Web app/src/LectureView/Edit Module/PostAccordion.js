@@ -38,6 +38,7 @@ export default function PostAccordion() {
           aria-controls="panel1bh-content"
           id="panel1bh-header"
           style={{"width": "100%"}}
+          data-testid={accordionDrop1}
         >
           <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }} >
             Post reminder
@@ -77,6 +78,7 @@ export default function PostAccordion() {
           expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}}/>}
           aria-controls="panel2bh-content"
           id="panel2bh-header"
+          data-testid={accordionDrop2}
         >
           <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }}  >Post due assignment</Typography>
           
@@ -114,6 +116,7 @@ export default function PostAccordion() {
           expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}}/>}
           aria-controls="panel3bh-content"
           id="panel3bh-header"
+          data-testid={accordionDrop3}
         >
           <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }}  >Add lecture venue</Typography>
           
@@ -155,6 +158,7 @@ export default function PostAccordion() {
           expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}}/>}
           aria-controls="panel4bh-content"
           id="panel4bh-header"
+          data-testid={accordionDrop4}
         >
           <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }}  >Remove lecture venue</Typography>
           
