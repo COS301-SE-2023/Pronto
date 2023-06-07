@@ -45,12 +45,13 @@ const PersonalInfoPage = () => {
             </table>
 
             <div>
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}} />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
                 style={{"width": "100%"}}
+                data-testid={'paccordionDrop'}
                 >
                 <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }} >
                     Change Password
