@@ -16,7 +16,7 @@ describe('EditModule', () => {
     });
 
     it('Test if the accordion is rendered', () => {
-        const navigation = screen.getByTestId('editAccordion');
-        expect(navigation).toBeInTheDocument();
+        const accordion = screen.getByTestId('editAccordion');
+        expect(accordion).toBeInTheDocument();
     });
 });
