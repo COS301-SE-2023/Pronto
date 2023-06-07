@@ -13,7 +13,7 @@ const PostReminder = () => {
 
       <main style={{ width: '900px',marginTop: '30px' }}>
         <h1 className="moduleHead">COS341- Compiler Construction</h1>
-        <PostAccordion data-testid="editAccordion"/>
+        <PostAccordion data-testid={"editAccordion"}/>
       </main>
 
     </div>   

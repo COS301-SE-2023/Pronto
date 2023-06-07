@@ -11,7 +11,7 @@ describe('EditModule', () => {
 
     // Test if the navigation bar is rendered
     it('Test if the navigation bar is rendered', () => {
-        const navigation = screen.getByTestId('InstitutionNavigation');
+        const navigation = screen.getByTestId('LecturerNavigation');
         expect(navigation).toBeInTheDocument();
     });
 

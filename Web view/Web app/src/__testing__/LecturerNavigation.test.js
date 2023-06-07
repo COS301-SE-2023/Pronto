@@ -36,10 +36,10 @@ test('Test if the <a> tags have the correct href', () => {
     expect(editmoduleLink).toHaveAttribute('href', '/lecture-homepage');
 
     const announcementsLink = screen.getByTestId('RecentAnnouncementsLink');
-    expect(announcementsLink).toHaveAttribute('href', '/recent-announcement');
+    expect(announcementsLink).toHaveAttribute('href', 'recent-announcement');
 
     const personalLink = screen.getByTestId('EditPersonalInfoLink');
-    expect(personalLink).toHaveAttribute('href', '/personal-info');
+    expect(personalLink).toHaveAttribute('href', 'personal-info');
 });
 
 // Test that uses fireEvent to check if the logout button is clickable and redirects to the login page by calling the logout function

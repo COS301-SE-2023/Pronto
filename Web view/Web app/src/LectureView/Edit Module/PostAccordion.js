@@ -126,7 +126,7 @@ export default function PostAccordion() {
           <div class="form-group row">
             <label for="colFormLabel" class="col-sm-2 col-form-label">Venue: </label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="colFormLabel" required></input>
+              <input type="text" class="form-control" id="colFormLabel" data-testid="venue" required></input>
             </div>
           </div>
 
