@@ -6,11 +6,19 @@ import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+  //sign in states
   const [signIn, toggle] = React.useState(true);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
+
+  //sign up states
+  const [name, setName] = React.useState("");
+  const [surname, setSurname] = React.useState("");
+  const [signUpPassword, setSignUpPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -37,9 +45,20 @@ function Login() {
     event.preventDefault();
     try {
       // const response = await Auth.signIn(email, password);
-      // setsignUpError("");
+      const response = await Auth.signUp({
+        username: email,
+        password: signUpPassword,
+        attributes: {
+          email: email,
+          name: name,
+          family_name: surname,
+          address: "",
+        },
+      });
+      setsignUpError("");
+      navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
-      //  setsignUpError(e.message);
+      setsignUpError(e.message);
     }
   };
 
@@ -54,14 +73,39 @@ function Login() {
           >
             Create Lecturer Account
           </Title>
-          <Input type="text" placeholder="Name" />
-          <Input type="text" placeholder="Surname" />
-          <Input type="email" placeholder="Email" />
-          <Input type="password" placeholder="Password" />
-          <Input type="password" placeholder="Confirm Password" />
+          <Input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Surname"
+            value={surname}
+            onChange={(event) => setSurname(event.target.value)}
+          />
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={signUpPassword}
+            onChange={(event) => setSignUpPassword(event.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+          />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
-          <Button>Sign Up</Button>
+          <Button onClick={onSignUpPressed}>Sign Up</Button>
         </Form>
       </SignUpContainer>
       <SignInContainer signin={signIn}>

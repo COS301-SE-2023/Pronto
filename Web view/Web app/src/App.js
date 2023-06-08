@@ -3,6 +3,7 @@ import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
 import LectureHomePage from "./LectureView/Edit Module/LectureHomePage";
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
+import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
 import InstitutionLogin from "./Authentication/Institution/Login";
 import InstitutionForgotPassword from "./Authentication/Institution/ForgotPassword";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -24,6 +25,10 @@ const Home = () => {
         <Routes>
           {/*Lecturer pages routing*/}
           <Route path="/lecturer-login" element={<LecturerLogin />} />
+          <Route
+            path="/lecturer-confirm-email"
+            element={<LecturerConfirmEmail />}
+          />
           <Route
             path="/lecturer-forgot-password"
             element={<LecturerForgotPassword />}

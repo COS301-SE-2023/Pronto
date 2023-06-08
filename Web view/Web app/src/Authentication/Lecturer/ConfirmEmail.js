@@ -2,138 +2,57 @@ import React from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { Route, useRoutes } from "react-router-dom";
 
-function ForgotPassword() {
+function ConfirmEmail() {
   const [email, setEmail] = React.useState("");
   const [code, setCode] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [step, setStep] = React.useState(1);
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  const route = useRoutes();
+  setEmail(route.location.state.email);
 
-  const handleCodeChange = (e) => {
-    setCode(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
-  };
-
-  const handleGetCode = () => {
-    // TODO: Implement code retrieval functionality
-    // You can add your code here to send a verification code to the provided email
-    // Once the code is sent, you can proceed to the next step by calling `setStep(2)`
-    setStep(2);
-  };
-
-  const handleVerifyCode = () => {
-    // TODO: Implement code verification functionality
-    // You can add your code here to verify the entered code
-    // Once the code is verified, you can proceed to the next step by calling `setStep(3)`
-    setStep(3);
-  };
-
-  const handleResetPassword = () => {
-    // TODO: Implement password reset functionality
-    // You can add your code here to reset the password
-    // Once the password is reset, you can redirect the user to another page
-    // or perform any other necessary actions
-    console.log("Password reset successful!");
+  const onVerifyPressed = async (event) => {
+    event.preventDefault();
+    try {
+      
+      setsignUpError("");
+      navigate("/lecturer-confirm-email", { state: { email: email } });
+    } catch (e) {
+      setsignUpError(e.message);
+    }
   };
 
   return (
     <Container>
-      {step === 1 && (
-        <Form>
-          <LogoContainer>
-            <img
-              src={ProntoLogo}
-              alt="Logo"
-              style={{
-                width: "50%",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </LogoContainer>
-          <Subtitle>Forgot Password</Subtitle>
-
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={handleEmailChange}
+      <Form>
+        <LogoContainer>
+          <img
+            src={ProntoLogo}
+            alt="Logo"
+            style={{
+              width: "50%",
+              height: "auto",
+              objectFit: "cover",
+            }}
           />
+        </LogoContainer>
+        <Subtitle>Confirm account</Subtitle>
+        <Subtitle
+          style={{
+            fontSize: "1.1rem",
+          }}
+        >
+          Please enter the code sent to your email to verify your account
+        </Subtitle>
+        <Input
+          type="text"
+          placeholder="Verification Code"
+          value={code}
+          onChange={setCode}
+        />
 
-          <Button onClick={handleGetCode}>Get Code</Button>
-        </Form>
-      )}
-
-      {step === 2 && (
-        <Form>
-          <LogoContainer>
-            <img
-              src={ProntoLogo}
-              alt="Logo"
-              style={{
-                width: "50%",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </LogoContainer>
-          <Subtitle>Verify Code</Subtitle>
-
-          <Input
-            type="text"
-            placeholder="Verification Code"
-            value={code}
-            onChange={handleCodeChange}
-          />
-
-          <Button onClick={handleVerifyCode}>Verify Code</Button>
-        </Form>
-      )}
-
-      {step === 3 && (
-        <Form>
-          <LogoContainer>
-            <img
-              src={ProntoLogo}
-              alt="Logo"
-              style={{
-                width: "50%",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </LogoContainer>
-          <Subtitle>Reset Password</Subtitle>
-
-          <Input
-            type="password"
-            placeholder="New Password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
-
-          <Button onClick={handleResetPassword}>Reset Password</Button>
-        </Form>
-      )}
+        <Button>Verify Code</Button>
+      </Form>
     </Container>
   );
 }
@@ -323,10 +242,4 @@ const Paragraph = styled.p`
   margin: 20px 0 30px;
 `;
 
-const ErrorText = styled.p`
-  font-size: 12px;
-  color: red;
-  margin-top: 5px;
-`;
-
-export default ForgotPassword;
+export default ConfirmEmail;
