@@ -3,19 +3,43 @@ import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [signIn, toggle] = React.useState(true);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [error, setError] = useState("");
+  const [signInError, setsignInError] = useState("");
+  const [signUpError, setsignUpError] = useState("");
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
 
   const onSignInPressed = async (event) => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
     event.preventDefault();
     try {
       const response = await Auth.signIn(email, password);
+      setsignInError("");
+      //navigate to lecturer home page
+      navigate("/lecture-homepage");
     } catch (e) {
-      setError(e.message);
+      setsignInError(e.message);
+    }
+    setLoading(false);
+  };
+
+  const onSignUpPressed = async (event) => {
+    event.preventDefault();
+    try {
+      // const response = await Auth.signIn(email, password);
+      // setsignUpError("");
+    } catch (e) {
+      //  setsignUpError(e.message);
     }
   };
 
@@ -35,6 +59,8 @@ function Login() {
           <Input type="email" placeholder="Email" />
           <Input type="password" placeholder="Password" />
           <Input type="password" placeholder="Confirm Password" />
+          {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
           <Button>Sign Up</Button>
         </Form>
       </SignUpContainer>
@@ -65,11 +91,13 @@ function Login() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <Button onClick={onSignInPressed}>Sign In</Button>
+          <Button onClick={onSignInPressed}>
+            {loading ? "Signing in..." : "Sign in"}
+          </Button>
           <Anchor href="/lecturer-forgot-password">
             Forgot your password?
           </Anchor>
-          {error && <ErrorText>{error}</ErrorText>}{" "}
+          {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
         </Form>
       </SignInContainer>
