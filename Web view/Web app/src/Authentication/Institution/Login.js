@@ -1,10 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { Auth } from "aws-amplify";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [signIn, toggle] = React.useState(true);
+
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [signInError, setsignInError] = useState("");
+  const [signUpError, setsignUpError] = useState("");
+
+  //sign up states
+  const [name, setName] = React.useState("");
+
+  const [signUpPassword, setSignUpPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+
+  const onSignInPressed = async (event) => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+    event.preventDefault();
+    try {
+      await Auth.signIn(email, password);
+      setsignInError("");
+      //navigate to lecturer home page
+      navigate("/institution-homepage");
+    } catch (e) {
+      setsignInError(e.message);
+    }
+    setLoading(false);
+  };
+
   return (
     <Container>
       <SignUpContainer signin={signIn}>
@@ -16,10 +52,30 @@ function Login() {
           >
             Create Institution Account
           </Title>
-          <Input type="text" placeholder="University Name" />
-          <Input type="email" placeholder="Adminsitration Email" />
-          <Input type="password" placeholder="Password" />
-          <Input type="password" placeholder="Confirm Password" />
+          <Input
+            type="text"
+            placeholder="University Name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+          <Input
+            type="email"
+            placeholder="Adminsitration Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={signUpPassword}
+            onChange={(event) => setSignUpPassword(event.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+          />
           <Button>Apply</Button>
         </Form>
       </SignUpContainer>
@@ -37,14 +93,26 @@ function Login() {
             />
           </LogoContainer>
           <Subtitle>Institution Login</Subtitle>
-
-          <Input type="email" placeholder="Email" />
-          <Input type="password" placeholder="Password" />
-
-          <Button>Sign In</Button>
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <Button onClick={onSignInPressed}>
+            {" "}
+            {loading ? "Signing in..." : "Sign in"}
+          </Button>
           <Anchor href="/institution-forgot-password">
             Forgot your password?
           </Anchor>
+          {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
         </Form>
       </SignInContainer>
       <OverlayContainer signin={signIn}>
@@ -247,6 +315,12 @@ const Paragraph = styled.p`
   line-height: 20px;
   letter-spacing: 0.5px;
   margin: 20px 0 30px;
+`;
+
+const ErrorText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
 `;
 
 export default Login;
