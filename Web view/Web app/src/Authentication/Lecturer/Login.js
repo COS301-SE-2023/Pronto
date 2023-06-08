@@ -43,6 +43,17 @@ function Login() {
 
   const onSignUpPressed = async (event) => {
     event.preventDefault();
+    if (confirmPassword !== signUpPassword) {
+      setsignUpError("Passwords do not match");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+
     try {
       // const response = await Auth.signIn(email, password);
       await Auth.signUp({
@@ -63,6 +74,7 @@ function Login() {
     } catch (e) {
       setsignUpError(e.message);
     }
+    setLoading(false);
   };
 
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -207,7 +219,9 @@ function Login() {
           />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
-          <Button onClick={onSignUpPressed}>Sign Up</Button>
+          <Button onClick={onSignUpPressed}>
+            {loading ? "Signing up..." : "Sign up"}
+          </Button>
           <div
             style={{
               display: "flex",

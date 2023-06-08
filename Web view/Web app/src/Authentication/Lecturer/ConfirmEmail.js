@@ -11,10 +11,16 @@ function ConfirmEmail() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   let email = location.state.email;
 
   const onVerifyPressed = async (event) => {
     event.preventDefault();
+    if (loading) {
+      return;
+    }
+    setLoading(true);
     try {
       await Auth.confirmSignUp(email, code);
       setError("");
@@ -22,6 +28,7 @@ function ConfirmEmail() {
     } catch (e) {
       setError(e.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -54,7 +61,9 @@ function ConfirmEmail() {
         />
         {error && <ErrorText>{error}</ErrorText>}
 
-        <Button onClick={onVerifyPressed}>Verify Code</Button>
+        <Button onClick={onVerifyPressed}>
+          {loading ? "Verifying..." : "Verify Code"}
+        </Button>
       </Form>
     </Container>
   );
