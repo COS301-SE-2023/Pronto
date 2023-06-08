@@ -65,6 +65,14 @@ function Login() {
     }
   };
 
+  const [emailIsValid, setEmailIsValid] = useState(false);
+
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = regex.test(value);
+    setEmailIsValid(isValid);
+  };
+
   return (
     <Container>
       <SignUpContainer signin={signIn}>
@@ -92,7 +100,11 @@ function Login() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              validateEmail(event.target.value);
+            }}
+            isValid={emailIsValid}
           />
           <Input
             type="password"
@@ -130,7 +142,11 @@ function Login() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              validateEmail(event.target.value);
+            }}
+            isValid={emailIsValid}
           />
           <Input
             type="password"
@@ -246,11 +262,12 @@ const Title = styled.h1`
 
 const Input = styled.input`
   background-color: #eee;
-  border: 0;
   border-radius: 25px;
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
+  ${(props) =>
+    props.isValid == true ? `border: 2px solid green` : `border: 2px solid red`}
 `;
 
 const Button = styled.button`
