@@ -22,15 +22,15 @@ Amplify.configure(config);
 const Home = () => {
   //use this part to see if user is logged in or out and then determine what pages they can access
   //begin
-  const [user, setUser] = useState(undefined);
-  const checkUser = async () => {
-    const authUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
-    setUser(authUser);
-  };
+  // const [user, setUser] = useState(undefined);
+  // const checkUser = async () => {
+  //   const authUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
+  //  setUser(authUser);
+  // };
 
-  useEffect(() => {
-    checkUser();
-  }, []);
+  //useEffect(() => {
+  //   checkUser();
+  // }, []);
 
   //end
 
