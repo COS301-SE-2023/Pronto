@@ -1,24 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import { Route, useRoutes } from "react-router-dom";
+import { Auth } from "aws-amplify";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ConfirmEmail() {
-  const [email, setEmail] = React.useState("");
   const [code, setCode] = React.useState("");
+  const [error, setError] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const route = useRoutes();
-  setEmail(route.location.state.email);
+  let email = location.state.email;
 
   const onVerifyPressed = async (event) => {
     event.preventDefault();
     try {
-      
-      setsignUpError("");
-      navigate("/lecturer-confirm-email", { state: { email: email } });
+      await Auth.confirmSignUp(email, code);
+      setError("");
+      navigate("/lecturer-login");
     } catch (e) {
-      setsignUpError(e.message);
+      setError(e.message);
     }
   };
 
@@ -48,10 +50,11 @@ function ConfirmEmail() {
           type="text"
           placeholder="Verification Code"
           value={code}
-          onChange={setCode}
+          onChange={(event) => setCode(event.target.value)}
         />
+        {error && <ErrorText>{error}</ErrorText>}
 
-        <Button>Verify Code</Button>
+        <Button onClick={onVerifyPressed}>Verify Code</Button>
       </Form>
     </Container>
   );
@@ -240,6 +243,12 @@ const Paragraph = styled.p`
   line-height: 20px;
   letter-spacing: 0.5px;
   margin: 20px 0 30px;
+`;
+
+const ErrorText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
 `;
 
 export default ConfirmEmail;

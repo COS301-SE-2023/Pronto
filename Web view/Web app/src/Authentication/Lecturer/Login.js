@@ -5,6 +5,7 @@ import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 
+
 function Login() {
   //sign in states
   const [signIn, toggle] = React.useState(true);
@@ -53,6 +54,9 @@ function Login() {
           name: name,
           family_name: surname,
           address: "",
+        },
+        clientMetadata: {
+          role: "Lecture",
         },
       });
       setsignUpError("");
