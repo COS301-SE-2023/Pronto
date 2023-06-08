@@ -119,6 +119,29 @@ function Login() {
     setPasswordSignInIsValid(isValidSignInPassword);
   };
 
+  //validate name and surname for sign up
+  const [nameIsValid, setNameIsValid] = useState(false);
+  const [surnameIsValid, setSurnameIsValid] = useState(false);
+
+  const validateName = (value) => {
+    const regex = /[a-zA-Z]+/;
+    const isValidName = regex.test(value);
+    setNameIsValid(isValidName);
+  };
+
+  const validateSurname = (value) => {
+    const regex = /[a-zA-Z]+/;
+    const isValidSurname = regex.test(value);
+    setSurnameIsValid(isValidSurname);
+  };
+
+  //validating confirm password
+  const [passwordMatch, setPasswordMatch] = useState(false);
+
+  const validateConfirmPassword = (value) => {
+    setPasswordMatch(value === signUpPassword);
+  };
+
   return (
     <Container>
       <SignUpContainer signin={signIn}>
@@ -134,13 +157,21 @@ function Login() {
             type="text"
             placeholder="Name"
             value={name}
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => {
+              setName(event.target.value);
+              validateName(event.target.value);
+            }}
+            isValidName={nameIsValid}
           />
           <Input
             type="text"
             placeholder="Surname"
             value={surname}
-            onChange={(event) => setSurname(event.target.value)}
+            onChange={(event) => {
+              setSurname(event.target.value);
+              validateSurname(event.target.value);
+            }}
+            isValidSurname={surnameIsValid}
           />
           <Input
             type="email"
@@ -168,7 +199,11 @@ function Login() {
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
+            onChange={(event) => {
+              setConfirmPassword(event.target.value);
+              validateConfirmPassword(event.target.value);
+            }}
+            passwordMatch={passwordMatch}
           />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
@@ -352,7 +387,12 @@ const Input = styled.input`
   width: 100%;
   &:focus {
     ${(props) =>
-      props.isValidEmail || props.isValidPassword || props.isValidSignInPassword
+      props.isValidEmail ||
+      props.isValidPassword ||
+      props.isValidSignInPassword ||
+      props.isValidName ||
+      props.isValidSurname ||
+      props.passwordMatch // Add the condition here
         ? `border: 2px solid green;`
         : `border: 1px solid #e32f45;`}
   }
