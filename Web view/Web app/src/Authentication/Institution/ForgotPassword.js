@@ -2,13 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { useNavigate } from "react-router-dom";
+import { Auth } from "aws-amplify";
 
 function ForgotPassword() {
   const [email, setEmail] = React.useState("");
   const [code, setCode] = React.useState("");
+  const [error, setError] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [step, setStep] = React.useState(1);
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -26,26 +30,30 @@ function ForgotPassword() {
     setConfirmPassword(e.target.value);
   };
 
-  const handleGetCode = () => {
-    // TODO: Implement code retrieval functionality
-    // You can add your code here to send a verification code to the provided email
-    // Once the code is sent, you can proceed to the next step by calling `setStep(2)`
-    setStep(2);
+  const handleGetCode = async (e) => {
+    try {
+      e.preventDefault();
+      await Auth.forgotPassword(email);
+      setStep(2);
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
-  const handleVerifyCode = () => {
-    // TODO: Implement code verification functionality
-    // You can add your code here to verify the entered code
-    // Once the code is verified, you can proceed to the next step by calling `setStep(3)`
-    setStep(3);
+  const handleVerifyCode = async (e) => {
+    try {
+      e.preventDefault();
+      await Auth.forgotPasswordSubmit(email, code, password);
+      setStep(3);
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleResetPassword = () => {
-    // TODO: Implement password reset functionality
-    // You can add your code here to reset the password
-    // Once the password is reset, you can redirect the user to another page
-    // or perform any other necessary actions
-    console.log("Password reset successful!");
+    navigate("/lecturer-login");
   };
 
   return (
@@ -64,14 +72,14 @@ function ForgotPassword() {
             />
           </LogoContainer>
           <Subtitle>Forgot Password</Subtitle>
-
           <Input
             type="email"
             placeholder="Email"
             value={email}
             onChange={handleEmailChange}
           />
-
+          {error && <ErrorText>{error}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
           <Button onClick={handleGetCode}>Get Code</Button>
         </Form>
       )}
@@ -90,14 +98,26 @@ function ForgotPassword() {
             />
           </LogoContainer>
           <Subtitle>Verify Code</Subtitle>
-
           <Input
             type="text"
             placeholder="Verification Code"
             value={code}
             onChange={handleCodeChange}
           />
-
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+          />
+          {error && <ErrorText>{error}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
           <Button onClick={handleVerifyCode}>Verify Code</Button>
         </Form>
       )}
@@ -115,23 +135,9 @@ function ForgotPassword() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Reset Password</Subtitle>
+          <Subtitle>Your password has been succesfully reset</Subtitle>
 
-          <Input
-            type="password"
-            placeholder="New Password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
-
-          <Button onClick={handleResetPassword}>Reset Password</Button>
+          <Button onClick={handleResetPassword}>Go to login</Button>
         </Form>
       )}
     </Container>
@@ -157,25 +163,6 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const SignUpContainer = styled.div`
-  position: absolute;
-  top: 0;
-  height: 100%;
-  transition: all 0.5s ease-in-out;
-  left: 0;
-  width: 50%;
-  opacity: 0;
-  z-index: 1;
-  ${(props) =>
-    props.signin !== true
-      ? `
-    transform: translateX(100%);
-    opacity: 1;
-    z-index: 5;
-  `
-      : null}
-`;
-
 const Subtitle = styled.p`
   font-size: 30px;
   font-weight: bold;
@@ -192,17 +179,6 @@ const LogoContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const SignInContainer = styled.div`
-  position: absolute;
-  top: 0;
-  height: 100%;
-  transition: all 0.5s ease-in-out;
-  left: 0;
-  width: 50%;
-  z-index: 2;
-  ${(props) => (props.signin !== true ? `transform: translateX(100%);` : null)}
-`;
-
 const Form = styled.form`
   background-color: white;
   display: flex;
@@ -212,11 +188,6 @@ const Form = styled.form`
   padding: 0 50px;
   height: 100%;
   text-align: center;
-`;
-
-const Title = styled.h1`
-  font-weight: bold;
-  margin: 0;
 `;
 
 const Input = styled.input`
@@ -248,79 +219,10 @@ const Button = styled.button`
   }
 `;
 
-const GhostButton = styled(Button)`
-  background-color: transparent;
-  border-color: #ffffff;
-`;
-
-const Anchor = styled.a`
-  color: #333;
-  font-size: 14px;
-  text-decoration: none;
-  margin: 15px 0;
-`;
-
-const OverlayContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  transition: transform 0.5s ease-in-out;
-  z-index: 100;
-  ${(props) => (props.signin !== true ? `transform: translateX(-100%);` : null)}
-`;
-
-const Overlay = styled.div`
-  background: #e32f45;
-  background: -webkit-linear-gradient(to right, #e32f45, #e32f45);
-  background: linear-gradient(to right, #e32f45, #e32f45);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 0 0;
-  color: #ffffff;
-  position: relative;
-  left: -100%;
-  height: 100%;
-  width: 200%;
-  transform: translateX(0);
-  transition: transform 0.5s ease-in-out;
-  ${(props) => (props.signin !== true ? `transform: translateX(50%);` : null)}
-`;
-
-const OverlayPanel = styled.div`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 40px;
-  text-align: center;
-  top: 0;
-  height: 100%;
-  width: 50%;
-  transform: translateX(0);
-  transition: transform 0.5s ease-in-out;
-`;
-
-const LeftOverlayPanel = styled(OverlayPanel)`
-  transform: translateX(-20%);
-  ${(props) => (props.signin !== true ? `transform: translateX(0);` : null)}
-`;
-
-const RightOverlayPanel = styled(OverlayPanel)`
-  right: 0;
-  transform: translateX(0);
-  ${(props) => (props.signin !== true ? `transform: translateX(20%);` : null)}
-`;
-
-const Paragraph = styled.p`
-  font-size: 14px;
-  font-weight: 100;
-  line-height: 20px;
-  letter-spacing: 0.5px;
-  margin: 20px 0 30px;
+const ErrorText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
 `;
 
 export default ForgotPassword;
