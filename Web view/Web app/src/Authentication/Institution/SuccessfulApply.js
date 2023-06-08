@@ -19,10 +19,14 @@ function SuccessfulApply() {
           />
         </LogoContainer>
         <Subtitle>Succesfully applied</Subtitle>
-        <Subtitle>
+        <Subtitle
+          style={{
+            fontSize: "1.1rem",
+          }}
+        >
           You have succesfully applied for an institution account! We will
           review your application and contact you after your application has
-          been reviewed
+          been reviewed.
         </Subtitle>
       </Form>
     </Container>

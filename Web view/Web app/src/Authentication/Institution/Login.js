@@ -60,7 +60,7 @@ function Login() {
         },
       });
       setsignUpError("");
-      navigate("/institution-confirm-email");
+      navigate("/institution-confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message);
     }

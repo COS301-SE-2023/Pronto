@@ -9,6 +9,7 @@ import InstitutionForgotPassword from "./Authentication/Institution/ForgotPasswo
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
+import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
@@ -56,6 +57,10 @@ const Home = () => {
 
           {/*Institution pages routing*/}
           <Route path="/institution-login" element={<InstitutionLogin />} />
+          <Route
+            path="/institution-confirm-email"
+            element={<InstitutionConfirmEmail />}
+          />
           <Route
             path="/institution-successful-apply"
             element={<InstitutionSuccessfulApply />}
