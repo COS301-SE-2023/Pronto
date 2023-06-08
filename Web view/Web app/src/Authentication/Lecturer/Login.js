@@ -34,7 +34,7 @@ function Login() {
       await Auth.signIn(email, password);
       setsignInError("");
       //navigate to lecturer home page
-      navigate("/lecture-homepage");
+      //  navigate("/lecture-homepage");
     } catch (e) {
       setsignInError(e.message);
     }

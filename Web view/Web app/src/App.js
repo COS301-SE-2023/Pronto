@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
 import LectureHomePage from "./LectureView/Edit Module/LectureHomePage";
 import LecturerLogin from "./Authentication/Lecturer/Login";
@@ -15,10 +15,25 @@ import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify } from "aws-amplify";
 import config from "./aws-exports";
+import { Auth } from "aws-amplify";
 
 Amplify.configure(config);
 
 const Home = () => {
+  //use this part to see if user is logged in or out and then determine what pages they can access
+  //begin
+  const [user, setUser] = useState(undefined);
+  const checkUser = async () => {
+    const authUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
+    setUser(authUser);
+  };
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  //end
+
   return (
     <div>
       <Router>
