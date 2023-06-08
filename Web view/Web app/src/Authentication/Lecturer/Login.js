@@ -5,7 +5,6 @@ import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 
-
 function Login() {
   //sign in states
   const [signIn, toggle] = React.useState(true);
@@ -32,7 +31,7 @@ function Login() {
     setLoading(true);
     event.preventDefault();
     try {
-      const response = await Auth.signIn(email, password);
+      await Auth.signIn(email, password);
       setsignInError("");
       //navigate to lecturer home page
       navigate("/lecture-homepage");
@@ -46,7 +45,7 @@ function Login() {
     event.preventDefault();
     try {
       // const response = await Auth.signIn(email, password);
-      const response = await Auth.signUp({
+      await Auth.signUp({
         username: email,
         password: signUpPassword,
         attributes: {

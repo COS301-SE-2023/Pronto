@@ -2,13 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { useNavigate } from "react-router-dom";
+import { Auth } from "aws-amplify";
 
 function ForgotPassword() {
   const [email, setEmail] = React.useState("");
   const [code, setCode] = React.useState("");
+  const [error, setError] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [step, setStep] = React.useState(1);
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -26,26 +30,30 @@ function ForgotPassword() {
     setConfirmPassword(e.target.value);
   };
 
-  const handleGetCode = () => {
-    // TODO: Implement code retrieval functionality
-    // You can add your code here to send a verification code to the provided email
-    // Once the code is sent, you can proceed to the next step by calling `setStep(2)`
-    setStep(2);
+  const handleGetCode = async (e) => {
+    try {
+      e.preventDefault();
+      await Auth.forgotPassword(email);
+      setStep(2);
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
-  const handleVerifyCode = () => {
-    // TODO: Implement code verification functionality
-    // You can add your code here to verify the entered code
-    // Once the code is verified, you can proceed to the next step by calling `setStep(3)`
-    setStep(3);
+  const handleVerifyCode = async (e) => {
+    try {
+      e.preventDefault();
+      await Auth.forgotPasswordSubmit(email, code, password);
+      setStep(3);
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleResetPassword = () => {
-    // TODO: Implement password reset functionality
-    // You can add your code here to reset the password
-    // Once the password is reset, you can redirect the user to another page
-    // or perform any other necessary actions
-    console.log("Password reset successful!");
+    navigate("/lecturer-login");
   };
 
   return (
@@ -64,14 +72,14 @@ function ForgotPassword() {
             />
           </LogoContainer>
           <Subtitle>Forgot Password</Subtitle>
-
           <Input
             type="email"
             placeholder="Email"
             value={email}
             onChange={handleEmailChange}
           />
-
+          {error && <ErrorText>{error}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
           <Button onClick={handleGetCode}>Get Code</Button>
         </Form>
       )}
@@ -90,14 +98,26 @@ function ForgotPassword() {
             />
           </LogoContainer>
           <Subtitle>Verify Code</Subtitle>
-
           <Input
             type="text"
             placeholder="Verification Code"
             value={code}
             onChange={handleCodeChange}
           />
-
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+          />
+          {error && <ErrorText>{error}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
           <Button onClick={handleVerifyCode}>Verify Code</Button>
         </Form>
       )}
@@ -115,23 +135,9 @@ function ForgotPassword() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Reset Password</Subtitle>
+          <Subtitle>Your password has been succesfully reset</Subtitle>
 
-          <Input
-            type="password"
-            placeholder="New Password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
-
-          <Button onClick={handleResetPassword}>Reset Password</Button>
+          <Button onClick={handleResetPassword}>Go to login</Button>
         </Form>
       )}
     </Container>
@@ -211,6 +217,12 @@ const Button = styled.button`
   &:focus {
     outline: none;
   }
+`;
+
+const ErrorText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
 `;
 
 export default ForgotPassword;
