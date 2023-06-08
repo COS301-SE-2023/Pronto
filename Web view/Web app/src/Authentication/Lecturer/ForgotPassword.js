@@ -210,6 +210,7 @@ function ForgotPassword() {
             style={{
               display: "flex",
               flexDirection: "column",
+              marginBottom: "1rem",
             }}
           >
             {passwordIsFocused && (
