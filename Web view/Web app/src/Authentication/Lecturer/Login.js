@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { Auth } from "aws-amplify";
 
 function Login() {
   const [signIn, toggle] = React.useState(true);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = useState("");
+
+  const onSignInPressed = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await Auth.signIn(email, password);
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
   return (
     <Container>
       <SignUpContainer signin={signIn}>
@@ -38,14 +52,25 @@ function Login() {
             />
           </LogoContainer>
           <Subtitle>Lecturer Login</Subtitle>
-
-          <Input type="email" placeholder="Email" />
-          <Input type="password" placeholder="Password" />
-
-          <Button>Sign In</Button>
+          {/* input fields for lecturers login*/}
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <Button onClick={onSignInPressed}>Sign In</Button>
           <Anchor href="/lecturer-forgot-password">
             Forgot your password?
           </Anchor>
+          {error && <ErrorText>{error}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
         </Form>
       </SignInContainer>
       <OverlayContainer signin={signIn}>
@@ -246,6 +271,12 @@ const Paragraph = styled.p`
   line-height: 20px;
   letter-spacing: 0.5px;
   margin: 20px 0 30px;
+`;
+
+const ErrorText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
 `;
 
 export default Login;

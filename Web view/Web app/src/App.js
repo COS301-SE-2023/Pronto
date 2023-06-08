@@ -12,6 +12,10 @@ import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
+import { Amplify } from "aws-amplify";
+import config from "./aws-exports";
+
+Amplify.configure(config);
 
 const Home = () => {
   return (
