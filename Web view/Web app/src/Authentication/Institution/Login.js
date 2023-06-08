@@ -60,7 +60,7 @@ function Login() {
         },
       });
       setsignUpError("");
-      navigate("/institution-success-apply");
+      navigate("/institution-confirm-email");
     } catch (e) {
       setsignUpError(e.message);
     }
