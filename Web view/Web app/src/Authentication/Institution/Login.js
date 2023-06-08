@@ -23,6 +23,7 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
 
+  //function for signing in
   const onSignInPressed = async (event) => {
     if (loading) {
       return;
@@ -39,6 +40,30 @@ function Login() {
       setsignInError(e.message);
     }
     setLoading(false);
+  };
+
+  //function for sign up
+  const onSignUpPressed = async (event) => {
+    event.preventDefault();
+    try {
+      await Auth.signUp({
+        username: email,
+        password: signUpPassword,
+        attributes: {
+          email: email,
+          name: name,
+          family_name: "",
+          address: "",
+        },
+        clientMetadata: {
+          role: "Admin",
+        },
+      });
+      setsignUpError("");
+      navigate("/institution-success-apply");
+    } catch (e) {
+      setsignUpError(e.message);
+    }
   };
 
   return (
@@ -76,7 +101,8 @@ function Login() {
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
-          <Button>Apply</Button>
+          {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
+          <Button onClick={onSignUpPressed}>Apply</Button>
         </Form>
       </SignUpContainer>
       <SignInContainer signin={signIn}>
