@@ -15,3 +15,7 @@ body {
   height: 100vh;
   margin: -20px 0 50px;
 }
+
+*:focus {
+  outline: none;
+}

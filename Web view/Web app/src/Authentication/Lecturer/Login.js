@@ -69,8 +69,16 @@ function Login() {
 
   const validateEmail = (value) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = regex.test(value);
-    setEmailIsValid(isValid);
+    const isValidEmail = regex.test(value);
+    setEmailIsValid(isValidEmail);
+  };
+
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
+  const validatePassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidPassword = regex.test(value);
+    setPasswordIsValid(isValidPassword);
   };
 
   return (
@@ -104,7 +112,7 @@ function Login() {
               setEmail(event.target.value);
               validateEmail(event.target.value);
             }}
-            isValid={emailIsValid}
+            isValidEmail={emailIsValid}
           />
           <Input
             type="password"
@@ -146,13 +154,17 @@ function Login() {
               setEmail(event.target.value);
               validateEmail(event.target.value);
             }}
-            isValid={emailIsValid}
+            isValidEmail={emailIsValid}
           />
           <Input
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              validatePassword(event.target.value);
+            }}
+            isValidPassword={passwordIsValid}
           />
           <Button onClick={onSignInPressed}>
             {loading ? "Signing in..." : "Sign in"}
@@ -262,12 +274,17 @@ const Title = styled.h1`
 
 const Input = styled.input`
   background-color: #eee;
+  border: none;
   border-radius: 25px;
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
-  ${(props) =>
-    props.isValid == true ? `border: 2px solid green` : `border: 2px solid red`}
+  &:focus {
+    ${(props) =>
+      props.isValidEmail || props.isValidPassword
+        ? `border: 2px solid green;`
+        : `border: 1px solid #e32f45;`}
+  }
 `;
 
 const Button = styled.button`
