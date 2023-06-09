@@ -51,7 +51,12 @@ function Login() {
       return;
     }
 
-    event.preventDefault();
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+
     try {
       await Auth.signUp({
         username: email,
@@ -71,6 +76,7 @@ function Login() {
     } catch (e) {
       setsignUpError(e.message);
     }
+    setLoading(false);
   };
 
   //validate email input for sign in and sign up
@@ -198,7 +204,9 @@ function Login() {
             passwordMatch={passwordMatch}
           />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
-          <Button onClick={onSignUpPressed}>Apply</Button>
+          <Button onClick={onSignUpPressed}>
+            {loading ? "Applying..." : "Apply"}
+          </Button>
           <div
             style={{
               display: "flex",

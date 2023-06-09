@@ -2,8 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { useNavigate } from "react-router-dom";
 
 function SuccessfulApply() {
+  const navigate = useNavigate();
+  const onHomeClick = () => {
+    navigate("/institution-login");
+  };
+
   return (
     <Container>
       <Form>
@@ -28,6 +34,8 @@ function SuccessfulApply() {
           review your application and contact you after your application has
           been reviewed.
         </Subtitle>
+
+        <Button onClick={onHomeClick}>Back to home</Button>
       </Form>
     </Container>
   );
@@ -77,6 +85,26 @@ const Form = styled.form`
   padding: 0 50px;
   height: 100%;
   text-align: center;
+`;
+
+const Button = styled.button`
+  border-radius: 20px;
+  border: 1px solid #e32f45;
+  background-color: #e32f45;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  margin: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+  &:active {
+    transform: scale(0.95);
+  }
+  &:focus {
+    outline: none;
+  }
 `;
 
 export default SuccessfulApply;
