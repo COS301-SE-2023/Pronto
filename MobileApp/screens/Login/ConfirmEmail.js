@@ -22,7 +22,14 @@ const ConfirmEmail = ({ navigation }) => {
   let email = route.params.email;
   const [code, setCode] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
+  const [loadingResend, setLoadingResend] = useState(false);
+
   const onVerifyPressed = async () => {
+    if (loading) return;
+
+    setLoading(true);
     try {
       response = await Auth.confirmSignUp(email, code);
 
@@ -32,15 +39,20 @@ const ConfirmEmail = ({ navigation }) => {
     } catch (e) {
       Alert.alert("Error", e.message);
     }
+    setLoading(false);
   };
 
   const onResendPressed = async () => {
+    if (loadingResend) return;
+
+    setLoadingResend(true);
     try {
       response = await Auth.resendSignUp(email);
       Alert.alert("Success", "Code was resent to: " + email);
     } catch (e) {
       Alert.alert("Error", e.message);
     }
+    setLoadingResend(false);
   };
 
   return (
@@ -64,11 +76,16 @@ const ConfirmEmail = ({ navigation }) => {
         </View>
 
         <TouchableOpacity style={styles.signInButton} onPress={onVerifyPressed}>
-          <Text style={styles.signInButtonText}>Verify Account</Text>
+          <Text style={styles.signInButtonText}>
+            {loading ? "Verifying..." : "Verify Account"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.resendButton} onPress={onResendPressed}>
-          <Text style={styles.resendButtonText}>Resend Code</Text>
+          <Text style={styles.resendButtonText}>
+            {" "}
+            {loadingResend ? "Resending..." : "Resend Code"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity

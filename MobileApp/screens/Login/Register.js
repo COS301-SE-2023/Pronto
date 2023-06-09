@@ -16,12 +16,7 @@ import { Auth } from "aws-amplify";
 const { height } = Dimensions.get("window");
 
 const Register = ({ navigation }) => {
-  const [focusedEmail, setFocusedEmail] = useState(false);
-  const [focusedPassword, setFocusedPassword] = useState(false);
-  const [focusedConfirm, setFocusedConfirm] = useState(false);
-  const [focusedName, setFocusedName] = useState(false);
-  const [focusedSurname, setFocusedSurname] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -70,6 +65,16 @@ const Register = ({ navigation }) => {
   };
 
   const onSignUpPressed = async () => {
+    if (loading) {
+      return;
+    }
+
+    if (confirmPassword !== password) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
     try {
       navigation.navigate("ConfirmEmail", { email });
       await Auth.signUp({
@@ -83,6 +88,7 @@ const Register = ({ navigation }) => {
     } catch (e) {
       Alert.alert("Error", e.message);
     }
+    setLoading(false);
   };
 
   //validating confirm password
@@ -240,7 +246,10 @@ const Register = ({ navigation }) => {
         </View>
 
         <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed}>
-          <Text style={styles.signUpButtonText}>Sign up</Text>
+          <Text style={styles.signUpButtonText}>
+            {" "}
+            {loading ? "Signing up..." : "Sign up"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
