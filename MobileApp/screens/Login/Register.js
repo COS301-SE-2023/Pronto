@@ -13,6 +13,8 @@ import React, { useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
 
+import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
+
 const { height } = Dimensions.get("window");
 
 const Register = ({ navigation }) => {
@@ -43,7 +45,24 @@ const Register = ({ navigation }) => {
     const isValidSignUpPassword = regex.test(value);
 
     setPasswordSignUpIsValid(isValidSignUpPassword);
+
+    setPasswordCriteria({
+      length: value.length >= 8,
+      uppercase: /[A-Z]/.test(value),
+      lowercase: /[a-z]/.test(value),
+      digit: /\d/.test(value),
+      specialChar: /[@$!%*?&]/.test(value),
+    });
   };
+
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    digit: false,
+    specialChar: false,
+  });
+
   const [isTypingPassword, setIsTypingPassword] = useState(false);
 
   //validate name and surname on sign up
@@ -213,6 +232,10 @@ const Register = ({ navigation }) => {
             <View style={styles.iconContainer}>
               <MaterialIcons name="cancel" size={24} color="red" />
             </View>
+          )}
+
+          {isTypingPassword && !passwordSignUpIsValid && (
+            <PasswordCriteriaMessage criteria={passwordCriteria} />
           )}
         </View>
 
