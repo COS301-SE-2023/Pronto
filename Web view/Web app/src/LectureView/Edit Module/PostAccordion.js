@@ -47,24 +47,24 @@ export default function PostAccordion() {
         </AccordionSummary>
         <AccordionDetails>
         <form>
-          <div class="form-group row">
-            <label for="colFormLabel" class="col-sm-2 col-form-label">Title: </label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="colFormLabel"  data-testid="title1"  required ></input>
+          <div className="form-group row">
+            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
+            <div className="col-sm-10">
+              <input type="text" className="form-control" id="colFormLabel"  data-testid="title1"  required ></input>
             </div>
           </div>
 
-          <div class="form-group row">
-            <label for="colFormLabel" class="col-sm-2 col-form-label">Body: </label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="colFormLabel"  data-testid="body1" required></input>
+          <div className="form-group row">
+            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Body: </label>
+            <div className="col-sm-10">
+              <input type="text" className="form-control" id="colFormLabel"  data-testid="body1" required></input>
             </div>
           </div>
 
-          <div class="form-group row">
-            <label for="colFormLabel" class="col-sm-2 col-form-label">Date: </label>
-            <div class="col-sm-10">
-              <input type="date" class="form-control" id="colFormLabel" data-testid="date1"></input>
+          <div className="form-group row">
+            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+            <div className="col-sm-10">
+              <input type="date" className="form-control" id="colFormLabel" data-testid="date1"></input>
             </div>
           </div>
 
@@ -85,24 +85,24 @@ export default function PostAccordion() {
         </AccordionSummary>
         <AccordionDetails>
         <form>
-          <div class="form-group row">
-            <label for="colFormLabel" class="col-sm-2 col-form-label">Title: </label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="colFormLabel"  data-testid="title2" required></input>
+          <div className="form-group row">
+            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
+            <div className="col-sm-10">
+              <input type="text" className="form-control" id="colFormLabel"  data-testid="title2" required></input>
             </div>
           </div>
 
-          <div class="form-group row">
-            <label for="colFormLabel" class="col-sm-2 col-form-label">Information: </label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="colFormLabel" data-testid="body2"></input>
+          <div className="form-group row">
+            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Information: </label>
+            <div className="col-sm-10">
+              <input type="text" className="form-control" id="colFormLabel" data-testid="body2"></input>
             </div>
           </div>
 
-          <div class="form-group row">
-            <label for="colFormLabel" class="col-sm-2 col-form-label">Date: </label>
-            <div class="col-sm-10">
-              <input type="date" class="form-control" id="colFormLabel"  data-testid="date2" required></input>
+          <div className="form-group row">
+            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+            <div className="col-sm-10">
+              <input type="date" className="form-control" id="colFormLabel"  data-testid="date2" required></input>
             </div>
           </div>
 
@@ -123,10 +123,10 @@ export default function PostAccordion() {
         </AccordionSummary>
         <AccordionDetails>
         <form>
-          <div class="form-group row">
-            <label for="colFormLabel" class="col-sm-2 col-form-label">Venue: </label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="colFormLabel" data-testid="venue" required></input>
+          <div className="form-group row">
+            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
+            <div className="col-sm-10">
+              <input type="text" className="form-control" id="colFormLabel" data-testid="venue" required></input>
             </div>
           </div>
 

@@ -6,14 +6,14 @@ import "../LectureHome.css";
 const PostReminder = () => {
     return (
     <div style={{ display: 'inline-flex' }}>
-      <nav style={{ width: '20%' }} data-testid="LectureNavigation">
+      <nav style={{ width: '20%' }} data-testid={"LecturerNavigation"}>
           {/* Navigation bar content */}
           <LecturerNavigation />
       </nav>
 
-      <main style={{ width: '900px',marginTop: '30px' }}>
+      <main style={{ width: '900px',marginTop: '30px' }} data-testId={'editAccordion'}>
         <h1 className="moduleHead">COS341- Compiler Construction</h1>
-        <PostAccordion data-testid={"editAccordion"}/>
+        <PostAccordion />
       </main>
 
     </div>   
