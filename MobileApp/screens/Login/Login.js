@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
 
 const { height } = Dimensions.get("window");
@@ -29,7 +29,8 @@ const Login = ({ navigation }) => {
     setEmailIsValid(isValidEmail);
   };
 
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTypingEmail, setIsTypingEmail] = useState(false);
+  const [isTypingPassword, setIsTypingPassword] = useState(false);
 
   const onSignInPressed = async (data) => {
     if (loading) {
@@ -72,35 +73,54 @@ const Login = ({ navigation }) => {
             placeholder="Email"
             autoCapitalize="none"
             placeholderTextColor="#666666"
-            style={[
-              styles.input,
-              isTyping && !emailIsValid ? styles.invalidInput : null,
-              isTyping && emailIsValid ? styles.validInput : null,
-            ]}
+            style={[styles.input]}
             value={username}
             onChangeText={(value) => {
               setUsername(value);
               validateEmail(value);
             }}
-            onFocus={() => setIsTyping(true)}
-            onBlur={() => setIsTyping(false)}
+            onFocus={() => setIsTypingEmail(true)}
           />
-          {emailIsValid && (
+          {isTypingEmail && emailIsValid && (
             <View style={styles.iconContainer}>
               <Ionicons name="checkmark-circle" size={24} color="green" />
             </View>
           )}
+
+          {isTypingEmail && !emailIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
         </View>
 
-        <TextInput
-          placeholder="Password"
-          autoCapitalize="none"
-          placeholderTextColor={"#666666"}
-          secureTextEntry={true}
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Password"
+            autoCapitalize="none"
+            placeholderTextColor="#666666"
+            secureTextEntry={true}
+            style={[styles.input]}
+            value={password}
+            onChangeText={(value) => {
+              setPassword(value);
+              setPasswordSignInIsValid(value);
+              validateSignInPassword(value);
+            }}
+            onFocus={() => setIsTypingPassword(true)}
+          />
+          {isTypingPassword && passwordSignInIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingPassword && !passwordSignInIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
 
         <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>
           <Text style={styles.signInButtonText}>
@@ -196,14 +216,6 @@ const styles = StyleSheet.create({
 
     fontSize: 15,
     fontWeight: "bold",
-  },
-  invalidInput: {
-    borderColor: "red",
-    borderWidth: 1,
-  },
-  validInput: {
-    borderColor: "green",
-    borderWidth: 1,
   },
   iconContainer: {
     position: "absolute",
