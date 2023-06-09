@@ -10,9 +10,8 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
-
 
 const { height } = Dimensions.get("window");
 
@@ -28,7 +27,47 @@ const Register = ({ navigation }) => {
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   var address = "";
+
+  //validate email input sign up
+  const [emailIsValid, setEmailIsValid] = useState(false);
+
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = regex.test(value);
+    setEmailIsValid(isValidEmail);
+  };
+  const [isTypingEmail, setIsTypingEmail] = useState(false);
+
+  //validate password on sign up
+  const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
+  const validateSignUpPassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidSignUpPassword = regex.test(value);
+
+    setPasswordSignUpIsValid(isValidSignUpPassword);
+  };
+  const [isTypingPassword, setIsTypingPassword] = useState(false);
+
+  //validate name and surname on sign up
+  const [nameIsValid, setNameIsValid] = useState(false);
+  const [surnameIsValid, setSurnameIsValid] = useState(false);
+  const [isTypingName, setIsTypingName] = useState(false);
+  const [isTypingSurname, setIsTypingSurname] = useState(false);
+
+  const validateName = (value) => {
+    const regex = /[a-zA-Z]+/;
+    const isValidName = regex.test(value);
+    setNameIsValid(isValidName);
+  };
+
+  const validateSurname = (value) => {
+    const regex = /[a-zA-Z]+/;
+    const isValidSurname = regex.test(value);
+    setSurnameIsValid(isValidSurname);
+  };
 
   const onSignUpPressed = async () => {
     try {
@@ -46,6 +85,14 @@ const Register = ({ navigation }) => {
     }
   };
 
+  //validating confirm password
+  const [passwordMatch, setPasswordMatch] = useState(false);
+  const [isTypingPasswordMatch, setIsTypingPasswordMatch] = useState(false);
+
+  const validateConfirmPassword = (value) => {
+    setPasswordMatch(value === password);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
@@ -59,58 +106,137 @@ const Register = ({ navigation }) => {
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Name"
-            onFocus={() => setFocusedName(true)}
-            onBlur={() => setFocusedName(false)}
+            onFocus={() => setIsTypingName(true)}
             value={name}
-            onChangeText={setName}
+            onChangeText={(value) => {
+              setName(value);
+              validateName(value);
+            }}
             placeholderTextColor={"#666666"}
-            style={[styles.input, focusedName && styles.inputFocused]}
+            style={styles.input}
           />
 
+          {isTypingName && nameIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingName && !nameIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Surname"
-            onFocus={() => setFocusedSurname(true)}
-            onBlur={() => setFocusedSurname(false)}
+            onFocus={() => setIsTypingSurname(true)}
             value={surname}
-            onChangeText={setSurname}
+            onChangeText={(value) => {
+              setSurname(value);
+              validateSurname(value);
+            }}
             placeholderTextColor={"#666666"}
-            style={[styles.input, focusedSurname && styles.inputFocused]}
+            style={styles.input}
           />
 
+          {isTypingSurname && surnameIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingSurname && !surnameIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
             autoCapitalize="none"
-            onFocus={() => setFocusedEmail(true)}
-            onBlur={() => setFocusedEmail(false)}
             placeholderTextColor={"#666666"}
             value={email}
-            onChangeText={setEmail}
-            style={[styles.input, focusedEmail && styles.inputFocused]}
+            onChangeText={(value) => {
+              setEmail(value);
+              validateEmail(value);
+            }}
+            style={[styles.input]}
+            onFocus={() => setIsTypingEmail(true)}
           />
 
+          {isTypingEmail && emailIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingEmail && !emailIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Password"
             autoCapitalize="none"
-
-            placeholderTextColor={"#666666"}
+            placeholderTextColor="#666666"
             secureTextEntry={true}
-            onFocus={() => setFocusedPassword(true)}
-            onBlur={() => setFocusedPassword(false)}
+            style={[styles.input]}
             value={password}
-            onChangeText={setPassword}
-
-            style={[styles.input, focusedPassword && styles.inputFocused]}
+            onChangeText={(value) => {
+              setPassword(value);
+              setPasswordSignUpIsValid(value);
+              validateSignUpPassword(value);
+            }}
+            onFocus={() => setIsTypingPassword(true)}
           />
+          {isTypingPassword && passwordSignUpIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
 
+          {isTypingPassword && !passwordSignUpIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Confirm Password"
             autoCapitalize="none"
             placeholderTextColor={"#666666"}
+            value={confirmPassword}
             secureTextEntry={true}
-            onFocus={() => setFocusedConfirm(true)}
-            onBlur={() => setFocusedConfirm(false)}
-            style={[styles.input, focusedConfirm && styles.inputFocused]}
+            onFocus={() => setIsTypingPasswordMatch(true)}
+            style={styles.input}
+            onChangeText={(value) => {
+              setConfirmPassword(value);
+              validateConfirmPassword(value);
+            }}
+            passwordMatch={passwordMatch}
           />
+
+          {isTypingPasswordMatch && passwordMatch && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingPasswordMatch && !passwordMatch && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
         </View>
 
         <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed}>
@@ -156,7 +282,7 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
   },
   inputContainer: {
-    marginVertical: 40,
+    position: "relative",
   },
   input: {
     fontSize: 15,
@@ -198,6 +324,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontWeight: "bold",
+  },
+  iconContainer: {
+    position: "absolute",
+    top: "50%",
+    right: 10,
+    transform: [{ translateY: -12 }],
   },
 });
 
