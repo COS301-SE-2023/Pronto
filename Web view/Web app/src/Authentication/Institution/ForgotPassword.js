@@ -1,17 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { useNavigate } from "react-router-dom";
+import { Auth } from "aws-amplify";
 
 function ForgotPassword() {
   const [email, setEmail] = React.useState("");
   const [code, setCode] = React.useState("");
+  const [error, setError] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [step, setStep] = React.useState(1);
+  const navigate = useNavigate();
+
+  //validate email
+  const [emailIsValid, setEmailIsValid] = useState(false);
+
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = regex.test(value);
+    setEmailIsValid(isValidEmail);
+  };
+
+  //validation of new passwords
+  //validating password for sign up
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
+  const validatePassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidPassword = regex.test(value);
+
+    setPasswordIsValid(isValidPassword);
+
+    setPasswordCriteria({
+      length: value.length >= 8,
+      uppercase: /[A-Z]/.test(value),
+      lowercase: /[a-z]/.test(value),
+      digit: /\d/.test(value),
+      specialChar: /[@$!%*?&]/.test(value),
+    });
+  };
+
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    digit: false,
+    specialChar: false,
+  });
+
+  const [passwordIsFocused, setPasswordIsFocused] = useState(false);
+
+  //validating confirm password
+  const [passwordMatch, setPasswordMatch] = useState(false);
+
+  const validateConfirmPassword = (value) => {
+    setPasswordMatch(value === password);
+  };
+
+  const handlePasswordFocus = () => {
+    setPasswordIsFocused(true);
+  };
+
+  const handlePasswordBlur = () => {
+    setPasswordIsFocused(false);
+  };
+
+  const [loading, setLoading] = useState(false);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
+    validateEmail(e.target.value);
   };
 
   const handleCodeChange = (e) => {
@@ -20,32 +80,56 @@ function ForgotPassword() {
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+    validatePassword(e.target.value);
   };
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
+    validateConfirmPassword(e.target.value);
   };
 
-  const handleGetCode = () => {
-    // TODO: Implement code retrieval functionality
-    // You can add your code here to send a verification code to the provided email
-    // Once the code is sent, you can proceed to the next step by calling `setStep(2)`
-    setStep(2);
+  const handleGetCode = async (e) => {
+    try {
+      e.preventDefault();
+      if (loading) {
+        return;
+      }
+      setLoading(true);
+      await Auth.forgotPassword(email);
+      setStep(2);
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
+    setLoading(false);
   };
 
-  const handleVerifyCode = () => {
-    // TODO: Implement code verification functionality
-    // You can add your code here to verify the entered code
-    // Once the code is verified, you can proceed to the next step by calling `setStep(3)`
-    setStep(3);
+  const [signUpError, setsignUpError] = useState("");
+
+  const handleVerifyCode = async (e) => {
+    e.preventDefault();
+    if (confirmPassword !== password) {
+      setsignUpError("Passwords do not match");
+      return;
+    }
+
+    try {
+      e.preventDefault();
+      if (loading) {
+        return;
+      }
+      setLoading(true);
+      await Auth.forgotPasswordSubmit(email, code, password);
+      setStep(3);
+      setError("");
+    } catch (error) {
+      setError(error.message);
+    }
+    setLoading(false);
   };
 
   const handleResetPassword = () => {
-    // TODO: Implement password reset functionality
-    // You can add your code here to reset the password
-    // Once the password is reset, you can redirect the user to another page
-    // or perform any other necessary actions
-    console.log("Password reset successful!");
+    navigate("/lecturer-login");
   };
 
   return (
@@ -64,15 +148,18 @@ function ForgotPassword() {
             />
           </LogoContainer>
           <Subtitle>Forgot Password</Subtitle>
-
           <Input
             type="email"
             placeholder="Email"
             value={email}
             onChange={handleEmailChange}
+            isValidEmail={emailIsValid}
           />
-
-          <Button onClick={handleGetCode}>Get Code</Button>
+          {error && <ErrorText>{error}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
+          <Button onClick={handleGetCode}>
+            {loading ? "Sending code..." : "Get Code"}
+          </Button>
         </Form>
       )}
 
@@ -90,15 +177,63 @@ function ForgotPassword() {
             />
           </LogoContainer>
           <Subtitle>Verify Code</Subtitle>
-
           <Input
             type="text"
             placeholder="Verification Code"
             value={code}
             onChange={handleCodeChange}
           />
-
-          <Button onClick={handleVerifyCode}>Verify Code</Button>
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handlePasswordChange}
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+            isValidPassword={passwordIsValid}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+            passwordMatch={passwordMatch}
+          />
+          {error && <ErrorText>{error}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
+          {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
+          <Button onClick={handleVerifyCode}>
+            {" "}
+            {loading ? "Verifying..." : "Verify Code"}
+          </Button>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "1rem",
+            }}
+          >
+            {passwordIsFocused && (
+              <>
+                <CriteriaMessage isValid={passwordCriteria.length}>
+                  {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.uppercase}>
+                  {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.lowercase}>
+                  {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.digit}>
+                  {passwordCriteria.digit ? "✓" : "x"} Digit
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.specialChar}>
+                  {passwordCriteria.specialChar ? "✓" : "x"} Special character
+                  (@$!%*?&)
+                </CriteriaMessage>
+              </>
+            )}
+          </div>
         </Form>
       )}
 
@@ -115,23 +250,9 @@ function ForgotPassword() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Reset Password</Subtitle>
+          <Subtitle>Your password has been succesfully reset</Subtitle>
 
-          <Input
-            type="password"
-            placeholder="New Password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-          />
-
-          <Button onClick={handleResetPassword}>Reset Password</Button>
+          <Button onClick={handleResetPassword}>Go to login</Button>
         </Form>
       )}
     </Container>
@@ -157,25 +278,6 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const SignUpContainer = styled.div`
-  position: absolute;
-  top: 0;
-  height: 100%;
-  transition: all 0.5s ease-in-out;
-  left: 0;
-  width: 50%;
-  opacity: 0;
-  z-index: 1;
-  ${(props) =>
-    props.signin !== true
-      ? `
-    transform: translateX(100%);
-    opacity: 1;
-    z-index: 5;
-  `
-      : null}
-`;
-
 const Subtitle = styled.p`
   font-size: 30px;
   font-weight: bold;
@@ -192,17 +294,6 @@ const LogoContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const SignInContainer = styled.div`
-  position: absolute;
-  top: 0;
-  height: 100%;
-  transition: all 0.5s ease-in-out;
-  left: 0;
-  width: 50%;
-  z-index: 2;
-  ${(props) => (props.signin !== true ? `transform: translateX(100%);` : null)}
-`;
-
 const Form = styled.form`
   background-color: white;
   display: flex;
@@ -214,11 +305,6 @@ const Form = styled.form`
   text-align: center;
 `;
 
-const Title = styled.h1`
-  font-weight: bold;
-  margin: 0;
-`;
-
 const Input = styled.input`
   background-color: #eee;
   border: 0;
@@ -226,6 +312,17 @@ const Input = styled.input`
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
+  &:focus {
+    ${(props) =>
+      props.isValidEmail ||
+      props.isValidPassword ||
+      props.isValidSignInPassword ||
+      props.isValidName ||
+      props.isValidSurname ||
+      props.passwordMatch // Add the condition here
+        ? `border: 2px solid green;`
+        : `border: 1px solid #e32f45;`}
+  }
 `;
 
 const Button = styled.button`
@@ -248,79 +345,17 @@ const Button = styled.button`
   }
 `;
 
-const GhostButton = styled(Button)`
-  background-color: transparent;
-  border-color: #ffffff;
+const ErrorText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
 `;
 
-const Anchor = styled.a`
-  color: #333;
-  font-size: 14px;
-  text-decoration: none;
-  margin: 15px 0;
-`;
-
-const OverlayContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  transition: transform 0.5s ease-in-out;
-  z-index: 100;
-  ${(props) => (props.signin !== true ? `transform: translateX(-100%);` : null)}
-`;
-
-const Overlay = styled.div`
-  background: #e32f45;
-  background: -webkit-linear-gradient(to right, #e32f45, #e32f45);
-  background: linear-gradient(to right, #e32f45, #e32f45);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 0 0;
-  color: #ffffff;
-  position: relative;
-  left: -100%;
-  height: 100%;
-  width: 200%;
-  transform: translateX(0);
-  transition: transform 0.5s ease-in-out;
-  ${(props) => (props.signin !== true ? `transform: translateX(50%);` : null)}
-`;
-
-const OverlayPanel = styled.div`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 40px;
-  text-align: center;
-  top: 0;
-  height: 100%;
-  width: 50%;
-  transform: translateX(0);
-  transition: transform 0.5s ease-in-out;
-`;
-
-const LeftOverlayPanel = styled(OverlayPanel)`
-  transform: translateX(-20%);
-  ${(props) => (props.signin !== true ? `transform: translateX(0);` : null)}
-`;
-
-const RightOverlayPanel = styled(OverlayPanel)`
-  right: 0;
-  transform: translateX(0);
-  ${(props) => (props.signin !== true ? `transform: translateX(20%);` : null)}
-`;
-
-const Paragraph = styled.p`
-  font-size: 14px;
-  font-weight: 100;
-  line-height: 20px;
-  letter-spacing: 0.5px;
-  margin: 20px 0 30px;
+const CriteriaMessage = styled.span`
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 12px;
+  color: ${({ isValid }) => (isValid ? "green" : "inherit")};
 `;
 
 export default ForgotPassword;
