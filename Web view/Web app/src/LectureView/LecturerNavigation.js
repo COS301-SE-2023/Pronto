@@ -6,7 +6,7 @@ export default function LecturerNavigation() {
 
   function Logout() {
     alert("You have been logged out");
-      window.location.href = '/login';
+      window.location.href = '/lecturer-login';
   }
 
     return (
