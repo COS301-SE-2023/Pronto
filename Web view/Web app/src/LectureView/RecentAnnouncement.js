@@ -105,10 +105,6 @@ export default function RecentAnnouncement() {
                     onClose={handleClose}
                     >
                     <MenuItem onClick={handleClose} disableRipple>
-                    <EditIcon />
-                    Edit
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} disableRipple>
                     <DeleteIcon />
                     Delete
                     </MenuItem>
@@ -147,10 +143,6 @@ export default function RecentAnnouncement() {
                     open={open}
                     onClose={handleClose}
                     >
-                    <MenuItem onClick={handleClose} disableRipple>
-                    <EditIcon />
-                    Edit
-                    </MenuItem>
                     <MenuItem onClick={handleClose} disableRipple>
                     <DeleteIcon />
                     Delete
