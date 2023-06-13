@@ -69,11 +69,13 @@ export default function RecentAnnouncement() {
       </nav>
     
         <main style={{ width: '900px',marginTop: '30px' }}>
+          
             <h1 className="moduleHead">Recent Announcements</h1>
 
             <div class="card" data-testid="card1">
               <div class="card-header">
-                COS132
+                <div className = "subjectCode">COS132</div>
+                <div className = "postDate">22/05/2023</div>
               </div>
               <div class="card-body">
                 <h5 class="card-title">No class from Thursday 1 June</h5>
