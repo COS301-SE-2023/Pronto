@@ -12,15 +12,19 @@ const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient({});
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
 exports.handler = async (event) => {
-  if (!event.request.clientMetadata.role)
+  if (!event.request.callerContext.clientMetadata.role)
     throw new Error('User role not provided on ClientMetadata')
   let GroupName;
+  console.debug(event.request.callerContext.clientId);  
+  console.debug(process.env.AppClientIdWeb);
+  console.debug(process.env.AppClientId);
+
   switch (event.request.callerContext.clientId) {
     case process.env.AppClientId:
       GroupName = process.env.StudentsGroupName;
       break;
     case process.env.AppClientIdWeb:
-      GroupName = event.request.clientMetadata.role==ROLES.Lecture ? process.env.LecturersGroupName : process.env.AdminGroupName;
+      GroupName = event.request.callerContext.clientMetadata.role==ROLES.Lecture ? process.env.LecturersGroupName : process.env.AdminGroupName;
       break;
     default: 
       throw new Error(`Unrecognised user pool app client ID=${event.request.callerContext.clientId}`);
