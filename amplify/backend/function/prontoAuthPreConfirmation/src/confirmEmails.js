@@ -1,5 +1,3 @@
-import { default as fetch, Request } from 'node-fetch';
-
 const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEYOUTPUT;
 let institutionDetails;
