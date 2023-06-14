@@ -9,10 +9,10 @@
 	LecturersGroupName
 	AdminGroupName
 Amplify Params - DO NOT EDIT */
-const { ROLES } = require('roles');
-const { isLectureEmailPartOfInstitution,
+import { ROLES } from './roles.js';
+import { isLectureEmailPartOfInstitution,
         isAdminAllocated
-} = require('./confirmEmails');
+} from './confirmEmails.js';
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
