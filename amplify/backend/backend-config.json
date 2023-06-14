@@ -52,7 +52,7 @@
           "SMS"
         ],
         "passwordProtectionSettings": {
-            "passwordPolicyCharacters": [
+          "passwordPolicyCharacters": [
             "REQUIRES_LOWERCASE",
             "REQUIRES_NUMBERS",
             "REQUIRES_SYMBOLS",
@@ -99,6 +99,32 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
     }
   },
   "storage": {
