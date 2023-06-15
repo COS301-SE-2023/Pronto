@@ -1,6 +1,7 @@
 import React from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer } from "../../graphql/mutations";
+//import { createLecturer} from "../../graphql/mutations";
+import { getLecturer } from "../../graphql/queries";
 import { useState } from "react";
 import Amplify, {API,graphqlOperation} from 'aws-amplify';
 
@@ -19,11 +20,15 @@ const AddLecturer = () => {
             lastName:lastName,
             userRole:"Lecturer",
             email:email,
+            institution:{
+                id:"UP123456789",
+            }
         }
-        let mut=await API.graphql(graphqlOperation(createLecturer,lecturer))
+        let mut=await API.graphql(graphqlOperation(getLecturer,{input:{ id:"123456789"}}))
         console.log(mut)
                
     }
+
     return (
         <div style={{ display: 'inline-flex' }}>
             <nav style={{ width: '20%' }} data-testid="InstitutionNavigation">
