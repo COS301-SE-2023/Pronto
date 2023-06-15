@@ -3,6 +3,9 @@ import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer } from "../../graphql/mutations";
 
 const AddLecturer = () => {
+    const add=  (lecturer) => { 
+        console.log(lecturer)
+    }
     return (
         <div style={{ display: 'inline-flex' }}>
             <nav style={{ width: '20%' }} data-testid="InstitutionNavigation">
@@ -15,7 +18,7 @@ const AddLecturer = () => {
 
                 <div className="card shadow">
                     <div className="card-body">
-                        <form>
+                        <form onSubmit={add}>
                             <div className="form-row">
                                 {/* First name */}
                                 <div className="form-group col-6">
