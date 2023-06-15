@@ -5,6 +5,7 @@ import { useState } from "react";
 import  {API} from 'aws-amplify';
 
 const AddLecturer = () => {
+
     const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
@@ -26,7 +27,7 @@ const AddLecturer = () => {
            let mut=await API.graphql({
               query: createLecturer,
               variables:{input : lecturer},
-              authMode:'AMAZON_COGNITO_USER_POOLS',
+              authMode:'API_KEY',
             }
         )
         
