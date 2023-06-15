@@ -1,6 +1,7 @@
 import React from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 
+
 const AddLecturer = () => {
     return (
         <div style={{ display: 'inline-flex' }}>
