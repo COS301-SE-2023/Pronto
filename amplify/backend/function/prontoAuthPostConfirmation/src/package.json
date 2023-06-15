@@ -8,7 +8,7 @@
     "axios": "latest"
   },
   "devDependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.345.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.352.0",
     "@types/aws-lambda": "^8.10.92"
   }
 }
