@@ -32,6 +32,7 @@ exports.handler = async (event) => {
     default: 
       throw new Error(`Unrecognised user pool app client ID=${event.request.callerContext.clientId}`);
   }
+  
   const groupParams = {
     GroupName: GroupName,
     UserPoolId: event.userPoolId,
@@ -45,13 +46,13 @@ exports.handler = async (event) => {
   console.debug(cognitoIdentityServiceProvider);
   //get user group
   //add user to user group
-    //else create and add user to group
   try {
     await cognitoIdentityServiceProvider.send(new GetGroupCommand(groupParams));
   } catch (e) {
-    await cognitoIdentityServiceProvider.send(new CreateGroupCommand(groupParams));
+    console.debug(e);
+    throw new Error(`User Group with groupName = ${groupParams.GroupName} Does not exist`);
   }
   await cognitoIdentityServiceProvider.send(new AdminAddUserToGroupCommand(addUserParams));
-  event.response.groupParams = groupParams;
+  
   return event;
 };
