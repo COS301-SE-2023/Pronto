@@ -110,6 +110,14 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoAuthPostConfirmation_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
       "usedBy": [
         {
@@ -118,7 +126,23 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoAuthPostConfirmation_lecturersGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_studentsGroupName": {
       "usedBy": [
         {
           "category": "function",
