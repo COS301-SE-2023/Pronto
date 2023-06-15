@@ -19,7 +19,9 @@ const AddLecturer = () => {
             lastName:lastName,
             userRole:"Lecturer",
             email:email,
-            courses:[]
+            insitution: { 
+                institutionId:"UP123456789",
+            }
         }
         let mut= API.graphql(graphqlOperation(createLecturer,lecturer))
         console.log(mut)

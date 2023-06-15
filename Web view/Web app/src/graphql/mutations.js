@@ -1,4 +1,3 @@
-
 export const createLecturer =`mutation CreateLecturer(  
                                 $input: CreateLecturerInput!  
                                 $condition: ModelLecturerConditionInput
