@@ -3,8 +3,10 @@ import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer } from "../../graphql/mutations";
 
 const AddLecturer = () => {
-    const add=  (lecturer) => { 
-        console.log(lecturer)
+    const add=  event => { 
+        event.preventDefault()
+        console.log("Add was pushed")
+        //alert(lec)
     }
     return (
         <div style={{ display: 'inline-flex' }}>
