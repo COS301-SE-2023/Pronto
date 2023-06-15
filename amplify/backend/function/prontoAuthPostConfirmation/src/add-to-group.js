@@ -23,10 +23,8 @@ exports.handler = async (event) => {
   if(!event.request.callerContext.clientId)
     throw new Error('ClientId not provided on callerContext')
   let GroupName;
-  console.table(event.request.callerContext.clientId);  
-  console.table(process.env.AppClientIdWeb);
-  console.table(process.env.AppClientId);
-  console.table( process.env);
+  console.table(event.request);
+  console.table(process.env);
   
   switch (event.request.callerContext.clientId) {
     case process.env.AppClientId:
@@ -48,7 +46,8 @@ exports.handler = async (event) => {
     UserPoolId: event.userPoolId,
     Username: event.userName,
   };
-  console.table(GroupName);
+  console.table(groupParams);
+  console.table(addUserParams);
   console.table(cognitoIdentityServiceProvider);
   //get user group
   //add user to user group
