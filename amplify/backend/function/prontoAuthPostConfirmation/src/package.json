@@ -3,9 +3,14 @@
   "version": "2.0.0",
   "description": "Post sign up validation",
   "main": "index.js",
+  "scripts": {
+    "test": "jest test",
+    "test:watch": "jest test --watch"
+  },
   "license": "Apache-2.0",
   "dependencies": {
-    "axios": "latest"
+    "axios": "latest",
+    "jest": "^29.5.0"
   },
   "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.352.0",
