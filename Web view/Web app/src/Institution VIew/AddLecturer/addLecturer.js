@@ -24,8 +24,13 @@ const AddLecturer = () => {
                 id:"UP123456789",
             }
         }
+        try{
         let mut=await API.graphql(graphqlOperation(getLecturer,{input:{ id:"123456789"}}))
         console.log(mut)
+        }catch(e){
+            console.log("Error")
+            console.log(e)
+        }
                
     }
 
