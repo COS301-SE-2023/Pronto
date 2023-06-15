@@ -6,7 +6,13 @@ const {
 } = require('@aws-sdk/client-cognito-identity-provider');
 const ROLES = require('./roles');
 
-const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION });
+const config = {
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+};
+
+const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient(config);
 
 /**
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
