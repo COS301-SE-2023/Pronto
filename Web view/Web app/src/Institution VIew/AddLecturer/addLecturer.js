@@ -1,6 +1,6 @@
 import React from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer} from "../../graphql/mutations";
+import { createLecturer,deleteLecturer} from "../../graphql/mutations";
 import { useState } from "react";
 import  {API} from 'aws-amplify';
 
