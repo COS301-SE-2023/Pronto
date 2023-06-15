@@ -43,6 +43,15 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "studentsGroupName": {
+      "Type": "String"
+    },
+    "lecturersGroupName": {
+      "Type": "String"
+    },
+    "adminGroupName": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -95,6 +104,15 @@
             },
             "GROUP": {
               "Ref": "GROUP"
+            },
+            "StudentsGroupName": {
+              "Ref": "studentsGroupName"
+            },
+            "LecturersGroupName": {
+              "Ref": "lecturersGroupName"
+            },
+            "AdminGroupName": {
+              "Ref": "adminGroupName"
             }
           }
         },

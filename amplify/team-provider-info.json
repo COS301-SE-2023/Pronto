@@ -24,7 +24,10 @@
         "prontoAuthPostConfirmation": {
           "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
           "s3Key": "amplify-builds/prontoAuthPostConfirmation-424452432f5076725477-build.zip",
-          "GROUP": ""
+          "GROUP": "",
+          "studentsGroupName": "studentsGroupName",
+          "lecturersGroupName": "lecturersGroupName",
+          "adminGroupName": "adminGroupName"
         },
         "prontoAuthPreConfirmation": {
           "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
