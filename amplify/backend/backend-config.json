@@ -125,6 +125,22 @@
           "resourceName": "prontoAuthPostConfirmation"
         }
       ]
+    },
+    "AMPLIFY_function_prontoAuthPreConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreConfirmation"
+        }
+      ]
     }
   },
   "storage": {
