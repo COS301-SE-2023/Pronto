@@ -34,4 +34,41 @@ export const createLecturer =`mutation CreateLecturer(
                                     owner
                                     }
                                 }`
+                            ;
+export const deleteLecturer=`mutation DeleteLecturer(
+                                $input: DeleteLecturerInput!
+                                $condition: ModelLecturerConditionInput
+                                ) {
+                             deleteLecturer(input: $input, condition: $condition) {
+                                id
+                                institutionId
+                                firstname
+                                lastname
+                                userRole
+                                email
+                                institution {
+                                    id
+                                    name
+                                    location
+                                    pageUrl
+                                    campusMapUrl
+                                    openingTime
+                                    closingTime
+                                    minimumDuration
+                                    lectureremails
+                                    coursecodes
+                                    domains
+                                    adminId
+                                    createdAt
+                                    updatedAt
+                                    }
+                                courses {
+                                    nextToken
+                                    startedAt
+                                }
+                                    createdAt
+                                    updatedAt
+                                    owner
+                            }
+                        }`                            
 ;
