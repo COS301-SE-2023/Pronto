@@ -1,8 +1,12 @@
 import React from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer } from "../../graphql/mutations";
-
+import { useState } from "react";
 const AddLecturer = () => {
+    const [firstName,setFisrtName]=useState("")
+    const [lastName,setLastName]=useState("")
+    const [email,setEmail]= useState("")
+    const [moduleCode,setModuleCode]=useState("")   
     const add=  event => { 
         event.preventDefault()
         console.log("Add was pushed")
