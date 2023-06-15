@@ -28,7 +28,7 @@ const AddLecturer = () => {
            let mut=await API.graphql({
               query: createLecturer,
               variables:{input : lecturer},
-              authMode:'AMAZON_CONGITO_USER_POOLS',
+              authMode:'AMAZON_COGNITO_USER_POOLS',
             }
         )
         
