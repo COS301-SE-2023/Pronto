@@ -6,7 +6,7 @@ const {
 } = require('@aws-sdk/client-cognito-identity-provider');
 const ROLES = require('./roles');
 
-const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient({});
+const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient();
 
 /**
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
@@ -18,7 +18,8 @@ exports.handler = async (event) => {
   console.debug(event.request.callerContext.clientId);  
   console.debug(process.env.AppClientIdWeb);
   console.debug(process.env.AppClientId);
-
+  console.debug('process.env', process.env);
+  
   switch (event.request.callerContext.clientId) {
     case process.env.AppClientId:
       GroupName = process.env.StudentsGroupName;
@@ -38,8 +39,11 @@ exports.handler = async (event) => {
     UserPoolId: event.userPoolId,
     Username: event.userName,
   };
-  console.debug(GroupName);
+  console.debug('GroupName', GroupName);
+  console.debug(cognitoIdentityServiceProvider);
+  //get user group
   //add user to user group
+    //else create and add user to group
   try {
     await cognitoIdentityServiceProvider.send(new GetGroupCommand(groupParams));
   } catch (e) {
