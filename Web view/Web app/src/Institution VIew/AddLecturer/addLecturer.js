@@ -25,7 +25,15 @@ const AddLecturer = () => {
             }
         }
         try{
-        let mut=await API.graphql(graphqlOperation(getLecturer,{input:{ id:"123456789"}}))
+        let mut=await API.graphql({
+            query: getLecturer,
+            variables:{input : {id: '123455678'}},
+            authMode:'AMAZON_COGNITO_USER_POOLS',
+            }
+        )
+        // query: queries.createPost,
+    //variables: { input: { title: 'Hello World' } },
+   // authMode: 'AMAZON_COGNITO_USER_POOLS',
         console.log(mut)
         }catch(e){
             console.log("Error")
