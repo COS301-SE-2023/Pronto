@@ -3,13 +3,16 @@ import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer } from "../../graphql/mutations";
 import { useState } from "react";
 const AddLecturer = () => {
-    const [firstName,setFisrtName]=useState("")
+    const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
     const [moduleCode,setModuleCode]=useState("")   
     const add=  event => { 
         event.preventDefault()
-        console.log("Add was pushed")
+        console.log(firstName)
+        console.log(lastName)
+        console.log(email)
+        console.log(moduleCode)
         //alert(lec)
     }
     return (
@@ -36,6 +39,8 @@ const AddLecturer = () => {
                                         placeholder="John"
                                         data-testid="firstName"
                                         required
+                                        value={firstName}
+                                        onChange={(e)=>setFirstName(e.target.value)}
                                     />
                                 </div>
 
@@ -49,6 +54,8 @@ const AddLecturer = () => {
                                         placeholder="Doe"
                                         data-testid="lastName"
                                         required
+                                        value={lastName}
+                                        onChange={(e)=>setLastName(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -64,6 +71,8 @@ const AddLecturer = () => {
                                         placeholder="john.doe@up.ac.za"
                                         data-testid="email"
                                         required
+                                        value={email}
+                                        onChange={(e)=>setEmail(e.target.value)}
                                     />
                                 </div>
 
@@ -76,6 +85,8 @@ const AddLecturer = () => {
                                         id="moduleCode"
                                         placeholder="COS132"
                                         required
+                                        value={moduleCode}
+                                        onChange={(e)=>setModuleCode(e.target.value)}
                                     />
                                 </div>
                             </div>
