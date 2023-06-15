@@ -9,7 +9,7 @@ const AddLecturer = () => {
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
     const [moduleCode,setModuleCode]=useState("")   
-    const add=  event => { 
+    const add=  async(event) => { 
         event.preventDefault()
         console.log("Add lecturer mutation")
         //alert(lec)
@@ -23,7 +23,7 @@ const AddLecturer = () => {
                 institutionId:"UP123456789",
             }
         }
-        let mut= API.graphql(graphqlOperation(createLecturer,lecturer))
+        let mut=await API.graphql(graphqlOperation(createLecturer,lecturer))
         console.log(mut)
                
     }
