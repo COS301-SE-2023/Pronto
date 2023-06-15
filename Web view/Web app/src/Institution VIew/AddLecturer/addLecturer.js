@@ -25,16 +25,15 @@ const AddLecturer = () => {
             }
         }
         try{
-        let mut=await API.graphql({
-            query: createLecturer,
-            variables:{input : lecturer},
-            authMode:'AMAZON_CONGITO_USER_POOLS',
+           let mut=await API.graphql({
+              query: createLecturer,
+              variables:{input : lecturer},
+              authMode:'AMAZON_CONGITO_USER_POOLS',
             }
         )
         
-        console.log("Successfully added "+lecturer.firstName)
+            console.log("Successfully added "+lecturer.firstName)
         }catch(e){
-            console.log("Error")
             console.log(e)
         }   
     }
