@@ -13,7 +13,9 @@ const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient();
  */
 exports.handler = async (event) => {
   if (!event.request.callerContext.clientMetadata.role)
-    throw new Error('User role not provided on ClientMetadata')
+    throw new Error('User role not provided on clientMetadata')
+  if(!event.request.callerContext.clientId)
+    throw new Error('ClientId not provided on callerContext')
   let GroupName;
   console.debug(event.request.callerContext.clientId);  
   console.debug(process.env.AppClientIdWeb);
