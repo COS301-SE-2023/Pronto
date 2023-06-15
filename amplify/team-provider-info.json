@@ -17,13 +17,18 @@
         "s3prontoblobestore": {}
       },
       "auth": {
-        "prontoAuth": {}
+        "prontoAuth": {},
+        "userPoolGroups": {}
       },
       "function": {
         "prontoAuthPostConfirmation": {
           "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
-          "s3Key": "amplify-builds/prontoAuthPostConfirmation-4d63544a6b496b697570-build.zip",
+          "s3Key": "amplify-builds/prontoAuthPostConfirmation-424452432f5076725477-build.zip",
           "GROUP": ""
+        },
+        "prontoAuthPreConfirmation": {
+          "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
+          "s3Key": "amplify-builds/prontoAuthPreConfirmation-43453033777274476d56-build.zip"
         }
       },
       "api": {
