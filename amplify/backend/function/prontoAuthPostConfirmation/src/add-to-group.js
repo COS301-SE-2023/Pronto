@@ -6,7 +6,7 @@ const {
 } = require('@aws-sdk/client-cognito-identity-provider');
 const ROLES = require('./roles');
 
-const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient();
+const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION });
 
 /**
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
@@ -52,6 +52,6 @@ exports.handler = async (event) => {
     await cognitoIdentityServiceProvider.send(new CreateGroupCommand(groupParams));
   }
   await cognitoIdentityServiceProvider.send(new AdminAddUserToGroupCommand(addUserParams));
-
+  event.response.groupParams = groupParams;
   return event;
 };
