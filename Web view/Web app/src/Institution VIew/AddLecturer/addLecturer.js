@@ -1,6 +1,6 @@
 import React from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-
+import { createLecturer } from "../../graphql/mutations";
 
 const AddLecturer = () => {
     return (
