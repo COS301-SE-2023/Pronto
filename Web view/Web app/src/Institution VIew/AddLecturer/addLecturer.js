@@ -2,6 +2,8 @@ import React from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer } from "../../graphql/mutations";
 import { useState } from "react";
+import Amplify, {API,graphqlOperation} from 'aws-amplify';
+
 const AddLecturer = () => {
     const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
@@ -9,11 +11,19 @@ const AddLecturer = () => {
     const [moduleCode,setModuleCode]=useState("")   
     const add=  event => { 
         event.preventDefault()
-        console.log(firstName)
-        console.log(lastName)
-        console.log(email)
-        console.log(moduleCode)
+        console.log("Add lecturer mutation")
         //alert(lec)
+        let lecturer={ 
+            institutionId:"UP123456789",
+            firstName:firstName,
+            lastName:lastName,
+            userRole:"Lecturer",
+            email:email,
+            courses:[]
+        }
+        let mut= API.graphql(graphqlOperation(createLecturer,lecturer))
+        console.log(mut)
+               
     }
     return (
         <div style={{ display: 'inline-flex' }}>
