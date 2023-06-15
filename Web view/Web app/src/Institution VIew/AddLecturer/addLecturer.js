@@ -3,7 +3,7 @@ import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer} from "../../graphql/mutations";
 import { getLecturer } from "../../graphql/queries";
 import { useState } from "react";
-import Amplify, {API,graphqlOperation} from 'aws-amplify';
+import  {API} from 'aws-amplify';
 
 const AddLecturer = () => {
     const [firstName,setFirstName]=useState("")
@@ -13,7 +13,6 @@ const AddLecturer = () => {
     const add=  async(event) => { 
         event.preventDefault()
         console.log("Add lecturer mutation")
-        //alert(lec)
         let lecturer={ 
             institutionId:"UP123456789",
             firstName:firstName,
