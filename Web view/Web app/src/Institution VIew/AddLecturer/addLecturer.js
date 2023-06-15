@@ -1,6 +1,6 @@
 import React from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-//import { createLecturer} from "../../graphql/mutations";
+import { createLecturer} from "../../graphql/mutations";
 import { getLecturer } from "../../graphql/queries";
 import { useState } from "react";
 import Amplify, {API,graphqlOperation} from 'aws-amplify';
@@ -26,8 +26,8 @@ const AddLecturer = () => {
         }
         try{
         let mut=await API.graphql({
-            query: getLecturer,
-            variables:{input : {id: '123455678'}},
+            mutation: createLecturer,
+            variables:{input : lecturer},
             authMode:'AMAZON_COGNITO_USER_POOLS',
             }
         )
