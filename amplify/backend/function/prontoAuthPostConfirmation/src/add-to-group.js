@@ -7,15 +7,13 @@ const {
 const ROLES = require('./roles');
 
 const config = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 };
 
-const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient(config);
+const cognitoIdentityServiceProviderClient = new CognitoIdentityProviderClient(config);
 
 console.table(config);
-console.table(cognitoIdentityServiceProvider);
+console.table(cognitoIdentityServiceProviderClient);
 /**
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
@@ -53,12 +51,12 @@ exports.handler = async (event) => {
   //get user group
   //add user to user group
   try {
-    await cognitoIdentityServiceProvider.send(new GetGroupCommand(groupParams));
+    await cognitoIdentityServiceProviderClient.send(new GetGroupCommand(groupParams));
   } catch (getGroupError) {
     console.table(getGroupError);
     throw new Error(`User Group with groupName = ${groupParams.GroupName} Does not exist`);
   }
-  await cognitoIdentityServiceProvider.send(new AdminAddUserToGroupCommand(addUserParams));
+  await cognitoIdentityServiceProviderClient.send(new AdminAddUserToGroupCommand(addUserParams));
   
   return event;
 };
