@@ -17,8 +17,7 @@
         "s3prontoblobestore": {}
       },
       "auth": {
-        "prontoAuth": {},
-        "userPoolGroups": {}
+        "prontoAuth": {}
       },
       "function": {
         "prontoAuthPostConfirmation": {
