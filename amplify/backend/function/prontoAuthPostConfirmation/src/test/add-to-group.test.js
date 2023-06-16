@@ -5,9 +5,17 @@ const lecturerEvent = require('../events/lecturers.event.json');
 const studentsEvent = require('../events/students.event.json');
 
 describe('add-to-group', () => {
+    const OLD_ENV = process.env;
     beforeEach(() => {
         jest.restoreAllMocks();
+        jest.resetModules();    
+        process.env = { ...OLD_ENV };
     });
+    
+    afterAll(() => {
+        process.env = OLD_ENV;
+    });
+    
     test(`Should throw Error('User role not provided on clientMetadata'`, async () => {
         const requestWithNullRole = {
             "request": {
@@ -50,4 +58,12 @@ describe('add-to-group', () => {
         .rejects
         .toThrow(/Unrecognised user pool app client ID=/);
     })
+    
+    test(`Should throw Error('User Group with userGroupName {####} Does not exitst`, async () => {
+        console.debug(adminEvent.clientId);
+        await expect(addToGroup.handler(adminEvent))
+        .rejects
+        .toThrow(/User Group with userGroupName/);
+    })
+
 })
