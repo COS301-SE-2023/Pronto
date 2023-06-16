@@ -26,7 +26,9 @@
           "GROUP": "",
           "studentsGroupName": "studentsGroupName",
           "lecturersGroupName": "lecturersGroupName",
-          "adminGroupName": "adminGroupName"
+          "adminGroupName": "adminGroupName",
+          "appClientId": "3uqlt9r8vsml0g02noh7v87dno",
+          "appClientIdWeb": "7mdve2f6k86vpadjd9u7rmgi6s"
         },
         "prontoAuthPreConfirmation": {
           "deploymentBucketName": "amplify-pronto-dev-153713-deployment",

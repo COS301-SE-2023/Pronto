@@ -44,6 +44,10 @@
     "s3Key": {
       "Type": "String"
     },
+    "authprontoAuthUserPoolId": {
+      "Type": "String",
+      "Default": "authprontoAuthUserPoolId"
+    },
     "studentsGroupName": {
       "Type": "String"
     },
@@ -53,9 +57,11 @@
     "adminGroupName": {
       "Type": "String"
     },
-    "authprontoAuthUserPoolId": {
-      "Type": "String",
-      "Default": "authprontoAuthUserPoolId"
+    "appClientId": {
+      "Type": "String"
+    },
+    "appClientIdWeb": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -109,6 +115,9 @@
             "GROUP": {
               "Ref": "GROUP"
             },
+            "AUTH_PRONTOAUTH_USERPOOLID": {
+              "Ref": "authprontoAuthUserPoolId"
+            },
             "StudentsGroupName": {
               "Ref": "studentsGroupName"
             },
@@ -118,8 +127,11 @@
             "AdminGroupName": {
               "Ref": "adminGroupName"
             },
-            "AUTH_PRONTOAUTH_USERPOOLID": {
-              "Ref": "authprontoAuthUserPoolId"
+            "AppClientId": {
+              "Ref": "appClientId"
+            },
+            "AppClientIdWeb": {
+              "Ref": "appClientIdWeb"
             }
           }
         },
