@@ -23,14 +23,14 @@ exports.handler = async (event) => {
   let GroupName;
   console.table(event.request);
   console.table(process.env);
-
+  console.table(ROLES);
+  
   switch (event.request.callerContext.clientId) {
     case process.env.AppClientId:
       GroupName = process.env.StudentsGroupName;
       break;
     case process.env.AppClientIdWeb:
-      GroupName =
-        event.request.callerContext.clientMetadata.role == ROLES.Lecture
+      GroupName = event.request.callerContext.clientMetadata.role == ROLES.Lecture
           ? process.env.LecturersGroupName
           : process.env.AdminGroupName;
       break;
