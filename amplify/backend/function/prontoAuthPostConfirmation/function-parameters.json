@@ -25,6 +25,14 @@
     {
       "cloudFormationParameterName": "adminGroupName",
       "environmentVariableName": "AdminGroupName"
+    },
+    {
+      "cloudFormationParameterName": "appClientId",
+      "environmentVariableName": "AppClientId"
+    },
+    {
+      "cloudFormationParameterName": "appClientIdWeb",
+      "environmentVariableName": "AppClientIdWeb"
     }
   ]
 }
