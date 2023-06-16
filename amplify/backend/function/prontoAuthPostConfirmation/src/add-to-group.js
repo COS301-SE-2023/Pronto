@@ -14,6 +14,8 @@ const config = {
 
 const cognitoIdentityServiceProvider = new CognitoIdentityProviderClient(config);
 
+console.table(config);
+console.table(cognitoIdentityServiceProvider);
 /**
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
@@ -48,16 +50,16 @@ exports.handler = async (event) => {
   };
   console.table(groupParams);
   console.table(addUserParams);
-  console.table(cognitoIdentityServiceProvider);
   //get user group
   //add user to user group
   try {
     await cognitoIdentityServiceProvider.send(new GetGroupCommand(groupParams));
-  } catch (e) {
-    console.table(e);
+  } catch (getGroupError) {
+    console.table(getGroupError);
     throw new Error(`User Group with groupName = ${groupParams.GroupName} Does not exist`);
   }
   await cognitoIdentityServiceProvider.send(new AdminAddUserToGroupCommand(addUserParams));
   
   return event;
 };
+ 
