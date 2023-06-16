@@ -59,12 +59,11 @@ describe('add-to-group', () => {
         .toThrow(/Unrecognised user pool app client ID=/);
     })
     
-    test(`Should throw Error('User Group with userGroupName {####} Does not exitst`, async () => {
+    test(`Should throw Error('Failed to get User Group with userGroupName...`, async () => {
         console.debug(adminEvent.clientId);
         process.env.AdminGroupName = null;
         await expect(addToGroup.handler(adminEvent))
         .rejects
-        .toThrow(/User Group with userGroupName/);
+        .toThrow(/Failed to get User Group with userGroupName/);
     })
-
 })
