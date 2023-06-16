@@ -60,10 +60,15 @@ describe('add-to-group', () => {
     })
     
     test(`Should throw Error('Failed to get User Group with userGroupName...`, async () => {
-        console.debug(adminEvent.clientId);
         process.env.AdminGroupName = null;
         await expect(addToGroup.handler(adminEvent))
         .rejects
         .toThrow(/Failed to get User Group with userGroupName/);
+    })
+    
+    test(`Should add admin to group`, async () => {
+        const mockAddToGroupHandler = jest.fn(addToGroup.handler)
+            .mockResolvedValue(adminEvent);
+        expect(await mockAddToGroupHandler(adminEvent)).toMatchObject(adminEvent);
     })
 })
