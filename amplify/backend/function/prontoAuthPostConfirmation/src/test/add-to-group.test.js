@@ -77,4 +77,9 @@ describe('add-to-group', () => {
             .mockResolvedValue(studentsEvent);
         expect(await mockAddToGroupHandler(studentsEvent)).toMatchObject(studentsEvent);
     })
+    test(`Should add student to group`, async () => {
+        const mockAddToGroupHandler = jest.fn(addToGroup.handler)
+            .mockResolvedValue(lecturerEvent);
+        expect(await mockAddToGroupHandler(lecturerEvent)).toMatchObject(lecturerEvent);
+    })
 })
