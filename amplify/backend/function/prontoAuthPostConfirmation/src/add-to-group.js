@@ -54,7 +54,7 @@ exports.handler = async (event) => {
     await cognitoIdentityServiceProviderClient.send(new GetGroupCommand(groupParams));
   } catch (getGroupError) {
     console.table(getGroupError);
-    throw new Error(`User Group with userGroupName = ${groupParams.GroupName} Does not exist`);
+    throw new Error(`Failed to get User Group with userGroupName = ${groupParams.GroupName} \n ${getGroupError}`)
   }
   try {
     await cognitoIdentityServiceProviderClient.send(new AdminAddUserToGroupCommand(addUserParams)); 
