@@ -61,6 +61,7 @@ describe('add-to-group', () => {
     
     test(`Should throw Error('User Group with userGroupName {####} Does not exitst`, async () => {
         console.debug(adminEvent.clientId);
+        process.env.AdminGroupName = null;
         await expect(addToGroup.handler(adminEvent))
         .rejects
         .toThrow(/User Group with userGroupName/);
