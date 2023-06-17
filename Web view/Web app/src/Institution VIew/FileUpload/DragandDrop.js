@@ -86,7 +86,7 @@ function DropzoneComponent() {
             <button
               onClick={handleSubmit}
               className={"btn  m-3"}
-              style={{ "background-color": "#e32f45" }}
+              style={{ "background-color": "#e32f45", color: "white" }}
             >
               Submit
             </button>
