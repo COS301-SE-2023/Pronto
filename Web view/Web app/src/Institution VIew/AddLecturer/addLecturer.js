@@ -12,7 +12,7 @@ const AddLecturer = () => {
     const [moduleCode,setModuleCode]=useState("")  
     
     const data=[ 
-        {firstname:"John",lastname:"Doe",email:"johndoe@up.ac.za",moduleCode:""}
+        {firstname:"John",lastname:"Doe",email:"johndoe@up.ac.za",moduleCode:"COS132"}
     ]
     
     const handleAdd=  async(event) => { 
