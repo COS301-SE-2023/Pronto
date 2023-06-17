@@ -1,113 +1,80 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import CloseIcon from '@mui/icons-material/Close';
-import { IconButton } from '@mui/material';
+import React, { useState } from 'react';
 
-const baseStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
-    borderWidth: 2,
-    borderRadius: 2,
-    borderColor: '#eeeeee',
-    borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#bdbdbd',
-    transition: 'border .3s ease-in-out'
-};
+function DropzoneComponent() {
+    const [selectedFile, setSelectedFile] = useState(null);
 
-const activeStyle = {
-    borderColor: '#2196f3'
-};
-
-const acceptStyle = {
-    borderColor: '#00e676'
-};
-
-const rejectStyle = {
-    borderColor: '#ff1744'
-};
-
-function DropzoneComponent(props) {
-    const [files, setFiles] = useState([]);
-
-    const onDrop = useCallback(acceptedFiles => {
-        setFiles(prevFiles => [
-            ...prevFiles,
-            ...acceptedFiles.map(file =>
-                Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                })
-            )
-        ]);
-    }, []);
-
-    const removeFile = file => {
-        setFiles(prevFiles => prevFiles.filter(f => f !== file));
-        URL.revokeObjectURL(file.preview);
+    const handleFileSelect = event => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
     };
 
-    const {
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        isDragAccept,
-        isDragReject
-    } = useDropzone({
-        onDrop,
-        accept: 'application/pdf'
-    });
+    const handleFileDrop = event => {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        setSelectedFile(file);
+    };
 
-    const style = useMemo(
-        () => ({
-            ...baseStyle,
-            ...(isDragActive ? activeStyle : {}),
-            ...(isDragAccept ? acceptStyle : {}),
-            ...(isDragReject ? rejectStyle : {})
-        }),
-        [isDragActive, isDragReject, isDragAccept]
-    );
+    const handleSubmit = () => {
+        if (selectedFile) {
+            // Perform file saving logic here
+            console.log('Saving file:', selectedFile.name);
+            // Reset the selected file
+            setSelectedFile(null);
+        }
+    };
 
-    const thumbs = files.map(file => (
-        <div key={file.name}>
-            {file.type.includes('image') ? (
-                <div>
-                    <img src={file.preview} alt={file.name} data-testid="image-preview" />
-                    <button className="btn btn-danger" onClick={() => removeFile(file)} data-testid="remove-button">
-                        Remove
-                    </button>
-                </div>
-            ) : (
-                <div>
-                    <span data-testid={'pdfName'}>{file.name}</span>
-                    <br />
-                    <a href={file.preview} target="_blank" rel="noopener noreferrer" data-testid={"pdf-link"}>
-                        View PDF
-                    </a>
-                    <IconButton onClick={() => removeFile(file)} name={'Remove'}  data-testid={'removePdf'}>
-                        <CloseIcon />
-                    </IconButton>
-                </div>
-            )}
-        </div>
-    ));
+    const handleDragOver = event => {
+        event.preventDefault();
+    };
 
-    useEffect(() => () => {
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
+    const handleDragEnter = event => {
+        event.preventDefault();
+    };
+
+    //when user clicks on the div with id dropzone, it will open file manager to select file and then input it
+    //to the input with id fileInput
+    const handleClick = () => {
+        alert('clicked');
+        document.getElementById('fileInput').click();
+    }
 
     return (
-        <div className="card" data-testid="dropzone">
-            <div className="card-body">
-                <section>
-                    <div {...getRootProps({ style })}>
-                        <input {...getInputProps()} data-testid="drop-input" />
-                        <div>Click here or Drag and drop your images or PDFs here.</div>
+        <div>
+            <div
+                className="dropzone text-center"
+                onDrop={handleFileDrop}
+                onDragOver={handleDragOver}
+                onDragEnter={handleDragEnter}
+                style={{ height: '100px', border: '1px dashed',justifyContent: 'center', alignItems: 'center', display: 'flex' }}
+            >
+                {selectedFile ? (
+                    <div>
+                        Selected File: {selectedFile.name}
+                        <button onClick={handleSubmit} className={'btn btn-primary m-3'}>Submit</button>
                     </div>
-                    <aside data-testid="thumbs-container">{thumbs}</aside>
-                </section>
+                ) : (
+                    <div
+                        id={
+                            'dropzone'
+                        }
+                        onClick={handleClick}
+                    >
+                        Drag and drop your file here or{' '}
+
+                        <label htmlFor="fileInput" className="file-label">
+                            click here
+                        </label>{' '}
+                        to select a file.
+                    </div>
+                )}
             </div>
+            <input
+                id="fileInput"
+                type="file"
+                accept=".pdf"
+                onChange={handleFileSelect}
+                style={{ display: 'none' }}
+            />
         </div>
     );
 }
