@@ -11,7 +11,7 @@ const AddLecturer = () => {
     const [email,setEmail]= useState("")
     const [moduleCode,setModuleCode]=useState("")   
     
-    const add=  async(event) => { 
+    const handleAdd=  async(event) => { 
         event.preventDefault()
         console.log("Add lecturer mutation")
         let user=await Auth.currentAuthenticatedUser() 
@@ -51,7 +51,7 @@ const AddLecturer = () => {
 
                 <div className="card shadow">
                     <div className="card-body">
-                        <form onSubmit={add}>
+                        <form onSubmit={handleAdd}>
                             <div className="form-row">
                                 {/* First name */}
                                 <div className="form-group col-6">
