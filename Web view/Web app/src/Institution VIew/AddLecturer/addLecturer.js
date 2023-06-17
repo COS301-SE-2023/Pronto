@@ -9,7 +9,11 @@ const AddLecturer = () => {
     const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
-    const [moduleCode,setModuleCode]=useState("")   
+    const [moduleCode,setModuleCode]=useState("")  
+    
+    const data=[ 
+        {firstname:"John",lastname:"Doe",email:"johndoe@up.ac.za",moduleCode:""}
+    ]
     
     const handleAdd=  async(event) => { 
         event.preventDefault()
@@ -204,6 +208,26 @@ const AddLecturer = () => {
                                     </button>
                                 </td>
                             </tr>
+                             {data.map((val, key) => {
+                                   return (
+                                    <tr key={key}>
+                                        <td>{val.firstname}</td>
+                                        <td>{val.lastname}</td>
+                                        <td>{val.email}</td> 
+                                        <td>{val.moduleCode}</td>
+                                        <td>
+                                            <button 
+                                                type="button" 
+                                                className="btn btn-danger w-100" 
+                                                data-testid="deleteButt"
+                                            >
+
+                                                Remove
+                                            </button>
+                                        </td>
+                                  </tr>
+                                )
+                             })}
                             </tbody>
                         </table>
                     </div>
