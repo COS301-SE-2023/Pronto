@@ -1,38 +1,41 @@
 import {React,useState} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer} from "../../graphql/mutations";
-import  {API} from 'aws-amplify';
-
+import { createLecturer,createAdmin,createInstitution} from "../../graphql/mutations"; 
+import { listAdmins,listLecturers,getInstitution,getAdmin } from "../../graphql/queries";
+import  {API,graphqlOperation} from 'aws-amplify';
+import { Auth } from "aws-amplify";
 const AddLecturer = () => {
 
     const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
     const [moduleCode,setModuleCode]=useState("")   
+    
     const add=  async(event) => { 
         event.preventDefault()
         console.log("Add lecturer mutation")
-        let lecturer={ 
-            institutionId:"UP123456789",
-            firstName:firstName,
-            lastName:lastName,
-            userRole:"Lecturer",
-            email:email,
-            institution:{
-                id:"UP123456789",
-            }
-        }
-        try{
-           let mut=await API.graphql({
-              query: createLecturer,
-              variables:{input : lecturer},
-              authMode:'AMAZON_COGNITO_USER_POOLS',
-            }
-        )
+        let user=await Auth.currentAuthenticatedUser() 
         
-            console.log("Successfully added "+lecturer.firstName)
-        }catch(e){
-            console.log(e)
+        let lecturer={
+            institutionId:user.username, 
+            firstname:firstName,
+            lastname:lastName,
+            userRole:"Admin",
+            email:email,
+        }
+
+        try{   
+            let mutation=await API.graphql(
+                {
+               query: createLecturer,
+               variables:{input:lecturer},
+               authMode:'AMAZON_COGNITO_USER_POOLS',
+             }
+         )
+        console.log(mutation)
+          
+        }catch(e){    
+            console.error(e)
         }   
     }
 
@@ -121,7 +124,7 @@ const AddLecturer = () => {
                                 className="btn btn-primary w-100"
                                 data-testid="submitButton"
                             >
-                                Submit
+                                Add
                             </button>
                         </form>
                     </div>
@@ -197,7 +200,7 @@ const AddLecturer = () => {
                                         className="btn btn-danger w-100"
                                         data-testid="deleteButton"
                                     >
-                                        Delete
+                                        Remove
                                     </button>
                                 </td>
                             </tr>
