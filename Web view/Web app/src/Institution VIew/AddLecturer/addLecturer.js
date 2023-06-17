@@ -2,7 +2,7 @@ import {React,useState} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer,createAdmin,createInstitution} from "../../graphql/mutations"; 
 import { listAdmins,listLecturers,getInstitution,getAdmin } from "../../graphql/queries";
-import  {API,graphqlOperation} from 'aws-amplify';
+import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
 const AddLecturer = () => {
 
@@ -28,19 +28,36 @@ const AddLecturer = () => {
             email:email,
         }
 
-        try{   
-            let mutation=await API.graphql(
-                {
-               query: createLecturer,
-               variables:{input:lecturer},
-               authMode:'AMAZON_COGNITO_USER_POOLS',
-             }
-         )
-        console.log(mutation)
+        // try{   
+        //     let mutation=await API.graphql(
+        //         {
+        //        query: createLecturer,
+        //        variables:{input:lecturer},
+        //        authMode:'AMAZON_COGNITO_USER_POOLS',
+        //      }
+        //  )
+        // console.log(mutation)
           
-        }catch(e){    
-            console.error(e)
-        }   
+        // }catch(e){    
+        //     console.error(e)
+        // }    
+        try{
+           let lecturers=await API.graphql(
+            {
+            query:listLecturers, 
+            variables:{},
+            authMode:'AMAZON_COGNITO_USER_POOLS',
+            }
+           ) 
+           lecturers.forEach(element => {
+               let lecturer=element
+               console.log(lecturer)
+           });
+           //data.concat({firstname,lastname,email,moduleCode})
+        }
+        catch(error){ 
+            console.error(error)
+        }
     }
 
     return (
