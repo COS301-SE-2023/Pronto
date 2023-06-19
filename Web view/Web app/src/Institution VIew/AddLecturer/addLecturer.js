@@ -10,7 +10,8 @@ const AddLecturer = () => {
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
     const [moduleCode,setModuleCode]=useState("")  
-
+    const [filterAttribute,setFilterAttribute]=useState("")
+    const [searchValue,setSearchValue]=useState("")
     const [lecturers ,setLecturers]= useState([])
 
     const handleAdd=  async(event) => { 
@@ -76,16 +77,16 @@ const AddLecturer = () => {
                 {
                 query:lecturersByInstitutionId, 
                 variables:{ 
-                            institutionId:institution.username
+                            institutionId:institution.username,
+                            limit: 20
                     },
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
            ) 
             console.log(lecturerslist)
-            lecturerslist=lecturerslist.data.listLecturers.items
+            lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
             lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
             setLecturers(lecturerslist)
-            console.log(lecturerslist)
         }
        
         catch(error){ 
@@ -93,6 +94,70 @@ const AddLecturer = () => {
         }
     }
     
+    const handleSearch = async() => { 
+        console.log(filterAttribute)
+        // try{ 
+        //     let institution=await Auth.currentAuthenticatedUser()
+        //     console.log(filterAttribute)
+         
+        //     if(filterAttribute==="firstname"){
+        //     let search= await API.graphql({
+        //         query:lecturersByInstitutionId,
+        //         variables:  { 
+        //                    institutionId : institution.username,  
+        //                     filter : { 
+        //                         firstname: { 
+        //                              eq: searchValue 
+        //                         } 
+
+        //                    }
+        //                 },
+        //         authMode:"AMAZON_COGNITO_USER_POOLS"         
+        //     })
+        //     console.log(search)
+        //     setLecturers(search.data.lecturersByInstitutionId.items)
+        // }
+        //     else if(filterAttribute==="lastname"){ 
+        //       let search= await API.graphql({
+        //         query:lecturersByInstitutionId,
+        //         variables:  { 
+        //                    institutionId : institution.username,  
+        //                     filter : { 
+        //                         lastname: { 
+        //                              eq: searchValue 
+        //                         } 
+
+        //                    }
+        //                 },
+        //         authMode:"AMAZON_COGNITO_USER_POOLS"         
+        //     })   
+        //     console.log(search)
+        //     setLecturers(search.data.lecturersByInstitutionId.items)
+        //     }
+        //     else if(filterAttribute==="email"){
+        //       let search= await API.graphql({
+        //         query:lecturersByInstitutionId,
+        //         variables:  { 
+        //                    institutionId : institution.username,  
+        //                     filter : { 
+        //                         email: { 
+        //                              eq: searchValue 
+        //                         } 
+
+        //                    }
+        //                 },
+        //         authMode:"AMAZON_COGNITO_USER_POOLS"         
+        //     })
+        //     console.log(search)  
+        //     setLecturers(search.data.lecturersByInstitutionId.items)
+        //     }
+            
+        // }
+        // catch(e){
+        //     console.error(e)
+        // }
+
+    } 
     
     useEffect(() => {
         fetchLecturers();
@@ -173,9 +238,9 @@ const AddLecturer = () => {
                                 </div>
                             </div>
 
-                            <small id="emailHelp" className="form-text text-muted">
+                            {/* <small id="emailHelp" className="form-text text-muted">
                                 We'll never share your email with anyone else.
-                            </small>
+                            </small> */}
 
                             <button
                                 type="submit"
@@ -192,7 +257,7 @@ const AddLecturer = () => {
                 <h1 className="text-center">Lecturers</h1>
                 {/* Search bar with search material ui icon and border radius of 20px */}
                 <div className="input-group mb-3 p-1">
-                    <input
+                    <input onChange={(e)=>setSearchValue(e.target.value)}
                         type="text"
                         className="form-control"
                         placeholder="Search for a lecturer"
@@ -201,23 +266,24 @@ const AddLecturer = () => {
                         data-testid="searchInput"
                     />
                     <div className="input-group-append">
-                        <button 
+                        <button onClick={handleSearch}
                             className="btn btn-outline-primary"
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
                         ></button>
                         {/* a dropdown filter for the search */}
-                        <select
+                        <select onChange={(e)=>setFilterAttribute(e.target.value)}
+                            value={filterAttribute}
                             className="custom-select"
                             id="inputGroupSelect01"
                             data-testid="filterSelect"
-                            defaultValue='default'
+                            //defaultValue='default'
                         >
-                            <option value={'default'}>Filter by</option>
-                            <option value="1">First Name</option>
-                            <option value="2">Last Name</option>
-                            <option value="3">Email</option>
+                            <option value={'default'}>Filter by</option> 
+                            <option value="firstname" >First Name</option>
+                            <option value="lastname" >Last Name</option>
+                            <option value="email" >Email</option>
                             <option value="4">Module Code</option>
                         </select>
                     </div>
