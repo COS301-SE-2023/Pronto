@@ -95,67 +95,70 @@ const AddLecturer = () => {
     }
     
     const handleSearch = async() => { 
-        console.log(filterAttribute)
-        // try{ 
-        //     let institution=await Auth.currentAuthenticatedUser()
-        //     console.log(filterAttribute)
+        try{ 
+            let institution=await Auth.currentAuthenticatedUser()
+            console.log(filterAttribute)
          
-        //     if(filterAttribute==="firstname"){
-        //     let search= await API.graphql({
-        //         query:lecturersByInstitutionId,
-        //         variables:  { 
-        //                    institutionId : institution.username,  
-        //                     filter : { 
-        //                         firstname: { 
-        //                              eq: searchValue 
-        //                         } 
+            if(filterAttribute==="firstname"){
+            let search= await API.graphql({
+                query:lecturersByInstitutionId,
+                variables:  { 
+                           institutionId : institution.username,  
+                            filter : { 
+                                firstname: { 
+                                     eq: searchValue 
+                                } 
 
-        //                    }
-        //                 },
-        //         authMode:"AMAZON_COGNITO_USER_POOLS"         
-        //     })
-        //     console.log(search)
-        //     setLecturers(search.data.lecturersByInstitutionId.items)
-        // }
-        //     else if(filterAttribute==="lastname"){ 
-        //       let search= await API.graphql({
-        //         query:lecturersByInstitutionId,
-        //         variables:  { 
-        //                    institutionId : institution.username,  
-        //                     filter : { 
-        //                         lastname: { 
-        //                              eq: searchValue 
-        //                         } 
+                           }
+                        },
+                authMode:"AMAZON_COGNITO_USER_POOLS"         
+            })
+            console.log(search)
+            setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+        }
+            else if(filterAttribute==="lastname"){ 
+              let search= await API.graphql({
+                query:lecturersByInstitutionId,
+                variables:  { 
+                           institutionId : institution.username,  
+                            filter : { 
+                                lastname: { 
+                                     eq: searchValue 
+                                } 
 
-        //                    }
-        //                 },
-        //         authMode:"AMAZON_COGNITO_USER_POOLS"         
-        //     })   
-        //     console.log(search)
-        //     setLecturers(search.data.lecturersByInstitutionId.items)
-        //     }
-        //     else if(filterAttribute==="email"){
-        //       let search= await API.graphql({
-        //         query:lecturersByInstitutionId,
-        //         variables:  { 
-        //                    institutionId : institution.username,  
-        //                     filter : { 
-        //                         email: { 
-        //                              eq: searchValue 
-        //                         } 
+                           }
+                        },
+                authMode:"AMAZON_COGNITO_USER_POOLS"         
+            })   
+            console.log(search)
+            setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+            }
+            else if(filterAttribute==="email"){
+              let search= await API.graphql({
+                query:lecturersByInstitutionId,
+                variables:  { 
+                           institutionId : institution.username,  
+                            filter : { 
+                                email: { 
+                                     eq: searchValue 
+                                } 
 
-        //                    }
-        //                 },
-        //         authMode:"AMAZON_COGNITO_USER_POOLS"         
-        //     })
-        //     console.log(search)  
-        //     setLecturers(search.data.lecturersByInstitutionId.items)
-        //     }
+                           }
+                        },
+                authMode:"AMAZON_COGNITO_USER_POOLS"         
+            })
+            console.log(search)  
+               
+            setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+            }
+            else{ 
+                await fetchLecturers()
+            }
             
-        // }
-        // catch(e){
-        //     console.error(e)
-        // }
+        }
+        catch(e){
+            console.error(e)
+        }
 
     } 
     
