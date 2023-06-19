@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer,createAdmin,createInstitution} from "../../graphql/mutations"; 
+import { createLecturer,createAdmin,createInstitution, deleteLecturer} from "../../graphql/mutations"; 
 import { listAdmins,listLecturers,getInstitution,getAdmin } from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
@@ -12,9 +12,6 @@ const AddLecturer = () => {
     const [moduleCode,setModuleCode]=useState("")  
 
     const [lecturers ,setLecturers]= useState([])
-    // let lecturers=[ 
-    //     {firstname:"",lastname:"",email:"",moduleCode:""}
-    // ]
 
     const handleAdd=  async(event) => { 
         event.preventDefault()
@@ -38,23 +35,11 @@ const AddLecturer = () => {
              }
          )
         console.log(mutation)
-          
+        lecturers.push(mutation.data.createLecturer)
+        setLecturers(lecturers)  
         }catch(e){    
             console.error(e)
         }    
-        try{
-           let l ={ 
-              firstname:lecturer.firstname,
-              lastname:lecturer.lastname,
-              email:email,
-              moduleCode:moduleCode
-           }
-           lecturers.push(l)
-           setLecturers(lecturers)
-        }
-        catch(error){ 
-            console.error(error)
-        }
         
         setFirstName("")
         setLastName("")
@@ -62,8 +47,32 @@ const AddLecturer = () => {
         setModuleCode("")
     }
 
-    const handleRemove= async(lecturer) =>{
-        
+    const handleRemove= async(lecturer,index) =>{
+        //event.preventDefault()
+        console.log(lecturer)
+        let lec={ 
+           id : lecturer.id,
+           _version:lecturer._version
+        }
+         try{
+            let mutation=await API.graphql({
+                query:deleteLecturer,
+                variables:{input : lec },
+                authMode:"AMAZON_COGNITO_USER_POOLS"
+            })
+            //console.log(index)
+            console.log(lecturers)
+            lecturers.splice(index,1)
+            //setLecturers(lecturers)
+            //console.log(lecturers)
+            console.log(mutation)
+            setLecturers(lecturers)
+            console.log(lecturers)
+            window.location.reload(false)
+        }
+        catch(e){
+            console.error(e)
+        }
     }
 
     const fetchLecturers = async()=>{
@@ -76,6 +85,7 @@ const AddLecturer = () => {
                 }
            ) 
             lecturerslist=lecturerslist.data.listLecturers.items
+            lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
             setLecturers(lecturerslist)
             console.log(lecturerslist)
         }
@@ -235,7 +245,7 @@ const AddLecturer = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                            {/* <tr>
                                 <td>John</td>
                                 <td>Doe</td>
                                 <td>
@@ -245,7 +255,7 @@ const AddLecturer = () => {
                                 </td>
                                 <td>COS132</td>
                                 <td>
-                                    <button onClick={handleRemove}
+                                    <button 
                                         type="button"
                                         className="btn btn-danger w-100"
                                         data-testid="deleteButton"
@@ -253,9 +263,9 @@ const AddLecturer = () => {
                                         Remove
                                     </button>
                                 </td>   
-                            </tr>
+                            </tr> */}
                              {  lecturers.map((val, key)=>{
-                                console.log("Adding rows")    
+                                //console.log("Adding rows")    
                                    return (
                                     <tr key={key}>
                                         <td>{val.firstname}</td>
@@ -267,7 +277,7 @@ const AddLecturer = () => {
                                         </td> 
                                         <td>{val.moduleCode}</td>
                                         <td>
-                                            <button onClick={() => handleRemove("Goal!")} 
+                                            <button onClick={() => {handleRemove(val,key)}} 
                                                 type="button" 
                                                 className="btn btn-danger w-100" 
                                                 data-testid="deleteButton"
