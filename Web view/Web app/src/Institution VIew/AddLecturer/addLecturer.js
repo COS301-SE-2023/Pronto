@@ -1,4 +1,4 @@
-import {React,useState} from "react";
+import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer,createAdmin,createInstitution} from "../../graphql/mutations"; 
 import { listAdmins,listLecturers,getInstitution,getAdmin } from "../../graphql/queries";
@@ -10,57 +10,86 @@ const AddLecturer = () => {
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
     const [moduleCode,setModuleCode]=useState("")  
-    
-    const data=[ 
-        {firstname:"John",lastname:"Doe",email:"johndoe@up.ac.za",moduleCode:"COS132"}
-    ]
-    
+
+    const [lecturers ,setLecturers]= useState([])
+    // let lecturers=[ 
+    //     {firstname:"",lastname:"",email:"",moduleCode:""}
+    // ]
+
     const handleAdd=  async(event) => { 
         event.preventDefault()
-        console.log("Add lecturer mutation")
+        // console.log("Add lecturer mutation")
         let user=await Auth.currentAuthenticatedUser() 
         
         let lecturer={
             institutionId:user.username, 
             firstname:firstName,
             lastname:lastName,
-            userRole:"Admin",
+            userRole:"Lecturer",
             email:email,
         }
 
-        // try{   
-        //     let mutation=await API.graphql(
-        //         {
-        //        query: createLecturer,
-        //        variables:{input:lecturer},
-        //        authMode:'AMAZON_COGNITO_USER_POOLS',
-        //      }
-        //  )
-        // console.log(mutation)
+        try{   
+            let mutation=await API.graphql(
+                {
+               query: createLecturer,
+               variables:{input:lecturer},
+               authMode:'AMAZON_COGNITO_USER_POOLS',
+             }
+         )
+        console.log(mutation)
           
-        // }catch(e){    
-        //     console.error(e)
-        // }    
+        }catch(e){    
+            console.error(e)
+        }    
         try{
-           let lecturers=await API.graphql(
-            {
-            query:listLecturers, 
-            variables:{},
-            authMode:'AMAZON_COGNITO_USER_POOLS',
-            }
-           ) 
-           lecturers.forEach(element => {
-               let lecturer=element
-               console.log(lecturer)
-           });
-           //data.concat({firstname,lastname,email,moduleCode})
+           let l ={ 
+              firstname:lecturer.firstname,
+              lastname:lecturer.lastname,
+              email:email,
+              moduleCode:moduleCode
+           }
+           lecturers.push(l)
+           setLecturers(lecturers)
         }
         catch(error){ 
             console.error(error)
         }
+        
+        setFirstName("")
+        setLastName("")
+        setEmail("")
+        setModuleCode("")
     }
 
-    return (
+    const handleRemove= async(lecturer) =>{
+        
+    }
+
+    const fetchLecturers = async()=>{
+        try{
+            let lecturerslist=await API.graphql(
+                {
+                query:listLecturers, 
+                variables:{},
+                authMode:'AMAZON_COGNITO_USER_POOLS',
+                }
+           ) 
+            lecturerslist=lecturerslist.data.listLecturers.items
+            setLecturers(lecturerslist)
+            console.log(lecturerslist)
+        }
+       
+        catch(error){ 
+            console.error(error)
+        }
+    }
+    
+    
+    useEffect(() => {
+        fetchLecturers();
+    }, [])
+    return (  
         <div style={{ display: 'inline-flex' }}>
             <nav style={{ width: '20%' }} data-testid="InstitutionNavigation">
                 {/* Navigation bar content */}
@@ -164,7 +193,7 @@ const AddLecturer = () => {
                         data-testid="searchInput"
                     />
                     <div className="input-group-append">
-                        <button
+                        <button 
                             className="btn btn-outline-primary"
                             type="button"
                             id="button-addon2"
@@ -216,35 +245,39 @@ const AddLecturer = () => {
                                 </td>
                                 <td>COS132</td>
                                 <td>
-                                    <button
+                                    <button onClick={handleRemove}
                                         type="button"
                                         className="btn btn-danger w-100"
                                         data-testid="deleteButton"
                                     >
                                         Remove
                                     </button>
-                                </td>
+                                </td>   
                             </tr>
-                             {data.map((val, key) => {
+                             {  lecturers.map((val, key)=>{
+                                console.log("Adding rows")    
                                    return (
                                     <tr key={key}>
                                         <td>{val.firstname}</td>
                                         <td>{val.lastname}</td>
-                                        <td>{val.email}</td> 
+                                        <td>
+                                            <a href="mailto:" data-testid="lecturerEmail">
+                                                {val.email}
+                                            </a>
+                                        </td> 
                                         <td>{val.moduleCode}</td>
                                         <td>
-                                            <button 
+                                            <button onClick={() => handleRemove("Goal!")} 
                                                 type="button" 
                                                 className="btn btn-danger w-100" 
-                                                data-testid="deleteButt"
+                                                data-testid="deleteButton"
                                             >
-
                                                 Remove
                                             </button>
                                         </td>
                                   </tr>
                                 )
-                             })}
+                             })} 
                             </tbody>
                         </table>
                     </div>

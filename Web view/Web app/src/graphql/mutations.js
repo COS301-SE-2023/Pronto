@@ -219,3 +219,4 @@ export const getInstitution=`query GetInstitution($id: ID!) {
 }
 `
 ;
+
