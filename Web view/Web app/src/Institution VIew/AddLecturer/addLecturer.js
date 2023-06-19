@@ -1,7 +1,7 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer,createAdmin,createInstitution, deleteLecturer} from "../../graphql/mutations"; 
-import { listAdmins,listLecturers,getInstitution,getAdmin } from "../../graphql/queries";
+import { listAdmins,listLecturers,getInstitution,getAdmin ,lecturersByInstitutionId} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
 const AddLecturer = () => {
@@ -15,7 +15,6 @@ const AddLecturer = () => {
 
     const handleAdd=  async(event) => { 
         event.preventDefault()
-        // console.log("Add lecturer mutation")
         let user=await Auth.currentAuthenticatedUser() 
         
         let lecturer={
@@ -60,14 +59,9 @@ const AddLecturer = () => {
                 variables:{input : lec },
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             })
-            //console.log(index)
-            console.log(lecturers)
             lecturers.splice(index,1)
-            //setLecturers(lecturers)
-            //console.log(lecturers)
             console.log(mutation)
             setLecturers(lecturers)
-            console.log(lecturers)
             window.location.reload(false)
         }
         catch(e){
@@ -77,13 +71,17 @@ const AddLecturer = () => {
 
     const fetchLecturers = async()=>{
         try{
+            let institution= await Auth.currentAuthenticatedUser()
             let lecturerslist=await API.graphql(
                 {
-                query:listLecturers, 
-                variables:{},
+                query:lecturersByInstitutionId, 
+                variables:{ 
+                            institutionId:institution.username
+                    },
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
            ) 
+            console.log(lecturerslist)
             lecturerslist=lecturerslist.data.listLecturers.items
             lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
             setLecturers(lecturerslist)
@@ -264,8 +262,7 @@ const AddLecturer = () => {
                                     </button>
                                 </td>   
                             </tr> */}
-                             {  lecturers.map((val, key)=>{
-                                //console.log("Adding rows")    
+                             {  lecturers.map((val, key)=>{    
                                    return (
                                     <tr key={key}>
                                         <td>{val.firstname}</td>

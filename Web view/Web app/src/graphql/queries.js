@@ -6,8 +6,7 @@ export const getLecturer = `query GetLecturer($id: ID!) {
     firstname
     lastname
   }
-}
-`;
+}`;
 
 export const listAdmins=`query ListAdmins(
   $filter: ModelAdminFilterInput
@@ -143,3 +142,37 @@ export const getAdmin=`query GetAdmin($id: ID!) {
     owner
   }
 }`;
+
+export const lecturersByInstitutionId=`query LecturersByInstitutionId(
+  $institutionId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelLecturerFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  lecturersByInstitutionId(
+    institutionId: $institutionId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    nextToken
+    startedAt
+  }
+}
+`
