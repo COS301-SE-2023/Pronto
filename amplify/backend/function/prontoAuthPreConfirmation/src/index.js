@@ -55,7 +55,7 @@ exports.handler = async (event) => {
         event.response.autoConfirmUser = false;
         break;
       default:
-        break;
+        throw new Error('Invalid User Role');
     }
   } catch (preAuthError) {
     console.debug(preAuthError);
