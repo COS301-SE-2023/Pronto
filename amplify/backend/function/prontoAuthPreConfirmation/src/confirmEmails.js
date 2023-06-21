@@ -1,6 +1,6 @@
 const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEYOUTPUT;
-let institutionDetails;
+
 const getAndSetInstitutionDetails = async (institutionId) => {
   const query = /* GraphQL */ `
       query MyQuery($id: ID = ${institutionId}) {
@@ -28,7 +28,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
   try {
     response = await fetch(request);
     body = await response.json();
-    if (!body.errors) return (institutionDetails = body.data.getInstitution);
+    return body.data.getInstitution;
   } catch (getEmailsQueryError) {
     console.debug(getEmailsQueryError);
     throw new Error(`Failed To retrieve institution details. id=${institutionId}.`);
@@ -40,21 +40,24 @@ const getLectureEmailsFromInstitution = async (institutionId) => {
     throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
   }
   try {
-    const results = await getAndSetInstitutionDetails(institutionId);
+    const institutionDetails = await getAndSetInstitutionDetails(institutionId);
     return institutionDetails.lectureremails;
   } catch (getAndSetInstitutionDetailsError) {
     console.debug(getAndSetInstitutionDetailsError);
-    throw new Error(`Failed to retrieve list of emails for the institution. Info: ${getAndSetInstitutionDetailsError}`);
+    throw new Error(`Failed to retrieve list for the institution. Info: ${getAndSetInstitutionDetailsError}`);
   }
 };
 
-const getInstitutionAdminId = async (institutionId) => {
-  if (!institutionDetails) {
-    const results = await getAndSetInstitutionDetails(institutionId);
-    if (!results.error) return institutionDetails.adminId;
-    throw new Error(results);
+const getInstitutionAdminId = async (institutionId) => {  
+  if (!institutionId) {
+    throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
   }
-  return institutionDetails.adminId;
+  try{
+    const institutionDetails = await getAndSetInstitutionDetails(institutionId);
+    return institutionDetails.adminId;
+  } catch(getInstitutionAdminIdError){
+    throw new Error(`Failed to retrieve admin for the institution. Info: ${getInstitutionAdminIdError}`);
+  }
 };
 
 const isLectureEmailPartOfInstitution = async (email, institutionId) => {
