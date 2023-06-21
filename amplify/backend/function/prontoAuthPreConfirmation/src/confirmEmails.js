@@ -67,9 +67,9 @@ const isLectureEmailPartOfInstitution = async (email, institutionId) => {
   }
 };
 
-const isAdminAllocated = function (institutionId) {
+const isAdminAllocated = async (institutionId) => {
   try {
-    const adminId = getInstitutionAdminId(institutionId);
+    const adminId = await getInstitutionAdminId(institutionId);
     return adminId != null;
   } catch (getInstitutionAdminIdError) {
     console.debug(getLectureEmailsFromInstitutionError);
