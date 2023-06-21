@@ -21,7 +21,7 @@ exports.handler = async (event) => {
     throw new Error(
       `Cannot authenticate users from this app client: Students Should use the mobile app and Admin/Lectures should use the web app`,
     );
-    
+
   event.response.autoConfirmUser = false;
   try {
     switch (event.request.clientMetadata.role) {
@@ -35,30 +35,31 @@ exports.handler = async (event) => {
         event.response.autoConfirmUser = true;
         break;
       case ROLES.Lecture:
-        const isLectureEmailPartOfInstitution = isLectureEmailPartOfInstitution(
+        const isLectureEmailPartOfInstitution = await isLectureEmailPartOfInstitution(
           event.request.userAttributes.email,
           event.request.clientMetadata.institutionId,
         );
-        if (isLectureEmailPartOfInstitution) {
-          event.response.autoConfirmUser = true;
+
+        if (!isLectureEmailPartOfInstitution) {
+          event.response.autoConfirmUser = false;
+          throw new Error(
+            `Lecturer email is not part of the Institution. institutionId=${event.request.clientMetadata.institutionId}`,
+          );
         }
-        event.response.autoConfirmUser = false;
-        throw new Error(
-          `Lecturer email is not part of the Institution. institutionId=${event.request.clientMetadata.institutionId}`,
-        );
+        event.response.autoConfirmUser = true;
       case ROLES.Student:
         //call api
         //get email domains for the institution
-        //check student domain
+        //check student domain : match(/@domain$/)
         //event.response.autoConfirmUser = isStudentDomainPartOfInstitution();
         event.response.autoConfirmUser = false;
         break;
       default:
         break;
     }
-  } catch (apiHandlerError) {
-    //db error, add error handling mechanisms
-    throw new Error(apiHandlerError); //send error to client
+  } catch (preAuthError) {
+    console.debug(preAuthError);
+    throw new Error(preAuthError);
   }
   return event;
 };
