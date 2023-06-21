@@ -1,7 +1,8 @@
 const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEYOUTPUT;
-
+let institutionDetails = null;
 const getAndSetInstitutionDetails = async (institutionId) => {
+  if(institutionDetails) return institutionDetails;
   const query = /* GraphQL */ `
       query MyQuery($id: ID = ${institutionId}) {
         getInstitution(id: $id) {
@@ -28,7 +29,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
   try {
     response = await fetch(request);
     body = await response.json();
-    return body.data.getInstitution;
+    return institutionDetails = body.data.getInstitution;
   } catch (getEmailsQueryError) {
     console.debug(getEmailsQueryError);
     throw new Error(`Failed To retrieve institution details. id=${institutionId}.`);
@@ -70,7 +71,9 @@ const isAdminAllocated = function (institutionId) {
   try {
     const adminId = getInstitutionAdminId(institutionId);
     return adminId != null;
-  } catch (error) {}
+  } catch (getInstitutionAdminIdError) { 
+  console.debug(getLectureEmailsFromInstitutionError);
+  throw new Error(getLectureEmailsFromInstitutionError);}
 };
 
 module.exports = {
