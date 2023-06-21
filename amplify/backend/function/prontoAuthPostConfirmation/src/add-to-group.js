@@ -19,8 +19,8 @@ console.table(cognitoIdentityServiceProviderClient);
  */
 exports.handler = async (event) => {
   if (!event.request.callerContext.clientMetadata.role) throw new Error('User role not provided on clientMetadata');
-  if (!(event.request.callerContext.clientMetadata.role in ROLES)) throw new Error('Invalid User Role');
   if (!event.request.callerContext.clientId) throw new Error('ClientId not provided on callerContext');
+  if (!(event.request.callerContext.clientMetadata.role in ROLES)) throw new Error('Invalid User Role');
   let GroupName;
 
   switch (event.request.callerContext.clientId) {
