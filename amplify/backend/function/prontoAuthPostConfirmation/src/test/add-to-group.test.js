@@ -69,6 +69,7 @@ describe('input validation', () => {
 
   test(`Should throw Error('Failed to get User Group with userGroupName...`, async () => {
     process.env.AdminGroupName = null;
+    process.env.AppClientIdWeb = adminEvent.request.callerContext.clientId;
     await expect(addToGroup.handler(adminEvent)).rejects.toThrow(/Failed to get User Group with userGroupName/);
   });
 });
