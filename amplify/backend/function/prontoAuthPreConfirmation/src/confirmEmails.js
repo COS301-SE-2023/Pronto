@@ -36,9 +36,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
 };
 
 const getLectureEmailsFromInstitution = async (institutionId) => {
-  if (!institutionId) {
-    throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
-  }
+  if (!institutionId) throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
   try {
     const institutionDetails = await getAndSetInstitutionDetails(institutionId);
     return institutionDetails.lectureremails;
@@ -48,14 +46,12 @@ const getLectureEmailsFromInstitution = async (institutionId) => {
   }
 };
 
-const getInstitutionAdminId = async (institutionId) => {  
-  if (!institutionId) {
-    throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
-  }
-  try{
+const getInstitutionAdminId = async (institutionId) => {
+  if (!institutionId) throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
+  try {
     const institutionDetails = await getAndSetInstitutionDetails(institutionId);
     return institutionDetails.adminId;
-  } catch(getInstitutionAdminIdError){
+  } catch (getInstitutionAdminIdError) {
     throw new Error(`Failed to retrieve admin for the institution. Info: ${getInstitutionAdminIdError}`);
   }
 };
@@ -65,6 +61,7 @@ const isLectureEmailPartOfInstitution = async (email, institutionId) => {
     const emailList = await getLectureEmailsFromInstitution(institutionId);
     return emailList.includes(email);
   } catch (getLectureEmailsFromInstitutionError) {
+    console.debug(getLectureEmailsFromInstitutionError);
     throw new Error(getLectureEmailsFromInstitutionError);
   }
 };
