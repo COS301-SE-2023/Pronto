@@ -28,12 +28,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
   try {
     response = await fetch(request);
     body = await response.json();
-    if (body.errors)
-      return {
-        error: `Failed To retrieve institution details. id=${institutionId}.
-             Info: ${body.errors}`,
-      };
-    return (institutionDetails = body.data.getInstitution);
+    if (!body.errors) return (institutionDetails = body.data.getInstitution);
   } catch (getEmailsQueryError) {
     console.debug(getEmailsQueryError);
     throw new Error(`Failed To retrieve institution details. id=${institutionId}.`);
@@ -42,11 +37,15 @@ const getAndSetInstitutionDetails = async (institutionId) => {
 
 const getLectureEmailsFromInstitution = async (institutionId) => {
   if (!institutionDetails) {
-    const results = await getAndSetInstitutionDetails(institutionId);
-    if (!results.error) return institutionDetails.lectureremails;
-    throw new Error(results);
+    throw new Error(`Invalid Institution Id: isntitution is ${institutionDetails}`);
   }
-  return institutionDetails.lectureremails;
+  try {
+    const results = await getAndSetInstitutionDetails(institutionId);
+    return institutionDetails.lectureremails;
+  } catch (getAndSetInstitutionDetailsError) {
+    console.debug(getAndSetInstitutionDetailsError);
+    throw new Error(`Failed to retrieve list of emails for the institution. Info: ${getAndSetInstitutionDetailsError}`);
+  }
 };
 
 const getInstitutionAdminId = async (institutionId) => {
