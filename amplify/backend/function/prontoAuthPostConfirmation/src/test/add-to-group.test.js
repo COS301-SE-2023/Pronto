@@ -4,7 +4,7 @@ const adminEvent = require('../events/admin.event.json');
 const lecturerEvent = require('../events/lecturers.event.json');
 const studentsEvent = require('../events/students.event.json');
 
-describe('add-to-group', () => {
+describe('input validation', () => {
   const OLD_ENV = process.env;
   beforeEach(() => {
     jest.restoreAllMocks();
@@ -40,12 +40,25 @@ describe('add-to-group', () => {
       /^ClientId not provided on callerContext$/,
     );
   });
+  test(`Should throw Error('Invalid User Role'`, async () => {
+    const requestWithInvalidRole = {
+      request: {
+        callerContext: {
+          clientId: 'aClientId',
+          clientMetadata: {
+            role: 'InvalidRole',
+          },
+        },
+      },
+    };
+    await expect(addToGroup.handler(requestWithInvalidRole)).rejects.toThrow(/^Invalid User Role$/);
+  });
   test(`Should throw Error('Unrecognised user pool app client ID='`, async () => {
     const requestWithNullclientId = {
       request: {
         callerContext: {
           clientMetadata: {
-            role: ' ',
+            role: 'Lecture',
           },
           clientId: 'UnrecognisedId',
         },
@@ -58,7 +71,18 @@ describe('add-to-group', () => {
     process.env.AdminGroupName = null;
     await expect(addToGroup.handler(adminEvent)).rejects.toThrow(/Failed to get User Group with userGroupName/);
   });
+});
+describe('add to group', () => {
+  const OLD_ENV = process.env;
+  beforeEach(() => {
+    jest.restoreAllMocks();
+    jest.resetModules();
+    process.env = { ...OLD_ENV };
+  });
 
+  afterAll(() => {
+    process.env = OLD_ENV;
+  });
   test(`Should add admin to group`, async () => {
     const mockAddToGroupHandler = jest.fn(addToGroup.handler).mockResolvedValue(adminEvent);
     expect(await mockAddToGroupHandler(adminEvent)).toMatchObject(adminEvent);
