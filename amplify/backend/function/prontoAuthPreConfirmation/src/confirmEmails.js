@@ -36,8 +36,8 @@ const getAndSetInstitutionDetails = async (institutionId) => {
 };
 
 const getLectureEmailsFromInstitution = async (institutionId) => {
-  if (!institutionDetails) {
-    throw new Error(`Invalid Institution Id: isntitution is ${institutionDetails}`);
+  if (!institutionId) {
+    throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
   }
   try {
     const results = await getAndSetInstitutionDetails(institutionId);
