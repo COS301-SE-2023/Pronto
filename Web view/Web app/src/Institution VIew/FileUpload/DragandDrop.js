@@ -1,7 +1,22 @@
-import React, { useState } from "react";
-import AWS from "aws-sdk";
+import React, { useState, useEffect } from "react";
+import { Amplify, Storage } from "aws-amplify";
+import config from "../../aws-exports";
 
 function DropzoneComponent() {
+  useEffect(() => {
+    Amplify.configure({
+      Auth: {
+        IdentityPoolId: "",
+        region: "us-east-1",
+      },
+      Storage: {
+        AWSS3: {
+          bucket: "institution-file-upload",
+          region: "us-east-1",
+        },
+      },
+    });
+  }, []);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileSelect = (event) => {
@@ -22,24 +37,9 @@ function DropzoneComponent() {
       // Perform file saving logic here
       console.log("Saving file:", selectedFile.name);
 
-      AWS.config.update({
-        accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-      });
-
-      const bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
-      console.log(bucketName);
-      const s3 = new AWS.S3();
-
-      const params = {
-        Bucket: bucketName,
-        Key: selectedFile.name,
-        Body: selectedFile,
-      };
-
       try {
-        await s3.upload(params).promise();
-        alert("File uploaded successfully.");
+        const result = await Storage.put(selectedFile.name, selectedFile);
+        console.log("File uploaded successfully:", result);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
@@ -86,7 +86,7 @@ function DropzoneComponent() {
             <button
               onClick={handleSubmit}
               className={"btn  m-3"}
-              style={{ "background-color": "#e32f45", color: "white" }}
+              style={{ backgroundColor: "#e32f45", color: "white" }}
             >
               Submit
             </button>
@@ -113,3 +113,4 @@ function DropzoneComponent() {
 }
 
 export default DropzoneComponent;
+
