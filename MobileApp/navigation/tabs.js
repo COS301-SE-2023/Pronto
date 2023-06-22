@@ -4,6 +4,7 @@ import EditTimetable from "../screens/Timetable/EditTimetable";
 import AccountSettings from "../screens/Timetable/AccountSettings";
 import Notifications from "../screens/Timetable/Notifications";
 import NavigationScreen from "../screens/Timetable/NavigationScreen";
+import FileView from "../screens/FileView/FileView";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
 const Tab = createBottomTabNavigator();
@@ -129,6 +130,35 @@ const Tabs = () => {
           tabBarLabelStyle: { display: "none" },
         }}
       />
+
+      <Tab.Screen
+        name="FileView"
+        testID="tabs"
+        component={FileView}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                top: 10,
+              }}
+            >
+              <Image
+                source={require("../assets/icons/folder.png")}
+                resizeMode="contain"
+                style={{
+                  width: 25,
+                  height: 25,
+                  tintColor: focused ? "#e32f45" : "#748c94",
+                }}
+              />
+            </View>
+          ),
+          tabBarLabelStyle: { display: "none" },
+        }}
+      />
+
       <Tab.Screen
         name="Account"
         component={AccountSettings}
