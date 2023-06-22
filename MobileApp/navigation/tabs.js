@@ -132,7 +132,7 @@ const Tabs = () => {
       />
 
       <Tab.Screen
-        name="FileView"
+        name="Student Files"
         testID="tabs"
         component={FileView}
         options={{
