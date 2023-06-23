@@ -1,4 +1,3 @@
-const { describe } = require('node:test');
 const addToGroup = require('../../../../function/prontoAuthPostConfirmation/src/add-to-group');
 const adminEvent = require('../../../../function/prontoAuthPostConfirmation/src/events/admin.event.json');
 const lecturerEvent = require('../../../../function/prontoAuthPostConfirmation/src/events/lecturers.event.json');
@@ -72,7 +71,7 @@ describe('input validation', () => {
     process.env.AppClientIdWeb = adminEvent.request.callerContext.clientId;
     await expect(addToGroup.handler(adminEvent)).rejects.toThrow(/Failed to get User Group with userGroupName/);
   });
-});  
+});
 test(`Should throw Error('Failed to get User Group with userGroupName...for students`, async () => {
   process.env.StudentsGroupName = null;
   process.env.AppClientId = studentsEvent.request.callerContext.clientId;
@@ -83,8 +82,8 @@ test(`Should throw Error('Failed to get User Group with userGroupName...for lect
   process.env.AppClientIdWeb = lecturerEvent.request.callerContext.clientId;
   await expect(addToGroup.handler(lecturerEvent)).rejects.toThrow(/Failed to get User Group with userGroupName/);
 });
-  describe('add to group', () => {
-    const OLD_ENV = process.env;
+describe('add to group', () => {
+  const OLD_ENV = process.env;
   beforeEach(() => {
     jest.restoreAllMocks();
     jest.resetModules();
