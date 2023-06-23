@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateLecturer, updateCourse} from "../../graphql/mutations"; 
+import { createLecturer, deleteLecturer, updateLecturer, updateCourse,createCourse} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listCourses} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
@@ -21,7 +21,7 @@ const AddLecturer = () => {
         if(!isModalOpened){
             let user=await Auth.currentAuthenticatedUser() 
             let courseList=[]
-            console.log(courses)
+            //console.log(courses)
         
             //Search for courses
             for(let i=0;i<courses.length;i++){   
@@ -40,13 +40,13 @@ const AddLecturer = () => {
                         })
             
                     courseList.push(id.data.listCourses.items[0])
-                    console.log(courseList) 
+                    //console.log(courseList) 
                     }
         
                     catch(e){
                         alert("Course not found!")
                         //console.log(e)
-                     }
+                    }
                 }
             }
 
@@ -73,25 +73,31 @@ const AddLecturer = () => {
                 
                 //Add lecturer to courses
                 for(let i=0;i<courses.length;i++){
-                    let updateCou={
-                        id:courseList[i].id,   
-                        institutionId:courseList[i].institutionId,
-                        coursecode:courseList[i].coursecode,
-                        coursename:courseList[i].coursename,
-                        lecturerId:mutation.data.createLecturer.id 
-                    }
+                
+                    // let updateCou={
+                    //     id:courseList[i].id,   
+                    //     institutionId:courseList[i].institutionId,
+                    //     coursecode:courseList[i].coursecode,
+                    //     coursename:courseList[i].coursename,
+                    //     lecturerId:mutation.data.createLecturer.id 
+                    // }
 
-                    let update=await API.graphql({
-                        query:updateCourse,
-                        variables:{input:updateCou},
-                        authMode:"AMAZON_COGNITO_USER_POOLS"
-                    })
-                    console.log(update)
+                    // let update=await API.graphql({
+                    //     query:updateCourse,
+                    //     variables:{input:updateCou},
+                    //     authMode:"AMAZON_COGNITO_USER_POOLS"
+                    // }) 
+                    // let u=await API.graphql({
+                    //     query:listCourses,
+                    //     variables:{},
+                    //     authMode:"AMAZON_COGNITO_USER_POOLS"
+                    // })
+                    //console.log(update)
                 }       
 
             }catch(e){    
-                 alert("Something went wrong")
-                // console.error(e)
+                 //alert("Something went wrong")
+                console.error(e)
              }    
             //Reset states
             setFirstName("")
