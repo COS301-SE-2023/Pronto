@@ -1,8 +1,14 @@
 const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEYOUTPUT;
-let institutionDetails = null;
+let institution = {
+  details:null,
+  id:null
+};
+
 const getAndSetInstitutionDetails = async (institutionId) => {
-  if (institutionDetails) return institutionDetails;
+  if (!institutionId) throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
+  if (institution.details && institution.id == institutionId) return institution.details;
+  institution.id = institutionId
   const query = /* GraphQL */ `
       query MyQuery($id: ID = ${institutionId}) {
         getInstitution(id: $id) {
@@ -13,10 +19,10 @@ const getAndSetInstitutionDetails = async (institutionId) => {
       }
     `;
 
-  const options = {
-    method: 'POST',
-    headers: {
-      'x-api-key': GRAPHQL_API_KEY,
+const options = {
+  method: 'POST',
+  headers: {
+    'x-api-key': GRAPHQL_API_KEY,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ query }),
@@ -29,7 +35,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
   try {
     response = await fetch(request);
     body = await response.json();
-    return (institutionDetails = body.data.getInstitution);
+    return (institution.details = body.data.getInstitution);
   } catch (getEmailsQueryError) {
     console.debug(getEmailsQueryError);
     throw new Error(`Failed To retrieve institution details. id=${institutionId}.`);
@@ -37,10 +43,9 @@ const getAndSetInstitutionDetails = async (institutionId) => {
 };
 
 const getLectureEmailsFromInstitution = async (institutionId) => {
-  if (!institutionId) throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
   try {
-    const institutionDetails = await getAndSetInstitutionDetails(institutionId);
-    return institutionDetails.lectureremails;
+    const institutionetails = await getAndSetInstitutionDetails(institutionId);
+    return institutionetails.lectureremails;
   } catch (getAndSetInstitutionDetailsError) {
     console.debug(getAndSetInstitutionDetailsError);
     throw new Error(`Failed to retrieve list for the institution. Info: ${getAndSetInstitutionDetailsError}`);
@@ -48,16 +53,16 @@ const getLectureEmailsFromInstitution = async (institutionId) => {
 };
 
 const getInstitutionAdminId = async (institutionId) => {
-  if (!institutionId) throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
   try {
-    const institutionDetails = await getAndSetInstitutionDetails(institutionId);
-    return institutionDetails.adminId;
+    const institutionetails = await getAndSetInstitutionDetails(institutionId);
+    return institutionetails.adminId;
   } catch (getInstitutionAdminIdError) {
     throw new Error(`Failed to retrieve admin for the institution. Info: ${getInstitutionAdminIdError}`);
   }
 };
 
 const isLectureEmailPartOfInstitution = async (email, institutionId) => {
+  if (!email) throw new Error(`Invalid email = ${email}`);
   try {
     const emailList = await getLectureEmailsFromInstitution(institutionId);
     return emailList.includes(email);
@@ -80,4 +85,7 @@ const isAdminAllocated = async (institutionId) => {
 module.exports = {
   isLectureEmailPartOfInstitution,
   isAdminAllocated,
+  getAndSetInstitutionDetails,
+  getLectureEmailsFromInstitution,
+  getInstitutionAdminId,
 };
