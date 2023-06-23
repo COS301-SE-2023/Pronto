@@ -1,54 +1,109 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer,createAdmin,createInstitution, deleteLecturer} from "../../graphql/mutations"; 
-import { listAdmins,listLecturers,getInstitution,getAdmin ,lecturersByInstitutionId} from "../../graphql/queries";
+import { createLecturer, deleteLecturer, updateLecturer, updateCourse} from "../../graphql/mutations"; 
+import { lecturersByInstitutionId,listCourses} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
-const AddLecturer = () => {
+import AddModal from './addCourse'
 
+const AddLecturer = () => {
     const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
-    const [moduleCode,setModuleCode]=useState("")  
+    const [courses,setCourses]=useState([{coursename:"",coursecode:""}])  
     const [filterAttribute,setFilterAttribute]=useState("")
     const [searchValue,setSearchValue]=useState("")
     const [lecturers ,setLecturers]= useState([])
-
+    const[isModalOpened,setIsModalOpened]=useState(false)
+    
     const handleAdd=  async(event) => { 
         event.preventDefault()
-        let user=await Auth.currentAuthenticatedUser() 
+        if(!isModalOpened){
+            let user=await Auth.currentAuthenticatedUser() 
+            let courseList=[]
+            console.log(courses)
         
-        let lecturer={
-            institutionId:user.username, 
-            firstname:firstName,
-            lastname:lastName,
-            userRole:"Lecturer",
-            email:email,
-        }
+            //Search for courses
+            for(let i=0;i<courses.length;i++){   
+                if(courses[i].coursecode!==""){    
+                    try{
+                        let id=await API.graphql({
+                            query:listCourses,
+                                variables: { 
+                                    filter: { 
+                                        coursecode : { 
+                                            eq:courses[i].coursecode
+                                          }
+                                    }
+                            },
+                            authMode:"AMAZON_COGNITO_USER_POOLS"
+                        })
+            
+                    courseList.push(id.data.listCourses.items[0])
+                    console.log(courseList) 
+                    }
+        
+                    catch(e){
+                        alert("Course not found!")
+                        //console.log(e)
+                     }
+                }
+            }
 
-        try{   
-            let mutation=await API.graphql(
-                {
-               query: createLecturer,
-               variables:{input:lecturer},
-               authMode:'AMAZON_COGNITO_USER_POOLS',
-             }
-         )
-        console.log(mutation)
-        lecturers.push(mutation.data.createLecturer)
-        setLecturers(lecturers)  
-        }catch(e){    
-            console.error(e)
-        }    
-        
-        setFirstName("")
-        setLastName("")
-        setEmail("")
-        setModuleCode("")
+            let lecturer={
+                institutionId:user.username, 
+                firstname:firstName,
+                lastname:lastName,
+                userRole:"lecturer",
+                email:"email",
+            }
+
+            try{   
+                let mutation=await API.graphql({
+                    query: createLecturer,
+                    variables:{input:lecturer},
+                    authMode:'AMAZON_COGNITO_USER_POOLS',
+                    })
+      
+                //console.log(mutation)
+                lecturer=mutation.data.createLecturer
+                lecturer.courses=courseList
+                lecturers.push(mutation.data.createLecturer)
+                setLecturers(lecturers)  
+                
+                //Add lecturer to courses
+                for(let i=0;i<courses.length;i++){
+                    let updateCou={
+                        id:courseList[i].id,   
+                        institutionId:courseList[i].institutionId,
+                        coursecode:courseList[i].coursecode,
+                        coursename:courseList[i].coursename,
+                        lecturerId:mutation.data.createLecturer.id 
+                    }
+
+                    let update=await API.graphql({
+                        query:updateCourse,
+                        variables:{input:updateCou},
+                        authMode:"AMAZON_COGNITO_USER_POOLS"
+                    })
+                    console.log(update)
+                }       
+
+            }catch(e){    
+                 alert("Something went wrong")
+                // console.error(e)
+             }    
+            //Reset states
+            setFirstName("")
+            setLastName("")
+            setEmail("")
+            setCourses([{coursename:"",coursecode:""}])
+      }
+      console.log(isModalOpened)
     }
 
     const handleRemove= async(lecturer,index) =>{
-        //event.preventDefault()
+        
         console.log(lecturer)
         let lec={ 
            id : lecturer.id,
@@ -60,10 +115,32 @@ const AddLecturer = () => {
                 variables:{input : lec },
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             })
-            lecturers.splice(index,1)
-            console.log(mutation)
-            setLecturers(lecturers)
-            window.location.reload(false)
+            let courses=lecturer.courses
+            for(let i=0;i<courses.length;i++){
+                try{
+                   let updateCou={
+                        id:courses[i].id,   
+                        institutionId:courses[i].institutionId,
+                        coursecode:courses[i].coursecode,
+                        coursename:courses[i].coursename,
+                        lecturerId:null
+                    }
+
+                    let update=await API.graphql({
+                        query:updateCourse,
+                        variables:{input:updateCou},
+                        authMode:"AMAZON_COGNITO_USER_POOLS"
+                    })
+                }
+                catch(e){
+                    alert("Failed to remove lecturer from courses")
+                }
+            }
+            
+            const rows=[...lecturers]
+            rows.splice(index,1)
+            setLecturers(rows)
+
         }
         catch(e){
             console.error(e)
@@ -72,6 +149,7 @@ const AddLecturer = () => {
 
     const fetchLecturers = async()=>{
         try{
+            //Get lecturers
             let institution= await Auth.currentAuthenticatedUser()
             let lecturerslist=await API.graphql(
                 {
@@ -83,12 +161,31 @@ const AddLecturer = () => {
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
            ) 
-            console.log(lecturerslist)
-            lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
-            lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
+           lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
+           lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
+           
+           //Get courses
+           for(let i=0;i<lecturerslist.length;i++){
+                
+                let course=await API.graphql({
+                    query:listCourses,
+                    variables:{
+                            filter:{
+                                lecturerId:{
+                                    eq:lecturerslist[i].id
+                            }
+                        }
+                    },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                })
+                
+             //   console.log(course)
+              lecturerslist[i].courses=course.data.listCourses.items
+            }
+            
             setLecturers(lecturerslist)
+            console.log(lecturerslist)
         }
-       
         catch(error){ 
             console.error(error)
         }
@@ -96,6 +193,7 @@ const AddLecturer = () => {
     
     const handleSearch = async() => { 
         try{ 
+
             let institution=await Auth.currentAuthenticatedUser()
             console.log(filterAttribute)
          
@@ -142,7 +240,6 @@ const AddLecturer = () => {
                                 email: { 
                                      eq: searchValue 
                                 } 
-
                            }
                         },
                 authMode:"AMAZON_COGNITO_USER_POOLS"         
@@ -154,17 +251,16 @@ const AddLecturer = () => {
             else{ 
                 await fetchLecturers()
             }
-            
         }
         catch(e){
             console.error(e)
         }
-
     } 
     
     useEffect(() => {
         fetchLecturers();
     }, [])
+    
     return (  
         <div style={{ display: 'inline-flex' }}>
             <nav style={{ width: '20%' }} data-testid="InstitutionNavigation">
@@ -226,24 +322,16 @@ const AddLecturer = () => {
                                     />
                                 </div>
 
-                                {/* Module Code e.g. COS132 */}
+                                {/*Adding courses via Modal popup */}
                                 <div className="form-group col-6">
-                                    <label htmlFor="moduleCode">Module Code</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="moduleCode"
-                                        placeholder="COS132"
-                                        required
-                                        value={moduleCode}
-                                        onChange={(e)=>setModuleCode(e.target.value)}
+                                    <label htmlFor="Course">Courses</label>
+                                    <AddModal 
+                                       courseData={courses} 
+                                       setModal={setIsModalOpened}
+                                       setCourses={setCourses}
                                     />
                                 </div>
                             </div>
-
-                            {/* <small id="emailHelp" className="form-text text-muted">
-                                We'll never share your email with anyone else.
-                            </small> */}
 
                             <button
                                 type="submit"
@@ -281,20 +369,17 @@ const AddLecturer = () => {
                             className="custom-select"
                             id="inputGroupSelect01"
                             data-testid="filterSelect"
-                            //defaultValue='default'
                         >
                             <option value={'default'}>Filter by</option> 
                             <option value="firstname" >First Name</option>
                             <option value="lastname" >Last Name</option>
                             <option value="email" >Email</option>
-                            <option value="4">Module Code</option>
                         </select>
                     </div>
                 </div>
                 <div
                     className="card shadow w-100"
                     style={{ width: '500px' }}
-
                 >
                     <div className="card-body">
                         <table
@@ -307,30 +392,11 @@ const AddLecturer = () => {
                                 <th scope="col">First Name</th>
                                 <th scope="col">Last Name</th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Module Code</th>
-                                <th scope="col">Delete</th>
+                                <th scope="col">Courses</th>
+                                <th scope="col">Remove</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {/* <tr>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>
-                                    <a href="mailto:" data-testid="lecturerEmail">
-                                        john.doe@up.ac.za
-                                    </a>
-                                </td>
-                                <td>COS132</td>
-                                <td>
-                                    <button 
-                                        type="button"
-                                        className="btn btn-danger w-100"
-                                        data-testid="deleteButton"
-                                    >
-                                        Remove
-                                    </button>
-                                </td>   
-                            </tr> */}
                              {  lecturers.map((val, key)=>{    
                                    return (
                                     <tr key={key}>
@@ -341,7 +407,12 @@ const AddLecturer = () => {
                                                 {val.email}
                                             </a>
                                         </td> 
-                                        <td>{val.moduleCode}</td>
+                                        {/* <td>{val.moduleCode}</td> */}
+                                        <td><AddModal
+                                            courseData={[...val.courses]}
+                                            setModal={setIsModalOpened}
+                                            setCourses={setCourses}
+                                            /></td>
                                         <td>
                                             <button onClick={() => {handleRemove(val,key)}} 
                                                 type="button" 
