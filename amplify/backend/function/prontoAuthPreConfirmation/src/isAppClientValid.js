@@ -4,10 +4,10 @@ function isAppClientValid(clientId,role){
     switch (clientId) {
         case process.env.AppClientId:
             return ROLES.Lecture == role || ROLES.Admin == role;
-        case process.env.AppClientId:
+        case process.env.AppClientIdWeb:
             return ROLES.Student == role;
         default:
-            throw new Error(`Unrecognised user pool app client ID=${event.request.callerContext.clientId}`);
+            throw new Error(`Unrecognised user pool app client ID=${clientId}`);
     }
 }
 module.exports = isAppClientValid;
