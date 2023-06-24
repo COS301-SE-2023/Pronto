@@ -5,7 +5,9 @@ import { lecturersByInstitutionId,listCourses} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
 import AddModal from './addCourse'
-import SearchIcon from "@mui/icons-material/Search";
+import SearchIcon from "@mui/icons-material/SearchSharp";
+import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import ClearIcon from '@mui/icons-material/Clear';
 //import{courses} from './addCourse'
 
 const AddLecturer = () => {
@@ -17,7 +19,8 @@ const AddLecturer = () => {
     const [searchValue,setSearchValue]=useState("")
     const [lecturers ,setLecturers]= useState([])
     const[isModalOpened,setIsModalOpened]=useState(false)
-    
+    const[searchIcon,setSearchIcon]=useState(false)
+
     const handleAdd=  async(event) => { 
         event.preventDefault()
         if(!isModalOpened){
@@ -178,42 +181,42 @@ const AddLecturer = () => {
     }
 
     const fetchLecturers = async()=>{
-        try{
-            //Get lecturers
-            let institution= await Auth.currentAuthenticatedUser()
-            let lecturerslist=await API.graphql(
-                {
-                query:lecturersByInstitutionId, 
-                variables:{ 
-                            institutionId:institution.username,
-                            limit: 50
-                    },
-                authMode:'AMAZON_COGNITO_USER_POOLS',
-                }
-           ) 
-           lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
-           lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
+        // try{
+        // //     //Get lecturers
+        // //     let institution= await Auth.currentAuthenticatedUser()
+        // //     let lecturerslist=await API.graphql(
+        // //         {
+        // //         query:lecturersByInstitutionId, 
+        // //         variables:{ 
+        // //                     institutionId:institution.username,
+        // //                     limit: 50
+        // //             },
+        // //         authMode:'AMAZON_COGNITO_USER_POOLS',
+        // //         }
+        // //    ) 
+        // //    lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
+        // //    lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
            
-           //Get courses
-           for(let i=0;i<lecturerslist.length;i++){   
-                let course=await API.graphql({
-                    query:listCourses,
-                    variables:{
-                            filter:{
-                                lecturerId:{
-                                    eq:lecturerslist[i].id
-                            }
-                        }
-                    },
-                    authMode:"AMAZON_COGNITO_USER_POOLS"
-                })        
-               lecturerslist[i].courses=course.data.listCourses.items
-            }        
-            setLecturers(lecturerslist)
-        }
-        catch(error){ 
-            console.error(error)
-        }
+        // //    //Get courses
+        // //    for(let i=0;i<lecturerslist.length;i++){   
+        // //         let course=await API.graphql({
+        // //             query:listCourses,
+        // //             variables:{
+        // //                     filter:{
+        // //                         lecturerId:{
+        // //                             eq:lecturerslist[i].id
+        // //                     }
+        // //                 }
+        // //             },
+        // //             authMode:"AMAZON_COGNITO_USER_POOLS"
+        // //         })        
+        // //        lecturerslist[i].courses=course.data.listCourses.items
+        // //     }        
+        // //     setLecturers(lecturerslist)
+        // }
+        // catch(error){ 
+        //     console.error(error)
+        // }
     }
     
     const handleSearch = async() => { 
@@ -267,15 +270,25 @@ const AddLecturer = () => {
             else{ 
                 await fetchLecturers()
             }
+           
         }
+        
         catch(e){
             console.error(e)
         }
+         if(searchIcon===true){ 
+                setSearchIcon(false)
+                console.log("now red")
+            }
+            else{
+                setSearchIcon(true)
+                console.log("now white")
+            }
     } 
     
-    useEffect(() => {
-        fetchLecturers();
-    }, [])
+    // useEffect(() => {
+    //     fetchLecturers();
+    // }, [])
     
     return (  
         <div style={{ display: 'inline-flex' }}>
@@ -383,7 +396,12 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                        ><SearchIcon/></button>
+                            style={{ backgroundColor: searchIcon ? "#C21F39" : "white" }}
+                        >
+                            <div className="input-group-append">
+                               <SearchSharpIcon/>
+                            </div>
+                        </button>
                         {/* a dropdown filter for the search */}
                         <select onChange={(e)=>setFilterAttribute(e.target.value)}
                             value={filterAttribute}
