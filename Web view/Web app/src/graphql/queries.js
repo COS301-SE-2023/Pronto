@@ -73,6 +73,35 @@ export const getInstitution=`query GetInstitution($id: ID!) {
 }
 `
 ;
+export const listInstitutions=`query ListInstitutions(
+  $filter: ModelInstitutionFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}`
 export const getAdmin=`query GetAdmin($id: ID!) {
   getAdmin(id: $id) {
     id
