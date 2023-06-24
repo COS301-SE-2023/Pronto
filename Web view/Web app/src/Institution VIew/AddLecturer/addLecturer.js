@@ -185,14 +185,13 @@ const AddLecturer = () => {
                 query:lecturersByInstitutionId, 
                 variables:{ 
                             institutionId:institution.username,
-                            _deleted:null,
-                            limit: 20
+                            limit: 50
                     },
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
            ) 
            lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
-           //lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
+           lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
            
            //Get courses
            for(let i=0;i<lecturerslist.length;i++){   
