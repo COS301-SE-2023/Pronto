@@ -50,7 +50,7 @@ describe('input validation', () => {
         },
       },
     };
-    await expect(addToGroup.handler(requestWithInvalidRole)).rejects.toThrow(/^Invalid User Role$/);
+  await expect(addToGroup.handler(requestWithInvalidRole)).rejects.toThrow(/^Invalid User Role$/);
   });
   test(`Should throw Error('Unrecognised user pool app client ID='`, async () => {
     const requestWithNullclientId = {

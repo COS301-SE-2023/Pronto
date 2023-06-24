@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest  --watch"
   },
   "dependencies": {
     "@aws-amplify/cli-extensibility-helper": "^3.0.0"
