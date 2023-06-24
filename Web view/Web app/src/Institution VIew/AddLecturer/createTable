@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 const CreateTable = ({ colNo }) => {
   const [columns, setColumns] = useState(["Column 1"]);
   const [generating, setGenerating] = useState(true);
-  const [readOnly, setReadOnly] = useState(true);
   const [rows, setRows] = useState(0);
   const [rowsData, setRowsData] = useState([]);
   const [modified, setModified] = useState(false);
@@ -133,9 +132,6 @@ const CreateTable = ({ colNo }) => {
                           type="text"
                           className="form-control border-0 text-center bg-dark text-white"
                           style={{ outline: "none", boxShadow: "none" }}
-                          readOnly={readOnly}
-                          onFocus={() => setReadOnly(false)}
-                          onBlur={() => setReadOnly(true)}
                           value={columns[index]}
                           onChange={(e) =>
                             setColumns(
