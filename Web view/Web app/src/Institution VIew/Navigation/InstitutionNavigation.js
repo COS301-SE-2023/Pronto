@@ -14,10 +14,17 @@ function Logout() {
     return (
         <div className={'grid'}>
             <nav className="vertical-navbar col-4 p-4" >
+                <div className="top">
+                <img
+                src={logo}
+                alt="Logo"
+                className="logo offset-2 img-fluid mr-1"
+                width={"175px"}
+                height={"155px"}
+                data-testid={'UniversityImage'}
+                />
                 <ul className="navbar-nav">
-                    <li className="nav-item ">
-                        <img src={logo} alt="Logo" className="logo offset-2 img-fluid mr-3" width={'175px'} height={'155px'} data-testid={'UniversityImage'}/>
-                    </li>
+        
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
                         <a href="/" className="nav-link" data-testid={'dashboardLink'}>
                             <b>Dashboard</b>
@@ -44,7 +51,6 @@ function Logout() {
                             <b>Edit University Info</b>
                         </a>
                     </li>
-
 
                 </ul>
 
