@@ -118,57 +118,6 @@ export const createAdmin=`mutation CreateAdmin(
 `
 ;
 
-export const createInstitution=`mutation CreateInstitution(
-  $input: CreateInstitutionInput!
-  $condition: ModelInstitutionConditionInput
-) {
-  createInstitution(input: $input, condition: $condition) {
-    id
-    name
-    location
-    pageUrl
-    campusMapUrl
-    openingTime
-    closingTime
-    minimumDuration
-    lectureremails
-    coursecodes
-    domains
-    admin {
-      id
-      institutionId
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      owner
-    }
-    adminId
-    courses {
-      nextToken
-      startedAt
-    }
-    students {
-      nextToken
-      startedAt
-    }
-    lecturer {
-      nextToken
-      startedAt
-    }
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-  }
-}`
-;
 
 export const updateCourse=`mutation UpdateCourse(
   $input: UpdateCourseInput!
