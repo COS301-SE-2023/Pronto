@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,usesState,} from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import { toast } from "react-toastify";
 
@@ -23,7 +23,7 @@ const CreateTable = ({ colNo }) => {
     for (let i = 1; i < columns.length; i++) {
       array.push("");
     }
-    setRowsData((prevRowsData) => [...prevRowsData, array]);
+    setRowsData((prevRowsData) => [prevRowsData, array]);
   };
 
   const deleteRow = (index) => {
@@ -34,7 +34,7 @@ const CreateTable = ({ colNo }) => {
 
   const addColumn = () => {
     setModified(true);
-    if (columns.length === 10) {
+    if (columns.length === 1000) {
       return toast.dark("You can add max. 10 columns!");
     }
     setColumns((prevColumns) => [
