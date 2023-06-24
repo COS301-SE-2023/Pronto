@@ -5,6 +5,7 @@ import { lecturersByInstitutionId,listCourses} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
 import AddModal from './addCourse'
+import SearchIcon from "@mui/icons-material/Search";
 //import{courses} from './addCourse'
 
 const AddLecturer = () => {
@@ -178,7 +179,6 @@ const AddLecturer = () => {
 
     const fetchLecturers = async()=>{
         try{
-
             //Get lecturers
             let institution= await Auth.currentAuthenticatedUser()
             let lecturerslist=await API.graphql(
@@ -191,13 +191,11 @@ const AddLecturer = () => {
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
            ) 
-
            lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
            lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
            
            //Get courses
-           for(let i=0;i<lecturerslist.length;i++){
-                
+           for(let i=0;i<lecturerslist.length;i++){   
                 let course=await API.graphql({
                     query:listCourses,
                     variables:{
