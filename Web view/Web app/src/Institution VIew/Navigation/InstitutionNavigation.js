@@ -23,6 +23,7 @@ function Logout() {
                 height={"155px"}
                 data-testid={'UniversityImage'}
                 />
+                </div>
                 <ul className="navbar-nav">
         
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
@@ -56,7 +57,7 @@ function Logout() {
 
             </nav>
             <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
-                <button className={"btn btn-danger btn-lg btn-block"} data-testid={'LogoutButton'} onClick={Logout}>Log Out</button>
+                <button className={"btn btn-danger btn-lg btn-block"} style={{borderRadius:"25px"}} data-testid={'LogoutButton'} onClick={Logout}>Log Out</button>
             </div>
 
         </div>
