@@ -284,48 +284,6 @@ export const createCourse=`mutation CreateCourse(
 }
 `
 
-export const updateLecturer=`mutation UpdateLecturer(
-  $input: UpdateLecturerInput!
-  $condition: ModelLecturerConditionInput
-) {
-  updateLecturer(input: $input, condition: $condition) {
-    id
-    institutionId
-    firstname
-    lastname
-    userRole
-    email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-    courses {
-      nextToken
-      startedAt
-    }
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    owner
-  }
-}`
 
 export const updateCourse=`mutation UpdateCourse(
   $input: UpdateCourseInput!
