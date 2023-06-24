@@ -82,9 +82,8 @@ const AddLecturer = () => {
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             }) 
             lecturer.courses.splice(i,1)
-            console.log(update) 
     }catch(e){ 
-        console.error(e)
+        alert("Could not remove course from lecturer")
     }
     }
 }
@@ -112,11 +111,10 @@ const AddLecturer = () => {
                 variables:{input:updatedCourseData},
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             }) 
-            console.log(update)
             lecturer.courses.push(update.data.updateCourse) 
             setLecturers(lecturers)
     }catch(e){ 
-        console.error(e)
+        alert("could not add course to lecturer")
     }
     }
 }
@@ -170,7 +168,7 @@ const AddLecturer = () => {
             setLecturers(rows)
         }
         catch(e){
-            console.error(e)
+            alert("Could not delete lecturer")
         }
     }
 
@@ -209,13 +207,13 @@ const AddLecturer = () => {
             setLecturers(lecturerslist)
         }
         catch(error){ 
-            console.error(error)
+            alert("could not fetch lecturer information")
         }
     }
     
     const handleSearch = async() => { 
         try{ 
-            //console.log(searchIcon)
+            
             if(searchIcon===false){
                 let institution=await Auth.currentAuthenticatedUser()
                 if(filterAttribute==="firstname"){
@@ -266,7 +264,7 @@ const AddLecturer = () => {
             setSearchIcon(!searchIcon)
         }
         else{
-            console.log("fetching")
+    
             fetchLecturers()
             setSearchIcon(!searchIcon)
         }
