@@ -5,6 +5,7 @@ import { lecturersByInstitutionId,listCourses} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
 import AddModal from './addCourse'
+//import{courses} from './addCourse'
 
 const AddLecturer = () => {
     const [firstName,setFirstName]=useState("")
@@ -21,41 +22,14 @@ const AddLecturer = () => {
         if(!isModalOpened){
             let user=await Auth.currentAuthenticatedUser() 
             let courseList=[]
-            //console.log(courses)
-        
-            //Search for courses
-            for(let i=0;i<courses.length;i++){   
-                if(courses[i].coursecode!==""){    
-                    try{
-                        let id=await API.graphql({
-                            query:listCourses,
-                                variables: { 
-                                    filter: { 
-                                        coursecode : { 
-                                            eq:courses[i].coursecode
-                                          }
-                                    }
-                            },
-                            authMode:"AMAZON_COGNITO_USER_POOLS"
-                        })
+            courseList=await findCourses(courses)
             
-                    courseList.push(id.data.listCourses.items[0])
-                    //console.log(courseList) 
-                    }
-        
-                    catch(e){
-                        alert("Course not found!")
-                        //console.log(e)
-                    }
-                }
-            }
-
             let lecturer={
                 institutionId:user.username, 
                 firstname:firstName,
                 lastname:lastName,
                 userRole:"lecturer",
-                email:"email",
+                email:email,
             }
 
             try{   
@@ -65,52 +39,117 @@ const AddLecturer = () => {
                     authMode:'AMAZON_COGNITO_USER_POOLS',
                     })
       
-                //console.log(mutation)
                 lecturer=mutation.data.createLecturer
-                lecturer.courses=courseList
+                lecturer.courses=[]
                 lecturers.push(mutation.data.createLecturer)
-                setLecturers(lecturers)  
-                
+                  
                 //Add lecturer to courses
-                for(let i=0;i<courses.length;i++){
-                
-                    // let updateCou={
-                    //     id:courseList[i].id,   
-                    //     institutionId:courseList[i].institutionId,
-                    //     coursecode:courseList[i].coursecode,
-                    //     coursename:courseList[i].coursename,
-                    //     lecturerId:mutation.data.createLecturer.id 
-                    // }
+                await addCourses(lecturer,courseList)
+                setLecturers(lecturers)       
+                  
+             }catch(e){    
+                  //alert("Something went wrong")
+                 console.error(e)
+              }    
 
-                    // let update=await API.graphql({
-                    //     query:updateCourse,
-                    //     variables:{input:updateCou},
-                    //     authMode:"AMAZON_COGNITO_USER_POOLS"
-                    // }) 
-                    // let u=await API.graphql({
-                    //     query:listCourses,
-                    //     variables:{},
-                    //     authMode:"AMAZON_COGNITO_USER_POOLS"
-                    // })
-                    //console.log(update)
-                }       
-
-            }catch(e){    
-                 //alert("Something went wrong")
-                console.error(e)
-             }    
             //Reset states
             setFirstName("")
             setLastName("")
             setEmail("")
-            setCourses([{coursename:"",coursecode:""}])
+            setCourses([{coursename:"",coursecode:""}])    
       }
-      console.log(isModalOpened)
+    }
+
+    const removeCourses=async(courseList,lecturer)=>{
+        if(courseList===undefined)
+            return
+        for(let i=0;i<courseList.length;i++){
+            
+            try{ 
+                let updatedCourseData={
+                id:courseList[i].id,   
+                institutionId:courseList[i].institutionId,
+                coursecode:courseList[i].coursecode,
+                coursename:courseList[i].coursename,
+                lecturerId:null, 
+                 _version:courseList[i]._version
+                }
+        
+            let update=await API.graphql({
+                query:updateCourse,
+                variables:{input:updatedCourseData},
+                authMode:"AMAZON_COGNITO_USER_POOLS"
+            }) 
+            lecturer.courses.splice(i,1)
+            console.log(update) 
+    }catch(e){ 
+        console.error(e)
+    }
+    }
+}
+
+    const addCourses=async(lecturer,courseList)=>{ 
+        
+        if(lecturer.courses===undefined)
+          lecturer.courses=[]
+        if(courseList===undefined)
+            return
+        for(let i=0;i<courseList.length;i++){
+        
+            try{ 
+                let updatedCourseData={
+                id:courseList[i].id,   
+                institutionId:courseList[i].institutionId,
+                coursecode:courseList[i].coursecode,
+                coursename:courseList[i].coursename,
+                lecturerId:lecturer.id, 
+                 _version:courseList[i]._version
+                }
+        
+            let update=await API.graphql({
+                query:updateCourse,
+                variables:{input:updatedCourseData},
+                authMode:"AMAZON_COGNITO_USER_POOLS"
+            }) 
+            console.log(update)
+            lecturer.courses.push(update.data.updateCourse) 
+            setLecturers(lecturers)
+    }catch(e){ 
+        console.error(e)
+    }
+    }
+}
+
+    const findCourses= async(courses)=>{
+        let courseList=[]
+            
+        for(let i=0;i<courses.length;i++){   
+        if(courses[i].coursecode!==""){    
+            try{
+                let id=await API.graphql({
+                    query:listCourses,
+                    variables: { 
+                    filter: { 
+                        coursecode : { 
+                                        eq:courses[i].coursecode
+                                        }
+                                    }
+                            },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                    })
+            
+                courseList.push(id.data.listCourses.items[0]) 
+                }
+                catch(e){
+                    alert("Course not found!")
+                    //console.log(e)
+                }
+        }
+    } 
+    return courseList.filter(element=>element!==undefined)
     }
 
     const handleRemove= async(lecturer,index) =>{
-        
-        console.log(lecturer)
         let lec={ 
            id : lecturer.id,
            _version:lecturer._version
@@ -121,32 +160,16 @@ const AddLecturer = () => {
                 variables:{input : lec },
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             })
-            let courses=lecturer.courses
-            for(let i=0;i<courses.length;i++){
-                try{
-                   let updateCou={
-                        id:courses[i].id,   
-                        institutionId:courses[i].institutionId,
-                        coursecode:courses[i].coursecode,
-                        coursename:courses[i].coursename,
-                        lecturerId:null
-                    }
-
-                    let update=await API.graphql({
-                        query:updateCourse,
-                        variables:{input:updateCou},
-                        authMode:"AMAZON_COGNITO_USER_POOLS"
-                    })
-                }
-                catch(e){
-                    alert("Failed to remove lecturer from courses")
-                }
-            }
-            
+            let courseList=lecturer.courses
+            console.log(courseList)
+            console.log(lecturer)
+            if(courseList!==undefined){
+                await removeCourses(courseList,lecturer)
+                
+        }
             const rows=[...lecturers]
             rows.splice(index,1)
             setLecturers(rows)
-
         }
         catch(e){
             console.error(e)
@@ -155,6 +178,7 @@ const AddLecturer = () => {
 
     const fetchLecturers = async()=>{
         try{
+
             //Get lecturers
             let institution= await Auth.currentAuthenticatedUser()
             let lecturerslist=await API.graphql(
@@ -162,11 +186,12 @@ const AddLecturer = () => {
                 query:lecturersByInstitutionId, 
                 variables:{ 
                             institutionId:institution.username,
-                            limit: 20
+                            limit: 50
                     },
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
            ) 
+
            lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
            lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
            
@@ -183,14 +208,10 @@ const AddLecturer = () => {
                         }
                     },
                     authMode:"AMAZON_COGNITO_USER_POOLS"
-                })
-                
-             //   console.log(course)
-              lecturerslist[i].courses=course.data.listCourses.items
-            }
-            
+                })        
+               lecturerslist[i].courses=course.data.listCourses.items
+            }        
             setLecturers(lecturerslist)
-            console.log(lecturerslist)
         }
         catch(error){ 
             console.error(error)
@@ -199,10 +220,7 @@ const AddLecturer = () => {
     
     const handleSearch = async() => { 
         try{ 
-
             let institution=await Auth.currentAuthenticatedUser()
-            console.log(filterAttribute)
-         
             if(filterAttribute==="firstname"){
             let search= await API.graphql({
                 query:lecturersByInstitutionId,
@@ -212,12 +230,10 @@ const AddLecturer = () => {
                                 firstname: { 
                                      eq: searchValue 
                                 } 
-
                            }
                         },
                 authMode:"AMAZON_COGNITO_USER_POOLS"         
             })
-            console.log(search)
             setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
         }
             else if(filterAttribute==="lastname"){ 
@@ -229,12 +245,10 @@ const AddLecturer = () => {
                                 lastname: { 
                                      eq: searchValue 
                                 } 
-
                            }
                         },
                 authMode:"AMAZON_COGNITO_USER_POOLS"         
             })   
-            console.log(search)
             setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
             }
             else if(filterAttribute==="email"){
@@ -250,8 +264,6 @@ const AddLecturer = () => {
                         },
                 authMode:"AMAZON_COGNITO_USER_POOLS"         
             })
-            console.log(search)  
-               
             setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
             }
             else{ 
@@ -332,7 +344,12 @@ const AddLecturer = () => {
                                 <div className="form-group col-6">
                                     <label htmlFor="Course">Courses</label>
                                     <AddModal 
-                                       courseData={courses} 
+                                       updateFlag={(false)}
+                                       lecturerData={(null)}
+                                       findCourses={findCourses}
+                                       addCourses={addCourses}
+                                       removeCourses={removeCourses}
+                                       courseData={courses}
                                        setModal={setIsModalOpened}
                                        setCourses={setCourses}
                                     />
@@ -415,7 +432,12 @@ const AddLecturer = () => {
                                         </td> 
                                         {/* <td>{val.moduleCode}</td> */}
                                         <td><AddModal
-                                            courseData={[...val.courses]}
+                                            updateFlag={(true)}
+                                            lecturerData={val}
+                                            findCourses={findCourses}
+                                            removeCourses={removeCourses}
+                                            addCourses={addCourses}
+                                            courseData={val.courses}
                                             setModal={setIsModalOpened}
                                             setCourses={setCourses}
                                             /></td>
