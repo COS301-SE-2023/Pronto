@@ -1,30 +1,4 @@
 
-
-export const listAdmins=`query ListAdmins(
-  $filter: ModelAdminFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listAdmins(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      institutionId
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      owner
-    }
-    nextToken
-    startedAt
-  }
-}`
-
 export const listLecturers=`query ListLecturers(
   $filter: ModelLecturerFilterInput
   $limit: Int
