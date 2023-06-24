@@ -172,35 +172,6 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
 }
 `
 
-export const listInstitutions=`query ListInstitutions(
-  $filter: ModelInstitutionFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-    nextToken
-    startedAt
-  }
-}`
 
 export const listCourses=`query ListCourses(
   $filter: ModelCourseFilterInput
