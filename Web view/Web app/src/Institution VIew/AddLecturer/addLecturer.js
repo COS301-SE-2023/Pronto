@@ -383,7 +383,7 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                        ></button>
+                        ><SearchIcon/></button>
                         {/* a dropdown filter for the search */}
                         <select onChange={(e)=>setFilterAttribute(e.target.value)}
                             value={filterAttribute}
