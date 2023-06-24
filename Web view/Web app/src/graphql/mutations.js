@@ -40,6 +40,57 @@ export const createLecturer=`mutation CreateLecturer(
     owner
   }
 }`
+export const updateInstitution=`mutation UpdateInstitution(
+  $input: UpdateInstitutionInput!
+  $condition: ModelInstitutionConditionInput
+) {
+  updateInstitution(input: $input, condition: $condition) {
+    id
+    name
+    location
+    pageUrl
+    campusMapUrl
+    openingTime
+    closingTime
+    minimumDuration
+    lectureremails
+    coursecodes
+    domains
+    admin {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+    adminId
+    courses {
+      nextToken
+      startedAt
+    }
+    students {
+      nextToken
+      startedAt
+    }
+    lecturer {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}`
+
 export const deleteLecturer=`mutation DeleteLecturer(
                                 $input: DeleteLecturerInput!
                                 $condition: ModelLecturerConditionInput

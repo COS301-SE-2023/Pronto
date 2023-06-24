@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse} from "../../graphql/mutations"; 
+import { createLecturer, deleteLecturer, updateCourse, updateInstitution} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listCourses,listInstitutions} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
@@ -17,9 +17,11 @@ const AddLecturer = () => {
     const [lecturers ,setLecturers]= useState([])
     const[isModalOpened,setIsModalOpened]=useState(false)
     const[searchIcon,setSearchIcon]=useState(false)
+    const[institutionId,setInstitutionId]=useState("")
 
     const handleAdd=  async(event) => { 
         event.preventDefault()
+        
         if(!isModalOpened){
             let user=await Auth.currentAuthenticatedUser() 
             let courseList=[]
@@ -173,14 +175,32 @@ const AddLecturer = () => {
     }
 
     const fetchLecturers = async()=>{
+        
         try{
+             //Fetch institution via domain of user email
+            //  if(institutionId===""){
+            //  
+            //     let domain=await Auth.currentAuthenticatedUser().attributes.email.split("@")[1]
+            //         let institution=await API.graphql({
+            //             query:listInstitutions,
+            //             variables:{
+            //                 filter:{
+            //                     domains:{
+            //                         contains:domain
+            //                     }
+            //                 }
+            //             }
+            //         })
+            //         setInstitutionId(institution.data.listInstitutions.items[0].id)
+            //     }
+
             //Get lecturers
-            let institution= await Auth.currentAuthenticatedUser()
+            let user= await Auth.currentAuthenticatedUser()
             let lecturerslist=await API.graphql(
                 {
                 query:lecturersByInstitutionId, 
                 variables:{ 
-                            institutionId:institution.username,
+                            institutionId:user.username,
                             limit: 50
                     },
                 authMode:'AMAZON_COGNITO_USER_POOLS',
