@@ -1,9 +1,6 @@
 import { useState} from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import  {API} from 'aws-amplify';
-//import AddLecurer from './addLecturer'
-import { updateCourse,listCourses } from '../../graphql/mutations';
 
 const style = {
   position:'absolute',
@@ -28,8 +25,6 @@ export default function AddModal(module) {
       setOpen(true) 
       console.log(module)
       module.setModal(true)
-      //setCourses([])
-
       //Adding new lecturer with courses
       if(module.updateFlag===false){
         console.log("Course data is")
@@ -56,52 +51,6 @@ export default function AddModal(module) {
         }
       }
 
-      // //No courses add a dummy
-      // if(module.courseData.length===0 && module.updateFlag===false){ 
-      //   setCourses([{coursecode:"",coursename:""}])
-      //   console.log("Called when adding a lecturer")
-      //  }
-
-      
-      // //No courses add a dummy
-      // else if(module.lecturerData.courses===undefined || module.lecturerData.courses.length===0){ 
-      //   setCourses([{coursecode:"",coursename:""}])
-      //   console.log("Called when adding a course to an existing lecturer")
-      // }
-
-      // //Courses so append a dummy 
-      // else if(module.courseData[module.courseData.length-1].coursecode!==""){
-      //   setCourses([...courses,{coursecode:"",coursename:""}])
-      //   console.log("Called when adding a lecturer (again)")
-      // }
-
-
-      // //Courses so append a dummy
-      // else if(module.lecturerData.courses[module.courses.length-1].coursecode!==""){
-      //   setCourses([...courses,{coursecode:"",coursename:""}])   
-      //   console.log("Called when adding a course to an existing lecturer (again)")
-      // }
-      
-      // if(module.courseData!==undefined || module.courseData.length!==0){
-      // //setCourses(module.courseData)
-      //   if(module.updateFlag===true){  
-      //     //if(module.lecturerData[module.lecturerData.length-1].coursecode!=="")
-      //       setCourses([...module.lecturerData.courses,{coursecode:"",coursename:""}])
-      //     //else
-      //       //setCourses([...module.lecturerData.courses])
-      //   }
-      //   else{   
-      //     console.log("set courses")
-      //     console.log(module.courseData)
-          
-      //     console.log(courses)
-      //     //if(module.courseData[module.courseData.length-1].coursecode!=="")
-      //       setCourses([...module.courseData,{coursecode:"",coursename:""}])
-      //     //else
-      //       // setCourses([...module.courseData]) 
-      //   }
-  //    } 
-     // console.log("courses")
       console.log(courses)
   }
 
@@ -155,7 +104,6 @@ const handleRemove = async(index) => {
     const remove=[...removed]
     remove.push(courses[index])
     setRemoved(remove)
-    //console.log(removed)
     const rows = [...courses]
     rows.splice(index, 1)
     setCourses( rows )
