@@ -438,9 +438,7 @@ const AddLecturer = () => {
                                             <a href="mailto:" data-testid="lecturerEmail">
                                                 {val.email}
                                             </a>
-                                        </td> 
-                                        {/* <td>{val.moduleCode}</td> */}
-                                        <td><AddModal
+                                        <AddModal
                                             updateFlag={(true)}
                                             lecturerData={val}
                                             findCourses={findCourses}
