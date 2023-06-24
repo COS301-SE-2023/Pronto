@@ -77,46 +77,6 @@ export const deleteLecturer=`mutation DeleteLecturer(
                             }
                         }`                            
                         ;
-export const createAdmin=`mutation CreateAdmin(
-  $input: CreateAdminInput!
-  $condition: ModelAdminConditionInput
-) {
-  createAdmin(input: $input, condition: $condition) {
-    id
-    institutionId
-    firstname
-    lastname
-    userRole
-    email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    owner
-  }
-}
-`
-;
 
 
 export const updateCourse=`mutation UpdateCourse(
