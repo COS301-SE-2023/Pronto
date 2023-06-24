@@ -14,7 +14,6 @@ const style = {
   p: 4,
 };
 
-//export {courses};
 export default function AddModal(module) {
 
   const [open, setOpen] = useState(false);
@@ -25,6 +24,7 @@ export default function AddModal(module) {
       setOpen(true) 
       console.log(module)
       module.setModal(true)
+
       //Adding new lecturer with courses
       if(module.updateFlag===false){
         console.log("Course data is")
@@ -73,13 +73,17 @@ export default function AddModal(module) {
           if(courses[i].coursecode!=="" ){
             if(module.courseData.find(course=>course.coursecode===courses[i].coursecode)===undefined){
               newcourses.push(courses[i])
+              console.log(newcourses)
             }
           }
         }
         let courseList=await module.findCourses(newcourses)
         console.log("Found")
         console.log(courseList)
-        await module.addCourses(module.lecturerData,courseList)
+        if(courseList.length>0){
+          console.log("not removing")
+          await module.addCourses(module.lecturerData,courseList)
+        }
         module.setCourses([])
       }
       else { 

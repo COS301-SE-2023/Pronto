@@ -1,14 +1,11 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateLecturer, updateCourse,createCourse} from "../../graphql/mutations"; 
+import { createLecturer, deleteLecturer, updateCourse} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listCourses} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
 import AddModal from './addCourse'
-import SearchIcon from "@mui/icons-material/SearchSharp";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
-import ClearIcon from '@mui/icons-material/Clear';
-//import{courses} from './addCourse'
 
 const AddLecturer = () => {
     const [firstName,setFirstName]=useState("")
@@ -52,11 +49,10 @@ const AddLecturer = () => {
                 setLecturers(lecturers)       
                   
              }catch(e){    
-                  //alert("Something went wrong")
-                 console.error(e)
+                  alert("Something went wrong")
               }    
 
-            //Reset states
+            //Reset state
             setFirstName("")
             setLastName("")
             setEmail("")
@@ -146,7 +142,6 @@ const AddLecturer = () => {
                 }
                 catch(e){
                     alert("Course not found!")
-                    //console.log(e)
                 }
         }
     } 
@@ -181,51 +176,53 @@ const AddLecturer = () => {
     }
 
     const fetchLecturers = async()=>{
-        // try{
-        // //     //Get lecturers
-        // //     let institution= await Auth.currentAuthenticatedUser()
-        // //     let lecturerslist=await API.graphql(
-        // //         {
-        // //         query:lecturersByInstitutionId, 
-        // //         variables:{ 
-        // //                     institutionId:institution.username,
-        // //                     limit: 50
-        // //             },
-        // //         authMode:'AMAZON_COGNITO_USER_POOLS',
-        // //         }
-        // //    ) 
-        // //    lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
-        // //    lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
+        try{
+            //Get lecturers
+            let institution= await Auth.currentAuthenticatedUser()
+            let lecturerslist=await API.graphql(
+                {
+                query:lecturersByInstitutionId, 
+                variables:{ 
+                            institutionId:institution.username,
+                            limit: 50
+                    },
+                authMode:'AMAZON_COGNITO_USER_POOLS',
+                }
+           ) 
+           lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
+           lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
            
-        // //    //Get courses
-        // //    for(let i=0;i<lecturerslist.length;i++){   
-        // //         let course=await API.graphql({
-        // //             query:listCourses,
-        // //             variables:{
-        // //                     filter:{
-        // //                         lecturerId:{
-        // //                             eq:lecturerslist[i].id
-        // //                     }
-        // //                 }
-        // //             },
-        // //             authMode:"AMAZON_COGNITO_USER_POOLS"
-        // //         })        
-        // //        lecturerslist[i].courses=course.data.listCourses.items
-        // //     }        
-        // //     setLecturers(lecturerslist)
-        // }
-        // catch(error){ 
-        //     console.error(error)
-        // }
+           //Get courses
+           for(let i=0;i<lecturerslist.length;i++){   
+                let course=await API.graphql({
+                    query:listCourses,
+                    variables:{
+                            filter:{
+                                lecturerId:{
+                                    eq:lecturerslist[i].id
+                            }
+                        }
+                    },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                })        
+               lecturerslist[i].courses=course.data.listCourses.items
+            }        
+            setLecturers(lecturerslist)
+        }
+        catch(error){ 
+            console.error(error)
+        }
     }
     
     const handleSearch = async() => { 
         try{ 
-            let institution=await Auth.currentAuthenticatedUser()
-            if(filterAttribute==="firstname"){
-            let search= await API.graphql({
-                query:lecturersByInstitutionId,
-                variables:  { 
+            //console.log(searchIcon)
+            if(searchIcon===false){
+                let institution=await Auth.currentAuthenticatedUser()
+                if(filterAttribute==="firstname"){
+                    let search= await API.graphql({
+                        query:lecturersByInstitutionId,
+                        variables:  { 
                            institutionId : institution.username,  
                             filter : { 
                                 firstname: { 
@@ -233,62 +230,58 @@ const AddLecturer = () => {
                                 } 
                            }
                         },
-                authMode:"AMAZON_COGNITO_USER_POOLS"         
-            })
-            setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+                        authMode:"AMAZON_COGNITO_USER_POOLS"         
+                    })
+                    setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+                }
+                else if(filterAttribute==="lastname"){ 
+                    let search= await API.graphql({
+                        query:lecturersByInstitutionId,
+                        variables:  { 
+                               institutionId : institution.username,  
+                                filter : { 
+                                    lastname: { 
+                                         eq: searchValue 
+                                    } 
+                                }
+                            },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"         
+                    })   
+                    setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+                }
+                else if(filterAttribute==="email"){
+                    let search= await API.graphql({
+                    query:lecturersByInstitutionId,
+                    variables:  { 
+                               institutionId : institution.username,  
+                                filter : { 
+                                    email: { 
+                                         eq: searchValue 
+                                    } 
+                                }
+                            },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"         
+                    })
+                    setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+            }
+            setSearchIcon(!searchIcon)
         }
-            else if(filterAttribute==="lastname"){ 
-              let search= await API.graphql({
-                query:lecturersByInstitutionId,
-                variables:  { 
-                           institutionId : institution.username,  
-                            filter : { 
-                                lastname: { 
-                                     eq: searchValue 
-                                } 
-                           }
-                        },
-                authMode:"AMAZON_COGNITO_USER_POOLS"         
-            })   
-            setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
-            }
-            else if(filterAttribute==="email"){
-              let search= await API.graphql({
-                query:lecturersByInstitutionId,
-                variables:  { 
-                           institutionId : institution.username,  
-                            filter : { 
-                                email: { 
-                                     eq: searchValue 
-                                } 
-                           }
-                        },
-                authMode:"AMAZON_COGNITO_USER_POOLS"         
-            })
-            setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
-            }
-            else{ 
-                await fetchLecturers()
-            }
-           
+        else{
+            console.log("fetching")
+            fetchLecturers()
+            console.log(searchIcon)
+            setSearchIcon(!searchIcon)
+            console.log(searchIcon)
         }
-        
-        catch(e){
-            console.error(e)
-        }
-         if(searchIcon===true){ 
-                setSearchIcon(false)
-                console.log("now red")
-            }
-            else{
-                setSearchIcon(true)
-                console.log("now white")
-            }
+       }catch(e){
+        alert("Search failed")
+       }
+         
     } 
     
-    // useEffect(() => {
-    //     fetchLecturers();
-    // }, [])
+    useEffect(() => {
+        fetchLecturers();
+    }, [])
     
     return (  
         <div style={{ display: 'inline-flex' }}>
