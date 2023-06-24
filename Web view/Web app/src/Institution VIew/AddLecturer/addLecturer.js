@@ -268,14 +268,11 @@ const AddLecturer = () => {
         else{
             console.log("fetching")
             fetchLecturers()
-            console.log(searchIcon)
             setSearchIcon(!searchIcon)
-            console.log(searchIcon)
         }
        }catch(e){
         alert("Search failed")
-       }
-         
+       } 
     } 
     
     useEffect(() => {
