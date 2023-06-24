@@ -155,14 +155,12 @@ const AddLecturer = () => {
            _version:lecturer._version
         }
          try{
-            let mutation=await API.graphql({
+            let removeMutation=await API.graphql({
                 query:deleteLecturer,
                 variables:{input : lec },
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             })
             let courseList=lecturer.courses
-            console.log(courseList)
-            console.log(lecturer)
             if(courseList!==undefined){
                 await removeCourses(courseList,lecturer)
                 
