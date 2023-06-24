@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>4/5</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -115,26 +115,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* Amplify Params - DO NOT EDIT
@@ -152,11 +152,11 @@ Amplify Params - DO NOT EDIT */ /**
  * The names of modules to load are stored as a comma-delimited string in the
  * `MODULES` env var.
  */
-const moduleNames = <span class="cstat-no" title="statement not covered" >process.env.MODULES.split(',');</span>
+const moduleNames = process.env.MODULES.split(',');
 /**
  * The array of imported modules.
  */
-const modules = <span class="cstat-no" title="statement not covered" >moduleNames.map(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; <span class="cstat-no" title="statement not covered" >require(`./${name}`))</span>;</span>
+const modules = moduleNames.map((name) =&gt; require(`./${name}`));
 &nbsp;
 /**
  * This async handler iterates over the given modules and awaits them.
@@ -165,13 +165,13 @@ const modules = <span class="cstat-no" title="statement not covered" >moduleName
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  *
  */
-<span class="cstat-no" title="statement not covered" >exports.handler = <span class="fstat-no" title="function not covered" >as</span>ync (event, context) =&gt; {</span>
+exports.handler = async (event, context) =&gt; {
   /**
    * Instead of naively iterating over all handlers, run them concurrently with
    * `await Promise.all(...)`. This would otherwise just be determined by the
    * order of names in the `MODULES` var.
    */
-<span class="cstat-no" title="statement not covered" >  await Promise.all(modules.map(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.handler(event, context))</span>);</span>
+  await Promise.all(modules.map((module) =&gt; module.handler(event, context)));
 <span class="cstat-no" title="statement not covered" >  return event;</span>
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -181,7 +181,7 @@ const modules = <span class="cstat-no" title="statement not covered" >moduleName
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-06-23T22:52:55.242Z
+                at 2023-06-24T14:48:11.054Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
