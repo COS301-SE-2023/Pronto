@@ -1,7 +1,7 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse} from "../../graphql/mutations"; 
-import { lecturersByInstitutionId,listCourses} from "../../graphql/queries";
+import { lecturersByInstitutionId,listCourses,listInstitutions} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
 import AddModal from './addCourse'
