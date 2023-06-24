@@ -46,7 +46,8 @@ const AddLecturer = () => {
                   
                 //Add lecturer to courses
                 await addCourses(lecturer,courseList)
-                setLecturers(lecturers)       
+                if(lecturers.length<19)
+                    setLecturers(lecturers)       
                   
              }catch(e){    
                   alert("Something went wrong")
