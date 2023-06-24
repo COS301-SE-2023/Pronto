@@ -67,7 +67,6 @@ export default function AddModal(module) {
         }
      
         //Add new courses
-        //module.lecturerData.courses=[]
         let newcourses=[]
         for(let i=0;i<courses.length;i++){
           if(courses[i].coursecode!=="" ){
@@ -144,8 +143,7 @@ const handleRemove = async(index) => {
   }
    
   return (
-    <div className="form-row">      
-    {/* {<AddModal coursesVar = {course} />*/}                      
+    <div className="form-row">                            
       <div className="form-group col-6">
       
       <button onClick={handleOpen}  
