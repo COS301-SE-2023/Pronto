@@ -16,7 +16,11 @@ describe('testing module iterator', () => {
     process.env = OLD_ENV;
     jest.restoreAllMocks();
   });
+  test('should throw', async () => {
+    await expect(moduleIterator.handler(studentsEvent)).rejects.toThrow(/^Failed to get User Group with userGroupName/);
+  });
   test('should return the event', async () => {
-    expect(await moduleIterator.handler(studentsEvent)).toMatchObject(studentsEvent);
+    const mockmoduleIterator = require('../../../../function/prontoAuthPostConfirmation/src/index');
+    expect(await mockmoduleIterator.handler(studentsEvent)).toMatchObject(studentsEvent);
   });
 });
