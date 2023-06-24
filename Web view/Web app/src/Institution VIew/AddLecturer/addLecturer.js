@@ -186,7 +186,7 @@ const AddLecturer = () => {
                 variables:{ 
                             institutionId:institution.username,
                             _deleted:null,
-                            limit: 50
+                            limit: 20
                     },
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
