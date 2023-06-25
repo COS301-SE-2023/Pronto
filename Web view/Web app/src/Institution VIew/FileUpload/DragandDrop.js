@@ -52,10 +52,8 @@ function DropzoneComponent() {
       createFolder("UniversityOfPretoria");
 
       try {
-        const result = await Storage.put(
-          selectedFile.name,
-          "UniversityOfPretoria/" + selectedFile
-        );
+        const fileKey = `UniversityOfPretoria/${selectedFile.name}`;
+        const result = await Storage.put(fileKey, selectedFile);
         console.log("File uploaded successfully:", result);
       } catch (error) {
         console.error("Error uploading file:", error);
