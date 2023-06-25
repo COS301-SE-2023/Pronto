@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Linking,
-  Alert,
-  StyleSheet,
-} from "react-native";
+import { View, Text, FlatList, Linking, Alert, StyleSheet } from "react-native";
+import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 let studentUniversity = "UniversityOfPretoria";
 
@@ -46,18 +40,25 @@ const BucketFilesScreen = () => {
       return null; // Skip rendering the item if the file name is empty
     }
     return (
-      <TouchableOpacity
-        onPress={() => openFile(item.key)}
-        style={styles.fileItem}
-      >
-        <Text style={styles.fileName}>{fileName}</Text>
-      </TouchableOpacity>
+      <Card onPress={() => openFile(item.key)} style={styles.fileItem}>
+        <Card.Content>
+          <Text style={styles.fileName}>{fileName}</Text>
+        </Card.Content>
+      </Card>
     );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>File List:</Text>
+      <View style={styles.headingContainer}>
+        <MaterialCommunityIcons
+          name="file-document"
+          size={24}
+          color="#e32f45"
+          style={styles.icon}
+        />
+        <Text style={styles.heading}>File List:</Text>
+      </View>
       <FlatList
         data={fileList}
         renderItem={renderFileItem}
@@ -70,20 +71,25 @@ const BucketFilesScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     padding: 10,
+  },
+  headingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+    justifyContent: "center",
   },
   heading: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
+    color: "#e32f45",
+    marginLeft: 10,
   },
   fileItem: {
     backgroundColor: "white",
-    padding: 10,
     marginBottom: 10,
     borderRadius: 5,
-    borderWidth: 1,
+    elevation: 2,
     borderColor: "#e32f45",
   },
   fileName: {
