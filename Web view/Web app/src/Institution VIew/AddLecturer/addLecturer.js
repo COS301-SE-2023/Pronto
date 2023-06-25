@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse, updateInstitution} from "../../graphql/mutations"; 
+import { createLecturer, deleteLecturer, updateCourse} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listCourses,listInstitutions} from "../../graphql/queries";
 import  {API} from 'aws-amplify';
 import { Auth } from "aws-amplify";
@@ -66,6 +66,7 @@ const AddLecturer = () => {
     const removeCourses=async(courseList,lecturer)=>{
         if(courseList===undefined)
             return
+
         for(let i=0;i<courseList.length;i++){
             
             try{ 
@@ -84,6 +85,7 @@ const AddLecturer = () => {
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             }) 
             lecturer.courses.splice(i,1)
+            
     }catch(e){ 
         alert("Could not remove course from lecturer")
     }
@@ -359,7 +361,7 @@ const AddLecturer = () => {
                                 </div>
 
                                 {/*Adding courses via Modal popup */}
-                                <div className="form-group col-6">
+                                <div className="form-group col-6" >
                                     <label htmlFor="Course">Courses</label>
                                     <AddModal 
                                        updateFlag={(false)}
@@ -370,6 +372,7 @@ const AddLecturer = () => {
                                        courseData={courses}
                                        setModal={setIsModalOpened}
                                        setCourses={setCourses}
+                                       className="form-control"
                                     />
                                 </div>
                             </div>
@@ -452,6 +455,8 @@ const AddLecturer = () => {
                                             <a href="mailto:" data-testid="lecturerEmail">
                                                 {val.email}
                                             </a>
+                                        </td>
+                                        <td>    
                                         <AddModal
                                             updateFlag={(true)}
                                             lecturerData={val}
@@ -461,7 +466,8 @@ const AddLecturer = () => {
                                             courseData={val.courses}
                                             setModal={setIsModalOpened}
                                             setCourses={setCourses}
-                                            /></td>
+                                            />
+                                        </td>
                                         <td>
                                             <button onClick={() => {handleRemove(val,key)}} 
                                                 type="button" 

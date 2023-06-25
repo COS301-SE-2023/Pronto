@@ -22,36 +22,33 @@ export default function AddModal(module) {
 
   const handleOpen = async() =>{ 
       setOpen(true) 
-      console.log(module)
       module.setModal(true)
 
       //Adding new lecturer with courses
-      if(module.updateFlag===false){
-        console.log("Course data is")
-        console.log(module.courseData)  
+      if(module.updateFlag===false){  
        
         if(module.courseData===undefined || module.courseData.length===0){ 
             setCourses([{coursename:"",coursecode:""}])
-            console.log("New lecturer with course")
+           
          }
          else if(module.courseData[module.courseData.length-1].coursecode!==""){ 
             setCourses([...module.courseData,{coursecode:"",coursename:""}])
-            console.log("New lecturer with course again")
+           
          } 
       }
       else{ 
-        console.log(module.courseData)
+      
         if(module.lecturerData.courses===undefined || module.lecturerData.courses.length===0){
             setCourses([{coursecode:"",coursename:""}])
-            console.log("Adding course to lecturer")
+      
         }
         else if(module.lecturerData.courses[module.lecturerData.courses.length-1].coursecode!==""){ 
             setCourses([...module.lecturerData.courses,{coursecode:"",coursename:""}])
-            console.log("Adding a course to a lecturer again")
+           
         }
       }
 
-      console.log(courses)
+      
   }
 
   const handleClose = async() => {  
@@ -63,7 +60,6 @@ export default function AddModal(module) {
       if(module.updateFlag===true){
         if(removed.length>0){
           await module.removeCourses(removed,module.lecturerData)
-          console.log(courses)
         }
      
         //Add new courses
@@ -72,25 +68,25 @@ export default function AddModal(module) {
           if(courses[i].coursecode!=="" ){
             if(module.courseData.find(course=>course.coursecode===courses[i].coursecode)===undefined){
               newcourses.push(courses[i])
-              console.log(newcourses)
             }
           }
         }
         let courseList=await module.findCourses(newcourses)
-        console.log("Found")
-        console.log(courseList)
+       
+        if(newcourses.length>courseList.length)
+             alert("Course(s) not found")
+       
         if(courseList.length>0){
-          console.log("not removing")
           await module.addCourses(module.lecturerData,courseList)
         }
+
         module.setCourses([])
       }
       else { 
         module.setCourses(courses)
       }
-      console.log(courses)
+      
       setCourses([])
-      console.log(module.lecturerData)
 }
 
 const handleAdd = async(event) => {
@@ -110,10 +106,15 @@ const handleRemove = async(index) => {
     const rows = [...courses]
     rows.splice(index, 1)
     setCourses( rows )
-    console.log(courses)
   }
 
   const handleNameChange= async(index,event) => { 
+    if(courses[index]===undefined){
+      courses[index]={
+        coursecode:"",
+        coursename:""
+      }
+    }
     if(courses.length<=index){
          courses[index]= { 
             coursename:"",
@@ -128,6 +129,12 @@ const handleRemove = async(index) => {
   }
 
   const handleCodeChange = async(index,event)=> {  
+    if(courses[index]===undefined){
+      courses[index]={
+        coursecode:"",
+        coursename:""
+      }
+    }
     if(courses.length<=index){
          courses[index]= { 
             coursename:"",
@@ -147,7 +154,7 @@ const handleRemove = async(index) => {
       <div className="form-group col-6">
       
       <button onClick={handleOpen}  
-      className="btn btn-primary "
+      className="btn btn-primary"
       data-testid="submitButton">View</button>
       <Modal
         open={open}
