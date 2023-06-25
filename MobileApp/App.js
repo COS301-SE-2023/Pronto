@@ -15,35 +15,35 @@ import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
 
-/* Amplify.configure({
+Amplify.configure({
   Auth: {
     region: config.REGION,
     userPoolId: config.USER_POOL_ID,
     userPoolWebClientId: config.USER_POOL_APP_CLIENT_ID,
   },
-}); */
+});
 
-//Auth.configure(config);
+Auth.configure(config);
 
-Amplify.configure({
+/* Amplify.configure({
   Auth: {
-    identityPoolId: "us-east-1:6b251f24-2cc0-4073-9c2e-f44ec6fff42a", //REQUIRED - Amazon Cognito Identity Pool ID
+    identityPoolId: "", //REQUIRED - Amazon Cognito Identity Pool ID
     region: "us-east-1", // REQUIRED - Amazon Cognito Region
   },
   Storage: {
     AWSS3: {
-      bucket: "institution-file-upload", //REQUIRED -  Amazon S3 bucket name
+      bucket: "", //REQUIRED -  Amazon S3 bucket name
       region: "us-east-1", //OPTIONAL -  Amazon service region
     },
   },
-});
+}); */
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
 
-  /* const checkUser = async () => {
+  const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
@@ -91,13 +91,13 @@ export default function App() {
         <ActivityIndicator color={"#e32f45"} size={"large"} />
       </View>
     );
-  } */
+  }
 
   return (
     <NavigationContainer>
-      {/* {user ? */}
-      <Tabs />
-      {/* ) : (
+      {user ? (
+        <Tabs />
+      ) : (
         <>
           <Stack.Navigator>
             <Stack.Screen
@@ -148,7 +148,7 @@ export default function App() {
             />
           </Stack.Navigator>
         </>
-      )}*/}
+      )}
     </NavigationContainer>
 
     /* <NavigationContainer>
