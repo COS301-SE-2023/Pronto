@@ -1,15 +1,21 @@
-import * as React from 'react';
-import './Navigation.css';
-import logo from '../../images/logo.jpg';
-//import {Person} from "@mui/icons-material";
-
+import * as React from "react";
+import "./Navigation.css";
+import logo from "../../images/logo.jpg";
+import { Auth } from "aws-amplify";
+import { useNavigate } from "react-router-dom";
 
 export default function InstitutionNavigation() {
-
-function Logout() {
-       alert("You have been logged out");
-         window.location.href = '/login';
-}
+  const navigate = useNavigate();
+  const onSignOut = async (event) => {
+    event.preventDefault();
+    try {
+      await Auth.signOut();
+      //navigate to lecturer login
+      navigate("/institution-login");
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
 
     return (
         <div className={'grid'}>
@@ -57,9 +63,8 @@ function Logout() {
 
             </nav>
             <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
-                <button className={"btn btn-danger btn-lg btn-block"} style={{borderRadius:"25px"}} data-testid={'LogoutButton'} onClick={Logout}>Log Out</button>
+                <button className={"btn btn-danger btn-lg btn-block"} style={{borderRadius:"25px"}} data-testid={'LogoutButton'} onClick={onSignOut}>Log Out</button>
             </div>
-
         </div>
 
             );

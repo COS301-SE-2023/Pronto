@@ -1,10 +1,159 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { Auth } from "aws-amplify";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  //sign in states
   const [signIn, toggle] = React.useState(true);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [signInError, setsignInError] = useState("");
+  const [signUpError, setsignUpError] = useState("");
+
+  //sign up states
+  const [name, setName] = React.useState("");
+  const [surname, setSurname] = React.useState("");
+  const [signUpPassword, setSignUpPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+
+  const onSignInPressed = async (event) => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+    event.preventDefault();
+    try {
+      await Auth.signIn(email, password);
+      setsignInError("");
+      //navigate to lecturer home page
+      navigate("/lecture-homepage");
+    } catch (e) {
+      setsignInError(e.message);
+    }
+    setLoading(false);
+  };
+
+  const onSignUpPressed = async (event) => {
+    event.preventDefault();
+    if (confirmPassword !== signUpPassword) {
+      setsignUpError("Passwords do not match");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // const response = await Auth.signIn(email, password);
+      await Auth.signUp({
+        username: email,
+        password: signUpPassword,
+        attributes: {
+          email: email,
+          name: name,
+          family_name: surname,
+          address: "",
+        },
+        clientMetadata: {
+          role: "Lecture",
+        },
+      });
+      setsignUpError("");
+      navigate("/lecturer-confirm-email", { state: { email: email } });
+    } catch (e) {
+      setsignUpError(e.message);
+    }
+    setLoading(false);
+  };
+
+  const [emailIsValid, setEmailIsValid] = useState(false);
+
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = regex.test(value);
+    setEmailIsValid(isValidEmail);
+  };
+
+  //validating password for sign up
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
+  const validatePassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidPassword = regex.test(value);
+
+    setPasswordIsValid(isValidPassword);
+
+    setPasswordCriteria({
+      length: value.length >= 8,
+      uppercase: /[A-Z]/.test(value),
+      lowercase: /[a-z]/.test(value),
+      digit: /\d/.test(value),
+      specialChar: /[@$!%*?&]/.test(value),
+    });
+  };
+
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    digit: false,
+    specialChar: false,
+  });
+
+  const [passwordIsFocused, setPasswordIsFocused] = useState(false);
+
+  const handlePasswordFocus = () => {
+    setPasswordIsFocused(true);
+  };
+
+  const handlePasswordBlur = () => {
+    setPasswordIsFocused(false);
+  };
+
+  //validating password for sign in
+  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
+  const validateSignInPassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidSignInPassword = regex.test(value);
+
+    setPasswordSignInIsValid(isValidSignInPassword);
+  };
+
+  //validate name and surname for sign up
+  const [nameIsValid, setNameIsValid] = useState(false);
+  const [surnameIsValid, setSurnameIsValid] = useState(false);
+
+  const validateName = (value) => {
+    const regex = /[a-zA-Z]+/;
+    const isValidName = regex.test(value);
+    setNameIsValid(isValidName);
+  };
+
+  const validateSurname = (value) => {
+    const regex = /[a-zA-Z]+/;
+    const isValidSurname = regex.test(value);
+    setSurnameIsValid(isValidSurname);
+  };
+
+  //validating confirm password
+  const [passwordMatch, setPasswordMatch] = useState(false);
+
+  const validateConfirmPassword = (value) => {
+    setPasswordMatch(value === signUpPassword);
+  };
+
   return (
     <Container>
       <SignUpContainer signin={signIn}>
@@ -16,12 +165,90 @@ function Login() {
           >
             Create Lecturer Account
           </Title>
-          <Input type="text" placeholder="Name" />
-          <Input type="text" placeholder="Surname" />
-          <Input type="email" placeholder="Email" />
-          <Input type="password" placeholder="Password" />
-          <Input type="password" placeholder="Confirm Password" />
-          <Button>Sign Up</Button>
+          <Input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(event) => {
+              setName(event.target.value);
+              validateName(event.target.value);
+            }}
+            isValidName={nameIsValid}
+          />
+          <Input
+            type="text"
+            placeholder="Surname"
+            value={surname}
+            onChange={(event) => {
+              setSurname(event.target.value);
+              validateSurname(event.target.value);
+            }}
+            isValidSurname={surnameIsValid}
+          />
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              validateEmail(event.target.value);
+            }}
+            isValidEmail={emailIsValid}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={signUpPassword}
+            onChange={(event) => {
+              setSignUpPassword(event.target.value);
+              validatePassword(event.target.value);
+            }}
+            isValidPassword={passwordIsValid}
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(event) => {
+              setConfirmPassword(event.target.value);
+              validateConfirmPassword(event.target.value);
+            }}
+            passwordMatch={passwordMatch}
+          />
+          {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
+          <Button onClick={onSignUpPressed}>
+            {loading ? "Signing up..." : "Sign up"}
+          </Button>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {passwordIsFocused && (
+              <>
+                <CriteriaMessage isValid={passwordCriteria.length}>
+                  {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.uppercase}>
+                  {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.lowercase}>
+                  {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.digit}>
+                  {passwordCriteria.digit ? "✓" : "x"} Digit
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.specialChar}>
+                  {passwordCriteria.specialChar ? "✓" : "x"} Special character
+                  (@$!%*?&)
+                </CriteriaMessage>
+              </>
+            )}
+          </div>
         </Form>
       </SignUpContainer>
       <SignInContainer signin={signIn}>
@@ -38,14 +265,35 @@ function Login() {
             />
           </LogoContainer>
           <Subtitle>Lecturer Login</Subtitle>
-
-          <Input type="email" placeholder="Email" />
-          <Input type="password" placeholder="Password" />
-
-          <Button>Sign In</Button>
+          {/* input fields for lecturers login*/}
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              validateEmail(event.target.value);
+            }}
+            isValidEmail={emailIsValid}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              validateSignInPassword(event.target.value);
+            }}
+            isValidSignInPassword={passwordSignInIsValid}
+          />
+          <Button onClick={onSignInPressed}>
+            {loading ? "Signing in..." : "Sign in"}
+          </Button>
           <Anchor href="/lecturer-forgot-password">
             Forgot your password?
           </Anchor>
+          {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
+          {/* Render error text area if error exists */}
         </Form>
       </SignInContainer>
       <OverlayContainer signin={signIn}>
@@ -146,11 +394,22 @@ const Title = styled.h1`
 
 const Input = styled.input`
   background-color: #eee;
-  border: 0;
+  border: none;
   border-radius: 25px;
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
+  &:focus {
+    ${(props) =>
+      props.isValidEmail ||
+      props.isValidPassword ||
+      props.isValidSignInPassword ||
+      props.isValidName ||
+      props.isValidSurname ||
+      props.passwordMatch // Add the condition here
+        ? `border: 2px solid green;`
+        : `border: 1px solid #e32f45;`}
+  }
 `;
 
 const Button = styled.button`
@@ -246,6 +505,19 @@ const Paragraph = styled.p`
   line-height: 20px;
   letter-spacing: 0.5px;
   margin: 20px 0 30px;
+`;
+
+const ErrorText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
+`;
+
+const CriteriaMessage = styled.span`
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 12px;
+  color: ${({ isValid }) => (isValid ? "green" : "inherit")};
 `;
 
 export default Login;

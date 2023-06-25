@@ -1,10 +1,155 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
+import { Auth } from "aws-amplify";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [signIn, toggle] = React.useState(true);
+
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [signInError, setsignInError] = useState("");
+  const [signUpError, setsignUpError] = useState("");
+
+  //sign up states
+  const [name, setName] = React.useState("");
+
+  const [signUpPassword, setSignUpPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+
+  //function for signing in
+  const onSignInPressed = async (event) => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+    event.preventDefault();
+
+    try {
+      await Auth.signIn(email, password);
+      setsignInError("");
+      //navigate to lecturer home page
+      navigate("/institution-homepage");
+    } catch (e) {
+      setsignInError(e.message);
+    }
+    setLoading(false);
+  };
+
+  //function for sign up
+  const onSignUpPressed = async (event) => {
+    event.preventDefault();
+    if (confirmPassword !== signUpPassword) {
+      setsignUpError("Passwords do not match");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await Auth.signUp({
+        username: email,
+        password: signUpPassword,
+        attributes: {
+          email: email,
+          name: name,
+          family_name: "",
+          address: "",
+        },
+        clientMetadata: {
+          role: "Admin",
+        },
+      });
+      setsignUpError("");
+      navigate("/institution-confirm-email", { state: { email: email } });
+    } catch (e) {
+      setsignUpError(e.message);
+    }
+    setLoading(false);
+  };
+
+  //validate email input for sign in and sign up
+  const [emailIsValid, setEmailIsValid] = useState(false);
+
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = regex.test(value);
+    setEmailIsValid(isValidEmail);
+  };
+
+  //validate password on sign in
+  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
+  const validateSignInPassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidSignInPassword = regex.test(value);
+
+    setPasswordSignInIsValid(isValidSignInPassword);
+  };
+
+  //validate password on sign up
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
+  const validatePassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidPassword = regex.test(value);
+
+    setPasswordIsValid(isValidPassword);
+
+    setPasswordCriteria({
+      length: value.length >= 8,
+      uppercase: /[A-Z]/.test(value),
+      lowercase: /[a-z]/.test(value),
+      digit: /\d/.test(value),
+      specialChar: /[@$!%*?&]/.test(value),
+    });
+  };
+
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    digit: false,
+    specialChar: false,
+  });
+
+  const [passwordIsFocused, setPasswordIsFocused] = useState(false);
+
+  const handlePasswordFocus = () => {
+    setPasswordIsFocused(true);
+  };
+
+  const handlePasswordBlur = () => {
+    setPasswordIsFocused(false);
+  };
+
+  //confirm password validation
+  const [passwordMatch, setPasswordMatch] = useState(false);
+
+  const validateConfirmPassword = (value) => {
+    setPasswordMatch(value === signUpPassword);
+  };
+
+  //validate university name on signup
+  const [nameIsValid, setNameIsValid] = useState(false);
+
+  const validateName = (value) => {
+    const regex = /[a-zA-Z]+/;
+    const isValidName = regex.test(value);
+    setNameIsValid(isValidName);
+  };
+
   return (
     <Container>
       <SignUpContainer signin={signIn}>
@@ -16,11 +161,79 @@ function Login() {
           >
             Create Institution Account
           </Title>
-          <Input type="text" placeholder="University Name" />
-          <Input type="email" placeholder="Adminsitration Email" />
-          <Input type="password" placeholder="Password" />
-          <Input type="password" placeholder="Confirm Password" />
-          <Button>Apply</Button>
+          <Input
+            type="text"
+            placeholder="University Name"
+            value={name}
+            onChange={(event) => {
+              setName(event.target.value);
+              validateName(event.target.value);
+            }}
+            isValidName={nameIsValid}
+          />
+          <Input
+            type="email"
+            placeholder="Adminsitration Email"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              validateEmail(event.target.value);
+            }}
+            isValidEmail={emailIsValid}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={signUpPassword}
+            onChange={(event) => {
+              setSignUpPassword(event.target.value);
+              validatePassword(event.target.value);
+            }}
+            isValidPassword={passwordIsValid}
+            onFocus={handlePasswordFocus}
+            onBlur={handlePasswordBlur}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(event) => {
+              setConfirmPassword(event.target.value);
+              validateConfirmPassword(event.target.value);
+            }}
+            passwordMatch={passwordMatch}
+          />
+          {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
+          <Button onClick={onSignUpPressed}>
+            {loading ? "Applying..." : "Apply"}
+          </Button>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {passwordIsFocused && (
+              <>
+                <CriteriaMessage isValid={passwordCriteria.length}>
+                  {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.uppercase}>
+                  {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.lowercase}>
+                  {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.digit}>
+                  {passwordCriteria.digit ? "✓" : "x"} Digit
+                </CriteriaMessage>
+                <CriteriaMessage isValid={passwordCriteria.specialChar}>
+                  {passwordCriteria.specialChar ? "✓" : "x"} Special character
+                  (@$!%*?&)
+                </CriteriaMessage>
+              </>
+            )}
+          </div>
         </Form>
       </SignUpContainer>
       <SignInContainer signin={signIn}>
@@ -37,14 +250,34 @@ function Login() {
             />
           </LogoContainer>
           <Subtitle>Institution Login</Subtitle>
-
-          <Input type="email" placeholder="Email" />
-          <Input type="password" placeholder="Password" />
-
-          <Button>Sign In</Button>
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              validateEmail(event.target.value);
+            }}
+            isValidEmail={emailIsValid}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              validateSignInPassword(event.target.value);
+            }}
+            isValidSignInPassword={passwordSignInIsValid}
+          />
+          <Button onClick={onSignInPressed}>
+            {" "}
+            {loading ? "Signing in..." : "Sign in"}
+          </Button>
           <Anchor href="/institution-forgot-password">
             Forgot your password?
           </Anchor>
+          {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
         </Form>
       </SignInContainer>
       <OverlayContainer signin={signIn}>
@@ -152,6 +385,17 @@ const Input = styled.input`
   padding: 12px 15px;
   margin: 8px 0;
   width: 100%;
+  &:focus {
+    ${(props) =>
+      props.isValidEmail ||
+      props.isValidPassword ||
+      props.isValidSignInPassword ||
+      props.isValidName ||
+      props.isValidSurname ||
+      props.passwordMatch // Add the condition here
+        ? `border: 2px solid green;`
+        : `border: 1px solid #e32f45;`}
+  }
 `;
 
 const Button = styled.button`
@@ -247,6 +491,19 @@ const Paragraph = styled.p`
   line-height: 20px;
   letter-spacing: 0.5px;
   margin: 20px 0 30px;
+`;
+
+const ErrorText = styled.p`
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
+`;
+
+const CriteriaMessage = styled.span`
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 12px;
+  color: ${({ isValid }) => (isValid ? "green" : "inherit")};
 `;
 
 export default Login;

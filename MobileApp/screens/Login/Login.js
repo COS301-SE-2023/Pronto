@@ -10,9 +10,8 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
-
 
 const { height } = Dimensions.get("window");
 
@@ -20,6 +19,18 @@ const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  //validate email input for sign in and sign up
+  const [emailIsValid, setEmailIsValid] = useState(false);
+
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = regex.test(value);
+    setEmailIsValid(isValidEmail);
+  };
+
+  const [isTypingEmail, setIsTypingEmail] = useState(false);
+  const [isTypingPassword, setIsTypingPassword] = useState(false);
 
   const onSignInPressed = async (data) => {
     if (loading) {
@@ -37,6 +48,15 @@ const Login = ({ navigation }) => {
     setLoading(false);
   };
 
+  //validate password on sign in
+  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
+  const validateSignInPassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidSignInPassword = regex.test(value);
+
+    setPasswordSignInIsValid(isValidSignInPassword);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,22 +72,54 @@ const Login = ({ navigation }) => {
           <TextInput
             placeholder="Email"
             autoCapitalize="none"
-            placeholderTextColor={"#666666"}
-            style={styles.input}
+            placeholderTextColor="#666666"
+            style={[styles.input]}
             value={username}
-            onChangeText={setUsername}
-
+            onChangeText={(value) => {
+              setUsername(value);
+              validateEmail(value);
+            }}
+            onFocus={() => setIsTypingEmail(true)}
           />
+          {isTypingEmail && emailIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
 
+          {isTypingEmail && !emailIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Password"
             autoCapitalize="none"
-            placeholderTextColor={"#666666"}
+            placeholderTextColor="#666666"
             secureTextEntry={true}
-            style={styles.input}
+            style={[styles.input]}
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(value) => {
+              setPassword(value);
+              setPasswordSignInIsValid(value);
+              validateSignInPassword(value);
+            }}
+            onFocus={() => setIsTypingPassword(true)}
           />
+          {isTypingPassword && passwordSignInIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingPassword && !passwordSignInIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
         </View>
 
         <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>
@@ -90,7 +142,6 @@ const Login = ({ navigation }) => {
           <Text style={styles.createAccountButtonText}>
             Create new account &#x2192;
           </Text>
-
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -123,7 +174,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     maxWidth: "70%",
   },
-  inputContainer: {},
+  inputContainer: { position: "relative" },
 
   input: {
     fontSize: 15,
@@ -139,7 +190,6 @@ const styles = StyleSheet.create({
     color: "#e32f45",
     alignSelf: "flex-end",
     marginBottom: 15,
-
   },
   signInButton: {
     padding: 20,
@@ -166,6 +216,12 @@ const styles = StyleSheet.create({
 
     fontSize: 15,
     fontWeight: "bold",
+  },
+  iconContainer: {
+    position: "absolute",
+    top: "50%",
+    right: 10,
+    transform: [{ translateY: -12 }],
   },
 });
 

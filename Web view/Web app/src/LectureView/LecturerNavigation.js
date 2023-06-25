@@ -1,14 +1,24 @@
-import * as React from 'react';
-import '../Institution VIew/Navigation/Navigation.css';
-import logo from '../images/logo.jpg';
+import * as React from "react";
+import "../Institution VIew/Navigation/Navigation.css";
+import logo from "../images/logo.jpg";
+import { Auth } from "aws-amplify";
+import { useNavigate } from "react-router-dom";
 
 export default function LecturerNavigation() {
 
-  function Logout() {
-    alert("You have been logged out");
-      window.location.href = '/lecturer-login';
-  }
+  const navigate = useNavigate();
 
+  const onSignOut = async (event) => {
+    event.preventDefault();
+    try {
+      await Auth.signOut();
+      //navigate to lecturer login
+      navigate("/lecturer-login");
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+ 
     return (
       <div className={"grid"}>
         <nav className="vertical-navbar col-4 p-4">
@@ -47,7 +57,6 @@ export default function LecturerNavigation() {
         <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
           <button className={"btn btn-danger btn-lg btn-block"} style={{borderRadius:"25px"}} data-testid={'LogoutButton'} onClick={Logout}>Log Out</button>
         </div>
-
       </div>
-    );
+  );
 }
