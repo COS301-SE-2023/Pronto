@@ -10,14 +10,14 @@
 	AdminGroupName
 Amplify Params - DO NOT EDIT */
 const ROLES = require('./roles.js');
-const { isLectureEmailPartOfInstitution, isAdminAllocated } = require('./confirmEmails.js');
-const isAppClientValid = require(',/isAppClientValid.js');
+const { isLectureEmailPartOfInstitution, isAdminAllocated } = require('./assertInstitutionInfo.js');
+const isAppClientValid = require('./isAppClientValid.js');
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
   if (!event.request.clientMetadata.role) throw new Error('User role not provided on ClientMetadata');
-  if (!isAppClientValid(event.request.clientMetadata.role))
+  if (!isAppClientValid(event.request.callerContext.clientId, event.request.clientMetadata.role))
     throw new Error(
       `Cannot authenticate users from this app client: Students Should use the mobile app and Admin/Lectures should use the web app`,
     );
@@ -35,12 +35,12 @@ exports.handler = async (event) => {
         event.response.autoConfirmUser = true;
         break;
       case ROLES.Lecture:
-        const isLectureEmailPartOfInstitution = await isLectureEmailPartOfInstitution(
+        const isLectureEmailPartOfInst = await isLectureEmailPartOfInstitution(
           event.request.userAttributes.email,
           event.request.clientMetadata.institutionId,
         );
 
-        if (!isLectureEmailPartOfInstitution) {
+        if (!isLectureEmailPartOfInst) {
           event.response.autoConfirmUser = false;
           throw new Error(
             `Lecturer email is not part of the Institution. institutionId=${event.request.clientMetadata.institutionId}`,
@@ -54,8 +54,6 @@ exports.handler = async (event) => {
         //event.response.autoConfirmUser = isStudentDomainPartOfInstitution();
         event.response.autoConfirmUser = false;
         break;
-      default:
-        throw new Error('Invalid User Role');
     }
   } catch (preAuthError) {
     console.debug(preAuthError);
