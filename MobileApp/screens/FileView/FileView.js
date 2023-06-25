@@ -1,68 +1,58 @@
-import React from "react";
-import { View, StyleSheet, Text, FlatList } from "react-native";
-import { Card, IconButton } from "react-native-paper";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Linking,
+  Alert,
+} from "react-native";
+import { Storage } from "aws-amplify";
 
-const FileView = () => {
-  // Sample data for PDF files
-  const pdfFiles = [
-    { id: "1", name: "Document 1.pdf" },
-    { id: "2", name: "Document 2.pdf" },
-    { id: "3", name: "Document 3.pdf" },
-    // Add more PDF file objects as needed
-  ];
+const BucketFilesScreen = () => {
+  const [fileList, setFileList] = useState([]);
 
-  const renderFileCard = ({ item }) => (
-    <Card style={styles.card} onPress={() => handleFilePress(item)}>
-      <Card.Title
-        title={item.name}
-        left={(props) => (
-          <MaterialIcons name="folder" size={24} color="#e32f45" />
-        )}
-      />
-    </Card>
-  );
+  useEffect(() => {
+    fetchFileList();
+  }, []);
 
-  const handleFilePress = (item) => {
-    // Handle the logic to open the selected PDF file
-    console.log("Open file:", item.name);
+  const fetchFileList = async () => {
+    try {
+      const files = await Storage.list("UniversityOfPretoria/", {
+        pageSize: 1000,
+      });
+      setFileList(files);
+      Alert.alert(JSON.stringify(files)); // Display the files in an alert
+    } catch (error) {
+      console.error("Error fetching file list:", error);
+    }
   };
 
+  const openFile = async (fileKey) => {
+    try {
+      const fileURL = await Storage.get(fileKey);
+      Linking.openURL(fileURL);
+    } catch (error) {
+      console.error("Error opening file:", error);
+    }
+  };
+
+  const renderFileItem = ({ item }) => (
+    <TouchableOpacity onPress={() => openFile(item.key)}>
+      <Text>{item.key}</Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.subTitle}>
-        Click on the documents provided by your university to access them
-      </Text>
+    <View>
+      <Text>File List:</Text>
       <FlatList
-        data={pdfFiles}
-        renderItem={renderFileCard}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
+        data={fileList}
+        renderItem={renderFileItem}
+        keyExtractor={(item) => item.key}
       />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    padding: 10,
-  },
-  subTitle: {
-    fontSize: 18,
-    textAlign: "center",
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  listContainer: {
-    flexGrow: 1,
-  },
-  card: {
-    marginVertical: 5,
-    marginHorizontal: 10,
-    backgroundColor: "white",
-  },
-});
-
-export default FileView;
+export default BucketFilesScreen;
