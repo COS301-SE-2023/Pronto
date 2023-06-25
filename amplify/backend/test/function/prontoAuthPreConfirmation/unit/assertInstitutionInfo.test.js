@@ -67,3 +67,16 @@ describe('Input Validation and Error handling', () => {
     await expect(isAdminAllocated(someInstitutionId)).rejects.toThrow(/Failed To retrieve institution details/);
   });
 });
+describe('Testing GraphQL API Calls', () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+    jest.resetModules();
+  });
+  test('should throw API ERROR: Failed to retrieve data', async () => {
+    const someInstitutionId = 'someInstitutionId';
+    const someEmail = 'someEmail';
+    await expect(isLectureEmailPartOfInstitution(someEmail, someInstitutionId)).rejects.toThrow(
+      /API ERROR: Failed to retrieve data$/,
+    );
+  });
+});
