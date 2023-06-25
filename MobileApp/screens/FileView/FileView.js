@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, Linking, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Linking,
+  Alert,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
@@ -8,6 +16,7 @@ let studentUniversity = "UniversityOfPretoria";
 
 const BucketFilesScreen = () => {
   const [fileList, setFileList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchFileList();
@@ -15,13 +24,16 @@ const BucketFilesScreen = () => {
 
   const fetchFileList = async () => {
     try {
+      setIsLoading(true);
       const response = await Storage.list(studentUniversity + "/", {
         pageSize: 1000,
       });
       const files = response.results;
       setFileList(files);
+      setIsLoading(false);
     } catch (error) {
       Alert.alert("Error fetching file list:", error);
+      setIsLoading(false);
     }
   };
 
@@ -59,11 +71,18 @@ const BucketFilesScreen = () => {
         />
         <Text style={styles.heading}>File List:</Text>
       </View>
-      <FlatList
-        data={fileList}
-        renderItem={renderFileItem}
-        keyExtractor={(item) => item.key}
-      />
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#e32f45" />
+          <Text style={styles.loadingText}>Loading files...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={fileList}
+          renderItem={renderFileItem}
+          keyExtractor={(item) => item.key}
+        />
+      )}
     </View>
   );
 };
@@ -85,6 +104,9 @@ const styles = StyleSheet.create({
     color: "#e32f45",
     marginLeft: 10,
   },
+  icon: {
+    marginRight: 10,
+  },
   fileItem: {
     backgroundColor: "white",
     marginBottom: 10,
@@ -95,6 +117,16 @@ const styles = StyleSheet.create({
   fileName: {
     color: "#e32f45",
     fontSize: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#e32f45",
   },
 });
 
