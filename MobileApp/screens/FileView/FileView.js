@@ -42,6 +42,9 @@ const BucketFilesScreen = () => {
 
   const renderFileItem = ({ item }) => {
     const fileName = item.key.replace(studentUniversity + "/", ""); // Extract file name
+    if (fileName === "") {
+      return null; // Skip rendering the item if the file name is empty
+    }
     return (
       <TouchableOpacity
         onPress={() => openFile(item.key)}
