@@ -4,19 +4,22 @@ import { Amplify, Storage } from "aws-amplify";
 // Folder name for S3 bucket
 let folderNameS3 = "UniversityOfPretoria";
 
-const createFolder = async (folderName) => {
-  try {
-    const folderKey = `${folderName}/`; // Include the trailing slash ("/") to indicate it's a folder
-    await Storage.put(folderKey, "", {
-      contentType: "application/octet-stream", // Set the content type to a generic value
-    });
-    console.log(`Successfully created folder: ${folderName}`);
-  } catch (error) {
-    console.error(`Error creating folder: ${error}`);
-  }
-};
-
 function DropzoneComponent() {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [message, setMessage] = useState("");
+
+  const createFolder = async (folderName) => {
+    try {
+      const folderKey = `${folderName}/`; // Include the trailing slash ("/") to indicate it's a folder
+      await Storage.put(folderKey, "", {
+        contentType: "application/octet-stream", // Set the content type to a generic value
+      });
+    } catch (error) {
+      setMessage("Error creating folder: " + error);
+    }
+  };
+
   useEffect(() => {
     Amplify.configure({
       Auth: {
@@ -32,9 +35,6 @@ function DropzoneComponent() {
       },
     });
   }, []);
-
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
@@ -52,7 +52,6 @@ function DropzoneComponent() {
   const handleSubmit = async () => {
     if (selectedFile) {
       // Perform file saving logic here
-      console.log("Saving file:", selectedFile.name);
       createFolder(folderNameS3);
 
       try {
@@ -61,11 +60,13 @@ function DropzoneComponent() {
           progressCallback: ({ loaded, total }) => {
             const progress = Math.round((loaded / total) * 100);
             setUploadProgress(progress);
+            setMessage("Uploading file: " + selectedFile.name);
           },
         });
-        console.log("File uploaded successfully");
+
+        setMessage("File successfully uploaded: " + selectedFile.name);
       } catch (error) {
-        console.error("Error uploading file:", error);
+        setMessage("Error uploading file");
       }
 
       // Reset the selected file and upload progress
@@ -125,11 +126,11 @@ function DropzoneComponent() {
         )}
       </div>
       {selectedFile && (
-        <div className="progress">
+        <div className="progress" style={{ marginTop: "5%", height: "30px" }}>
           <div
             className="progress-bar"
             role="progressbar"
-            style={{ width: `${uploadProgress}%` }}
+            style={{ width: `${uploadProgress}%`, backgroundColor: "#e32f45" }}
             aria-valuenow={uploadProgress}
             aria-valuemin="0"
             aria-valuemax="100"
@@ -137,6 +138,9 @@ function DropzoneComponent() {
             {uploadProgress}%
           </div>
         </div>
+      )}
+      {message && (
+        <div style={{ marginTop: "5%", color: "green" }}>{message}</div>
       )}
       <input
         id="fileInput"
