@@ -4,7 +4,6 @@
   "description": "Pre sign up validation",
   "main": "index.js",
   "license": "Apache-2.0",
-  "type": "module",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92"
   }
