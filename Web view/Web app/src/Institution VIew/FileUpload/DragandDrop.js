@@ -2,8 +2,34 @@ import React, { useState, useEffect } from "react";
 import { Amplify, Storage } from "aws-amplify";
 import config from "../../aws-exports";
 
+const createFolder = async (folderName) => {
+  try {
+    const folderKey = `${folderName}/`; // Include the trailing slash ("/") to indicate it's a folder
+    await Storage.put(folderKey, "", {
+      contentType: "application/octet-stream", // Set the content type to a generic value
+    });
+    console.log(`Successfully created folder: ${folderName}`);
+  } catch (error) {
+    console.error(`Error creating folder: ${error}`);
+  }
+};
 function DropzoneComponent() {
-  
+  useEffect(() => {
+    Amplify.configure({
+      Auth: {
+        identityPoolId: "us-east-1:6b251f24-2cc0-4073-9c2e-f44ec6fff42a",
+        region: "us-east-1",
+      },
+      Storage: {
+        AWSS3: {
+          bucket: "institution-file-upload",
+          region: "us-east-1",
+          keyPrefix: "UniversityOfPretoria/",
+        },
+      },
+    });
+  }, []);
+
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileSelect = (event) => {
@@ -23,9 +49,13 @@ function DropzoneComponent() {
     if (selectedFile) {
       // Perform file saving logic here
       console.log("Saving file:", selectedFile.name);
+      createFolder("UniversityOfPretoria");
 
       try {
-        const result = await Storage.put(selectedFile.name, selectedFile);
+        const result = await Storage.put(
+          selectedFile.name,
+          "UniversityOfPretoria/" + selectedFile
+        );
         console.log("File uploaded successfully:", result);
       } catch (error) {
         console.error("Error uploading file:", error);

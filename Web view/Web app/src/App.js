@@ -17,7 +17,6 @@ import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify } from "aws-amplify";
 import config from "./aws-exports";
-import { Auth } from "aws-amplify";
 
 //Amplify.configure(config);
 
@@ -35,16 +34,15 @@ const Home = () => {
   // }, []);
 
   //end
-
   useEffect(() => {
     Amplify.configure({
       Auth: {
-        identityPoolId: "",
+        identityPoolId: "us-east-1:6b251f24-2cc0-4073-9c2e-f44ec6fff42a",
         region: "us-east-1",
       },
       Storage: {
         AWSS3: {
-          bucket: "",
+          bucket: "institution-file-upload",
           region: "us-east-1",
           keyPrefix: "UniversityOfPretoria/",
         },
