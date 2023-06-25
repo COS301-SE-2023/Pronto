@@ -23,12 +23,12 @@ function DropzoneComponent() {
   useEffect(() => {
     Amplify.configure({
       Auth: {
-        identityPoolId: "us-east-1:6b251f24-2cc0-4073-9c2e-f44ec6fff42a",
+        identityPoolId: "",
         region: "us-east-1",
       },
       Storage: {
         AWSS3: {
-          bucket: "institution-file-upload",
+          bucket: "",
           region: "us-east-1",
           keyPrefix: `${folderNameS3}/`,
         },

@@ -18,7 +18,7 @@ import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify } from "aws-amplify";
 import config from "./aws-exports";
 
-//Amplify.configure(config);
+Amplify.configure(config);
 
 const Home = () => {
   //use this part to see if user is logged in or out and then determine what pages they can access
@@ -35,19 +35,7 @@ const Home = () => {
 
   //end
   useEffect(() => {
-    Amplify.configure({
-      Auth: {
-        identityPoolId: "us-east-1:6b251f24-2cc0-4073-9c2e-f44ec6fff42a",
-        region: "us-east-1",
-      },
-      Storage: {
-        AWSS3: {
-          bucket: "institution-file-upload",
-          region: "us-east-1",
-          keyPrefix: "UniversityOfPretoria/",
-        },
-      },
-    });
+    Amplify.configure(config);
   }, []);
 
   return (
