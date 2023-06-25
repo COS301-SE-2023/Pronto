@@ -16,7 +16,7 @@ const PersonalInfoPage = () => {
 
     return (
       <div style={{ display: 'inline-flex' }}>
-        <nav style={{ width: '20%' }}>
+        <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
             {/* Navigation bar content */}
             <LecturerNavigation />
         </nav>
@@ -45,12 +45,13 @@ const PersonalInfoPage = () => {
             </table>
 
             <div>
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}} />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
                 style={{"width": "100%"}}
+                data-testid={'paccordionDrop'}
                 >
                 <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }} >
                     Change Password
@@ -62,21 +63,21 @@ const PersonalInfoPage = () => {
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Old password: </label>
                     <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel" required></input>
+                    <input type="text" class="form-control" id="colFormLabel" data-testid="pword" required></input>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">New password: </label>
                     <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel" required></input>
+                    <input type="text" class="form-control" id="colFormLabel" data-testid="repword" required></input>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Confirm password: </label>
                     <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel"></input>
+                    <input type="text" class="form-control" id="colFormLabel" data-testid="newpword"></input>
                     </div>
                 </div>
 
