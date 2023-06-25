@@ -12,6 +12,8 @@ import {
 import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import * as FileSystem from "expo-file-system";
+import * as IntentLauncher from "expo-intent-launcher";
 
 let studentUniversity = "UniversityOfPretoria";
 
@@ -121,9 +123,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#e32f45",
     marginLeft: 10,
-  },
-  icon: {
-    marginRight: 10,
   },
   fileItem: {
     backgroundColor: "white",
