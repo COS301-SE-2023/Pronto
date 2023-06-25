@@ -19,7 +19,7 @@ import { Amplify } from "aws-amplify";
 import config from "./aws-exports";
 import { Auth } from "aws-amplify";
 
-Amplify.configure(config);
+//Amplify.configure(config);
 
 const Home = () => {
   //use this part to see if user is logged in or out and then determine what pages they can access
@@ -35,6 +35,22 @@ const Home = () => {
   // }, []);
 
   //end
+
+  useEffect(() => {
+    Amplify.configure({
+      Auth: {
+        identityPoolId: "",
+        region: "us-east-1",
+      },
+      Storage: {
+        AWSS3: {
+          bucket: "",
+          region: "us-east-1",
+          keyPrefix: "UniversityOfPretoria/",
+        },
+      },
+    });
+  }, []);
 
   return (
     <div>

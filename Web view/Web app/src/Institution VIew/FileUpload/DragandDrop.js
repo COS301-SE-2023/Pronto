@@ -3,20 +3,7 @@ import { Amplify, Storage } from "aws-amplify";
 import config from "../../aws-exports";
 
 function DropzoneComponent() {
-  useEffect(() => {
-    Amplify.configure({
-      Auth: {
-        IdentityPoolId: "",
-        region: "us-east-1",
-      },
-      Storage: {
-        AWSS3: {
-          bucket: "institution-file-upload",
-          region: "us-east-1",
-        },
-      },
-    });
-  }, []);
+  
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileSelect = (event) => {
@@ -113,4 +100,3 @@ function DropzoneComponent() {
 }
 
 export default DropzoneComponent;
-
