@@ -1169,6 +1169,5 @@ mutation DeleteAnnouncement(
     _version
     _deleted
     _lastChangedAt
-
   }
 }
