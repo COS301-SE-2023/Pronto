@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
@@ -17,6 +18,7 @@ let studentUniversity = "UniversityOfPretoria";
 const BucketFilesScreen = () => {
   const [fileList, setFileList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     fetchFileList();
@@ -24,6 +26,7 @@ const BucketFilesScreen = () => {
 
   const fetchFileList = async () => {
     try {
+      setIsRefreshing(true);
       setIsLoading(true);
       const response = await Storage.list(studentUniversity + "/", {
         pageSize: 1000,
@@ -31,9 +34,11 @@ const BucketFilesScreen = () => {
       const files = response.results;
       setFileList(files);
       setIsLoading(false);
+      setIsRefreshing(false);
     } catch (error) {
       Alert.alert("Error fetching file list:", error);
       setIsLoading(false);
+      setIsRefreshing(false);
     }
   };
 
@@ -60,6 +65,10 @@ const BucketFilesScreen = () => {
     );
   };
 
+  const handleRefresh = () => {
+    fetchFileList();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
@@ -81,8 +90,17 @@ const BucketFilesScreen = () => {
           data={fileList}
           renderItem={renderFileItem}
           keyExtractor={(item) => item.key}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+              colors={["#e32f45"]}
+              tintColor="#e32f45"
+            />
+          }
         />
       )}
+      <Text style={styles.swipeToRefresh}>Swipe down to refresh &#x2193;</Text>
     </View>
   );
 };
@@ -127,6 +145,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: "#e32f45",
+  },
+  swipeToRefresh: {
+    alignSelf: "center",
+    marginBottom: 120,
   },
 });
 
