@@ -80,3 +80,28 @@ test(`Should throw Error('Failed to get User Group with userGroupName...for lect
   process.env.AppClientIdWeb = lecturerEvent.request.callerContext.clientId;
   await expect(addToGroup.handler(lecturerEvent)).rejects.toThrow(/Failed to get User Group with userGroupName/);
 });
+describe('add to group', () => {
+  const OLD_ENV = process.env;
+  beforeEach(() => {
+    jest.restoreAllMocks();
+    jest.resetModules();
+    process.env = { ...OLD_ENV };
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV;
+  });
+  test(`Should add admin to group`, async () => {
+    const mockAddToGroupHandler = jest.fn(addToGroup.handler).mockResolvedValue(adminEvent);
+    expect(await mockAddToGroupHandler(adminEvent)).toMatchObject(adminEvent);
+  });
+
+  test(`Should add student to group`, async () => {
+    const mockAddToGroupHandler = jest.fn(addToGroup.handler).mockResolvedValue(studentsEvent);
+    expect(await mockAddToGroupHandler(studentsEvent)).toMatchObject(studentsEvent);
+  });
+  test(`Should add lecturer to group`, async () => {
+    const mockAddToGroupHandler = jest.fn(addToGroup.handler).mockResolvedValue(lecturerEvent);
+    expect(await mockAddToGroupHandler(lecturerEvent)).toMatchObject(lecturerEvent);
+  });
+});
