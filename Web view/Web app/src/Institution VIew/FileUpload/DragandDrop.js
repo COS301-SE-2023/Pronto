@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Amplify, Storage } from "aws-amplify";
 
-//folder name for S3 bucket
+// Folder name for S3 bucket
 let folderNameS3 = "UniversityOfPretoria";
 
 const createFolder = async (folderName) => {
@@ -34,20 +34,21 @@ function DropzoneComponent() {
   }, []);
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
   };
 
-  //same logic but for dropping file
+  // Same logic but for dropping file
   const handleFileDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
     setSelectedFile(file);
   };
 
-  //when submit is pressed
+  // When submit is pressed
   const handleSubmit = async () => {
     if (selectedFile) {
       // Perform file saving logic here
@@ -56,14 +57,20 @@ function DropzoneComponent() {
 
       try {
         const fileKey = `${folderNameS3}/${selectedFile.name}`;
-        const result = await Storage.put(fileKey, selectedFile);
-        console.log("File uploaded successfully:", result);
+        await Storage.put(fileKey, selectedFile, {
+          progressCallback: ({ loaded, total }) => {
+            const progress = Math.round((loaded / total) * 100);
+            setUploadProgress(progress);
+          },
+        });
+        console.log("File uploaded successfully");
       } catch (error) {
         console.error("Error uploading file:", error);
       }
 
-      // Reset the selected file
+      // Reset the selected file and upload progress
       setSelectedFile(null);
+      setUploadProgress(0);
     }
   };
 
@@ -75,10 +82,8 @@ function DropzoneComponent() {
     event.preventDefault();
   };
 
-  //when user clicks on the div with id dropzone, it will open file manager to select file and then input it
-  //to the input with id fileInput
+  // When user clicks on the div with id dropzone, it will open the file manager to select a file and then input it to the input with id fileInput
   const handleClick = (event) => {
-    //prevent default
     event.preventDefault();
     document.getElementById("fileInput").click();
   };
@@ -103,7 +108,7 @@ function DropzoneComponent() {
             Selected File: {selectedFile.name}
             <button
               onClick={handleSubmit}
-              className={"btn  m-3"}
+              className={"btn m-3"}
               style={{ backgroundColor: "#e32f45", color: "white" }}
             >
               Submit
@@ -119,6 +124,20 @@ function DropzoneComponent() {
           </div>
         )}
       </div>
+      {selectedFile && (
+        <div className="progress">
+          <div
+            className="progress-bar"
+            role="progressbar"
+            style={{ width: `${uploadProgress}%` }}
+            aria-valuenow={uploadProgress}
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            {uploadProgress}%
+          </div>
+        </div>
+      )}
       <input
         id="fileInput"
         type="file"
