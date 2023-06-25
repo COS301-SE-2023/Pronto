@@ -1,5 +1,6 @@
 const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEYOUTPUT;
+
 let institution = {
   details:null,
   id:null
@@ -63,6 +64,7 @@ const getInstitutionAdminId = async (institutionId) => {
 
 const isLectureEmailPartOfInstitution = async (email, institutionId) => {
   if (!email) throw new Error(`Invalid email = ${email}`);
+
   try {
     const emailList = await getLectureEmailsFromInstitution(institutionId);
     return emailList.includes(email);

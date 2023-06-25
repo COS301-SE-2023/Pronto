@@ -7,7 +7,8 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "axios": "latest"
+    "axios": "latest",
+    "jest": "^29.5.0"
   },
   "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.352.0",

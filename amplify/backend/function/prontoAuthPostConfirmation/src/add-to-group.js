@@ -22,7 +22,9 @@ exports.handler = async (event) => {
   if (!event.request.callerContext.clientId) throw new Error('ClientId not provided on callerContext');
   if (!(event.request.callerContext.clientMetadata.role in ROLES)) throw new Error('Invalid User Role');
   let GroupName;
-
+  console.table(event.request);
+  console.table(process.env);
+  
   switch (event.request.callerContext.clientId) {
     case process.env.AppClientId:
       GroupName = process.env.StudentsGroupName;
