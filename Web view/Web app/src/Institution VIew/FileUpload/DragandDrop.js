@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Amplify, Storage } from "aws-amplify";
-import config from "../../aws-exports";
+
+//folder name for S3 bucket
+let folderNameS3 = "UniversityOfPretoria";
 
 const createFolder = async (folderName) => {
   try {
@@ -13,6 +15,7 @@ const createFolder = async (folderName) => {
     console.error(`Error creating folder: ${error}`);
   }
 };
+
 function DropzoneComponent() {
   useEffect(() => {
     Amplify.configure({
@@ -24,7 +27,7 @@ function DropzoneComponent() {
         AWSS3: {
           bucket: "institution-file-upload",
           region: "us-east-1",
-          keyPrefix: "UniversityOfPretoria/",
+          keyPrefix: `${folderNameS3}/`,
         },
       },
     });
@@ -49,10 +52,10 @@ function DropzoneComponent() {
     if (selectedFile) {
       // Perform file saving logic here
       console.log("Saving file:", selectedFile.name);
-      createFolder("UniversityOfPretoria");
+      createFolder(folderNameS3);
 
       try {
-        const fileKey = `UniversityOfPretoria/${selectedFile.name}`;
+        const fileKey = `${folderNameS3}/${selectedFile.name}`;
         const result = await Storage.put(fileKey, selectedFile);
         console.log("File uploaded successfully:", result);
       } catch (error) {
