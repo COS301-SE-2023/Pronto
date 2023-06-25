@@ -7,8 +7,6 @@
     "test": "jest test",
     "test:watch": "jest test --watch"
   },
-  "scripts": {
-  },
   "license": "Apache-2.0",
   "dependencies": {
     "axios": "latest",
