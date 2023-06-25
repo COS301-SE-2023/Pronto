@@ -4,6 +4,8 @@
   "description": "Post sign up validation",
   "main": "index.js",
   "scripts": {
+    "test": "jest test",
+    "test:watch": "jest test --watch"
   },
   "license": "Apache-2.0",
   "dependencies": {
