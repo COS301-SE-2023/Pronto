@@ -18,8 +18,9 @@ describe('input validation', () => {
   test(`Should throw Error('User role not provided on clientMetadata'`, async () => {
     const requestWithNullRole = {
       request: {
-        callerContext: {},
-        clientMetadata: {},
+        callerContext: {
+          clientMetadata: {},
+        },
       },
     };
     await expect(addToGroup.handler(requestWithNullRole)).rejects.toThrow('User role not provided on clientMetadata');
@@ -27,9 +28,10 @@ describe('input validation', () => {
   test(`Should throw Error('ClientId not provided on callerContext'`, async () => {
     const requestWithNullclientId = {
       request: {
-        callerContext: {},
-        clientMetadata: {
-          role: ' ',
+        callerContext: {
+          clientMetadata: {
+            role: ' ',
+          },
         },
       },
     };
@@ -42,22 +44,22 @@ describe('input validation', () => {
       request: {
         callerContext: {
           clientId: 'aClientId',
-        },
-        clientMetadata: {
-          role: 'InvalidRole',
+          clientMetadata: {
+            role: 'InvalidRole',
+          },
         },
       },
     };
-    await expect(addToGroup.handler(requestWithInvalidRole)).rejects.toThrow(/^Invalid User Role$/);
+  await expect(addToGroup.handler(requestWithInvalidRole)).rejects.toThrow(/^Invalid User Role$/);
   });
   test(`Should throw Error('Unrecognised user pool app client ID='`, async () => {
     const requestWithNullclientId = {
       request: {
         callerContext: {
+          clientMetadata: {
+            role: 'Lecture',
+          },
           clientId: 'UnrecognisedId',
-        },
-        clientMetadata: {
-          role: 'Lecture',
         },
       },
     };
