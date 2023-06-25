@@ -22,8 +22,17 @@
       "function": {
         "prontoAuthPostConfirmation": {
           "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
-          "s3Key": "amplify-builds/prontoAuthPostConfirmation-4d63544a6b496b697570-build.zip",
-          "GROUP": ""
+          "s3Key": "amplify-builds/prontoAuthPostConfirmation-424452432f5076725477-build.zip",
+          "GROUP": "",
+          "studentsGroupName": "studentsGroupName",
+          "lecturersGroupName": "lecturersGroupName",
+          "adminGroupName": "adminGroupName",
+          "appClientId": "3uqlt9r8vsml0g02noh7v87dno",
+          "appClientIdWeb": "7mdve2f6k86vpadjd9u7rmgi6s"
+        },
+        "prontoAuthPreConfirmation": {
+          "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
+          "s3Key": "amplify-builds/prontoAuthPreConfirmation-43453033777274476d56-build.zip"
         }
       },
       "api": {
