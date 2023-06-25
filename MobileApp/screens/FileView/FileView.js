@@ -18,9 +18,10 @@ const BucketFilesScreen = () => {
 
   const fetchFileList = async () => {
     try {
-      const files = await Storage.list("UniversityOfPretoria/", {
+      const response = await Storage.list("UniversityOfPretoria/", {
         pageSize: 1000,
       });
+      const files = response.results; // Access the 'results' property
       setFileList(files);
       Alert.alert(JSON.stringify(files)); // Display the files in an alert
     } catch (error) {
