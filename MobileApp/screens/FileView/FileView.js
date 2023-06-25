@@ -21,9 +21,9 @@ const BucketFilesScreen = () => {
       const response = await Storage.list("UniversityOfPretoria/", {
         pageSize: 1000,
       });
-      const files = response.results; // Access the 'results' property
+      const files = response.results;
       setFileList(files);
-      Alert.alert(JSON.stringify(files)); // Display the files in an alert
+      Alert.alert(JSON.stringify(files));
     } catch (error) {
       console.error("Error fetching file list:", error);
     }
@@ -38,11 +38,14 @@ const BucketFilesScreen = () => {
     }
   };
 
-  const renderFileItem = ({ item }) => (
-    <TouchableOpacity onPress={() => openFile(item.key)}>
-      <Text>{item.key}</Text>
-    </TouchableOpacity>
-  );
+  const renderFileItem = ({ item }) => {
+    const fileName = item.key.replace("UniversityOfPretoria/", ""); // Extract file name
+    return (
+      <TouchableOpacity onPress={() => openFile(item.key)}>
+        <Text>{fileName}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View>
