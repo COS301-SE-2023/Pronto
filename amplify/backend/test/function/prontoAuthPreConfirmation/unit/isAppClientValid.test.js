@@ -21,3 +21,22 @@ describe('input validation', () => {
   });
   test;
 });
+
+describe('is the app client id valid?', () => {
+  test('should return false', () => {
+    process.env.AppClientIdWeb = adminEvent.request.callerContext.clientId;
+    expect(isAppClientValid(adminEvent.request.callerContext.clientId, ROLE.Student)).toBe(false);
+  });
+  test('should return true', () => {
+    process.env.AppClientIdWeb = adminEvent.request.callerContext.clientId;
+    expect(isAppClientValid(adminEvent.request.callerContext.clientId, ROLE.Lecture)).toBe(true);
+  });
+  test('should return false', () => {
+    process.env.AppClientIdWeb = adminEvent.request.callerContext.clientId;
+    expect(isAppClientValid(studentsEvent.request.callerContext.clientId, ROLE.Lecture)).toBe(false);
+  });
+  test('should return true', () => {
+    process.env.AppClientIdWeb = studentsEvent.request.callerContext.clientId;
+    expect(isAppClientValid(studentsEvent.request.callerContext.clientId, ROLE.Student)).toBe(false);
+  });
+});
