@@ -1,4 +1,3 @@
-
 const ROLES = {
     Lecture: 'Lecture',
     Student: 'Student',
