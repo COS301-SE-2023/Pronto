@@ -19,11 +19,15 @@ Pronto is a React Native application that helps students to create their timetab
 
 ## Documentation
 
-<div><a href="https://drive.google.com/file/d/1fCV8T3spQrg4OAzxC2IXdsMGs2QsVS-M/view?usp=share_link" target="_blank">🧾 Demo 1 Document</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/Documentation/Demo 1 documents/Demo 1 SRS">🧾 Demo 1  SRS Document</a></div>
+<br><br>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/Documentation/Demo 2 documents/Architectural Requirements">🧾 Architectural requirement</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/Documentation/Demo 2 documents/Demo 2 SRS">🧾 Demo 2 SRS Document</a></div>
 
 ## Demo Recordings
 
 <div><a href="https://drive.google.com/file/d/1HWyxFvWtt6HvSSNpiXuQ2BRM43qTEhgU/view?usp=share_link">📽️ Demo 1</a></div>
+<div><a href="https://drive.google.com/file/d/1HWyxFvWtt6HvSSNpiXuQ2BRM43qTEhgU/view?usp=share_link">📽️ Demo 2</a></div>
 
 ## Project Management
 
