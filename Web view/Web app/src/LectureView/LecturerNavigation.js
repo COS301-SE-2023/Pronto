@@ -55,7 +55,9 @@ export default function LecturerNavigation() {
         </nav>
 
         <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
+          
           <button className={"btn btn-danger btn-lg btn-block"} style={{borderRadius:"25px"}} data-testid={'LogoutButton'} onClick={signOut}>Log Out</button>
+
         </div>
       </div>
   );
