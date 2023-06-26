@@ -4,7 +4,7 @@ import NotificationList from "../../components/NotificationList";
 
 const Notifications = () => {
   return (
-    <View>
+    <View testID={'notificationsList'}>
       <NotificationList />
     </View>
   );
