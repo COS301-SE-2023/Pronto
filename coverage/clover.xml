@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1684739166908" clover="3.2.0">
+  <project timestamp="1684739166909" name="All files">
+    <metrics statements="26" coveredstatements="25" conditionals="6" coveredconditionals="6" methods="17" coveredmethods="16" elements="49" coveredelements="47" complexity="0" loc="26" ncloc="26" packages="1" files="3" classes="3"/>
+    <file name="NotificationList.js" path="C:\Users\jonel\OneDrive\Documents\GitHub\Pronto\components\NotificationList.js">
+      <metrics statements="17" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="12" coveredmethods="11"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="7" count="9" type="stmt"/>
+      <line num="8" count="9" type="stmt"/>
+      <line num="9" count="9" type="stmt"/>
+      <line num="11" count="9" type="stmt"/>
+      <line num="12" count="9" type="stmt"/>
+      <line num="13" count="9" type="stmt"/>
+      <line num="15" count="9" type="stmt"/>
+      <line num="16" count="0" type="stmt"/>
+      <line num="19" count="9" type="stmt"/>
+      <line num="26" count="9" type="stmt"/>
+      <line num="63" count="9" type="stmt"/>
+      <line num="86" count="9" type="stmt"/>
+      <line num="122" count="9" type="stmt"/>
+      <line num="145" count="9" type="stmt"/>
+      <line num="168" count="9" type="stmt"/>
+      <line num="191" count="9" type="stmt"/>
+    </file>
+    <file name="SearchFilter.js" path="C:\Users\jonel\OneDrive\Documents\GitHub\Pronto\components\SearchFilter.js">
+      <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="6" count="3" type="stmt"/>
+      <line num="11" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="15" count="2" type="stmt"/>
+      <line num="19" count="1" type="stmt"/>
+      <line num="52" count="1" type="stmt"/>
+    </file>
+    <file name="SettingsComponent.js" path="C:\Users\jonel\OneDrive\Documents\GitHub\Pronto\components\SettingsComponent.js">
+      <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="7" count="4" type="stmt"/>
+      <line num="11" count="8" type="stmt"/>
+    </file>
+  </project>
+</coverage>
