@@ -52,7 +52,7 @@ describe('RecentAnnouncement', () => {
     //provide a test from RecentAnnouncement.js that will test the values that have not been tested yet
     test('test if the announcement card 1 has the correct title', () => {
         const announcementCard1 = screen.getByTestId('announcement-card1');
-        expect(announcementCard1).toHaveTextContent('COS13222/05/2023No class from Thursday 1 JunePlease note that due to the complexity of the work, there will be no class on Thursday 1 June. We will continue with the work on Tuesday 6 June.');
+        expect(announcementCard1).toHaveTextContent('COS13222/05/2023No class from Thursday 1 JunePlease note that due to the completion of the syllabus in this morning\'s lecture, there will be no class tomorrow or from here forth:)Options');
 
     });
 
