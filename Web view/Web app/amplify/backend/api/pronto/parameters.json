@@ -7,5 +7,7 @@
       "authprontoAuth",
       "Outputs.UserPoolId"
     ]
-  }
+  },
+  "AuthModeLastUpdated": "2023-06-25T10:50:32.801Z",
+  "CreateAPIKey": 0
 }

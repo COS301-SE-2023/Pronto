@@ -22,7 +22,9 @@
           ],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
+              "apiKeyExpirationDate": "2023-07-25T10:50:06.758Z",
+              "apiKeyExpirationDays": 30,
+              "description": "ApiKey_2"
             },
             "authenticationType": "API_KEY"
           }
@@ -97,6 +99,29 @@
   "function": {
     "prontoAuthPostConfirmation": {
       "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "prontoAuthPreConfirmation": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "pronto"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "prontoAuth"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
