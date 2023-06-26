@@ -142,6 +142,7 @@
         }
       ]
     },
+
     "AMPLIFY_function_prontoAuthPostConfirmation_lecturersGroupName": {
       "usedBy": [
         {
@@ -157,6 +158,7 @@
           "resourceName": "prontoAuthPostConfirmation"
         }
       ]
+
     },
     "AMPLIFY_function_prontoAuthPostConfirmation_studentsGroupName": {
       "usedBy": [
