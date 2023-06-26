@@ -35,41 +35,44 @@ function ConfirmEmail() {
   };
 
   return (
-    <Container>
-      <Form>
-        <LogoContainer>
-          <img
-            src={ProntoLogo}
-            alt="Logo"
-            style={{
-              width: "50%",
-              height: "auto",
-              objectFit: "cover",
-            }}
+      <Container data-testid="confirm-email-container">
+        <Form>
+          <LogoContainer>
+            <img
+                src={ProntoLogo}
+                alt="Logo"
+                style={{
+                  width: "50%",
+                  height: "auto",
+                  objectFit: "cover",
+                }}
+                data-testid="logo-image"
+            />
+          </LogoContainer>
+          <Subtitle data-testid="confirm-account-title">Confirm account</Subtitle>
+          <Subtitle
+              style={{
+                fontSize: "1.1rem",
+              }}
+              data-testid="confirmation-message"
+          >
+            Please enter the code sent to your email to verify your account
+          </Subtitle>
+          <Input
+              type="text"
+              placeholder="Verification Code"
+              value={code}
+              onChange={(event) => setCode(event.target.value)}
+              data-testid="verification-code-input"
           />
-        </LogoContainer>
-        <Subtitle>Confirm account</Subtitle>
-        <Subtitle
-          style={{
-            fontSize: "1.1rem",
-          }}
-        >
-          Please enter the code sent to your email to verify your account
-        </Subtitle>
-        <Input
-          type="text"
-          placeholder="Verification Code"
-          value={code}
-          onChange={(event) => setCode(event.target.value)}
-        />
-        {error && <ErrorText>{error}</ErrorText>}
+          {error && <ErrorText data-testid="error-text">{error}</ErrorText>}
 
-        <Button onClick={onVerifyPressed}>
-          {" "}
-          {loading ? "Verifying..." : "Verify Code"}
-        </Button>
-      </Form>
-    </Container>
+          <Button onClick={onVerifyPressed} data-testid="verify-button">
+            {loading ? "Verifying..." : "Verify Code"}
+          </Button>
+        </Form>
+      </Container>
+
   );
 }
 
