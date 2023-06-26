@@ -5,7 +5,6 @@ const lecturerEvent = require('../../../../function/prontoAuthPostConfirmation/s
 const studentsEvent = require('../../../../function/prontoAuthPostConfirmation/src/events/students.event.json');
 
 describe('input validation', () => {
-  test('should throw Unrecognised user pool app client ID', async () => {});
   test('should throw Invalid User Role', () => {
     const nullClientID = null;
     const nullRole = null;
