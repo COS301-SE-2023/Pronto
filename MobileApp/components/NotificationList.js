@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert, View, StyleSheet, Text } from "react-native";
 import { List, Card, Avatar } from "react-native-paper";
 import { ScrollView } from "react-native";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 const NotificationList = () => {
   const [expanded1, setExpanded1] = useState(false);
