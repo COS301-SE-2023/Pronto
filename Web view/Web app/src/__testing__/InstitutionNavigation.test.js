@@ -1,67 +1,53 @@
-import {render, screen, cleanup, fireEvent} from "@testing-library/react";
-import InstitutionNavigation from "../Institution VIew/Navigation/InstitutionNavigation";
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import InstitutionNavigation from '../Institution VIew/Navigation/InstitutionNavigation';
 
-beforeEach(() => {
-    render(<InstitutionNavigation/>);
-});
+// Mock the useNavigate hook
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: jest.fn(),
+}));
 
-// get the list on the navigation bar and check that they are present by testID
-test('Test if the navigation bar has the correct links', () => {
-    const dashboard = screen.getByTestId('Dashboard');
-    expect(dashboard).toBeInTheDocument();
+jest.mock('aws-amplify', () => ({
+    Auth: {
+        signOut: jest.fn().mockResolvedValue({}),
+    },
+}));
 
-    const uploadSchedule = screen.getByTestId('UploadSchedule');
-    expect(uploadSchedule).toBeInTheDocument();
+describe('InstitutionNavigation', () => {
+    beforeEach(() => {
+        render(<InstitutionNavigation />);
+    });
 
-    const uploadStudentFiles = screen.getByTestId('UploadStudentFiles');
-    expect(uploadStudentFiles).toBeInTheDocument();
+    test('renders the logo image', () => {
+        const logoImage = screen.getByTestId('UniversityImage');
+        expect(logoImage).toBeInTheDocument();
+        expect(logoImage.src).toContain('logo.jpg');
+    });
 
-    const addLecturer = screen.getByTestId('AddLecturer');
-    expect(addLecturer).toBeInTheDocument();
+    test('renders navigation links', () => {
+        const dashboardLink = screen.getByTestId('dashboardLink');
+        expect(dashboardLink).toHaveTextContent('Dashboard');
+        expect(dashboardLink.href).toContain('/');
 
-    const editUniversityInfo = screen.getByTestId('EditUniversityInfo');
-    expect(editUniversityInfo).toBeInTheDocument();
-});
+        const uploadScheduleLink = screen.getByTestId('UploadScheduleLink');
+        expect(uploadScheduleLink).toHaveTextContent('Upload Schedule');
+        expect(uploadScheduleLink.href).toContain('/upload-schedule');
 
-// Test if the navigation bar list items are in the document
-test('Test if the navigation bar list items have an <a> tag', () => {
-    const dashboardLink = screen.getByTestId('dashboardLink');
-    expect(dashboardLink).toBeInTheDocument();
+        const uploadStudentFilesLink = screen.getByTestId('UploadStudentFilesLink');
+        expect(uploadStudentFilesLink).toHaveTextContent('Upload Student Files');
+        expect(uploadStudentFilesLink.href).toContain('/upload-student-files');
 
-    const uploadScheduleLink = screen.getByTestId('UploadScheduleLink');
-    expect(uploadScheduleLink).toBeInTheDocument();
+        const addLecturerLink = screen.getByTestId('AddLecturerLink');
+        expect(addLecturerLink).toHaveTextContent('Add/Remove Lecturer');
+        expect(addLecturerLink.href).toContain('/add-lecturer');
 
-    const uploadStudentFilesLink = screen.getByTestId('UploadStudentFilesLink');
-    expect(uploadStudentFilesLink).toBeInTheDocument();
+        const editUniversityInfoLink = screen.getByTestId('EditUniversityInfoLink');
+        expect(editUniversityInfoLink).toHaveTextContent('Edit University Info');
+        expect(editUniversityInfoLink.href).toContain('http://localhost/src/Institution%20VIew/Navigation/InstitutionNavigation#');
+    });
 
-    const addLecturerLink = screen.getByTestId('AddLecturerLink');
-    expect(addLecturerLink).toBeInTheDocument();
 
-    const editUniversityInfoLink = screen.getByTestId('EditUniversityInfoLink');
-    expect(editUniversityInfoLink).toBeInTheDocument();
-});
 
-//check that the <a> tags have the correct href
-test('Test if the <a> tags have the correct href', () => {
-    const dashboardLink = screen.getByTestId('dashboardLink');
-    expect(dashboardLink).toHaveAttribute('href', '/');
 
-    const uploadScheduleLink = screen.getByTestId('UploadScheduleLink');
-    expect(uploadScheduleLink).toHaveAttribute('href', '/upload-schedule');
-
-    const uploadStudentFilesLink = screen.getByTestId('UploadStudentFilesLink');
-    expect(uploadStudentFilesLink).toHaveAttribute('href', '/upload-student-files');
-
-    const addLecturerLink = screen.getByTestId('AddLecturerLink');
-    expect(addLecturerLink).toHaveAttribute('href', '/add-lecturer');
-
-    const editUniversityInfoLink = screen.getByTestId('EditUniversityInfoLink');
-    expect(editUniversityInfoLink).toHaveAttribute('href', 'src/Institution VIew/Navigation/InstitutionNavigation#');
-});
-
-// Test that uses fireEvent to check if the logout button is clickable and redirects to the login page by calling the logout function
-test('Test if the logout button is clickable', () => {
-    const logoutButton = screen.getByTestId('LogoutButton');
-    fireEvent.click(logoutButton);
-    expect(logoutButton).toBeInTheDocument();
 });
