@@ -8,11 +8,11 @@ const FileUploadPage = () => {
         <div style={{ display: 'flex'}}>
             <nav style={{ width: '20%' }}>
                 {/* Navigation bar content */}
-                <InstitutionNavigation />
+                <InstitutionNavigation data-testid="institution-navigation"/>
             </nav>
             <main style={{ width: '900px',marginTop: '250px'  }} className={'text-center'}>
                 <h1>Upload Schedule</h1>
-                <DragandDrop/>
+                <DragandDrop data-testid="drag-and-drop"/>
             </main>
         </div>
 

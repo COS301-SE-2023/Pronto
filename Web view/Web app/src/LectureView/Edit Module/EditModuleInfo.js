@@ -11,7 +11,7 @@ const PostReminder = () => {
           <LecturerNavigation />
       </nav>
 
-      <main style={{ width: '900px',marginTop: '30px' }} data-testId={'editAccordion'}>
+      <main style={{ width: '900px',marginTop: '30px' }} data-testid={'editAccordion'}>
         <h1 className="moduleHead">COS341- Compiler Construction</h1>
         <PostAccordion />
       </main>

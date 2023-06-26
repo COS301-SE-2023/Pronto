@@ -1,8 +1,12 @@
-import {render, screen, cleanup, fireEvent} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import LecturerNavigation from "../LectureView/LecturerNavigation";
+import {MemoryRouter} from "react-router-dom";
 
 beforeEach(() => {
-    render(<LecturerNavigation/>);
+    render(
+        <MemoryRouter>
+            <LecturerNavigation/>
+        </MemoryRouter>);
 });
 
 // get the list on the navigation bar and check that they are present by testID

@@ -1,11 +1,15 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import EditModule from '../LectureView/Edit Module/EditModuleInfo';
+import {MemoryRouter} from "react-router-dom";
 
 describe('EditModule', () => {
 
     beforeEach(() => {
-        render(<EditModule />);
+        render(
+            <MemoryRouter>
+                <EditModule/>
+            </MemoryRouter>);
     });
 //create sets of tests for each testID
 

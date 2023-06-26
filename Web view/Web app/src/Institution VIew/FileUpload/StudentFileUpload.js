@@ -10,7 +10,7 @@ const StudentFileUploadPage = () => {
                 {/* Navigation bar content */}
                 <InstitutionNavigation />
             </nav>
-            <main style={{ width: '900px',marginTop: '250px' }} className={'text-center'}>
+            <main style={{ width: '900px',marginTop: '250px' }} className={'text-center'} data-testid={'drag-and-drop'}>
                 <h1>Upload Student Files</h1>
                 <DragandDrop/>
             </main>

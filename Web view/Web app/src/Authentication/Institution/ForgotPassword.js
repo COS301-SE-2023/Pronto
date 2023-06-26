@@ -52,8 +52,7 @@ function ForgotPassword() {
 
   const [passwordIsFocused, setPasswordIsFocused] = useState(false);
 
-  //validating confirm password
-  const [passwordMatch, setPasswordMatch] = useState(false);
+   const [passwordMatch, setPasswordMatch] = useState(false);
 
   const validateConfirmPassword = (value) => {
     setPasswordMatch(value === password);

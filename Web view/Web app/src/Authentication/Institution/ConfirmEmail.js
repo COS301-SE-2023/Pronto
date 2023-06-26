@@ -11,7 +11,10 @@ function ConfirmEmail() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  let email = location.state.email;
+  let email = null;
+  if (location.state && location.state.email) {
+    email = location.state.email;
+  }
 
   const [loading, setLoading] = useState(false);
 

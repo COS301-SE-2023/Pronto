@@ -1,11 +1,15 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import RecentAnnouncement from '../LectureView/RecentAnnouncement';
+import {MemoryRouter} from "react-router-dom";
 
 describe('RecentAnnouncement', () => {
 
     beforeEach(() => {
-        render(<RecentAnnouncement />);
+        render(
+            <MemoryRouter>
+                <RecentAnnouncement/>
+            </MemoryRouter>);
     });
 
 //create sets of tests for each testID
