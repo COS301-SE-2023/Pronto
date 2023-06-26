@@ -17,7 +17,6 @@ import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify } from "aws-amplify";
 import config from "./aws-exports";
-import { Auth } from "aws-amplify";
 
 Amplify.configure(config);
 
@@ -35,6 +34,9 @@ const Home = () => {
   // }, []);
 
   //end
+  useEffect(() => {
+    Amplify.configure(config);
+  }, []);
 
   return (
     <div>

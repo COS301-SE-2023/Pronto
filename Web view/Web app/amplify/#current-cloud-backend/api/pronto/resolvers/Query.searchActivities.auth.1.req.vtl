@@ -1,0 +1,44 @@
+## [Start] Authorization Steps. **
+$util.qr($ctx.stash.put("hasAuth", true))
+#set( $isAuthorized = false )
+#set( $totalFields = ["id","courseId","activityname","day","start","end","venue","group","frequency","description","course","createdAt","updatedAt","_version","_deleted","_lastChangedAt"] )
+#set( $allowedAggFields = ["createdAt","updatedAt","_version","_deleted","_lastChangedAt","id","courseId","activityname","day","start","end","venue","group","frequency","description","course"] )
+#if( $util.authType() == "API Key Authorization" )
+$util.unauthorized()
+#end
+#if( $util.authType() == "User Pool Authorization" )
+  #set( $authFilterConditions = [] )
+  #set( $ownerClaim0 = $util.defaultIfNull($ctx.identity.claims.get("sub"), null) )
+  #set( $currentClaim1 = $util.defaultIfNull($ctx.identity.claims.get("username"), $util.defaultIfNull($ctx.identity.claims.get("cognito:username"), null)) )
+  #if( !$util.isNull($ownerClaim0) && !$util.isNull($currentClaim1) )
+    #set( $ownerClaim0 = "$ownerClaim0::$currentClaim1" )
+    #set( $ownerClaimsList0 = [] )
+    $util.qr($ownerClaimsList0.add($util.defaultIfNull($ctx.identity.claims.get("sub"), null)))
+    $util.qr($ownerClaimsList0.add($util.defaultIfNull($ctx.identity.claims.get("username"), $util.defaultIfNull($ctx.identity.claims.get("cognito:username"), null))))
+    $util.qr($ownerClaimsList0.add($ownerClaim0))
+    #set( $owner0 = {
+  "terms_set": {
+      "courseId.keyword": {
+          "terms": $ownerClaimsList0,
+          "minimum_should_match_script": {
+              "source": "1"
+      }
+    }
+  }
+} )
+    $util.qr($authFilterConditions.add($owner0))
+  #end
+  #if( !$isAuthorized && !$authFilterConditions.isEmpty() )
+    $util.qr($ctx.stash.put("authFilter", {
+  "bool": {
+      "should": $authFilterConditions
+  }
+}))
+  #end
+#end
+$util.qr($ctx.stash.put("allowedAggFields", $allowedAggFields))
+#if( !$isAuthorized && $util.isNull($ctx.stash.authFilter) )
+$util.unauthorized()
+#end
+$util.toJson({"version":"2018-05-29","payload":{}})
+## [End] Authorization Steps. **
