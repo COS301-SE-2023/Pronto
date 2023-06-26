@@ -51,6 +51,7 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function RecentAnnouncement() {
+  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -62,17 +63,19 @@ export default function RecentAnnouncement() {
 
   return (
     <div style={{ display: 'inline-flex' }}>
-      <nav style={{ width: '20%' }}>
+      <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
           {/* Navigation bar content */}
           <LecturerNavigation />
       </nav>
     
         <main style={{ width: '900px',marginTop: '30px' }}>
+
             <h1 className="moduleHead">Recent Announcements</h1>
 
-            <div class="card">
+            <div class="card" data-testid="card1">
               <div class="card-header">
-                COS132
+                <div className = "subjectCode">COS132</div>
+                <div className = "postDate">22/05/2023</div>
               </div>
               <div class="card-body">
                 <h5 class="card-title">No class from Thursday 1 June</h5>
@@ -102,10 +105,6 @@ export default function RecentAnnouncement() {
                     onClose={handleClose}
                     >
                     <MenuItem onClick={handleClose} disableRipple>
-                    <EditIcon />
-                    Edit
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} disableRipple>
                     <DeleteIcon />
                     Delete
                     </MenuItem>
@@ -113,9 +112,10 @@ export default function RecentAnnouncement() {
               </div>
             </div>
 
-            <div class="card">
+            <div class="card" data-testid="card2">
               <div class="card-header">
-                COS341
+                <div className = "subjectCode">COS341</div>
+                <div className = "postDate">20/05/2023</div>
               </div>
               <div class="card-body">
                 <h5 class="card-title">Date of final exam</h5>
@@ -143,10 +143,6 @@ export default function RecentAnnouncement() {
                     open={open}
                     onClose={handleClose}
                     >
-                    <MenuItem onClick={handleClose} disableRipple>
-                    <EditIcon />
-                    Edit
-                    </MenuItem>
                     <MenuItem onClick={handleClose} disableRipple>
                     <DeleteIcon />
                     Delete

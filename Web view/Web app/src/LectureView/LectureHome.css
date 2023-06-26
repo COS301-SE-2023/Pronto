@@ -52,3 +52,16 @@
     margin-top:2%;
     margin-bottom: 5%;
 }
+
+.postDate{
+    float:right;
+}
+
+.subjectCode{
+    float:left;
+}
+
+.card{
+    margin-bottom: 2%;
+    border: 1px solid black;
+}
