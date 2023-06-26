@@ -4,31 +4,29 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import GoogleMapReact from 'google-map-react';
+import {Autocomplete, GoogleMap, Marker, useJsApiLoader} from '@react-google-maps/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 
 export default function PostAccordion() {
   const [expanded, setExpanded] = React.useState(false);
 
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const handleApiLoaded = (map, maps) => {
-    // use map and maps objects
-  };
+  {/*Default location for the map*/
+  }
+  const {isLoaded} = useJsApiLoader({
+    googleMapsApiKey: "",
+    libraries: ['places']
+  });
 
-  const AnyReactComponent = ({ text }) => <div>{text}</div>;
+  if (!isLoaded) {
+    return <div>Loading</div>
+  }
 
-  const defaultProps = {
-    center: 
-    {
-      lat:-25.753899044547357,
-      lng: 28.23134724523217
-    },
-    zoom: 16
-  };
 
   return (
     <div>
@@ -51,8 +49,8 @@ export default function PostAccordion() {
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
             <div className="col-sm-10">
               <input type="text" className="form-control" id="colFormLabel"  data-testid="title1"  required ></input>
+
             </div>
-          </div>
 
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Body: </label>
@@ -69,6 +67,7 @@ export default function PostAccordion() {
           </div>
 
             <button className="post-button">Post</button>
+          </div>
         </form>
         </AccordionDetails>
       </Accordion>
