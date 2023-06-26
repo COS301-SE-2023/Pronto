@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { Auth } from "aws-amplify";
@@ -20,11 +20,40 @@ const { height } = Dimensions.get("window");
 const VerifyCode = ({ navigation }) => {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  //validate password on sign up
+  const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
+  const validateSignUpPassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidSignUpPassword = regex.test(value);
+
+    setPasswordSignUpIsValid(isValidSignUpPassword);
+  };
+  const [isTypingPassword, setIsTypingPassword] = useState(false);
+
+  //validating confirm password
+  const [passwordMatch, setPasswordMatch] = useState(false);
+  const [isTypingPasswordMatch, setIsTypingPasswordMatch] = useState(false);
+
+  const validateConfirmPassword = (value) => {
+    setPasswordMatch(value === password);
+  };
 
   const route = useRoute();
   let email = route.params.email;
 
   const onResetPasswordPressed = async () => {
+    if (loading) return;
+
+    if (confirmPassword !== password) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
     try {
       await Auth.forgotPasswordSubmit(email, code, password);
       Alert.alert("Success", "Password succesfully changed!");
@@ -32,6 +61,7 @@ const VerifyCode = ({ navigation }) => {
     } catch (e) {
       Alert.alert("Error", e.message);
     }
+    setLoading(false);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -52,28 +82,71 @@ const VerifyCode = ({ navigation }) => {
             style={styles.input}
           />
 
-          <TextInput
-            placeholder="New Password"
-            placeholderTextColor={"#666666"}
-            secureTextEntry={true}
-            value={password}
-            onChangeText={setPassword}
-            style={styles.input}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="New Password"
+              autoCapitalize="none"
+              placeholderTextColor="#666666"
+              secureTextEntry={true}
+              style={[styles.input]}
+              value={password}
+              onChangeText={(value) => {
+                setPassword(value);
+                setPasswordSignUpIsValid(value);
+                validateSignUpPassword(value);
+              }}
+              onFocus={() => setIsTypingPassword(true)}
+            />
+            {isTypingPassword && passwordSignUpIsValid && (
+              <View style={styles.iconContainer}>
+                <Ionicons name="checkmark-circle" size={24} color="green" />
+              </View>
+            )}
 
-          <TextInput
-            placeholder="Confirm New Password"
-            placeholderTextColor={"#666666"}
-            secureTextEntry={true}
-            style={styles.input}
-          />
+            {isTypingPassword && !passwordSignUpIsValid && (
+              <View style={styles.iconContainer}>
+                <MaterialIcons name="cancel" size={24} color="red" />
+              </View>
+            )}
+          </View>
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Confirm New Password"
+              autoCapitalize="none"
+              placeholderTextColor={"#666666"}
+              value={confirmPassword}
+              secureTextEntry={true}
+              onFocus={() => setIsTypingPasswordMatch(true)}
+              style={styles.input}
+              onChangeText={(value) => {
+                setConfirmPassword(value);
+                validateConfirmPassword(value);
+              }}
+              passwordMatch={passwordMatch}
+            />
+
+            {isTypingPasswordMatch && passwordMatch && (
+              <View style={styles.iconContainer}>
+                <Ionicons name="checkmark-circle" size={24} color="green" />
+              </View>
+            )}
+
+            {isTypingPasswordMatch && !passwordMatch && (
+              <View style={styles.iconContainer}>
+                <MaterialIcons name="cancel" size={24} color="red" />
+              </View>
+            )}
+          </View>
         </View>
 
         <TouchableOpacity
           style={styles.signInButton}
           onPress={onResetPasswordPressed}
         >
-          <Text style={styles.signInButtonText}>Reset Password</Text>
+          <Text style={styles.signInButtonText}>
+            {loading ? "Resetting..." : "Reset Password"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -117,7 +190,7 @@ const styles = StyleSheet.create({
     maxWidth: "70%",
   },
   inputContainer: {
-    marginVertical: 40,
+    position: "relative",
   },
   input: {
     fontSize: 15,
@@ -166,6 +239,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontWeight: "bold",
+  },
+  iconContainer: {
+    position: "absolute",
+    top: "50%",
+    right: 10,
+    transform: [{ translateY: -12 }],
   },
 });
 

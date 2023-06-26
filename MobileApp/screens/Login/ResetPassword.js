@@ -10,22 +10,37 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
 
 const { height } = Dimensions.get("window");
 
 const ResetPassword = ({ navigation }) => {
-  const [focusedEmail, setFocusedEmail] = useState(false);
   const [email, setEmail] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
+  //validate email input sign up
+  const [emailIsValid, setEmailIsValid] = useState(false);
+
+  const validateEmail = (value) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = regex.test(value);
+    setEmailIsValid(isValidEmail);
+  };
+  const [isTypingEmail, setIsTypingEmail] = useState(false);
+
   const onResetPasswordPressed = async () => {
+    if (loading) return;
+
+    setLoading(true);
     try {
       await Auth.forgotPassword(email);
       navigation.navigate("VerifyCode", { email });
     } catch (e) {
       Alert.alert("Error", e.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -41,20 +56,37 @@ const ResetPassword = ({ navigation }) => {
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email"
-            onFocus={() => setFocusedEmail(true)}
-            onBlur={() => setFocusedEmail(false)}
-            onChangeText={setEmail}
-            value={email}
+            autoCapitalize="none"
             placeholderTextColor={"#666666"}
-            style={[styles.input, focusedEmail && styles.inputFocused]}
+            value={email}
+            onChangeText={(value) => {
+              setEmail(value);
+              validateEmail(value);
+            }}
+            style={[styles.input]}
+            onFocus={() => setIsTypingEmail(true)}
           />
+
+          {isTypingEmail && emailIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingEmail && !emailIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
         </View>
 
         <TouchableOpacity
           style={styles.signUpButton}
           onPress={onResetPasswordPressed}
         >
-          <Text style={styles.signUpButtonText}>Send code</Text>
+          <Text style={styles.signUpButtonText}>
+            {loading ? "Sending..." : "Send code"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -97,7 +129,7 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
   },
   inputContainer: {
-    marginVertical: 40,
+    position: "relative",
   },
   input: {
     fontSize: 15,
@@ -139,6 +171,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontWeight: "bold",
+  },
+  iconContainer: {
+    position: "absolute",
+    top: "50%",
+    right: 10,
+    transform: [{ translateY: -12 }],
   },
 });
 
