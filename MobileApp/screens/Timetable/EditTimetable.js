@@ -179,278 +179,152 @@ const EditTimetable = ({ onSearch }) => {
   const oneModule = ({ item }) => {
     const handleDelete = () => {
       setSelectedModules((prevModules) =>
-        prevModules.filter((module) => module.id !== item.id)
+          prevModules.filter((module) => module.id !== item.id)
       );
     };
 
     return (
-      <View style={{ margin: 20 }}>
-        <TouchableWithoutFeedback onPress={() => addToModules(item)}>
-          <Card
-            style={{
-              height: 200,
-              backgroundColor: "white",
-              justifyContent: "center",
-            }}
-          >
-            <Card.Title
-              title={item.code}
-              titleStyle={{
-                fontSize: 20,
-                fontWeight: "bold",
-                justifyContent: "center",
-                textAlign: "center",
-                marginLeft: 30,
-              }}
-              subtitle={item.name}
-              subtitleStyle={{
-                fontSize: 15,
-                justifyContent: "center",
-                textAlign: "center",
-                marginBottom: 10,
-                marginLeft: 30,
-              }}
-              right={(props) => (
-                <View style={{ flexDirection: "column" }}>
-                  <IconButton
-                    {...props}
-                    icon="plus"
-                    iconColor="#e32f45"
-                    onPress={() => toggleModal(item)}
-                    style={{ marginRight: 10 }}
-                  />
-                  <IconButton
-                    {...props}
-                    icon="delete"
-                    onPress={handleDelete}
-                    iconColor="#e32f45"
-                  />
-                </View>
-              )}
-            />
-            <Card.Content>
-              <View></View>
-            </Card.Content>
-          </Card>
-        </TouchableWithoutFeedback>
-      </View>
+        <View style={{ margin: 20 }}>
+          <TouchableWithoutFeedback onPress={() => addToModules(item)}>
+            <Card
+                style={{
+                  height: 200,
+                  backgroundColor: "white",
+                  justifyContent: "center",
+                }}
+                testID={`module-card-${item.id}`}
+            >
+              <Card.Title
+                  title={item.code}
+                  titleStyle={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    marginLeft: 30,
+                  }}
+                  subtitle={item.name}
+                  subtitleStyle={{
+                    fontSize: 15,
+                    justifyContent: "center",
+                    textAlign: "center",
+                    marginBottom: 10,
+                    marginLeft: 30,
+                  }}
+                  right={(props) => (
+                      <View style={{ flexDirection: "column" }}>
+                        <IconButton
+                            {...props}
+                            icon="plus"
+                            iconColor="#e32f45"
+                            onPress={() => toggleModal(item)}
+                            style={{ marginRight: 10 }}
+                            testID={`add-module-button-${item.id}`}
+                        />
+                        <IconButton
+                            {...props}
+                            icon="delete"
+                            onPress={handleDelete}
+                            iconColor="#e32f45"
+                            testID={`delete-module-button-${item.id}`}
+                        />
+                      </View>
+                  )}
+              />
+              <Card.Content>
+                <View></View>
+              </Card.Content>
+            </Card>
+          </TouchableWithoutFeedback>
+        </View>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          padding: 10,
-          margin: 10,
-          flexDirection: "row",
-          width: "95%",
-          backgroundColor: "#d9dbda",
-          borderRadius: 10,
-          alignItems: "center",
-        }}
-      >
-        <Feather
-          name="search"
-          size={20}
-          color="black"
-          style={{ marginLeft: 1, marginRight: 4 }}
-        />
-        <TextInput
-          value={input}
-          onChangeText={(text) => setInput(text)}
-          style={{ fontSize: 15, width: "100%" }}
-          placeholder="Search for your modules"
-        />
-      </View>
-
-      <SearchFilter
-        data={modules}
-        input={input}
-        setInput={setInput}
-        addToModules={addToModules}
-      />
-
-      <FlatList
-        data={selectedModules}
-        renderItem={oneModule}
-        ListEmptyComponent={
-          !input &&
-          selectedModules.length === 0 && (
-            <View
-              style={{
-                flexDirection: "row",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 24,
-                  fontWeight: "bold",
-                  color: "black",
-                }}
-              >
-                You have no modules
-              </Text>
-            </View>
-          )
-        }
-        style={styles.moduleList} // Set a specific height for FlatList
-      />
-
-      <Modal visible={isModalVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <IconButton
-            icon="close"
-            onPress={() => toggleModal(null)}
-            style={styles.closeIcon}
-            color="#000000"
+      <SafeAreaView style={styles.container}>
+        <View
+            style={{
+              padding: 10,
+              margin: 10,
+              flexDirection: "row",
+              width: "95%",
+              backgroundColor: "#d9dbda",
+              borderRadius: 10,
+              alignItems: "center",
+            }}
+        >
+          <Feather
+              name="search"
+              size={20}
+              color="black"
+              style={{ marginLeft: 1, marginRight: 4 }}
           />
+          <TextInput
+              value={input}
+              onChangeText={(text) => setInput(text)}
+              style={{ fontSize: 15, width: "100%" }}
+              placeholder="Search"
+              testID="search-input"
+          />
+        </View>
 
+        <ScrollView>
+          <FlatList
+              data={modules.filter(
+                  (item) =>
+                      item.name.toLowerCase().includes(input.toLowerCase()) ||
+                      item.code.toLowerCase().includes(input.toLowerCase())
+              )}
+              renderItem={oneModule}
+              keyExtractor={(item) => item.id.toString()}
+              numColumns={2}
+          />
+        </ScrollView>
+
+        <Modal visible={isModalVisible} animationType="slide">
           <View style={styles.modalContent}>
             {selectedModule && (
-              <View key={selectedModule.code}>
-                <Text style={styles.moduleCode}>{selectedModule.code}</Text>
-                <Text style={styles.moduleName}>{selectedModule.name}</Text>
-                {/* Check if there are lectures */}
-                {selectedModule.lectureActivity &&
-                  selectedModule.lectureDays &&
-                  selectedModule.lectureTimes &&
-                  selectedModule.lectureVenues &&
-                  selectedModule.lectureDays.map((day, index) => (
-                    <DropdownComponent
-                      key={index}
-                      activity={"Lecture"}
-                      moduleContent={selectedModule.lectureTimes[day].map(
-                        (time, timeIndex) => ({
-                          label: `${day}: ${time} (${selectedModule.lectureVenues[timeIndex]})`,
-                          value: `${index + 1}`,
-                        })
-                      )}
-                      activityNumber={index + 1}
-                    />
-                  ))}
-                {/* Check if there are practicals */}
-                {selectedModule.practicalActivity &&
-                  selectedModule.practicalTimes &&
-                  selectedModule.practicalVenues &&
-                  selectedModule.practicalActivity.map(
-                    (practicalActivity, index) => {
-                      const practicalTimes = selectedModule.practicalTimes;
-                      const practicalVenues = selectedModule.practicalVenues;
-
-                      return (
-                        <DropdownComponent
-                          key={index}
-                          activity={"Practical"}
-                          activityNumber={index + 1}
-                          moduleContent={practicalTimes.map(
-                            (time, timeIndex) => ({
-                              label: `${time[0]}: ${time[1]} (${practicalVenues[timeIndex]})`,
-                              value: `${timeIndex + 1}`,
-                            })
-                          )}
-                        />
-                      );
-                    }
-                  )}
-
-                {/* Check if there are tutorials */}
-                {selectedModule.tutorialActivity &&
-                  selectedModule.tutorialTimes &&
-                  selectedModule.tutorialVenues &&
-                  selectedModule.tutorialActivity.map(
-                    (tutorialActivity, index) => {
-                      const tutorialTimes = selectedModule.tutorialTimes;
-                      const tutorialVenues = selectedModule.tutorialVenues;
-                      return (
-                        <DropdownComponent
-                          key={index}
-                          activity={"Tutorial"}
-                          activityNumber={index + 1}
-                          moduleContent={tutorialTimes.map(
-                            (time, timeIndex) => ({
-                              label: `${time[0]}: ${time[1]} (${tutorialVenues[timeIndex]})`,
-                              value: `${timeIndex + 1}`,
-                            })
-                          )}
-                        />
-                      );
-                    }
-                  )}
-
-                <Button
-                  icon="check"
-                  mode="contained"
-                  style={{
-                    backgroundColor: "#e32f45",
-                    marginVertical: 10,
-                    marginHorizontal: 20,
-                  }}
-                  outlined={true}
-                  onPress={() => toggleModal(null)}
-                  testID="save-button"
-                >
-                  Save
-                </Button>
-              </View>
+                <View style={{ alignItems: "center" }}>
+                  <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+                    {selectedModule.code}
+                  </Text>
+                  <Text>{selectedModule.name}</Text>
+                </View>
             )}
+            <Button
+                mode="contained"
+                onPress={() => toggleModal(null)}
+                style={{ marginVertical: 20 }}
+                testID="close-modal-button"
+            >
+              Close
+            </Button>
           </View>
+        </Modal>
+
+        <View>
+          <Text>Selected Modules:</Text>
+          {selectedModules.map((module) => (
+              <Text key={module.id}>{module.code}</Text>
+          ))}
         </View>
-      </Modal>
-    </SafeAreaView>
+      </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    marginVertical: 200,
-    marginHorizontal: 10,
-    borderRadius: "50",
-    backgroundColor: "white",
-    elevation: 5,
-    shadowColor: "black",
-    shadowOpacity: 0.2,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 4,
-  },
-  modalContent: {
-    alignItems: "center",
-    marginTop: 50,
-    marginBottom: 20,
-    width: "80%",
-  },
-  moduleCode: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  moduleName: {
-    fontSize: 15,
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  closeIcon: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    zIndex: 1,
-  },
-  moduleList: {
-    flex: 1, // Fill the available space
-    marginBottom: 70,
-  },
   container: {
     flex: 1,
+    paddingTop: 50,
+    paddingHorizontal: 10,
+    backgroundColor: "white",
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 20,
+    marginVertical: 150,
   },
 });
 
