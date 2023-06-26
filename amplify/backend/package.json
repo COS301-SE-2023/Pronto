@@ -4,7 +4,10 @@
   "description": "",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "test": "jest",
+    "test:watch": "jest  --watch",
+    "test:watch:silent": "jest --watch --silent"
   },
   "dependencies": {
     "@aws-amplify/cli-extensibility-helper": "^3.0.0"
