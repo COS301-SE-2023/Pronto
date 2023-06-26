@@ -51,18 +51,17 @@ exports.handler = async (event) => {
   };
   console.table(groupParams);
   console.table(addUserParams);
-  //get user group
-  //add user to user group
   try {
     await cognitoIdentityServiceProviderClient.send(new GetGroupCommand(groupParams));
   } catch (getGroupError) {
     console.table(getGroupError);
-    throw new Error(`Failed to get User Group with userGroupName = ${groupParams.GroupName} \n ${getGroupError}`);
+    throw new Error(`Failed to get User Group with userGroupName = ${groupParams.GroupName}`);
   }
   try {
     await cognitoIdentityServiceProviderClient.send(new AdminAddUserToGroupCommand(addUserParams));
   } catch (adminAddUserToGroupError) {
-    throw new Error(`failed to add user to userGroupName = ${addUserParams.GroupName} \n ${adminAddUserToGroupError}`);
+    console.table(adminAddUserToGroupError);
+    throw new Error(`failed to add user to userGroupName = ${addUserParams.GroupName}`);
   }
 
   return event;
