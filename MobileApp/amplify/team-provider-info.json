@@ -1,0 +1,76 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pronto-dev-153713-authRole",
+      "UnauthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-153713-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-153713-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-pronto-dev-153713-deployment",
+      "UnauthRoleName": "amplify-pronto-dev-153713-unauthRole",
+      "StackName": "amplify-pronto-dev-153713",
+      "StackId": "arn:aws:cloudformation:us-east-1:915206092794:stack/amplify-pronto-dev-153713/9dd4dde0-ee6e-11ed-b2ee-0eea86a96083",
+      "AmplifyAppId": "d1kit50gzhvboi",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-pronto-dev-153713-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+<<<<<<< Updated upstream:MobileApp/amplify/team-provider-info.json
+      "api": {
+        "pronto": {}
+=======
+      "storage": {
+        "s3prontoblobestore": {}
+      },
+      "auth": {
+        "prontoAuth": {},
+        "userPoolGroups": {}
+>>>>>>> Stashed changes:amplify/team-provider-info.json
+      },
+      "function": {
+        "prontoAuthPostConfirmation": {
+          "GROUP": "prontoUserGroup",
+          "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
+<<<<<<< Updated upstream:MobileApp/amplify/team-provider-info.json
+          "s3Key": "amplify-builds/prontoAuthPostConfirmation-4d63544a6b496b697570-build.zip"
+=======
+          "s3Key": "amplify-builds/prontoAuthPostConfirmation-52345653503638396d67-build.zip",
+          "GROUP": ""
+        },
+        "prontoAuthPreConfirmation": {
+          "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
+          "s3Key": "amplify-builds/prontoAuthPreConfirmation-6e30614b74556d6c654d-build.zip"
+        }
+      },
+      "api": {
+        "pronto": {}
+      }
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pronto-prod-95641-authRole",
+      "UnauthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-prod-95641-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-prod-95641-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-pronto-prod-95641-deployment",
+      "UnauthRoleName": "amplify-pronto-prod-95641-unauthRole",
+      "StackName": "amplify-pronto-prod-95641",
+      "StackId": "arn:aws:cloudformation:us-east-1:915206092794:stack/amplify-pronto-prod-95641/9cf659a0-f551-11ed-be01-0afd497892d5",
+      "AmplifyAppId": "d1kit50gzhvboi"
+    },
+    "categories": {
+      "api": {
+        "pronto": {
+          "OpenSearchInstanceType": "c5.large.search"
+>>>>>>> Stashed changes:amplify/team-provider-info.json
+        }
+      },
+      "auth": {
+        "prontoAuth": {},
+        "userPoolGroups": {}
+      },
+      "storage": {
+        "s3prontoblobestore": {}
+      }
+    }
+  }
+}

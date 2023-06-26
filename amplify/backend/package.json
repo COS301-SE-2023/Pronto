@@ -1,0 +1,22 @@
+{
+  "name": "overrides",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "test:watch": "jest  --watch",
+    "test:watch:silent": "jest --watch --silent",
+    "test:unit": "jest unit",
+    "test:unit:watch": "jest --watch unit",
+    "test:unit:watch:silent": "jest --watch --silent unit",
+    "test:int::watch:silent": "jest --watch --silent integration"
+  },
+  "dependencies": {
+    "@aws-amplify/cli-extensibility-helper": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
+}
