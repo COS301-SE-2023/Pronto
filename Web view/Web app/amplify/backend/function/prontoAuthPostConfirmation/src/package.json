@@ -1,0 +1,14 @@
+{
+  "name": "prontoAuthPostConfirmation",
+  "version": "2.0.0",
+  "description": "Post sign up validation",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "axios": "latest"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.345.0",
+    "@types/aws-lambda": "^8.10.92"
+  }
+}

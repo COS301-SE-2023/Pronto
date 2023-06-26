@@ -10,6 +10,7 @@ module.exports = {
   // Stop running tests after `n` failures
   // bail: 0,
   setupFiles: ["<rootDir>/test/.jest/setEnvVars.js"],
+
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "/private/var/folders/vb/7bd64kyx5mxglzq0n3870_km0000gn/T/jest_dx",
 
@@ -109,6 +110,7 @@ module.exports = {
   // reporters: undefined,
 
   // Automatically reset mock state before every test
+
   // resetMocks: false,
 
   // Reset the module registry before running each individual test
@@ -118,6 +120,7 @@ module.exports = {
   // resolver: undefined,
 
   // Automatically restore mock state and implementation before every test
+
   // restoreMocks: false,
 
   // The root directory that Jest should scan for tests and modules within

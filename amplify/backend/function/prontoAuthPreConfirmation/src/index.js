@@ -10,7 +10,7 @@
 	AdminGroupName
 Amplify Params - DO NOT EDIT */
 const ROLES = require('./roles.js');
-const { isLectureEmailPartOfInstitution, isAdminAllocated } = require('./confirmEmails.js');
+const { isLectureEmailPartOfInstitution, isAdminAllocated } = require('./assertInstitutionInfo.js');
 const isAppClientValid = require(',/isAppClientValid.js');
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}

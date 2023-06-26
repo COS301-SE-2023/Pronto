@@ -9,17 +9,9 @@ const ROLES = require('./roles');
 const config = {
   region: process.env.AWS_REGION,
 };
-const ROLES = require('./roles');
-
-const config = {
-  region: process.env.AWS_REGION,
-};
 
 const cognitoIdentityServiceProviderClient = new CognitoIdentityProviderClient(config);
-const cognitoIdentityServiceProviderClient = new CognitoIdentityProviderClient(config);
 
-console.table(config);
-console.table(cognitoIdentityServiceProviderClient);
 console.table(config);
 console.table(cognitoIdentityServiceProviderClient);
 /**
@@ -77,7 +69,6 @@ exports.handler = async (event) => {
   };
   const addUserParams = {
     GroupName: GroupName,
-    GroupName: GroupName,
     UserPoolId: event.userPoolId,
     Username: event.userName,
   };
@@ -88,24 +79,6 @@ exports.handler = async (event) => {
   } catch (getGroupError) {
     console.table(getGroupError);
     throw new Error(`Failed to get User Group with userGroupName = ${groupParams.GroupName}`);
-  }
-  console.table(groupParams);
-  console.table(addUserParams);
-  try {
-    await cognitoIdentityServiceProviderClient.send(new GetGroupCommand(groupParams));
-  } catch (getGroupError) {
-    console.table(getGroupError);
-    throw new Error(`Failed to get User Group with userGroupName = ${groupParams.GroupName}`);
-  }
-  try {
-    await cognitoIdentityServiceProviderClient.send(new AdminAddUserToGroupCommand(addUserParams));
-  } catch (adminAddUserToGroupError) {
-    console.table(adminAddUserToGroupError);
-    throw new Error(`failed to add user to userGroupName = ${addUserParams.GroupName}`);
-    await cognitoIdentityServiceProviderClient.send(new AdminAddUserToGroupCommand(addUserParams));
-  } catch (adminAddUserToGroupError) {
-    console.table(adminAddUserToGroupError);
-    throw new Error(`failed to add user to userGroupName = ${addUserParams.GroupName}`);
   }
   return event;
 };
