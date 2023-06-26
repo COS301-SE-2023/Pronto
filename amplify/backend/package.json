@@ -7,7 +7,9 @@
     "watch": "tsc -w",
     "test": "jest",
     "test:watch": "jest  --watch",
-    "test:watch:silent": "jest --watch --silent"
+    "test:watch:silent": "jest --watch --silent",
+    "test:unit:watch:silent": "jest --watch --silent unit",
+    "test:int::watch:silent": "jest --watch --silent integration"
   },
   "dependencies": {
     "@aws-amplify/cli-extensibility-helper": "^3.0.0"
@@ -16,3 +18,4 @@
     "typescript": "^4.2.4"
   }
 }
+
