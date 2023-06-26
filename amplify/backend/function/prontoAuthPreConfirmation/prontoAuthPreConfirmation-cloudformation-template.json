@@ -1,52 +1,20 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.0.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"10.6.2\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-    "GROUP": {
+    "CloudWatchRule": {
       "Type": "String",
-      "Default": ""
-    },
-    "modules": {
-      "Type": "String",
-      "Default": "",
-      "Description": "Comma-delimited list of modules to be executed by a lambda trigger. Sent to resource as an env variable."
-    },
-    "resourceName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "trigger": {
-      "Type": "String",
-      "Default": "true"
-    },
-    "functionName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "roleName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentResource": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentStack": {
-      "Type": "String",
-      "Default": ""
-    },
-    "env": {
-      "Type": "String"
+      "Default": "NONE",
+      "Description": " Schedule Expression"
     },
     "deploymentBucketName": {
       "Type": "String"
     },
-    "s3Key": {
+    "env": {
       "Type": "String"
     },
-    "authprontoAuthUserPoolId": {
-      "Type": "String",
-      "Default": "authprontoAuthUserPoolId"
+    "s3Key": {
+      "Type": "String"
     },
     "studentsGroupName": {
       "Type": "String"
@@ -57,11 +25,21 @@
     "adminGroupName": {
       "Type": "String"
     },
-    "appClientId": {
-      "Type": "String"
+    "apiprontoGraphQLAPIIdOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIIdOutput"
     },
-    "appClientIdWeb": {
-      "Type": "String"
+    "apiprontoGraphQLAPIEndpointOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIEndpointOutput"
+    },
+    "apiprontoGraphQLAPIKeyOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIKeyOutput"
+    },
+    "authprontoAuthUserPoolId": {
+      "Type": "String",
+      "Default": "authprontoAuthUserPoolId"
     }
   },
   "Conditions": {
@@ -82,16 +60,24 @@
         "aws:asset:property": "Code"
       },
       "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": {
+            "Ref": "s3Key"
+          }
+        },
         "Handler": "index.handler",
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "prontoAuthPostConfirmation",
+            "prontoAuthPreConfirmation",
             {
               "Fn::Join": [
                 "",
                 [
-                  "prontoAuthPostConfirmation",
+                  "prontoAuthPreConfirmation",
                   "-",
                   {
                     "Ref": "env"
@@ -106,14 +92,17 @@
             "ENV": {
               "Ref": "env"
             },
-            "MODULES": {
-              "Ref": "modules"
-            },
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "GROUP": {
-              "Ref": "GROUP"
+            "API_PRONTO_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIIdOutput"
+            },
+            "API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIEndpointOutput"
+            },
+            "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIKeyOutput"
             },
             "AUTH_PRONTOAUTH_USERPOOLID": {
               "Ref": "authprontoAuthUserPoolId"
@@ -126,12 +115,6 @@
             },
             "AdminGroupName": {
               "Ref": "adminGroupName"
-            },
-            "AppClientId": {
-              "Ref": "appClientId"
-            },
-            "AppClientIdWeb": {
-              "Ref": "appClientIdWeb"
             }
           }
         },
@@ -141,16 +124,9 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs18.x",
-        "Timeout": 25,
-        "Code": {
-          "S3Bucket": {
-            "Ref": "deploymentBucketName"
-          },
-          "S3Key": {
-            "Ref": "s3Key"
-          }
-        }
+        "Runtime": "nodejs14.x",
+        "Layers": [],
+        "Timeout": 25
       }
     },
     "LambdaExecutionRole": {
@@ -159,12 +135,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "prontoAuthPostConfirmation",
+            "prontoLambdaRole9233c92d",
             {
               "Fn::Join": [
                 "",
                 [
-                  "prontoAuthPostConfirmation",
+                  "prontoLambdaRole9233c92d",
                   "-",
                   {
                     "Ref": "env"
@@ -253,6 +229,34 @@
             {
               "Effect": "Allow",
               "Action": [
+                "appsync:GraphQL"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apiprontoGraphQLAPIIdOutput"
+                      },
+                      "/types/Query/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
                 "cognito-identity:Describe*",
                 "cognito-identity:Get*",
                 "cognito-identity:List*",
@@ -266,19 +270,7 @@
                 "cognito-sync:List*",
                 "iam:ListOpenIdConnectProviders",
                 "iam:ListRoles",
-                "sns:ListPlatformApplications",
-                "cognito-idp:ForgotPassword",
-                "cognito-idp:UpdateAuthEventFeedback",
-                "cognito-idp:UpdateResourceServer",
-                "cognito-idp:UpdateUserPoolClient",
-                "cognito-idp:AdminUpdateUserAttributes",
-                "cognito-idp:UpdateUserAttributes",
-                "cognito-idp:UpdateUserPoolDomain",
-                "cognito-idp:UpdateIdentityProvider",
-                "cognito-idp:UpdateGroup",
-                "cognito-idp:AdminUpdateAuthEventFeedback",
-                "cognito-idp:UpdateDeviceStatus",
-                "cognito-idp:UpdateUserPool"
+                "sns:ListPlatformApplications"
               ],
               "Resource": [
                 {
@@ -321,6 +313,11 @@
         ]
       }
     },
+    "Region": {
+      "Value": {
+        "Ref": "AWS::Region"
+      }
+    },
     "LambdaExecutionRole": {
       "Value": {
         "Ref": "LambdaExecutionRole"
@@ -332,11 +329,6 @@
           "LambdaExecutionRole",
           "Arn"
         ]
-      }
-    },
-    "Region": {
-      "Value": {
-        "Ref": "AWS::Region"
       }
     }
   }
