@@ -59,15 +59,11 @@ type Enrollment @model @auth(rules: [{ allow: owner, ownerField: "student" }]) {
   course: Course! @belongsTo(fields: ["courseId"])
 }
 
-type Course
-  @model
-  @searchable
-  @auth(rules: [{ allow: owner, ownerField: "institutionId" }, { allow: public, operations: [read] }]) {
+type Course @model @searchable @auth(rules: [{ allow: owner, ownerField: "institutionId" }, { allow: public, operations: [read] }]) {
   id: ID!
   institutionId: ID! @index(name: "byCourse")
   lecturerId: ID
   coursecode: String!
-  coursename: String!
   semester: Int
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
   activity: [Activity] @hasMany(indexName: "byActivity", fields: ["id"])
