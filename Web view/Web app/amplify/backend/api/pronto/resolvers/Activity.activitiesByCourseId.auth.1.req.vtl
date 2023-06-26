@@ -1,0 +1,53 @@
+## [Start] Authorization Steps. **
+$util.qr($ctx.stash.put("hasAuth", true))
+#set( $isAuthorized = false )
+#set( $primaryFieldMap = {} )
+#if( $util.authType() == "API Key Authorization" )
+
+#end
+#if( $util.authType() == "User Pool Authorization" )
+  #set( $courseIdClaim = $util.defaultIfNull($ctx.identity.claims.get("sub"), null) )
+  #set( $currentClaim1 = $util.defaultIfNull($ctx.identity.claims.get("username"), $util.defaultIfNull($ctx.identity.claims.get("cognito:username"), null)) )
+  #if( !$util.isNull($courseIdClaim) && !$util.isNull($currentClaim1) )
+    #set( $courseIdClaim = "$courseIdClaim::$currentClaim1" )
+    #set( $ownerClaimsList0 = [] )
+    $util.qr($ownerClaimsList0.add($util.defaultIfNull($ctx.identity.claims.get("sub"), null)))
+    $util.qr($ownerClaimsList0.add($util.defaultIfNull($ctx.identity.claims.get("username"), $util.defaultIfNull($ctx.identity.claims.get("cognito:username"), null))))
+    $util.qr($ownerClaimsList0.add($courseIdClaim))
+    #if( !$util.isNull($ctx.args.courseId) )
+      #if( $util.isString($ctx.args.courseId) )
+        #set( $courseIdCondition = (($courseIdClaim == $ctx.args.courseId) || $ownerClaimsList0.contains($ctx.args.courseId)) )
+      #else
+        #set( $courseIdCondition = ($courseIdClaim == $util.defaultIfNull($ctx.args.courseId.get("eq"), null) || $ownerClaimsList0.contains($util.defaultIfNull($ctx.args.courseId.get("eq"), null))) )
+        #if( !$courseIdCondition )
+          #set( $entityValues = 0 )
+          #foreach( $argEntity in $ctx.args.courseId.get("eq") )
+            #if( $ownerClaimsList0.contains($argEntity) )
+              #set( $entityValues = $entityValues + 1 )
+            #end
+          #end
+          #if( $entityValues == $ctx.args.courseId.get("eq").size() )
+            #set( $courseIdCondition = true )
+          #end
+        #end
+      #end
+      #if( $courseIdCondition )
+        #set( $isAuthorized = true )
+        $util.qr($ctx.stash.put("authFilter", null))
+      #end
+    #else
+      $util.qr($primaryFieldMap.put("courseId", $ownerClaimsList0))
+    #end
+  #end
+  #if( !$isAuthorized && $util.isNull($ctx.stash.authFilter) && !$primaryFieldMap.isEmpty() )
+    #foreach( $entry in $primaryFieldMap.entrySet() )
+      $util.qr($ctx.args.put($entry.key, $entry.value))
+      #set( $isAuthorized = true )
+    #end
+  #end
+#end
+#if( !$isAuthorized && $util.isNull($ctx.stash.authFilter) )
+$util.unauthorized()
+#end
+$util.toJson({"version":"2018-05-29","payload":{}})
+## [End] Authorization Steps. **
