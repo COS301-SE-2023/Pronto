@@ -1,0 +1,46 @@
+name: Frontend Tests
+on:
+  push:
+    branches:
+      - frontend-new-frontendTests
+  pull_request:
+    branches:
+      - frontend-new-frontendTests
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [14.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run frontend tests
+        run: npm test -- --coverage --watchAll=false
+
+      - name: Create coverage directory
+        run: mkdir coverage
+
+      - name: Move coverage files
+        run: mv coverage/* ./coverage/
+
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage/
