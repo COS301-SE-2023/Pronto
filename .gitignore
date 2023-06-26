@@ -86,7 +86,6 @@ node_modules/
 *.~*
 *.DS_Store?
 
-
 .vscode
 .env
 
@@ -167,6 +166,7 @@ node_modules/
 *.tmp.*
 *.~*
 *.DS_Store?
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
