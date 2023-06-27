@@ -3,9 +3,7 @@
     "pronto": {
       "dependsOn": [
         {
-          "attributes": [
-            "UserPoolId"
-          ],
+          "attributes": ["UserPoolId"],
           "category": "auth",
           "resourceName": "prontoAuth"
         }
@@ -37,10 +35,7 @@
       "customAuth": false,
       "dependsOn": [
         {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
+          "attributes": ["Arn", "Name"],
           "category": "function",
           "resourceName": "prontoAuthPostConfirmation",
           "triggerProvider": "Cognito"
@@ -48,11 +43,9 @@
       ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
+        "mfaTypes": ["SMS"],
         "passwordProtectionSettings": {
-            "passwordPolicyCharacters": [
+          "passwordPolicyCharacters": [
             "REQUIRES_LOWERCASE",
             "REQUIRES_NUMBERS",
             "REQUIRES_SYMBOLS",
@@ -60,19 +53,10 @@
           ],
           "passwordPolicyMinLength": 8
         },
-        "signupAttributes": [
-          "ADDRESS",
-          "EMAIL",
-          "FAMILY_NAME",
-          "NAME"
-        ],
+        "signupAttributes": ["ADDRESS", "EMAIL", "FAMILY_NAME", "NAME"],
         "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
+        "usernameAttributes": ["EMAIL"],
+        "verificationMechanisms": ["EMAIL"]
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
@@ -80,12 +64,7 @@
     "userPoolGroups": {
       "dependsOn": [
         {
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ],
+          "attributes": ["UserPoolId", "AppClientIDWeb", "AppClientID", "IdentityPoolId"],
           "category": "auth",
           "resourceName": "prontoAuth"
         }
