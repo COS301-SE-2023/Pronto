@@ -21,25 +21,6 @@ exports.handler = async (event) => {
   if (!event.request.clientMetadata.role) throw new Error('User role not provided on clientMetadata');
   if (!event.request.callerContext.clientId) throw new Error('ClientId not provided on callerContext');
   if (!(event.request.clientMetadata.role in ROLES)) throw new Error('Invalid User Role');
-  console.table(event);
-
-  switch (event.request.callerContext.clientId) {
-    case process.env.AppClientId:
-      GroupName = process.env.StudentsGroupName;
-      break;
-    case process.env.AppClientIdWeb:
-      GroupName =
-        event.request.clientMetadata.role == ROLES.Lecture
-          ? process.env.LecturersGroupName
-          : process.env.AdminGroupName;
-      break;
-    default:
-      throw new Error(`Unrecognised user pool app client ID=${event.request.callerContext.clientId}`);
-  }
-
-  if (!event.request.clientMetadata.role) throw new Error('User role not provided on clientMetadata');
-  if (!event.request.callerContext.clientId) throw new Error('ClientId not provided on callerContext');
-  if (!(event.request.clientMetadata.role in ROLES)) throw new Error('Invalid User Role');
   let GroupName;
   console.table(event.request);
   console.table(process.env);
@@ -61,7 +42,6 @@ exports.handler = async (event) => {
 
   const groupParams = {
     GroupName: GroupName,
-    GroupName: GroupName,
     UserPoolId: event.userPoolId,
   };
   const addUserParams = {
@@ -77,5 +57,12 @@ exports.handler = async (event) => {
     console.table(getGroupError);
     throw new Error(`Failed to get User Group with userGroupName = ${groupParams.GroupName}`);
   }
+  try {
+    await cognitoIdentityServiceProviderClient.send(new AdminAddUserToGroupCommand(addUserParams));
+  } catch (adminAddUserToGroupError) {
+    console.table(adminAddUserToGroupError);
+    throw new Error(`failed to add user to userGroupName = ${addUserParams.GroupName}`);
+  }
+
   return event;
 };

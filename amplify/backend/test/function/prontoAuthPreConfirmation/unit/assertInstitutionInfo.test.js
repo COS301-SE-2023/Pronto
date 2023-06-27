@@ -9,7 +9,6 @@ const institutionDetails = {
   adminId: 'someAdminId',
   lectureremails: ['someLecturerEmail1', 'someLecturerEmail2'],
 };
-const mockGetAndSetInstitutionDetails = jest.fn(getAndSetInstitutionDetails).mockResolvedValue(institutionDetails);
 
 describe('Input Validation and Error handling', () => {
   test(`should throw "Invalid Institution Id: InstitutionId =  null"`, async () => {
@@ -73,10 +72,26 @@ describe('Testing GraphQL API Calls', () => {
     jest.resetModules();
   });
   test('should throw API ERROR: Failed to retrieve data', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ ok: false }),
+      }),
+    );
     const someInstitutionId = 'someInstitutionId';
     const someEmail = 'someEmail';
     await expect(isLectureEmailPartOfInstitution(someEmail, someInstitutionId)).rejects.toThrow(
       /API ERROR: Failed to retrieve data$/,
     );
+  });
+  test('should retrieve data', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ ok: true, data: { getInstitution: institutionDetails } }),
+      }),
+    );
+    const someInstitutionId = 'someInstitutionId';
+    const someEmail = 'someEmail';
+    expect(await isAdminAllocated(someEmail, someInstitutionId)).toBe(true);
+    expect(await isLectureEmailPartOfInstitution(someEmail, someInstitutionId)).toBe(false);
   });
 });
