@@ -2,9 +2,9 @@ name: Pronto
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main, dev,Automated-Testing]
   pull_request:
-    branches: [main, dev]
+    branches: [main, dev, Automated-Testing]
 
 jobs:
   build-mobile:
@@ -31,7 +31,7 @@ jobs:
           node-version: [18.x]
       defaults:
         run:
-          working-directory: ./WebView/WebApp
+          working-directory: ./Web%/20View/WebApp
       steps: 
         -uses: actions/checkout@v3
         -name: Use Node.js ${{matrix.node-version}}
@@ -45,3 +45,10 @@ jobs:
 
 
 
+#Wait will the workflow run on our current branch? 
+#I thought it ran on dev and main only?
+#Where are we now?
+#Ok
+
+#I think we made a mistake with the web. The directory is Web View/Web App with spaces
+#Also lets try again but add the automated testing branch to the push 
