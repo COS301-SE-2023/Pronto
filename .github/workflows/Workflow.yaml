@@ -32,7 +32,7 @@ jobs:
         node-version: [18.x]
     defaults:
       run:
-        working-directory: "./Web view/WebApp"
+        working-directory: "./Web view/Web App"
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{matrix.node-version}}
