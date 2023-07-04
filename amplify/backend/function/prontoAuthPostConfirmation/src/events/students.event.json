@@ -1,0 +1,12 @@
+{
+    "userPoolId": "USERPOOLID", 
+        "userName": "USERNAME",
+        "request": {
+          "callerContext": {
+            "clientId": "CLIENTID", 
+            "clientMetadata": {
+              "role": "Student" 
+            }
+          }
+      }
+}
