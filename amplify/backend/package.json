@@ -14,7 +14,8 @@
     "test:int::watch:silent": "jest --watch --silent integration"
   },
   "dependencies": {
-    "@aws-amplify/cli-extensibility-helper": "^3.0.0"
+    "@aws-amplify/cli-extensibility-helper": "^3.0.0",
+    "jest": "^29.5.0"
   },
   "devDependencies": {
     "typescript": "^4.2.4"
