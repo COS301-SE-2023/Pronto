@@ -2,19 +2,19 @@ name: Pronto
 
 on:
   push:
-    branches: [main, dev,Automated-Testing]
+    branches: [main, dev, Automated-Testing]
   pull_request:
     branches: [main, dev, Automated-Testing]
 
 jobs:
   build-mobile:
-   strategy:
+    runs-on: [windows-latest, mac-12os, ubuntu-latest]
+    strategy:
       matrix:
-        node-version: [ 18.x]
+        node-version: [18.x]
     defaults:
       run:
         working-directory: ./MobileApp
-
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -25,30 +25,21 @@ jobs:
       - run: npm run build --if-present
       - run: npm test
 
-    build-web:
-      strategy:
-        matrix: 
-          node-version: [18.x]
-      defaults:
-        run:
-          working-directory: ./Web%/20View/WebApp
-      steps: 
-        -uses: actions/checkout@v3
-        -name: Use Node.js ${{matrix.node-version}}
-         uses: actions/setup-node@v3
-         with:
-            node-version: ${{ matrix.node-version}} 
-        - run: | 
-            npm ci
-            npm run build --if-present
-            npm test  
-
-
-
-#Wait will the workflow run on our current branch? 
-#I thought it ran on dev and main only?
-#Where are we now?
-#Ok
-
-#I think we made a mistake with the web. The directory is Web View/Web App with spaces
-#Also lets try again but add the automated testing branch to the push 
+  build-web:
+    runs-on: [windows-latest, mac-12os, ubuntu-latest]
+    strategy:
+      matrix: 
+        node-version: [18.x]
+    defaults:
+      run:
+        working-directory: ./Web%/20View/WebApp
+    steps: 
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version}} 
+      - run: | 
+          npm ci
+          npm run build --if-present
+          npm test
