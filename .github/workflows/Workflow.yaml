@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-mobile:
-    runs-on: [windows-latest, mac-12os, ubuntu-latest]
+    runs-on:  ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
@@ -26,7 +26,7 @@ jobs:
       - run: npm test
 
   build-web:
-    runs-on: [windows-latest, mac-12os, ubuntu-latest]
+    runs-on:  ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
