@@ -39,6 +39,21 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "appClientId": {
+      "Type": "String"
+    },
+    "appClientIdWeb": {
+      "Type": "String"
+    },
+    "studentsGroupName": {
+      "Type": "String"
+    },
+    "lecturersGroupName": {
+      "Type": "String"
+    },
+    "adminGroupName": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -88,6 +103,21 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "AppClientId": {
+              "Ref": "appClientId"
+            },
+            "AppClientIdWeb": {
+              "Ref": "appClientIdWeb"
+            },
+            "StudentsGroupName": {
+              "Ref": "studentsGroupName"
+            },
+            "LecturersGroupName": {
+              "Ref": "lecturersGroupName"
+            },
+            "AdminGroupName": {
+              "Ref": "adminGroupName"
             }
           }
         },

@@ -12,5 +12,27 @@
   "triggerTemplate": "PostAuthentication.json.ejs",
   "triggerEventPath": "PostAuthentication.event.json",
   "roleName": "pronto5f713f59PostAuthentication",
-  "skipEdit": true
+  "skipEdit": true,
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "appClientId",
+      "environmentVariableName": "AppClientId"
+    },
+    {
+      "cloudFormationParameterName": "appClientIdWeb",
+      "environmentVariableName": "AppClientIdWeb"
+    },
+    {
+      "cloudFormationParameterName": "studentsGroupName",
+      "environmentVariableName": "StudentsGroupName"
+    },
+    {
+      "cloudFormationParameterName": "lecturersGroupName",
+      "environmentVariableName": "LecturersGroupName"
+    },
+    {
+      "cloudFormationParameterName": "adminGroupName",
+      "environmentVariableName": "AdminGroupName"
+    }
+  ]
 }
