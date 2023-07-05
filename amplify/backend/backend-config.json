@@ -164,6 +164,30 @@
         }
       ]
     },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_appClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_appClientIdWeb": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
     "AMPLIFY_function_pronto5f713f59PostAuthentication_deploymentBucketName": {
       "usedBy": [
         {
@@ -172,7 +196,23 @@
         }
       ]
     },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_lecturersGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
     "AMPLIFY_function_pronto5f713f59PostAuthentication_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_studentsGroupName": {
       "usedBy": [
         {
           "category": "function",
