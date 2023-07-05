@@ -1,64 +1,41 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-pronto-dev-153713-authRole",
-      "UnauthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-153713-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-153713-authRole",
+      "AuthRoleName": "amplify-pronto-dev-163054-authRole",
+      "UnauthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-163054-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-163054-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-pronto-dev-153713-deployment",
-      "UnauthRoleName": "amplify-pronto-dev-153713-unauthRole",
-      "StackName": "amplify-pronto-dev-153713",
-      "StackId": "arn:aws:cloudformation:us-east-1:915206092794:stack/amplify-pronto-dev-153713/9dd4dde0-ee6e-11ed-b2ee-0eea86a96083",
-      "AmplifyAppId": "d1kit50gzhvboi",
-      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-pronto-dev-153713-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+      "DeploymentBucketName": "amplify-pronto-dev-163054-deployment",
+      "UnauthRoleName": "amplify-pronto-dev-163054-unauthRole",
+      "StackName": "amplify-pronto-dev-163054",
+      "StackId": "arn:aws:cloudformation:us-east-1:915206092794:stack/amplify-pronto-dev-163054/3aaa7e80-19ae-11ee-8eb8-0a7f71ca4217",
+      "AmplifyAppId": "d3j57fmadrzn3",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-pronto-dev-163054-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
-      "storage": {
-        "s3prontoblobestore": {}
-      },
       "auth": {
-        "prontoAuth": {}
+        "pronto5f713f59": {},
+        "userPoolGroups": {}
+      },
+      "storage": {
+        "prontoBlobeStore": {}
       },
       "function": {
-        "prontoAuthPostConfirmation": {
-          "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
-          "s3Key": "amplify-builds/prontoAuthPostConfirmation-424452432f5076725477-build.zip",
-          "GROUP": "",
-          "studentsGroupName": "studentsGroupName",
-          "lecturersGroupName": "lecturersGroupName",
-          "adminGroupName": "adminGroupName",
-          "appClientId": "3uqlt9r8vsml0g02noh7v87dno",
-          "appClientIdWeb": "7mdve2f6k86vpadjd9u7rmgi6s"
+        "AdminQueries7f7a03b0": {
+          "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
+          "s3Key": "amplify-builds/AdminQueries7f7a03b0-4977306a6a7435714749-build.zip"
         },
-        "prontoAuthPreConfirmation": {
-          "deploymentBucketName": "amplify-pronto-dev-153713-deployment",
-          "s3Key": "amplify-builds/prontoAuthPreConfirmation-43453033777274476d56-build.zip"
+        "pronto5f713f59PostAuthentication": {
+          "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
+          "s3Key": "amplify-builds/pronto5f713f59PostAuthentication-446f6537422f51664b30-build.zip"
+        },
+        "pronto5f713f59PreSignup": {
+          "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
+          "s3Key": "amplify-builds/pronto5f713f59PreSignup-31445a55324b77396d4d-build.zip"
         }
       },
       "api": {
-        "pronto": {}
-      }
-    }
-  },
-  "prod": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-pronto-prod-95641-authRole",
-      "UnauthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-prod-95641-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-prod-95641-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-pronto-prod-95641-deployment",
-      "UnauthRoleName": "amplify-pronto-prod-95641-unauthRole",
-      "StackName": "amplify-pronto-prod-95641",
-      "StackId": "arn:aws:cloudformation:us-east-1:915206092794:stack/amplify-pronto-prod-95641/9cf659a0-f551-11ed-be01-0afd497892d5",
-      "AmplifyAppId": "d1kit50gzhvboi"
-    },
-    "categories": {
-      "api": {
-        "pronto": {
-          "OpenSearchInstanceType": "c5.large.search"
-        }
-      },
-      "auth": {
+        "AdminQueries": {},
         "pronto": {}
       }
     }
