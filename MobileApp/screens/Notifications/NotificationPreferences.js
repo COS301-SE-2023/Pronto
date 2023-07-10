@@ -5,13 +5,22 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  Button,
 } from "react-native";
 
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
+    setShowSaveButton(true);
+  };
+
+  const handleSavePreferences = () => {
+    // Save the selectedOption to your storage or API
+    setShowSaveButton(false); // Hide the save button after saving
+    // Add your logic to handle saving the notification preferences
   };
 
   return (
@@ -25,7 +34,7 @@ const NotificationPreferences = () => {
         ]}
         onPress={() => handleOptionSelect("email")}
       >
-        <Text>Email</Text>
+        <Text style={styles.optionText}>Email</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -35,7 +44,7 @@ const NotificationPreferences = () => {
         ]}
         onPress={() => handleOptionSelect("sms")}
       >
-        <Text>SMS</Text>
+        <Text style={styles.optionText}>SMS</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -45,8 +54,16 @@ const NotificationPreferences = () => {
         ]}
         onPress={() => handleOptionSelect("push")}
       >
-        <Text>Push Notifications</Text>
+        <Text style={styles.optionText}>Push Notifications</Text>
       </TouchableOpacity>
+
+      {showSaveButton && (
+        <Button
+          title="Save"
+          onPress={handleSavePreferences}
+          backgroundColor="#e32f45"
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -60,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
+    color: "#e32f45",
   },
   option: {
     borderWidth: 1,
@@ -68,8 +86,15 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 12,
   },
+  optionText: {
+    color: "#e32f45",
+  },
   selectedOption: {
-    backgroundColor: "#ccc",
+    borderColor: "#e32f45",
+  },
+  buttonStyle: {
+    color: "#e32f45",
+    backgroundColor: "orange",
   },
 });
 
