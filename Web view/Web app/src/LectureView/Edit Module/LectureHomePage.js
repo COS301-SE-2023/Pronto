@@ -1,11 +1,55 @@
 import React, {useState} from "react";
 import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
-import { listCourses } from "../../graphql/queries";
+import { listCourses ,listLecturers} from "../../graphql/queries";
+import  {API,Auth} from 'aws-amplify';
 
 const LectureHomePage = () => {
 
   const [courses,setCourses]=useState([])
+  const [lecturer,setLecturer]=useState('')
+
+  const fetchCourses=async()=>{ 
+    try{
+         const email=await Auth.currentAuthenticatedUser()
+         if(email===undefined){
+           alert("Please log in")
+         }
+         else{
+          let user_email=email.email
+         const lec=await API.graphql({ 
+             query:listLecturers,
+             variables:{ 
+              filter: { 
+                email: { 
+                  eq : { 
+                    user_email
+                  }
+                }
+              }
+             }
+         }) 
+         console.log(lec)
+         const courseList= await API.graphql({
+           query:listCourses,
+                    variables: { 
+                    filter: { 
+                        lecturerId : { 
+                                        eq:lec.data.listLecturers.items[0].id
+                                        }
+                                    }
+                            },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+         })
+        console.log(courseList)
+        courseList=courseList.data.listCourses 
+        setCourses([...courseList])
+         }
+    }catch(error){
+      console.log(error)
+    }
+
+  }
 
   return (
     <div style={{ display: 'inline-flex' }}>
