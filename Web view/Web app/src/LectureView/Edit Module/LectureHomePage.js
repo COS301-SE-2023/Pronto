@@ -30,12 +30,13 @@ const LectureHomePage = () => {
              }
          }) 
          console.log(lec)
+         setLecturer(lec.data.listLecturers.item[0])
          const courseList= await API.graphql({
            query:listCourses,
                     variables: { 
                     filter: { 
                         lecturerId : { 
-                                        eq:lec.data.listLecturers.items[0].id
+                                        eq:lecturer.id
                                         }
                                     }
                             },
