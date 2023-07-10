@@ -131,7 +131,7 @@ export default function PostAccordion() {
 
           <div className = "map">
             <div style={{ height: '50vh', width: '100%' }}>
-              <GoogleMapReact
+              {/* <GoogleMapReact
                 bootstrapURLKeys={{ key: "" }}
                 defaultCenter={defaultProps.center}
                 defaultZoom={defaultProps.zoom}
@@ -143,7 +143,7 @@ export default function PostAccordion() {
                   lng={30.337844}
                   text="My Marker"
                 />
-              </GoogleMapReact>
+              </GoogleMapReact> */}
             </div>
           </div>
           <button className="post-button">Add venue</button>

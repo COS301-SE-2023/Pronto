@@ -73,6 +73,7 @@ function Login() {
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message);
+      console.log(e)
     }
     setLoading(false);
   };
