@@ -1,5 +1,6 @@
 {
-  "projectPath": "/Users/shashingounden/Desktop/Capstone/Pronto",
+  "projectPath": "C:\\Users\\user\\Documents\\GitHub\\Pronto\\MobileApp",
   "envName": "dev",
-  "defaultEditor": "vscode"
+  "defaultEditor": "vscode",
+  "noUpdateBackend": true
 }
