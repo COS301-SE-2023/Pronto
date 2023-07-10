@@ -3,11 +3,13 @@ import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
 import { listCourses ,listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
+import Modal from '@mui/material/Modal';
 
 const LectureHomePage = () => {
 
   const [courses,setCourses]=useState([])
   const [lecturer,setLecturer]=useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const fetchCourses=async()=>{ 
     try{
@@ -48,7 +50,9 @@ const LectureHomePage = () => {
         setCourses([...courseList])
          }
     }catch(error){
+      setErrorMessage(error)
       console.log(error)
+
     }
 
   }
