@@ -18,7 +18,6 @@ const NotificationPreferences = () => {
   };
 
   const handleSavePreferences = () => {
-    // Save the selectedOption to your storage or API
     setShowSaveButton(false); // Hide the save button after saving
     Alert.alert(
       "Preferences Updated",
@@ -30,51 +29,56 @@ const NotificationPreferences = () => {
         },
       ]
     );
-    // Add your logic to handle saving the notification preferences
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Notification Preferences</Text>
+      <View style={styles.content}>
+        <Text style={styles.title}>Notification Preferences</Text>
 
-      <TouchableOpacity
-        style={[
-          styles.option,
-          selectedOption === "email" && styles.selectedOption,
-        ]}
-        onPress={() => handleOptionSelect("email")}
-      >
-        <Text style={styles.optionText}>Email</Text>
-      </TouchableOpacity>
+        <Text style={styles.instructions}>
+          Select your preferred way of receiving notifications:
+        </Text>
 
-      <TouchableOpacity
-        style={[
-          styles.option,
-          selectedOption === "sms" && styles.selectedOption,
-        ]}
-        onPress={() => handleOptionSelect("sms")}
-      >
-        <Text style={styles.optionText}>SMS</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[
-          styles.option,
-          selectedOption === "push" && styles.selectedOption,
-        ]}
-        onPress={() => handleOptionSelect("push")}
-      >
-        <Text style={styles.optionText}>Push Notifications</Text>
-      </TouchableOpacity>
-
-      {showSaveButton && (
         <TouchableOpacity
-          style={styles.saveButton}
-          onPress={handleSavePreferences}
+          style={[
+            styles.option,
+            selectedOption === "email" && styles.selectedOption,
+          ]}
+          onPress={() => handleOptionSelect("email")}
         >
-          <Text style={styles.saveButtonText}>Save</Text>
+          <Text style={styles.optionText}>Email</Text>
         </TouchableOpacity>
-      )}
+
+        <TouchableOpacity
+          style={[
+            styles.option,
+            selectedOption === "sms" && styles.selectedOption,
+          ]}
+          onPress={() => handleOptionSelect("sms")}
+        >
+          <Text style={styles.optionText}>SMS</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.option,
+            selectedOption === "push" && styles.selectedOption,
+          ]}
+          onPress={() => handleOptionSelect("push")}
+        >
+          <Text style={styles.optionText}>Push Notifications</Text>
+        </TouchableOpacity>
+
+        {showSaveButton && (
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={handleSavePreferences}
+          >
+            <Text style={styles.saveButtonText}>Save</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </SafeAreaView>
   );
 };
@@ -82,13 +86,19 @@ const NotificationPreferences = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  content: {
+    width: "80%",
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
     color: "#e32f45",
+    textAlign: "center",
   },
   option: {
     borderWidth: 1,
@@ -112,6 +122,11 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  instructions: {
+    fontSize: 16,
+    marginBottom: 12,
+    textAlign: "center",
   },
 });
 
