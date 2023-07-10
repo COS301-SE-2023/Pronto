@@ -41,7 +41,7 @@ Auth.configure(config);
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [user, setUser] = useState(undefined);
+  /* const [user, setUser] = useState(undefined);
 
   const checkUser = async () => {
     try {
@@ -91,10 +91,11 @@ export default function App() {
         <ActivityIndicator color={"#e32f45"} size={"large"} />
       </View>
     );
-  }
+  } */
 
   return (
-    <NavigationContainer>
+    <NotificationPreferences></NotificationPreferences>
+    /*  <NavigationContainer>
       {user ? (
         <Tabs />
       ) : (
@@ -149,7 +150,7 @@ export default function App() {
           </Stack.Navigator>
         </>
       )}
-    </NavigationContainer>
+    </NavigationContainer>  */
 
     /* <NavigationContainer>
       <Tabs />

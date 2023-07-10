@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 
 const NotificationPreferences = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Text>Notifications</Text>
-    </View>
+    </SafeAreaView>
   );
 };
 

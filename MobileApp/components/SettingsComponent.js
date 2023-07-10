@@ -3,11 +3,15 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
 import { Auth } from "aws-amplify";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const SettingsComponent = ({ settingsOptions }) => {
   const onLogoutPressed = () => {
     Auth.signOut();
   };
+
+  const Stack = createNativeStackNavigator();
 
   return (
     <View style={{ height: "100%" }}>
@@ -64,6 +68,16 @@ const SettingsComponent = ({ settingsOptions }) => {
           </Button>
         </View>
       </ScrollView>
+
+      <Stack.Navigator>
+        <Stack.Screen
+          name="NotificationPreferences"
+          component={NotificationPreferences}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
     </View>
   );
 };

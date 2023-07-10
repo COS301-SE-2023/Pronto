@@ -1,8 +1,13 @@
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import SettingsComponent from "../../components/SettingsComponent";
+import NotificationPreferences from "../Notifications/NotificationPreferences";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const AccountSettings = ({ navigation }) => {
+
+
   const settingsOptions = [
     {
       title: "My profile",
@@ -39,6 +44,8 @@ const AccountSettings = ({ navigation }) => {
   return (
     <View>
       <SettingsComponent settingsOptions={settingsOptions} />
+
+     
     </View>
   );
 };

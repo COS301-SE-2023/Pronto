@@ -40,6 +40,7 @@ const Login = ({ navigation }) => {
     setLoading(true);
     try {
       const response = await Auth.signIn(username, password);
+
       //  navigation.navigate("Timetable");
     } catch (e) {
       Alert.alert("Sign in error", e.message);
