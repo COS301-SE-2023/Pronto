@@ -73,7 +73,13 @@ const LectureHomePage = () => {
         <a href="/imperative">
         <button className="content-button">COS132- Imperative Programming</button>
         </a>
-        
+        {  courses.map((val, key)=>{    
+            return (
+              <a href="./edit-module"> 
+                <button className="content-button">{val.coursecode} {val.coursename}</button>
+              </a>
+                                )
+                             })} 
       </main>
 
     </div>
