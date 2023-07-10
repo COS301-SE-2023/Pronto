@@ -12,6 +12,7 @@ const LectureHomePage = () => {
   const fetchCourses=async()=>{ 
     try{
          const email=await Auth.currentAuthenticatedUser()
+         console.log(email)
          if(email===undefined){
            alert("Please log in")
          }
@@ -69,10 +70,10 @@ const LectureHomePage = () => {
         <a href="./edit-module">
         <button className="content-button">COS341- Compiler Construction</button>
         </a>
-
-        <a href="/imperative">
+{/* 
+        <a href="./edit-module">
         <button className="content-button">COS132- Imperative Programming</button>
-        </a>
+        </a> */}
         {  courses.map((val, key)=>{    
             return (
               <a href="./edit-module"> 
