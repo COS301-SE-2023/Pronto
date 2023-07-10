@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-  Button,
+  Alert,
 } from "react-native";
 
 const NotificationPreferences = () => {
@@ -20,6 +20,16 @@ const NotificationPreferences = () => {
   const handleSavePreferences = () => {
     // Save the selectedOption to your storage or API
     setShowSaveButton(false); // Hide the save button after saving
+    Alert.alert(
+      "Preferences Updated",
+      `Preference successfully updated to ${selectedOption}`,
+      [
+        {
+          text: "OK",
+          onPress: () => console.log("OK Pressed"),
+        },
+      ]
+    );
     // Add your logic to handle saving the notification preferences
   };
 
@@ -58,11 +68,12 @@ const NotificationPreferences = () => {
       </TouchableOpacity>
 
       {showSaveButton && (
-        <Button
-          title="Save"
+        <TouchableOpacity
+          style={styles.saveButton}
           onPress={handleSavePreferences}
-          backgroundColor="#e32f45"
-        />
+        >
+          <Text style={styles.saveButtonText}>Save</Text>
+        </TouchableOpacity>
       )}
     </SafeAreaView>
   );
@@ -92,9 +103,15 @@ const styles = StyleSheet.create({
   selectedOption: {
     borderColor: "#e32f45",
   },
-  buttonStyle: {
-    color: "#e32f45",
-    backgroundColor: "orange",
+  saveButton: {
+    backgroundColor: "#e32f45",
+    borderRadius: 8,
+    padding: 12,
+    alignItems: "center",
+  },
+  saveButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 
