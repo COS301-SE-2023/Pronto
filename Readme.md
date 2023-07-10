@@ -1,5 +1,5 @@
 <p align = "center">
-<img src="Documentation/ReadME Resources/ImagesProntoLogo.png" alt="Alt text" title="Optional title">
+<img src="Documentation/ReadME Resources/Images/ProntoLogo.png" alt="Alt text" title="Optional title">
 </p>
 
 # Pronto
