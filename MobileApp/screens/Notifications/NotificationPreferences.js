@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -29,6 +30,8 @@ const NotificationPreferences = () => {
         },
       ]
     );
+
+    //navigate to settings page
   };
 
   return (
@@ -70,11 +73,23 @@ const NotificationPreferences = () => {
           <Text style={styles.optionText}>Push Notifications</Text>
         </TouchableOpacity>
 
-        {showSaveButton && (
+        {showSaveButton ? (
           <TouchableOpacity
             style={styles.saveButton}
             onPress={handleSavePreferences}
           >
+            <View style={styles.saveButtonContent}>
+              <Text style={styles.saveButtonText}>Save</Text>
+              <Icon
+                name="check"
+                size={20}
+                color="#fff"
+                style={styles.checkIcon}
+              />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.disabledSaveButton} disabled>
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
         )}
@@ -94,7 +109,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
     color: "#e32f45",
@@ -127,6 +142,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
     textAlign: "center",
+  },
+  saveButtonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkIcon: {
+    marginLeft: 5,
   },
 });
 
