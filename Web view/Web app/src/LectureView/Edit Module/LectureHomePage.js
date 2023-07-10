@@ -51,6 +51,7 @@ const LectureHomePage = () => {
          }
     }catch(error){
       setErrorMessage(error)
+      
       console.log(error)
 
     }
@@ -69,7 +70,7 @@ const LectureHomePage = () => {
       </nav>
 
       <main style={{ width: '900px',marginTop: '30px' }}>
-        <h1 className="moduleHead">Modules</h1>
+        <h1 className="moduleHead">Courses</h1>
 
         <a href="./edit-module">
         <button className="content-button">COS341- Compiler Construction</button>

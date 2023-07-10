@@ -1,7 +1,7 @@
 import * as React from "react";
 import "../Institution VIew/Navigation/Navigation.css";
 import logo from "../images/logo.jpg";
-import { Auth } from "aws-amplify";
+import { Auth,API } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 
 export default function LecturerNavigation() {
