@@ -60,9 +60,3 @@ Pronto is a React Native application that helps students to create their timetab
 -> Scan the QR code to run the app on your device
 -> Ensure that your network configuration is set to Private and not Public
 ```
-
-## Jest UI Testing
-
-->npm test
-Tests completed:
--> Timetable tests
