@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
 import { listCourses ,listLecturers} from "../../graphql/queries";
@@ -51,6 +51,10 @@ const LectureHomePage = () => {
 
   }
 
+  useEffect(() => {
+        fetchCourses();
+    }, [])
+    
   return (
     <div style={{ display: 'inline-flex' }}>
       <nav style={{ width: '20%' }}>
