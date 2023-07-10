@@ -1,4 +1,3 @@
-
 # Expo
 node_modules/
 .expo/
@@ -30,7 +29,6 @@ node_modules/
 .vscode
 .env
 
-
 # dependencies
 /node_modules
 
@@ -55,6 +53,7 @@ yarn-error.log*
 # Visual Studio Code
 .vscode/
 *.code-workspace
+
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -86,7 +85,6 @@ node_modules/
 *.tmp.*
 *.~*
 *.DS_Store?
-
 
 .vscode
 .env
@@ -168,6 +166,7 @@ node_modules/
 *.tmp.*
 *.~*
 *.DS_Store?
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -189,3 +188,4 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
