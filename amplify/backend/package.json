@@ -1,7 +1,8 @@
 {
-  "name": "overrides",
+  "name": "pronto-backend",
   "version": "1.0.0",
-  "description": "",
+  "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -10,13 +11,10 @@
     "test:watch:silent": "jest --watch --silent",
     "test:unit": "jest unit",
     "test:unit:watch": "jest --watch unit",
-    "test:unit:watch:silent": "jest --watch --silent unit",
-    "test:int::watch:silent": "jest --watch --silent integration"
-  },
-  "dependencies": {
-    "@aws-amplify/cli-extensibility-helper": "^3.0.0"
+    "test:unit:watch:silent": "jest --watch --silent unit"
   },
   "devDependencies": {
-    "typescript": "^4.2.4"
+    "@aws-sdk/client-cognito-identity-provider": "^3.363.0",
+    "jest": "^29.6.0"
   }
 }
