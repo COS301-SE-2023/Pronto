@@ -104,6 +104,3 @@ type Announcement @model @searchable @auth(rules: [{ allow: owner, ownerField: "
   venue: String!
   course: Course! @belongsTo(fields: ["courseId"])
 }
-
-# Failing Relations
-# There are some relations that are failing, model needs to be improved

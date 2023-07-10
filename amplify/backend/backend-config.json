@@ -1,28 +1,54 @@
 {
   "api": {
+    "AdminQueries": {
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto5f713f59"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AdminQueries7f7a03b0"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "pronto": {
       "dependsOn": [
         {
-          "attributes": ["UserPoolId"],
+          "attributes": [
+            "UserPoolId"
+          ],
           "category": "auth",
-          "resourceName": "prontoAuth"
+          "resourceName": "pronto5f713f59"
         }
       ],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authprontoAuth"
-              }
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2023-08-02T15:29:59.974Z",
+                "apiKeyExpirationDays": 30,
+                "description": "GraphQL API Key"
+              },
+              "authenticationType": "API_KEY"
             }
           ],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authpronto5f713f59"
+            }
           }
         }
       },
@@ -31,32 +57,49 @@
     }
   },
   "auth": {
-    "prontoAuth": {
+    "pronto5f713f59": {
       "customAuth": false,
       "dependsOn": [
         {
-          "attributes": ["Arn", "Name"],
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
           "category": "function",
-          "resourceName": "prontoAuthPostConfirmation",
+          "resourceName": "pronto5f713f59PostAuthentication",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup",
           "triggerProvider": "Cognito"
         }
       ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
-        "mfaTypes": ["SMS"],
+        "mfaTypes": [
+          "SMS"
+        ],
         "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [
-            "REQUIRES_LOWERCASE",
-            "REQUIRES_NUMBERS",
-            "REQUIRES_SYMBOLS",
-            "REQUIRES_UPPERCASE"
-          ],
+          "passwordPolicyCharacters": [],
           "passwordPolicyMinLength": 8
         },
-        "signupAttributes": ["ADDRESS", "EMAIL", "FAMILY_NAME", "NAME"],
+        "signupAttributes": [
+          "EMAIL",
+          "FAMILY_NAME",
+          "NAME"
+        ],
         "socialProviders": [],
-        "usernameAttributes": ["EMAIL"],
-        "verificationMechanisms": ["EMAIL"]
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
@@ -64,9 +107,14 @@
     "userPoolGroups": {
       "dependsOn": [
         {
-          "attributes": ["UserPoolId", "AppClientIDWeb", "AppClientID", "IdentityPoolId"],
+          "attributes": [
+            "UserPoolId",
+            "AppClientIDWeb",
+            "AppClientID",
+            "IdentityPoolId"
+          ],
           "category": "auth",
-          "resourceName": "prontoAuth"
+          "resourceName": "pronto5f713f59"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -74,15 +122,233 @@
     }
   },
   "function": {
-    "prontoAuthPostConfirmation": {
+    "AdminQueries7f7a03b0": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto5f713f59"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "pronto5f713f59PostAuthentication": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "pronto5f713f59PreSignup": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
+  "parameters": {
+    "AMPLIFY_function_AdminQueries7f7a03b0_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries7f7a03b0"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries7f7a03b0_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries7f7a03b0"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_appClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_appClientIdWeb": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_lecturersGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_studentsGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_appClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_appClientIdWeb": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_lecturersGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_studentsGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreConfirmation"
+        }
+      ]
+    }
+  },
   "storage": {
-    "s3prontoblobestore": {
-      "dependsOn": [],
+    "prontoBlobeStore": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto5f713f59"
+        },
+        {
+          "attributes": [
+            "adminUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "lecturerUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "studentUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "S3"
     }

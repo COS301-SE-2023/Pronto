@@ -1,5 +1,10 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
+    "AdminQueries": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "pronto": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
@@ -7,7 +12,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "auth": {
-    "prontoAuth": {
+    "pronto5f713f59": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -17,20 +22,27 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolName": "string"
     },
     "userPoolGroups": {
-      "adminUserPoolGroupGroupRole": "string",
-      "lecturerUserPoolGroupGroupRole": "string",
-      "studentUserPoolGroupGroupRole": "string"
+      "adminUserGroupGroupRole": "string",
+      "lecturerUserGroupGroupRole": "string",
+      "studentUserGroupGroupRole": "string"
     }
   },
   "function": {
-    "prontoAuthPostConfirmation": {
+    "AdminQueries7f7a03b0": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "prontoAuthPreConfirmation": {
+    "pronto5f713f59PostAuthentication": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "pronto5f713f59PreSignup": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
@@ -39,7 +51,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "s3prontoblobestore": {
+    "prontoBlobeStore": {
       "BucketName": "string",
       "Region": "string"
     }
