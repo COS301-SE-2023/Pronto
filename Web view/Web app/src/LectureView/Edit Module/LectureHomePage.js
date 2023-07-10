@@ -1,8 +1,12 @@
 import React, {useState} from "react";
 import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
+import { listCourses } from "../../graphql/queries";
 
 const LectureHomePage = () => {
+
+  const [courses,setCourses]=useState([])
+
   return (
     <div style={{ display: 'inline-flex' }}>
       <nav style={{ width: '20%' }}>
