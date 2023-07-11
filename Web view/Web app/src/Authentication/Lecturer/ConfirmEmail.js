@@ -22,7 +22,7 @@ function ConfirmEmail() {
     }
     setLoading(true);
     try {
-      await Auth.confirmSignUp(email, code);
+      await Auth.confirmSignUp(email, code, { role: "Lecturer" });
       setError("");
       navigate("/lecturer-login");
     } catch (e) {
