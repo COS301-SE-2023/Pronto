@@ -11,7 +11,7 @@ import { createAnnouncement,updateAnnouncement } from '../../graphql/mutations';
 
 export default function PostAccordion() {
   const [expanded, setExpanded] = React.useState(false);
-
+  const[announcement,setAnnouncement]=React.useState("")
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -28,6 +28,13 @@ export default function PostAccordion() {
     return <div>Loading</div>
   }
 
+  const handleSubmit = async()=>{ 
+        try{
+
+        }catch(error){ 
+          
+        }
+  }
 
   return (
     <div>
@@ -45,7 +52,7 @@ export default function PostAccordion() {
          
         </AccordionSummary>
         <AccordionDetails>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
             <div className="col-sm-10">
@@ -84,7 +91,7 @@ export default function PostAccordion() {
           
         </AccordionSummary>
         <AccordionDetails>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
             <div className="col-sm-10">
