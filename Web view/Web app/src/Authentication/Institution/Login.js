@@ -65,7 +65,6 @@ function Login() {
           email: email,
           name: name,
           family_name: "",
-         // address: "",
         },
         clientMetadata: {
           role: "Admin",

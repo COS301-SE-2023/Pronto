@@ -63,7 +63,6 @@ function Login() {
           email: email,
           name: name,
           family_name: surname,
-          address: "",
         },
         clientMetadata: {
           role: "Lecture",
