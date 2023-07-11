@@ -39,7 +39,9 @@ const Login = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await Auth.signIn(username, password);
+      const response = await Auth.signIn(username, password, {
+        role: "Student",
+      });
 
       //  navigation.navigate("Timetable");
     } catch (e) {

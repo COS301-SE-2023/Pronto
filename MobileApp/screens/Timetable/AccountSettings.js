@@ -1,12 +1,10 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View } from "react-native";
 import SettingsComponent from "../../components/SettingsComponent";
-import NotificationPreferences from "../Notifications/NotificationPreferences";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
-const AccountSettings = ({ navigation }) => {
-
+const AccountSettings = () => {
+  const navigation = useNavigation();
 
   const settingsOptions = [
     {
@@ -17,7 +15,7 @@ const AccountSettings = ({ navigation }) => {
     {
       title: "Notification Preferences",
       subTitle: "Change your notification preferences",
-      onPress: () => navigation.navigate("NotificationPreferences"),
+      onPress: () => navigation.navigate("Notification Preferences"),
     },
     {
       title: "Security",
@@ -44,8 +42,6 @@ const AccountSettings = ({ navigation }) => {
   return (
     <View>
       <SettingsComponent settingsOptions={settingsOptions} />
-
-     
     </View>
   );
 };

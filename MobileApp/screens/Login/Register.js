@@ -94,12 +94,12 @@ const Register = ({ navigation }) => {
 
     setLoading(true);
     try {
-      navigation.navigate("ConfirmEmail", { email });
+      //  navigation.navigate("ConfirmEmail", { email });
       await Auth.signUp({
         username: email,
         password,
         attributes: { email, family_name: surname, name },
-        clientMetadata: { ROLES: "Student" },
+        clientMetadata: { role: "Students" },
       });
 
       navigation.navigate("ConfirmEmail", { email });

@@ -4,6 +4,7 @@ import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
 import { Auth } from "aws-amplify";
 import { NavigationContainer } from "@react-navigation/native";
+import NotificationPreferences from "../screens/Notifications/NotificationPreferences";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const SettingsComponent = ({ settingsOptions }) => {
@@ -68,16 +69,6 @@ const SettingsComponent = ({ settingsOptions }) => {
           </Button>
         </View>
       </ScrollView>
-
-      <Stack.Navigator>
-        <Stack.Screen
-          name="NotificationPreferences"
-          component={NotificationPreferences}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
     </View>
   );
 };
