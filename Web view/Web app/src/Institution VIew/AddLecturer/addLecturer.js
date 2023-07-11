@@ -2,9 +2,8 @@ import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listCourses,listInstitutions} from "../../graphql/queries";
-import  {API} from 'aws-amplify';
-import { Auth } from "aws-amplify";
-import AddModal from './addCourse'
+import  {API,Auth} from 'aws-amplify';
+import AddModal from './addCourse';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 
 const AddLecturer = () => {
@@ -195,11 +194,12 @@ const AddLecturer = () => {
                             }
                         }
                     })
+                    console.log(institution)
                     setInstitutionId(institution.data.listInstitutions.items[0].id)
                 }
 
             //Get lecturers
-            let user= await Auth.currentAuthenticatedUser()
+            //let user= await Auth.currentAuthenticatedUser()
             let lecturerslist=await API.graphql(
                 {
                 query:lecturersByInstitutionId, 
