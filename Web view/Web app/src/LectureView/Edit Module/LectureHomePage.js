@@ -3,7 +3,7 @@ import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
 import { listCourses ,listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
-import Modal from '@mui/material/Modal';
+import {ErrorModal} from '../../ErrorModal';
 
 const LectureHomePage = () => {
 
@@ -51,7 +51,7 @@ const LectureHomePage = () => {
          }
     }catch(error){
       setErrorMessage(error)
-      
+      ErrorModal(errorMessage)
       console.log(error)
 
     }

@@ -15,7 +15,7 @@ const style = {
 };
 
 
-export default function AddModal(errorMessage) {
+export default function ErrorModal(errorMessage) {
 
   const [open, setOpen] = useState(false);
 
