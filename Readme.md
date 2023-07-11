@@ -18,11 +18,12 @@
 Pronto is a React Native application that helps students to create their timetables in an easy and convenient way. They will also be able to receive reminders, test date and due assignment updates from lecturers. The navigation feature will also make directions to venue halls much easier for pupils that are unfamiliar to the campus.
 
 ## Documentation
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%202%20documents/Demo2%20SRS.pdf">🧾 SRS Document</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Architectural%20Requirements.pdf">🧾 Architectural Requirement</a></div><br>
 
-<div><a href="https://drive.google.com/file/d/1fCV8T3spQrg4OAzxC2IXdsMGs2QsVS-M/view?usp=drive_link">🧾 Demo 1  SRS Document</a></div>
-<br>
-<div><a href="https://drive.google.com/file/d/11U8h3t-zTHTeaVu3NkFpXoySvkSc93KQ/view?usp=drive_link">🧾 Architectural requirement</a></div>
-<div><a href="https://drive.google.com/file/d/1amTCJujSBPRpWBwBWlAFIo4oQRSCK8WX/view?usp=drive_link">🧾 Demo 2 SRS Document</a></div>
+
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%201%20documents/Demo%201%20SRS.pdf">🧾 Demo 1: SRS Document</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%202%20documents/Demo2%20SRS.pdf">🧾 Demo 2: SRS Document</a></div>
 
 ## Demo Recordings
 
