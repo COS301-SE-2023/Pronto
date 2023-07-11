@@ -15,7 +15,7 @@ const style = {
 };
 
 
-export default function ErrorModal(errorMessage) {
+export default function AddModal(errorMessage) {
 
   const [open, setOpen] = useState(false);
 
@@ -26,15 +26,17 @@ export default function ErrorModal(errorMessage) {
   const handleClose= async()=>{ 
     setOpen(false)
   }
-  <Modal
+
+  return (
+    <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      >
+    >
         <Box sx={style}>
             {errorMessage}
         </Box>
     </Modal>     
-
+  )
 }
