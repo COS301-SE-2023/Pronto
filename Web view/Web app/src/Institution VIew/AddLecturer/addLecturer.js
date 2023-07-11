@@ -28,7 +28,8 @@ const AddLecturer = () => {
             courseList=await findCourses(courses)
             
             let lecturer={
-                institutionId:user.username, 
+                //institutionId:user.username, 
+                institutionId:institutionId,
                 firstname:firstName,
                 lastname:lastName,
                 userRole:"lecturer",
@@ -53,7 +54,8 @@ const AddLecturer = () => {
                   
              }catch(e){    
                   alert("Something went wrong")
-              }    
+                   console.log(e)
+                }    
 
             //Reset state
             setFirstName("")
@@ -180,21 +182,21 @@ const AddLecturer = () => {
         
         try{
              //Fetch institution via domain of user email
-            //  if(institutionId===""){
-            //  
-            //     let domain=await Auth.currentAuthenticatedUser().attributes.email.split("@")[1]
-            //         let institution=await API.graphql({
-            //             query:listInstitutions,
-            //             variables:{
-            //                 filter:{
-            //                     domains:{
-            //                         contains:domain
-            //                     }
-            //                 }
-            //             }
-            //         })
-            //         setInstitutionId(institution.data.listInstitutions.items[0].id)
-            //     }
+             if(institutionId===""){
+             
+                let domain=await Auth.currentAuthenticatedUser().attributes.email.split("@")[1]
+                    let institution=await API.graphql({
+                        query:listInstitutions,
+                        variables:{
+                            filter:{
+                                domains:{
+                                    contains:domain
+                                }
+                            }
+                        }
+                    })
+                    setInstitutionId(institution.data.listInstitutions.items[0].id)
+                }
 
             //Get lecturers
             let user= await Auth.currentAuthenticatedUser()
@@ -202,12 +204,14 @@ const AddLecturer = () => {
                 {
                 query:lecturersByInstitutionId, 
                 variables:{ 
-                            institutionId:user.username,
+                            //institutionId:user.username,
+                            institutionId:institutionId,
                             limit: 50
                     },
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
-           ) 
+           )
+           console.log(lecturerslist) 
            lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
            lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
            
@@ -230,6 +234,7 @@ const AddLecturer = () => {
         }
         catch(error){ 
             alert("could not fetch lecturer information")
+            console.log(error)
         }
     }
     
@@ -242,7 +247,8 @@ const AddLecturer = () => {
                     let search= await API.graphql({
                         query:lecturersByInstitutionId,
                         variables:  { 
-                           institutionId : institution.username,  
+                            //institutionId : institution.username,  
+                            institutionId:institutionId,
                             filter : { 
                                 firstname: { 
                                      eq: searchValue 
@@ -257,8 +263,9 @@ const AddLecturer = () => {
                     let search= await API.graphql({
                         query:lecturersByInstitutionId,
                         variables:  { 
-                               institutionId : institution.username,  
-                                filter : { 
+                               //institutionId : institution.username,  
+                               institutionId:institutionId, 
+                               filter : { 
                                     lastname: { 
                                          eq: searchValue 
                                     } 
@@ -272,8 +279,9 @@ const AddLecturer = () => {
                     let search= await API.graphql({
                     query:lecturersByInstitutionId,
                     variables:  { 
-                               institutionId : institution.username,  
-                                filter : { 
+                               //institutionId : institution.username,  
+                               institutionId:institutionId, 
+                               filter : { 
                                     email: { 
                                          eq: searchValue 
                                     } 

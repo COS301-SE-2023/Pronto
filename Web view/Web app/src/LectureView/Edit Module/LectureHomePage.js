@@ -3,8 +3,8 @@ import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
 import { listCourses ,listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
-import {ErrorModal} from '../../ErrorModal';
-
+import {AddModal} from '../../ErrorModal'
+import { Modal,Typography,Box } from "@mui/material";
 const LectureHomePage = () => {
 
   const [courses,setCourses]=useState([])
@@ -51,12 +51,14 @@ const LectureHomePage = () => {
          }
     }catch(error){
       setErrorMessage(error)
-      ErrorModal(errorMessage)
       console.log(error)
-
+      return ( 
+          <AddModal error={errorMessage}> 
+          </AddModal>     
+      )
     }
-
   }
+  
 
   useEffect(() => {
         fetchCourses();

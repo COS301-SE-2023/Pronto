@@ -15,7 +15,7 @@ const style = {
 };
 
 
-export default function AddModal(errorMessage) {
+export function AddModal(errorMessage) {
 
   const [open, setOpen] = useState(false);
 
@@ -29,7 +29,7 @@ export default function AddModal(errorMessage) {
 
   return (
     <Modal
-        open={open}
+        open={true}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
