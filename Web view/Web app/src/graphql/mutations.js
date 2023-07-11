@@ -193,3 +193,36 @@ export const updateCourse=`mutation UpdateCourse(
     _lastChangedAt
   }
 }`
+export const createAnnouncement=`mutation CreateAnnouncement(
+  $input: CreateAnnouncementInput!
+  $condition: ModelAnnouncementConditionInput
+) {
+  createAnnouncement(input: $input, condition: $condition) {
+    id
+    courseId
+    description
+    start
+    end
+    date
+    venue
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+`
