@@ -1,8 +1,11 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View } from "react-native";
 import SettingsComponent from "../../components/SettingsComponent";
+import { useNavigation } from "@react-navigation/native";
 
-const AccountSettings = ({ navigation }) => {
+const AccountSettings = () => {
+  const navigation = useNavigation();
+
   const settingsOptions = [
     {
       title: "My profile",
@@ -12,7 +15,7 @@ const AccountSettings = ({ navigation }) => {
     {
       title: "Notification Preferences",
       subTitle: "Change your notification preferences",
-      onPress: () => navigation.navigate("NotificationPreferences"),
+      onPress: () => navigation.navigate("Notification Preferences"),
     },
     {
       title: "Security",

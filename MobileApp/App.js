@@ -7,6 +7,7 @@ import Register from "./screens/Login/Register";
 import Login from "./screens/Login/Login";
 import ResetPassword from "./screens/Login/ResetPassword";
 import VerifyCode from "./screens/Login/VerifyCode";
+import AccountSettings from "./screens/Timetable/AccountSettings";
 import ConfirmEmail from "./screens/Login/ConfirmEmail";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, Text } from "react-native";
@@ -95,72 +96,25 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {user ? (
-        <Tabs />
-      ) : (
+      <Stack.Navigator>
         <>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Welcome"
-              component={WelcomeScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-
-            <Stack.Screen
-              name="Register"
-              component={Register}
-              options={{
-                headerShown: false,
-              }}
-            />
-
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{
-                headerShown: false,
-              }}
-            />
-
-            <Stack.Screen
-              name="ResetPassword"
-              component={ResetPassword}
-              options={{
-                headerShown: false,
-              }}
-            />
-
-            <Stack.Screen
-              name="VerifyCode"
-              component={VerifyCode}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="ConfirmEmail"
-              component={ConfirmEmail}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </Stack.Navigator>
+          <Stack.Screen
+            name="Tabs"
+            component={Tabs}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AccountSettings"
+            component={AccountSettings}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Notification Preferences"
+            component={NotificationPreferences}
+            options={{ headerShown: true }}
+          />
         </>
-      )}
+      </Stack.Navigator>
     </NavigationContainer>
-
-    /* <NavigationContainer>
-      <Tabs />
-
-      <Stack.Screen
-        name="NotificationPreferences"
-        component={NotificationPreferences}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </NavigationContainer> */
   );
 }
