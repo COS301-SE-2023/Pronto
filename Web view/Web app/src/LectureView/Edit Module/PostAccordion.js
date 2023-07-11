@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Autocomplete, GoogleMap, Marker, useJsApiLoader} from '@react-google-maps/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import { createAnnouncement } from '../../graphql/mutations';
+import { createAnnouncement,updateAnnouncement } from '../../graphql/mutations';
 
 export default function PostAccordion() {
   const [expanded, setExpanded] = React.useState(false);
