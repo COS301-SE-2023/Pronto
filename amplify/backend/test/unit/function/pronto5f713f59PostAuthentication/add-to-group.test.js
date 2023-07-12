@@ -73,6 +73,23 @@ describe("input validation", () => {
       /Unrecognised user pool app client ID=/
     );
   });
+
+  test("show throw: The App is reserved for STUDENTS only...", async () => {
+    const studentRequestWithWrongRole = JSON.parse(
+      JSON.stringify(studentsEvent)
+    );
+    studentRequestWithWrongRole.request.clientMetadata.role = "Lecturer";
+    await expect(
+      addToGroup.handler(studentRequestWithWrongRole)
+    ).rejects.toThrow(/The App is reserved for STUDENTS only/);
+  });
+  test("show throw: The Web App is reserved for ADMINs or LECTURERs only...", async () => {
+    const adminRequestWithWrongRole = JSON.parse(JSON.stringify(adminEvent));
+    adminRequestWithWrongRole.request.clientMetadata.role = "Student";
+    await expect(addToGroup.handler(adminRequestWithWrongRole)).rejects.toThrow(
+      /The Web App is reserved for ADMINs or LECTURERs only/
+    );
+  });
 });
 
 describe("add to group", () => {
