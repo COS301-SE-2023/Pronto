@@ -15,16 +15,15 @@ import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
 
+Auth.configure(config);
+
 Amplify.configure({
-  //  aws_user_pools_app_client_id: "67lg7el40kvcb1rkrjv8ghdo5h",
   Auth: {
     region: config.REGION,
     userPoolId: config.USER_POOL_ID,
     userPoolWebClientId: config.USER_POOL_APP_CLIENT_ID,
   },
 });
-
-Auth.configure(config);
 
 /* Amplify.configure({
   Auth: {
