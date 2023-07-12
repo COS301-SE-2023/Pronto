@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse} from "../../graphql/mutations"; 
+import { createLecturer, deleteLecturer, updateCourse,createAdmin} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listCourses,listInstitutions} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
@@ -24,36 +24,36 @@ const AddLecturer = () => {
         if(!isModalOpened){
             let user=await Auth.currentAuthenticatedUser() 
             let courseList=[]
-            courseList=await findCourses(courses)
+            // courseList=await findCourses(courses)
             
-            let lecturer={
-                //institutionId:user.username, 
-                institutionId:institutionId,
-                firstname:firstName,
-                lastname:lastName,
-                userRole:"lecturer",
-                email:email,
-            }
+            // let lecturer={
+            //     //institutionId:user.username, 
+            //     institutionId:institutionId,
+            //     firstname:firstName,
+            //     lastname:lastName,
+            //     userRole:"lecturer",
+            //     email:email,
+            // }
 
-            try{   
-                let mutation=await API.graphql({
-                    query: createLecturer,
-                    variables:{input:lecturer},
-                    authMode:'AMAZON_COGNITO_USER_POOLS',
-                    })
+             try{   
+            //     let mutation=await API.graphql({
+            //         query: createLecturer,
+            //         variables:{input:lecturer},
+            //         authMode:'AMAZON_COGNITO_USER_POOLS',
+            //         })
       
-                lecturer=mutation.data.createLecturer
-                lecturer.courses=[]
-                lecturers.push(mutation.data.createLecturer)
+            //     lecturer=mutation.data.createLecturer
+            //     lecturer.courses=[]
+            //     lecturers.push(mutation.data.createLecturer)
                   
-                //Add lecturer to courses
-                await addCourses(lecturer,courseList)
-                if(lecturers.length<19)
-                    setLecturers(lecturers)       
-                  
+            //     //Add lecturer to courses
+            //     await addCourses(lecturer,courseList)
+            //     if(lecturers.length<19)
+            //         setLecturers(lecturers)
+
              }catch(e){    
                   alert("Something went wrong")
-                   console.log(e)
+                  // console.error(e)
                 }    
 
             //Reset state
@@ -181,22 +181,28 @@ const AddLecturer = () => {
         
         try{
              //Fetch institution via domain of user email
+            
              if(institutionId===""){
-             
-                let domain=await Auth.currentAuthenticatedUser().attributes.email.split("@")[1]
-                    let institution=await API.graphql({
-                        query:listInstitutions,
-                        variables:{
-                            filter:{
-                                domains:{
-                                    contains:domain
-                                }
+                let user=await Auth.currentAuthenticatedUser()
+                let domain=user.attributes.email.split("@")[1]
+                let institution=await API.graphql({
+                    query:listInstitutions,
+                    variables:{
+                        filter:{
+                            domains:{
+                                contains:domain
                             }
                         }
-                    })
-                    console.log(institution)
-                    setInstitutionId(institution.data.listInstitutions.items[0].id)
+                     },
+                    authMode:'AMAZON_COGNITO_USER_POOLS',
+                })
+                console.log(domain)
+                console.log(institution)
+                if(institution.data.listInstitutions.items.length===0){
+                    throw new Error("No Institution found that matches the given domain"+ domain+".Please contact the developers for further assistance")
                 }
+                setInstitutionId(institution.data.listInstitutions.items[0].id)
+            }
 
             //Get lecturers
             //let user= await Auth.currentAuthenticatedUser()
@@ -213,7 +219,7 @@ const AddLecturer = () => {
            )
            console.log(lecturerslist) 
            lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
-           lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
+           //lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
            
            //Get courses
            for(let i=0;i<lecturerslist.length;i++){   
@@ -233,8 +239,9 @@ const AddLecturer = () => {
             setLecturers(lecturerslist)
         }
         catch(error){ 
-            alert("could not fetch lecturer information")
-            console.log(error)
+             
+            alert(error.message)
+            //console.error(error)
         }
     }
     

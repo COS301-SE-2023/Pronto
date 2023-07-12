@@ -258,3 +258,36 @@ export const updateAnnouncement=`mutation UpdateAnnouncement(
     _lastChangedAt
   }
 }`
+export const createAdmin=`mutation CreateAdmin(
+  $input: CreateAdminInput!
+  $condition: ModelAdminConditionInput
+) {
+  createAdmin(input: $input, condition: $condition) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+`

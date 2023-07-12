@@ -94,12 +94,8 @@ export const listInstitutions=`query ListInstitutions(
       adminId
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     nextToken
-    startedAt
   }
 }`
 export const getAdmin=`query GetAdmin($id: ID!) {
