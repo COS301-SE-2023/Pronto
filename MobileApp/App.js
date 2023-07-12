@@ -15,6 +15,8 @@ import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
 
+Auth.configure(config);
+
 Amplify.configure({
   Auth: {
     region: config.REGION,
@@ -22,8 +24,6 @@ Amplify.configure({
     userPoolWebClientId: config.USER_POOL_APP_CLIENT_ID,
   },
 });
-
-Auth.configure(config);
 
 /* Amplify.configure({
   Auth: {
