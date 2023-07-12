@@ -25,7 +25,6 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  var address = "";
 
   //validate email input sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -99,8 +98,8 @@ const Register = ({ navigation }) => {
       await Auth.signUp({
         username: email,
         password,
-        attributes: { address, email, family_name: surname, name },
-        clientMetadata: { ROLES: "Student" },
+        attributes: { email, family_name: surname, name },
+        clientMetadata: { role: "Student" },
       });
 
       navigation.navigate("ConfirmEmail", { email });
