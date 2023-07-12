@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse,createAdmin} from "../../graphql/mutations"; 
+import { createLecturer, deleteLecturer,updateAdmin,createCourse, updateCourse,createAdmin,createInstitution, updateInstitution} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listCourses,listInstitutions} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
@@ -16,7 +16,7 @@ const AddLecturer = () => {
     const [lecturers ,setLecturers]= useState([])
     const[isModalOpened,setIsModalOpened]=useState(false)
     const[searchIcon,setSearchIcon]=useState(false)
-    const[institutionId,setInstitutionId]=useState("")
+    const[institution,setInstitution]=useState("")
 
     const handleAdd=  async(event) => { 
         event.preventDefault()
@@ -26,34 +26,45 @@ const AddLecturer = () => {
             let courseList=[]
             // courseList=await findCourses(courses)
             
-            // let lecturer={
-            //     //institutionId:user.username, 
-            //     institutionId:institutionId,
-            //     firstname:firstName,
-            //     lastname:lastName,
-            //     userRole:"lecturer",
-            //     email:email,
-            // }
+            let lecturer={
+                institutionId:institution.id,
+                firstname:firstName,
+                lastname:lastName,
+                userRole:"Lecture",
+                email:email,
+            }
 
              try{   
-            //     let mutation=await API.graphql({
-            //         query: createLecturer,
-            //         variables:{input:lecturer},
-            //         authMode:'AMAZON_COGNITO_USER_POOLS',
-            //         })
+                
+                let mutation=await API.graphql({
+                    query: createLecturer,
+                    variables:{input:lecturer},
+                    authMode:'AMAZON_COGNITO_USER_POOLS',
+                    })
       
-            //     lecturer=mutation.data.createLecturer
+                  console.log(mutation)
+                 lecturer=mutation.data.createLecturer
             //     lecturer.courses=[]
-            //     lecturers.push(mutation.data.createLecturer)
+                 lecturers.push(mutation.data.createLecturer)
                   
             //     //Add lecturer to courses
             //     await addCourses(lecturer,courseList)
             //     if(lecturers.length<19)
             //         setLecturers(lecturers)
 
-             }catch(e){    
-                  alert("Something went wrong")
-                  // console.error(e)
+             }catch(error){    
+
+                console.error(error)
+                try{
+                    if(error.errors[0].errorType==="Unathorized"){
+                        alert("You are not authorised to perform this task.Please log out and log in again") 
+                      //  console.error(error)
+                    }
+                }
+                 catch(e) { 
+                    alert("Failed to process your request")
+                    //console.error(e) 
+                 }
                 }    
 
             //Reset state
@@ -182,45 +193,49 @@ const AddLecturer = () => {
         try{
              //Fetch institution via domain of user email
             
-             if(institutionId===""){
-                let user=await Auth.currentAuthenticatedUser()
-                let domain=user.attributes.email.split("@")[1]
-                let institution=await API.graphql({
-                    query:listInstitutions,
-                    variables:{
-                        filter:{
-                            domains:{
-                                contains:domain
-                            }
+             
+            let user=await Auth.currentAuthenticatedUser()
+            let domain=user.attributes.email.split("@")[1]
+            let institution=await API.graphql({
+                query:listInstitutions,
+                variables:{
+                    filter:{
+                        domains:{
+                            contains:domain
                         }
-                     },
+                    }
+                },
                     authMode:'AMAZON_COGNITO_USER_POOLS',
-                })
-                console.log(domain)
-                console.log(institution)
-                if(institution.data.listInstitutions.items.length===0){
-                    throw new Error("No Institution found that matches the given domain"+ domain+".Please contact the developers for further assistance")
-                }
-                setInstitutionId(institution.data.listInstitutions.items[0].id)
+            })
+                //console.log(domain)
+                //console.log(institution)
+            if(institution.data.listInstitutions.items.length===0){
+                throw new Error("No Institution found that matches the given domain"+ domain+".Please contact the developers for further assistance")
             }
+            institution=institution.data.listInstitutions.items[0]
+                //console.log(institution)
+            setInstitution(institution)
+            
+            //console.log(institution)
 
             //Get lecturers
             //let user= await Auth.currentAuthenticatedUser()
+            console.log(institution)
             let lecturerslist=await API.graphql(
                 {
                 query:lecturersByInstitutionId, 
                 variables:{ 
                             //institutionId:user.username,
-                            institutionId:institutionId,
+                            institutionId:institution.id,
                             limit: 50
                     },
                 authMode:'AMAZON_COGNITO_USER_POOLS',
                 }
            )
-           console.log(lecturerslist) 
+           console.log(lecturerslist)  
            lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
            //lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
-           
+          
            //Get courses
            for(let i=0;i<lecturerslist.length;i++){   
                 let course=await API.graphql({
@@ -235,13 +250,13 @@ const AddLecturer = () => {
                     authMode:"AMAZON_COGNITO_USER_POOLS"
                 })        
                lecturerslist[i].courses=course.data.listCourses.items
+               console.log(course)
             }        
             setLecturers(lecturerslist)
         }
-        catch(error){ 
-             
-            alert(error.message)
-            //console.error(error)
+        catch(error){   
+            //alert(error.message)
+            console.error(error)
         }
     }
     
@@ -255,7 +270,7 @@ const AddLecturer = () => {
                         query:lecturersByInstitutionId,
                         variables:  { 
                             //institutionId : institution.username,  
-                            institutionId:institutionId,
+                            institutionId:institution.id,
                             filter : { 
                                 firstname: { 
                                      eq: searchValue 
@@ -271,7 +286,7 @@ const AddLecturer = () => {
                         query:lecturersByInstitutionId,
                         variables:  { 
                                //institutionId : institution.username,  
-                               institutionId:institutionId, 
+                               institutionId:institution.id, 
                                filter : { 
                                     lastname: { 
                                          eq: searchValue 
@@ -287,7 +302,7 @@ const AddLecturer = () => {
                     query:lecturersByInstitutionId,
                     variables:  { 
                                //institutionId : institution.username,  
-                               institutionId:institutionId, 
+                               institutionId:institution.id, 
                                filter : { 
                                     email: { 
                                          eq: searchValue 

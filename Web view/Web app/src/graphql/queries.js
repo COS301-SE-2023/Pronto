@@ -14,13 +14,9 @@ export const listLecturers=`query ListLecturers(
       email
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
     nextToken
-    startedAt
   }
 }`
 
@@ -46,29 +42,20 @@ export const getInstitution=`query GetInstitution($id: ID!) {
       email
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
     adminId
     courses {
       nextToken
-      startedAt
     }
     students {
       nextToken
-      startedAt
     }
     lecturer {
       nextToken
-      startedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 `
@@ -121,15 +108,9 @@ export const getAdmin=`query GetAdmin($id: ID!) {
       adminId
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
     owner
   }
 }`;
@@ -157,17 +138,12 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
       email
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
     nextToken
-    startedAt
   }
 }
 `
-
 
 export const listCourses=`query ListCourses(
   $filter: ModelCourseFilterInput
@@ -180,15 +156,10 @@ export const listCourses=`query ListCourses(
       institutionId
       lecturerId
       coursecode
-      coursename
       semester
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     nextToken
-    startedAt
   }
 }`
