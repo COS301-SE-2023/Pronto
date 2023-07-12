@@ -44,7 +44,7 @@
           "lecturersGroupName": "lecturerUserPoolGroup",
           "studentsGroupName": "studentUserPoolGroup",
           "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
-          "s3Key": "amplify-builds/pronto5f713f59PostAuthentication-4361394454374274524b-build.zip"
+          "s3Key": "amplify-builds/pronto5f713f59PostAuthentication-49546366487a45785157-build.zip"
         },
         "AdminQueries7f7a03b0": {
           "deploymentBucketName": "amplify-pronto-dev-163054-deployment",

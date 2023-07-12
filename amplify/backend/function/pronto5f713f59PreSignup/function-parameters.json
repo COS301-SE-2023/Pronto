@@ -12,5 +12,15 @@
   "triggerTemplate": "PreSignup.json.ejs",
   "triggerEventPath": "PreSignup.event.json",
   "roleName": "pronto5f713f59PreSignup",
-  "skipEdit": true
+  "skipEdit": true,
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "lecturersGroupName",
+      "environmentVariableName": "LecturersGroupName"
+    },
+    {
+      "cloudFormationParameterName": "adminGroupName",
+      "environmentVariableName": "AdminGroupName"
+    }
+  ]
 }
