@@ -13,24 +13,23 @@ const LectureHomePage = () => {
 
   const fetchCourses=async()=>{ 
     try{
-         const email=await Auth.currentAuthenticatedUser()
-         console.log(email)
-         if(email===undefined){
+         const user=await Auth.currentAuthenticatedUser()
+         console.log(user)
+         if(user===undefined){
            alert("Please log in")
          }
          else{
-          let user_email=email.email
-         const lec=await API.graphql({ 
+          let email=user.attributes.email
+          const lec=await API.graphql({ 
              query:listLecturers,
              variables:{ 
               filter: { 
                 email: { 
-                  eq : { 
-                    user_email
-                  }
+                  eq : email
                 }
               }
-             }
+             },
+             authMode:"AMAZON_COGNITO_USER_POOLS",
          }) 
          console.log(lec)
          setLecturer(lec.data.listLecturers.item[0])
@@ -43,7 +42,7 @@ const LectureHomePage = () => {
                                         }
                                     }
                             },
-                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                    authMode:"AMAZON_COGNITO_USER_POOLS",
          })
         console.log(courseList)
         courseList=courseList.data.listCourses 

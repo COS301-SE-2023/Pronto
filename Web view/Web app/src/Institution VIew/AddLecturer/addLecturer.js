@@ -193,7 +193,6 @@ const AddLecturer = () => {
         try{
              //Fetch institution via domain of user email
             
-             
             let user=await Auth.currentAuthenticatedUser()
             let domain=user.attributes.email.split("@")[1]
             let institution=await API.graphql({
