@@ -12,7 +12,6 @@ import {
 import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-import { Amplify } from "aws-amplify";
 
 let studentUniversity = "UniversityOfPretoria";
 

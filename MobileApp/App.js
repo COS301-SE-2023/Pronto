@@ -17,13 +17,7 @@ import config from "./src/aws-exports";
 
 Auth.configure(config);
 
-Amplify.configure({
-  Auth: {
-    region: config.REGION,
-    userPoolId: config.USER_POOL_ID,
-    userPoolWebClientId: config.USER_POOL_APP_CLIENT_ID,
-  },
-});
+Amplify.configure(config);
 
 const Stack = createNativeStackNavigator();
 
