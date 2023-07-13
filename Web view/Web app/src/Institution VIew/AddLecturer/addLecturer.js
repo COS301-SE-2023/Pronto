@@ -379,7 +379,7 @@ const AddLecturer = () => {
 
                             <button
                                 type="submit"
-                                className="btn btn-primary w-100"
+                                className="btn btn-danger w-100"
                                 data-testid="submitButton"
                             >
                                 Add
@@ -402,14 +402,14 @@ const AddLecturer = () => {
                     />
                     <div className="input-group-append">
                         <button onClick={handleSearch}
-                            className="btn btn-outline-primary"
+                            className="btn btn-outline-danger"
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            style={{ backgroundColor: searchIcon ? "#C21F39" : "white" }}
+                            style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }} 
                         >
                             <div className="input-group-append">
-                               <SearchSharpIcon/>
+                               <SearchSharpIcon style={{"color":"#e32f45"}}/>
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}
