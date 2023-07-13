@@ -19,6 +19,14 @@
       "environmentVariableName": "LecturersGroupName"
     },
     {
+      "cloudFormationParameterName": "studentsGroupName",
+      "environmentVariableName": "StudentsGroupName"
+    },
+    {
+      "cloudFormationParameterName": "lecturersGroupName",
+      "environmentVariableName": "LecturersGroupName"
+    },
+    {
       "cloudFormationParameterName": "adminGroupName",
       "environmentVariableName": "AdminGroupName"
     }
