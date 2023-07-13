@@ -20,22 +20,6 @@ function DropzoneComponent() {
     }
   };
 
-  useEffect(() => {
-    Amplify.configure({
-      Auth: {
-        identityPoolId: "",
-        region: "us-east-1",
-      },
-      Storage: {
-        AWSS3: {
-          bucket: "",
-          region: "us-east-1",
-          keyPrefix: `${folderNameS3}/`,
-        },
-      },
-    });
-  }, []);
-
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
