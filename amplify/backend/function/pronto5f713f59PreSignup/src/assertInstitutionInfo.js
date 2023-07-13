@@ -43,9 +43,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     throw new Error("API ERROR: Failed to retrieve data");
   } catch (getEmailsQueryError) {
     console.debug(getEmailsQueryError);
-    throw new Error(
-      `Failed To retrieve institution details. id=${institutionId}. Because ${getEmailsQueryError}`
-    );
+    throw new Error(`Failed To retrieve institution details.`);
   }
 };
 
@@ -55,9 +53,7 @@ const getLectureEmailsFromInstitution = async (institutionId) => {
     return institutionetails.lectureremails;
   } catch (getAndSetInstitutionDetailsError) {
     console.debug(getAndSetInstitutionDetailsError);
-    throw new Error(
-      `Failed to retrieve list for the institution. Info: ${getAndSetInstitutionDetailsError}`
-    );
+    throw new Error(`Failed to retrieve list for the institution.`);
   }
 };
 
@@ -66,9 +62,7 @@ const getInstitutionAdminId = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.adminId;
   } catch (getInstitutionAdminIdError) {
-    throw new Error(
-      `Failed to retrieve admin for the institution. Info: ${getInstitutionAdminIdError}`
-    );
+    throw new Error(`Failed to retrieve admin for the institution.`);
   }
 };
 
