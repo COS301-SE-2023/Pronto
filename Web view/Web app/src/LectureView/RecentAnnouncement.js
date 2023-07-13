@@ -80,20 +80,27 @@ export default function RecentAnnouncement() {
                     }
                   },
                 authMode:"AMAZON_COGNITO_USER_POOLS",
-                }) 
-                const announcement=await API.graphql({ 
+              })
+        
+        setLecturer(lec.data.listLecturers.items[0])
+        
+        for(let i=0;i<lec.courses.length;i++){
+           
+          const announcement=await API.graphql({ 
                     query:listAnnouncements,
                     variables:{ 
-                    //    filter: { 
-                    //       email: { 
-                    //        eq : lecturer_email
-                    //    }
-                    // }
+                       filter: { 
+                          courseId: { 
+                           eq : lec.courses[i].id
+                       }
+                    }
                   },
                 authMode:"AMAZON_COGNITO_USER_POOLS",
                 }) 
-                console.log(announcement)    
-                setAnnouncements(announcement.data.listAnnouncements.items)
+          console.log(announcement)    
+          setAnnouncements([...announcement.data.listAnnouncements.items])
+        }
+
       }catch(error){
           console.log(error)
       }

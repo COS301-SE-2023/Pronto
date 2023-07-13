@@ -235,3 +235,36 @@ export const listAnnouncements=`query ListAnnouncements(
     nextToken
   }
 }`
+
+export const getLecturer=`query GetLecturer($id: ID!) {
+  getLecturer(id: $id) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+    }
+    courses {
+      nextToken
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}`

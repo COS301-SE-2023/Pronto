@@ -1,7 +1,7 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer,updateAdmin,createCourse, updateCourse,createAdmin,createInstitution, updateInstitution} from "../../graphql/mutations"; 
-import { lecturersByInstitutionId,listAdmins,listCourses,listInstitutions} from "../../graphql/queries";
+import { createLecturer, deleteLecturer,updateCourse} from "../../graphql/mutations"; 
+import { lecturersByInstitutionId,listInstitutions,listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
@@ -60,7 +60,6 @@ const AddLecturer = () => {
                     alert("Failed to process your request")
                  }
                 }    
-            //Reset state
             setFirstName("")
             setLastName("")
             setEmail("")
@@ -149,9 +148,7 @@ const AddLecturer = () => {
     }
 
     const fetchLecturers = async()=>{
-        
         try{
-             
             let user=await Auth.currentAuthenticatedUser()
             let domain=user.attributes.email.split("@")[1]
             let institution=await API.graphql({
@@ -168,30 +165,61 @@ const AddLecturer = () => {
             if(institution.data.listInstitutions.items.length===0){
                 throw new Error("No Institution found that matches the given domain"+ domain+".Please contact the developers for further assistance")
             }
+
             institution=institution.data.listInstitutions.items[0]
             setInstitution(institution)
             console.log(institution)
+            
             setCourses(institution.courses.items)
-            setLecturers(institution.lecturer.items)
-            console.log(lecturers)
+            let lecturerList=institution.lecturer.items
             for(let i=0;i<courses.length;i++){ 
                 if(courses[i].lecturerId===null){
                    offeredCourses.push(courses[i])
                 }
 
                  if(courses[i].lecturerId!==null){
-                    for(let j=0;j<lecturers.length;j++){
-                        if(lecturers[j].id===courses[i].lecturerId){ 
-                            lecturers[j].courses.items.push(courses[i])
+                    for(let j=0;j<lecturerList.length;j++){
+                        if(lecturerList[j].id===courses[i].lecturerId){ 
+                            lecturerList[j].courses.items.push(courses[i])
                             break
                         }
-                    }   
-                 
+                    }           
                 }
         }
-            setOfferedCourses(offeredCourses)
-            
-            setLecturers(lecturers)
+            //setLecturers(institution.lecturer.items)
+            console.log(lecturerList)
+            setLecturers(lecturerList)
+            console.log(institution.lecturer.items)
+        //     for(let i=0;i<courses.length;i++){ 
+        //         if(courses[i].lecturerId===null){
+        //            offeredCourses.push(courses[i])
+        //         }
+
+        //          if(courses[i].lecturerId!==null){
+        //             for(let j=0;j<lecturers.length;j++){
+        //                 if(lecturers[j].id===courses[i].lecturerId){ 
+        //                     lecturers[j].courses.items.push(courses[i])
+        //                     break
+        //                 }
+        //             }           
+        //         }
+        // }
+            //setOfferedCourses(offeredCourses)
+
+            //setLecturers(lecturers)
+            console.log(lecturers)
+            const lec=await API.graphql({ 
+                    query:listLecturers,
+                    variables:{ 
+                    //    filter: { 
+                    //       email: { 
+                    //        eq : lecturer_email
+                    //    }
+                    // }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                })
+                console.log(lec)
         }
         catch(error){   
             alert(error.message)
@@ -217,7 +245,7 @@ const AddLecturer = () => {
                         },
                         authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
-                    setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+                    setLecturers(search.data.lecturersByInstitutionId.items)
                 }
                 else if(filterAttribute==="lastname"){ 
                     let search= await API.graphql({
