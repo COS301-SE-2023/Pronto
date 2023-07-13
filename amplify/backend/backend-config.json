@@ -251,6 +251,14 @@
           "resourceName": "pronto5f713f59PreSignup"
         }
       ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_studentsGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
     }
   },
   "storage": {

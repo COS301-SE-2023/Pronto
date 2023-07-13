@@ -25,19 +25,6 @@ Amplify.configure({
   },
 });
 
-/* Amplify.configure({
-  Auth: {
-    identityPoolId: "", //REQUIRED - Amazon Cognito Identity Pool ID
-    region: "us-east-1", // REQUIRED - Amazon Cognito Region
-  },
-  Storage: {
-    AWSS3: {
-      bucket: "", //REQUIRED -  Amazon S3 bucket name
-      region: "us-east-1", //OPTIONAL -  Amazon service region
-    },
-  },
-}); */
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
