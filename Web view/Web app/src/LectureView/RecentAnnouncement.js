@@ -93,9 +93,9 @@ export default function RecentAnnouncement() {
                 authMode:"AMAZON_COGNITO_USER_POOLS",
                 }) 
                 console.log(announcement)    
-
+                setAnnouncements(announcement.data.listAnnouncements.items)
       }catch(error){
-
+          console.log(error)
       }
   }
 
@@ -113,6 +113,7 @@ export default function RecentAnnouncement() {
         <main style={{ width: '900px',marginTop: '30px' }}>
 
             <h1 className="moduleHead">Recent Announcements</h1>
+
 
             <div className="card" data-testid="card1">
               <div className="card-header">
@@ -153,8 +154,50 @@ export default function RecentAnnouncement() {
                 </StyledMenu>
               </div>
             </div>
+           { announcements.map((val,key)=>{ 
+              return(
+                <div className="card" data-testid="card1">
+                  <div className="card-header">
+                      <div className = "subjectCode">{val.coursecode}</div>
+                      <div className = "postDate">{val.createdAt}</div>
+                  </div>
+                  <div className="card-body">
+                    <h5 className="card-title"></h5>
+                    <p className="card-text">{val.description}</p>
 
-            <div className="card" data-testid="card2">
+                    <Button 
+                      id="demo-customized-button"
+                      aria-controls={open ? 'demo-customized-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? 'true' : undefined}
+                      variant="contained"
+                      disableElevation
+                      onClick={handleClick}
+                      endIcon={<KeyboardArrowDownIcon />}
+                    >
+                      Options
+                    </Button>
+
+                    <StyledMenu
+                      id="demo-customized-menu"
+                      MenuListProps={{
+                      'aria-labelledby': 'demo-customized-button',
+                      }}
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose} disableRipple>
+                        <DeleteIcon />
+                          Delete
+                      </MenuItem>
+                    </StyledMenu>
+                  </div>
+                </div>
+              )
+           })}
+
+            {/* <div className="card" data-testid="card2">
               <div className="card-header">
                 <div className = "subjectCode">COS341</div>
                 <div className = "postDate">20/05/2023</div>
@@ -191,7 +234,7 @@ export default function RecentAnnouncement() {
                     </MenuItem>
                 </StyledMenu>
               </div>
-            </div>
+            </div> */}
         </main>
 
     </div>
