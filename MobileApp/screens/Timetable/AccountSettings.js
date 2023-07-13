@@ -30,7 +30,7 @@ const AccountSettings = () => {
     {
       title: "Privacy Policy",
       subTitle: "Privacy Policy of the Pronto application",
-      onPress: () => {},
+      onPress: () => navigation.navigate("Privacy Policy"),
     },
     {
       title: "About",

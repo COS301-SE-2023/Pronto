@@ -9,6 +9,7 @@ import ResetPassword from "./screens/Login/ResetPassword";
 import VerifyCode from "./screens/Login/VerifyCode";
 import AccountSettings from "./screens/Timetable/AccountSettings";
 import ConfirmEmail from "./screens/Login/ConfirmEmail";
+import PrivacyPolicyScreen from "./screens/Settings/PrivacyPolicy";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, Text } from "react-native";
 
@@ -111,7 +112,12 @@ export default function App() {
             <Stack.Screen
               name="Notification Preferences"
               component={NotificationPreferences}
-              options={{ headerShown: false }}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Privacy Policy"
+              component={PrivacyPolicyScreen}
+              options={{ headerShown: true }}
             />
           </>
         ) : (
