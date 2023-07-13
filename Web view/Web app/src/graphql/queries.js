@@ -86,6 +86,7 @@ export const listInstitutions=`query ListInstitutions(
       courses{ 
         items { 
            id
+           lecturerId
            coursecode
         }
       }

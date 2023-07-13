@@ -69,8 +69,7 @@ const AddLecturer = () => {
             //Reset state
             setFirstName("")
             setLastName("")
-            setEmail("")
-            //setCourses([{coursename:"",coursecode:""}])    
+            setEmail("") 
       }
     }
 
@@ -82,12 +81,12 @@ const AddLecturer = () => {
             
             try{ 
                 let updatedCourseData={
-                id:courseList[i].id,   
-                institutionId:courseList[i].institutionId,
-                coursecode:courseList[i].coursecode,
-                coursename:courseList[i].coursename,
-                lecturerId:null, 
-                 _version:courseList[i]._version
+                    id:courseList[i].id,   
+                    //institutionId:courseList[i].institutionId,
+                    //coursecode:courseList[i].coursecode,
+                    //coursename:courseList[i].coursename,
+                    lecturerId:null, 
+                 //_version:courseList[i]._version
                 }
         
             let update=await API.graphql({
@@ -404,6 +403,8 @@ const AddLecturer = () => {
                                        courseData={courses}
                                        setModal={setIsModalOpened}
                                        setCourses={setCourses}
+                                       selectedCourses={[]}
+                                       offeredCourses={courses}
                                        className="form-control"
                                     />
                                 </div>

@@ -17,43 +17,28 @@ const style = {
 export default function AddModal(module) {
 
   const [open, setOpen] = useState(false);
-  const[courses,setCourses]=useState([{coursecode:"",coursename:""}]);
+  const[offeredCourses,setOfferedCourses]=useState([]);
+  const[selectedCourses,setSelectedCourses]=useState([])
   const[removed,setRemoved]=useState([])
+  const[selected,setSelected]=useState()
 
   const handleOpen = async() =>{ 
       setOpen(true) 
-      module.setModal(true)
-
-      //Adding new lecturer with courses
-      if(module.updateFlag===false){  
-       
-        if(module.courseData===undefined || module.courseData.length===0){ 
-            setCourses([{coursename:"",coursecode:""}])
-           
-         }
-         else if(module.courseData[module.courseData.length-1].coursecode!==""){ 
-            setCourses([...module.courseData,{coursecode:"",coursename:""}])
-           
-         } 
+      module.setModal(true)      
+      let courses=[]
+      for(let i = 0  ;i< module.offeredCourses.length;i++){
+        if(module.offeredCourses[i].lecturerId===null){ 
+            courses.push(module.offeredCourses[i])
+          } 
       }
-      else{ 
-      
-        if(module.lecturerData.courses===undefined || module.lecturerData.courses.length===0){
-            setCourses([{coursecode:"",coursename:""}])
-      
-        }
-        else if(module.lecturerData.courses[module.lecturerData.courses.length-1].coursecode!==""){ 
-            setCourses([...module.lecturerData.courses,{coursecode:"",coursename:""}])
-           
-        }
-      }
+      setOfferedCourses(courses)
+      setSelectedCourses(module.selectedCourses)
 
-      
   }
 
   const handleClose = async() => {  
      setOpen(false) 
-     module.setCourses(courses)
+     //module.setCourses()
      module.setModal(false)
      
      //Remove deleted courses
@@ -64,13 +49,13 @@ export default function AddModal(module) {
      
         //Add new courses
         let newcourses=[]
-        for(let i=0;i<courses.length;i++){
-          if(courses[i].coursecode!=="" ){
-            if(module.courseData.find(course=>course.coursecode===courses[i].coursecode)===undefined){
-              newcourses.push(courses[i])
-            }
-          }
-        }
+        // for(let i=0;i<courses.length;i++){
+        //   if(courses[i].coursecode!=="" ){
+        //     if(module.courseData.find(course=>course.coursecode===courses[i].coursecode)===undefined){
+        //       newcourses.push(courses[i])
+        //     }
+        //   }
+        //}
         let courseList=await module.findCourses(newcourses)
        
         if(newcourses.length>courseList.length)
@@ -82,71 +67,52 @@ export default function AddModal(module) {
 
         module.setCourses([])
       }
-      else { 
-        module.setCourses(courses)
-      }
+      // else { 
+      //   module.setCourses(courses)
+      // }
       
-      setCourses([])
+     // setCourses([])
+     module.setCourses(offeredCourses)
 }
 
 const handleAdd = async(event) => {
   event.preventDefault()
-  const course = {
-      coursename: "",
-      coursecode: ""
-    };
-    setCourses([...courses,course])
-    event.target.reset()
-  };
+  let index=-1
+  console.log(offeredCourses)
+  console.log(selected)
+  if(selected!==null || selected!==undefined){
+    for(let i=0;i<offeredCourses.length;i++){
+      if(offeredCourses[i].id===selected.id){ 
+        index=i
+        break;
+      }
+    }
+  } 
+  setSelectedCourses([...selectedCourses,selected])
+  offeredCourses.splice(index,1)
+  setOfferedCourses(offeredCourses)
+
+    //event.target.reset()
+}
 
 const handleRemove = async(index) => {
     const remove=[...removed]
-    remove.push(courses[index])
+  //  remove.push(courses[index])
     setRemoved(remove)
-    const rows = [...courses]
-    rows.splice(index, 1)
-    setCourses( rows )
+    //const rows = [...courses]
+    //rows.splice(index, 1)
+    //setCourses( rows )
   }
 
-  const handleNameChange= async(index,event) => { 
-    if(courses[index]===undefined){
-      courses[index]={
-        coursecode:"",
-        coursename:""
-      }
-    }
-    if(courses.length<=index){
-         courses[index]= { 
-            coursename:"",
-            coursecode:""
-         }
-      }
-      courses[index]= { 
-      coursename:event.target.value,
-      coursecode:courses[index].coursecode
-    }
-      setCourses(courses)
-  }
-
-  const handleCodeChange = async(index,event)=> {  
-    if(courses[index]===undefined){
-      courses[index]={
-        coursecode:"",
-        coursename:""
-      }
-    }
-    if(courses.length<=index){
-         courses[index]= { 
-            coursename:"",
-            coursecode:""
-         }
-      }
-    
-    courses[index]= { 
-        coursename:courses[index].coursename,
-        coursecode:event.target.value
-    }
-      setCourses(courses)
+  const handleSelect = async(index)=>{
+      // for(let i=0;i<offeredCourses.length;i++){
+      //   if(offeredCourses[i].coursecode===event.target.value)
+      //       setSelected(offeredCourses[i])
+      // }
+      console.log(index)
+      setSelected(offeredCourses[index])
+      //console.log(value) 
+     // event.target.reset()
   }
    
   return (
@@ -171,18 +137,14 @@ const handleRemove = async(index) => {
             <thead>
               <tr>                
                 <th scope="col">Course Code</th>
-                <th scope="col">Course Name</th>
               </tr>
             </thead>
             <tbody>
-              { courses.slice(0,courses.length-1).map((val, key)=>{    
+              { selectedCourses.map((val, key)=>{    
                   return (
                     <tr key={key}>
                       <td>   
                           {val.coursecode}
-                      </td>
-                      <td>
-                        {val.coursename}
                       </td>
                       <td>
                         <button onClick={(e)=>handleRemove(key)}
@@ -201,41 +163,39 @@ const handleRemove = async(index) => {
           <form onSubmit={(e)=>handleAdd(e)}>
             <div className="form-row">
               <div className="form-group col-6">
-             <select> 
-               { courses.map((val, key)=>{
+             <select 
+                  onChange={(e)=>handleSelect(e.target.value)}
+                  //value={selected}
+                  className="custom-select">
+
+               { offeredCourses.map((val, key)=>{
                 return( 
-                  <option>{val.coursecode}</option>
+                  <option key={val.coursecode}
+                  value={key}>{val.coursecode}</option>
                 )
                 
               })
 
               }
              </select>
-            <input 
-              type="text"
-              name="coursecode"
-              defaultValue=""
-              required
-              onChange={(e)=>handleCodeChange(courses.length-1,e)}
-              className="form-control"
-              /> 
-              </div>
-              <div className="form-group col-6">
-             <input 
-              type="text"
-              name="coursename"
-              defaultValue=""
-              required
-              onChange={(e)=>handleNameChange(courses.length-1,e)}
-              className="form-control"
-              />  
+             {/* <select
+                //value={selected}
+                className="custom-select"
+                id="inputGroupSelect01"
+                //data-testid="filterSelect"
+              >
+                  <option >Filter by</option> 
+                  <option  >First Name</option>
+                  <option >Last Name</option>
+                  <option  >Email</option>
+            </select> */}
               </div>
               <button type="submit" 
                className="btn btn-primary" 
                 data-testid="addButton">Add</button>
               </div> 
           </form>
-          <button onClick={handleClose}
+          <button 
             type="submit" 
             className="btn btn-primary float-right"
             data-testid="submitCourses" 
