@@ -170,8 +170,10 @@ const AddLecturer = () => {
             }
             institution=institution.data.listInstitutions.items[0]
             setInstitution(institution)
+            console.log(institution)
             setCourses(institution.courses.items)
             setLecturers(institution.lecturer.items)
+            console.log(lecturers)
             for(let i=0;i<courses.length;i++){ 
                 if(courses[i].lecturerId===null){
                    offeredCourses.push(courses[i])
@@ -189,7 +191,7 @@ const AddLecturer = () => {
         }
             setOfferedCourses(offeredCourses)
             
-            //setLecturers(institution.lecturer.items)
+            setLecturers(lecturers)
         }
         catch(error){   
             alert(error.message)

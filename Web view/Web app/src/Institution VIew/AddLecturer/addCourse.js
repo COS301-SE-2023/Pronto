@@ -33,7 +33,10 @@ export default function AddModal(module) {
           } 
       }
       setOfferedCourses(offeredCourses)
+      console.log(offeredCourses)
       setSelectedCourses(module.selectedCourses)
+      console.log(module)
+      
     }catch(e){
       alert("No courses found")
     }
