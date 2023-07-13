@@ -9,20 +9,6 @@ export const createLecturer=`mutation CreateLecturer(
     lastname
     userRole
     email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      domains
-      adminId
-      createdAt
-      updatedAt
-    }
     courses {
       nextToken
     }
@@ -79,7 +65,6 @@ export const updateCourse=`mutation UpdateCourse(
     institutionId
     lecturerId
     coursecode
-    coursename
     semester
     enrollments {
       nextToken

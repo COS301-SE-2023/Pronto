@@ -26,28 +26,28 @@ export default function AddModal(module) {
       setOpen(true) 
       module.setModal(true)      
       let courses=[]
-      for(let i = 0  ;i< module.offeredCourses.length;i++){
-        if(module.offeredCourses[i].lecturerId===null){ 
-            courses.push(module.offeredCourses[i])
+      try{
+      for(let i = 0  ;i < module.courseData.length;i++){
+        if(module.courseData[i].lecturerId===null){ 
+            offeredCourses.push(module.courseData[i])
           } 
       }
-      setOfferedCourses(courses)
+      setOfferedCourses(offeredCourses)
       setSelectedCourses(module.selectedCourses)
-
+    }catch(e){
+      alert("No courses found")
+    }
   }
 
   const handleClose = async() => {  
      setOpen(false) 
-     //module.setCourses()
      module.setModal(false)
      
-
      //Remove deleted courses
       if(module.updateFlag===true){
         if(removed.length>0){
           await module.removeCourses(removed,module.lecturerData)
         }
-     
         //Add new courses
         let newcourses=[]
         for(let i=0;i<selectedCourses.length;i++){
@@ -55,30 +55,21 @@ export default function AddModal(module) {
                newcourses.push(selectedCourses[i])
            }
         }
-        let courseList=await module.addCourses(newcourses)
-       
-        // if(newcourses.length>courseList.length)
-        //      alert("Course(s) not found")
-       
-        // if(courseList.length>0){
-        //   await module.addCourses(module.lecturerData,courseList)
-        // }
-
-        module.setCourses([offeredCourses])
+        await module.addCourses(module.lecturerData,newcourses)
+        module.setOfferedCourses(offeredCourses)
       }
        else { 
-         module.setCourses(selectedCourses)
+         module.setSelectedCourses(selectedCourses)
+         module.setOfferedCourses(offeredCourses)
        }
-      
-     // setCourses([])
-     //module.setCourses(offeredCourses)
+      setOfferedCourses([])
+      setSelectedCourses([])
+  
 }
 
 const handleAdd = async(event) => {
   event.preventDefault()
   let index=-1
-  console.log(offeredCourses)
-  console.log(selected)
   if(selected!==null || selected!==undefined){
     for(let i=0;i<offeredCourses.length;i++){
       if(offeredCourses[i].id===selected.id){ 
@@ -96,26 +87,16 @@ const handleAdd = async(event) => {
 
 const handleRemove = async(index) => {
     const remove=[...removed,selectedCourses[index]]
-  //  remove.push(courses[index])
     offeredCourses.push(selectedCourses[index])
     selectedCourses.splice(index,1)
     setRemoved(remove)
     setOfferedCourses(offeredCourses)
     setSelectedCourses(selectedCourses)
-    //const rows = [...courses]
-    //rows.splice(index, 1)
-    //setCourses( rows )
+   
   }
 
   const handleSelect = async(index)=>{
-      // for(let i=0;i<offeredCourses.length;i++){
-      //   if(offeredCourses[i].coursecode===event.target.value)
-      //       setSelected(offeredCourses[i])
-      // }
-      console.log(index)
       setSelected(offeredCourses[index])
-      //console.log(value) 
-     // event.target.reset()
   }
    
   return (
@@ -170,7 +151,7 @@ const handleRemove = async(index) => {
                   onChange={(e)=>handleSelect(e.target.value)}
                   //value={selected}
                   className="custom-select">
-
+                 <option key="{}"> </option>
                { offeredCourses.map((val, key)=>{
                 return( 
                   <option key={val.coursecode}
@@ -187,7 +168,8 @@ const handleRemove = async(index) => {
                 data-testid="addButton">Add</button>
               </div> 
           </form>
-          <button 
+          <button
+            onClick={handleClose} 
             type="submit" 
             className="btn btn-primary float-right"
             data-testid="submitCourses" 

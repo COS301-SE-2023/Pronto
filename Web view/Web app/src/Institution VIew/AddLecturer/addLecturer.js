@@ -17,10 +17,11 @@ const AddLecturer = () => {
     const[isModalOpened,setIsModalOpened]=useState(false)
     const[searchIcon,setSearchIcon]=useState(false)
     const[institution,setInstitution]=useState("")
+    const[offeredCourses,setOfferedCourses]=useState([])
+    const[selectedCourses,setSelectedCourses]=useState([])
 
     const handleAdd=  async(event) => { 
         event.preventDefault()
-        
         if(!isModalOpened){
             //courseList=await findCourses(courses)
             
@@ -39,34 +40,31 @@ const AddLecturer = () => {
                     authMode:'AMAZON_COGNITO_USER_POOLS',
                     })
       
-                console.log(mutation)
                  lecturer=mutation.data.createLecturer
                  lecturer.courses=[]
                  lecturers.push(mutation.data.createLecturer)
                   
                  //Add lecturer to courses
-                 await addCourses(lecturer,courses)
+                 await addCourses(lecturer,selectedCourses)
                  if(lecturers.length<19)
-                         setLecturers(lecturers)
+                        setLecturers(lecturers)
 
              }catch(error){    
 
-                console.error(error)
                 try{
                     if(error.errors[0].errorType==="Unathorized"){
                         alert("You are not authorised to perform this task.Please log out and log in again") 
-                      //  console.error(error)
                     }
                 }
                  catch(e) { 
                     alert("Failed to process your request")
-                    //console.error(e) 
                  }
                 }    
             //Reset state
             setFirstName("")
             setLastName("")
-            setEmail("") 
+            setEmail("")
+            setSelectedCourses([])
       }
     }
 
@@ -79,11 +77,7 @@ const AddLecturer = () => {
             try{ 
                 let updatedCourseData={
                     id:courseList[i].id,   
-                    //institutionId:courseList[i].institutionId,
-                    //coursecode:courseList[i].coursecode,
-                    //coursename:courseList[i].coursename,
                     lecturerId:null, 
-                 //_version:courseList[i]._version
                 }
         
             let update=await API.graphql({
@@ -105,16 +99,14 @@ const AddLecturer = () => {
           lecturer.courses=[]
         if(courseList===undefined)
             return
-        for(let i=0;i<courseList.length;i++){
         
+        for(let i=0;i<courseList.length;i++){
             try{ 
                 let updatedCourseData={
-                id:courseList[i].id,   
-                institutionId:courseList[i].institutionId,
-                coursecode:courseList[i].coursecode,
-                coursename:courseList[i].coursename,
-                lecturerId:lecturer.id, 
-                 _version:courseList[i]._version
+                    id:courseList[i].id,   
+                    institutionId:institution.id,
+                    coursecode:courseList[i].coursecode,
+                    lecturerId:lecturer.id, 
                 }
         
             let update=await API.graphql({
@@ -122,46 +114,18 @@ const AddLecturer = () => {
                 variables:{input:updatedCourseData},
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             }) 
-            lecturer.courses.push(update.data.updateCourse) 
+            lecturer.courses.items.push(update.data.updateCourse)
             setLecturers(lecturers)
+
     }catch(e){ 
-        alert("could not add course to lecturer")
+        alert("Could not add course "+courseList[i].coursecode+ " to lecturer")
     }
     }
 }
 
-    const findCourses= async(courses)=>{
-        let courseList=[]
-            
-        for(let i=0;i<courses.length;i++){   
-        if(courses[i].coursecode!==""){    
-            try{
-                let id=await API.graphql({
-                    query:listCourses,
-                    variables: { 
-                    filter: { 
-                        coursecode : { 
-                                        eq:courses[i].coursecode
-                                        }
-                                    }
-                            },
-                    authMode:"AMAZON_COGNITO_USER_POOLS"
-                    })
-            
-                courseList.push(id.data.listCourses.items[0]) 
-                }
-                catch(e){
-                    alert("Course not found!")
-                }
-        }
-    } 
-    return courseList.filter(element=>element!==undefined)
-    }
-
     const handleRemove= async(lecturer,index) =>{
         let lec={ 
            id : lecturer.id,
-           _version:lecturer._version
         }
          try{
             let removeMutation=await API.graphql({
@@ -172,6 +136,7 @@ const AddLecturer = () => {
             let courseList=lecturer.courses
             if(courseList!==undefined){
                 await removeCourses(courseList,lecturer)
+                setOfferedCourses([...offeredCourses,courseList])
                 
         }
             const rows=[...lecturers]
@@ -186,8 +151,7 @@ const AddLecturer = () => {
     const fetchLecturers = async()=>{
         
         try{
-             //Fetch institution via domain of user email
-            
+             
             let user=await Auth.currentAuthenticatedUser()
             let domain=user.attributes.email.split("@")[1]
             let institution=await API.graphql({
@@ -201,60 +165,34 @@ const AddLecturer = () => {
                 },
                     authMode:'AMAZON_COGNITO_USER_POOLS',
             })
-                //console.log(domain)
-                //console.log(institution)
             if(institution.data.listInstitutions.items.length===0){
                 throw new Error("No Institution found that matches the given domain"+ domain+".Please contact the developers for further assistance")
             }
             institution=institution.data.listInstitutions.items[0]
-                //console.log(institution)
             setInstitution(institution)
-            
-            //console.log(institution)
-
-            //Get lecturers
-            //let user= await Auth.currentAuthenticatedUser()
-            console.log(institution)
-            console.log(institution.courses.items)
             setCourses(institution.courses.items)
             setLecturers(institution.lecturer.items)
-        //     let lecturerslist=await API.graphql(
-        //         {
-        //         query:lecturersByInstitutionId, 
-        //         variables:{ 
-        //                     //institutionId:user.username,
-        //                     institutionId:institution.id,
-        //                     limit: 50
-        //             },
-        //         authMode:'AMAZON_COGNITO_USER_POOLS',
-        //         }
-        //    )
-           //console.log(lecturerslist)  
-           //lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
-           //lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
-          console.log(courses)
-          console.log(lecturers)
-           //Get courses
-        //    for(let i=0;i<lecturerslist.length;i++){   
-        //         let course=await API.graphql({
-        //             query:listCourses,
-        //             variables:{
-        //                     filter:{
-        //                         lecturerId:{
-        //                             eq:lecturerslist[i].id
-        //                     }
-        //                 }
-        //             },
-        //             authMode:"AMAZON_COGNITO_USER_POOLS"
-        //         })        
-        //        lecturerslist[i].courses=course.data.listCourses.items
-        //        console.log(course)
-        //     }        
-            //setLecturers(lecturerslist)
+            for(let i=0;i<courses.length;i++){ 
+                if(courses[i].lecturerId===null){
+                   offeredCourses.push(courses[i])
+                }
+
+                 if(courses[i].lecturerId!==null){
+                    for(let j=0;j<lecturers.length;j++){
+                        if(lecturers[j].id===courses[i].lecturerId){ 
+                            lecturers[j].courses.items.push(courses[i])
+                            break
+                        }
+                    }   
+                 
+                }
+        }
+            setOfferedCourses(offeredCourses)
+            
+            //setLecturers(institution.lecturer.items)
         }
         catch(error){   
-            //alert(error.message)
-            console.error(error)
+            alert(error.message)
         }
     }
     
@@ -397,11 +335,13 @@ const AddLecturer = () => {
                                        //findCourses={findCourses}
                                        addCourses={addCourses}
                                        removeCourses={removeCourses}
-                                       //courseData={courses}
+                                       courseData={courses}
                                        setModal={setIsModalOpened}
                                        setCourses={setCourses}
-                                       selectedCourses={[]}
-                                       offeredCourses={courses}
+                                       selectedCourses={selectedCourses}
+                                       offeredCourses={offeredCourses}
+                                       setSelectedCourses={setSelectedCourses}
+                                       setOfferedCourses={setOfferedCourses}
                                        className="form-control"
                                     />
                                 </div>
@@ -476,12 +416,12 @@ const AddLecturer = () => {
                             </tr>
                             </thead>
                             <tbody>
-                             {/* {  lecturers.map((val, key)=>{    
+                             {  lecturers.map((val, key)=>{    
                                    return (
                                     <tr key={key}>
-                                        {/* <td>{val.firstname}</td>
-                                        <td>{val.lastname}</td> */}
-                                        {/* <td>
+                                        <td>{val.firstname}</td>
+                                        <td>{val.lastname}</td> 
+                                        <td>
                                             <a href="mailto:" data-testid="lecturerEmail">
                                                 {val.email}
                                             </a>
@@ -490,15 +430,18 @@ const AddLecturer = () => {
                                         <AddModal
                                             updateFlag={(true)}
                                             lecturerData={val}
-                                            findCourses={findCourses}
-                                            removeCourses={removeCourses}
                                             addCourses={addCourses}
-                                            courseData={val.courses}
+                                            removeCourses={removeCourses}
+                                            courseData={courses}
                                             setModal={setIsModalOpened}
                                             setCourses={setCourses}
-                                            /> */}
-                                        {/* </td> */} 
-                                        {/* <td>
+                                            selectedCourses={val.courses.items}
+                                            offeredCourses={offeredCourses}
+                                            setSelectedCourses={setSelectedCourses}
+                                            setOfferedCourses={setOfferedCourses}
+                                            />
+                                        </td> 
+                                        <td>
                                             <button onClick={() => {handleRemove(val,key)}} 
                                                 type="button" 
                                                 className="btn btn-danger w-100" 
@@ -507,9 +450,9 @@ const AddLecturer = () => {
                                                 Remove
                                             </button>
                                         </td>
-                                  </tr> */}
-                                {/* ) */}
-                             {/* })}  */}
+                                  </tr>
+                                 )
+                              })} 
                             </tbody>
                         </table>
                     </div>

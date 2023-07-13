@@ -101,6 +101,12 @@ export const listInstitutions=`query ListInstitutions(
           firstname
           lastname
           email
+          courses { 
+            items{ 
+              id 
+              coursecode
+            }
+          }
         }
       }
       createdAt
