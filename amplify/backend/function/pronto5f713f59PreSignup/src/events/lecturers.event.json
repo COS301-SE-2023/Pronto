@@ -1,0 +1,16 @@
+{
+  "userPoolId": "USERPOOLID",
+  "userName": "USERNAME",
+  "callerContext": {
+    "clientId": "WEB_CLIENTID"
+  },
+  "request": {
+    "clientMetadata": {
+      "role": "Lecturer"
+    },
+    "userAttributes": {
+      "email": "EMAIL"
+    }
+  },
+  "response": {}
+}
