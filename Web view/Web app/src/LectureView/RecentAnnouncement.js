@@ -8,6 +8,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LecturerNavigation from "./LecturerNavigation";
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./LectureHome.css";
+import {API,Auth} from 'aws-amplify'
+import { listLecturers,listAnnouncements } from '../graphql/queries';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -53,6 +55,9 @@ const StyledMenu = styled((props) => (
 export default function RecentAnnouncement() {
   
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [lecturer,setLecturer]=React.useState('')
+  const[announcements,setAnnouncements]=React.useState([])
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,6 +65,43 @@ export default function RecentAnnouncement() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const fetchAnnouncements = async()=>{ 
+      try{
+        let user=await Auth.currentAuthenticatedUser();
+        let lecturer_email=user.attributes.email
+         const lec=await API.graphql({ 
+                    query:listLecturers,
+                    variables:{ 
+                       filter: { 
+                          email: { 
+                           eq : lecturer_email
+                       }
+                    }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                }) 
+                const announcement=await API.graphql({ 
+                    query:listAnnouncements,
+                    variables:{ 
+                    //    filter: { 
+                    //       email: { 
+                    //        eq : lecturer_email
+                    //    }
+                    // }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                }) 
+                console.log(announcement)    
+
+      }catch(error){
+
+      }
+  }
+
+  React.useEffect(()=>  { 
+      fetchAnnouncements(); 
+    } , [])
 
   return (
     <div style={{ display: 'inline-flex' }}>

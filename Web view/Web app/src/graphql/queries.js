@@ -214,3 +214,24 @@ export const listAdmins=`query ListAdmins(
     nextToken
   }
 }`
+
+export const listAnnouncements=`query ListAnnouncements(
+  $filter: ModelAnnouncementFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      courseId
+      description
+      start
+      end
+      date
+      venue
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}`
