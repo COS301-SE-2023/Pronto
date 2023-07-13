@@ -201,6 +201,16 @@ const handleRemove = async(index) => {
           <form onSubmit={(e)=>handleAdd(e)}>
             <div className="form-row">
               <div className="form-group col-6">
+             <select> 
+               { courses.map((val, key)=>{
+                return( 
+                  <option>{val.coursecode}</option>
+                )
+                
+              })
+
+              }
+             </select>
             <input 
               type="text"
               name="coursecode"

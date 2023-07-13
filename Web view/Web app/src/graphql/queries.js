@@ -76,9 +76,27 @@ export const listInstitutions=`query ListInstitutions(
       closingTime
       minimumDuration
       lectureremails
-      coursecodes
       domains
-      adminId
+      admin { 
+        id
+        firstname
+        lastname
+        email
+      }
+      courses{ 
+        items { 
+           id
+           coursecode
+        }
+      }
+      lecturer{ 
+        items{ 
+          id
+          firstname
+          lastname
+          email
+        }
+      }
       createdAt
       updatedAt
     }
@@ -159,6 +177,27 @@ export const listCourses=`query ListCourses(
       semester
       createdAt
       updatedAt
+    }
+    nextToken
+  }
+}`
+
+export const listAdmins=`query ListAdmins(
+  $filter: ModelAdminFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAdmins(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      owner
     }
     nextToken
   }

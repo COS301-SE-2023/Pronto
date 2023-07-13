@@ -31,7 +31,7 @@ function Login() {
     setLoading(true);
     event.preventDefault();
     try {
-      await Auth.signIn(email, password);
+      await Auth.signIn(email, password,{"role":"Lecturer"});
       setsignInError("");
       //navigate to lecturer home page
       navigate("/lecture-homepage");

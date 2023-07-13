@@ -13,41 +13,46 @@ const LectureHomePage = () => {
 
   const fetchCourses=async()=>{ 
     try{
-         const user=await Auth.currentAuthenticatedUser()
-         console.log(user)
-         if(user===undefined){
-           alert("Please log in")
+      const user=await Auth.currentAuthenticatedUser()
+      if(user===undefined){
+        alert("Please log in")
+      }
+      else{
+        let lecturer_email=user.attributes.email
+        console.log(lecturer_email)
+        const lec=await API.graphql({ 
+                    query:listLecturers,
+                    variables:{ 
+                       filter: { 
+                          email: { 
+                           eq : lecturer_email
+                       }
+                    }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                }) 
+        console.log(lec)
+        if(lec.data.listLecturers.items.length>0){     
+          setLecturer(lec.data.listLecturers.items[0])
+          //console.log(lec)
+             let courseList=await API.graphql({
+                    query:listCourses,
+                    variables:{
+                            filter:{
+                                lecturerId:{
+                                    eq:lec.data.listLecturers.items[0].id
+                            }
+                        }
+                    },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                })
+          console.log(courseList)
+          
+          //courseList=courseList.data.listCourses.items 
+          //setCourses([...courseList])
+            
          }
-         else{
-          let email=user.attributes.email
-          const lec=await API.graphql({ 
-             query:listLecturers,
-             variables:{ 
-              filter: { 
-                email: { 
-                  eq : email
-                }
-              }
-             },
-             authMode:"AMAZON_COGNITO_USER_POOLS",
-         }) 
-         console.log(lec)
-         setLecturer(lec.data.listLecturers.item[0])
-         const courseList= await API.graphql({
-           query:listCourses,
-                    variables: { 
-                    filter: { 
-                        lecturerId : { 
-                                        eq:lecturer.id
-                                        }
-                                    }
-                            },
-                    authMode:"AMAZON_COGNITO_USER_POOLS",
-         })
-        console.log(courseList)
-        courseList=courseList.data.listCourses 
-        setCourses([...courseList])
-         }
+        }
     }catch(error){
       setErrorMessage(error)
       console.log(error)

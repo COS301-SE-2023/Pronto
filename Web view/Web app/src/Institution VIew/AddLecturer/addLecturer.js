@@ -1,7 +1,7 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer,updateAdmin,createCourse, updateCourse,createAdmin,createInstitution, updateInstitution} from "../../graphql/mutations"; 
-import { lecturersByInstitutionId,listCourses,listInstitutions} from "../../graphql/queries";
+import { lecturersByInstitutionId,listAdmins,listCourses,listInstitutions} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
@@ -10,7 +10,7 @@ const AddLecturer = () => {
     const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
-    const [courses,setCourses]=useState([{coursename:"",coursecode:""}])  
+    const [courses,setCourses]=useState([])  
     const [filterAttribute,setFilterAttribute]=useState("")
     const [searchValue,setSearchValue]=useState("")
     const [lecturers ,setLecturers]= useState([])
@@ -22,35 +22,34 @@ const AddLecturer = () => {
         event.preventDefault()
         
         if(!isModalOpened){
-            let user=await Auth.currentAuthenticatedUser() 
-            let courseList=[]
             // courseList=await findCourses(courses)
             
             let lecturer={
                 institutionId:institution.id,
                 firstname:firstName,
                 lastname:lastName,
-                userRole:"Lecture",
+                userRole:"Lecturer",
                 email:email,
             }
+            
 
              try{   
                 
-                let mutation=await API.graphql({
-                    query: createLecturer,
-                    variables:{input:lecturer},
-                    authMode:'AMAZON_COGNITO_USER_POOLS',
-                    })
+                // let mutation=await API.graphql({
+                //     query: createLecturer,
+                //     variables:{input:lecturer},
+                //     authMode:'AMAZON_COGNITO_USER_POOLS',
+                //     })
       
-                  console.log(mutation)
-                 lecturer=mutation.data.createLecturer
+                //   console.log(mutation)
+                 //lecturer=mutation.data.createLecturer
             //     lecturer.courses=[]
-                 lecturers.push(mutation.data.createLecturer)
+                 //lecturers.push(mutation.data.createLecturer)
                   
             //     //Add lecturer to courses
             //     await addCourses(lecturer,courseList)
-            //     if(lecturers.length<19)
-            //         setLecturers(lecturers)
+                 if(lecturers.length<19)
+                         setLecturers(lecturers)
 
              }catch(error){    
 
@@ -71,7 +70,7 @@ const AddLecturer = () => {
             setFirstName("")
             setLastName("")
             setEmail("")
-            setCourses([{coursename:"",coursecode:""}])    
+            //setCourses([{coursename:"",coursecode:""}])    
       }
     }
 
@@ -220,38 +219,42 @@ const AddLecturer = () => {
             //Get lecturers
             //let user= await Auth.currentAuthenticatedUser()
             console.log(institution)
-            let lecturerslist=await API.graphql(
-                {
-                query:lecturersByInstitutionId, 
-                variables:{ 
-                            //institutionId:user.username,
-                            institutionId:institution.id,
-                            limit: 50
-                    },
-                authMode:'AMAZON_COGNITO_USER_POOLS',
-                }
-           )
-           console.log(lecturerslist)  
-           lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
+            console.log(institution.courses.items)
+            setCourses(institution.courses.items)
+            setLecturers(institution.lecturer.items)
+        //     let lecturerslist=await API.graphql(
+        //         {
+        //         query:lecturersByInstitutionId, 
+        //         variables:{ 
+        //                     //institutionId:user.username,
+        //                     institutionId:institution.id,
+        //                     limit: 50
+        //             },
+        //         authMode:'AMAZON_COGNITO_USER_POOLS',
+        //         }
+        //    )
+           //console.log(lecturerslist)  
+           //lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
            //lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
-          
+          console.log(courses)
+          console.log(lecturers)
            //Get courses
-           for(let i=0;i<lecturerslist.length;i++){   
-                let course=await API.graphql({
-                    query:listCourses,
-                    variables:{
-                            filter:{
-                                lecturerId:{
-                                    eq:lecturerslist[i].id
-                            }
-                        }
-                    },
-                    authMode:"AMAZON_COGNITO_USER_POOLS"
-                })        
-               lecturerslist[i].courses=course.data.listCourses.items
-               console.log(course)
-            }        
-            setLecturers(lecturerslist)
+        //    for(let i=0;i<lecturerslist.length;i++){   
+        //         let course=await API.graphql({
+        //             query:listCourses,
+        //             variables:{
+        //                     filter:{
+        //                         lecturerId:{
+        //                             eq:lecturerslist[i].id
+        //                     }
+        //                 }
+        //             },
+        //             authMode:"AMAZON_COGNITO_USER_POOLS"
+        //         })        
+        //        lecturerslist[i].courses=course.data.listCourses.items
+        //        console.log(course)
+        //     }        
+            //setLecturers(lecturerslist)
         }
         catch(error){   
             //alert(error.message)
@@ -475,12 +478,12 @@ const AddLecturer = () => {
                             </tr>
                             </thead>
                             <tbody>
-                             {  lecturers.map((val, key)=>{    
+                             {/* {  lecturers.map((val, key)=>{    
                                    return (
                                     <tr key={key}>
-                                        <td>{val.firstname}</td>
-                                        <td>{val.lastname}</td>
-                                        <td>
+                                        {/* <td>{val.firstname}</td>
+                                        <td>{val.lastname}</td> */}
+                                        {/* <td>
                                             <a href="mailto:" data-testid="lecturerEmail">
                                                 {val.email}
                                             </a>
@@ -495,9 +498,9 @@ const AddLecturer = () => {
                                             courseData={val.courses}
                                             setModal={setIsModalOpened}
                                             setCourses={setCourses}
-                                            />
-                                        </td>
-                                        <td>
+                                            /> */}
+                                        {/* </td> */} 
+                                        {/* <td>
                                             <button onClick={() => {handleRemove(val,key)}} 
                                                 type="button" 
                                                 className="btn btn-danger w-100" 
@@ -506,9 +509,9 @@ const AddLecturer = () => {
                                                 Remove
                                             </button>
                                         </td>
-                                  </tr>
-                                )
-                             })} 
+                                  </tr> */}
+                                {/* ) */}
+                             {/* })}  */}
                             </tbody>
                         </table>
                     </div>
