@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Amplify, Storage } from "aws-amplify";
 
 // Folder name for S3 bucket
+//Determine university name with graphQL call...
 let folderNameS3 = "UniversityOfPretoria";
 
 function DropzoneComponent() {
