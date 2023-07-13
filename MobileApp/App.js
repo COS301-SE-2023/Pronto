@@ -17,26 +17,7 @@ import config from "./src/aws-exports";
 
 Auth.configure(config);
 
-Amplify.configure({
-  Auth: {
-    region: config.REGION,
-    userPoolId: config.USER_POOL_ID,
-    userPoolWebClientId: config.USER_POOL_APP_CLIENT_ID,
-  },
-});
-
-/* Amplify.configure({
-  Auth: {
-    identityPoolId: "", //REQUIRED - Amazon Cognito Identity Pool ID
-    region: "us-east-1", // REQUIRED - Amazon Cognito Region
-  },
-  Storage: {
-    AWSS3: {
-      bucket: "", //REQUIRED -  Amazon S3 bucket name
-      region: "us-east-1", //OPTIONAL -  Amazon service region
-    },
-  },
-}); */
+Amplify.configure(config);
 
 const Stack = createNativeStackNavigator();
 
