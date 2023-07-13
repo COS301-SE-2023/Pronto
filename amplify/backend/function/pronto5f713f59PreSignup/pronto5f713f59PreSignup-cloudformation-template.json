@@ -51,6 +51,9 @@
     "lecturersGroupName": {
       "Type": "String"
     },
+    "studentsGroupName": {
+      "Type": "String"
+    },
     "adminGroupName": {
       "Type": "String"
     }
@@ -111,6 +114,9 @@
             },
             "LecturersGroupName": {
               "Ref": "lecturersGroupName"
+            },
+            "StudentsGroupName": {
+              "Ref": "studentsGroupName"
             },
             "AdminGroupName": {
               "Ref": "adminGroupName"

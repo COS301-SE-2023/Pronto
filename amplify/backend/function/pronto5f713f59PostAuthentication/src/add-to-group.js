@@ -24,7 +24,7 @@ exports.handler = async (event) => {
     throw new Error("User role not provided on clientMetadata");
   if (!event.callerContext.clientId)
     throw new Error("ClientId not provided on callerContext");
-  if (!(Object.values(ROLES).includes(event.request.clientMetadata.role)))
+  if (!Object.values(ROLES).includes(event.request.clientMetadata.role))
     throw new Error("Invalid User Role");
   let GroupName;
   console.table(event.request);
@@ -33,9 +33,17 @@ exports.handler = async (event) => {
 
   switch (event.callerContext.clientId) {
     case process.env.AppClientId:
+      if (event.request.clientMetadata.role !== ROLES.Student)
+        throw new Error(
+          "The App is reserved for STUDENTS only!\n please signup as a student or if you are an ADMIN or LECTURER, use the web app"
+        );
       GroupName = process.env.StudentsGroupName;
       break;
     case process.env.AppClientIdWeb:
+      if (event.request.clientMetadata.role === ROLES.Student)
+        throw new Error(
+          "The Web App is reserved for ADMINs or LECTURERs only, please signup as an ADMINs or LECTURERs, if you are a STUDENT the Pronto app"
+        );
       GroupName =
         event.request.clientMetadata.role == ROLES.Lecture
           ? process.env.LecturersGroupName
