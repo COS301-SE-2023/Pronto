@@ -72,14 +72,14 @@ export default function RecentAnnouncement() {
 
             <h1 className="moduleHead">Recent Announcements</h1>
 
-            <div class="card" data-testid="card1">
-              <div class="card-header">
+            <div className="card" data-testid="card1">
+              <div className="card-header">
                 <div className = "subjectCode">COS132</div>
                 <div className = "postDate">22/05/2023</div>
               </div>
-              <div class="card-body">
-                <h5 class="card-title">No class from Thursday 1 June</h5>
-                <p class="card-text">Please note that due to the completeion of the sylabus in this mornings lecture,
+              <div className="card-body">
+                <h5 className="card-title">No class from Thursday 1 June</h5>
+                <p className="card-text">Please note that due to the completeion of the sylabus in this mornings lecture,
                     there will be no class tomorrow or from here forth:) </p>
 
                 <Button 
@@ -112,14 +112,14 @@ export default function RecentAnnouncement() {
               </div>
             </div>
 
-            <div class="card" data-testid="card2">
-              <div class="card-header">
+            <div className="card" data-testid="card2">
+              <div className="card-header">
                 <div className = "subjectCode">COS341</div>
                 <div className = "postDate">20/05/2023</div>
               </div>
-              <div class="card-body">
-                <h5 class="card-title">Date of final exam</h5>
-                <p class="card-text">Please note that the exam date is the 15th of June at 09.30. The exam will be 3 hours.</p>
+              <div className="card-body">
+                <h5 className="card-title">Date of final exam</h5>
+                <p className="card-text">Please note that the exam date is the 15th of June at 09.30. The exam will be 3 hours.</p>
 
                 <Button 
                 id="demo-customized-button"

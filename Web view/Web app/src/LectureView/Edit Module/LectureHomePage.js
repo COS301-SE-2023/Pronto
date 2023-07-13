@@ -4,7 +4,7 @@ import "../LectureHome.css";
 import { listCourses ,listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import {AddModal} from '../../ErrorModal'
-import { Modal,Typography,Box } from "@mui/material";
+
 const LectureHomePage = () => {
 
   const [courses,setCourses]=useState([])
@@ -23,26 +23,26 @@ const LectureHomePage = () => {
         const lec=await API.graphql({ 
                     query:listLecturers,
                     variables:{ 
-                       filter: { 
-                          email: { 
-                           eq : lecturer_email
-                       }
-                    }
+                    //    filter: { 
+                    //       email: { 
+                    //        eq : lecturer_email
+                    //    }
+                    // }
                   },
                 authMode:"AMAZON_COGNITO_USER_POOLS",
                 }) 
         console.log(lec)
-        if(lec.data.listLecturers.items.length>0){     
-          setLecturer(lec.data.listLecturers.items[0])
+        //if(lec.data.listLecturers.items.length>0){     
+          //setLecturer(lec.data.listLecturers.items[0])
           //console.log(lec)
              let courseList=await API.graphql({
                     query:listCourses,
                     variables:{
-                            filter:{
-                                lecturerId:{
-                                    eq:lec.data.listLecturers.items[0].id
-                            }
-                        }
+                        //     filter:{
+                        //         lecturerId:{
+                        //             eq:lec.data.listLecturers.items[0].id
+                        //     }
+                        // }
                     },
                     authMode:"AMAZON_COGNITO_USER_POOLS"
                 })
@@ -51,7 +51,7 @@ const LectureHomePage = () => {
           //courseList=courseList.data.listCourses.items 
           //setCourses([...courseList])
             
-         }
+        // }
         }
     }catch(error){
       setErrorMessage(error)
@@ -88,7 +88,7 @@ const LectureHomePage = () => {
         {  courses.map((val, key)=>{    
             return (
               <a href="./edit-module"> 
-                <button className="content-button">{val.coursecode} {val.coursename}</button>
+                <button className="content-button">{val.coursecode}</button>
               </a>
                                 )
                              })} 

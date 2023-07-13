@@ -23,7 +23,7 @@ const PersonalInfoPage = () => {
   
         <main style={{ width: '900px',marginTop: '30px' }}>
             <h1 className="moduleHead">Personal Information</h1>
-            <table class="table table-sm">
+            <table className="table table-sm">
                 <tbody>
                     
                     <tr>
@@ -60,24 +60,24 @@ const PersonalInfoPage = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                 <form>
-                <div class="form-group row">
-                    <label for="colFormLabel" class="col-sm-2 col-form-label">Old password: </label>
-                    <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel" data-testid="pword" required></input>
+                <div className="form-group row">
+                    <label for="colFormLabel" className="col-sm-2 col-form-label">Old password: </label>
+                    <div className="col-sm-10">
+                    <input type="text" className="form-control" id="colFormLabel" data-testid="pword" required></input>
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label for="colFormLabel" class="col-sm-2 col-form-label">New password: </label>
-                    <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel" data-testid="repword" required></input>
+                <div className="form-group row">
+                    <label for="colFormLabel" className="col-sm-2 col-form-label">New password: </label>
+                    <div className="col-sm-10">
+                    <input type="text" className="form-control" id="colFormLabel" data-testid="repword" required></input>
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label for="colFormLabel" class="col-sm-2 col-form-label">Confirm password: </label>
-                    <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel" data-testid="newpword"></input>
+                <div className="form-group row">
+                    <label for="colFormLabel" className="col-sm-2 col-form-label">Confirm password: </label>
+                    <div className="col-sm-10">
+                    <input type="text" className="form-control" id="colFormLabel" data-testid="newpword"></input>
                     </div>
                 </div>
 
