@@ -22,7 +22,7 @@ const AddLecturer = () => {
         event.preventDefault()
         
         if(!isModalOpened){
-            // courseList=await findCourses(courses)
+            //courseList=await findCourses(courses)
             
             let lecturer={
                 institutionId:institution.id,
@@ -32,22 +32,20 @@ const AddLecturer = () => {
                 email:email,
             }
             
-
-             try{   
-                
-                // let mutation=await API.graphql({
-                //     query: createLecturer,
-                //     variables:{input:lecturer},
-                //     authMode:'AMAZON_COGNITO_USER_POOLS',
-                //     })
+             try{       
+                let mutation=await API.graphql({
+                    query: createLecturer,
+                    variables:{input:lecturer},
+                    authMode:'AMAZON_COGNITO_USER_POOLS',
+                    })
       
-                //   console.log(mutation)
-                 //lecturer=mutation.data.createLecturer
-            //     lecturer.courses=[]
-                 //lecturers.push(mutation.data.createLecturer)
+                console.log(mutation)
+                 lecturer=mutation.data.createLecturer
+                 lecturer.courses=[]
+                 lecturers.push(mutation.data.createLecturer)
                   
-            //     //Add lecturer to courses
-            //     await addCourses(lecturer,courseList)
+                 //Add lecturer to courses
+                 await addCourses(lecturer,courses)
                  if(lecturers.length<19)
                          setLecturers(lecturers)
 
@@ -65,7 +63,6 @@ const AddLecturer = () => {
                     //console.error(e) 
                  }
                 }    
-
             //Reset state
             setFirstName("")
             setLastName("")
@@ -397,10 +394,10 @@ const AddLecturer = () => {
                                     <AddModal 
                                        updateFlag={(false)}
                                        lecturerData={(null)}
-                                       findCourses={findCourses}
+                                       //findCourses={findCourses}
                                        addCourses={addCourses}
                                        removeCourses={removeCourses}
-                                       courseData={courses}
+                                       //courseData={courses}
                                        setModal={setIsModalOpened}
                                        setCourses={setCourses}
                                        selectedCourses={[]}

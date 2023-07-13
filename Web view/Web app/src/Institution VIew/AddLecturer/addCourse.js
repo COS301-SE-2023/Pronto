@@ -41,6 +41,7 @@ export default function AddModal(module) {
      //module.setCourses()
      module.setModal(false)
      
+
      //Remove deleted courses
       if(module.updateFlag===true){
         if(removed.length>0){
@@ -49,30 +50,28 @@ export default function AddModal(module) {
      
         //Add new courses
         let newcourses=[]
-        // for(let i=0;i<courses.length;i++){
-        //   if(courses[i].coursecode!=="" ){
-        //     if(module.courseData.find(course=>course.coursecode===courses[i].coursecode)===undefined){
-        //       newcourses.push(courses[i])
-        //     }
-        //   }
-        //}
-        let courseList=await module.findCourses(newcourses)
-       
-        if(newcourses.length>courseList.length)
-             alert("Course(s) not found")
-       
-        if(courseList.length>0){
-          await module.addCourses(module.lecturerData,courseList)
+        for(let i=0;i<selectedCourses.length;i++){
+           if(selectedCourses[i].lecturerId===null ){
+               newcourses.push(selectedCourses[i])
+           }
         }
+        let courseList=await module.addCourses(newcourses)
+       
+        // if(newcourses.length>courseList.length)
+        //      alert("Course(s) not found")
+       
+        // if(courseList.length>0){
+        //   await module.addCourses(module.lecturerData,courseList)
+        // }
 
-        module.setCourses([])
+        module.setCourses([offeredCourses])
       }
-      // else { 
-      //   module.setCourses(courses)
-      // }
+       else { 
+         module.setCourses(selectedCourses)
+       }
       
      // setCourses([])
-     module.setCourses(offeredCourses)
+     //module.setCourses(offeredCourses)
 }
 
 const handleAdd = async(event) => {
@@ -96,9 +95,13 @@ const handleAdd = async(event) => {
 }
 
 const handleRemove = async(index) => {
-    const remove=[...removed]
+    const remove=[...removed,selectedCourses[index]]
   //  remove.push(courses[index])
+    offeredCourses.push(selectedCourses[index])
+    selectedCourses.splice(index,1)
     setRemoved(remove)
+    setOfferedCourses(offeredCourses)
+    setSelectedCourses(selectedCourses)
     //const rows = [...courses]
     //rows.splice(index, 1)
     //setCourses( rows )
@@ -178,17 +181,6 @@ const handleRemove = async(index) => {
 
               }
              </select>
-             {/* <select
-                //value={selected}
-                className="custom-select"
-                id="inputGroupSelect01"
-                //data-testid="filterSelect"
-              >
-                  <option >Filter by</option> 
-                  <option  >First Name</option>
-                  <option >Last Name</option>
-                  <option  >Email</option>
-            </select> */}
               </div>
               <button type="submit" 
                className="btn btn-primary" 

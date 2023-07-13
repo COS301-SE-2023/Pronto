@@ -18,8 +18,6 @@ export const createLecturer=`mutation CreateLecturer(
       openingTime
       closingTime
       minimumDuration
-      lectureremails
-      coursecodes
       domains
       adminId
       createdAt

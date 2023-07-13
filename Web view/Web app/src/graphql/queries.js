@@ -12,6 +12,12 @@ export const listLecturers=`query ListLecturers(
       lastname
       userRole
       email
+      courses { 
+        items{ 
+          id 
+          coursecode
+        }
+      }
       createdAt
       updatedAt
       owner
@@ -75,7 +81,6 @@ export const listInstitutions=`query ListInstitutions(
       openingTime
       closingTime
       minimumDuration
-      lectureremails
       domains
       admin { 
         id
