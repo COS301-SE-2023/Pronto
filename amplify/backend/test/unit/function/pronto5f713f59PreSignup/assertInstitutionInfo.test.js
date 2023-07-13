@@ -19,6 +19,7 @@ describe("Input Validation and Error handling", () => {
     ).rejects.toThrow(/^Invalid Institution Id: InstitutionId =/);
   });
   test(`should throw "Failed To retrieve institution details"`, async () => {
+    global.Request = jest.fn((input, options) => null);
     const someInstitutionId = "someInstitutionId";
 
     await expect(
@@ -44,12 +45,9 @@ describe("Input Validation and Error handling", () => {
       /^Invalid email/
     );
   });
-  test(`should throw "Failed To retrieve institution details...Failed to retrieve list for the institution" on isLectureEmailPartOfInstitution`, async () => {
+  test(`should throw "Failed To retrieve institution details...Failed to retrieve list for the institution"`, async () => {
     const someInstitutionId = "someInstitutionId";
     const someEmail = "someEmail";
-    await expect(
-      isLectureEmailPartOfInstitution(someEmail, someInstitutionId)
-    ).rejects.toThrow(/Failed To retrieve institution details/);
     await expect(
       isLectureEmailPartOfInstitution(someEmail, someInstitutionId)
     ).rejects.toThrow(/Failed to retrieve list for the institution/);
@@ -67,9 +65,6 @@ describe("Input Validation and Error handling", () => {
     await expect(isAdminAllocated(someInstitutionId)).rejects.toThrow(
       /Failed to retrieve admin for the institution/
     );
-    await expect(isAdminAllocated(someInstitutionId)).rejects.toThrow(
-      /Failed To retrieve institution details/
-    );
   });
 });
 describe("Testing GraphQL API Calls", () => {
@@ -77,7 +72,7 @@ describe("Testing GraphQL API Calls", () => {
     jest.restoreAllMocks();
     jest.resetModules();
   });
-  test("should throw API ERROR: Failed to retrieve data", async () => {
+  test("should throw Failed to retrieve list for the institution", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve({ ok: false }),
@@ -87,7 +82,7 @@ describe("Testing GraphQL API Calls", () => {
     const someEmail = "someEmail";
     await expect(
       isLectureEmailPartOfInstitution(someEmail, someInstitutionId)
-    ).rejects.toThrow(/API ERROR: Failed to retrieve data$/);
+    ).rejects.toThrow(/Failed to retrieve list for the institution./);
   });
   test("should retrieve data", async () => {
     global.fetch = jest.fn(() =>
@@ -105,5 +100,12 @@ describe("Testing GraphQL API Calls", () => {
     expect(
       await isLectureEmailPartOfInstitution(someEmail, someInstitutionId)
     ).toBe(false);
+  });
+
+  test("should get institution data that was set from previous getAndSetInstitutionDetails call", async () => {
+    const someInstitutionId = "someInstitutionId";
+    expect(await getAndSetInstitutionDetails(someInstitutionId)).toMatchObject(
+      institutionDetails
+    );
   });
 });

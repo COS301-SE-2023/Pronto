@@ -23,12 +23,12 @@ exports.handler = async (event) => {
     throw new Error("User role not provided on ClientMetadata");
   if (
     !isAppClientValid(
-      event.request.callerContext.clientId,
+      event.callerContext.clientId,
       event.request.clientMetadata.role
     )
   )
     throw new Error(
-      `Cannot authenticate users from this app client: Students Should use the mobile app and Admin/Lectures should use the web app`
+      `Cannot authenticate user from this app client:\n Students Should use the mobile app and Admin/Lectures should use the web app`
     );
 
   event.response.autoConfirmUser = false;
@@ -39,9 +39,7 @@ exports.handler = async (event) => {
           await isAdminAllocated(event.request.clientMetadata.institutionId)
         ) {
           event.response.autoConfirmUser = false;
-          throw new Error(
-            `Institution has an admin already. institutionId=${event.request.clientMetadata.institutionId}`
-          );
+          throw new Error(`Institution has an admin already.`);
         }
         event.response.autoConfirmUser = true;
         break;
@@ -53,9 +51,7 @@ exports.handler = async (event) => {
 
         if (!isLectureEmailPartOfInst) {
           event.response.autoConfirmUser = false;
-          throw new Error(
-            `Lecturer email is not part of the Institution. institutionId=${event.request.clientMetadata.institutionId}`
-          );
+          throw new Error(`Lecturer email is not part of the Institution.`);
         }
         event.response.autoConfirmUser = true;
       case ROLES.Student:

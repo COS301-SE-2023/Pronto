@@ -1,6 +1,6 @@
-const adminEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/admin.event.json");
-const lecturerEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/lecturers.event.json");
-const studentsEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/students.event.json");
+const adminEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/admin.event.json");
+const lecturerEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/lecturers.event.json");
+const studentsEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/students.event.json");
 const preAuth = require("../../../../function/pronto5f713f59PreSignup/src/index");
 
 jest.mock(
@@ -35,23 +35,22 @@ describe("Input Validation and Error handling", () => {
     const studentEventWithAdminInvalidClientId = JSON.parse(
       JSON.stringify(studentsEvent)
     );
-    studentEventWithAdminInvalidClientId.request.callerContext.clientId =
-      "Invalid";
+    studentEventWithAdminInvalidClientId.callerContext.clientId = "Invalid";
     console.table(studentEventWithAdminInvalidClientId);
     await expect(
       preAuth.handler(studentEventWithAdminInvalidClientId)
     ).rejects.toThrow(/Unrecognised user pool app client ID/);
   });
-  test(`should throw "Cannot authenticate users from this app client: Students Should use the mobile app and Admin/Lectures should use the web app"`, async () => {
+  test(`should throw "Cannot authenticate users from this app client..."`, async () => {
     const studentEventWithAdminRole = JSON.parse(JSON.stringify(studentsEvent));
     studentEventWithAdminRole.request.clientMetadata.role = "Admin";
     await expect(preAuth.handler(studentEventWithAdminRole)).rejects.toThrow(
-      "Cannot authenticate users from this app client: Students Should use the mobile app and Admin/Lectures should use the web app"
+      "Cannot authenticate user from this app client:\n Students Should use the mobile app and Admin/Lectures should use the web app"
     );
   });
   test('should throw "Institution has an admin already. institutionId"', async () => {
     await expect(preAuth.handler(adminEvent)).rejects.toThrow(
-      /Institution has an admin already. institutionId/
+      /Institution has an admin already./
     );
   });
   test('should throw "Lecturer email is not part of the Institution"', async () => {
