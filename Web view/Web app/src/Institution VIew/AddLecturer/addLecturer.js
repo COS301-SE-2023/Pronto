@@ -4,6 +4,7 @@ import { createLecturer, deleteLecturer,updateCourse} from "../../graphql/mutati
 import { lecturersByInstitutionId,listInstitutions,listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
+import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 
 const AddLecturer = () => {
@@ -316,6 +317,7 @@ const AddLecturer = () => {
     
     return (  
         <div style={{ display: 'inline-flex' }}>
+             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             <nav style={{ width: '20%' }} data-testid="InstitutionNavigation">
                 {/* Navigation bar content */}
                 <InstitutionNavigation />
