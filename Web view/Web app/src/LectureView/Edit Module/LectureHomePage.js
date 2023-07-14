@@ -9,13 +9,13 @@ const LectureHomePage = () => {
 
   const [courses,setCourses]=useState([])
   const [lecturer,setLecturer]=useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [error, setError] = useState('')
 
   const fetchCourses=async()=>{ 
     try{
       const user=await Auth.currentAuthenticatedUser()
       if(user===undefined){
-        alert("Please log in")
+        setError("You are not logged in! Please click on the logout button and log in to use Pronto")
       }
       else{
         let lecturer_email=user.attributes.email
@@ -55,12 +55,16 @@ const LectureHomePage = () => {
          }
         }
     }catch(error){
-      setErrorMessage(error)
-      console.log(error)
-      // return ( 
-      //     <AddModal error={errorMessage}> 
-      //     </AddModal>     
-      // )
+         let e=error.errors[0].message
+          if(e.search("Unathorized")!==-1){ 
+            setError("You are not authorized to perform this action.Please log out and log in")
+          }
+          else if(e.search("Network")!==-1){
+            setError("Request failed due to network issues")
+          }
+          else{ 
+            setError("Something went wrong.Please try again later")
+          }
     }
   }
   
@@ -71,6 +75,7 @@ const LectureHomePage = () => {
     
   return (
     <div style={{ display: 'inline-flex' }}>
+      {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }}>
           {/* Navigation bar content */}
           <LecturerNavigation />
@@ -78,37 +83,24 @@ const LectureHomePage = () => {
 
       <main style={{ width: '900px',marginTop: '30px' }}>
         <h1 className="moduleHead">Courses</h1>
-{/* 
-        <a href="./edit-module">
-        <button className="content-button">COS341- Compiler Construction</button>
-        </a> */}
        <Link 
           to={'/edit-module'}  
           state={courses}>Learn More</Link>
-          
-{/* 
-        <a href="./edit-module">
-        <button className="content-button">COS132- Imperative Programming</button>
-        </a> */}
-        {  courses.map((val, key)=>{    
-            return (
-              // <a href="./edit-module" key={val.coursecode}> 
-              //   <button className="content-button" key={val.coursecode}>{val.coursecode}</button>
-              // </a>
-              <Link 
-                to={'/edit-module'}  
-                state={val}
-                key={val.coursecode}>        
-                    <button   
-                      className="content-button" 
-                      key={val.coursecode}>
-                        {val.coursecode}    
-                    </button>
-              </Link>
-                )
-                             })} 
+          {courses.map((val, key)=>{    
+              return (
+                <Link 
+                  to={'/edit-module'}  
+                  state={val}
+                  key={val.coursecode}>        
+                      <button   
+                        className="content-button" 
+                        key={val.coursecode}>
+                          {val.coursecode}    
+                      </button>
+                </Link>
+                  )
+            })} 
       </main>
-
     </div>
   );
 };

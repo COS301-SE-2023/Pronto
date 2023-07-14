@@ -36,7 +36,6 @@ export default function PostAccordion(course) {
   const handleSubmit = async(event)=>{ 
         try{
           event.preventDefault()
-          //console.log(course)
           let announcement={ 
             courseId:course.course.id,
             description:body,
@@ -52,7 +51,16 @@ export default function PostAccordion(course) {
           })
           setError("Announcement posted succesfully")
         }catch(error){ 
-          setError(error.errors[0].message)
+          let e=error.errors[0].message
+          if(e.search("Unathorized")!==-1){ 
+            setError("You are not authorized to perform this action.Please log out and log in")
+          }
+          else if(e.search("Network")!==-1){
+            setError("Request failed due to network issues")
+          }
+          else{ 
+            setError("Something went wrong.Please try again later")
+          }
         }
         setTitle("") 
         setBody("")

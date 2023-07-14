@@ -7,9 +7,6 @@ import { useLocation } from "react-router-dom";
 const PostReminder = (props) => { 
   const state=useLocation()
   const p =async()=>{ 
-    console.log(props)
-    console.log(this)
-    console.log(state)
     if(state.state===null){ 
       let s={
         coursecode:""

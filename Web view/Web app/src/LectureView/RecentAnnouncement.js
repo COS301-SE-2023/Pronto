@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import "./LectureHome.css";
 import {API,Auth} from 'aws-amplify'
 import { listLecturers,listAnnouncements, listCourses } from '../graphql/queries';
+import { ErrorModal } from '../ErrorModal';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -58,6 +59,7 @@ export default function RecentAnnouncement() {
   const [lecturer,setLecturer]=React.useState('')
   const[courses,setCourses]=React.useState([])
   const[announcements,setAnnouncements]=React.useState([])
+  const[error,setError]=React.useState("")
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -70,6 +72,11 @@ export default function RecentAnnouncement() {
   const fetchAnnouncements = async()=>{ 
       try{
         let user=await Auth.currentAuthenticatedUser();
+        if(user===undefined){
+            setError("You are not logged in! Please click on the logout button and log in to use Pronto")       
+        }
+
+        else{
         let lecturer_email=user.attributes.email
          const lec=await API.graphql({ 
                     query:listLecturers,
@@ -109,17 +116,25 @@ export default function RecentAnnouncement() {
                   },
                 authMode:"AMAZON_COGNITO_USER_POOLS",
                 }) 
-                console.log(announcement)
           if(announcement.data.listAnnouncements.items.length>0){
             announcementList.push.apply(announcementList,announcement.data.listAnnouncements.items)
           }
         }
+      
         setAnnouncements(announcementList)
-        console.log(announcements)
       }
-
+    }
       }catch(error){
-          console.log(error)
+          let e=error.errors[0].message
+          if(e.search("Unathorized")!==-1){ 
+            setError("You are not authorized to perform this action.Please log out and log in")
+          }
+          else if(e.search("Network")!==-1){
+            setError("Request failed due to network issues")
+          }
+          else{ 
+            setError("Something went wrong.Please try again later")
+          }
       }
   }
 
@@ -129,11 +144,12 @@ export default function RecentAnnouncement() {
 
   return (
     <div style={{ display: 'inline-flex' }}>
+       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
           {/* Navigation bar content */}
           <LecturerNavigation />
       </nav>
-    
+       
         <main style={{ width: '900px',marginTop: '30px' }}>
 
             <h1 className="moduleHead">Recent Announcements</h1>
