@@ -7,6 +7,9 @@
   "request": {
     "clientMetadata": {
       "role": "Student"
+    },
+    "userAttributes": {
+      "email": "EMAIL"
     }
   },
   "response": {}
