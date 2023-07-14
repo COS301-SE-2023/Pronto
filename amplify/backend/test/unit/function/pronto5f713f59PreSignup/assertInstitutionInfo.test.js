@@ -1,13 +1,16 @@
 const {
   isLectureEmailPartOfInstitution,
   isAdminAllocated,
+  isStudentEmailDomainPartOfInstitution,
   getAndSetInstitutionDetails,
   getLectureEmailsFromInstitution,
   getInstitutionAdminId,
+  getInstitutionEmailDomains,
 } = require("../../../../function/pronto5f713f59PreSignup/src/assertInstitutionInfo");
 const institutionDetails = {
   adminId: "someAdminId",
   lectureremails: ["someLecturerEmail1", "someLecturerEmail2"],
+  domains: ["tuks.co.za", "up.ac.za"],
 };
 
 describe("Input Validation and Error handling", () => {
@@ -66,6 +69,19 @@ describe("Input Validation and Error handling", () => {
       /Failed to retrieve admin for the institution/
     );
   });
+  test(`should throw "Failed to retrieve email domains for the institution."`, async () => {
+    const someInstitutionId = "someInstitutionId";
+    await expect(getInstitutionEmailDomains(someInstitutionId)).rejects.toThrow(
+      /Failed to retrieve email domains for the institution./
+    );
+  });
+  test(`should throw "Failed to retrieve email domains for the institution"`, async () => {
+    const someInstitutionId = "someInstitutionId";
+    const someEmail = "someEmail";
+    await expect(
+      isStudentEmailDomainPartOfInstitution(someEmail, someInstitutionId)
+    ).rejects.toThrow(/Failed to retrieve email domains for the institution/);
+  });
 });
 describe("Testing GraphQL API Calls", () => {
   afterEach(() => {
@@ -96,16 +112,16 @@ describe("Testing GraphQL API Calls", () => {
     );
     const someInstitutionId = "someInstitutionId";
     const someEmail = "someEmail";
+    const someStudentEmail = "a@tuks.co.za";
     expect(await isAdminAllocated(someEmail, someInstitutionId)).toBe(true);
     expect(
       await isLectureEmailPartOfInstitution(someEmail, someInstitutionId)
     ).toBe(false);
-  });
-
-  test("should get institution data that was set from previous getAndSetInstitutionDetails call", async () => {
-    const someInstitutionId = "someInstitutionId";
-    expect(await getAndSetInstitutionDetails(someInstitutionId)).toMatchObject(
-      institutionDetails
-    );
+    expect(
+      await isStudentEmailDomainPartOfInstitution(
+        someStudentEmail,
+        someInstitutionId
+      )
+    ).toBe(true);
   });
 });

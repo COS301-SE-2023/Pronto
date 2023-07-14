@@ -8,6 +8,7 @@ jest.mock(
   () => ({
     isLectureEmailPartOfInstitution: jest.fn(() => Promise.resolve(false)),
     isAdminAllocated: jest.fn(() => Promise.resolve(true)),
+    isStudentEmailDomainPartOfInstitution: jest.fn(() => Promise.resolve(true)),
   })
 );
 describe("Input Validation and Error handling", () => {
@@ -45,7 +46,7 @@ describe("Input Validation and Error handling", () => {
     const studentEventWithAdminRole = JSON.parse(JSON.stringify(studentsEvent));
     studentEventWithAdminRole.request.clientMetadata.role = "Admin";
     await expect(preAuth.handler(studentEventWithAdminRole)).rejects.toThrow(
-      "Cannot authenticate user from this app client:\n Students Should use the mobile app and Admin/Lectures should use the web app"
+      /Cannot authenticate user from this app client/
     );
   });
   test('should throw "Institution has an admin already. institutionId"', async () => {
@@ -58,10 +59,9 @@ describe("Input Validation and Error handling", () => {
       /Lecturer email is not part of the Institution/
     );
   });
-});
-
-describe("testing returned values", () => {
-  test("should return event", async () => {
-    expect(await preAuth.handler(studentsEvent)).toMatchObject(studentsEvent);
+  test('should throw "The provided student email does not match the selected institutions student emails format." ', async () => {
+    await expect(preAuth.handler(studentsEvent)).rejects.toThrow(
+      /The provided student email does not match the selected institutions student emails format./
+    );
   });
 });

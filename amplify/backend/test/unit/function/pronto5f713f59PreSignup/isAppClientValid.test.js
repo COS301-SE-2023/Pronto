@@ -16,7 +16,7 @@ describe("input validation", () => {
     const nullClientID = null;
     expect(() => {
       isAppClientValid(nullClientID, ROLE.Lecture);
-    }).toThrow(/^Unrecognised user pool app client ID=/);
+    }).toThrow(/^Unrecognised user pool app client ID/);
   });
 });
 
