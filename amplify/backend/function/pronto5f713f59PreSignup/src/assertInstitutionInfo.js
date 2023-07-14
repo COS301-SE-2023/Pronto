@@ -66,6 +66,15 @@ const getInstitutionAdminId = async (institutionId) => {
   }
 };
 
+const getInstitutionEmailDomains = async (institutionId) => {
+  try {
+    const institutionetails = await getAndSetInstitutionDetails(institutionId);
+    return institutionetails.domains;
+  } catch (getInstitutionEmailDomainsError) {
+    throw new Error(`Failed to retrieve email domains for the institution.`);
+  }
+};
+
 const isLectureEmailPartOfInstitution = async (email, institutionId) => {
   if (!email) throw new Error(`Invalid email = ${email}`);
   try {
@@ -87,10 +96,27 @@ const isAdminAllocated = async (institutionId) => {
   }
 };
 
+const isStudentEmailDomainPartOfInstitution = async (
+  studentEmail,
+  institutionId
+) => {
+  try {
+    const institutionDomains = await getInstitutionEmailDomains(institutionId);
+    return Object.values(institutionDomains).includes(
+      studentEmail.split("@")[1]
+    );
+  } catch (getInstitutionEmailDomainsError) {
+    console.debug(getInstitutionEmailDomainsError);
+    throw new Error(getInstitutionEmailDomainsError);
+  }
+};
+
 module.exports = {
   isLectureEmailPartOfInstitution,
   isAdminAllocated,
+  isStudentEmailDomainPartOfInstitution,
   getAndSetInstitutionDetails,
   getLectureEmailsFromInstitution,
   getInstitutionAdminId,
+  getInstitutionEmailDomains,
 };

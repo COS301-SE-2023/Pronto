@@ -13,6 +13,7 @@ const ROLES = require("./roles.js");
 const {
   isLectureEmailPartOfInstitution,
   isAdminAllocated,
+  isStudentEmailDomainPartOfInstitution,
 } = require("./assertInstitutionInfo.js");
 const isAppClientValid = require("./isAppClientValid.js");
 /**
@@ -28,7 +29,8 @@ exports.handler = async (event) => {
     )
   )
     throw new Error(
-      `Cannot authenticate user from this app client:\n Students Should use the mobile app and Admin/Lectures should use the web app`
+      `Cannot authenticate user from this app client: 
+      Students Should use the mobile app and Admin/Lectures should use the web app`
     );
 
   event.response.autoConfirmUser = false;
@@ -55,12 +57,17 @@ exports.handler = async (event) => {
         }
         event.response.autoConfirmUser = true;
       case ROLES.Student:
-        //call api
-        //get email domains for the institution
-        //check student domain : match(/@domain$/)
-        //event.response.autoConfirmUser = isStudentDomainPartOfInstitution();
-        event.response.autoConfirmUser = false;
-        break;
+        if (
+          await isStudentEmailDomainPartOfInstitution(
+            event.request.userAttributes.email,
+            event.request.clientMetadata.institutionId
+          )
+        )
+          event.response.autoConfirmUser = true;
+        throw new Error(
+          `The provided student email does not match the selected institutions student emails format.
+          Please use your institution provided email.`
+        );
     }
   } catch (preAuthError) {
     console.debug(preAuthError);
