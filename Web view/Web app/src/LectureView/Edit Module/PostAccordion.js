@@ -92,7 +92,7 @@ export default function PostAccordion(course) {
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Body: </label>
             <div className="col-sm-10">
-              <input  
+              <textarea  
                  type="text" 
                  className="form-control" 
                  id="colFormLabel"  
@@ -100,7 +100,7 @@ export default function PostAccordion(course) {
                  required
                  value={body}
                  onChange={(e)=>setBody(e.target.value)}
-                 ></input>
+                 ></textarea>
             </div>
           </div>
 
@@ -152,14 +152,14 @@ export default function PostAccordion(course) {
 
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Information: </label>
-            <div className="col-sm-10">
-              <input  
+            <div className='col-sm-10'>
+              <textarea 
                 type="text"  
                 className="form-control"  
                 id="colFormLabel" 
                 data-testid="body2" 
                 value={body}
-                onChange={(e)=>setBody(e.target.value)}></input>
+                onChange={(e)=>setBody(e.target.value)}></textarea>
             </div>
           </div>
 
