@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1689237419301" clover="3.2.0">
-  <project timestamp="1689237419301" name="All files">
-    <metrics statements="366" coveredstatements="122" conditionals="121" coveredconditionals="41" methods="39" coveredmethods="11" elements="526" coveredelements="174" complexity="0" loc="366" ncloc="366" packages="3" files="10" classes="10"/>
+<coverage generated="1689302576800" clover="3.2.0">
+  <project timestamp="1689302576800" name="All files">
+    <metrics statements="378" coveredstatements="133" conditionals="123" coveredconditionals="42" methods="41" coveredmethods="13" elements="542" coveredelements="188" complexity="0" loc="378" ncloc="378" packages="3" files="10" classes="10"/>
     <package name="AdminQueries7f7a03b0.src">
       <metrics statements="238" coveredstatements="0" conditionals="78" coveredconditionals="0" methods="28" coveredmethods="0"/>
       <file name="app.js" path="/Users/bandisa/dev/Pronto/amplify/backend/function/AdminQueries7f7a03b0/src/app.js">
@@ -311,30 +311,30 @@
       </file>
     </package>
     <package name="pronto5f713f59PreSignup.src">
-      <metrics statements="82" coveredstatements="79" conditionals="28" coveredconditionals="26" methods="7" coveredmethods="7"/>
+      <metrics statements="94" coveredstatements="90" conditionals="30" coveredconditionals="27" methods="9" coveredmethods="9"/>
       <file name="assertInstitutionInfo.js" path="/Users/bandisa/dev/Pronto/amplify/backend/function/pronto5f713f59PreSignup/src/assertInstitutionInfo.js">
-        <metrics statements="46" coveredstatements="46" conditionals="10" coveredconditionals="10" methods="5" coveredmethods="5"/>
+        <metrics statements="57" coveredstatements="57" conditionals="10" coveredconditionals="10" methods="7" coveredmethods="7"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
-        <line num="9" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="13" type="cond" truecount="2" falsecount="0"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="11" count="10" type="cond" truecount="4" falsecount="0"/>
+        <line num="11" count="12" type="cond" truecount="4" falsecount="0"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="13" count="9" type="stmt"/>
-        <line num="14" count="9" type="stmt"/>
-        <line num="24" count="9" type="stmt"/>
-        <line num="33" count="9" type="stmt"/>
-        <line num="37" count="9" type="stmt"/>
-        <line num="38" count="9" type="stmt"/>
+        <line num="13" count="11" type="stmt"/>
+        <line num="14" count="11" type="stmt"/>
+        <line num="24" count="11" type="stmt"/>
+        <line num="33" count="11" type="stmt"/>
+        <line num="37" count="11" type="stmt"/>
+        <line num="38" count="11" type="stmt"/>
         <line num="39" count="3" type="stmt"/>
         <line num="40" count="3" type="stmt"/>
         <line num="41" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="42" count="1" type="stmt"/>
         <line num="43" count="1" type="stmt"/>
-        <line num="45" count="7" type="stmt"/>
-        <line num="46" count="7" type="stmt"/>
+        <line num="45" count="9" type="stmt"/>
+        <line num="46" count="9" type="stmt"/>
         <line num="50" count="1" type="stmt"/>
         <line num="51" count="5" type="stmt"/>
         <line num="52" count="5" type="stmt"/>
@@ -347,48 +347,60 @@
         <line num="63" count="1" type="stmt"/>
         <line num="65" count="2" type="stmt"/>
         <line num="69" count="1" type="stmt"/>
-        <line num="70" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="70" count="3" type="stmt"/>
         <line num="71" count="3" type="stmt"/>
-        <line num="72" count="3" type="stmt"/>
-        <line num="73" count="1" type="stmt"/>
-        <line num="75" count="2" type="stmt"/>
-        <line num="76" count="2" type="stmt"/>
-        <line num="80" count="1" type="stmt"/>
-        <line num="81" count="2" type="stmt"/>
-        <line num="82" count="2" type="stmt"/>
-        <line num="83" count="1" type="stmt"/>
-        <line num="85" count="1" type="stmt"/>
-        <line num="86" count="1" type="stmt"/>
-        <line num="90" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="74" count="2" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="79" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="80" count="3" type="stmt"/>
+        <line num="81" count="3" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="84" count="2" type="stmt"/>
+        <line num="85" count="2" type="stmt"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="90" count="2" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="92" count="1" type="stmt"/>
+        <line num="94" count="1" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="103" count="2" type="stmt"/>
+        <line num="104" count="2" type="stmt"/>
+        <line num="105" count="1" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="114" count="1" type="stmt"/>
       </file>
       <file name="index.js" path="/Users/bandisa/dev/Pronto/amplify/backend/function/pronto5f713f59PreSignup/src/index.js">
-        <metrics statements="26" coveredstatements="23" conditionals="11" coveredconditionals="9" methods="1" coveredmethods="1"/>
+        <metrics statements="27" coveredstatements="23" conditionals="13" coveredconditionals="10" methods="1" coveredmethods="1"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="22" count="7" type="cond" truecount="2" falsecount="0"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="24" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="34" count="3" type="stmt"/>
-        <line num="35" count="3" type="stmt"/>
-        <line num="36" count="3" type="cond" truecount="3" falsecount="0"/>
-        <line num="38" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="41" count="1" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="47" count="1" type="stmt"/>
-        <line num="52" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="53" count="1" type="stmt"/>
-        <line num="54" count="1" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="62" count="1" type="stmt"/>
-        <line num="63" count="1" type="stmt"/>
-        <line num="66" count="2" type="stmt"/>
-        <line num="67" count="2" type="stmt"/>
-        <line num="69" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="38" count="3" type="cond" truecount="3" falsecount="0"/>
+        <line num="40" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="54" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="73" count="3" type="stmt"/>
+        <line num="74" count="3" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
       </file>
       <file name="isAppClientValid.js" path="/Users/bandisa/dev/Pronto/amplify/backend/function/pronto5f713f59PreSignup/src/isAppClientValid.js">
         <metrics statements="8" coveredstatements="8" conditionals="7" coveredconditionals="7" methods="1" coveredmethods="1"/>
