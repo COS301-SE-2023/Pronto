@@ -39,7 +39,7 @@ export default function PostAccordion(course) {
             courseId:course.course.id,
             description:body,
             start:title,
-            end:"",
+            end:course.course.coursecode,
             date:date,
             venue:"",
           } 
@@ -65,8 +65,7 @@ export default function PostAccordion(course) {
         }
         setTitle("") 
         setBody("")
-        setDate("")
-        
+        setDate("")     
   }
 
   return (

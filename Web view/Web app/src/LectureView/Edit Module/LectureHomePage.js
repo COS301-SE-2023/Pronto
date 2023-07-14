@@ -32,16 +32,8 @@ const LectureHomePage = () => {
                 authMode:"API_KEY",
                 })
 
-        // console.log(lec)
-        // const query=await API.graphql({
-        //     query:getLecturer,
-        //     variables:{id},
-        //     authMode:"API_KEY",
-        // })
-        // console.log(query)
         if(lec.data.listLecturers.items.length>0){     
           await setLecturer(lec.data.listLecturers.items[0])
-          console.log(lec)
             let courseList=await API.graphql({ 
                     query:listCourses,
                     variables:{ 
