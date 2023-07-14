@@ -9,7 +9,7 @@ import LecturerNavigation from "./LecturerNavigation";
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./LectureHome.css";
 import {API,Auth} from 'aws-amplify'
-import { listLecturers,listAnnouncements } from '../graphql/queries';
+import { listLecturers,listAnnouncements, listCourses } from '../graphql/queries';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -56,6 +56,7 @@ export default function RecentAnnouncement() {
   
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [lecturer,setLecturer]=React.useState('')
+  const[courses,setCourses]=React.useState([])
   const[announcements,setAnnouncements]=React.useState([])
 
   const open = Boolean(anchorEl);
@@ -75,31 +76,47 @@ export default function RecentAnnouncement() {
                     variables:{ 
                        filter: { 
                           email: { 
-                           eq : lecturer_email
+                           eq : "ndie2001@gmail.com"
                        }
                     }
                   },
                 authMode:"AMAZON_COGNITO_USER_POOLS",
               })
-        
-        setLecturer(lec.data.listLecturers.items[0])
-        
-        for(let i=0;i<lec.courses.length;i++){
-           
+        await setLecturer(lec.data.listLecturers.items[0])
+        if(lec.data.listLecturers.items.length>0){
+        let course=await API.graphql({ 
+                    query:listCourses,
+                    variables:{ 
+                        filter: { 
+                           lecturerId: { 
+                            eq : lec.data.listLecturers.items[0].id
+                        }
+                     }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                })
+        await setCourses(course.data.listCourses.items)
+        let announcementList=[]
+        for(let i=0;i<course.data.listCourses.items.length;i++){
           const announcement=await API.graphql({ 
                     query:listAnnouncements,
                     variables:{ 
                        filter: { 
                           courseId: { 
-                           eq : lec.courses[i].id
+                           eq :course.data.listCourses.items[i].id
                        }
                     }
                   },
                 authMode:"AMAZON_COGNITO_USER_POOLS",
                 }) 
-          console.log(announcement)    
-          setAnnouncements([...announcement.data.listAnnouncements.items])
+                console.log(announcement)
+          if(announcement.data.listAnnouncements.items.length>0){
+            announcementList.push.apply(announcementList,announcement.data.listAnnouncements.items)
+          }
         }
+        setAnnouncements(announcementList)
+        console.log(announcements)
+      }
 
       }catch(error){
           console.log(error)
@@ -120,130 +137,50 @@ export default function RecentAnnouncement() {
         <main style={{ width: '900px',marginTop: '30px' }}>
 
             <h1 className="moduleHead">Recent Announcements</h1>
+                { announcements.map((val,key)=>{ 
+                  return(
+                    <div className="card" data-testid="card1" key={key}>
+                      <div className="card-header">
+                        <div className = "subjectCode">{val.course.coursecode}</div>
+                        <div className = "postDate">{val.date}</div>
+                    </div>
+                    <div className="card-body">
+                      <h5 className="card-title">{val.start}</h5>
+                      <p className="card-text">{val.description}</p>
 
+                      <Button 
+                        id="demo-customized-button"
+                        aria-controls={open ? 'demo-customized-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        variant="contained"
+                        disableElevation
+                        onClick={handleClick}
+                        endIcon={<KeyboardArrowDownIcon />}
+                      >
+                        Options
+                      </Button>
 
-            <div className="card" data-testid="card1">
-              <div className="card-header">
-                <div className = "subjectCode">COS132</div>
-                <div className = "postDate">22/05/2023</div>
-              </div>
-              <div className="card-body">
-                <h5 className="card-title">No class from Thursday 1 June</h5>
-                <p className="card-text">Please note that due to the completeion of the sylabus in this mornings lecture,
-                    there will be no class tomorrow or from here forth:) </p>
-
-                <Button 
-                id="demo-customized-button"
-                aria-controls={open ? 'demo-customized-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                variant="contained"
-                disableElevation
-                onClick={handleClick}
-                endIcon={<KeyboardArrowDownIcon />}
-                >
-                Options
-                </Button>
-
-                <StyledMenu
-                    id="demo-customized-menu"
-                    MenuListProps={{
-                    'aria-labelledby': 'demo-customized-button',
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    >
-                    <MenuItem onClick={handleClose} disableRipple>
-                    <DeleteIcon />
-                    Delete
-                    </MenuItem>
-                </StyledMenu>
-              </div>
-            </div>
-           { announcements.map((val,key)=>{ 
-              return(
-                <div className="card" data-testid="card1">
-                  <div className="card-header">
-                      <div className = "subjectCode">{val.coursecode}</div>
-                      <div className = "postDate">{val.createdAt}</div>
+                      <StyledMenu
+                        id="demo-customized-menu"
+                        MenuListProps={{
+                        'aria-labelledby': 'demo-customized-button',
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                      >
+                        <MenuItem onClick={handleClose} disableRipple>
+                          <DeleteIcon />
+                            Delete
+                        </MenuItem>
+                      </StyledMenu>
+                    </div>
                   </div>
-                  <div className="card-body">
-                    <h5 className="card-title"></h5>
-                    <p className="card-text">{val.description}</p>
+               )
+            })}
 
-                    <Button 
-                      id="demo-customized-button"
-                      aria-controls={open ? 'demo-customized-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open ? 'true' : undefined}
-                      variant="contained"
-                      disableElevation
-                      onClick={handleClick}
-                      endIcon={<KeyboardArrowDownIcon />}
-                    >
-                      Options
-                    </Button>
-
-                    <StyledMenu
-                      id="demo-customized-menu"
-                      MenuListProps={{
-                      'aria-labelledby': 'demo-customized-button',
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <MenuItem onClick={handleClose} disableRipple>
-                        <DeleteIcon />
-                          Delete
-                      </MenuItem>
-                    </StyledMenu>
-                  </div>
-                </div>
-              )
-           })}
-
-            {/* <div className="card" data-testid="card2">
-              <div className="card-header">
-                <div className = "subjectCode">COS341</div>
-                <div className = "postDate">20/05/2023</div>
-              </div>
-              <div className="card-body">
-                <h5 className="card-title">Date of final exam</h5>
-                <p className="card-text">Please note that the exam date is the 15th of June at 09.30. The exam will be 3 hours.</p>
-
-                <Button 
-                id="demo-customized-button"
-                aria-controls={open ? 'demo-customized-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                variant="contained"
-                disableElevation
-                onClick={handleClick}
-                endIcon={<KeyboardArrowDownIcon />}
-                >
-                Options
-                </Button>
-
-                <StyledMenu
-                    id="demo-customized-menu"
-                    MenuListProps={{
-                    'aria-labelledby': 'demo-customized-button',
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    >
-                    <MenuItem onClick={handleClose} disableRipple>
-                    <DeleteIcon />
-                    Delete
-                    </MenuItem>
-                </StyledMenu>
-              </div>
-            </div> */}
-        </main>
-
-    </div>
+          </main>
+      </div>
   );
 }

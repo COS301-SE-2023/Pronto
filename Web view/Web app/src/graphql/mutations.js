@@ -123,7 +123,6 @@ export const createAnnouncement=`mutation CreateAnnouncement(
       institutionId
       lecturerId
       coursecode
-      coursename
       semester
       createdAt
       updatedAt

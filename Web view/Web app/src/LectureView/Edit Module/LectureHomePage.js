@@ -4,7 +4,7 @@ import "../LectureHome.css";
 import { listCourses ,listLecturers,getLecturer} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import {AddModal} from '../../ErrorModal'
-//import {} from './EditModuleInfo'
+import { Link } from "react-router-dom";
 const LectureHomePage = () => {
 
   const [courses,setCourses]=useState([])
@@ -34,23 +34,23 @@ const LectureHomePage = () => {
 
         console.log(lec)
         if(lec.data.listLecturers.items.length>0){     
-          setLecturer(lec.data.listLecturers.items[0])
+          await setLecturer(lec.data.listLecturers.items[0])
           console.log(lec)
-             let courseList=await API.graphql({
+            let courseList=await API.graphql({ 
                     query:listCourses,
-                    variables:{
-                            filter:{
-                                lecturerId:{
-                                    eq:lecturer.id
-                            }
+                    variables:{ 
+                        filter: { 
+                           lecturerId: { 
+                            eq : lec.data.listLecturers.items[0].id
                         }
-                    },
-                    authMode:"AMAZON_COGNITO_USER_POOLS",
+                     }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
                 })
           console.log(courseList)
           
           courseList=courseList.data.listCourses.items 
-          setCourses([...courseList])
+          setCourses(courseList)
             
          }
         }
@@ -82,16 +82,30 @@ const LectureHomePage = () => {
         <a href="./edit-module">
         <button className="content-button">COS341- Compiler Construction</button>
         </a> */}
+       <Link 
+          to={'/edit-module'}  
+          state={courses}>Learn More</Link>
+          
 {/* 
         <a href="./edit-module">
         <button className="content-button">COS132- Imperative Programming</button>
         </a> */}
         {  courses.map((val, key)=>{    
             return (
-              <a href="./edit-module" > 
-                <button className="content-button" key={val.coursecode}>{val.coursecode}</button>
-              </a>
-                                )
+              // <a href="./edit-module" key={val.coursecode}> 
+              //   <button className="content-button" key={val.coursecode}>{val.coursecode}</button>
+              // </a>
+              <Link 
+                to={'/edit-module'}  
+                state={val}
+                key={val.coursecode}>        
+                    <button   
+                      className="content-button" 
+                      key={val.coursecode}>
+                        {val.coursecode}    
+                    </button>
+              </Link>
+                )
                              })} 
       </main>
 

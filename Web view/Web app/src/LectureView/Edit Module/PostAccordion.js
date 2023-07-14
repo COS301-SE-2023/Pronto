@@ -8,11 +8,13 @@ import {Autocomplete, GoogleMap, Marker, useJsApiLoader} from '@react-google-map
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { createAnnouncement,updateAnnouncement } from '../../graphql/mutations';
-
-export default function PostAccordion() {
+import { API } from 'aws-amplify';
+export default function PostAccordion(course) {
   const [expanded, setExpanded] = React.useState(false);
   const[announcement,setAnnouncement]=React.useState("")
-
+  const[title,setTitle]=React.useState("")
+  const[body,setBody]=React.useState("")
+  const[date,setDate]=React.useState("")
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -28,12 +30,31 @@ export default function PostAccordion() {
     return <div>Loading</div>
   }
 
-  const handleSubmit = async()=>{ 
+  const handleSubmit = async(event)=>{ 
         try{
-
+          event.preventDefault()
+          console.log(course)
+          let announcement={ 
+            courseId:course.course.id,
+            description:body,
+            start:title,
+            end:"",
+            date:date,
+            venue:"",
+          } 
+          console.log(announcement)
+          let mutation= await API.graphql({
+            query:createAnnouncement,
+            variables:{input:announcement},
+            authMode:"AMAZON_COGNITO_USER_POOLS",
+          })
+          console.log(mutation)
         }catch(error){ 
-          
+          console.log(error)
         }
+        setTitle("") 
+        setBody("")
+        setDate("")
   }
 
   return (
@@ -52,25 +73,48 @@ export default function PostAccordion() {
          
         </AccordionSummary>
         <AccordionDetails>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e)=>handleSubmit(e)}>
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
             <div className="col-sm-10">
-              <input type="text" className="form-control" id="colFormLabel"  data-testid="title1"  required ></input>
+              <input 
+                
+                type="text" 
+                className="form-control" 
+                id="colFormLabel"  
+                data-testid="title1"  
+                required  
+                value={title}
+                onChange={(e)=>setTitle(e.target.value)}></input>
 
             </div>
 
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Body: </label>
             <div className="col-sm-10">
-              <input type="text" className="form-control" id="colFormLabel"  data-testid="body1" required></input>
+              <input  
+                 type="text" 
+                 className="form-control" 
+                 id="colFormLabel"  
+                 data-testid="body1" 
+                 required
+                 value={body}
+                 onChange={(e)=>setBody(e.target.value)}
+                 ></input>
             </div>
           </div>
 
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
             <div className="col-sm-10">
-              <input type="date" className="form-control" id="colFormLabel" data-testid="date1"></input>
+              <input 
+                type="date" 
+                className="form-control" 
+                id="colFormLabel" 
+                data-testid="date1"
+                value={date}
+                onChange={(e)=>setDate(e.target.value)}
+                ></input>
             </div>
           </div>
 
@@ -91,25 +135,45 @@ export default function PostAccordion() {
           
         </AccordionSummary>
         <AccordionDetails>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e)=>handleSubmit(e)}>
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
             <div className="col-sm-10">
-              <input type="text" className="form-control" id="colFormLabel"  data-testid="title2" required></input>
+              <input  
+                type="text" 
+                className="form-control" 
+                id="colFormLabel"  
+                data-testid="title2" 
+                required
+                value={title} 
+                onChange={(e)=>setTitle(e.target.value)}></input>
             </div>
           </div>
 
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Information: </label>
             <div className="col-sm-10">
-              <input type="text" className="form-control" id="colFormLabel" data-testid="body2"></input>
+              <input  
+                type="text"  
+                className="form-control"  
+                id="colFormLabel" 
+                data-testid="body2" 
+                value={body}
+                onChange={(e)=>setBody(e.target.value)}></input>
             </div>
           </div>
 
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
             <div className="col-sm-10">
-              <input type="date" className="form-control" id="colFormLabel"  data-testid="date2" required></input>
+              <input 
+               type="date"  
+               className="form-control"  
+               id="colFormLabel"   
+               data-testid="date2" 
+               required 
+               value={date}
+               onChange={(e)=>setDate(e.target.value)}></input>
             </div>
           </div>
 
