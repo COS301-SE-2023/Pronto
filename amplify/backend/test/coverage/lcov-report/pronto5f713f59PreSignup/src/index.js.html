@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.46% </span>
+                <span class="strong">85.18% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>23/26</span>
+                <span class='fraction'>23/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.81% </span>
+                <span class="strong">76.92% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/11</span>
+                <span class='fraction'>10/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.46% </span>
+                <span class="strong">85.18% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>23/26</span>
+                <span class='fraction'>23/27</span>
             </div>
         
             
@@ -133,7 +133,14 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -145,6 +152,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,6 +174,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
@@ -190,6 +199,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,10 +209,13 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* Amplify Params - DO NOT EDIT
 	ENV
@@ -218,6 +232,7 @@ const ROLES = require("./roles.js");
 const {
   isLectureEmailPartOfInstitution,
   isAdminAllocated,
+  isStudentEmailDomainPartOfInstitution,
 } = require("./assertInstitutionInfo.js");
 const isAppClientValid = require("./isAppClientValid.js");
 /**
@@ -233,7 +248,8 @@ exports.handler = async (event) =&gt; {
     )
   )
     throw new Error(
-      `Cannot authenticate user from this app client:\n Students Should use the mobile app and Admin/Lectures should use the web app`
+      `Cannot authenticate user from this app client: 
+      Students Should use the mobile app and Admin/Lectures should use the web app`
     );
 &nbsp;
   event.response.autoConfirmUser = false;
@@ -260,18 +276,23 @@ exports.handler = async (event) =&gt; {
         }
 <span class="cstat-no" title="statement not covered" >        event.response.autoConfirmUser = true;</span>
       case ROLES.Student:
-        //call api
-        //get email domains for the institution
-        //check student domain : match(/@domain$/)
-        //event.response.autoConfirmUser = isStudentDomainPartOfInstitution();
-        event.response.autoConfirmUser = false;
-        break;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (
+          await isStudentEmailDomainPartOfInstitution(
+            event.request.userAttributes.email,
+            event.request.clientMetadata.institutionId
+          )
+        )
+          event.response.autoConfirmUser = true;
+        throw new Error(
+          `The provided student email does not match the selected institutions student emails format.
+          Please use your institution provided email.`
+        );
     }
   } catch (preAuthError) {
     console.debug(preAuthError);
     throw new Error(preAuthError);
   }
-  return event;
+<span class="cstat-no" title="statement not covered" >  return event;</span>
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -280,7 +301,7 @@ exports.handler = async (event) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-13T08:36:59.289Z
+                at 2023-07-14T02:42:56.778Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
