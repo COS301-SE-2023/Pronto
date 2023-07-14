@@ -12,6 +12,7 @@ import ConfirmEmail from "./screens/Login/ConfirmEmail";
 import PrivacyPolicyScreen from "./screens/Settings/PrivacyPolicy";
 import ProfilePage from "./screens/Settings/Profile";
 import AboutScreen from "./screens/Settings/About";
+import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, Text } from "react-native";
 
@@ -124,6 +125,18 @@ export default function App() {
             <Stack.Screen
               name="Profile Page"
               component={ProfilePage}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
+              name="Reset Password"
+              component={ResetPassword}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
+              name="Delete Account"
+              component={DeleteAccountPage}
               options={{ headerShown: true }}
             />
 

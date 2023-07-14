@@ -20,12 +20,12 @@ const AccountSettings = () => {
     {
       title: "Security",
       subTitle: "Change your password",
-      onPress: () => {},
+      onPress: () => navigation.navigate("Reset Password"),
     },
     {
       title: "Reset",
-      subTitle: "Reset all of your app information",
-      onPress: () => {},
+      subTitle: "Delete your account and all of your information",
+      onPress: () => navigation.navigate("Delete Account"),
     },
     {
       title: "Privacy Policy",
