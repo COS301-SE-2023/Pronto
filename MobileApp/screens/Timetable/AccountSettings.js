@@ -10,7 +10,7 @@ const AccountSettings = () => {
     {
       title: "My profile",
       subTitle: "Edit your profile",
-      onPress: () => {},
+      onPress: () => navigation.navigate("Profile Page"),
     },
     {
       title: "Notification Preferences",
