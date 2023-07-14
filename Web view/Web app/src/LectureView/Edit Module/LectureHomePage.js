@@ -3,7 +3,7 @@ import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
 import { listCourses ,listLecturers,getLecturer} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
-import {AddModal} from '../../ErrorModal'
+import {ErrorModal} from '../../ErrorModal'
 import { Link } from "react-router-dom";
 const LectureHomePage = () => {
 
@@ -57,10 +57,10 @@ const LectureHomePage = () => {
     }catch(error){
       setErrorMessage(error)
       console.log(error)
-      return ( 
-          <AddModal error={errorMessage}> 
-          </AddModal>     
-      )
+      // return ( 
+      //     <AddModal error={errorMessage}> 
+      //     </AddModal>     
+      // )
     }
   }
   

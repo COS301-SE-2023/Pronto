@@ -15,9 +15,9 @@ const style = {
 };
 
 
-export function AddModal(errorMessage) {
+export function ErrorModal(errorMessage) {
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleOpen = async()=>{ 
     setOpen(true)
@@ -25,18 +25,35 @@ export function AddModal(errorMessage) {
 
   const handleClose= async()=>{ 
     setOpen(false)
+    errorMessage.setError("")
   }
 
-  return (
-    <Modal
-        open={true}
+    return (
+    <div className="form-row">                            
+      <div className="form-group col-6">
+      
+      {/* <button onClick={handleOpen}  
+      className="btn btn-primary"
+      data-testid="submitButton">View</button> */}
+      <Modal
+        open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-    >
+      >
         <Box sx={style}>
-            {errorMessage}
+        <p>{errorMessage.errorMessage}</p>
+          <button
+            onClick={handleClose} 
+            type="submit" 
+            className="btn btn-primary float-right"
+            data-testid="submitCourses" 
+              >
+            Ok 
+          </button>
         </Box>
-    </Modal>     
-  )
+      </Modal>
+    </div>
+  </div>
+  );
 }

@@ -9,12 +9,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { createAnnouncement,updateAnnouncement } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
+import { Modal } from '@mui/material';
+import {ErrorModal} from '../../ErrorModal'
 export default function PostAccordion(course) {
   const [expanded, setExpanded] = React.useState(false);
   const[announcement,setAnnouncement]=React.useState("")
   const[title,setTitle]=React.useState("")
   const[body,setBody]=React.useState("")
   const[date,setDate]=React.useState("")
+  const[error,setError]=React.useState("")
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -33,7 +36,7 @@ export default function PostAccordion(course) {
   const handleSubmit = async(event)=>{ 
         try{
           event.preventDefault()
-          console.log(course)
+          //console.log(course)
           let announcement={ 
             courseId:course.course.id,
             description:body,
@@ -42,23 +45,25 @@ export default function PostAccordion(course) {
             date:date,
             venue:"",
           } 
-          console.log(announcement)
           let mutation= await API.graphql({
             query:createAnnouncement,
             variables:{input:announcement},
             authMode:"AMAZON_COGNITO_USER_POOLS",
           })
-          console.log(mutation)
+          setError("Announcement posted succesfully")
         }catch(error){ 
-          console.log(error)
+          setError(error.errors[0].message)
         }
         setTitle("") 
         setBody("")
         setDate("")
+        
   }
 
   return (
+    
     <div>
+       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}} />}
@@ -77,30 +82,27 @@ export default function PostAccordion(course) {
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
             <div className="col-sm-10">
-              <input 
-                
+              <input  
                 type="text" 
                 className="form-control" 
                 id="colFormLabel"  
-                data-testid="title1"  
-                required  
-                value={title}
+                data-testid="title2" 
+                required
+                value={title} 
                 onChange={(e)=>setTitle(e.target.value)}></input>
-
             </div>
+          </div>
 
           <div className="form-group row">
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Body: </label>
-            <div className="col-sm-10">
-              <textarea  
-                 type="text" 
-                 className="form-control" 
-                 id="colFormLabel"  
-                 data-testid="body1" 
-                 required
-                 value={body}
-                 onChange={(e)=>setBody(e.target.value)}
-                 ></textarea>
+            <div className='col-sm-10'>
+              <textarea 
+                type="text"  
+                className="form-control"  
+                id="colFormLabel" 
+                data-testid="body2" 
+                value={body}
+                onChange={(e)=>setBody(e.target.value)}></textarea>
             </div>
           </div>
 
@@ -108,18 +110,16 @@ export default function PostAccordion(course) {
             <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
             <div className="col-sm-10">
               <input 
-                type="date" 
-                className="form-control" 
-                id="colFormLabel" 
-                data-testid="date1"
-                value={date}
-                onChange={(e)=>setDate(e.target.value)}
-                ></input>
+               type="date"  
+               className="form-control"  
+               id="colFormLabel"   
+               data-testid="date2" 
+               required 
+               value={date}
+               onChange={(e)=>setDate(e.target.value)}></input>
             </div>
           </div>
-
             <button className="post-button">Post</button>
-          </div>
         </form>
         </AccordionDetails>
       </Accordion>
