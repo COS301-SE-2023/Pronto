@@ -24,11 +24,15 @@ const Home = () => {
   //use this part to see if user is logged in or out and then determine what pages they can access
   //begin
   const [user, setUser] = useState(undefined);
+  const [userGroup, setUserGroup] = useState(null);
 
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({});
+      const group =
+        authUser.signInUserSession.idToken.payload["cognito:groups"];
       setUser(authUser);
+      setUserGroup(group);
     } catch (e) {
       setUser(null);
     }
@@ -56,71 +60,142 @@ const Home = () => {
     return <div>Loading...</div>;
   }
 
-  if (user === null) {
-    return (
-      <div>
-        <Router>
-          <Routes>
-            {/*Lecturer pages routing*/}
-            <Route path="/lecturer-login" element={<LecturerLogin />} />
-            <Route
-              path="/lecturer-confirm-email"
-              element={<LecturerConfirmEmail />}
-            />
-            <Route
-              path="/lecturer-forgot-password"
-              element={<LecturerForgotPassword />}
-            />
+  if (user) {
+    if (userGroup === "adminUserGroup") {
+      return (
+        <div>
+          <Router>
+            <Routes>
+              {/*Lecturer pages routing*/}
+              <Route path="/lecturer-login" element={<LecturerLogin />} />
+              <Route
+                path="/lecturer-confirm-email"
+                element={<LecturerConfirmEmail />}
+              />
+              <Route
+                path="/lecturer-forgot-password"
+                element={<LecturerForgotPassword />}
+              />
 
-            {/*Institution pages routing*/}
-            <Route path="/institution-login" element={<InstitutionLogin />} />
-            <Route
-              path="/institution-confirm-email"
-              element={<InstitutionConfirmEmail />}
-            />
-            <Route
-              path="/institution-successful-apply"
-              element={<InstitutionSuccessfulApply />}
-            />
-            <Route
-              path="/institution-forgot-password"
-              element={<InstitutionForgotPassword />}
-            />
-          </Routes>
-        </Router>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <Router>
-          <Routes>
-            {/*Lecturer pages routing*/}
+              {/*Institution pages routing*/}
+              <Route path="/institution-login" element={<InstitutionLogin />} />
+              <Route
+                path="/institution-confirm-email"
+                element={<InstitutionConfirmEmail />}
+              />
+              <Route
+                path="/institution-successful-apply"
+                element={<InstitutionSuccessfulApply />}
+              />
+              <Route
+                path="/institution-forgot-password"
+                element={<InstitutionForgotPassword />}
+              />
+              <Route path="/add-lecturer" element={<AddLecturer />} />
+              <Route
+                path="/institution-homepage"
+                element={<InstitutionHomePage />}
+              />
+              <Route path="/upload-schedule" element={<FileUploadPage />} />
+              <Route
+                path="/upload-student-files"
+                element={<StudentFileUploadPage />}
+              />
+            </Routes>
+          </Router>
+        </div>
+      );
+    } else if (userGroup === "lecturerUserGroup") {
+      return (
+        <div>
+          <Router>
+            <Routes>
+              {/*Lecturer pages routing*/}
 
-            <Route path="/lecture-homepage" element={<LectureHomePage />} />
-            <Route path="edit-module" element={<EditModuleInfo />} />
-            <Route
-              path="recent-announcement"
-              element={<RecentAnnouncement />}
-            />
-            <Route path="personal-info" element={<PersonalInformation />} />
+              <Route path="/lecture-homepage" element={<LectureHomePage />} />
+              <Route path="edit-module" element={<EditModuleInfo />} />
+              <Route
+                path="recent-announcement"
+                element={<RecentAnnouncement />}
+              />
+              <Route path="personal-info" element={<PersonalInformation />} />
 
-            {/*Institution pages routing*/}
+              {/*Institution pages routing*/}
 
-            <Route path="/add-lecturer" element={<AddLecturer />} />
-            <Route
-              path="/institution-homepage"
-              element={<InstitutionHomePage />}
-            />
-            <Route path="/upload-schedule" element={<FileUploadPage />} />
-            <Route
-              path="/upload-student-files"
-              element={<StudentFileUploadPage />}
-            />
-          </Routes>
-        </Router>
-      </div>
-    );
+              <Route path="/add-lecturer" element={<AddLecturer />} />
+              <Route
+                path="/institution-homepage"
+                element={<InstitutionHomePage />}
+              />
+              <Route path="/upload-schedule" element={<FileUploadPage />} />
+              <Route
+                path="/upload-student-files"
+                element={<StudentFileUploadPage />}
+              />
+
+              <Route path="/lecturer-login" element={<LecturerLogin />} />
+              <Route
+                path="/lecturer-confirm-email"
+                element={<LecturerConfirmEmail />}
+              />
+              <Route
+                path="/lecturer-forgot-password"
+                element={<LecturerForgotPassword />}
+              />
+
+              {/*Institution pages routing*/}
+              <Route path="/institution-login" element={<InstitutionLogin />} />
+              <Route
+                path="/institution-confirm-email"
+                element={<InstitutionConfirmEmail />}
+              />
+              <Route
+                path="/institution-successful-apply"
+                element={<InstitutionSuccessfulApply />}
+              />
+              <Route
+                path="/institution-forgot-password"
+                element={<InstitutionForgotPassword />}
+              />
+            </Routes>
+          </Router>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Router>
+            <Routes>
+              {/*Lecturer pages routing*/}
+              <Route path="/lecturer-login" element={<LecturerLogin />} />
+              <Route
+                path="/lecturer-confirm-email"
+                element={<LecturerConfirmEmail />}
+              />
+              <Route
+                path="/lecturer-forgot-password"
+                element={<LecturerForgotPassword />}
+              />
+
+              {/*Institution pages routing*/}
+              <Route path="/institution-login" element={<InstitutionLogin />} />
+              <Route
+                path="/institution-confirm-email"
+                element={<InstitutionConfirmEmail />}
+              />
+              <Route
+                path="/institution-successful-apply"
+                element={<InstitutionSuccessfulApply />}
+              />
+              <Route
+                path="/institution-forgot-password"
+                element={<InstitutionForgotPassword />}
+              />
+            </Routes>
+          </Router>
+        </div>
+      );
+    }
   }
 };
 
