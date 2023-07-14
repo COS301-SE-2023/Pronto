@@ -9,7 +9,7 @@ const AccountSettings = () => {
   const settingsOptions = [
     {
       title: "My profile",
-      subTitle: "Edit your profile",
+      subTitle: "View your profile information",
       onPress: () => navigation.navigate("Profile Page"),
     },
     {

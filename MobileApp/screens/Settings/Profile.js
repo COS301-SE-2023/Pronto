@@ -23,7 +23,7 @@ const ProfilePage = () => {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text style={{ color: "#e32f45", fontSize: 24 }}>Loading...</Text>
       </View>
     );
   }
@@ -31,6 +31,7 @@ const ProfilePage = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>User Information:</Text>
+      <Text>These are the details that we have stored for you.</Text>
       <ImageBackground
         resizeMode="contain"
         //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
@@ -38,14 +39,16 @@ const ProfilePage = () => {
         style={styles.image}
       />
 
-      <Text style={styles.label}>Name:</Text>
-      <Text style={styles.text}>{user?.attributes?.name}</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.label}>Name:</Text>
+        <Text style={styles.text}>{user?.attributes?.name}</Text>
 
-      <Text style={styles.label}>Surname:</Text>
-      <Text style={styles.text}>{user?.attributes?.family_name}</Text>
+        <Text style={styles.label}>Surname:</Text>
+        <Text style={styles.text}>{user?.attributes?.family_name}</Text>
 
-      <Text style={styles.label}>Email:</Text>
-      <Text style={styles.text}>{user?.attributes?.email}</Text>
+        <Text style={styles.label}>Email:</Text>
+        <Text style={styles.text}>{user?.attributes?.email}</Text>
+      </View>
     </View>
   );
 };
@@ -61,6 +64,14 @@ const styles = StyleSheet.create({
     width: 200, // Specify the desired width
     height: 200, // Specify the desired height
   },
+  infoContainer: {
+    borderWidth: 2,
+    borderColor: "#e32f45",
+    padding: 50,
+    marginBottom: 20,
+    textAlign: "center",
+    borderRadius: 20,
+  },
   label: {
     fontSize: 18,
     fontWeight: "bold",
@@ -73,6 +84,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 25,
     color: "#e32f45",
+    marginBottom: 20,
   },
 });
 
