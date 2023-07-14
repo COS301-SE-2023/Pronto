@@ -9,7 +9,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { createAnnouncement,updateAnnouncement } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
-import { Modal } from '@mui/material';
 import {ErrorModal} from '../../ErrorModal'
 export default function PostAccordion(course) {
   const [expanded, setExpanded] = React.useState(false);

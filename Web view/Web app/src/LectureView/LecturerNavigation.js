@@ -3,9 +3,9 @@ import "../Institution VIew/Navigation/Navigation.css";
 import logo from "../images/logo.jpg";
 import { Auth,API } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-
 export default function LecturerNavigation() {
 
+  const[user,setUser]=React.useState("")
   const navigate = useNavigate();
 
   const onSignOut = async (event) => {
@@ -18,6 +18,17 @@ export default function LecturerNavigation() {
       console.log(e.message);
     }
   };
+
+  const userSet = async()=>{
+    let u=await Auth.currentAuthenticatedUser()
+    u=u.attributes.name
+    setUser(u)
+    console.log(user)
+  }
+
+  React.useEffect(()=>{
+    userSet()
+  })
  
     return (
       <div className={"grid"}>
@@ -31,7 +42,7 @@ export default function LecturerNavigation() {
               height={"155px"}
               data-testid={'UniversityImage'}
             />
-            <div className="lecturer-name">Stefan Gruner</div>
+            <div className="lecturer-name">{user}</div>
           </div>
 
           <ul className="navbar-nav">

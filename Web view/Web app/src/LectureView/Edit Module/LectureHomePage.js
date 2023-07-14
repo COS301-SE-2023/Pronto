@@ -33,6 +33,12 @@ const LectureHomePage = () => {
                 })
 
         console.log(lec)
+        // const query=await API.graphql({
+        //     query:getLecturer,
+        //     variables:{input:{id:"8e0ee2c3-4dad-45da-ba10-b3093755dc8b"}},
+        //     authMode:"AMAZON_COGNITO_USER_POOLS",
+        // })
+        // console.log(query)
         if(lec.data.listLecturers.items.length>0){     
           await setLecturer(lec.data.listLecturers.items[0])
           console.log(lec)
@@ -65,6 +71,7 @@ const LectureHomePage = () => {
           else{ 
             setError("Something went wrong.Please try again later")
           }
+          console.log(error)
     }
   }
   
@@ -83,9 +90,6 @@ const LectureHomePage = () => {
 
       <main style={{ width: '900px',marginTop: '30px' }}>
         <h1 className="moduleHead">Courses</h1>
-       <Link 
-          to={'/edit-module'}  
-          state={courses}>Learn More</Link>
           {courses.map((val, key)=>{    
               return (
                 <Link 
