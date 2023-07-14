@@ -158,7 +158,7 @@ export default function RecentAnnouncement() {
                   return(
                     <div className="card" data-testid="card1" key={key}>
                       <div className="card-header">
-                        <div className = "subjectCode">{key}</div>
+                        <div className = "subjectCode">{val.end}</div>
                         <div className = "postDate">{val.date}</div>
                     </div>
                     <div className="card-body">

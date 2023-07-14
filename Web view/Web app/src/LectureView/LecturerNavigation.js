@@ -21,7 +21,7 @@ export default function LecturerNavigation() {
 
   const userSet = async()=>{
     let u=await Auth.currentAuthenticatedUser()
-    u=u.attributes.name
+    u=u.attributes.name+u.attributes.family_name
     setUser(u)
   }
 
