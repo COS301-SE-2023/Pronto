@@ -22,7 +22,6 @@ Amplify.configure(config);
 
 const Home = () => {
   //use this part to see if user is logged in or out and then determine what pages they can access
-  //begin
   const [user, setUser] = useState(undefined);
   const [userGroup, setUserGroup] = useState(null);
 
@@ -61,7 +60,7 @@ const Home = () => {
   }
 
   if (user) {
-    if (userGroup === "adminUserGroup") {
+    if (userGroup == "adminUserGroup") {
       return (
         <div>
           <Router>
@@ -105,7 +104,7 @@ const Home = () => {
           </Router>
         </div>
       );
-    } else if (userGroup === "lecturerUserGroup") {
+    } else if (userGroup == "lecturerUserGroup") {
       return (
         <div>
           <Router>
@@ -123,15 +122,6 @@ const Home = () => {
               {/*Institution pages routing*/}
 
               <Route path="/add-lecturer" element={<AddLecturer />} />
-              <Route
-                path="/institution-homepage"
-                element={<InstitutionHomePage />}
-              />
-              <Route path="/upload-schedule" element={<FileUploadPage />} />
-              <Route
-                path="/upload-student-files"
-                element={<StudentFileUploadPage />}
-              />
 
               <Route path="/lecturer-login" element={<LecturerLogin />} />
               <Route
