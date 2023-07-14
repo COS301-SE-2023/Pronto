@@ -21,9 +21,11 @@ export default function LecturerNavigation() {
 
   const userSet = async()=>{
     let u=await Auth.currentAuthenticatedUser()
+    //console.log(u)
     u=u.attributes.name
+    //console.log(u)
     setUser(u)
-    console.log(user)
+    //console.log(user)
   }
 
   React.useEffect(()=>{

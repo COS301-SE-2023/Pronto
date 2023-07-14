@@ -51,7 +51,7 @@ export default function PostAccordion(course) {
           setError("Announcement posted succesfully")
         }catch(error){ 
           let e=error.errors[0].message
-          if(e.search("Unathorized")!==-1){ 
+          if(e.search("Not Authorized")!==-1){ 
             setError("You are not authorized to perform this action.Please log out and log in")
           }
           else if(e.search("Network")!==-1){
@@ -59,7 +59,9 @@ export default function PostAccordion(course) {
           }
           else{ 
             setError("Something went wrong.Please try again later")
+          
           }
+          console.log(error)
         }
         setTitle("") 
         setBody("")

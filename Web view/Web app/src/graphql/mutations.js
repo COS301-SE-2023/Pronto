@@ -118,15 +118,6 @@ export const createAnnouncement=`mutation CreateAnnouncement(
     end
     date
     venue
-    course {
-      id
-      institutionId
-      lecturerId
-      coursecode
-      semester
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
   }

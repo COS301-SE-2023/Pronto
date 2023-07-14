@@ -25,18 +25,18 @@ const LectureHomePage = () => {
                     variables:{ 
                         filter: { 
                            email: { 
-                            eq : "ndie2001@gmail.com"
+                            eq : lecturer_email
                         }
                      }
                   },
-                authMode:"AMAZON_COGNITO_USER_POOLS",
+                authMode:"API_KEY",
                 })
 
-        console.log(lec)
+        // console.log(lec)
         // const query=await API.graphql({
         //     query:getLecturer,
-        //     variables:{input:{id:"8e0ee2c3-4dad-45da-ba10-b3093755dc8b"}},
-        //     authMode:"AMAZON_COGNITO_USER_POOLS",
+        //     variables:{id},
+        //     authMode:"API_KEY",
         // })
         // console.log(query)
         if(lec.data.listLecturers.items.length>0){     
@@ -51,7 +51,7 @@ const LectureHomePage = () => {
                         }
                      }
                   },
-                authMode:"AMAZON_COGNITO_USER_POOLS",
+                authMode:"API_KEY",
                 })
           console.log(courseList)
           
@@ -62,7 +62,7 @@ const LectureHomePage = () => {
         }
     }catch(error){
          let e=error.errors[0].message
-          if(e.search("Unathorized")!==-1){ 
+          if(e.search("Not Authorized")!==-1){ 
             setError("You are not authorized to perform this action.Please log out and log in")
           }
           else if(e.search("Network")!==-1){

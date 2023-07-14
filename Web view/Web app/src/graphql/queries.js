@@ -223,15 +223,11 @@ export const listAnnouncements=`query ListAnnouncements(
   listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      courseId
       description
       start
       end
       date
       venue
-      course{ 
-        coursecode
-      }
       createdAt
       updatedAt
     }

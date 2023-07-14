@@ -83,11 +83,11 @@ export default function RecentAnnouncement() {
                     variables:{ 
                        filter: { 
                           email: { 
-                           eq : "ndie2001@gmail.com"
+                           eq : lecturer_email
                        }
                     }
                   },
-                authMode:"AMAZON_COGNITO_USER_POOLS",
+                authMode:"API_KEY",
               })
         await setLecturer(lec.data.listLecturers.items[0])
         if(lec.data.listLecturers.items.length>0){
@@ -100,7 +100,7 @@ export default function RecentAnnouncement() {
                         }
                      }
                   },
-                authMode:"AMAZON_COGNITO_USER_POOLS",
+                authMode:"API_KEY",
                 })
         await setCourses(course.data.listCourses.items)
         let announcementList=[]
@@ -126,7 +126,7 @@ export default function RecentAnnouncement() {
     }
       }catch(error){
           let e=error.errors[0].message
-          if(e.search("Unathorized")!==-1){ 
+          if(e.search("Not Authorized")!==-1){ 
             setError("You are not authorized to perform this action.Please log out and log in")
           }
           else if(e.search("Network")!==-1){
@@ -135,6 +135,7 @@ export default function RecentAnnouncement() {
           else{ 
             setError("Something went wrong.Please try again later")
           }
+          console.log(error)
       }
   }
 
@@ -157,7 +158,7 @@ export default function RecentAnnouncement() {
                   return(
                     <div className="card" data-testid="card1" key={key}>
                       <div className="card-header">
-                        <div className = "subjectCode">{val.course.coursecode}</div>
+                        <div className = "subjectCode">{key}</div>
                         <div className = "postDate">{val.date}</div>
                     </div>
                     <div className="card-body">
