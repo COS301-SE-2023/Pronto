@@ -9,52 +9,54 @@ on:
   workflow_dispatch: {}  
 
 jobs:
+ 
+  job1:
+    build: 
 
-  build: 
+      name: Format Code Base
 
-    name: Format Code Base
-
-    runs-on:  ubuntu-latest
+      runs-on:  ubuntu-latest
     
-    strategy:
-      matrix:
-        node-version: [ 18.x]
+     strategy:
+        matrix:
+          node-version: [ 18.x]
 
-    steps: 
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: | 
-          npm install standard --global
-          standard --fix
+      steps: 
+        - uses: actions/checkout@v3
+        - name: Use Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.node-version }}
+            cache: 'npm'
+        - run: | 
+            npm install standard --global
+            standard --fix
 
-  build:
+  job2:
+    needs: job1
+  
+    build:
     
-    name: Lint Code Base
+      name: Lint Code Base
 
-    needs: Format Code Base
+      runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+      permissions:
+        contents: write
+        packages: write
+        statuses: write
 
-    permissions:
-      contents: write
-      packages: write
-      statuses: write
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
           
-      - name: Lint Code Base
-        uses: github/super-linter@v5
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          IGNORE_GENERATED_FILES: true
-          IGNORE_GITIGNORED_FILES: true
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Lint Code Base
+          uses: github/super-linter@v5
+          env:
+            VALIDATE_ALL_CODEBASE: false
+            IGNORE_GENERATED_FILES: true
+            IGNORE_GITIGNORED_FILES: true
+            DEFAULT_BRANCH: main
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
