@@ -20,6 +20,7 @@ const isAppClientValid = require("./isAppClientValid.js");
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
+  console.table(event);
   if (!event.request.clientMetadata.role)
     throw new Error("User role not provided on ClientMetadata");
   if (
@@ -56,18 +57,20 @@ exports.handler = async (event) => {
           throw new Error(`Lecturer email is not part of the Institution.`);
         }
         event.response.autoConfirmUser = true;
+        break;
       case ROLES.Student:
         if (
-          await isStudentEmailDomainPartOfInstitution(
+          !await isStudentEmailDomainPartOfInstitution(
             event.request.userAttributes.email,
             event.request.clientMetadata.institutionId
           )
         )
-          event.response.autoConfirmUser = true;
-        throw new Error(
-          `The provided student email does not match the selected institutions student emails format.
+          throw new Error(
+            `The provided student email does not match the selected institutions student emails format.
           Please use your institution provided email.`
-        );
+          );
+        event.response.autoConfirmUser = true;
+        break;
     }
   } catch (preAuthError) {
     console.debug(preAuthError);

@@ -6,7 +6,8 @@
   },
   "request": {
     "clientMetadata": {
-      "role": "Student"
+      "role": "Student",
+      "institutionId": "INSTITUTIONID"
     },
     "userAttributes": {
       "email": "EMAIL"

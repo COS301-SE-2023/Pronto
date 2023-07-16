@@ -12,8 +12,9 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     return institution.details;
   institution.id = institutionId;
   const query = /* GraphQL */ `
-    query getInstitutionQuery($id: ID!) {
-      getInstitution(id: $id) {
+    query getInstitutionQuery($input: ID!) {
+      getInstitution(id: $input) {
+        name
         adminId
         domains
         lectureremails
@@ -21,9 +22,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     }
   `;
   const variables = {
-    id: {
-      id: institution.id,
-    },
+    input: institution.id,
   };
   const options = {
     method: "POST",
@@ -42,7 +41,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     response = await fetch(request);
     body = await response.json();
     console.debug(`graphQL Resonse: ${JSON.stringify(body)}`);
-    if (body.ok) return (institution.details = body.data.getInstitution);
+    if (body.data) return (institution.details = body.data.getInstitution);
     throw new Error("API ERROR: Failed to retrieve data");
   } catch (getEmailsQueryError) {
     console.debug(getEmailsQueryError);
@@ -106,6 +105,7 @@ const isStudentEmailDomainPartOfInstitution = async (
 ) => {
   try {
     const institutionDomains = await getInstitutionEmailDomains(institutionId);
+    console.table(institutionDomains);
     return Object.values(institutionDomains).includes(
       studentEmail.split("@")[1]
     );

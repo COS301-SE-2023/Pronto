@@ -1,12 +1,13 @@
 {
-  "userPoolId": "USERPOOLID",
+  "userPoolId": "us-east-1_0MFceeZ4B",
   "userName": "USERNAME",
   "callerContext": {
     "clientId": "WEB_CLIENTID"
   },
   "request": {
     "clientMetadata": {
-      "role": "Admin"
+      "role": "Admin",
+      "institutionId": "INSTITUTIONID"
     }
   },
   "response": {}
