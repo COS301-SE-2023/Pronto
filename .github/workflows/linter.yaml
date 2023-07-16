@@ -9,12 +9,8 @@ on:
   workflow_dispatch: {}  
 
 jobs:
- 
-  job1:
+  Fomrat:
     build: 
-
-      name: Format Code Base
-
       runs-on:  ubuntu-latest
     
      strategy:
@@ -32,13 +28,10 @@ jobs:
             npm install standard --global
             standard --fix
 
-  job2:
-    needs: job1
-  
+  Lint:
+    needs: Fomrat
     build:
-    
-      name: Lint Code Base
-
+  
       runs-on: ubuntu-latest
 
       permissions:
