@@ -8,7 +8,7 @@ import GoogleMapReact from 'google-map-react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import {useState} from "react";
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import PlacesAutocomplete from 'react-places-autocomplete';
 
 export default function PostAccordion() {
   const [expanded, setExpanded] = React.useState(false);
@@ -34,11 +34,12 @@ export default function PostAccordion() {
     zoom: 16
   };
   const [address, setAddress] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   const handleSelect = (location) => {
-    console.log('Selected location:', location);
-    // Add your custom logic here to handle the selected location
+    setSelectedLocation(location);
+    console.log('Selected location:', selectedLocation.toString());
+    // Add your custom logic here to handle adding the value to the database
   };
 
   return (
@@ -148,12 +149,15 @@ export default function PostAccordion() {
                           <input {...getInputProps({ placeholder: "Type address" })} />
                           <div>
                             {loading ? <div>...loading</div> : null}
-                            {suggestions.map(suggestion => {
+                            {suggestions.map((suggestion, index) => {
                               const style = {
                                 backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
                               };
                               return (
-                                  <div {...getSuggestionItemProps(suggestion, { style })}>
+                                  <div
+                                      key={index} // Add the key prop with a unique value
+                                      {...getSuggestionItemProps(suggestion, { style })}
+                                  >
                                     {suggestion.description}
                                   </div>
                               );
@@ -162,6 +166,7 @@ export default function PostAccordion() {
                         </div>
                     )}
                   </PlacesAutocomplete>
+
 
                 </div>
 
