@@ -4,6 +4,9 @@
       "AuthRoleName": "amplify-pronto-dev-163054-authRole",
       "UnauthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-163054-unauthRole",
       "AuthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-163054-authRole",
+      "AuthRoleName": "amplify-pronto-dev-163054-authRole",
+      "UnauthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-163054-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::915206092794:role/amplify-pronto-dev-163054-authRole",
       "Region": "us-east-1",
       "DeploymentBucketName": "amplify-pronto-dev-163054-deployment",
       "UnauthRoleName": "amplify-pronto-dev-163054-unauthRole",
@@ -15,29 +18,28 @@
     "categories": {
       "function": {
         "pronto5f713f59PostAuthentication": {
-          "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
-          "s3Key": "amplify-builds/pronto5f713f59PostAuthentication-646a387935642f586647-build.zip",
+          "adminGroupName": "adminUserPoolGroup",
           "appClientId": "67lg7el40kvcb1rkrjv8ghdo5h",
           "appClientIdWeb": "j9shrouag9o2appmrjvfgtm75",
-          "studentsGroupName": "studentUserGroup",
+          "lecturersGroupName": "lecturerUserPoolGroup",
+          "studentsGroupName": "studentUserPoolGroup",
+          "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
+          "s3Key": "amplify-builds/pronto5f713f59PostAuthentication-646a387935642f586647-build.zip"
+        },
+        "pronto5f713f59PreSignup": {
           "adminGroupName": "adminUserGroup",
-          "lecturersGroupName": "lecturerUserGroup"
+          "lecturersGroupName": "lecturerUserGroup",
+          "studentsGroupName": "studentUserGroup",
+          "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
+          "s3Key": "amplify-builds/pronto5f713f59PreSignup-31445a55324b77396d4d-build.zip"
         },
         "AdminQueries7f7a03b0": {
           "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
           "s3Key": "amplify-builds/AdminQueries7f7a03b0-4977306a6a7435714749-build.zip"
-        },
-        "pronto5f713f59PreSignup": {
-          "deploymentBucketName": "amplify-pronto-dev-163054-deployment",
-          "s3Key": "amplify-builds/pronto5f713f59PreSignup-31445a55324b77396d4d-build.zip",
-          "studentsGroupName": "studentUserGroup",
-          "lecturersGroupName": "lecturerUserGroup",
-          "adminGroupName": "adminUserGroup"
         }
       },
       "api": {
-        "pronto": {},
-        "AdminQueries": {}
+        "pronto": {}
       },
       "auth": {
         "pronto5f713f59": {},

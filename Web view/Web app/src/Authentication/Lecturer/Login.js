@@ -65,7 +65,7 @@ function Login() {
           family_name: surname,
         },
         clientMetadata: {
-          role: "Lecture",
+          role: "Lecturer",
         },
       });
       setsignUpError("");
