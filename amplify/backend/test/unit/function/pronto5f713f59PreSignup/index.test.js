@@ -8,7 +8,7 @@ jest.mock(
   () => ({
     isLectureEmailPartOfInstitution: jest.fn(() => Promise.resolve(false)),
     isAdminAllocated: jest.fn(() => Promise.resolve(true)),
-    isStudentEmailDomainPartOfInstitution: jest.fn(() => Promise.resolve(true)),
+    isStudentEmailDomainPartOfInstitution: jest.fn(() => Promise.resolve(false)),
   })
 );
 describe("Input Validation and Error handling", () => {
