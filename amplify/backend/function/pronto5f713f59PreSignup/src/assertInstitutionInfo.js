@@ -82,6 +82,10 @@ const isLectureEmailPartOfInstitution = async (email, institutionId) => {
   if (!email) throw new Error(`Invalid email = ${email}`);
   try {
     const emailList = await getLectureEmailsFromInstitution(institutionId);
+    if (!emailList)
+      throw Error(
+        "Lecture email list was not provided, please contact your institution admin"
+      );
     return emailList.includes(email);
   } catch (getLectureEmailsFromInstitutionError) {
     console.debug(getLectureEmailsFromInstitutionError);
@@ -105,6 +109,10 @@ const isStudentEmailDomainPartOfInstitution = async (
 ) => {
   try {
     const institutionDomains = await getInstitutionEmailDomains(institutionId);
+    if (!institutionDomains)
+      throw new Error(
+        "The Allowed Email Domain for students has not been set for this institution. Please contact your admin"
+      );
     console.table(institutionDomains);
     return Object.values(institutionDomains).includes(
       studentEmail.split("@")[1]
