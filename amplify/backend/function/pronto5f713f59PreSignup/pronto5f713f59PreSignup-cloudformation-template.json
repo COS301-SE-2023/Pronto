@@ -40,10 +40,25 @@
     "s3Key": {
       "Type": "String"
     },
-    "lecturersGroupName": {
+    "appClientId": {
+      "Type": "String"
+    },
+    "appClientIdWeb": {
+      "Type": "String"
+    },
+    "studentsGroupName": {
+      "Type": "String"
+    },
+    "apiApiProntoGraphqlapiendpoint": {
+      "Type": "String"
+    },
+    "apiApiProntoGraphqlapikey": {
       "Type": "String"
     },
     "adminGroupName": {
+      "Type": "String"
+    },
+    "lecturersGroupName": {
       "Type": "String"
     }
   },
@@ -95,11 +110,26 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "LecturersGroupName": {
-              "Ref": "lecturersGroupName"
+            "AppClientId": {
+              "Ref": "appClientId"
+            },
+            "AppClientIdWeb": {
+              "Ref": "appClientIdWeb"
+            },
+            "StudentsGroupName": {
+              "Ref": "studentsGroupName"
+            },
+            "API_API_PRONTO_GRAPHQLAPIENDPOINT": {
+              "Ref": "apiApiProntoGraphqlapiendpoint"
+            },
+            "API_API_PRONTO_GRAPHQLAPIKEY": {
+              "Ref": "apiApiProntoGraphqlapikey"
             },
             "AdminGroupName": {
               "Ref": "adminGroupName"
+            },
+            "LecturersGroupName": {
+              "Ref": "lecturersGroupName"
             }
           }
         },
