@@ -11,7 +11,7 @@
 #     build: 
 #       runs-on:  ubuntu-latest
     
-#      strategy:
+#        strategy:
 #         matrix:
 #           node-version: [ 18.x]
 
@@ -77,13 +77,13 @@ jobs:
           standard --fix
 
   lint:
-    need: format
-    runs-on: ubuntu-latest
-
-      permissions:
-        contents: write
-        packages: write
-        statuses: write
+    needs: format
+    build:
+      runs-on: ubuntu-latest
+        permissions:
+          contents: write
+          packages: write
+          statuses: write
 
       steps:
         - name: Checkout Code
