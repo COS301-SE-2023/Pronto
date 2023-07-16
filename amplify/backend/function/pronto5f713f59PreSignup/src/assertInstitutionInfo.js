@@ -1,5 +1,5 @@
-const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
-const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEYOUTPUT;
+const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINT;
+const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEY;
 let institution = {
   details: null,
   id: null,
@@ -12,22 +12,26 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     return institution.details;
   institution.id = institutionId;
   const query = /* GraphQL */ `
-      query MyQuery($id: ID = ${institutionId}) {
-        getInstitution(id: $id) {
-          adminId
-          domains
-          lectureremails
-        }
+    query getInstitutionQuery($id: ID!) {
+      getInstitution(id: $id) {
+        adminId
+        domains
+        lectureremails
       }
-    `;
-
+    }
+  `;
+  const variables = {
+    id: {
+      id: institution.id,
+    },
+  };
   const options = {
     method: "POST",
     headers: {
       "x-api-key": GRAPHQL_API_KEY,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ query, variables }),
   };
 
   const request = new Request(GRAPHQL_ENDPOINT, options);
@@ -37,9 +41,8 @@ const getAndSetInstitutionDetails = async (institutionId) => {
   try {
     response = await fetch(request);
     body = await response.json();
-    console.table(body);
+    console.debug(`graphQL Resonse: ${JSON.stringify(body)}`);
     if (body.ok) return (institution.details = body.data.getInstitution);
-    console.table(body.message);
     throw new Error("API ERROR: Failed to retrieve data");
   } catch (getEmailsQueryError) {
     console.debug(getEmailsQueryError);
@@ -62,6 +65,7 @@ const getInstitutionAdminId = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.adminId;
   } catch (getInstitutionAdminIdError) {
+    console.debug({ getInstitutionAdminIdError });
     throw new Error(`Failed to retrieve admin for the institution.`);
   }
 };
