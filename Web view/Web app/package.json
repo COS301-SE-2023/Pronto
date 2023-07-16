@@ -25,6 +25,7 @@
     "react-dropzone": "^14.2.3",
     "react-google-autocomplete": "^2.7.3",
     "react-google-places-autocomplete": "^4.0.1",
+    "react-native-google-places-autocomplete": "^2.5.1",
     "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^6.11.2",
     "react-scripts": "^5.0.1",

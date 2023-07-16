@@ -7,6 +7,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import GoogleMapReact from 'google-map-react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import {useState} from "react";
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 export default function PostAccordion() {
   const [expanded, setExpanded] = React.useState(false);
@@ -19,6 +21,8 @@ export default function PostAccordion() {
     // use map and maps objects
   };
 
+
+
   const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
   const defaultProps = {
@@ -28,6 +32,13 @@ export default function PostAccordion() {
           lng: 28.23134724523217
         },
     zoom: 16
+  };
+  const [address, setAddress] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  const handleSelect = (location) => {
+    console.log('Selected location:', location);
+    // Add your custom logic here to handle the selected location
   };
 
   return (
@@ -123,8 +134,37 @@ export default function PostAccordion() {
               <div className="form-group row">
                 <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
                 <div className="col-sm-10">
-                  <input type="text" className="form-control" id="colFormLabel" required></input>
+                  {/* Add google auto complete to complete the venue name when typing*/}
+                  <PlacesAutocomplete
+                      value={address}
+                      onChange={setAddress}
+                      onSelect={(location) => {
+                        setSelectedLocation(location);
+                        handleSelect(location);
+                      }}
+                  >
+                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                        <div>
+                          <input {...getInputProps({ placeholder: "Type address" })} />
+                          <div>
+                            {loading ? <div>...loading</div> : null}
+                            {suggestions.map(suggestion => {
+                              const style = {
+                                backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
+                              };
+                              return (
+                                  <div {...getSuggestionItemProps(suggestion, { style })}>
+                                    {suggestion.description}
+                                  </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                    )}
+                  </PlacesAutocomplete>
+
                 </div>
+
               </div>
 
               <div className = "map">
