@@ -21,7 +21,8 @@ const PersonalInfoPage = () => {
         setExpanded(isExpanded ? panel : false);
     };
 
-    const handleSubmit =async()=>{ 
+    const handleSubmit =async(event)=>{ 
+        event.preventDefault()
         try{
             if(newPassword===confirmPassword){
                 if(oldPassword!==newPassword){
@@ -39,6 +40,9 @@ const PersonalInfoPage = () => {
              setError("Password change failed")
              console.log(error)
         }
+        setOldPassword("")
+        setNewPassword("")
+        setConfirmPassword("")
     }
     
     const fetchLecturer =async()=>{
@@ -49,7 +53,8 @@ const PersonalInfoPage = () => {
 
     React.useEffect(()=> { 
         fetchLecturer()
-    })
+    },"")
+
     return (
       <div style={{ display: 'inline-flex' }}>
         {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
@@ -96,18 +101,18 @@ const PersonalInfoPage = () => {
                 
                 </AccordionSummary>
                 <AccordionDetails>
-                <form onSubmit={e=>{handleSubmit(e)}}>
+                <form onSubmit={handleSubmit}>
                 <div className="form-group row">
                     <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Old password: </label>
                     <div className="col-sm-10">
                     <input
-                     type="text" 
+                     type="password" 
                      className="form-control" 
                      id="colFormLabel" 
                      data-testid="pword" 
                      required
                      value={oldPassword}
-                     onChange={e=>setOldPassword(e.target.value)}></input>
+                     onChange={(e)=>setOldPassword(e.target.value)}></input>
                     </div>
                 </div>
 
@@ -115,13 +120,13 @@ const PersonalInfoPage = () => {
                     <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">New password: </label>
                     <div className="col-sm-10">
                     <input  
-                    type="text"  
+                    type="password"  
                     className="form-control" 
                     id="colFormLabel" 
                     data-testid="repword" 
                     required
                     value={newPassword}
-                    onChange={(e=>{setNewPassword(e.target.value)})}></input>
+                    onChange={(e)=>setNewPassword(e.target.value)}></input>
                     </div>
                 </div>
 
@@ -129,12 +134,12 @@ const PersonalInfoPage = () => {
                     <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Confirm password: </label>
                     <div className="col-sm-10">
                     <input 
-                        type="text" 
+                        type="password" 
                         className="form-control" 
                         id="colFormLabel" 
                         data-testid="newpword"
                         value={confirmPassword}
-                        onChange={e=>{setConfirmPassword(e.target.value)}}
+                        onChange={(e)=>setConfirmPassword(e.target.value)}
                     ></input>
                     </div>
                 </div>
