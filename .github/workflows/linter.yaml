@@ -9,10 +9,33 @@ on:
   workflow_dispatch: {}  
 
 jobs:
+
+  build: 
+
+    name: Format Code Base
+
+    runs-on:  ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [ 18.x]
+
+    steps: 
+     -name: Apply Standard JS rules
+      uses: actions/checkout@v3
+      with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      run: | 
+        npm install standard --global
+        standard --fix
+
   build:
     
     name: Lint Code Base
-    
+
+    needs: Format Code Base
+
     runs-on: ubuntu-latest
 
     permissions:
