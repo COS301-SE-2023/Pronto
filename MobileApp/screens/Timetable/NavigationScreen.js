@@ -23,6 +23,35 @@ const NavigationScreen = () => {
   const [destination, setDestination] = useState(null);
   const [route, setRoute] = useState(false);
   const [distance, setDistance] = useState("");
+  const [travelTime, setTravelTime] = useState("");
+
+  function calculateTime(passedDistance, metric) {
+
+    if(metric === "km") {
+
+      //calculate the time to travel the route
+      const averageSpeed = 30; // Average speed in km/h
+      const time = (passedDistance * 1000) / (averageSpeed / 3.6); // Time in seconds
+      const hours = Math.floor(time / 3600);
+      const minutes = Math.floor((time % 3600) / 60);
+      const formattedTime = `${hours}h ${minutes}m`;
+      setTravelTime(formattedTime); // Update the duration state
+    }
+    else
+    {
+
+      //calculate the time to travel the route
+      const averageSpeed = 1.5; // Average speed ratio
+      const time = passedDistance / (averageSpeed / 3.6); // Time in seconds
+
+      const hours = Math.floor(time / 3600);
+
+      const minutes = Math.floor((time % 3600) / 60);
+      const formattedTime = `Walking time: ${hours}h ${minutes}m`;
+      setTravelTime(formattedTime); // Update the duration state
+    }
+
+  }
 
   const calculateDistance = () => {
     if (origin && destination) {
@@ -47,11 +76,18 @@ const NavigationScreen = () => {
       if(distance >= 1000)
       {
         const newdistance = distance/1000;
+        //caluclate time
+        calculateTime(newdistance,"km");
         setDistance(newdistance.toFixed(2).toString() + " kilometers"); // Update the distance state
+
+        console.log("time is " + travelTime);
       }
       else {
+        calculateTime(distance,"m") ;
         setDistance(distance.toFixed(2).toString() + " meters"); // Update the distance state
       }
+
+
     }
   };
 
@@ -118,6 +154,7 @@ const NavigationScreen = () => {
             <Text style={styles.buttonText}>Trace Route</Text>
           </TouchableOpacity>
           <Text style={styles.distanceText}>Distance: {distance} </Text>
+          <Text style={styles.distanceText}>{travelTime} </Text>
         </View>
       </View>
   );
