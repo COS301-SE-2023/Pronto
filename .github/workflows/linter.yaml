@@ -80,10 +80,11 @@ jobs:
     needs: format
     build:
       runs-on: ubuntu-latest
-        permissions:
-          contents: write
-          packages: write
-          statuses: write
+      
+      permissions:
+        contents: write
+        packages: write
+        statuses: write
 
       steps:
         - name: Checkout Code
