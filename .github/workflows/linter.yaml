@@ -21,12 +21,13 @@ jobs:
         node-version: [ 18.x]
 
     steps: 
-     -name: Apply Standard JS rules
-      uses: actions/checkout@v3
-      with:
+     - uses:  actions/checkout@v3
+     - name: Apply Standard JS rules
+        uses: actions/setup-node@v3
+        with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      run: | 
+     - run: | 
         npm install standard --global
         standard --fix
 
