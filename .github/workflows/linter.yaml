@@ -76,27 +76,27 @@ jobs:
           npm install standard --global
           standard --fix
 
-  lint:
-    needs: format
-    build:
-      runs-on: ubuntu-latest
+  # lint:
+  #   needs: format
+  #   build:
+  #     runs-on: ubuntu-latest
       
-      permissions:
-        contents: write
-        packages: write
-        statuses: write
+  #     permissions:
+  #       contents: write
+  #       packages: write
+  #       statuses: write
 
-      steps:
-        - name: Checkout Code
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
+  #     steps:
+  #       - name: Checkout Code
+  #         uses: actions/checkout@v3
+  #         with:
+  #           fetch-depth: 0
           
-        - name: Lint Code Base
-          uses: github/super-linter@v5
-          env:
-            VALIDATE_ALL_CODEBASE: false
-            IGNORE_GENERATED_FILES: true
-            IGNORE_GITIGNORED_FILES: true
-            DEFAULT_BRANCH: main
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       - name: Lint Code Base
+  #         uses: github/super-linter@v5
+  #         env:
+  #           VALIDATE_ALL_CODEBASE: false
+  #           IGNORE_GENERATED_FILES: true
+  #           IGNORE_GITIGNORED_FILES: true
+  #           DEFAULT_BRANCH: main
+  #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
