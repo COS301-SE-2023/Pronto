@@ -1,6 +1,6 @@
 import * as React from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import DragandDrop from "./DragandDrop";
+import DragandDropSchedule from "./DragandDropSchedule";
 
 const FileUploadPage = () => {
   return (
@@ -14,7 +14,7 @@ const FileUploadPage = () => {
         className={"text-center"}
       >
         <h1>Upload Schedule</h1>
-        <DragandDrop />
+        <DragandDropSchedule />
       </main>
     </div>
   );
