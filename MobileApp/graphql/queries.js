@@ -85,9 +85,6 @@ export const searchCourses=`query SearchCourses(
       semester
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     nextToken
     total
@@ -108,3 +105,31 @@ export const searchCourses=`query SearchCourses(
   }
 }
 `
+
+export const coursesByInstitutionId=`query CoursesByInstitutionId(
+  $institutionId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelCourseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  coursesByInstitutionId(
+    institutionId: $institutionId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}`
