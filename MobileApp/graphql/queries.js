@@ -150,3 +150,33 @@ export const listTimetables=`query ListTimetables(
     nextToken
   }
 }`
+
+export const studentsByInstitutionId=`query StudentsByInstitutionId(
+  $institutionId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelStudentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  studentsByInstitutionId(
+    institutionId: $institutionId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      studentTimetableId
+      owner
+    }
+    nextToken
+  }
+}`
