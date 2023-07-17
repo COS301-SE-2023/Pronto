@@ -133,3 +133,20 @@ export const coursesByInstitutionId=`query CoursesByInstitutionId(
     nextToken
   }
 }`
+
+export const listTimetables=`query ListTimetables(
+  $filter: ModelTimetableFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listTimetables(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}`
