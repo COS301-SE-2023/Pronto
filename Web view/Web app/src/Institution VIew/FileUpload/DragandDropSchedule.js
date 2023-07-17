@@ -31,19 +31,19 @@ function DropzoneComponent() {
 
   const createFolder = async (folderName) => {
     try {
-      const scheduleFilesKey = `${folderName}/Schedule/`; // Include the trailing slash for "StudentFiles" folder
+      const scheduleFilesKey = `${folderName}/Schedule/`;
 
-      // Check if "StudentFiles" folder exists
-      const scheduleFilesExists = await Storage.list(scheduleFilesKey);
+      // List all files in the "Schedule" folder
+      const fileList = await Storage.list(scheduleFilesKey);
 
-      if (!scheduleFilesExists || scheduleFilesExists.length === 0) {
-        // If "StudentFiles" folder does not exist, create it
-        await Storage.put(scheduleFilesKey, "", {
-          contentType: "application/octet-stream",
-        });
-      }
+      // Delete all files in the "Schedule" folder
+      await Promise.all(
+        fileList.map(async (file) => {
+          await Storage.remove(file.key);
+        })
+      );
 
-      // Add the file to the "StudentFiles" folder
+      // Add the new file to the "Schedule" folder
       await Storage.put(scheduleFilesKey + selectedFile.name, selectedFile, {
         progressCallback: ({ loaded, total }) => {
           const progress = Math.round((loaded / total) * 100);
