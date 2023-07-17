@@ -22,11 +22,40 @@ export const announcementsByCourseId=`query AnnouncementsByCourseId(
       venue
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     nextToken
-    startedAt
   }
 }`
+
+export const activitiesByCourseId=`query ActivitiesByCourseId(
+  $courseId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelActivityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  activitiesByCourseId(
+    courseId: $courseId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      courseId
+      activityname
+      day
+      start
+      end
+      venue
+      group
+      frequency
+      description
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+`
