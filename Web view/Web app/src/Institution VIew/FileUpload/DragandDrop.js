@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Amplify, Storage, Auth } from "aws-amplify";
 
 function DropzoneComponent() {
-  useEffect(() => {
-    getUniversityName();
-  }, []);
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [message, setMessage] = useState("");
+  const [user, setUser] = useState(null);
   const [folderNameS3, setFolderNameS3] = useState("");
 
-  const getUniversityName = async () => {
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
     try {
-      const user = await Auth.currentAuthenticatedUser();
-
-      let username = user.name; // Get the name of the signed-in uni
-
-      //process name to be camel case and remove spaces
+      const userInfo = await Auth.currentUserInfo();
+      setUser(userInfo);
+      let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
       username = username.replace(/\s+/g, ""); // Remove spaces
       username = username.charAt(0).toUpperCase() + username.slice(1); // Convert to camel case
 
@@ -24,8 +24,8 @@ function DropzoneComponent() {
 
       setFolderNameS3(username);
       setMessage("");
-    } catch (e) {
-      setMessage(e.message);
+    } catch (error) {
+      setMessage("Error fetching user data");
     }
   };
 
@@ -158,3 +158,97 @@ function DropzoneComponent() {
 }
 
 export default DropzoneComponent;
+
+/*
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import { Auth } from "aws-amplify";
+
+const ProfilePage = () => {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const userInfo = await Auth.currentUserInfo();
+      setUser(userInfo);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error fetching user data:", error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: "#e32f45", fontSize: 24 }}>Loading...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>User Information:</Text>
+      <Text>These are the details that we have stored for you.</Text>
+      <ImageBackground
+        resizeMode="contain"
+        //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+        source={require("../../assets/icons/UserInfo.png")}
+        style={styles.image}
+      />
+
+      <View style={styles.infoContainer}>
+        <Text style={styles.label}>Name:</Text>
+        <Text style={styles.text}>{user?.attributes?.name}</Text>
+
+        <Text style={styles.label}>Surname:</Text>
+        <Text style={styles.text}>{user?.attributes?.family_name}</Text>
+
+        <Text style={styles.label}>Email:</Text>
+        <Text style={styles.text}>{user?.attributes?.email}</Text>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  image: {
+    width: 200, // Specify the desired width
+    height: 200, // Specify the desired height
+  },
+  infoContainer: {
+    borderWidth: 2,
+    borderColor: "#e32f45",
+    padding: 50,
+    marginBottom: 20,
+    textAlign: "center",
+    borderRadius: 20,
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  heading: {
+    fontSize: 25,
+    color: "#e32f45",
+    marginBottom: 20,
+  },
+});
+
+export default ProfilePage;
+*/
