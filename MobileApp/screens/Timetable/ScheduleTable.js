@@ -3,6 +3,8 @@ import { View, TouchableOpacity, Text, Dimensions } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import modules from "../../assets/data/mock/modules.json";
+import {API} from "aws-amplify"
+import {getCourseByInstitutionId} from "../../graphql/queries"
 
 //function to take in a day, and give all dates of the year that a day occurs
 function getDatesForDayOfWeek(dayOfWeek) {
