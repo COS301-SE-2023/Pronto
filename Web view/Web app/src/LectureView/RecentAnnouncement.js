@@ -8,6 +8,9 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LecturerNavigation from "./LecturerNavigation";
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./LectureHome.css";
+import {API,Auth} from 'aws-amplify'
+import { listLecturers,listAnnouncements, listCourses } from '../graphql/queries';
+import { ErrorModal } from '../ErrorModal';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -53,6 +56,11 @@ const StyledMenu = styled((props) => (
 export default function RecentAnnouncement() {
   
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [lecturer,setLecturer]=React.useState('')
+  const[courses,setCourses]=React.useState([])
+  const[announcements,setAnnouncements]=React.useState([])
+  const[error,setError]=React.useState("")
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -61,97 +69,135 @@ export default function RecentAnnouncement() {
     setAnchorEl(null);
   };
 
+  const fetchAnnouncements = async()=>{ 
+      try{
+        let user=await Auth.currentAuthenticatedUser();
+        if(user===undefined){
+            setError("You are not logged in! Please click on the logout button and log in to use Pronto")       
+        }
+
+        else{
+        let lecturer_email=user.attributes.email
+         const lec=await API.graphql({ 
+                    query:listLecturers,
+                    variables:{ 
+                       filter: { 
+                          email: { 
+                           eq : lecturer_email
+                       }
+                    }
+                  },
+                authMode:"API_KEY",
+              })
+        await setLecturer(lec.data.listLecturers.items[0])
+        if(lec.data.listLecturers.items.length>0){
+        let course=await API.graphql({ 
+                    query:listCourses,
+                    variables:{ 
+                        filter: { 
+                           lecturerId: { 
+                            eq : lec.data.listLecturers.items[0].id
+                        }
+                     }
+                  },
+                authMode:"API_KEY",
+                })
+        await setCourses(course.data.listCourses.items)
+        let announcementList=[]
+        for(let i=0;i<course.data.listCourses.items.length;i++){
+          const announcement=await API.graphql({ 
+                    query:listAnnouncements,
+                    variables:{ 
+                       filter: { 
+                          courseId: { 
+                           eq :course.data.listCourses.items[i].id
+                       }
+                    }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                }) 
+          if(announcement.data.listAnnouncements.items.length>0){
+            announcementList.push.apply(announcementList,announcement.data.listAnnouncements.items)
+          }
+        }
+      
+        setAnnouncements(announcementList)
+      }
+    }
+      }catch(error){
+          let e=error.errors[0].message
+          if(e.search("Not Authorized")!==-1){ 
+            setError("You are not authorized to perform this action.Please log out and log in")
+          }
+          else if(e.search("Network")!==-1){
+            setError("Request failed due to network issues")
+          }
+          else{ 
+            setError("Something went wrong.Please try again later")
+          }
+          console.log(error)
+      }
+  }
+
+  React.useEffect(()=>  { 
+      fetchAnnouncements(); 
+    } , [])
+
   return (
     <div style={{ display: 'inline-flex' }}>
+       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
           {/* Navigation bar content */}
           <LecturerNavigation />
       </nav>
-    
+       
         <main style={{ width: '900px',marginTop: '30px' }}>
 
             <h1 className="moduleHead">Recent Announcements</h1>
+                { announcements.map((val,key)=>{ 
+                  return(
+                    <div className="card" data-testid="card1" key={key}>
+                      <div className="card-header">
+                        <div className = "subjectCode">{val.end}</div>
+                        <div className = "postDate">{val.date}</div>
+                    </div>
+                    <div className="card-body">
+                      <h5 className="card-title">{val.start}</h5>
+                      <p className="card-text">{val.description}</p>
 
-            <div class="card" data-testid="card1">
-              <div class="card-header">
-                <div className = "subjectCode">COS132</div>
-                <div className = "postDate">22/05/2023</div>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">No class from Thursday 1 June</h5>
-                <p class="card-text">Please note that due to the completeion of the sylabus in this mornings lecture,
-                    there will be no class tomorrow or from here forth:) </p>
+                      <Button 
+                        id="demo-customized-button"
+                        aria-controls={open ? 'demo-customized-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        variant="contained"
+                        disableElevation
+                        onClick={handleClick}
+                        endIcon={<KeyboardArrowDownIcon />}
+                      >
+                        Options
+                      </Button>
 
-                <Button 
-                id="demo-customized-button"
-                aria-controls={open ? 'demo-customized-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                variant="contained"
-                disableElevation
-                onClick={handleClick}
-                endIcon={<KeyboardArrowDownIcon />}
-                >
-                Options
-                </Button>
+                      <StyledMenu
+                        id="demo-customized-menu"
+                        MenuListProps={{
+                        'aria-labelledby': 'demo-customized-button',
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                      >
+                        <MenuItem onClick={handleClose} disableRipple>
+                          <DeleteIcon />
+                            Delete
+                        </MenuItem>
+                      </StyledMenu>
+                    </div>
+                  </div>
+               )
+            })}
 
-                <StyledMenu
-                    id="demo-customized-menu"
-                    MenuListProps={{
-                    'aria-labelledby': 'demo-customized-button',
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    >
-                    <MenuItem onClick={handleClose} disableRipple>
-                    <DeleteIcon />
-                    Delete
-                    </MenuItem>
-                </StyledMenu>
-              </div>
-            </div>
-
-            <div class="card" data-testid="card2">
-              <div class="card-header">
-                <div className = "subjectCode">COS341</div>
-                <div className = "postDate">20/05/2023</div>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">Date of final exam</h5>
-                <p class="card-text">Please note that the exam date is the 15th of June at 09.30. The exam will be 3 hours.</p>
-
-                <Button 
-                id="demo-customized-button"
-                aria-controls={open ? 'demo-customized-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                variant="contained"
-                disableElevation
-                onClick={handleClick}
-                endIcon={<KeyboardArrowDownIcon />}
-                >
-                Options
-                </Button>
-
-                <StyledMenu
-                    id="demo-customized-menu"
-                    MenuListProps={{
-                    'aria-labelledby': 'demo-customized-button',
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    >
-                    <MenuItem onClick={handleClose} disableRipple>
-                    <DeleteIcon />
-                    Delete
-                    </MenuItem>
-                </StyledMenu>
-              </div>
-            </div>
-        </main>
-
-    </div>
+          </main>
+      </div>
   );
 }

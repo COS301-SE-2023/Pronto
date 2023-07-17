@@ -690,56 +690,8 @@ mutation CreateCourse(
     coursecode
     coursename
     semester
-    enrollments {
-      nextToken
-      startedAt
-    }
-    activity {
-      nextToken
-      startedAt
-    }
-    announcents {
-      nextToken
-      startedAt
-    }
-    lecturer {
-      id
-      institutionId
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      owner
-    }
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
 mutation UpdateCourse(
