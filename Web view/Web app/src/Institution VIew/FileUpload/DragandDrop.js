@@ -22,8 +22,6 @@ function DropzoneComponent() {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
         .join(""); // Join the words without spaces
 
-      console.log(username);
-
       setFolderNameS3(username);
       setMessage("");
     } catch (error) {
@@ -33,12 +31,30 @@ function DropzoneComponent() {
 
   const createFolder = async (folderName) => {
     try {
-      const folderKey = `${folderName}/`; // Include the trailing slash ("/") to indicate it's a folder
-      await Storage.put(folderKey, "", {
-        contentType: "application/octet-stream", // Set the content type to a generic value
+      const studentFilesKey = `${folderName}/StudentFiles/`; // Include the trailing slash for "StudentFiles" folder
+
+      // Check if "StudentFiles" folder exists
+      const studentFilesExists = await Storage.list(studentFilesKey);
+
+      if (!studentFilesExists || studentFilesExists.length === 0) {
+        // If "StudentFiles" folder does not exist, create it
+        await Storage.put(studentFilesKey, "", {
+          contentType: "application/octet-stream",
+        });
+      }
+
+      // Add the file to the "StudentFiles" folder
+      await Storage.put(studentFilesKey + selectedFile.name, selectedFile, {
+        progressCallback: ({ loaded, total }) => {
+          const progress = Math.round((loaded / total) * 100);
+          setUploadProgress(progress);
+          setMessage("Uploading file: " + selectedFile.name);
+        },
       });
+
+      setMessage("File successfully uploaded: " + selectedFile.name);
     } catch (error) {
-      setMessage("Error creating folder: " + error);
+      setMessage("Error uploading file");
     }
   };
 
@@ -57,11 +73,8 @@ function DropzoneComponent() {
   // When submit is pressed
   const handleSubmit = async () => {
     if (selectedFile) {
-      // Perform file saving logic here
-      createFolder(folderNameS3);
-
       try {
-        const fileKey = `${folderNameS3}/${selectedFile.name}`;
+        const fileKey = `${folderNameS3}/StudentFiles/${selectedFile.name}`;
         await Storage.put(fileKey, selectedFile, {
           progressCallback: ({ loaded, total }) => {
             const progress = Math.round((loaded / total) * 100);
