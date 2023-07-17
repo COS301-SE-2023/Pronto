@@ -17,8 +17,10 @@ function DropzoneComponent() {
       const userInfo = await Auth.currentUserInfo();
       setUser(userInfo);
       let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
-      username = username.replace(/\s+/g, ""); // Remove spaces
-      username = username.charAt(0).toUpperCase() + username.slice(1); // Convert to camel case
+      const words = username.split(/\s+/); // Split the name into words
+      username = words
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
+        .join(""); // Join the words without spaces
 
       console.log(username);
 
