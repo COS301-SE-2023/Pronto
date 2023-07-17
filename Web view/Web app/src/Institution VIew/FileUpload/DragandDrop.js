@@ -1,13 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Amplify, Storage } from "aws-amplify";
-
-// Folder name for S3 bucket
-let folderNameS3 = "UniversityOfPretoria";
+import { Amplify, Storage, Auth } from "aws-amplify";
 
 function DropzoneComponent() {
+  useEffect(() => {
+    getUniversityName();
+  }, []);
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [message, setMessage] = useState("");
+  const [folderNameS3, setFolderNameS3] = useState("");
+
+  const getUniversityName = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+
+      let username = user.name; // Get the name of the signed-in uni
+
+      //process name to be camel case and remove spaces
+      username = username.replace(/\s+/g, ""); // Remove spaces
+      username = username.charAt(0).toUpperCase() + username.slice(1); // Convert to camel case
+
+      console.log(username);
+
+      setFolderNameS3(username);
+      setMessage("");
+    } catch (e) {
+      setMessage(e.message);
+    }
+  };
 
   const createFolder = async (folderName) => {
     try {
