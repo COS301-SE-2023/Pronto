@@ -22,7 +22,8 @@ const EditTimetable = ({ onSearch }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
   const[courses,setCourses]=useState([])
- 
+  const[lectures,setLectures]=useState(["L01","L02","L03","L04"])
+
   const toggleModal = async(module) => {
     if (module) {
       await setSelectedModule(module); 
@@ -244,15 +245,20 @@ const EditTimetable = ({ onSearch }) => {
                 {/* <Text style={styles.moduleName}>{selectedModule.name}</Text> */}
                 
                 {/* Check if there are lectures */}
-                {selectedModule.activity.map((act,index)=>(
+                {lectures.map((lecture,i)=>(
                       <DropdownComponent
-                          key={index}
+                          key={i}
                           activity={"Lecture"}
                           moduleContent={
-                                  [{label: `${act.day}: ${act.start} -${act.end} (${act.venue})`,
-                                  value: `${index + 1}`,}]
+                                  selectedModule.activity.filter(item=>item.activityname===lecture).map((act,index)=>(
+                                    {
+                                    label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
+                                  
+                                  value: `${index + 1}`,}
+                                    )
+                                  )
                                 }
-                          activityNumber={index+1}
+                          activityNumber={i+1}
                           />
                 ))}
                 
