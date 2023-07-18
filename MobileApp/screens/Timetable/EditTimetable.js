@@ -73,7 +73,7 @@ const EditTimetable = ({ onSearch }) => {
       // semester: "Y",
       activity:[ 
         {
-          activityname:"Lecture",
+          activityname:"L01",
           day:"Monday",
           start:"11:30",
           end:"12:20",
@@ -81,7 +81,15 @@ const EditTimetable = ({ onSearch }) => {
           group:"G01"
         },
         {
-            activityname:"Lecture",
+          activityname:"L01",
+          day:"Monday",
+          start:"11:30",
+          end:"12:20",
+          venue:"Louw Hall",
+          group:"G02"
+        },
+        {
+            activityname:"L02",
             day:"Tuesday",
             start:"13:30",
             end:"14:30",
