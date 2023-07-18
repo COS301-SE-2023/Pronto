@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  SafeAreaView,
+  ScrollView,
   TextInput,
   ImageBackground,
   Dimensions,
@@ -38,7 +38,13 @@ const Register = ({ navigation }) => {
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
   //select instituition
-  const [selectedInstitutionId, setSelectedInstitutionId] = React.useState("");
+  const [institutionId, setInstitutionId] = React.useState("");
+
+  //Validate institutionId
+  const [isInstitutionIdValid, setIsInstitutionIdValid] = React.useState(false);
+  const validateInstitutionId = () => {
+    setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
+  };
 
   //validate password on sign up
   const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
@@ -91,6 +97,11 @@ const Register = ({ navigation }) => {
       return;
     }
 
+    if (!isInstitutionIdValid) {
+      Alert.alert("Error", "Please Select An Institution");
+      return;
+    }
+
     if (confirmPassword !== password) {
       Alert.alert("Error", "Passwords do not match");
       return;
@@ -103,7 +114,7 @@ const Register = ({ navigation }) => {
         username: email,
         password,
         attributes: { email, family_name: surname, name },
-        clientMetadata: { role: "Student" },
+        clientMetadata: { role: "Student", institutionId: institutionId },
       });
 
       navigation.navigate("ConfirmEmail", { email });
@@ -122,7 +133,7 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.centered}>
           <Text style={styles.title}>Create Account</Text>
@@ -212,9 +223,14 @@ const Register = ({ navigation }) => {
 
         <View style={styles.inputContainer}>
           <SelectList
-            setSelected={(val) => setSelectedInstitutionId(val)}
+            setSelected={(institutionId) => setInstitutionId(institutionId)}
             data={institutionInfo}
-            save="value"
+            save="key"
+            boxStyles={styles.input}
+            defaultOption={{ key: "notSet", value: "Select University" }}
+            placeholder="Select University"
+            searchPlaceholder="Search University"
+            onSelect={(institutionId) => validateInstitutionId(institutionId)}
           />
         </View>
 
@@ -295,7 +311,7 @@ const Register = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
