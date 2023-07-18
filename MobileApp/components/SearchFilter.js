@@ -12,6 +12,7 @@ const SearchFilter = ({ data, input, setInput, addToModules }) => {
             // item.coursecode.toLowerCase().includes(input.toLowerCase()) &&
             input != ""
           ) {
+            console.log("In search filter")
             return (
               <View style={{ margin: 20 }}>
                 <Card

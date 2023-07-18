@@ -14,6 +14,8 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
       </Text>
     );
   };
+
+  console.log("Drop down")
   return (
     <View style={styles.container}>
       {renderLabel()}

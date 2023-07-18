@@ -119,9 +119,11 @@ const EditTimetable = ({ onSearch }) => {
   const [selectedModule, setSelectedModule] = useState(null);
   const[courses,setCourses]=useState([])
  
-  const toggleModal = (module) => {
+  const toggleModal = async(module) => {
     if (module) {
-      setSelectedModule(module);
+      await setSelectedModule(module); 
+      console.log("In toggle modal")
+      console.log(module)
       setModalVisible(true);
     } else {
       setSelectedModule(null);
@@ -135,6 +137,8 @@ const EditTimetable = ({ onSearch }) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [...prevModules, module]);
     }
+    console.log("Adding to modules")
+    console.log(selectedModules.length)
     setInput("");
   };
 
@@ -192,10 +196,14 @@ const EditTimetable = ({ onSearch }) => {
   }
 
   const oneModule = ({ item }) => {
-    const handleDelete = () => {
-      setSelectedModules((prevModules) =>
+    console.log("In one module")
+    console.log(item.id)
+
+    const handleDelete = async() => {
+      await setSelectedModules((prevModules) =>
         prevModules.filter((module) => module.id !== item.id)
       );
+      console.log("Deleting module")
     };
   
     return (
@@ -308,7 +316,7 @@ const EditTimetable = ({ onSearch }) => {
                   color: "black",
                 }}
               >
-                You have no modules
+                Create Your Timetable Here!
               </Text>
             </View>
           )
@@ -321,8 +329,8 @@ const EditTimetable = ({ onSearch }) => {
           <IconButton
             icon="close"
             onPress={() => toggleModal(null)}
-            style={styles.closeIcon}
-            color="#000000"
+            //style={styles.closeIcon}
+            //color="#000000"
           />
 
           <View style={styles.modalContent}>
@@ -331,6 +339,8 @@ const EditTimetable = ({ onSearch }) => {
                 <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
                 {/* <Text style={styles.moduleName}>{selectedModule.name}</Text> */}
                 {/* Check if there are lectures */}
+                {/* {selectedModule} */}
+                
                 {/* {
                 //  selectedModule.lectureActivity &&
                 //   selectedModule.lectureDays &&
@@ -437,7 +447,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 200,
     marginHorizontal: 10,
-    borderRadius: "50",
+    borderRadius: 50,
     backgroundColor: "white",
     elevation: 5,
     shadowColor: "black",
