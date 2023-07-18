@@ -24,11 +24,16 @@ const EditTimetable = ({ onSearch }) => {
   const[courses,setCourses]=useState([])
   const[lectures,setLectures]=useState(["L01","L02","L03","L04"])
 
-  const toggleModal = async(module) => {
+  const toggleModal = (module) => {
     if (module) {
-      await setSelectedModule(module); 
+      setSelectedModule(module); 
       console.log("In toggle modal")
       console.log(module)
+     try{
+      groups(module)
+     }catch(error){
+
+     }
       setModalVisible(true);
     } else {
       setSelectedModule(null);
@@ -37,6 +42,17 @@ const EditTimetable = ({ onSearch }) => {
   };
 
   const [selectedModules, setSelectedModules] = useState([]);
+
+  const groups =(module)=>{ 
+    let lectureNumber=1;
+    for(let i=0;i<module.activity.length;i++){
+      if(module.activity[i].activityname.contains("L")){
+        if(module.activity[i].activityname.slice(0,2)>lectureNumber)
+        lectureNumber==module.activity[i].activityname.slice(0,2)
+      }
+    }
+    console.log(lectureNumber)
+  }
 
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
@@ -70,7 +86,6 @@ const EditTimetable = ({ onSearch }) => {
           {
       id: 1,
       coursecode: "COS 301",
-      // semester: "Y",
       activity:[ 
         {
           activityname:"L01",
@@ -109,11 +124,11 @@ const EditTimetable = ({ onSearch }) => {
   }
 
   const oneModule = ({ item }) => {
-    console.log("In one module")
-    console.log(item.id)
+    //console.log("In one module")
+    //console.log(item.id)
 
-    const handleDelete = async() => {
-      await setSelectedModules((prevModules) =>
+    const handleDelete = () => {
+      setSelectedModules((prevModules) =>
         prevModules.filter((module) => module.id !== item.id)
       );
       console.log("Deleting module")

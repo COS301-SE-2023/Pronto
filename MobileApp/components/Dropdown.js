@@ -10,13 +10,12 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
   const renderLabel = () => {
     return (
       <Text style={[styles.label, isFocus && { color: "#e32f45" }]}>
-        {/* {activity}  */}
-        {/* {activityNumber} */}
+        {activity}{"-"}{activityNumber}
       </Text>
     );
   };
 
-  console.log("Drop down")
+  //console.log("Drop down")
   return (
     <View style={styles.container}>
       {renderLabel()}
