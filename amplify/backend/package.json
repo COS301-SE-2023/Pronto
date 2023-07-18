@@ -12,6 +12,11 @@
     "test:unit": "jest unit",
     "test:unit:watch": "jest --watch unit",
     "test:unit:watch:silent": "jest --watch --silent unit"
+    "test:unit:watch:silent": "jest --watch --silent unit",
+    "test:int::watch:silent": "jest --watch --silent integration"
+  },
+  "dependencies": {
+    "@aws-amplify/cli-extensibility-helper": "^3.0.0"
   },
   "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.363.0",
