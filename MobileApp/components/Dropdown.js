@@ -32,7 +32,7 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
-          setValue(item.value);
+          //setValue(item.value);
           setIsFocus(false);
         }}
         renderLeftIcon={() => (

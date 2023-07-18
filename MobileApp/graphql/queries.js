@@ -81,7 +81,6 @@ export const searchCourses=`query SearchCourses(
       institutionId
       lecturerId
       coursecode
-      coursename
       semester
       createdAt
       updatedAt

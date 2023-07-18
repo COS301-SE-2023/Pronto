@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Modal,
   StyleSheet,
+  Alert,
   ScrollView,
 } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
@@ -14,147 +15,110 @@ import { Card, Button, IconButton } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
+import{API,Auth} from "aws-amplify"
+import{searchCourses} from "../../graphql/queries"
 
 const EditTimetable = ({ onSearch }) => {
-  const modules = [
-    {
-      id: 1,
-      code: "COS 301",
-      name: "Software Engineering",
-      value: "COS 301",
-      semester: "Y",
-      groups: ["G01"],
-      lectureDays: ["Monday", "Tuesday"],
-      lectureActivity: ["L1", "L2"],
-      lectureTimes: {
-        Monday: ["11:30-12:20"],
-        Tuesday: ["14:30-15:20"],
-      },
-      lectureVenues: ["IT 2-27", "IT 2-27"],
+  //Mock data
+  //let modules = [
+    // {
+    //   id: 1,
+    //   coursecode: "COS 301",
+    //   // semester: "Y",
+    //   activity:[ 
+    //     {
+    //       activityname:"Lecture",
+    //       day:"Monday",
+    //       start:"11:30",
+    //       end:"12:20",
+    //       venue:"HB 4-9",
+    //       group:"G01"
+    //     },
+    //     {
+    //         activityname:"Lecture",
+    //         day:"Tuesday",
+    //         start:"13:30",
+    //         end:"14:30",
+    //         venue:"North Hall",
+    //         group:"G01"
+    //     }
+    //   ]
+    // },
+      
+    // {
+    //   id: 2,
+    //   coursecode: "COS 332",
+    //   // semester: "S1",
+    //   activity:[ 
+    //     {
+    //       activityname:"Lecture",
+    //       day:"Monday",
+    //       start:"12:30",
+    //       end:"13:20",
+    //       venue:"IT 2-26",
+    //       group:"G01"
+    //     },
+    //     {
+    //         activityname:"Lecture",
+    //         day:"Wednesday",
+    //         start:"15:30",
+    //         end:"16:30",
+    //         venue:"IT 2-26",
+    //         group:"G01"
+    //     },
+    //     {
+    //         activityname:"Practical",
+    //         day:"Tuesday",
+    //         start:"15:30",
+    //         end:"18:30",
+    //         venue:"Green Lab",
+    //         group:"G01"
+    //     },
+    //     {
+    //         activityname:"Practical",
+    //         day:"Friday",
+    //         start:"08:30",
+    //         end:"11:30",
+    //         venue:"Green Lab",
+    //         group:"G02"
+    //     }
+    //   ]
+    // },
+    
+  //];
 
-      practicalActivity: null,
-      practicalDays: null,
-      practicalTimes: null,
-      practicalVenues: null,
+  const[modules,setModules]=useState([])
+  const fecthCourses= async()=>{
+    await setCourses[modules]
+    //Alert.alert(courses[0].coursecode)
+    try{ 
+        // let search= await API.graphql({
+        //             query:searchCourses,
+        //             variables:  { 
+        //                        filter : { 
+        //                             coursecode: { 
+        //                                  wildcard: "COS" 
+        //                             } 
+        //                         }
+        //                     },
+        //             authMode:"AMAZON_COGNITO_USER_POOLS"         
+        //         })
+        //         console.log(search)
+    }catch(error){
+      console.log(error)
+    }
 
-      tutorialActivity: null,
-      tutorialDays: null,
-      tutorialTimes: null,
-      tutorialVenues: null,
-    },
-    {
-      id: 2,
-      code: "COS 332",
-      name: "Computer Networks",
-      value: "COS 332",
-      semester: "S1",
-      groups: ["G01"],
+    //console.log()
+  }
 
-      lectureDays: ["Monday", "Wednesday"],
-      lectureActivity: ["L1", "L2"],
-      lectureTimes: {
-        Monday: ["12:30-13:20"],
-        Wednesday: ["14:30-15:20"],
-      },
-      lectureVenues: ["IT 2-26", "IT 2-26"],
-
-      practicalActivity: ["P1"],
-      practicalTimes: [
-        ["Tuesday", "14:30-17:20"],
-        ["Friday", "08:30-11:20"],
-      ],
-      practicalVenues: ["Green Lab", "Blue Lab"],
-
-      tutorialActivity: null,
-      tutorialDays: null,
-      tutorialTimes: null,
-      tutorialVenues: null,
-    },
-    {
-      id: 3,
-      code: "COS 341",
-      name: "Compiler Construction",
-      value: "COS 341",
-      semester: "S1",
-      groups: ["G01"],
-
-      lectureDays: ["Monday", "Wednesday"],
-      lectureActivity: ["L1", "L2"],
-      lectureTimes: {
-        Monday: ["12:30-13:20"],
-        Wednesday: ["14:30-15:20"],
-      },
-      lectureVenues: ["IT 2-26", "IT 2-26"],
-
-      practicalActivity: ["P1"],
-      practicalTimes: [
-        ["Tuesday", "14:30-17:20"],
-        ["Friday", "08:30-11:20"],
-      ],
-      practicalVenues: ["Green Lab", "Blue Lab"],
-
-      tutorialActivity: null,
-      tutorialDays: null,
-      tutorialTimes: null,
-      tutorialVenues: null,
-    },
-    {
-      id: 4,
-      code: "IMY 310",
-      name: "Human Computer Interaction",
-      value: "IMY310",
-      semester: "S1",
-      groups: ["G01"],
-
-      lectureDays: ["Monday", "Wednesday"],
-      lectureActivity: ["L1", "L2"],
-      lectureTimes: {
-        Monday: ["12:30-13:20"],
-        Wednesday: ["14:30-15:20"],
-      },
-      lectureVenues: ["IT 2-26", "IT 2-26"],
-
-      practicalActivity: null,
-      practicalTimes: null,
-      practicalVenues: null,
-
-      tutorialActivity: ["T1"],
-      tutorialTimes: [["Friday", "14:30-17:20"]],
-      tutorialVenues: ["SIT Lab"],
-    },
-    {
-      id: 5,
-      code: "COS 216",
-      name: "Netcentric Computer Programming",
-      value: "COS 216",
-      semester: "S1",
-      groups: ["G01"],
-
-      lectureDays: ["Monday", "Wednesday"],
-      lectureActivity: ["L1", "L2"],
-      lectureTimes: {
-        Monday: ["12:30-13:20"],
-        Wednesday: ["14:30-15:20"],
-      },
-      lectureVenues: ["IT 2-26", "IT 2-26"],
-
-      practicalActivity: ["P1"],
-      practicalTimes: [
-        ["Tuesday", "14:30-17:20"],
-        ["Friday", "08:30-11:20"],
-      ],
-      practicalVenues: ["Green Lab", "Blue Lab"],
-
-      tutorialActivity: null,
-      tutorialDays: null,
-      tutorialTimes: null,
-      tutorialVenues: null,
-    },
-  ];
+    useEffect(() => {
+        fecthCourses();
+    }, [])
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
-
+  const[courses,setCourses]=useState([])
+ 
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module);
@@ -176,13 +140,64 @@ const EditTimetable = ({ onSearch }) => {
 
   const [input, setInput] = useState("");
 
+  const handleSearch = async(text)=>{
+    console.log(text)
+     //Alert.alert(courses[0].coursecode)
+    try{ 
+        // let search= await API.graphql({
+        //             query:searchCourses,
+        //             variables:  { 
+        //                        filter : { 
+        //                             coursecode: { 
+        //                                  wildcard: text 
+        //                             } 
+        //                         }
+        //                     },
+        //             authMode:"AMAZON_COGNITO_USER_POOLS"         
+        //         })
+        //         console.log(search)
+        //setCourses(search.data.searchCourses.items)
+        let m=[
+          {
+      id: 1,
+      coursecode: "COS 301",
+      // semester: "Y",
+      activity:[ 
+        {
+          activityname:"Lecture",
+          day:"Monday",
+          start:"11:30",
+          end:"12:20",
+          venue:"HB 4-9",
+          group:"G01"
+        },
+        {
+            activityname:"Lecture",
+            day:"Tuesday",
+            start:"13:30",
+            end:"14:30",
+            venue:"North Hall",
+            group:"G01"
+        }
+      ]
+    }
+        ]
+        setModules(m)
+        setCourses(m)
+    }catch(error){
+      console.log(error)
+    }
+
+    setInput(text)
+  }
+
   const oneModule = ({ item }) => {
     const handleDelete = () => {
       setSelectedModules((prevModules) =>
         prevModules.filter((module) => module.id !== item.id)
       );
     };
-
+  
     return (
       <View style={{ margin: 20 }}>
         <TouchableWithoutFeedback onPress={() => addToModules(item)}>
@@ -194,7 +209,7 @@ const EditTimetable = ({ onSearch }) => {
             }}
           >
             <Card.Title
-              title={item.code}
+              title={item.coursecode}
               titleStyle={{
                 fontSize: 20,
                 fontWeight: "bold",
@@ -202,7 +217,7 @@ const EditTimetable = ({ onSearch }) => {
                 textAlign: "center",
                 marginLeft: 30,
               }}
-              subtitle={item.name}
+             // subtitle={item.name}
               subtitleStyle={{
                 fontSize: 15,
                 justifyContent: "center",
@@ -258,14 +273,15 @@ const EditTimetable = ({ onSearch }) => {
         />
         <TextInput
           value={input}
-          onChangeText={(text) => setInput(text)}
+          //onChangeText={(text) => setInput(text)}
+          onChangeText={(text)=>handleSearch(text)}
           style={{ fontSize: 15, width: "100%" }}
           placeholder="Search for your modules"
         />
       </View>
 
       <SearchFilter
-        data={modules}
+        data={courses}
         input={input}
         setInput={setInput}
         addToModules={addToModules}
@@ -311,75 +327,83 @@ const EditTimetable = ({ onSearch }) => {
 
           <View style={styles.modalContent}>
             {selectedModule && (
-              <View key={selectedModule.code}>
-                <Text style={styles.moduleCode}>{selectedModule.code}</Text>
-                <Text style={styles.moduleName}>{selectedModule.name}</Text>
+              <View key={selectedModule.coursecode}>
+                <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
+                {/* <Text style={styles.moduleName}>{selectedModule.name}</Text> */}
                 {/* Check if there are lectures */}
-                {selectedModule.lectureActivity &&
-                  selectedModule.lectureDays &&
-                  selectedModule.lectureTimes &&
-                  selectedModule.lectureVenues &&
-                  selectedModule.lectureDays.map((day, index) => (
+                {/* {
+                //  selectedModule.lectureActivity &&
+                //   selectedModule.lectureDays &&
+                //   selectedModule.lectureTimes &&
+                //   selectedModule.lectureVenues && 
+                  // selectedModule.filter((act)=>act.activityname==="Lecture").map((day,index)=> 
+                  selectedModule.activity.filter((act)=>act.activityname==="Lecture").map((day, index) => (
                     <DropdownComponent
                       key={index}
                       activity={"Lecture"}
-                      moduleContent={selectedModule.lectureTimes[day].map(
-                        (time, timeIndex) => ({
-                          label: `${day}: ${time} (${selectedModule.lectureVenues[timeIndex]})`,
-                          value: `${index + 1}`,
-                        })
-                      )}
+                      moduleContent={selectedModule.start}
+                      //   .map(
+                      //   (time, timeIndex) => ({
+                      //     label: `${day}: ${time} (${selectedModule.lectureVenue[timeIndex]})`,
+                      //     value: `${index + 1}`,
+                      //   })
+                      // )}
+
                       activityNumber={index + 1}
                     />
-                  ))}
+                  ))} */}
                 {/* Check if there are practicals */}
-                {selectedModule.practicalActivity &&
-                  selectedModule.practicalTimes &&
-                  selectedModule.practicalVenues &&
-                  selectedModule.practicalActivity.map(
-                    (practicalActivity, index) => {
-                      const practicalTimes = selectedModule.practicalTimes;
-                      const practicalVenues = selectedModule.practicalVenues;
+                {/* {
+                // selectedModule.practicalActivity &&
+                //   selectedModule.practicalTimes &&
+                //   selectedModule.practicalVenues &&
+                  selectedModule.activity.filter((act)=>act.activityname==="Practical").map(
+                    (prac, index) => {
+                      const practicalTimes = prac.start;
+                      const practicalVenues = prac.venue;
 
                       return (
                         <DropdownComponent
                           key={index}
                           activity={"Practical"}
                           activityNumber={index + 1}
-                          moduleContent={practicalTimes.map(
-                            (time, timeIndex) => ({
-                              label: `${time[0]}: ${time[1]} (${practicalVenues[timeIndex]})`,
-                              value: `${timeIndex + 1}`,
-                            })
-                          )}
+                          moduleContent={practicalTimes}
+                          //   .map(
+                          //   (time, timeIndex) => ({
+                          //     label: `${time[0]}: ${time[1]} (${practicalVenues[timeIndex]})`,
+                          //     value: `${timeIndex + 1}`,
+                          //   })
+                          // )}
                         />
                       );
                     }
-                  )}
+                  )} */}
 
                 {/* Check if there are tutorials */}
-                {selectedModule.tutorialActivity &&
-                  selectedModule.tutorialTimes &&
-                  selectedModule.tutorialVenues &&
-                  selectedModule.tutorialActivity.map(
-                    (tutorialActivity, index) => {
-                      const tutorialTimes = selectedModule.tutorialTimes;
-                      const tutorialVenues = selectedModule.tutorialVenues;
+                {/* {
+                // selectedModule.tutorialActivity &&
+                //   selectedModule.tutorialTimes &&
+                //   selectedModule.tutorialVenues &&
+                  selectedModule.activity.filter((act)=>act.activityname==="Tutorial").map(
+                    (tut, index) => {
+                      const tutorialTimes = tut.start;
+                      const tutorialVenues = tut.venue;
                       return (
                         <DropdownComponent
                           key={index}
                           activity={"Tutorial"}
                           activityNumber={index + 1}
-                          moduleContent={tutorialTimes.map(
-                            (time, timeIndex) => ({
-                              label: `${time[0]}: ${time[1]} (${tutorialVenues[timeIndex]})`,
-                              value: `${timeIndex + 1}`,
-                            })
-                          )}
+                          moduleContent={tutorialTimes}
+                          //   .map(
+                          //   (time, timeIndex) => ({
+                          //     label: `${time[0]}: ${time[1]} (${tutorialVenues[timeIndex]})`,
+                          //     value: `${timeIndex + 1}`,
+                          //   })
+                          // )}
                         />
                       );
                     }
-                  )}
+                  )} */}
 
                 <Button
                   icon="check"
@@ -404,6 +428,8 @@ const EditTimetable = ({ onSearch }) => {
   );
 };
 
+
+//Styles
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
