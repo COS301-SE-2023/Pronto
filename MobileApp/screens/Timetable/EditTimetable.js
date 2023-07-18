@@ -19,8 +19,6 @@ import{API,Auth} from "aws-amplify"
 import{searchCourses} from "../../graphql/queries"
 
 const EditTimetable = ({ onSearch }) => {
-  
-  const[modules,setModules]=useState([])
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
   const[courses,setCourses]=useState([])
@@ -244,8 +242,19 @@ const EditTimetable = ({ onSearch }) => {
               <View key={selectedModule.coursecode}>
                 <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
                 {/* <Text style={styles.moduleName}>{selectedModule.name}</Text> */}
+                
                 {/* Check if there are lectures */}
-                {/* {selectedModule} */}
+                {selectedModule.activity.map((act,index)=>(
+                      <DropdownComponent
+                          key={index}
+                          activity={"Lecture"}
+                          moduleContent={
+                                  [{label: `${act.day}: ${act.start} -${act.end} (${act.venue})`,
+                                  value: `${index + 1}`,}]
+                                }
+                          activityNumber={index+1}
+                          />
+                ))}
                 
                 {/* {
                 //  selectedModule.lectureActivity &&
@@ -253,7 +262,7 @@ const EditTimetable = ({ onSearch }) => {
                 //   selectedModule.lectureTimes &&
                 //   selectedModule.lectureVenues && 
                   // selectedModule.filter((act)=>act.activityname==="Lecture").map((day,index)=> 
-                  selectedModule.activity.filter((act)=>act.activityname==="Lecture").map((day, index) => (
+                  selectedModule.activity.map((day, index) => (
                     <DropdownComponent
                       key={index}
                       activity={"Lecture"}
@@ -268,59 +277,6 @@ const EditTimetable = ({ onSearch }) => {
                       activityNumber={index + 1}
                     />
                   ))} */}
-                {/* Check if there are practicals */}
-                {/* {
-                // selectedModule.practicalActivity &&
-                //   selectedModule.practicalTimes &&
-                //   selectedModule.practicalVenues &&
-                  selectedModule.activity.filter((act)=>act.activityname==="Practical").map(
-                    (prac, index) => {
-                      const practicalTimes = prac.start;
-                      const practicalVenues = prac.venue;
-
-                      return (
-                        <DropdownComponent
-                          key={index}
-                          activity={"Practical"}
-                          activityNumber={index + 1}
-                          moduleContent={practicalTimes}
-                          //   .map(
-                          //   (time, timeIndex) => ({
-                          //     label: `${time[0]}: ${time[1]} (${practicalVenues[timeIndex]})`,
-                          //     value: `${timeIndex + 1}`,
-                          //   })
-                          // )}
-                        />
-                      );
-                    }
-                  )} */}
-
-                {/* Check if there are tutorials */}
-                {/* {
-                // selectedModule.tutorialActivity &&
-                //   selectedModule.tutorialTimes &&
-                //   selectedModule.tutorialVenues &&
-                  selectedModule.activity.filter((act)=>act.activityname==="Tutorial").map(
-                    (tut, index) => {
-                      const tutorialTimes = tut.start;
-                      const tutorialVenues = tut.venue;
-                      return (
-                        <DropdownComponent
-                          key={index}
-                          activity={"Tutorial"}
-                          activityNumber={index + 1}
-                          moduleContent={tutorialTimes}
-                          //   .map(
-                          //   (time, timeIndex) => ({
-                          //     label: `${time[0]}: ${time[1]} (${tutorialVenues[timeIndex]})`,
-                          //     value: `${timeIndex + 1}`,
-                          //   })
-                          // )}
-                        />
-                      );
-                    }
-                  )} */}
-
                 <Button
                   icon="check"
                   mode="contained"
