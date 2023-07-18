@@ -6,6 +6,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Alert,
+  ImageBackground,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
@@ -38,6 +39,20 @@ const NotificationPreferences = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Notification Preferences</Text>
+        <Text
+          style={{
+            marginBottom: 20,
+            textAlign: "center",
+          }}
+        >
+          This is how you will receive notifications from your lecturer
+        </Text>
+        <ImageBackground
+          resizeMode="contain"
+          //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+          source={require("../../assets/icons/NotificationPreference.png")}
+          style={styles.image}
+        />
 
         <Text style={styles.instructions}>
           Select your preferred way of receiving notifications:
@@ -150,6 +165,12 @@ const styles = StyleSheet.create({
   },
   checkIcon: {
     marginLeft: 5,
+  },
+  image: {
+    width: 200, // Specify the desired width
+    height: 200, // Specify the desired height
+    alignSelf: "center", // Center the image horizontally
+    marginBottom: 20,
   },
 });
 

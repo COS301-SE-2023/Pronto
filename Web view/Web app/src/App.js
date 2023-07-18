@@ -12,6 +12,7 @@ import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulA
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
+import EditUniversityInfo from "./Institution VIew/EditInformation/EditInfo";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
@@ -80,6 +81,10 @@ const Home = () => {
           <Route
             path="/upload-student-files"
             element={<StudentFileUploadPage />}
+          />
+          <Route
+            path="/edit-university-info"
+            element={<EditUniversityInfo />}
           />
         </Routes>
       </Router>

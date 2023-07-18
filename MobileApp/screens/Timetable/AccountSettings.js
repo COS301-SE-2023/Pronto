@@ -9,8 +9,8 @@ const AccountSettings = () => {
   const settingsOptions = [
     {
       title: "My profile",
-      subTitle: "Edit your profile",
-      onPress: () => {},
+      subTitle: "View your profile information",
+      onPress: () => navigation.navigate("Profile Page"),
     },
     {
       title: "Notification Preferences",
@@ -20,22 +20,22 @@ const AccountSettings = () => {
     {
       title: "Security",
       subTitle: "Change your password",
-      onPress: () => {},
+      onPress: () => navigation.navigate("Reset Password"),
     },
     {
       title: "Reset",
-      subTitle: "Reset all of your app information",
-      onPress: () => {},
+      subTitle: "Delete your account and all of your information",
+      onPress: () => navigation.navigate("Delete Account"),
     },
     {
       title: "Privacy Policy",
       subTitle: "Privacy Policy of the Pronto application",
-      onPress: () => {},
+      onPress: () => navigation.navigate("Privacy Policy"),
     },
     {
       title: "About",
-      subTitle: null,
-      onPress: () => {},
+      subTitle: "About the Pronto application",
+      onPress: () => navigation.navigate("About"),
     },
   ];
 
