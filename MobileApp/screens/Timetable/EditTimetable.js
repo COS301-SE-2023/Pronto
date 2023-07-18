@@ -16,24 +16,20 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import{API,Auth} from "aws-amplify"
-import{searchCourses} from "../../graphql/queries"
+import{searchCourses,listTimetables} from "../../graphql/queries"
+import{createTimetable,updateTimetable} from "../../graphql/mutations"
 
 const EditTimetable = ({ onSearch }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
   const[courses,setCourses]=useState([])
-  const[lectures,setLectures]=useState(["L01","L02","L03","L04"])
+  const[lectures,setLectures]=useState(["L01","L02","L03","L04","L05","L06","L07","L08","L09"])
+  const[tutorials,setTutorials]=useState(["T01","T02","T03","T04","T05","T06","T07","T08","T09"])
+  const[practicals,setPracticals]=useState(["P01","P02","P03","P04","P05","P06","P07","P08","P09"])
 
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module); 
-      //console.log("In toggle modal")
-      //console.log(module)
-    //  try{
-    //   groups(module)
-    //  }catch(error){
-
-     //}
       setModalVisible(true);
     } else {
       setSelectedModule(null);
@@ -43,21 +39,6 @@ const EditTimetable = ({ onSearch }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-  // const groups =(module)=>{ 
-  //   let lectureNumber=1;
-  //   for(let i=0;i<module.activity.length;i++){
-  //     if(module.activity[i].activityname.contains("L")){
-  //       if(module.activity[i].activityname.slice(0,2)>lectureNumber)
-  //       lectureNumber==module.activity[i].activityname.slice(0,2)
-  //     }
-  //   }
-  //   let l=[]
-  //   for(let i =0;i<lectureNumber;i++){
-  //     l.push("L0"+i)
-  //   }
-  //   setLectures(l)
-  //   console.log(lectureNumber)
-  // }
 
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
@@ -69,6 +50,7 @@ const EditTimetable = ({ onSearch }) => {
   };
 
   const [input, setInput] = useState("");
+  
 
   const handleSearch = async(text)=>{
     console.log(text)
@@ -119,7 +101,6 @@ const EditTimetable = ({ onSearch }) => {
       ]
     }
         ]
-        //setModules(m)
         setCourses(m)
     }catch(error){
       console.log(error)
@@ -249,7 +230,7 @@ const EditTimetable = ({ onSearch }) => {
                   color: "black",
                 }}
               >
-                Create Your Timetable Here!
+                You have no Courses
               </Text>
             </View>
           )
@@ -290,28 +271,41 @@ const EditTimetable = ({ onSearch }) => {
                           activityNumber={i+1}
                           />
                 ))}
-                
-                {/* {
-                //  selectedModule.lectureActivity &&
-                //   selectedModule.lectureDays &&
-                //   selectedModule.lectureTimes &&
-                //   selectedModule.lectureVenues && 
-                  // selectedModule.filter((act)=>act.activityname==="Lecture").map((day,index)=> 
-                  selectedModule.activity.map((day, index) => (
-                    <DropdownComponent
-                      key={index}
-                      activity={"Lecture"}
-                      moduleContent={selectedModule.start}
-                      //   .map(
-                      //   (time, timeIndex) => ({
-                      //     label: `${day}: ${time} (${selectedModule.lectureVenue[timeIndex]})`,
-                      //     value: `${index + 1}`,
-                      //   })
-                      // )}
+                {tutorials.map((tutorial,i)=>(
+                  selectedModule.activity.filter(item=>item.activityname==tutorial).length>0 &&
+                      <DropdownComponent
+                          key={i}
+                          activity={"Tutorial"}
+                          moduleContent={
+                                  selectedModule.activity.filter(item=>item.activityname===tutorial).map((act,index)=>(
+                                    {
+                                    label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
+                                  
+                                  value: `${index + 1}`,}
+                                    )
+                                  )
+                                }
+                          activityNumber={i+1}
+                          />
+                ))}
 
-                      activityNumber={index + 1}
-                    />
-                  ))} */}
+                {practicals.map((practical,i)=>(
+                  selectedModule.activity.filter(item=>item.activityname==practical).length>0 &&
+                      <DropdownComponent
+                          key={i}
+                          activity={"Practical"}
+                          moduleContent={
+                                  selectedModule.activity.filter(item=>item.activityname===practical).map((act,index)=>(
+                                    {
+                                    label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
+                                  
+                                  value: `${index + 1}`,}
+                                    )
+                                  )
+                                }
+                          activityNumber={i+1}
+                          />
+                ))}
                 <Button
                   icon="check"
                   mode="contained"

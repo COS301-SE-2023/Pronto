@@ -179,3 +179,33 @@ export const studentsByInstitutionId=`query StudentsByInstitutionId(
     nextToken
   }
 }`
+
+export const enrollmentsByStudentId=`query EnrollmentsByStudentId(
+  $studentId: ID!
+  $sortDirection: ModelSortDirection
+  $filter: ModelEnrollmentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  enrollmentsByStudentId(
+    studentId: $studentId
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      studentId
+      courseId
+      course { 
+        id 
+        coursecode
+      }
+      year
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}`
