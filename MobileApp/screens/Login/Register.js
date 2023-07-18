@@ -9,10 +9,11 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
+import { SelectList } from "react-native-dropdown-select-list";
 import React, { useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
-
+import institutionInfo from "../../assets/data/universityInfo.json";
 import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
 
 const { height } = Dimensions.get("window");
@@ -35,6 +36,9 @@ const Register = ({ navigation }) => {
     setEmailIsValid(isValidEmail);
   };
   const [isTypingEmail, setIsTypingEmail] = useState(false);
+
+  //select instituition
+  const [selectedInstitutionId, setSelectedInstitutionId] = React.useState("");
 
   //validate password on sign up
   const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
@@ -204,6 +208,14 @@ const Register = ({ navigation }) => {
               <MaterialIcons name="cancel" size={24} color="red" />
             </View>
           )}
+        </View>
+
+        <View style={styles.inputContainer}>
+          <SelectList
+            setSelected={(val) => setSelectedInstitutionId(val)}
+            data={institutionInfo}
+            save="value"
+          />
         </View>
 
         <View style={styles.inputContainer}>
