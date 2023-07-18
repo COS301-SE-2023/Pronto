@@ -10,7 +10,8 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
   const renderLabel = () => {
     return (
       <Text style={[styles.label, isFocus && { color: "#e32f45" }]}>
-        {activity} {activityNumber}
+        {/* {activity}  */}
+        {/* {activityNumber} */}
       </Text>
     );
   };
@@ -34,7 +35,7 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
-          //setValue(item.value);
+          setValue(item);
           setIsFocus(false);
         }}
         renderLeftIcon={() => (

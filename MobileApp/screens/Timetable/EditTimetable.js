@@ -19,102 +19,8 @@ import{API,Auth} from "aws-amplify"
 import{searchCourses} from "../../graphql/queries"
 
 const EditTimetable = ({ onSearch }) => {
-  //Mock data
-  //let modules = [
-    // {
-    //   id: 1,
-    //   coursecode: "COS 301",
-    //   // semester: "Y",
-    //   activity:[ 
-    //     {
-    //       activityname:"Lecture",
-    //       day:"Monday",
-    //       start:"11:30",
-    //       end:"12:20",
-    //       venue:"HB 4-9",
-    //       group:"G01"
-    //     },
-    //     {
-    //         activityname:"Lecture",
-    //         day:"Tuesday",
-    //         start:"13:30",
-    //         end:"14:30",
-    //         venue:"North Hall",
-    //         group:"G01"
-    //     }
-    //   ]
-    // },
-      
-    // {
-    //   id: 2,
-    //   coursecode: "COS 332",
-    //   // semester: "S1",
-    //   activity:[ 
-    //     {
-    //       activityname:"Lecture",
-    //       day:"Monday",
-    //       start:"12:30",
-    //       end:"13:20",
-    //       venue:"IT 2-26",
-    //       group:"G01"
-    //     },
-    //     {
-    //         activityname:"Lecture",
-    //         day:"Wednesday",
-    //         start:"15:30",
-    //         end:"16:30",
-    //         venue:"IT 2-26",
-    //         group:"G01"
-    //     },
-    //     {
-    //         activityname:"Practical",
-    //         day:"Tuesday",
-    //         start:"15:30",
-    //         end:"18:30",
-    //         venue:"Green Lab",
-    //         group:"G01"
-    //     },
-    //     {
-    //         activityname:"Practical",
-    //         day:"Friday",
-    //         start:"08:30",
-    //         end:"11:30",
-    //         venue:"Green Lab",
-    //         group:"G02"
-    //     }
-    //   ]
-    // },
-    
-  //];
-
+  
   const[modules,setModules]=useState([])
-  const fecthCourses= async()=>{
-    await setCourses[modules]
-    //Alert.alert(courses[0].coursecode)
-    try{ 
-        // let search= await API.graphql({
-        //             query:searchCourses,
-        //             variables:  { 
-        //                        filter : { 
-        //                             coursecode: { 
-        //                                  wildcard: "COS" 
-        //                             } 
-        //                         }
-        //                     },
-        //             authMode:"AMAZON_COGNITO_USER_POOLS"         
-        //         })
-        //         console.log(search)
-    }catch(error){
-      console.log(error)
-    }
-
-    //console.log()
-  }
-
-    useEffect(() => {
-        fecthCourses();
-    }, [])
-
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
   const[courses,setCourses]=useState([])
@@ -186,7 +92,7 @@ const EditTimetable = ({ onSearch }) => {
       ]
     }
         ]
-        setModules(m)
+        //setModules(m)
         setCourses(m)
     }catch(error){
       console.log(error)
@@ -329,8 +235,8 @@ const EditTimetable = ({ onSearch }) => {
           <IconButton
             icon="close"
             onPress={() => toggleModal(null)}
-            //style={styles.closeIcon}
-            //color="#000000"
+            style={styles.closeIcon}
+            color="#000000"
           />
 
           <View style={styles.modalContent}>
