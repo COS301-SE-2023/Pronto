@@ -209,3 +209,46 @@ export const enrollmentsByStudentId=`query EnrollmentsByStudentId(
     nextToken
   }
 }`
+
+export const listStudents=`query ListStudents(
+  $filter: ModelStudentFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listStudents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      studentTimetableId
+      timetable { 
+        activity{ 
+           items { 
+              id
+              courseId
+              activityname
+              day
+              start
+              end
+              venue
+              group
+            }
+          }
+        }
+      enrollments { 
+        items{
+          course{ 
+            coursecode
+            id
+          }
+        }
+      }  
+    }
+    nextToken
+  }
+}`

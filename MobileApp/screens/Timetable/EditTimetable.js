@@ -16,8 +16,8 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import{API,Auth} from "aws-amplify"
-import{searchCourses,listTimetables} from "../../graphql/queries"
-import{createTimetable,updateTimetable} from "../../graphql/mutations"
+import{searchCourses,listTimetables,listStudents, enrollmentsByStudentId} from "../../graphql/queries"
+import{createStudent, createTimetable,updateTimetable} from "../../graphql/mutations"
 
 const EditTimetable = ({ onSearch }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -26,6 +26,8 @@ const EditTimetable = ({ onSearch }) => {
   const[lectures,setLectures]=useState(["L01","L02","L03","L04","L05","L06","L07","L08","L09"])
   const[tutorials,setTutorials]=useState(["T01","T02","T03","T04","T05","T06","T07","T08","T09"])
   const[practicals,setPracticals]=useState(["P01","P02","P03","P04","P05","P06","P07","P08","P09"])
+  const[timetable,setTimetable]=useState(null)
+  const[activities,setActivities]=useState([])
 
   const toggleModal = (module) => {
     if (module) {
@@ -50,7 +52,7 @@ const EditTimetable = ({ onSearch }) => {
   };
 
   const [input, setInput] = useState("");
-  
+
 
   const handleSearch = async(text)=>{
     console.log(text)
@@ -107,6 +109,74 @@ const EditTimetable = ({ onSearch }) => {
     }
 
     setInput(text)
+  }
+  
+  const fetchCourses= async()=>{ 
+    try{
+      //Find Student
+        let user=await Auth.currentAuthenticatedUser()
+        let studentEmail=user.attributes.email;
+        let student=await API.graphql({
+              query:listStudents,
+              variables:{input:{
+                filter :{ 
+                  email : { 
+                    eq:studentEmail
+                  }
+                }
+              } 
+                               } ,
+          authMode:"AMAZON_COGNITO_USER_POOLS"                
+        })
+
+        //Student does not exist so create them
+        if(student.data.listStudents.items.length===0){
+          let domain=studentEmail.split("@")[1]
+          
+          //Find Institution via domain
+          let institution= await API.graphql({
+            query:listInsitituions,
+            variables:{input:{
+              filter:{
+                domains:{
+                  contains: domain
+                }
+              }
+            }},
+            authMode:"AMAZON_COGNITO_USER_POOLS"
+          })
+          if(institution.data.listInsitituions.items.length===0)
+            throw Error("Could not determine institution")
+          
+          institution=institution.data.listInsitituions.items[0]
+
+          //Create student
+          let newStudent={
+            institutionId:institution.id,
+            firstname:user.attributes.name,
+            lastname:user.attributes.family_name,
+            userRole:"Student",
+            email:user.attributes.email
+             
+          }
+
+          let create=await API.graphql({
+            query:createStudent,
+            variables:{input:newStudent},
+            authMode:"AMAZON_COGNITO_USER_POOLS"
+          })
+        }
+        else{
+            student=student.data.listStudents.items[0]
+            setSelectedModules(student.enrollments.items)
+            setTimetable(student.timetable)
+            if(student.timetable!==null){
+              setActivities(student.timetable.activities.items)
+            }
+        }
+    }catch(error){
+      console.log(error)
+    }
   }
 
   const oneModule = ({ item }) => {
