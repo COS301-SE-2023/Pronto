@@ -27,13 +27,13 @@ const EditTimetable = ({ onSearch }) => {
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module); 
-      console.log("In toggle modal")
-      console.log(module)
-     try{
-      groups(module)
-     }catch(error){
+      //console.log("In toggle modal")
+      //console.log(module)
+    //  try{
+    //   groups(module)
+    //  }catch(error){
 
-     }
+     //}
       setModalVisible(true);
     } else {
       setSelectedModule(null);
@@ -43,16 +43,21 @@ const EditTimetable = ({ onSearch }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-  const groups =(module)=>{ 
-    let lectureNumber=1;
-    for(let i=0;i<module.activity.length;i++){
-      if(module.activity[i].activityname.contains("L")){
-        if(module.activity[i].activityname.slice(0,2)>lectureNumber)
-        lectureNumber==module.activity[i].activityname.slice(0,2)
-      }
-    }
-    console.log(lectureNumber)
-  }
+  // const groups =(module)=>{ 
+  //   let lectureNumber=1;
+  //   for(let i=0;i<module.activity.length;i++){
+  //     if(module.activity[i].activityname.contains("L")){
+  //       if(module.activity[i].activityname.slice(0,2)>lectureNumber)
+  //       lectureNumber==module.activity[i].activityname.slice(0,2)
+  //     }
+  //   }
+  //   let l=[]
+  //   for(let i =0;i<lectureNumber;i++){
+  //     l.push("L0"+i)
+  //   }
+  //   setLectures(l)
+  //   console.log(lectureNumber)
+  // }
 
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
@@ -269,6 +274,7 @@ const EditTimetable = ({ onSearch }) => {
                 
                 {/* Check if there are lectures */}
                 {lectures.map((lecture,i)=>(
+                  selectedModule.activity.filter(item=>item.activityname==lecture).length>0 &&
                       <DropdownComponent
                           key={i}
                           activity={"Lecture"}
