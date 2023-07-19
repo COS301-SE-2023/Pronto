@@ -43,6 +43,6 @@ jobs:
       - name: Install Amplify CLI & Building Project
         run: |     
           npm install -g @aws-amplify/cli 
-          bash scripts/initialise-amplify.sh
+          bash scripts/configure-amplify.sh
           # amplify pull --yes
           # amplify build
