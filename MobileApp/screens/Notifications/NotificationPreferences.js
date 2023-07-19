@@ -143,6 +143,12 @@ const NotificationPreferences = () => {
                 >
                   <Text style={styles.saveButtonText}>Save</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalCancelButton}
+                  onPress={closeModalAndDeselectOption} // Call the close function when canceling from the modal
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </TouchableWithoutFeedback>
