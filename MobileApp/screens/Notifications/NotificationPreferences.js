@@ -129,7 +129,14 @@ const NotificationPreferences = () => {
           <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
             <View style={styles.modalBackground}>
               <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeModalIcon}
+                  onPress={closeModalAndDeselectOption}
+                >
+                  <Icon name="close" size={24} color="gray" />
+                </TouchableOpacity>
                 <Text style={styles.modalTitle}>Enter Your Phone Number</Text>
+
                 <TextInput
                   style={styles.modalInput}
                   placeholder="Phone Number"
@@ -137,6 +144,7 @@ const NotificationPreferences = () => {
                   onChangeText={setPhoneNumber}
                   keyboardType="phone-pad"
                 />
+
                 <TouchableOpacity
                   style={styles.modalSaveButton}
                   onPress={() => setModalVisible(false)}
@@ -227,7 +235,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 8,
     padding: 20,
-    width: "80%",
+    width: "85%",
     alignItems: "center",
   },
   modalTitle: {
@@ -263,6 +271,12 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: "#fff",
     fontWeight: "bold",
+  },
+  closeModalIcon: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+    zIndex: 1,
   },
 });
 
