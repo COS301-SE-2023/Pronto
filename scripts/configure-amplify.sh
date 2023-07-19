@@ -14,7 +14,7 @@ AWSCLOUDFORMATIONCONFIG="{\
 }"
 AMPLIFY="{\
 \"projectName\":\"pronto\",\
-\"appId\":\"d1kit50gzhvboi\",\
+\"appId\":\"d3j57fmadrzn3\",\
 \"envName\":\"dev\",\
 \"defaultEditor\":\"Visual Studio Code\"\
 }"
@@ -24,6 +24,7 @@ FRONTEND="{\
 PROVIDERS="{\
 \"awscloudformation\":$AWSCLOUDFORMATIONCONFIG\
 }"
+
 CODEGEN="{\
 \"generateCode\":true,\
 \"codeLanguage\":\"swift\",\
