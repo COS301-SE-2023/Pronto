@@ -5,8 +5,7 @@ node_modules/
 .git/
 *.log
 *.tgz
-.DS_Store
-
+amplify\team-provider-info.json
 # WebStorm
 .idea/
 *.iml
