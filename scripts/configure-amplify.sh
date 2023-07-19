@@ -2,7 +2,7 @@
 set -e
 IFS='|'
 
-echo "'${AWS_ACCESS_KEY_ID}' '${AWS_SECRET_ACCESS_KEY}'"
+echo "'${AWS_ACCESS_KEY_ID}' '${AWS_SECRET_ACCESS_KEY}' `${APP_ID}`"
 
 AWSCLOUDFORMATIONCONFIG="{\
 \"configLevel\":\"project\",\
@@ -14,7 +14,7 @@ AWSCLOUDFORMATIONCONFIG="{\
 }"
 AMPLIFY="{\
 \"projectName\":\"pronto\",\
-\"appId\":\"d3j57fmadrzn3\",\
+\"appId\":\"${APP_ID}\",\
 \"envName\":\"dev\",\
 \"defaultEditor\":\"Visual Studio Code\"\
 }"
