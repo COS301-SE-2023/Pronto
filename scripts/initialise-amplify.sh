@@ -2,8 +2,6 @@
 set -e
 IFS='|'
 
-echo "d3j57fmadrzn3"
-
 AWSCLOUDFORMATIONCONFIG="{\
 \"configLevel\":\"project\",\
 \"useProfile\":true,\
