@@ -34,9 +34,9 @@ jobs:
           aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
           aws configure set default.region us-east-1
-          # echo ${{secrets.APP_ID}}
-          # echo ${{secrets.AWS_ACCESS_KEY_ID}}
-          # echo ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          echo ${{secrets.APP_ID}}
+          echo ${{secrets.AWS_ACCESS_KEY_ID}}
+          echo ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
       - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v1
