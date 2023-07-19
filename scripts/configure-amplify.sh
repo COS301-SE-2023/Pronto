@@ -2,7 +2,7 @@
 set -e
 IFS='|'
 
-echo "'${AWS_ACCESS_KEY_ID}' '${AWS_SECRET_ACCESS_KEY}' `${APP_ID}`"
+echo "Secrets are'${AWS_ACCESS_KEY_ID}' '${AWS_SECRET_ACCESS_KEY}' `${APP_ID}`"
 
 AWSCLOUDFORMATIONCONFIG="{\
 \"configLevel\":\"project\",\
