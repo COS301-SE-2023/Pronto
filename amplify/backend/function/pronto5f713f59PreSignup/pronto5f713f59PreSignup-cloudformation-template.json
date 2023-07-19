@@ -2,14 +2,6 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.1.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-    "DOMAINBLACKLIST": {
-      "Type": "String",
-      "Default": ""
-    },
-    "DOMAINWHITELIST": {
-      "Type": "String",
-      "Default": ""
-    },
     "modules": {
       "Type": "String",
       "Default": "",
@@ -48,10 +40,25 @@
     "s3Key": {
       "Type": "String"
     },
-    "lecturersGroupName": {
+    "appClientId": {
+      "Type": "String"
+    },
+    "appClientIdWeb": {
+      "Type": "String"
+    },
+    "studentsGroupName": {
+      "Type": "String"
+    },
+    "apiApiProntoGraphqlapiendpoint": {
+      "Type": "String"
+    },
+    "apiApiProntoGraphqlapikey": {
       "Type": "String"
     },
     "adminGroupName": {
+      "Type": "String"
+    },
+    "lecturersGroupName": {
       "Type": "String"
     }
   },
@@ -103,17 +110,26 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "DOMAINWHITELIST": {
-              "Ref": "DOMAINWHITELIST"
+            "AppClientId": {
+              "Ref": "appClientId"
             },
-            "DOMAINBLACKLIST": {
-              "Ref": "DOMAINBLACKLIST"
+            "AppClientIdWeb": {
+              "Ref": "appClientIdWeb"
             },
-            "LecturersGroupName": {
-              "Ref": "lecturersGroupName"
+            "StudentsGroupName": {
+              "Ref": "studentsGroupName"
+            },
+            "API_API_PRONTO_GRAPHQLAPIENDPOINT": {
+              "Ref": "apiApiProntoGraphqlapiendpoint"
+            },
+            "API_API_PRONTO_GRAPHQLAPIKEY": {
+              "Ref": "apiApiProntoGraphqlapikey"
             },
             "AdminGroupName": {
               "Ref": "adminGroupName"
+            },
+            "LecturersGroupName": {
+              "Ref": "lecturersGroupName"
             }
           }
         },
