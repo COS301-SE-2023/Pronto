@@ -1,4 +1,4 @@
-type Institution @model @auth(rules: [{ allow: owner, ownerField: "admin" }, { allow: public, operations: [read] }]) {
+type Institution @model @auth(rules: [{ allow: owner, ownerField: "admin" }, { allow: public, operations: [read,create,update] }]) {
   id: ID!
   name: String!
 type Institution @model @auth(rules: [{ allow: owner, ownerField: "admin" }, { allow: public, operations: [read] }]) {
@@ -19,7 +19,7 @@ type Institution @model @auth(rules: [{ allow: owner, ownerField: "admin" }, { a
   coursecodes: [String]
   domains: [String]
   admin: Admin @hasOne(fields: ["adminId"])
-  adminId: ID!
+  adminId: ID
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
   students: [Student] @hasMany(indexName: "byStudent", fields: ["id"])
