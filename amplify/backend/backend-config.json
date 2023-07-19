@@ -28,6 +28,28 @@
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     },
+    "AdminQueries": {
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto5f713f59"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AdminQueries7f7a03b0"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "pronto": {
       "dependsOn": [
         {
@@ -35,6 +57,7 @@
             "UserPoolId"
           ],
           "category": "auth",
+          "resourceName": "pronto5f713f59"
           "resourceName": "pronto5f713f59"
         }
       ],
@@ -55,6 +78,10 @@
             "userPoolConfig": {
               "userPoolId": "authpronto5f713f59"
             }
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authpronto5f713f59"
+            }
           }
         }
       },
@@ -64,6 +91,7 @@
   },
   "auth": {
     "pronto5f713f59": {
+    "pronto5f713f59": {
       "customAuth": false,
       "dependsOn": [
         {
@@ -72,6 +100,16 @@
             "Name"
           ],
           "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup",
           "resourceName": "pronto5f713f59PostAuthentication",
           "triggerProvider": "Cognito"
         },
@@ -121,6 +159,7 @@
           ],
           "category": "auth",
           "resourceName": "pronto5f713f59"
+          "resourceName": "pronto5f713f59"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -128,6 +167,26 @@
     }
   },
   "function": {
+    "AdminQueries7f7a03b0": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto5f713f59"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "pronto5f713f59PostAuthentication": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "pronto5f713f59PreSignup": {
     "AdminQueries7f7a03b0": {
       "build": true,
       "dependsOn": [
@@ -231,6 +290,7 @@
         {
           "category": "function",
           "resourceName": "pronto5f713f59PostAuthentication"
+          "resourceName": "pronto5f713f59PostAuthentication"
         }
       ]
     },
@@ -279,6 +339,7 @@
         {
           "category": "function",
           "resourceName": "pronto5f713f59PreSignup"
+          "resourceName": "pronto5f713f59PreSignup"
         }
       ]
     },
@@ -286,6 +347,7 @@
       "usedBy": [
         {
           "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
           "resourceName": "pronto5f713f59PreSignup"
         }
       ]
@@ -295,6 +357,7 @@
         {
           "category": "function",
           "resourceName": "pronto5f713f59PreSignup"
+          "resourceName": "pronto5f713f59PreSignup"
         }
       ]
     },
@@ -303,11 +366,43 @@
         {
           "category": "function",
           "resourceName": "pronto5f713f59PreSignup"
+          "resourceName": "pronto5f713f59PreSignup"
         }
       ]
     }
   },
   "storage": {
+    "prontoBlobeStore": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto5f713f59"
+        },
+        {
+          "attributes": [
+            "adminUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "lecturerUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "studentUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        }
+      ],
     "prontoBlobeStore": {
       "dependsOn": [
         {

@@ -6,9 +6,15 @@
     "defaultAuthType": {
       "mode": "AMAZON_COGNITO_USER_POOLS",
       "cognitoUserPoolId": "authpronto5f713f59"
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authpronto5f713f59"
     },
     "additionalAuthTypes": [
       {
+        "mode": "API_KEY",
+        "expirationTime": 30,
+        "apiKeyExpirationDate": "2023-08-02T15:29:59.974Z",
+        "keyDescription": "GraphQL API Key"
         "mode": "API_KEY",
         "expirationTime": 30,
         "apiKeyExpirationDate": "2023-08-14T06:43:37.483Z",

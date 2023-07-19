@@ -2,7 +2,10 @@
   "version": "1",
   "cognitoConfig": {
     "identityPoolName": "pronto5f713f59_identitypool_5f713f59",
+    "identityPoolName": "pronto5f713f59_identitypool_5f713f59",
     "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "pronto5f713f59",
+    "userPoolName": "pronto5f713f59_userpool_5f713f59",
     "resourceNameTruncated": "pronto5f713f59",
     "userPoolName": "pronto5f713f59_userpool_5f713f59",
     "autoVerifiedAttributes": [
@@ -14,6 +17,8 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Pronto Verification Code",
+    "emailVerificationMessage": "Your verification code is {####}",
     "emailVerificationSubject": "Pronto Verification Code",
     "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": false,
@@ -32,12 +37,23 @@
       "email",
       "family_name",
       "name"
+      "phone_number",
+      "email",
+      "family_name",
+      "name"
     ],
     "userpoolClientReadAttributes": [
       "email",
       "family_name",
       "name"
+      "email",
+      "family_name",
+      "name"
     ],
+    "userpoolClientLambdaRole": "pronto5f713f59_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": true,
+    "sharedId": "5f713f59",
+    "resourceName": "pronto5f713f59",
     "userpoolClientLambdaRole": "pronto5f713f59_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": true,
     "sharedId": "5f713f59",
@@ -53,9 +69,17 @@
       ],
       "PreSignup": [
         "custom"
+      "PostAuthentication": [
+        "custom"
+      ],
+      "PreSignup": [
+        "custom"
       ]
     },
     "userPoolGroupList": [
+      "adminUserGroup",
+      "lecturerUserGroup",
+      "studentUserGroup"
       "adminUserGroup",
       "lecturerUserGroup",
       "studentUserGroup"
@@ -79,6 +103,16 @@
     "dependsOn": [
       {
         "category": "function",
+        "resourceName": "pronto5f713f59PostAuthentication",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
+        "resourceName": "pronto5f713f59PreSignup",
         "resourceName": "pronto5f713f59PostAuthentication",
         "triggerProvider": "Cognito",
         "attributes": [
