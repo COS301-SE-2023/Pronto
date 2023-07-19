@@ -51,6 +51,6 @@ jobs:
           APP_ID: ${{secrets.APP_ID}}
         run: |     
           npm install -g @aws-amplify/cli 
-          bash scripts/intialise-amplify.sh
+          bash scripts/initialise-amplify.sh
       #     # amplify pull --yes
       #     # amplify build

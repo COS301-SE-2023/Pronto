@@ -2,6 +2,8 @@
 set -e
 IFS='|'
 
+echo "${APP_ID}"
+
 AWSCLOUDFORMATIONCONFIG="{\
 \"configLevel\":\"project\",\
 \"useProfile\":true,\
@@ -12,7 +14,7 @@ AWSCLOUDFORMATIONCONFIG="{\
 }"
 AMPLIFY="{\
 \"projectName\":\"pronto\",\
-\"appId\":\"${APP_ID}\",\
+\"appId\":\"d3j57fmadrzn3\",\
 \"envName\":\"dev\",\
 \"defaultEditor\":\"code\"\
 }"
