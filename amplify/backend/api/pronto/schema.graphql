@@ -35,6 +35,7 @@ type Admin @model @auth(rules: [{ allow: owner }]) {
   firstname: String!
   lastname: String!
   userRole: String!
+  userRole: String!
   email: String!
   institution: Institution @belongsTo(fields: ["institutionId"])
 }
@@ -96,6 +97,10 @@ type Course @model @searchable @auth(rules: [{ allow: owner, ownerField: "instit
   institution: Institution! @belongsTo(fields: ["institutionId"])
 }
 
+type Timetable @model @auth(rules: [{ allow: owner, ownerField: "student" }]) {
+  id: ID!
+  studentId: ID!
+  activityId: String!
 type Timetable @model @auth(rules: [{ allow: owner, ownerField: "student" }]) {
   id: ID!
   studentId: ID!
