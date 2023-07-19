@@ -1,6 +1,9 @@
 type Institution @model @auth(rules: [{ allow: owner, ownerField: "admin" }, { allow: public, operations: [read,create,update] }]) {
   id: ID!
   name: String!
+type Institution @model @auth(rules: [{ allow: owner, ownerField: "admin" }, { allow: public, operations: [read] }]) {
+  id: ID!
+  name: String!
   location: String
   pageUrl: String
   campusMapUrl: String
@@ -17,6 +20,7 @@ type Institution @model @auth(rules: [{ allow: owner, ownerField: "admin" }, { a
   domains: [String]
   admin: Admin @hasOne(fields: ["adminId"])
   adminId: ID
+  courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
   students: [Student] @hasMany(indexName: "byStudent", fields: ["id"])
   lecturer: [Lecturer] @hasMany(indexName: "byLecturer", fields: ["id"])
@@ -129,6 +133,7 @@ type Activity @model @searchable @auth(rules: [{ allow: owner, ownerField: "cour
   frequency: Int
   description: String!
   course: Course @belongsTo(fields: ["courseId"])
+}
 }
 
 type Announcement @model @searchable @auth(rules: [{ allow: owner, ownerField: "course" }]) {
