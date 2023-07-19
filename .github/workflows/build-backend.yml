@@ -45,10 +45,6 @@ jobs:
           version: ${{ matrix.node_version }}
 
       - name: Install Amplify CLI & Building Project
-        env: 
-          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          APP_ID: ${{secrets.APP_ID}}
         run: |     
           npm install -g @aws-amplify/cli 
           bash scripts/initialise-amplify.sh
