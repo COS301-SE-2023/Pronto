@@ -1,7 +1,7 @@
 name: Build Amplify
 on:
   pull_request:
-    branches: [ back-end,main,dev ] 
+    branches: [ backend,main,dev ] 
   push: 
     branches: [build/fix]    
   workflow_dispatch:   
@@ -29,7 +29,7 @@ jobs:
         env: 
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-          APP_ID: ${{secrets.APP_ID}}
+
         run: |    
           aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default

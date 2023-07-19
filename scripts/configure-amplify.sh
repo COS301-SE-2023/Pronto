@@ -2,7 +2,7 @@
 set -e
 IFS='|'
 
-echo "Secrets are `${APP_ID}`"
+# echo "Secrets are `${APP_ID}`"
 
 # AWSCLOUDFORMATIONCONFIG="{\
 # \"configLevel\":\"project\",\
