@@ -31,18 +31,19 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
           APP_ID: ${{secrets.APP_ID}}
         run: |    
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
-          aws configure set default.region us-east-1
+          # aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
+          # aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
+          # aws configure set default.region us-east-1
+          echo ${{secrets.APP_ID}}
 
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          version: ${{ matrix.node_version }}
+      # - name: Use Node.js ${{ matrix.node_version }}
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     version: ${{ matrix.node_version }}
 
-      - name: Install Amplify CLI & Building Project
-        run: |     
-          npm install -g @aws-amplify/cli 
-          bash scripts/configure-amplify.sh
-          # amplify pull --yes
-          # amplify build
+      # - name: Install Amplify CLI & Building Project
+      #   run: |     
+      #     npm install -g @aws-amplify/cli 
+      #     bash scripts/configure-amplify.sh
+      #     # amplify pull --yes
+      #     # amplify build
