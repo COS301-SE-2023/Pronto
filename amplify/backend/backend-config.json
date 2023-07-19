@@ -22,6 +22,28 @@
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
     },
+    "AdminQueries": {
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto5f713f59"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AdminQueries7f7a03b0"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "pronto": {
       "dependsOn": [
         {
@@ -30,6 +52,7 @@
           ],
           "category": "auth",
           "resourceName": "pronto5f713f59"
+          "resourceName": "pronto5f713f59"
         }
       ],
       "output": {
@@ -37,7 +60,7 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2023-08-02T15:29:59.974Z",
+                "apiKeyExpirationDate": "2023-08-14T06:43:37.483Z",
                 "apiKeyExpirationDays": 30,
                 "description": "GraphQL API Key"
               },
@@ -45,6 +68,10 @@
             }
           ],
           "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authpronto5f713f59"
+            }
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
               "userPoolId": "authpronto5f713f59"
@@ -58,6 +85,7 @@
   },
   "auth": {
     "pronto5f713f59": {
+    "pronto5f713f59": {
       "customAuth": false,
       "dependsOn": [
         {
@@ -66,6 +94,16 @@
             "Name"
           ],
           "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup",
           "resourceName": "pronto5f713f59PostAuthentication",
           "triggerProvider": "Cognito"
         },
@@ -120,6 +158,7 @@
           ],
           "category": "auth",
           "resourceName": "pronto5f713f59"
+          "resourceName": "pronto5f713f59"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -127,6 +166,26 @@
     }
   },
   "function": {
+    "AdminQueries7f7a03b0": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "pronto5f713f59"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "pronto5f713f59PostAuthentication": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "pronto5f713f59PreSignup": {
     "AdminQueries7f7a03b0": {
       "build": true,
       "dependsOn": [
@@ -161,6 +220,14 @@
         }
       ]
     },
+    "AMPLIFY_function_AdminQueries7f7a03b0_group": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries7f7a03b0"
+        }
+      ]
+    },
     "AMPLIFY_function_AdminQueries7f7a03b0_s3Key": {
       "usedBy": [
         {
@@ -182,29 +249,36 @@
         {
           "category": "function",
           "resourceName": "pronto5f713f59PostAuthentication"
+          "resourceName": "pronto5f713f59PostAuthentication"
         }
       ]
     },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_appClientIdWeb": {
     "AMPLIFY_function_pronto5f713f59PostAuthentication_appClientIdWeb": {
       "usedBy": [
         {
           "category": "function",
           "resourceName": "pronto5f713f59PostAuthentication"
+          "resourceName": "pronto5f713f59PostAuthentication"
         }
       ]
     },
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_deploymentBucketName": {
     "AMPLIFY_function_pronto5f713f59PostAuthentication_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
           "resourceName": "pronto5f713f59PostAuthentication"
+          "resourceName": "pronto5f713f59PostAuthentication"
         }
       ]
     },
     "AMPLIFY_function_pronto5f713f59PostAuthentication_lecturersGroupName": {
+    "AMPLIFY_function_pronto5f713f59PostAuthentication_lecturersGroupName": {
       "usedBy": [
         {
           "category": "function",
+          "resourceName": "pronto5f713f59PostAuthentication"
           "resourceName": "pronto5f713f59PostAuthentication"
         }
       ]
