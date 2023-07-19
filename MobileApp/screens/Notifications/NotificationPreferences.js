@@ -7,44 +7,66 @@ import {
   SafeAreaView,
   Alert,
   ImageBackground,
+  TextInput,
+  Modal, // Import Modal
+  TouchableWithoutFeedback, // Import TouchableWithoutFeedback
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showSaveButton, setShowSaveButton] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState(""); // State to store the phone number
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
     setShowSaveButton(true);
+    if (option !== "sms") {
+      // Reset phone number state when an option other than "SMS" is selected
+      setPhoneNumber("");
+    }
   };
 
   const handleSavePreferences = () => {
     setShowSaveButton(false); // Hide the save button after saving
     Alert.alert(
       "Preferences Updated",
-      `Preference successfully updated to ${selectedOption}`,
-      [
-        {
-          text: "OK",
-          onPress: () => console.log("OK Pressed"),
-        },
-      ]
+      `Preference successfully updated to ${selectedOption}`
     );
 
+    // Save the phone number if "SMS" option is selected
+    if (selectedOption === "sms") {
+      savePhoneNumber(phoneNumber);
+    }
     //navigate to settings page
+  };
+
+  // Helper function to save the phone number (you can replace this with your own implementation)
+  const savePhoneNumber = (number) => {
+    // Implement your logic to save the phone number here
+    console.log("Phone number saved:", number);
+  };
+
+  // Render input field for phone number when "SMS" option is selected
+  const renderPhoneNumberInput = () => {
+    if (selectedOption === "sms") {
+      return (
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your phone number"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+        />
+      );
+    }
+    return null;
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Notification Preferences</Text>
-        <Text
-          style={{
-            marginBottom: 20,
-            textAlign: "center",
-          }}
-        >
+        <Text style={{ marginBottom: 20, textAlign: "center" }}>
           This is how you will receive notifications from your lecturer
         </Text>
         <ImageBackground
@@ -88,6 +110,9 @@ const NotificationPreferences = () => {
           <Text style={styles.optionText}>Push Notifications</Text>
         </TouchableOpacity>
 
+        {/* Render phone number input when "SMS" option is selected */}
+        {renderPhoneNumberInput()}
+
         {showSaveButton ? (
           <TouchableOpacity
             style={styles.saveButton}
@@ -112,6 +137,8 @@ const NotificationPreferences = () => {
     </SafeAreaView>
   );
 };
+
+// Remaining styles...
 
 const styles = StyleSheet.create({
   container: {
