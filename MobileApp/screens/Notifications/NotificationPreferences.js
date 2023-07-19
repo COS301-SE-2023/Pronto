@@ -12,54 +12,47 @@ import {
   TouchableWithoutFeedback, // Import TouchableWithoutFeedback
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showSaveButton, setShowSaveButton] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState(""); // State to store the phone number
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false); // State to control modal visibility
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
-    setShowSaveButton(true);
-    if (option !== "sms") {
-      // Reset phone number state when an option other than "SMS" is selected
-      setPhoneNumber("");
+    if (option === "sms") {
+      // Show the modal when "SMS" option is clicked
+      setModalVisible(true);
+    } else {
+      // For other options, show the save button
+      setShowSaveButton(true);
+      setPhoneNumber(""); // Reset phone number state
     }
   };
 
   const handleSavePreferences = () => {
-    setShowSaveButton(false); // Hide the save button after saving
+    setShowSaveButton(false);
     Alert.alert(
       "Preferences Updated",
       `Preference successfully updated to ${selectedOption}`
     );
 
-    // Save the phone number if "SMS" option is selected
     if (selectedOption === "sms") {
+      // Show the modal when "SMS" option is selected
+      setModalVisible(true);
+    } else {
       savePhoneNumber(phoneNumber);
     }
-    //navigate to settings page
   };
 
-  // Helper function to save the phone number (you can replace this with your own implementation)
+  const closeModalAndDeselectOption = () => {
+    setModalVisible(false);
+    setSelectedOption(null); // Deselect the "SMS" option
+  };
+
   const savePhoneNumber = (number) => {
     // Implement your logic to save the phone number here
     console.log("Phone number saved:", number);
-  };
-
-  // Render input field for phone number when "SMS" option is selected
-  const renderPhoneNumberInput = () => {
-    if (selectedOption === "sms") {
-      return (
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your phone number"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-        />
-      );
-    }
-    return null;
   };
 
   return (
@@ -110,10 +103,7 @@ const NotificationPreferences = () => {
           <Text style={styles.optionText}>Push Notifications</Text>
         </TouchableOpacity>
 
-        {/* Render phone number input when "SMS" option is selected */}
-        {renderPhoneNumberInput()}
-
-        {showSaveButton ? (
+        {selectedOption === "sms" && showSaveButton ? (
           <TouchableOpacity
             style={styles.saveButton}
             onPress={handleSavePreferences}
@@ -133,12 +123,34 @@ const NotificationPreferences = () => {
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
         )}
+
+        {/* Modal for entering phone number */}
+        <Modal visible={isModalVisible} transparent animationType="fade">
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Enter Your Phone Number</Text>
+                <TextInput
+                  style={styles.modalInput}
+                  placeholder="Phone Number"
+                  value={phoneNumber}
+                  onChangeText={setPhoneNumber}
+                  keyboardType="phone-pad"
+                />
+                <TouchableOpacity
+                  style={styles.modalSaveButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.saveButtonText}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
       </View>
     </SafeAreaView>
   );
 };
-
-// Remaining styles...
 
 const styles = StyleSheet.create({
   container: {
@@ -198,6 +210,41 @@ const styles = StyleSheet.create({
     height: 200, // Specify the desired height
     alignSelf: "center", // Center the image horizontally
     marginBottom: 20,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 20,
+    width: "80%",
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 16,
+    color: "#e32f45",
+    textAlign: "center",
+  },
+  modalInput: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    padding: 12,
+    marginBottom: 12,
+  },
+  modalSaveButton: {
+    backgroundColor: "#e32f45",
+    borderRadius: 8,
+    padding: 12,
+    alignItems: "center",
+    width: "50%",
   },
 });
 
