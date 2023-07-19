@@ -252,6 +252,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "50%",
   },
+  modalCancelButton: {
+    backgroundColor: "#ccc",
+    borderRadius: 8,
+    padding: 12,
+    alignItems: "center",
+    width: "50%",
+    marginTop: 10,
+  },
+  cancelButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
 });
 
 export default NotificationPreferences;
