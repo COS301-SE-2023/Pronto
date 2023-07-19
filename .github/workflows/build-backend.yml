@@ -41,10 +41,7 @@ jobs:
           version: ${{ matrix.node_version }}
 
       - name: Install Amplify CLI & Building Project
-        env: 
-          APP_ID: ${{secrets.APP_ID}}
         run: |    
-           
           npm install -g @aws-amplify/cli 
           bash scripts/initialise-amplify.sh
       #     # amplify pull --yes
