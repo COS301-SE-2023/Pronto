@@ -55,12 +55,15 @@ type Student @model @auth(rules: [{ allow: owner }]) {
   lastname: String!
   userRole: String!
   email: String!
+  preference: String
   institution: Institution! @belongsTo(fields: ["institutionId"])
   timetable: Timetable @hasOne
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
 }
 
-type Enrollment @model @auth(rules: [{ allow: owner }]) {
+type Enrollment
+  @model
+  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
   id: ID!
   studentId: ID! @index(name: "byEnrollment")
   courseId: ID!
@@ -87,7 +90,9 @@ type Course
   institution: Institution! @belongsTo(fields: ["institutionId"])
 }
 
-type Timetable @model @auth(rules: [{ allow: owner }]) {
+type Timetable
+  @model
+  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
   id: ID!
   studentId: ID!
   activityId: [String]!
