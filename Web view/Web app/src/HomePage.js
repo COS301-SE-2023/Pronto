@@ -21,20 +21,23 @@ function HomePage() {
       height="200"
       image={require("./Authentication/Institution/ProntoLogo.png")}
       alt="logo"
+      sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
       />
       <CardContent>
       <Typography gutterBottom variant="h4" component="div" align="center">
                   Welcome to Pronto timetable application
       </Typography>
+      <Typography gutterBottom variant="h4" component="div" align="center"></Typography>
 
         <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Card sx={{ maxWidth: 400 }}>
+          <Card sx={{ maxWidth: 400 }} style={{ border: "1px solid #5a5a5a" }}>
               <CardMedia
                 component="img"
                 height="150"
                 image={require("./images/Institution.png")}
                 alt="Institution"
+                sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
               />
               <CardContent>
                 <Typography gutterBottom variant="h4" component="div">
@@ -53,19 +56,20 @@ function HomePage() {
           </Grid>
 
           <Grid item xs={6}>
-          <Card sx={{ maxWidth: 400 }}>
+          <Card sx={{ maxWidth: 400 }}  style={{ border: "1px solid #5a5a5a" }}>
               <CardMedia
                 component="img"
                 height="150"
                 image={require("./images/Lecturer.jpg")}
                 alt="Institution"
+                sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
               />
               <CardContent>
                 <Typography gutterBottom variant="h4" component="div">
                   Lecturer
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  If you would like to sign into or create a Lecturer account for a registered institution, click the button below:
+                  If you would like to sign into, or create a Lecturer account for a registered institution, click the button below:
                 </Typography>
               </CardContent>
             <CardActions>
