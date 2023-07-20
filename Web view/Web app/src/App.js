@@ -23,7 +23,7 @@ import config from "./aws-exports";
 Amplify.configure(config);
 
 const Home = () => {
-  
+
   useEffect(() => {
     Amplify.configure(config);
   }, []);
@@ -45,6 +45,7 @@ const Home = () => {
             path="/lecturer-forgot-password"
             element={<LecturerForgotPassword />}
           />
+
           <Route path="/lecture-homepage" element={<LectureHomePage />} />
           <Route path="edit-module" element={<EditModuleInfo />} />
           <Route path="recent-announcement" element={<RecentAnnouncement />} />
@@ -65,6 +66,7 @@ const Home = () => {
             path="/institution-forgot-password"
             element={<InstitutionForgotPassword />}
           />
+          
           <Route path="/add-lecturer" element={<AddLecturer />} />
           <Route
             path="/institution-homepage"
