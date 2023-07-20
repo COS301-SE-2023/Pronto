@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,68 +9,74 @@ import Grid from '@mui/material/Grid';
 
 function HomePage() {
   return (
-
-    <Container maxWidth="100%" fixed bgcolor = "#e32f45" >
+    
+    <Container maxWidth="false" 
+    justify="center"
+    alignitems="center"
+    bgcolor = "#e32f45" >
 
     <Card sx={{maxWidth:2000}}>
       <CardMedia
       component="img"
-      height="140"
-      image="./Authentication/Institution/ProntoLogo.png"
+      height="200"
+      image={require("./Authentication/Institution/ProntoLogo.png")}
       alt="logo"
       />
       <CardContent>
+      <Typography gutterBottom variant="h4" component="div" align="center">
+                  Welcome to Pronto timetable application!
+      </Typography>
 
-      <Grid container spacing={2}>
-      <Grid item xs={6}>
-        <Card sx={{ maxWidth: 400 }}>
-            <CardMedia
-              component="img"
-              height="140"
-              image="/static/images/cards/contemplative-reptile.jpg"
-              alt="Institution"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h4" component="div">
-                Institution Admin
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                If you would like to sign into an admin account for a registered Institution, click the button below:
-              </Typography>
-            </CardContent>
-          <CardActions>
-            <Button size="small" color="error" href="/institution-login">
-              Sign in
-            </Button>
-          </CardActions>
-        </Card>
-        </Grid>
-
+        <Grid container spacing={2}>
         <Grid item xs={6}>
-        <Card sx={{ maxWidth: 400 }}>
-            <CardMedia
-              component="img"
-              height="140"
-              image="/static/images/cards/contemplative-reptile.jpg"
-              alt="Institution"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h4" component="div">
-                Lecturer
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                If you would like to sign into or create a Lecturer account for a registered institution, click the button below:
-              </Typography>
-            </CardContent>
-          <CardActions>
-            <Button size="small" color="error" href="/lecturer-login">
-              Sign in/Register
-            </Button>
-          </CardActions>
-        </Card>
-        </Grid>
+          <Card sx={{ maxWidth: 400 }}>
+              <CardMedia
+                component="img"
+                height="140"
+                image="/static/images/cards/contemplative-reptile.jpg"
+                alt="Institution"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h4" component="div">
+                  Institution Admin
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  If you would like to sign into an admin account for a registered Institution, click the button below:
+                </Typography>
+              </CardContent>
+            <CardActions>
+              <Button size="small" color="error" href="/institution-login">
+                Sign in
+              </Button>
+            </CardActions>
+          </Card>
+          </Grid>
 
-      </Grid>
+          <Grid item xs={6}>
+          <Card sx={{ maxWidth: 400 }}>
+              <CardMedia
+                component="img"
+                height="140"
+                image="/static/images/cards/contemplative-reptile.jpg"
+                alt="Institution"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h4" component="div">
+                  Lecturer
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  If you would like to sign into or create a Lecturer account for a registered institution, click the button below:
+                </Typography>
+              </CardContent>
+            <CardActions>
+              <Button size="small" color="error" href="/lecturer-login">
+                Sign in/Register
+              </Button>
+            </CardActions>
+          </Card>
+          </Grid>
+
+        </Grid>
       </CardContent>
     </Card>
 
