@@ -16,25 +16,14 @@ import EditUniversityInfo from "./Institution VIew/EditInformation/EditInfo";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
+import HomePage from "./HomePage";
 import { Amplify } from "aws-amplify";
 import config from "./aws-exports";
 
 Amplify.configure(config);
 
 const Home = () => {
-  //use this part to see if user is logged in or out and then determine what pages they can access
-  //begin
-  // const [user, setUser] = useState(undefined);
-  // const checkUser = async () => {
-  //   const authUser = await Auth.currentAuthenticatedUser({ bypassCache: true });
-  //  setUser(authUser);
-  // };
-
-  //useEffect(() => {
-  //   checkUser();
-  // }, []);
-
-  //end
+  
   useEffect(() => {
     Amplify.configure(config);
   }, []);
@@ -43,6 +32,9 @@ const Home = () => {
     <div>
       <Router>
         <Routes>
+          {/* Website home page */}
+          <Route path="/" element={<HomePage />} />
+
           {/*Lecturer pages routing*/}
           <Route path="/lecturer-login" element={<LecturerLogin />} />
           <Route
@@ -57,6 +49,7 @@ const Home = () => {
           <Route path="edit-module" element={<EditModuleInfo />} />
           <Route path="recent-announcement" element={<RecentAnnouncement />} />
           <Route path="personal-info" element={<PersonalInformation />} />
+
 
           {/*Institution pages routing*/}
           <Route path="/institution-login" element={<InstitutionLogin />} />
@@ -86,6 +79,7 @@ const Home = () => {
             path="/edit-university-info"
             element={<EditUniversityInfo />}
           />
+
         </Routes>
       </Router>
     </div>
