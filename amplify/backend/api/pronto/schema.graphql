@@ -48,7 +48,9 @@ type Lecturer
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
 }
 
-type Student @model @auth(rules: [{ allow: owner }]) {
+type Student
+  @model
+  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
   institutionId: ID! @index(name: "byStudent")
   id: ID!
   firstname: String!
