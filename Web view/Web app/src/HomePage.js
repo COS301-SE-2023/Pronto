@@ -24,7 +24,7 @@ function HomePage() {
       />
       <CardContent>
       <Typography gutterBottom variant="h4" component="div" align="center">
-                  Welcome to Pronto timetable application!
+                  Welcome to Pronto timetable application
       </Typography>
 
         <Grid container spacing={2}>
@@ -32,8 +32,8 @@ function HomePage() {
           <Card sx={{ maxWidth: 400 }}>
               <CardMedia
                 component="img"
-                height="140"
-                image="/static/images/cards/contemplative-reptile.jpg"
+                height="150"
+                image={require("./images/Institution.png")}
                 alt="Institution"
               />
               <CardContent>
@@ -56,8 +56,8 @@ function HomePage() {
           <Card sx={{ maxWidth: 400 }}>
               <CardMedia
                 component="img"
-                height="140"
-                image="/static/images/cards/contemplative-reptile.jpg"
+                height="150"
+                image={require("./images/Lecturer.jpg")}
                 alt="Institution"
               />
               <CardContent>
