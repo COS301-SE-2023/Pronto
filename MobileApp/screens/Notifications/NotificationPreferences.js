@@ -8,8 +8,9 @@ import {
   Alert,
   ImageBackground,
   TextInput,
-  Modal, // Import Modal
-  TouchableWithoutFeedback, // Import TouchableWithoutFeedback
+  Modal,
+  TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 const NotificationPreferences = () => {
@@ -17,6 +18,8 @@ const NotificationPreferences = () => {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalVisible, setModalVisible] = useState(false); // State to control modal visibility
+  const [isVerificationModalVisible, setVerificationModalVisible] =
+    useState(false);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -51,8 +54,23 @@ const NotificationPreferences = () => {
   };
 
   const savePhoneNumber = (number) => {
+    // Regular expression to match valid South African phone numbers
+    const saPhoneNumberRegex = /^(?:\+27|0)(?:\d\s?){9}$/;
+
+    if (!saPhoneNumberRegex.test(number)) {
+      // Display an error message for invalid phone numbers
+      Alert.alert(
+        "Invalid Phone Number",
+        "Please enter a valid South African phone number starting with +27 or 0, followed by 9 digits."
+      );
+      return;
+    }
+
     // Implement your logic to save the phone number here
     console.log("Phone number saved:", number);
+
+    // Show the verification modal after saving the phone number
+    setVerificationModalVisible(true);
   };
 
   return (
@@ -137,19 +155,27 @@ const NotificationPreferences = () => {
                 </TouchableOpacity>
                 <Text style={styles.modalTitle}>Enter Your Phone Number</Text>
 
-                <TextInput
-                  style={styles.modalInput}
-                  placeholder="Phone Number"
-                  value={phoneNumber}
-                  onChangeText={setPhoneNumber}
-                  keyboardType="phone-pad"
-                />
+                {/* South African flag and number format */}
+                <View style={styles.phoneNumberInputContainer}>
+                  <Image
+                    source={require("../../assets/icons/SouthAfricaFlag.png")}
+                    style={styles.flagIcon}
+                  />
+                  <Text style={styles.phoneNumberPrefix}>+27</Text>
+                  <TextInput
+                    style={styles.modalInput}
+                    placeholder="Phone Number"
+                    value={phoneNumber}
+                    onChangeText={setPhoneNumber}
+                    keyboardType="phone-pad"
+                  />
+                </View>
 
                 <TouchableOpacity
                   style={styles.modalSaveButton}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={styles.saveButtonText}>Save</Text>
+                  <Text style={styles.saveButtonText}>Next</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.modalCancelButton}
@@ -160,6 +186,13 @@ const NotificationPreferences = () => {
               </View>
             </View>
           </TouchableWithoutFeedback>
+        </Modal>
+        <Modal
+          visible={isVerificationModalVisible}
+          transparent
+          animationType="fade"
+        >
+          {/* Rest of the modal content */}
         </Modal>
       </View>
     </SafeAreaView>
@@ -246,12 +279,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalInput: {
-    width: "100%",
+    flex: 1,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 4,
     padding: 12,
-    marginBottom: 12,
   },
   modalSaveButton: {
     backgroundColor: "#e32f45",
@@ -277,6 +309,21 @@ const styles = StyleSheet.create({
     top: 16,
     right: 16,
     zIndex: 1,
+  },
+  phoneNumberInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  flagIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 8,
+  },
+  phoneNumberPrefix: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginRight: 8,
   },
 });
 
