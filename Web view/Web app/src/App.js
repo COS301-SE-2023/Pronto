@@ -59,7 +59,7 @@ const Home = () => {
     return <div>Loading...</div>;
   }
 
-  if (user) {
+  if (user == null) {
     if (userGroup == "adminUserGroup") {
       return (
         <div>
