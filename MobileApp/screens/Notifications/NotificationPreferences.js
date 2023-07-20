@@ -18,14 +18,15 @@ const NotificationPreferences = () => {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalVisible, setModalVisible] = useState(false); // State to control modal visibility
+  const [isVerificationModalVisible, setVerificationModalVisible] =
+    useState(false); // State to control the verification modal visibility
+  const [enteredVerificationCode, setEnteredVerificationCode] = useState("");
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
     if (option === "sms") {
-      // Show the modal when "SMS" option is clicked
-      setModalVisible(true);
+      setModalVisible(true); // Show the phone number modal when "SMS" option is clicked
     } else {
-      // For other options, show the save button
       setShowSaveButton(true);
       setPhoneNumber(""); // Reset phone number state
     }
@@ -57,10 +58,27 @@ const NotificationPreferences = () => {
       return;
     }
 
-    // Implement your logic to save the phone number here
-    console.log("Phone number saved:", number);
-
     //if successful, move on to next step, verify phone number
+    if (saPhoneNumberRegex.test(number)) {
+      setVerificationModalVisible(true);
+      setModalVisible(false); // Close the phone number modal
+    }
+  };
+
+  const handleVerificationCode = (code) => {
+    // Implement your logic to verify the SMS code here
+    console.log("Verification code entered:", code);
+
+    // After successful verification, you can do any required action
+    // For example, show a success message or navigate to the next step in the app
+    // For this example, let's show an alert:
+    Alert.alert(
+      "Verification Successful",
+      "Your phone number has been verified successfully."
+    );
+
+    setVerificationModalVisible(false);
+    setShowSaveButton(true);
   };
 
   return (
@@ -177,6 +195,51 @@ const NotificationPreferences = () => {
             </View>
           </TouchableWithoutFeedback>
         </Modal>
+
+        <Modal
+          visible={isVerificationModalVisible}
+          transparent
+          animationType="fade"
+        >
+          <TouchableWithoutFeedback
+            onPress={() => setVerificationModalVisible(false)}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeModalIcon}
+                  onPress={() => setVerificationModalVisible(false)}
+                >
+                  <Icon name="close" size={24} color="gray" />
+                </TouchableOpacity>
+                <Text style={styles.modalTitle}>Enter Verification Code</Text>
+
+                <TextInput
+                  style={styles.verificationInput}
+                  placeholder="Verification Code"
+                  keyboardType="numeric"
+                  value={enteredVerificationCode}
+                  onChangeText={setEnteredVerificationCode}
+                />
+
+                <TouchableOpacity
+                  style={styles.modalNextButton}
+                  onPress={() =>
+                    handleVerificationCode(enteredVerificationCode)
+                  }
+                >
+                  <Text style={styles.saveButtonText}>Verify</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalCancelButton}
+                  onPress={() => setVerificationModalVisible(false)}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
       </View>
     </SafeAreaView>
   );
@@ -267,6 +330,14 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 4,
     padding: 12,
+  },
+  verificationInput: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    padding: 12,
+    marginBottom: 12,
   },
   modalNextButton: {
     backgroundColor: "#e32f45",
