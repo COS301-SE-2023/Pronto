@@ -18,8 +18,6 @@ const NotificationPreferences = () => {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalVisible, setModalVisible] = useState(false); // State to control modal visibility
-  const [isVerificationModalVisible, setVerificationModalVisible] =
-    useState(false);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -34,23 +32,16 @@ const NotificationPreferences = () => {
   };
 
   const handleSavePreferences = () => {
-    setShowSaveButton(false);
     Alert.alert(
       "Preferences Updated",
       `Preference successfully updated to ${selectedOption}`
     );
-
-    if (selectedOption === "sms") {
-      // Show the modal when "SMS" option is selected
-      setModalVisible(true);
-    } else {
-      savePhoneNumber(phoneNumber);
-    }
   };
 
   const closeModalAndDeselectOption = () => {
     setModalVisible(false);
     setSelectedOption(null); // Deselect the "SMS" option
+    setShowSaveButton(false);
   };
 
   const savePhoneNumber = (number) => {
@@ -61,7 +52,7 @@ const NotificationPreferences = () => {
       // Display an error message for invalid phone numbers
       Alert.alert(
         "Invalid Phone Number",
-        "Please enter a valid South African phone number starting with +27 or 0, followed by 9 digits."
+        "Please enter a valid South African phone number."
       );
       return;
     }
@@ -69,8 +60,7 @@ const NotificationPreferences = () => {
     // Implement your logic to save the phone number here
     console.log("Phone number saved:", number);
 
-    // Show the verification modal after saving the phone number
-    setVerificationModalVisible(true);
+    //if successful, move on to next step, verify phone number
   };
 
   return (
@@ -121,7 +111,7 @@ const NotificationPreferences = () => {
           <Text style={styles.optionText}>Push Notifications</Text>
         </TouchableOpacity>
 
-        {selectedOption === "sms" && showSaveButton ? (
+        {showSaveButton ? (
           <TouchableOpacity
             style={styles.saveButton}
             onPress={handleSavePreferences}
@@ -172,8 +162,8 @@ const NotificationPreferences = () => {
                 </View>
 
                 <TouchableOpacity
-                  style={styles.modalSaveButton}
-                  onPress={() => setModalVisible(false)}
+                  style={styles.modalNextButton}
+                  onPress={() => savePhoneNumber(phoneNumber)}
                 >
                   <Text style={styles.saveButtonText}>Next</Text>
                 </TouchableOpacity>
@@ -186,13 +176,6 @@ const NotificationPreferences = () => {
               </View>
             </View>
           </TouchableWithoutFeedback>
-        </Modal>
-        <Modal
-          visible={isVerificationModalVisible}
-          transparent
-          animationType="fade"
-        >
-          {/* Rest of the modal content */}
         </Modal>
       </View>
     </SafeAreaView>
@@ -285,7 +268,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 12,
   },
-  modalSaveButton: {
+  modalNextButton: {
     backgroundColor: "#e32f45",
     borderRadius: 8,
     padding: 12,
