@@ -79,11 +79,17 @@ export const searchCourses=`query SearchCourses(
     items {
       id
       institutionId
-      lecturerId
       coursecode
-      semester
-      createdAt
-      updatedAt
+      activity { 
+        items { 
+          activityname
+          day
+          start
+          end 
+          venue
+          courseId
+        }
+      }
     }
     nextToken
     total
@@ -227,7 +233,7 @@ export const listStudents=`query ListStudents(
       updatedAt
       studentTimetableId
       timetable { 
-        activity{ 
+        activities{ 
            items { 
               id
               courseId
@@ -243,7 +249,6 @@ export const listStudents=`query ListStudents(
       enrollments { 
         items{
           course{ 
-            coursecode
             id
           }
         }
@@ -252,3 +257,59 @@ export const listStudents=`query ListStudents(
     nextToken
   }
 }`
+
+export const listInstitutions=`query ListInstitutions(
+  $filter: ModelInstitutionFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      coursecodes
+      domains
+    }
+    nextToken
+  }
+}`
+
+export const listCourses=`query ListCourses(
+  $filter: ModelCourseFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCourses(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      semester
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}`
+export const getCourse=`query GetCourse($id: ID!) {
+  getCourse(id: $id) {
+    id
+    institutionId
+    lecturerId
+    coursecode
+    semester
+    enrollments {
+      nextToken
+    }
+    activity {
+      nextToken
+    }
+    announcents {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+`

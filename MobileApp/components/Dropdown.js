@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
+const DropdownComponent = ({ activity, activityNumber, moduleContent,addActivity }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -14,6 +14,10 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
       </Text>
     );
   };
+
+  const handleSelect =()=>{
+    console.log(activity)
+  }
 
   //console.log("Drop down")
   return (
@@ -33,9 +37,12 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent }) => {
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
+        onConfirmSelectItem={()=>handleSelect()}
         onChange={(item) => {
           setValue(item);
-          setIsFocus(false);
+          setIsFocus(false)
+          //console.log(item.act)
+          addActivity(item.act)
         }}
         renderLeftIcon={() => (
           <AntDesign

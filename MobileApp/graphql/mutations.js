@@ -67,36 +67,37 @@ export const createStudent=`mutation CreateStudent(
     lastname
     userRole
     email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-    }
     timetable {
       id
       studentId
       activityId
-      createdAt
-      updatedAt
     }
     enrollments {
       nextToken
-      startedAt
     }
     createdAt
     updatedAt
     studentTimetableId
-    owner
   }
 }`
+
+
+export const createEnrollment=`mutation CreateEnrollment(
+  $input: CreateEnrollmentInput!
+  $condition: ModelEnrollmentConditionInput
+) {
+  createEnrollment(input: $input, condition: $condition) {
+    id
+    studentId
+    courseId
+    student {
+      institutionId
+      id
+    }
+    course {
+      id
+      coursecode
+    }
+  }
+}
+`

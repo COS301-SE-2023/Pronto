@@ -17,7 +17,8 @@ import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import{API,Auth} from "aws-amplify"
 import{searchCourses,listTimetables,listStudents, enrollmentsByStudentId} from "../../graphql/queries"
-import{createStudent, createTimetable,updateTimetable} from "../../graphql/mutations"
+import{createEnrollment, createStudent, createTimetable,updateTimetable} from "../../graphql/mutations"
+import { listInstitutions,listCourses,getCourse } from "../../graphql/queries"
 
 const EditTimetable = ({ onSearch }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -28,10 +29,12 @@ const EditTimetable = ({ onSearch }) => {
   const[practicals,setPracticals]=useState(["P01","P02","P03","P04","P05","P06","P07","P08","P09"])
   const[timetable,setTimetable]=useState(null)
   const[activities,setActivities]=useState([])
+  const[student,setStudent]=useState(null)
 
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module); 
+      console.log(selectedModule)
       setModalVisible(true);
     } else {
       setSelectedModule(null);
@@ -46,8 +49,8 @@ const EditTimetable = ({ onSearch }) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [...prevModules, module]);
     }
-    console.log("Adding to modules")
-    console.log(selectedModules.length)
+    //console.log("Adding to modules")
+    //console.log(selectedModules.length)
     setInput("");
   };
 
@@ -55,141 +58,234 @@ const EditTimetable = ({ onSearch }) => {
 
 
   const handleSearch = async(text)=>{
-    console.log(text)
-     //Alert.alert(courses[0].coursecode)
-    try{ 
-        // let search= await API.graphql({
-        //             query:searchCourses,
-        //             variables:  { 
-        //                        filter : { 
-        //                             coursecode: { 
-        //                                  wildcard: text 
-        //                             } 
-        //                         }
-        //                     },
-        //             authMode:"AMAZON_COGNITO_USER_POOLS"         
-        //         })
-        //         console.log(search)
-        //setCourses(search.data.searchCourses.items)
-        let m=[
-          {
-      id: 1,
-      coursecode: "COS 301",
-      activity:[ 
-        {
-          activityname:"L01",
-          day:"Monday",
-          start:"11:30",
-          end:"12:20",
-          venue:"HB 4-9",
-          group:"G01"
-        },
-        {
-          activityname:"L01",
-          day:"Monday",
-          start:"11:30",
-          end:"12:20",
-          venue:"Louw Hall",
-          group:"G02"
-        },
-        {
-            activityname:"L02",
-            day:"Tuesday",
-            start:"13:30",
-            end:"14:30",
-            venue:"North Hall",
-            group:"G01"
-        }
-      ]
-    }
-        ]
-        setCourses(m)
+    //console.log(text)
+    setInput(text)
+    if(text!==null){
+       try{ 
+        let search= await API.graphql({
+                    query:searchCourses,
+                    variables:  { 
+                               filter : { 
+                                    coursecode: { 
+                                        matchPhrasePrefix: text 
+                                    } 
+                                }
+                            },
+                    authMode:"API_KEY"         
+                })
+                console.log(search)
+        //         //search=search.data.searchCourses.items
+        // //         //console.log(search.activity.items)
+                setCourses(search.data.searchCourses.items)
+    //     let m=[
+    //       {
+    //   id: 1,
+    //   coursecode: "COS 301",
+    //   activity:[ 
+    //     {
+    //       activityname:"L01",
+    //       day:"Monday",
+    //       start:"11:30",
+    //       end:"12:20",
+    //       venue:"HB 4-9",
+    //       group:"G01"
+    //     },
+    //     {
+    //       activityname:"L01",
+    //       day:"Monday",
+    //       start:"11:30",
+    //       end:"12:20",
+    //       venue:"Louw Hall",
+    //       group:"G02"
+    //     },
+    //     {
+    //         activityname:"L02",
+    //         day:"Tuesday",
+    //         start:"13:30",
+    //         end:"14:30",
+    //         venue:"North Hall",
+    //         group:"G01"
+    //     }
+    //   ]
+    // }
+    //     ]
+        //setCourses(m)
+        //setCourses([])
+      //        }
+            
     }catch(error){
       console.log(error)
     }
 
-    setInput(text)
+    //setInput(text)
+   }
   }
   
   const fetchCourses= async()=>{ 
     try{
-      //Find Student
+        //handleSearch("COS")
+      
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
-        let student=await API.graphql({
-              query:listStudents,
-              variables:{input:{
-                filter :{ 
-                  email : { 
-                    eq:studentEmail
-                  }
-                }
-              } 
+      
+        //if(student===null){
+           let stu=await API.graphql({
+                query:listStudents,
+                variables:{
+                    filter :{ 
+                      email : { 
+                          eq:studentEmail
+                      }
+                    }
                                } ,
           authMode:"AMAZON_COGNITO_USER_POOLS"                
         })
-
-        //Student does not exist so create them
-        if(student.data.listStudents.items.length===0){
+        setStudent(stu.data.listStudents.items[0])
+        
+       //Student does not exist so create them
+        if(stu.data.listStudents.items.length===0){
           let domain=studentEmail.split("@")[1]
           
           //Find Institution via domain
-          let institution= await API.graphql({
-            query:listInsitituions,
-            variables:{input:{
-              filter:{
-                domains:{
-                  contains: domain
-                }
-              }
-            }},
-            authMode:"AMAZON_COGNITO_USER_POOLS"
-          })
-          if(institution.data.listInsitituions.items.length===0)
+          let institution=await API.graphql({
+                    query:listInstitutions,
+                    variables:{ 
+                        filter :{ 
+                          domains :{ 
+                            contains:domain
+                          }
+                        }
+                      },
+                      authMode:"API_KEY",
+                })
+      
+      //  // }
+             //Institution not found
+          if(institution.data.listInstitutions.items.length===0)
             throw Error("Could not determine institution")
-          
-          institution=institution.data.listInsitituions.items[0]
+    
 
+          institution=institution.data.listInstitutions.items[0]
+          
           //Create student
           let newStudent={
             institutionId:institution.id,
-            firstname:user.attributes.name,
-            lastname:user.attributes.family_name,
-            userRole:"Student",
-            email:user.attributes.email
-             
+            firstname: user.attributes.name,
+            lastname: user.attributes.family_name,
+            userRole: "Student",
+            email: studentEmail   
           }
-
           let create=await API.graphql({
             query:createStudent,
             variables:{input:newStudent},
             authMode:"AMAZON_COGNITO_USER_POOLS"
           })
-        }
+         }
+
+        //Student  found
         else{
-            student=student.data.listStudents.items[0]
-            setSelectedModules(student.enrollments.items)
-            setTimetable(student.timetable)
-            if(student.timetable!==null){
-              setActivities(student.timetable.activities.items)
+              stu=stu.data.listStudents.items[0]
+              let c=[]
+              for(let i=0;i<stu.enrollments.items;i++){
+                  c.push(stu.enrollments.items[i].course)
+              }
+              setSelectedModules(c)
+              setTimetable(stu.timetable)
+              if(stu.timetable!==null){
+                setActivities(stu.timetable.activities.items)
             }
-        }
+                 }
     }catch(error){
       console.log(error)
     }
   }
+    //console.log(student)
+ // }
 
+  useEffect(() => {
+        fetchCourses();
+    }, [])
+
+  const handleSave = async()=>{
+       try{
+        //Create enrollment if it doesnt exist
+        // let enroll;
+        // if(student.items.enrollments.filter((item)=>item.coursecode===selectedModule.coursecode).length===0){
+        //   enroll={
+        //     coursecode:selectedModule.coursecode;
+        //     studentId:student.id,
+        //   }
+        //   let newEnrollment =await API.graphql({
+        //     query:createEnrollment,
+        //     variables:{input:enroll},
+        //     authMode:"AMAZON_COGNITO_USER_POOLS"
+        //   })
+        //   console.log(newEnrollment)
+        //}
+      //   if(timetable===null){
+      //      let newTimetable={
+      //         studentId:student.id,
+      //         activityId:activities.id
+      //     }
+      //     let create=await API.graphql({
+      //       query:createTimetable,
+      //       variables:{input:newTimetable},
+      //       authMode:"AMAZON_COGNITO_USER_POOLS",
+      //     })
+      // }
+      // else{
+        if(student.timetable===null){
+        let ids=[]
+        for(let i=0;i<activities.length;i++){
+          ids.push[activities[i].activityname]
+        }
+      //   let newTimetable={
+      //     id:timetable.id,
+      //     studentId:student.id,
+      //     activityId:ids
+      //   }
+        }
+        else{
+          //Remove duplicate activities
+          let rows=[...student.timetable.activities]
+          for(let i=0;i<activities;i++){
+             let index=student.timetable.activities.find((item)=>item.activityname===activities[i] && item.id===activities[i].id)
+             rows.splice[i]
+          }
+      //   let update=await API.graphql({
+      //       query:updateTimetable,
+      //       variables:{input:newTimetable},
+      //       authMode:"AMAZON_COGNITO_USER_POOLS",
+      //     })
+      // }
+        }
+        console.log(activities)    
+        toggleModal(null)
+      }catch(error){
+
+      }
+  }
+  const addActivity = (activity)=>{ 
+    console.log(activity)
+    let rows=[...activities]
+    for(let i=0;i<activities.length;i++){
+      if(activities[i].activityname===activity.activityname){
+            rows.splice(i,1)
+      }
+    }
+    rows.push(activity)
+    //console.log(rows)
+    setActivities(rows)
+  }
   const oneModule = ({ item }) => {
-    //console.log("In one module")
-    //console.log(item.id)
-
     const handleDelete = () => {
       setSelectedModules((prevModules) =>
         prevModules.filter((module) => module.id !== item.id)
       );
       console.log("Deleting module")
     };
-  
+    //setSelectedModule(item)
+    console.log(selectedModule)
     return (
       <View style={{ margin: 20 }}>
         <TouchableWithoutFeedback onPress={() => addToModules(item)}>
@@ -265,11 +361,11 @@ const EditTimetable = ({ onSearch }) => {
         />
         <TextInput
           value={input}
-          //onChangeText={(text) => setInput(text)}
           onChangeText={(text)=>handleSearch(text)}
           style={{ fontSize: 15, width: "100%" }}
           placeholder="Search for your modules"
         />
+
       </View>
 
       <SearchFilter
@@ -300,7 +396,7 @@ const EditTimetable = ({ onSearch }) => {
                   color: "black",
                 }}
               >
-                You have no Courses
+                You have no Modules
               </Text>
             </View>
           )
@@ -317,32 +413,35 @@ const EditTimetable = ({ onSearch }) => {
             color="#000000"
           />
 
-          <View style={styles.modalContent}>
-            {selectedModule && (
+          <View style={styles.modalContent}> 
+             {selectedModule && (
               <View key={selectedModule.coursecode}>
                 <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
-                {/* <Text style={styles.moduleName}>{selectedModule.name}</Text> */}
+                {/* <Text style={styles.moduleName}>{selectedModule.name}</Text>
                 
-                {/* Check if there are lectures */}
+                {/* Display lectures */}
                 {lectures.map((lecture,i)=>(
-                  selectedModule.activity.filter(item=>item.activityname==lecture).length>0 &&
+                  selectedModule.activity.items.filter(item=>item.activityname==lecture).length>0 &&
                       <DropdownComponent
                           key={i}
                           activity={"Lecture"}
                           moduleContent={
-                                  selectedModule.activity.filter(item=>item.activityname===lecture).map((act,index)=>(
+                                  selectedModule.activity.items.filter(item=>item.activityname===lecture).map((act,index)=>(
                                     {
                                     label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
-                                  
-                                  value: `${index + 1}`,}
+                                    act:act,
+                                    value: `${index + 1}`,}
                                     )
                                   )
                                 }
+                          addActivity={addActivity}      
                           activityNumber={i+1}
                           />
                 ))}
-                {tutorials.map((tutorial,i)=>(
-                  selectedModule.activity.filter(item=>item.activityname==tutorial).length>0 &&
+
+                {/*Display tutorials*/}
+                {/* {tutorials.map((tutorial,i)=>(
+                  selectedModule.items.activity.filter(item=>item.activityname==tutorial).length>0 &&
                       <DropdownComponent
                           key={i}
                           activity={"Tutorial"}
@@ -350,32 +449,36 @@ const EditTimetable = ({ onSearch }) => {
                                   selectedModule.activity.filter(item=>item.activityname===tutorial).map((act,index)=>(
                                     {
                                     label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
-                                  
-                                  value: `${index + 1}`,}
+                                    act:act,
+                                    value: `${index + 1}`,}
                                     )
                                   )
                                 }
+                          addActivity={addActivity}      
                           activityNumber={i+1}
+                          onChange={(e)=>setActvities([...activities,act])}
                           />
-                ))}
-
-                {practicals.map((practical,i)=>(
-                  selectedModule.activity.filter(item=>item.activityname==practical).length>0 &&
-                      <DropdownComponent
-                          key={i}
-                          activity={"Practical"}
-                          moduleContent={
-                                  selectedModule.activity.filter(item=>item.activityname===practical).map((act,index)=>(
-                                    {
-                                    label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
-                                  
-                                  value: `${index + 1}`,}
-                                    )
-                                  )
-                                }
-                          activityNumber={i+1}
-                          />
-                ))}
+                ))} */}
+{/* 
+                {/*Display practicals*/}
+                {/* {practicals.map((practical,i)=>(
+                  selectedModule.activity.filter(item=>item.activityname==practical).length>0 && */}
+                      {/* // <DropdownComponent */}
+                      {/* //     key={i}
+                      //     activity={"Practical"}
+                      //     moduleContent={
+                      //             selectedModule.activity.filter(item=>item.activityname===practical).map((act,index)=>( */}
+                      {/* //               { */}
+                      {/* //               label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
+                      //               act:act,
+                      //               value: `${index + 1}`,}
+                      //               )
+                      //             )
+                      //           }
+                      //     addActivity={addActivity}      
+                      //     activityNumber={i+1}
+                      //     />
+                //))}   */}
                 <Button
                   icon="check"
                   mode="contained"
@@ -385,7 +488,7 @@ const EditTimetable = ({ onSearch }) => {
                     marginHorizontal: 20,
                   }}
                   outlined={true}
-                  onPress={() => toggleModal(null)}
+                  onPress={() => handleSave()}
                   testID="save-button"
                 >
                   Save
@@ -395,6 +498,7 @@ const EditTimetable = ({ onSearch }) => {
           </View>
         </View>
       </Modal>
+     
     </SafeAreaView>
   );
 };
