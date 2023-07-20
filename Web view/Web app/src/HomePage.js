@@ -1,21 +1,26 @@
 import * as React from 'react';
+import "./App.css"
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActions } from '@mui/material';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 
 function HomePage() {
   return (
-    
-    <Container maxWidth="false" 
-    justify="center"
-    alignitems="center"
-    bgcolor = "#e32f45" >
+  <div className = "BG">
+    <Grid
+    container
+    spacing={0}
+    direction="column"
+    alignItems="center"
+    justifyContent="center"
+    sx={{ minHeight: '100vh' }}>
 
-    <Card sx={{maxWidth:2000}}>
+    <Grid item xs={3}>
+
+    <Card sx={{maxWidth:2000}} style={{ border: "1px solid #000000" }}>
       <CardMedia
       component="img"
       height="200"
@@ -84,7 +89,9 @@ function HomePage() {
       </CardContent>
     </Card>
 
-    </Container>
+    </Grid>
+    </Grid>  
+    </div> 
   );
 }
 export default HomePage;
