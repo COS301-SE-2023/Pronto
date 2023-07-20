@@ -25,6 +25,10 @@ const NotificationPreferences = () => {
   const [enteredVerificationCode, setEnteredVerificationCode] = useState("");
   const [email, setEmail] = useState(null);
   const [isEmailModalVisible, setEmailModalVisible] = useState(false);
+  const [isEmailVerificationModalVisible, setEmailVerificationModalVisible] =
+    useState(false);
+  const [enteredEmailVerificationCode, setEnteredEmailVerificationCode] =
+    useState("");
 
   const fetchUserEmail = async () => {
     try {
@@ -59,6 +63,7 @@ const NotificationPreferences = () => {
       "Preferences Updated",
       `Preference successfully updated to ${selectedOption}`
     );
+    setShowSaveButton(false);
   };
 
   const closeModalAndDeselectOption = () => {
@@ -67,11 +72,23 @@ const NotificationPreferences = () => {
     setShowSaveButton(false);
   };
 
+  const openEmailVerificationModal = () => {
+    setEmailVerificationModalVisible(true);
+    setEmailModalVisible(false); // Close the email modal
+  };
+
   const closeEmailModalAndClearOption = () => {
     setEmailModalVisible(false);
     setSelectedOption(null);
     setShowSaveButton(false);
   };
+
+  const handleCancelEmailVerification = () => {
+    setEmailVerificationModalVisible(false);
+    setSelectedOption(null); // Clear the selected option
+    setShowSaveButton(false); // Hide the save button
+  };
+
   const savePhoneNumber = (number) => {
     // Regular expression to match valid South African phone numbers
     const saPhoneNumberRegex = /^(?:\+27|0)(?:\d\s?){9}$/;
@@ -93,13 +110,30 @@ const NotificationPreferences = () => {
   };
 
   const handleEmailConfirm = () => {
-    setEmailModalVisible(false);
+    // Perform any necessary actions before opening the email verification modal
+    // For example, you might want to send the verification code to the user's email before opening the modal
+    // After sending the verification code, open the email verification modal:
+    openEmailVerificationModal();
+  };
+
+  const handleEmailVerificationCode = (code) => {
+    // Implement your logic to verify the email code here
+
+    // After successful verification, you can do any required action
+    // For example, show a success message or navigate to the next step in the app
+    // For this example, let's show an alert:
+    Alert.alert(
+      "Email Verification Successful",
+      "Your email has been verified successfully."
+    );
+
+    // Close the email verification modal and show the Save button
+    setEmailVerificationModalVisible(false);
     setShowSaveButton(true);
   };
 
   const handleVerificationCode = (code) => {
     // Implement your logic to verify the SMS code here
-    console.log("Verification code entered:", code);
 
     // After successful verification, you can do any required action
     // For example, show a success message or navigate to the next step in the app
@@ -240,7 +274,11 @@ const NotificationPreferences = () => {
               <View style={styles.modalContent}>
                 <TouchableOpacity
                   style={styles.closeModalIcon}
-                  onPress={() => setVerificationModalVisible(false)}
+                  onPress={() => {
+                    setSelectedOption(null);
+                    setShowSaveButton(false);
+                    setVerificationModalVisible(false);
+                  }}
                 >
                   <Icon name="close" size={24} color="gray" />
                 </TouchableOpacity>
@@ -264,7 +302,11 @@ const NotificationPreferences = () => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.modalCancelButton}
-                  onPress={() => setVerificationModalVisible(false)}
+                  onPress={() => {
+                    setSelectedOption(null);
+                    setShowSaveButton(false);
+                    setVerificationModalVisible(false);
+                  }}
                 >
                   <Text style={styles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
@@ -292,7 +334,56 @@ const NotificationPreferences = () => {
                   style={styles.modalNextButton}
                   onPress={handleEmailConfirm}
                 >
-                  <Text style={styles.saveButtonText}>OK</Text>
+                  <Text style={styles.saveButtonText}>Next</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+        <Modal
+          visible={isEmailVerificationModalVisible}
+          transparent
+          animationType="fade"
+        >
+          <TouchableWithoutFeedback
+            onPress={() => setEmailVerificationModalVisible(false)}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeModalIcon}
+                  onPress={() => {
+                    setSelectedOption(null);
+                    setShowSaveButton(false);
+                    setEmailVerificationModalVisible(false);
+                  }}
+                >
+                  <Icon name="close" size={24} color="gray" />
+                </TouchableOpacity>
+
+                <Text style={styles.modalTitle}>Enter Verification Code</Text>
+
+                <TextInput
+                  style={styles.verificationInput}
+                  placeholder="Verification Code"
+                  keyboardType="numeric"
+                  value={enteredEmailVerificationCode}
+                  onChangeText={setEnteredEmailVerificationCode}
+                />
+
+                <TouchableOpacity
+                  style={styles.modalNextButton}
+                  onPress={() =>
+                    handleEmailVerificationCode(enteredEmailVerificationCode)
+                  }
+                >
+                  <Text style={styles.saveButtonText}>Verify</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalCancelButton}
+                  onPress={handleCancelEmailVerification}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
               </View>
             </View>
