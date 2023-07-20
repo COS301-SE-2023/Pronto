@@ -13,6 +13,8 @@ import {
   Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { Auth } from "aws-amplify";
+
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showSaveButton, setShowSaveButton] = useState(false);
@@ -21,11 +23,31 @@ const NotificationPreferences = () => {
   const [isVerificationModalVisible, setVerificationModalVisible] =
     useState(false); // State to control the verification modal visibility
   const [enteredVerificationCode, setEnteredVerificationCode] = useState("");
+  const [email, setEmail] = useState(null);
+  const [isEmailModalVisible, setEmailModalVisible] = useState(false);
 
-  const handleOptionSelect = (option) => {
+  const fetchUserEmail = async () => {
+    try {
+      // Replace "currentUser" with the method that retrieves the authenticated user from Cognito
+      // For example, if you are using AWS Amplify, you can use Auth.currentAuthenticatedUser()
+      const currentUser = await Auth.currentAuthenticatedUser();
+      const email = currentUser.attributes.email; // Assuming that "email" is the attribute name for the email in Cognito
+      return email;
+    } catch (error) {
+      console.error("Error fetching user email:", error);
+      return null;
+    }
+  };
+
+  const handleOptionSelect = async (option) => {
     setSelectedOption(option);
     if (option === "sms") {
       setModalVisible(true); // Show the phone number modal when "SMS" option is clicked
+    } else if (option === "email") {
+      // Fetch user's email from Cognito
+      const userEmail = await fetchUserEmail();
+      setEmail(userEmail); // Set the email state with the user's email
+      setEmailModalVisible(true); // Show the "Email Modal"
     } else {
       setShowSaveButton(true);
       setPhoneNumber(""); // Reset phone number state
@@ -45,6 +67,11 @@ const NotificationPreferences = () => {
     setShowSaveButton(false);
   };
 
+  const closeEmailModalAndClearOption = () => {
+    setEmailModalVisible(false);
+    setSelectedOption(null);
+    setShowSaveButton(false);
+  };
   const savePhoneNumber = (number) => {
     // Regular expression to match valid South African phone numbers
     const saPhoneNumberRegex = /^(?:\+27|0)(?:\d\s?){9}$/;
@@ -63,6 +90,11 @@ const NotificationPreferences = () => {
       setVerificationModalVisible(true);
       setModalVisible(false); // Close the phone number modal
     }
+  };
+
+  const handleEmailConfirm = () => {
+    setEmailModalVisible(false);
+    setShowSaveButton(true);
   };
 
   const handleVerificationCode = (code) => {
@@ -240,6 +272,32 @@ const NotificationPreferences = () => {
             </View>
           </TouchableWithoutFeedback>
         </Modal>
+        <Modal visible={isEmailModalVisible} transparent animationType="fade">
+          <TouchableWithoutFeedback onPress={closeEmailModalAndClearOption}>
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeModalIcon}
+                  onPress={closeEmailModalAndClearOption}
+                >
+                  <Icon name="close" size={24} color="gray" />
+                </TouchableOpacity>
+                <Text style={styles.modalTitle}>Your Current Email</Text>
+                <Text style={styles.currentEmailText}>
+                  {email
+                    ? `Your current email is set to: ${email}`
+                    : "Email not available"}
+                </Text>
+                <TouchableOpacity
+                  style={styles.modalNextButton}
+                  onPress={handleEmailConfirm}
+                >
+                  <Text style={styles.saveButtonText}>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
       </View>
     </SafeAreaView>
   );
@@ -378,6 +436,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginRight: 8,
+  },
+  currentEmailText: {
+    textAlign: "center",
+    padding: 20,
   },
 });
 
