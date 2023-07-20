@@ -9,85 +9,12 @@ export const createLecturer=`mutation CreateLecturer(
     lastname
     userRole
     email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
     courses {
       nextToken
-      startedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
     owner
-  }
-}`
-export const updateInstitution=`mutation UpdateInstitution(
-  $input: UpdateInstitutionInput!
-  $condition: ModelInstitutionConditionInput
-) {
-  updateInstitution(input: $input, condition: $condition) {
-    id
-    name
-    location
-    pageUrl
-    campusMapUrl
-    openingTime
-    closingTime
-    minimumDuration
-    lectureremails
-    coursecodes
-    domains
-    admin {
-      id
-      institutionId
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      owner
-    }
-    adminId
-    courses {
-      nextToken
-      startedAt
-    }
-    students {
-      nextToken
-      startedAt
-    }
-    lecturer {
-      nextToken
-      startedAt
-    }
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }`
 
@@ -120,7 +47,6 @@ export const deleteLecturer=`mutation DeleteLecturer(
                                     }
                                 courses {
                                     nextToken
-                                    startedAt
                                 }
                                     createdAt
                                     updatedAt
@@ -139,19 +65,15 @@ export const updateCourse=`mutation UpdateCourse(
     institutionId
     lecturerId
     coursecode
-    coursename
     semester
     enrollments {
       nextToken
-      startedAt
     }
     activity {
       nextToken
-      startedAt
     }
     announcents {
       nextToken
-      startedAt
     }
     lecturer {
       id
@@ -162,9 +84,6 @@ export const updateCourse=`mutation UpdateCourse(
       email
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
       owner
     }
     institution {
@@ -182,14 +101,188 @@ export const updateCourse=`mutation UpdateCourse(
       adminId
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }`
+export const createAnnouncement=`mutation CreateAnnouncement(
+  $input: CreateAnnouncementInput!
+  $condition: ModelAnnouncementConditionInput
+) {
+  createAnnouncement(input: $input, condition: $condition) {
+    id
+    courseId
+    description
+    start
+    end
+    date
+    venue
+    createdAt
+    updatedAt
+  }
+}
+`
+export const updateAnnouncement=`mutation UpdateAnnouncement(
+  $input: UpdateAnnouncementInput!
+  $condition: ModelAnnouncementConditionInput
+) {
+  updateAnnouncement(input: $input, condition: $condition) {
+    id
+    courseId
+    description
+    start
+    end
+    date
+    venue
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}`
+export const createAdmin=`mutation CreateAdmin(
+  $input: CreateAdminInput!
+  $condition: ModelAdminConditionInput
+) {
+  createAdmin(input: $input, condition: $condition) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}
+`
+
+export const createInstitution=`mutation CreateInstitution(
+  $input: CreateInstitutionInput!
+  $condition: ModelInstitutionConditionInput
+) {
+  createInstitution(input: $input, condition: $condition) {
+    id
+    name
+    location
+    pageUrl
+    campusMapUrl
+    openingTime
+    closingTime
+    minimumDuration
+    lectureremails
+    coursecodes
+    domains
+    adminId     
+    createdAt
+    updatedAt
+  }
+}
+`
+export const updateInstitution=`mutation UpdateInstitution(
+  $input: UpdateInstitutionInput!
+  $condition: ModelInstitutionConditionInput
+) {
+  updateInstitution(input: $input, condition: $condition) {
+    id
+    name
+    location
+    pageUrl
+    campusMapUrl
+    openingTime
+    closingTime
+    minimumDuration
+    lectureremails
+    coursecodes
+    domains
+    adminId
+    courses {
+      nextToken
+    }
+    students {
+      nextToken
+    }
+    lecturer {
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+
+}`
+
+export const updateAdmin=`mutation UpdateAdmin(
+  $input: UpdateAdminInput!
+  $condition: ModelAdminConditionInput
+) {
+  updateAdmin(input: $input, condition: $condition) {
+    id
+    institutionId
+    firstname
+    lastname
+    userRole
+    email
+    institution {
+      id
+      name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
+      lectureremails
+      coursecodes
+      domains
+      adminId
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+    owner
+  }
+}`
+
+
+export const createCourse=`mutation CreateCourse(
+  $input: CreateCourseInput!
+  $condition: ModelCourseConditionInput
+) {
+  createCourse(input: $input, condition: $condition) {
+    id
+    institutionId
+    lecturerId
+    coursecode
+    semester
+    createdAt
+    updatedAt
+  }
+}`
+

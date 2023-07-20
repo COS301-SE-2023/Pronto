@@ -28,7 +28,7 @@ node_modules/
 
 .vscode
 .env
-
+*.vtl
 # dependencies
 /node_modules
 

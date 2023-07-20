@@ -31,7 +31,7 @@ function Login() {
     setLoading(true);
     event.preventDefault();
     try {
-      await Auth.signIn(email, password, { role: "Lecturer" });
+      await Auth.signIn(email, password,{"role":"Lecturer"});
       setsignInError("");
       //navigate to lecturer home page
       navigate("/lecture-homepage");
@@ -72,6 +72,7 @@ function Login() {
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message);
+      console.log(e)
     }
     setLoading(false);
   };
