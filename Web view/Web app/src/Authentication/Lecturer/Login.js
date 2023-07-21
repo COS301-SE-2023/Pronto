@@ -73,6 +73,7 @@ function Login() {
         },
         clientMetadata: {
           role: "Lecturer",
+          institutionId: institutionId,
         },
       });
       setsignUpError("");
