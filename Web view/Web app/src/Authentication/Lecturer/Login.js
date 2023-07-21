@@ -45,6 +45,11 @@ function Login() {
 
   const onSignUpPressed = async (event) => {
     event.preventDefault();
+    if (institutionId === institutionInfo[0].key) {
+      setsignUpError("Please Select An Institution");
+      return;
+    }
+
     if (confirmPassword !== signUpPassword) {
       setsignUpError("Passwords do not match");
       return;
