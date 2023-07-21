@@ -4,6 +4,8 @@ import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
+import institutionInfo from "../../assets/data/universityInfo.json";
+import { SelectInstitution } from "../components/SelectInstitution.dropDown";
 
 function Login() {
   //sign in states
@@ -31,7 +33,7 @@ function Login() {
     setLoading(true);
     event.preventDefault();
     try {
-      await Auth.signIn(email, password,{"role":"Lecturer"});
+      await Auth.signIn(email, password, { role: "Lecturer" });
       setsignInError("");
       //navigate to lecturer home page
       navigate("/lecture-homepage");
@@ -72,7 +74,7 @@ function Login() {
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message);
-      console.log(e)
+      console.log(e);
     }
     setLoading(false);
   };
@@ -152,6 +154,14 @@ function Login() {
 
   const validateConfirmPassword = (value) => {
     setPasswordMatch(value === signUpPassword);
+  };
+
+  //select institution
+  const [institutionId, setInstitutionId] = React.useState("");
+
+  const handleInstitutionSelection = (event) => {
+    if (!event.target.value) setsignUpError("Please Select An Institution");
+    setInstitutionId(event.target.value);
   };
 
   return (
