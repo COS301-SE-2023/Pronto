@@ -23,20 +23,19 @@ function HomePage() {
     <Card sx={{maxWidth:2000}} style={{ border: "1px solid #000000" }}>
       <CardMedia
       component="img"
-      height="200"
+      height="150"
       image={require("./Authentication/Institution/ProntoLogo.png")}
       alt="logo"
       sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
       />
       <CardContent>
-      <Typography gutterBottom variant="h4" component="div" align="center">
-                  Welcome to Pronto timetable application
+      <Typography gutterBottom variant="h4" component="div" align="center" sx={{ fontWeight: 'bold', m: 1 }}>
+                  Welcome to Pronto timetable application!
       </Typography>
-      <Typography gutterBottom variant="h4" component="div" align="center"></Typography>
 
         <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Card sx={{ maxWidth: 400 }} style={{ border: "1px solid #5a5a5a" }}>
+          <Card sx={{ maxWidth: 400 }} style={{ border: "1px solid #e32f45" }}>
               <CardMedia
                 component="img"
                 height="150"
@@ -53,7 +52,7 @@ function HomePage() {
                 </Typography>
               </CardContent>
             <CardActions>
-              <Button size="small" color="error" href="/institution-login">
+              <Button size="small" color="error"  variant="contained" href="/institution-login">
                 Sign in
               </Button>
             </CardActions>
@@ -61,7 +60,7 @@ function HomePage() {
           </Grid>
 
           <Grid item xs={6}>
-          <Card sx={{ maxWidth: 400 }}  style={{ border: "1px solid #5a5a5a" }}>
+          <Card sx={{ maxWidth: 400 }}  style={{ border: "1px solid #e32f45" }}>
               <CardMedia
                 component="img"
                 height="150"
@@ -78,7 +77,7 @@ function HomePage() {
                 </Typography>
               </CardContent>
             <CardActions>
-              <Button size="small" color="error" href="/lecturer-login">
+              <Button size="small" color="error" variant="contained" href="/lecturer-login">
                 Sign in/Register
               </Button>
             </CardActions>
