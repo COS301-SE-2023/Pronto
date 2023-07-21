@@ -45,8 +45,8 @@ function Login() {
 
   const onSignUpPressed = async (event) => {
     event.preventDefault();
-    if (institutionId === institutionInfo[0].key) {
-      setsignUpError("Please Select An Institution");
+    if (!institutionId) {
+      setAndPrintInstitutionIdError(!institutionId);
       return;
     }
 
@@ -164,11 +164,8 @@ function Login() {
 
   //select institution
   const [institutionId, setInstitutionId] = React.useState("");
-
-  const handleInstitutionSelection = (event) => {
-    if (!event.target.value) setsignUpError("Please Select An Institution");
-    setInstitutionId(event.target.value);
-  };
+  const [isInstitutudeIdValid, setIsInstitutudeIdValid] = React.useState(false);
+  const setAndPrintInstitutionIdError = (isInstitutudeIdInvalid) => {
 
   return (
     <Container>
@@ -211,11 +208,13 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-          <SelectInstitution
-            institutionInfo={institutionInfo}
-            institutionId={institutionId}
-            handleInstitutionSelection={handleInstitutionSelection}
-          ></SelectInstitution>
+          <SelectInputWrapper isInstitutudeIdValid={isInstitutudeIdValid}>
+            <SelectInstitution
+              institutionInfo={institutionInfo}
+              institutionId={institutionId}
+              handleInstitutionSelection={handleInstitutionSelection}
+            ></SelectInstitution>
+          </SelectInputWrapper>
           <Input
             type="password"
             placeholder="Password"
@@ -429,7 +428,7 @@ const Input = styled.input`
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
         ? `border: 2px solid green;`
-        : `border: 1px solid #e32f45;`}
+        : `border: 2px solid #e32f45;`}
   }
 `;
 
@@ -539,6 +538,29 @@ const CriteriaMessage = styled.span`
   margin-right: 10px;
   font-size: 12px;
   color: ${({ isValid }) => (isValid ? "green" : "inherit")};
+`;
+
+const SelectInputWrapper = styled.div`
+  background-color: #eee;
+  border: none;
+  border-radius: 25px;
+  margin: 8px 0;
+  width: 100%;
+  font: inherit;
+
+  select {
+    background-color: #eee;
+    border-radius: 25px;
+    width: 100%;
+    height: inherit;
+    font: inherit;
+    padding: 12px 15px;
+    border: none;
+    &:focus {
+      border: ${({ isInstitutudeIdValid }) =>
+        isInstitutudeIdValid ? "2px solid green" : "2px solid #e32f45"};
+    }
+  }
 `;
 
 export default Login;
