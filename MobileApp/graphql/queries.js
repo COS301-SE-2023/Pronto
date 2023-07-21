@@ -50,10 +50,6 @@ export const activitiesByCourseId=`query ActivitiesByCourseId(
       end
       venue
       group
-      frequency
-      description
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -82,6 +78,7 @@ export const searchCourses=`query SearchCourses(
       coursecode
       activity { 
         items { 
+          id
           activityname
           day
           start
@@ -229,8 +226,6 @@ export const listStudents=`query ListStudents(
       lastname
       userRole
       email
-      createdAt
-      updatedAt
       studentTimetableId
       timetable { 
         activities{ 
@@ -248,6 +243,7 @@ export const listStudents=`query ListStudents(
         }
       enrollments { 
         items{
+          id
           course{ 
             id
             coursecode

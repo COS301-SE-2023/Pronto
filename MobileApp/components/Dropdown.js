@@ -15,11 +15,7 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent,addActivity
     );
   };
 
-  const handleSelect =()=>{
-    console.log(activity)
-  }
 
-  //console.log("Drop down")
   return (
     <View style={styles.container}>
       {renderLabel()}
@@ -37,11 +33,10 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent,addActivity
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
-        onConfirmSelectItem={()=>handleSelect()}
         onChange={(item) => {
           setValue(item);
           setIsFocus(false)
-          //console.log(item.act)
+          //console.log(item)
           addActivity(item.act)
         }}
         renderLeftIcon={() => (

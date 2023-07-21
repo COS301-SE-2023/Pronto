@@ -20,7 +20,6 @@ export const createTimetable=`mutation CreateTimetable(
     }
     activities {
       nextToken
-      startedAt
     }
     createdAt
     updatedAt
@@ -49,10 +48,7 @@ export const updateTimetable=`mutation UpdateTimetable(
     }
     activities {
       nextToken
-      startedAt
     }
-    createdAt
-    updatedAt
   }
 }`
 
@@ -125,5 +121,31 @@ export const deleteEnrollment=`mutation DeleteEnrollment(
       coursename
       semester
     }
+  }
+}`
+export const updateStudent=`mutation UpdateStudent(
+  $input: UpdateStudentInput!
+  $condition: ModelStudentConditionInput
+) {
+  updateStudent(input: $input, condition: $condition) {
+    institutionId
+    id
+    firstname
+    lastname
+    userRole
+    email
+    timetable {
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+    }
+    enrollments {
+      nextToken
+    }
+    createdAt
+    updatedAt
+    studentTimetableId
   }
 }`
