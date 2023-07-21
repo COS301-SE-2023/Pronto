@@ -20,7 +20,7 @@ function HomePage() {
 
     <Grid item xs={3}>
 
-    <Card sx={{maxWidth:2000}} style={{ border: "1px solid #000000" }}>
+    <Card sx={{maxWidth:2000}} style={{ border: "1px solid #5a5a5a" }}>
       <CardMedia
       component="img"
       height="150"
