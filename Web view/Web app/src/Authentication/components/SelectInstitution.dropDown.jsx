@@ -2,7 +2,7 @@ export function SelectInstitution({ institutionId, institutionInfo, handleInstit
     return (<>          
         <select value={institutionId} onChange={handleInstitutionSelection} name="institutionOptions">
           {institutionInfo.map((info) => (
-            <option value={info.key} key={info.key}>
+            <option value={info.key} key={info.key} disabled={!info.key}>
               {info.value}
             </option>
           ))}
