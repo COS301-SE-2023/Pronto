@@ -90,14 +90,40 @@ export const createEnrollment=`mutation CreateEnrollment(
     id
     studentId
     courseId
-    student {
-      institutionId
-      id
-    }
     course {
       id
       coursecode
+      activity{
+              items{
+                courseId
+                activityname
+                id
+                day
+                start
+                end
+                venue 
+                group
+              }
+            }
     }
   }
 }
 `
+export const deleteEnrollment=`mutation DeleteEnrollment(
+  $input: DeleteEnrollmentInput!
+  $condition: ModelEnrollmentConditionInput
+) {
+  deleteEnrollment(input: $input, condition: $condition) {
+    id
+    studentId
+    courseId
+    course {
+      id
+      institutionId
+      lecturerId
+      coursecode
+      coursename
+      semester
+    }
+  }
+}`

@@ -250,6 +250,19 @@ export const listStudents=`query ListStudents(
         items{
           course{ 
             id
+            coursecode
+            activity{
+              items{
+                courseId
+                activityname
+                id
+                day
+                start
+                end
+                venue 
+                group
+              }
+            }
           }
         }
       }  

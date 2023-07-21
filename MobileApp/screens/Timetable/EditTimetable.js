@@ -124,7 +124,7 @@ const EditTimetable = ({ onSearch }) => {
   const fetchCourses= async()=>{ 
     try{
         //handleSearch("COS")
-      
+        setActivities([])
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
       
@@ -186,14 +186,15 @@ const EditTimetable = ({ onSearch }) => {
         else{
               stu=stu.data.listStudents.items[0]
               let c=[]
-              for(let i=0;i<stu.enrollments.items;i++){
+              for(let i=0;i<stu.enrollments.items.length;i++){
                   c.push(stu.enrollments.items[i].course)
               }
-              setSelectedModules(c)
+              setSelectedModules([...c])
               setTimetable(stu.timetable)
               if(stu.timetable!==null){
                 setActivities(stu.timetable.activities.items)
             }
+            console.log(stu.enrollments.items)
                  }
     }catch(error){
       console.log(error)
@@ -210,18 +211,19 @@ const EditTimetable = ({ onSearch }) => {
        try{
         //Create enrollment if it doesnt exist
         // let enroll;
-        // if(student.items.enrollments.filter((item)=>item.coursecode===selectedModule.coursecode).length===0){
-        //   enroll={
-        //     coursecode:selectedModule.coursecode;
-        //     studentId:student.id,
-        //   }
-        //   let newEnrollment =await API.graphql({
-        //     query:createEnrollment,
-        //     variables:{input:enroll},
-        //     authMode:"AMAZON_COGNITO_USER_POOLS"
-        //   })
-        //   console.log(newEnrollment)
-        //}
+        if(student.enrollments.items.filter((item)=>item.courseId===selectedModule.id).length===0){
+          enroll={
+            courseId:selectedModule.id,
+            studentId:student.id,
+          }
+          let newEnrollment =await API.graphql({
+            query:createEnrollment,
+            variables:{input:enroll},
+            authMode:"AMAZON_COGNITO_USER_POOLS"
+          })
+
+           //console.log(newEnrollment)
+        }
       //   if(timetable===null){
       //      let newTimetable={
       //         studentId:student.id,
@@ -234,35 +236,35 @@ const EditTimetable = ({ onSearch }) => {
       //     })
       // }
       // else{
-        if(student.timetable===null){
-        let ids=[]
-        for(let i=0;i<activities.length;i++){
-          ids.push[activities[i].activityname]
-        }
-      //   let newTimetable={
-      //     id:timetable.id,
-      //     studentId:student.id,
-      //     activityId:ids
+      //   if(student.timetable===null){
+      //   let ids=[]
+      //   for(let i=0;i<activities.length;i++){
+      //     ids.push[activities[i].activityname]
       //   }
-        }
-        else{
-          //Remove duplicate activities
-          let rows=[...student.timetable.activities]
-          for(let i=0;i<activities;i++){
-             let index=student.timetable.activities.find((item)=>item.activityname===activities[i] && item.id===activities[i].id)
-             rows.splice[i]
-          }
+      // //   let newTimetable={
+      // //     id:timetable.id,
+      // //     studentId:student.id,
+      // //     activityId:ids
+      // //   }
+      //   }
+      //   else{
+      //     //Remove duplicate activities
+      //     let rows=[...student.timetable.activities]
+      //     for(let i=0;i<activities;i++){
+      //        let index=student.timetable.activities.find((item)=>item.activityname===activities[i] && item.id===activities[i].id)
+      //        rows.splice[i]
+      //     }
       //   let update=await API.graphql({
       //       query:updateTimetable,
       //       variables:{input:newTimetable},
       //       authMode:"AMAZON_COGNITO_USER_POOLS",
       //     })
       // }
-        }
-        console.log(activities)    
+        //}
+        //console.log(activities)    
         toggleModal(null)
       }catch(error){
-
+         console.log(error)
       }
   }
   const addActivity = (activity)=>{ 
@@ -274,7 +276,7 @@ const EditTimetable = ({ onSearch }) => {
       }
     }
     rows.push(activity)
-    //console.log(rows)
+    console.log(rows)
     setActivities(rows)
   }
   const oneModule = ({ item }) => {
@@ -440,13 +442,13 @@ const EditTimetable = ({ onSearch }) => {
                 ))}
 
                 {/*Display tutorials*/}
-                {/* {tutorials.map((tutorial,i)=>(
-                  selectedModule.items.activity.filter(item=>item.activityname==tutorial).length>0 &&
+                {tutorials.map((tutorial,i)=>(
+                  selectedModule.activity.items.filter(item=>item.activityname==tutorial).length>0 &&
                       <DropdownComponent
                           key={i}
                           activity={"Tutorial"}
                           moduleContent={
-                                  selectedModule.activity.filter(item=>item.activityname===tutorial).map((act,index)=>(
+                                  selectedModule.activity.items.filter(item=>item.activityname===tutorial).map((act,index)=>(
                                     {
                                     label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
                                     act:act,
@@ -456,29 +458,28 @@ const EditTimetable = ({ onSearch }) => {
                                 }
                           addActivity={addActivity}      
                           activityNumber={i+1}
-                          onChange={(e)=>setActvities([...activities,act])}
                           />
-                ))} */}
-{/* 
+                ))}
+
                 {/*Display practicals*/}
-                {/* {practicals.map((practical,i)=>(
-                  selectedModule.activity.filter(item=>item.activityname==practical).length>0 && */}
-                      {/* // <DropdownComponent */}
-                      {/* //     key={i}
-                      //     activity={"Practical"}
-                      //     moduleContent={
-                      //             selectedModule.activity.filter(item=>item.activityname===practical).map((act,index)=>( */}
-                      {/* //               { */}
-                      {/* //               label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
-                      //               act:act,
-                      //               value: `${index + 1}`,}
-                      //               )
-                      //             )
-                      //           }
-                      //     addActivity={addActivity}      
-                      //     activityNumber={i+1}
-                      //     />
-                //))}   */}
+                {practicals.map((practical,i)=>(
+                  selectedModule.activity.items.filter(item=>item.activityname==practical).length>0 && 
+                       <DropdownComponent 
+                            key={i}
+                           activity={"Practical"}
+                           moduleContent={
+                                   selectedModule.activity.items.filter(item=>item.activityname===practical).map((act,index)=>( 
+                                    { 
+                                     label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
+                                     act:act,
+                                     value: `${index + 1}`,}
+                                     )
+                                   )
+                                 }
+                           addActivity={addActivity}      
+                           activityNumber={i+1}
+                           />
+                ))}  
                 <Button
                   icon="check"
                   mode="contained"
