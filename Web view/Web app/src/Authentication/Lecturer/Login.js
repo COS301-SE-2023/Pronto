@@ -205,6 +205,11 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+          <SelectInstitution
+            institutionInfo={institutionInfo}
+            institutionId={institutionId}
+            handleInstitutionSelection={handleInstitutionSelection}
+          ></SelectInstitution>
           <Input
             type="password"
             placeholder="Password"
