@@ -17,6 +17,8 @@ import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify } from "aws-amplify";
 import config from "./aws-exports";
+import PostAccordion from "./LectureView/Edit Module/PostAccordion";
+import Dashboard from "./Institution VIew/Dashboard/Dashboard";
 
 Amplify.configure(config);
 
@@ -39,7 +41,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
+    <div >
       <Router>
         <Routes>
           {/*Lecturer pages routing*/}
@@ -81,6 +83,8 @@ const Home = () => {
             path="/upload-student-files"
             element={<StudentFileUploadPage />}
           />
+          <Route path={"/postAccordian"} element={<PostAccordion />} />
+          <Route path={"/dashboard"} element={<Dashboard />} />
         </Routes>
       </Router>
     </div>
