@@ -32,6 +32,13 @@ function Login() {
     setLoading(true);
     event.preventDefault();
 
+    // Add email validation check
+    if (!emailIsValid) {
+      setsignInError("Please enter a valid email address.");
+      setLoading(false);
+      return;
+    }
+
     try {
       await Auth.signIn(email, password);
       setsignInError("");
