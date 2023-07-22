@@ -30,6 +30,13 @@ function Login() {
 
     setLoading(true);
     event.preventDefault();
+
+    // Add email validation check
+    if (!emailIsValid) {
+      setsignInError("Please enter a valid email address.");
+      setLoading(false);
+      return;
+    }
     try {
       await Auth.signIn(email, password);
       setsignInError("");
@@ -151,13 +158,6 @@ function Login() {
 
   //validating password for sign in
   const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
-  const validateSignInPassword = (value) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const isValidSignInPassword = regex.test(value);
-
-    setPasswordSignInIsValid(isValidSignInPassword);
-  };
 
   //validate name and surname for sign up
   const [nameIsValid, setNameIsValid] = useState(false);
@@ -310,9 +310,7 @@ function Login() {
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
-              validateSignInPassword(event.target.value);
             }}
-            isValidSignInPassword={passwordSignInIsValid}
           />
           <Button onClick={onSignInPressed}>
             {loading ? "Signing in..." : "Sign in"}
@@ -431,12 +429,11 @@ const Input = styled.input`
     ${(props) =>
       props.isValidEmail ||
       props.isValidPassword ||
-      props.isValidSignInPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
         ? `border: 2px solid green;`
-        : `border: 1px solid #e32f45;`}
+        : `border: 1px solid grey`}
   }
 `;
 
