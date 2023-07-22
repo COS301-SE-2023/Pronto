@@ -5,7 +5,7 @@ import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import institutionInfo from "../../assets/data/universityInfo.json";
-import { SelectInstitution } from "../components/SelectInstitution.dropDown";
+import Select from "react-select";
 
 function Login() {
   //sign in states
@@ -173,9 +173,10 @@ function Login() {
     }
     setIsInstitutudeIdValid(true);
   };
+
   const handleInstitutionSelection = (event) => {
-    setInstitutionId(event.target.value);
-    if (!event.target.value) {
+    setInstitutionId(event.value);
+    if (!event.value) {
       setIsInstitutudeIdValid(false);
       return;
     }
@@ -224,11 +225,12 @@ function Login() {
             isValidEmail={emailIsValid}
           />
           <SelectInputWrapper isInstitutudeIdValid={isInstitutudeIdValid}>
-            <SelectInstitution
-              institutionInfo={institutionInfo}
-              institutionId={institutionId}
-              handleInstitutionSelection={handleInstitutionSelection}
-            ></SelectInstitution>
+            <Select
+              options={institutionInfo}
+              defaultValue={institutionId}
+              onChange={handleInstitutionSelection}
+              placeholder="Select an Institution"
+            ></Select>
           </SelectInputWrapper>
           <Input
             type="password"
