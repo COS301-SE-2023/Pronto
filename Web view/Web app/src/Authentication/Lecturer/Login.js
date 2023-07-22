@@ -48,6 +48,30 @@ function Login() {
       return;
     }
 
+    if (!nameIsValid) {
+      setsignUpError("Please enter a valid name.");
+      return;
+    }
+
+    if (!surnameIsValid) {
+      setsignUpError("Please enter a valid surname.");
+      return;
+    }
+
+    if (!emailIsValid) {
+      setsignUpError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!passwordIsValid) {
+      setsignUpError(
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&)."
+      );
+      return;
+    }
+
+    setsignUpError(""); // Reset error message if all fields are valid
+
     if (loading) {
       return;
     }
@@ -55,7 +79,6 @@ function Login() {
     setLoading(true);
 
     try {
-      // const response = await Auth.signIn(email, password);
       await Auth.signUp({
         username: email,
         password: signUpPassword,
@@ -66,10 +89,9 @@ function Login() {
           address: "",
         },
         clientMetadata: {
-          role: "Lecture",
+          role: "Lecturer",
         },
       });
-      setsignUpError("");
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message);
