@@ -43,30 +43,36 @@ function Login() {
 
   const onSignUpPressed = async (event) => {
     event.preventDefault();
+    const errors = []; // Create an array to hold error messages
+
     if (confirmPassword !== signUpPassword) {
-      setsignUpError("Passwords do not match");
-      return;
+      errors.push("Passwords do not match");
     }
 
     if (!nameIsValid) {
-      setsignUpError("Please enter a valid name.");
-      return;
+      errors.push("Please enter a valid name.");
     }
 
     if (!surnameIsValid) {
-      setsignUpError("Please enter a valid surname.");
-      return;
+      errors.push("Please enter a valid surname.");
     }
 
     if (!emailIsValid) {
-      setsignUpError("Please enter a valid email address.");
-      return;
+      errors.push("Please enter a valid email address.");
     }
 
     if (!passwordIsValid) {
-      setsignUpError(
+      errors.push(
         "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&)."
       );
+    }
+
+    if (errors.length > 0) {
+      // Combine all error messages into a single string separated by <div> elements
+      const errorMessage = errors.map((error, index) => (
+        <div key={index}>{error}</div>
+      ));
+      setsignUpError(errorMessage);
       return;
     }
 
