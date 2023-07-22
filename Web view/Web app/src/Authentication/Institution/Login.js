@@ -88,16 +88,6 @@ function Login() {
     setEmailIsValid(isValidEmail);
   };
 
-  //validate password on sign in
-  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
-  const validateSignInPassword = (value) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const isValidSignInPassword = regex.test(value);
-
-    setPasswordSignInIsValid(isValidSignInPassword);
-  };
-
   //validate password on sign up
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const validatePassword = (value) => {
@@ -266,9 +256,7 @@ function Login() {
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
-              validateSignInPassword(event.target.value);
             }}
-            isValidSignInPassword={passwordSignInIsValid}
           />
           <Button onClick={onSignInPressed}>
             {" "}
@@ -380,7 +368,7 @@ const Title = styled.h1`
 
 const Input = styled.input`
   background-color: #eee;
-  border: 0;
+  border: none;
   border-radius: 25px;
   padding: 12px 15px;
   margin: 8px 0;
@@ -389,12 +377,11 @@ const Input = styled.input`
     ${(props) =>
       props.isValidEmail ||
       props.isValidPassword ||
-      props.isValidSignInPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
         ? `border: 2px solid green;`
-        : `border: 1px solid #e32f45;`}
+        : `border: 1px solid grey`}
   }
 `;
 
