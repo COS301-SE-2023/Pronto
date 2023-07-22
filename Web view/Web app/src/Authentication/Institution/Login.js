@@ -53,10 +53,35 @@ function Login() {
   //function for sign up
   const onSignUpPressed = async (event) => {
     event.preventDefault();
+    const errors = []; // Create an array to hold error messages
+
+    if (!nameIsValid) {
+      errors.push("Please enter a university valid name.");
+    }
+
+    if (!emailIsValid) {
+      errors.push("Please enter a valid email address.");
+    }
+
+    if (!passwordIsValid) {
+      errors.push(
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&)."
+      );
+    }
     if (confirmPassword !== signUpPassword) {
-      setsignUpError("Passwords do not match");
+      errors.push("Passwords do not match");
+    }
+
+    if (errors.length > 0) {
+      // Combine all error messages into a single string separated by <div> elements
+      const errorMessage = errors.map((error, index) => (
+        <div key={index}>{error}</div>
+      ));
+      setsignUpError(errorMessage);
       return;
     }
+
+    setsignUpError(""); // Reset error message if all fields are valid
 
     if (loading) {
       return;
