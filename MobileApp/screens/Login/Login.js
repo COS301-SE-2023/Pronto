@@ -30,7 +30,6 @@ const Login = ({ navigation }) => {
   };
 
   const [isTypingEmail, setIsTypingEmail] = useState(false);
-  const [isTypingPassword, setIsTypingPassword] = useState(false);
 
   const onSignInPressed = async (data) => {
     if (loading) {

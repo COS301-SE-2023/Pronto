@@ -87,19 +87,42 @@ const Register = ({ navigation }) => {
       return;
     }
 
-    if (confirmPassword !== password) {
-      Alert.alert("Error", "Passwords do not match");
+    let errorMessage = "";
+
+    if (!nameIsValid) {
+      errorMessage += "Please enter a valid name.\n";
+    }
+
+    if (!surnameIsValid) {
+      errorMessage += "Please enter a valid surname.\n";
+    }
+
+    if (!emailIsValid) {
+      errorMessage += "Please enter a valid email address.\n";
+    }
+
+    if (!passwordSignUpIsValid) {
+      errorMessage +=
+        "Please enter a password with at least 8 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.\n";
+    }
+
+    if (!passwordMatch) {
+      errorMessage += "Passwords do not match.\n";
+    }
+
+    if (errorMessage !== "") {
+      Alert.alert("Error(s)", errorMessage);
       return;
     }
 
     setLoading(true);
     try {
-      //  navigation.navigate("ConfirmEmail", { email });
+      // navigation.navigate("ConfirmEmail", { email });
       await Auth.signUp({
         username: email,
         password,
         attributes: { email, family_name: surname, name },
-        clientMetadata: { role: "Students" },
+        clientMetadata: { role: "Student" },
       });
 
       navigation.navigate("ConfirmEmail", { email });
