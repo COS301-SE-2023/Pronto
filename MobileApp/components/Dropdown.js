@@ -36,7 +36,6 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent,addActivity
         onChange={(item) => {
           setValue(item);
           setIsFocus(false)
-          //console.log(item)
           addActivity(item.act)
         }}
         renderLeftIcon={() => (

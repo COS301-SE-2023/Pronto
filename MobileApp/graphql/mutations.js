@@ -113,14 +113,6 @@ export const deleteEnrollment=`mutation DeleteEnrollment(
     id
     studentId
     courseId
-    course {
-      id
-      institutionId
-      lecturerId
-      coursecode
-      coursename
-      semester
-    }
   }
 }`
 export const updateStudent=`mutation UpdateStudent(

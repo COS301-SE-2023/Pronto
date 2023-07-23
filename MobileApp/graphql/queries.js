@@ -238,8 +238,12 @@ export const listStudents=`query ListStudents(
               end
               venue
               group
+              course{
+                coursecode
+              }
             }
           }
+        activityId  
         }
       enrollments { 
         items{
@@ -247,6 +251,20 @@ export const listStudents=`query ListStudents(
           course{ 
             id
             coursecode
+            announcents{ 
+              items{
+                id
+                courseId
+                description
+                start
+                end
+                date
+                venue
+                course{
+                  coursecode
+                }
+              }
+            }
             activity{
               items{
                 courseId
@@ -254,9 +272,13 @@ export const listStudents=`query ListStudents(
                 id
                 day
                 start
+                frequency
                 end
                 venue 
                 group
+                course{
+                  coursecode
+                }
               }
             }
           }
@@ -322,3 +344,22 @@ export const getCourse=`query GetCourse($id: ID!) {
   }
 }
 `
+export const listAnnouncements = `query ListAnnouncements(
+    $filter: ModelAnnouncementFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        courseId
+        description
+        start
+        end
+        date
+        venue
+      }
+      nextToken
+    }
+  }
+`;

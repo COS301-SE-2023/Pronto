@@ -16,9 +16,8 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import{API,Auth} from "aws-amplify"
-import{searchCourses,listTimetables,listStudents, enrollmentsByStudentId} from "../../graphql/queries"
+import{searchCourses,listStudents,listInstitutions} from "../../graphql/queries"
 import{createEnrollment, createStudent,deleteEnrollment,updateStudent, createTimetable,updateTimetable} from "../../graphql/mutations"
-import { listInstitutions,listCourses,getCourse } from "../../graphql/queries"
 
 const EditTimetable = ({ onSearch }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -53,7 +52,6 @@ const EditTimetable = ({ onSearch }) => {
 
   const [input, setInput] = useState("");
 
-
   const handleSearch = async(text)=>{
     setInput(text)
     if(text!==null){
@@ -61,10 +59,10 @@ const EditTimetable = ({ onSearch }) => {
         let search= await API.graphql({
                     query:searchCourses,
                     variables:  { 
-                               filter : { 
+                               filter : {
                                     coursecode: { 
                                         matchPhrasePrefix: text 
-                                    } 
+                                    }
                                 }
                             },
                     authMode:"API_KEY"         
@@ -78,12 +76,12 @@ const EditTimetable = ({ onSearch }) => {
   
   const fetchCourses= async()=>{ 
     try{
-        setActivities([])
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
       
         if(student===null){
-           let stu=await API.graphql({
+          setActivities([])
+          let stu=await API.graphql({
                 query:listStudents,
                 variables:{
                     filter :{ 
@@ -94,6 +92,7 @@ const EditTimetable = ({ onSearch }) => {
                                } ,
           authMode:"AMAZON_COGNITO_USER_POOLS"                
         })
+        //console.log(stu)
         setStudent(stu.data.listStudents.items[0])
         
        //Student does not exist so create them
@@ -143,10 +142,20 @@ const EditTimetable = ({ onSearch }) => {
               for(let i=0;i<stu.enrollments.items.length;i++){
                   c.push(stu.enrollments.items[i].course)
               }
-             setSelectedModules(c)
+        
+              setSelectedModules(c)
               setTimetable(stu.timetable)
               if(stu.timetable!==null){
-                setActivities(stu.timetable.activities.items)
+                for(let i=0;i<stu.timetable.activityId.length;i++){
+                  for(let j=0;j<c.length;j++){
+                    let index=c[j].activity.items.find(item=>item.id===stu.timetable.activityId[i])
+                    if(index!==undefined){
+                      activities.push(index)
+                      break;
+                    }
+                }
+                }
+                setActivities(activities)
             }
                  }
                 }
@@ -156,6 +165,7 @@ const EditTimetable = ({ onSearch }) => {
   }
 
   useEffect(() => {
+        //setStudent(null)
         fetchCourses();
     }, [])
 
@@ -168,7 +178,7 @@ const EditTimetable = ({ onSearch }) => {
           activityIds.push(activities[i].id)
         }
         
-        if(student.enrollments.items.filter((item)=>item.course.id===selectedModule.id).length===0){
+        if((selectedModule!==null && selectedModule!==undefined ) && student.enrollments.items.filter((item)=>item.course.id===selectedModule.id).length===0){
           enroll={
             courseId:selectedModule.id,
             studentId:student.id,
@@ -226,9 +236,9 @@ const EditTimetable = ({ onSearch }) => {
           setStudent(s)
           setTimetable(update.data.updateTimetable)
       }
-            
         toggleModal(null)
       }catch(error){
+         console.log("F")
          console.log(error)
       }
   }
@@ -247,13 +257,15 @@ const EditTimetable = ({ onSearch }) => {
       
       let s=student
       let del
+      let act=activities.filter((activity)=>activity.courseId===item.id)
+      handleSave()
       for(let i=0;i<student.enrollments.items.length;i++){
         if(student.enrollments.items[i].course.id===item.id){
           try{
              del= await API.graphql({
-              query:deleteEnrollment,
-              variables:{input:{id:student.enrollments.items[i].id}},
-              authMode:"AMAZON_COGNITO_USER_POOLS",
+                query:deleteEnrollment,
+                variables:{input:{id:student.enrollments.items[i].id}},
+                authMode:"AMAZON_COGNITO_USER_POOLS",
              })
           }catch(error){
            console.log(error)
@@ -266,9 +278,10 @@ const EditTimetable = ({ onSearch }) => {
       setSelectedModules((prevModules) =>
         prevModules.filter((module) => module.id !== item.id)
       );
-
+      setActivities(act)
+      setSelectedModule(null)
     };
-  
+
     return (
       <View style={{ margin: 20 }}>
         <TouchableWithoutFeedback onPress={() => addToModules(item)}>

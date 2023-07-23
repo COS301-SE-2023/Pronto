@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, StyleSheet, SafeAreaView, View, Animated, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ScheduleTable from './ScheduleTable';
 
-export default function Timetable() {
+const Timetable= () =>{
 
     {/* These are states for the side panel for the menu button
      It is used to open and close the side panel and check if it is open or not
@@ -16,7 +16,7 @@ export default function Timetable() {
      */}
     const [isNPanelOpen, setIsNPanelOpen] = useState(false);
     const [nAnim] = useState(new Animated.Value(-800));
-
+  
     {/* This function is used to open and close the side panel for the menu button*/}
     const handleMenuClick = () => {
         setIsSPanelOpen(!isSPanelOpen);
@@ -44,6 +44,12 @@ export default function Timetable() {
         }).start();
     };
 
+    const hook = ()=>{
+        console.log("Hook")
+    }
+    useEffect(()=>{
+        hook()
+    },"")
 
     function handleClose() {
         // If the side panel is open, close it
@@ -66,10 +72,8 @@ export default function Timetable() {
         }
     }
 
-
     return (
         <SafeAreaView style={styles.container}>
-
 
             <Text style={styles.welcomeText}>
 
@@ -102,7 +106,6 @@ export default function Timetable() {
                     <Text ><Ionicons name="ios-close" size={30} color="black" onPress={handleClose} style={styles.icon} /></Text>
                 </TouchableOpacity>
 
-
                 <TouchableOpacity style={styles.navbarRow}>
                     <View style={styles.pageName}>
                         <Text >Account Details</Text>
@@ -113,7 +116,6 @@ export default function Timetable() {
                 </TouchableOpacity>
 
             </Animated.View>
-
 
             {/* This is the side panel for the notification button */}
             <Animated.View
@@ -129,7 +131,6 @@ export default function Timetable() {
                 <TouchableOpacity style={styles.navbarRow}>
                     <Text ><Ionicons name="ios-close" size={30} color="black" onPress={handleClose} style={styles.icon} /></Text>
                 </TouchableOpacity>
-
 
                 <TouchableOpacity style={styles.navbarRow}>
                     <View style={styles.pageName}>
@@ -207,3 +208,5 @@ const styles = StyleSheet.create({
     },
 
 });
+
+export default Timetable;
