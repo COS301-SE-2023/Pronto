@@ -6,7 +6,7 @@ import{API,Auth} from 'aws-amplify'
 import{listStudents} from "../../graphql/queries"
 import { createStudent } from "../../graphql/mutations";
 
-const ScheduleTable=()=>{
+const ScheduleTable= () => {
 
  // const[student,setStudent]=useState(null)
   const[activities,setActivities]=useState([])

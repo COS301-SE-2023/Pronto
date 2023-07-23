@@ -20,7 +20,7 @@ const NotificationList = () => {
     Alert.alert(key.description);
   };
 
-  const fetchAnnouncements= async()=>{
+  const fetchAnnouncements = async() => {
       try{
         let error="There appears to be a network issue.Please try again later"
         let user=await Auth.currentAuthenticatedUser()
@@ -96,7 +96,7 @@ const NotificationList = () => {
       }
   }
 
-  useEffect(()=>{
+  useEffect( () => {
     fetchAnnouncements()
   },[])
 

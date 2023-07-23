@@ -3,7 +3,7 @@ import {Text, StyleSheet, SafeAreaView, View, Animated, TouchableOpacity} from '
 import { Ionicons } from '@expo/vector-icons';
 import ScheduleTable from './ScheduleTable';
 
-const Timetable= () =>{
+const Timetable = () => {
 
     {/* These are states for the side panel for the menu button
      It is used to open and close the side panel and check if it is open or not
