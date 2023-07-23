@@ -54,6 +54,8 @@ const EditTimetable = ({ onSearch }) => {
 
   const handleSearch = async(text)=>{
     setInput(text)
+    let error="There appears to be a network issue"
+
     if(text!==null){
        try{ 
         let search= await API.graphql({
@@ -68,8 +70,8 @@ const EditTimetable = ({ onSearch }) => {
                     authMode:"API_KEY"         
                 })
                 setCourses(search.data.searchCourses.items)
-    }catch(error){
-      console.log(error)
+    }catch(e){
+      Alert(error)
     }
    }
   }
@@ -78,7 +80,8 @@ const EditTimetable = ({ onSearch }) => {
     try{
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
-      
+        let error="There appear to be network issues.Please try again later"
+
         if(student===null){
           setActivities([])
           let stu=await API.graphql({
@@ -92,7 +95,7 @@ const EditTimetable = ({ onSearch }) => {
                                } ,
           authMode:"AMAZON_COGNITO_USER_POOLS"                
         })
-        //console.log(stu)
+  
         setStudent(stu.data.listStudents.items[0])
         
        //Student does not exist so create them
@@ -112,11 +115,11 @@ const EditTimetable = ({ onSearch }) => {
                       authMode:"API_KEY",
                 })
       
-      //  // }
              //Institution not found
-          if(institution.data.listInstitutions.items.length===0)
-            throw Error("Could not determine institution")
-    
+          if(institution.data.listInstitutions.items.length===0){
+            error="Could not determine institution"
+            throw Error("")
+          }
 
           institution=institution.data.listInstitutions.items[0]
           
@@ -159,25 +162,25 @@ const EditTimetable = ({ onSearch }) => {
             }
                  }
                 }
-    }catch(error){
-      console.log(error)
+    }catch(e){
+      Alert(error)
     }
   }
 
   useEffect(() => {
-        //setStudent(null)
         fetchCourses();
     }, [])
 
   const handleSave = async()=>{
        try{
         //Create enrollment if it doesnt exist
-
         let activityIds=[]
         for(let i=0;i<activities.length;i++){
           activityIds.push(activities[i].id)
         }
-        
+
+        let error="There appears to be a network issue.Please try again"
+
         if((selectedModule!==null && selectedModule!==undefined ) && student.enrollments.items.filter((item)=>item.course.id===selectedModule.id).length===0){
           enroll={
             courseId:selectedModule.id,
@@ -237,9 +240,8 @@ const EditTimetable = ({ onSearch }) => {
           setTimetable(update.data.updateTimetable)
       }
         toggleModal(null)
-      }catch(error){
-         console.log("F")
-         console.log(error)
+      }catch(e){
+         Alert(error)
       }
   }
   const addActivity = (activity)=>{ 
@@ -259,6 +261,8 @@ const EditTimetable = ({ onSearch }) => {
       let del
       let act=activities.filter((activity)=>activity.courseId===item.id)
       handleSave()
+      let error="Failed to remove course.Please try again later"
+
       for(let i=0;i<student.enrollments.items.length;i++){
         if(student.enrollments.items[i].course.id===item.id){
           try{
@@ -267,8 +271,8 @@ const EditTimetable = ({ onSearch }) => {
                 variables:{input:{id:student.enrollments.items[i].id}},
                 authMode:"AMAZON_COGNITO_USER_POOLS",
              })
-          }catch(error){
-           console.log(error)
+          }catch(er){
+            Alert(error)
           }
           student.enrollments.items.splice[i,1]
           break

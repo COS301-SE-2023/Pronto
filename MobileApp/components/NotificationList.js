@@ -3,7 +3,7 @@ import { Alert, View, StyleSheet, Text } from "react-native";
 import { List, Card, Avatar, Modal } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { listStudents,listAnnouncements } from "../graphql/queries";
+import { listStudents} from "../graphql/queries";
 import{Auth,API} from "aws-amplify"
 
 const NotificationList = () => {
@@ -22,6 +22,7 @@ const NotificationList = () => {
 
   const fetchAnnouncements= async()=>{
       try{
+        let error="There appears to be a network issue.Please try again later"
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
       
@@ -55,8 +56,10 @@ const NotificationList = () => {
                       authMode:"API_KEY",
                 })
       
-          if(institution.data.listInstitutions.items.length===0)
-            throw Error("Could not determine institution")
+          if(institution.data.listInstitutions.items.length===0){
+            error="Could not determine institution"
+            throw Error("")
+          }
     
           institution=institution.data.listInstitutions.items[0]
           
@@ -81,7 +84,6 @@ const NotificationList = () => {
               setStudent(stu)
               let a=[]
               for(let i=0;i<stu.enrollments.items.length;i++){
-                ///a=[...a,stu.enrollments.items[i].course.announcents.items]
                 for(let j=0;j<stu.enrollments.items[i].course.announcents.items.length;j++){
                   a.push(stu.enrollments.items[i].course.announcents.items[j])
                 }
@@ -89,8 +91,8 @@ const NotificationList = () => {
               setAnnouncements(a)
             }
          }
-      }catch(error){
-         console.log(error)
+      }catch(er){
+        Alert(error)
       }
   }
 

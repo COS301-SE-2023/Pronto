@@ -53,7 +53,7 @@ const ScheduleTable=()=>{
     try{ 
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
-        console.log("fetching")
+
         let act=[]
         let error ="There seem tp be network problems.Try again later"
         let stu=await API.graphql({
@@ -188,11 +188,8 @@ const ScheduleTable=()=>{
 
       });
     }
-    //schedule=scheduleArray
+  
     setSchedule(scheduleArray)
-    console.log(scheduleArray)
-   
-    // return scheduleArray
   }
 
   const renderItem = (module) => {
