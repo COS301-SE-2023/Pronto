@@ -6,8 +6,7 @@ echo "'${AWS_ACCESS_KEY_ID}' '${AWS_SECRET_ACCESS_KEY}'"
 
 AWSCLOUDFORMATIONCONFIG="{\
 \"configLevel\":\"project\",\
-\"useProfile\":true,\
-\"profileName\":\"amplify_dev\",\
+\"useProfile\":false,\
 \"accessKeyId\":\"${AWS_ACCESS_KEY_ID}\",\
 \"secretAccessKey\":\"${AWS_SECRET_ACCESS_KEY}\",\
 \"region\":\"us-east-1\"\
