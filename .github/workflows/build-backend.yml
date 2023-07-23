@@ -44,5 +44,7 @@ jobs:
         run: |    
           npm install -g @aws-amplify/cli 
           bash scripts/initialise-amplify.sh
+          echo ${{secrets.AWS_ACCESS_KEY_ID}}
+          echo ${{secrets.AWS_SECRET_ACCESS_KEY}}
       #     # amplify pull --yes
       #     # amplify build
