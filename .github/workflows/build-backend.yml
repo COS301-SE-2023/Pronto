@@ -1,10 +1,8 @@
 name: Build Amplify
 on:
   pull_request:
-    branches: [ backend,main,dev ] 
-  push: 
-    branches: [build/fix]    
-  workflow_dispatch:   
+    branches: [ back-end,main,dev ]    
+  workflow_dispatch: {}  
 jobs:
   build:
     strategy:
@@ -52,5 +50,4 @@ jobs:
         run: |    
           npm install -g @aws-amplify/cli 
           bash scripts/initialise-amplify.sh
-      #     # amplify pull --yes
-      #     # amplify build
+          amplify build
