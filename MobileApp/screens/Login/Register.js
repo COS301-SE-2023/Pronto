@@ -3,16 +3,17 @@ import {
   View,
   Text,
   TouchableOpacity,
-  SafeAreaView,
+  ScrollView,
   TextInput,
   ImageBackground,
   Dimensions,
   Alert,
 } from "react-native";
+import { SelectList } from "react-native-dropdown-select-list";
 import React, { useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
-
+import institutionInfo from "../../assets/data/universityInfo.json";
 import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
 
 const { height } = Dimensions.get("window");
@@ -35,6 +36,15 @@ const Register = ({ navigation }) => {
     setEmailIsValid(isValidEmail);
   };
   const [isTypingEmail, setIsTypingEmail] = useState(false);
+
+  //select instituition
+  const [institutionId, setInstitutionId] = React.useState("");
+
+  //Validate institutionId
+  const [isInstitutionIdValid, setIsInstitutionIdValid] = React.useState(false);
+  const validateInstitutionId = () => {
+    setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
+  };
 
   //validate password on sign up
   const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
@@ -87,6 +97,11 @@ const Register = ({ navigation }) => {
       return;
     }
 
+    if (!isInstitutionIdValid) {
+      Alert.alert("Error", "Please Select An Institution");
+      return;
+    }
+
     if (confirmPassword !== password) {
       Alert.alert("Error", "Passwords do not match");
       return;
@@ -99,7 +114,7 @@ const Register = ({ navigation }) => {
         username: email,
         password,
         attributes: { email, family_name: surname, name },
-        clientMetadata: { role: "Student" },
+        clientMetadata: { role: "Student", institutionId: institutionId },
       });
 
       navigation.navigate("ConfirmEmail", { email });
@@ -118,7 +133,7 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.centered}>
           <Text style={styles.title}>Create Account</Text>
@@ -207,6 +222,19 @@ const Register = ({ navigation }) => {
         </View>
 
         <View style={styles.inputContainer}>
+          <SelectList
+            setSelected={(institutionId) => setInstitutionId(institutionId)}
+            data={institutionInfo}
+            save="key"
+            boxStyles={styles.input}
+            defaultOption={{ key: "notSet", value: "Select University" }}
+            placeholder="Select University"
+            searchPlaceholder="Search University"
+            onSelect={(institutionId) => validateInstitutionId(institutionId)}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Password"
             autoCapitalize="none"
@@ -283,7 +311,7 @@ const Register = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
