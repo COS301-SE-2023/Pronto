@@ -32,11 +32,13 @@
       "email",
       "family_name",
       "name"
+      
     ],
     "userpoolClientReadAttributes": [
       "email",
       "family_name",
       "name"
+     
     ],
     "userpoolClientLambdaRole": "pronto5f713f59_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": true,
@@ -53,12 +55,13 @@
       ],
       "PreSignup": [
         "custom"
-      ]
+      ]     
     },
     "userPoolGroupList": [
       "adminUserGroup",
       "lecturerUserGroup",
       "studentUserGroup"
+   
     ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
@@ -89,6 +92,16 @@
       {
         "category": "function",
         "resourceName": "pronto5f713f59PreSignup",
+        "resourceName": "pronto5f713f59PostAuthentication",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
+        "resourceName": "pronto5f713f59PreSignup",
         "triggerProvider": "Cognito",
         "attributes": [
           "Arn",
@@ -106,6 +119,9 @@
     "adminQueries": false,
     "hostedUI": false,
     "authProviders": [],
-    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PostAuthentication\",\n    \"lambdaFunctionName\": \"pronto5f713f59PostAuthentication\"\n  },\n  {\n    \"triggerType\": \"PreSignUp\",\n    \"lambdaFunctionName\": \"pronto5f713f59PreSignup\"\n  }\n]"
+    "authTriggerConnections": [
+      "{\"triggerType\":\"PostAuthentication\",\"lambdaFunctionName\":\"pronto5f713f59PostAuthentication\"}",
+      "{\"triggerType\":\"PreSignUp\",\"lambdaFunctionName\":\"pronto5f713f59PreSignup\"}"
+    ]
   }
 }

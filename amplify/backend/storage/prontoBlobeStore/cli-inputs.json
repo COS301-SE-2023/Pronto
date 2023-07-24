@@ -5,7 +5,6 @@
   "storageAccess": "auth",
   "guestAccess": [],
   "authAccess": [],
-  "triggerFunction": "NONE",
   "groupAccess": {
     "adminUserGroup": [
       "CREATE_AND_UPDATE",
