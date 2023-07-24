@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import {useState} from "react";
 import PlacesAutocomplete from 'react-places-autocomplete';
+import styled from "styled-components";
 
 export default function PostAccordion() {
   const [expanded, setExpanded] = React.useState(false);
@@ -38,7 +39,7 @@ export default function PostAccordion() {
 
   const handleSelect = (location) => {
     setSelectedLocation(location);
-    console.log('Selected location:', selectedLocation.toString());
+    console.log('Selected location:', location);
     // Add your custom logic here to handle adding the value to the database
   };
 
@@ -154,12 +155,13 @@ export default function PostAccordion() {
                                 backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
                               };
                               return (
-                                  <div
+                                  <MapSuggestionsContainer
                                       key={index} // Add the key prop with a unique value
                                       {...getSuggestionItemProps(suggestion, { style })}
+
                                   >
                                     {suggestion.description}
-                                  </div>
+                                  </MapSuggestionsContainer>
                               );
                             })}
                           </div>
@@ -219,3 +221,16 @@ export default function PostAccordion() {
       </div>
   );
 }
+
+//add styling
+const MapSuggestionsContainer = styled.div`
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding : 5px;
+
+`;
