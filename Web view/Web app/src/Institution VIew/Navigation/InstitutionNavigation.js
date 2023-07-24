@@ -33,7 +33,7 @@ export default function InstitutionNavigation() {
                 <ul className="navbar-nav">
         
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
-                        <a href="/" className="nav-link" data-testid={'dashboardLink'}>
+                        <a href="/dashboard" className="nav-link" data-testid={'dashboardLink'}>
                             <b>Dashboard</b>
                         </a>
                     </li>

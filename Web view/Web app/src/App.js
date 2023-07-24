@@ -17,6 +17,8 @@ import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify, Auth, Hub } from "aws-amplify";
 import config from "./aws-exports";
+import PostAccordion from "./LectureView/Edit Module/PostAccordion";
+import Dashboard from "./Institution VIew/Dashboard/Dashboard";
 
 Amplify.configure(config);
 
@@ -44,6 +46,7 @@ const Home = () => {
   useEffect(() => {
     Amplify.configure(config);
   }, []);
+
 
   useEffect(() => {
     const listener = (data) => {
@@ -187,6 +190,7 @@ const Home = () => {
       );
     }
   }
+
 };
 
 export default Home;

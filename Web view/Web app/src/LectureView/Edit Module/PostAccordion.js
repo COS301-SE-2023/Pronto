@@ -1,12 +1,21 @@
 import * as React from 'react';
+import { useState } from "react";
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Autocomplete, GoogleMap, Marker, useJsApiLoader} from '@react-google-maps/api';
+import GoogleMapReact from 'google-map-react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    geocodeByPlaceId,
+    getLatLng,
+} from 'react-places-autocomplete';
+
+import styled from "styled-components";
 import { createAnnouncement,updateAnnouncement } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
 import {ErrorModal} from '../../ErrorModal'
@@ -18,10 +27,32 @@ export default function PostAccordion(course) {
   const[date,setDate]=React.useState("")
   const[error,setError]=React.useState("")
 
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const handleApiLoaded = (map, maps) => {
+    // use map and maps objects
+  };
+
+  const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
+  const defaultProps = {
+    center: {
+      lat: -25.753899044547357,
+      lng: 28.23134724523217
+    },
+    zoom: 16
+  };
+
+  const handleSelect = (location) => {
+    setSelectedLocation(location);
+    console.log('Selected location:', location);
+    // Add your custom logic here to handle adding the value to the database
+  };
+
+  
   {
     /*Default location for the map*/
   }
@@ -208,65 +239,74 @@ export default function PostAccordion(course) {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion
-        expanded={expanded === "panel3"}
-        onChange={handleChange("panel3")}
-        data-testid={"accordion3"}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
-          aria-controls="panel3bh-content"
-          id="panel3bh-header"
-          data-testid={"accordionDrop3"}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              flexShrink: 0,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Add lecture venue
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <form>
-            <div className="form-group row">
-              <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">
-                Venue:{" "}
-              </label>
-              <div className="col-sm-10">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="colFormLabel"
-                  data-testid="venue"
-                  required
-                ></input>
-              </div>
-            </div>
+      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
+                aria-controls="panel3bh-content"
+                id="panel3bh-header"
+            >
+              <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >Add lecture venue</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <form>
+                <div className="form-group row">
+                  <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
+                  <div className="col-sm-10">
+                    <PlacesAutocomplete
+                        value={selectedLocation}
+                        onChange={setSelectedLocation}
+                        onSelect={handleSelect}
+                    >
+                      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                          <div>
+                            <input
+                                {...getInputProps({
+                                  placeholder: 'Search Places...',
+                                  className: 'location-search-input form-control',
+                                })}
+                            />
+                            <MapSuggestionsContainer>
+                              {loading && <div>Loading...</div>}
+                              {suggestions.map((suggestion, index) => {
+                                const style = {
+                                  backgroundColor: suggestion.active ? '#e32f45' : '#fff',
+                                  cursor: 'pointer',
+                                  padding: '5px',
+                                };
+                                return (
+                                    <div key={index} {...getSuggestionItemProps(suggestion, { style })}>
+                                      {suggestion.description}
+                                    </div>
+                                );
+                              })}
+                            </MapSuggestionsContainer>
+                          </div>
+                      )}
+                    </PlacesAutocomplete>
+                  </div>
+                </div>
 
-          <div className = "map">
-            <div style={{ height: '50vh', width: '100%' }}>
-               <GoogleMapReact
-                bootstrapURLKeys={{ key: "" }}
-                defaultCenter={defaultProps.center}
-                defaultZoom={defaultProps.zoom}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-              >
-                <AnyReactComponent
-                  lat={59.955413}
-                  lng={30.337844}
-                  text="My Marker"
-                />
-              </GoogleMapReact> 
-            </div>
-            <button className="post-button">Add venue</button>
-          </form>
-        </AccordionDetails>
-      </Accordion>
+                  <div className = "map">
+                      <div style={{ height: '50vh', width: '100%' }}>
+                          <GoogleMapReact
+                              bootstrapURLKeys={{ key: "" }}
+                              defaultCenter={defaultProps.center}
+                              defaultZoom={defaultProps.zoom}
+                              yesIWantToUseGoogleMapApiInternals
+
+                          >
+                              <AnyReactComponent
+                                  lat={59.955413}
+                                  lng={30.337844}
+                                  text="My Marker"
+                              />
+                          </GoogleMapReact>
+                      </div>
+                  </div>
+                  <button className="post-button">Add venue</button>
+              </form>
+            </AccordionDetails>
+          </Accordion>
 
       <Accordion
         expanded={expanded === "panel4"}
@@ -302,3 +342,14 @@ export default function PostAccordion(course) {
     </div>
   );
 }
+//add styling
+const MapSuggestionsContainer = styled.div`
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 5px;
+  padding: 5px;
+
+`;
+
