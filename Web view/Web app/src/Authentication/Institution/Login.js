@@ -33,7 +33,7 @@ function Login() {
     event.preventDefault();
 
     try {
-      await Auth.signIn(email, password, { role: "Admin" });
+      await Auth.signIn(email, password,{role:"Admin"});
       setsignInError("");
       //navigate to lecturer home page
       navigate("/institution-homepage");

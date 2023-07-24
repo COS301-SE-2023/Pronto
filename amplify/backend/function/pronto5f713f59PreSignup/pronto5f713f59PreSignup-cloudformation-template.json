@@ -47,15 +47,6 @@
     },
     "s3Key": {
       "Type": "String"
-    },
-    "lecturersGroupName": {
-      "Type": "String"
-    },
-    "studentsGroupName": {
-      "Type": "String"
-    },
-    "adminGroupName": {
-      "Type": "String"
     }
   },
   "Conditions": {
@@ -111,15 +102,6 @@
             },
             "DOMAINBLACKLIST": {
               "Ref": "DOMAINBLACKLIST"
-            },
-            "LecturersGroupName": {
-              "Ref": "lecturersGroupName"
-            },
-            "StudentsGroupName": {
-              "Ref": "studentsGroupName"
-            },
-            "AdminGroupName": {
-              "Ref": "adminGroupName"
             }
           }
         },

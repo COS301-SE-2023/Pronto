@@ -29,9 +29,12 @@ const BucketFilesScreen = () => {
     try {
       setIsRefreshing(true);
       setIsLoading(true);
-      const response = await Storage.list(studentUniversity + "/", {
-        pageSize: 1000,
-      });
+      const response = await Storage.list(
+        studentUniversity + "/StudentFiles/",
+        {
+          pageSize: 1000,
+        }
+      );
       const files = response.results;
       setFileList(files);
       setIsLoading(false);
@@ -53,7 +56,7 @@ const BucketFilesScreen = () => {
   };
 
   const renderFileItem = ({ item }) => {
-    const fileName = item.key.replace(studentUniversity + "/", ""); // Extract file name
+    const fileName = item.key.replace(studentUniversity + "/StudentFiles/", ""); // Extract file name
     if (fileName === "") {
       return null; // Skip rendering the item if the file name is empty
     }

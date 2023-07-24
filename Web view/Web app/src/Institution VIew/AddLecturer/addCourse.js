@@ -17,43 +17,33 @@ const style = {
 export default function AddModal(module) {
 
   const [open, setOpen] = useState(false);
-  const[courses,setCourses]=useState([{coursecode:"",coursename:""}]);
+  const[offeredCourses,setOfferedCourses]=useState([]);
+  const[selectedCourses,setSelectedCourses]=useState([])
   const[removed,setRemoved]=useState([])
+  const[selected,setSelected]=useState()
 
   const handleOpen = async() =>{ 
       setOpen(true) 
-      module.setModal(true)
-
-      //Adding new lecturer with courses
-      if(module.updateFlag===false){  
-       
-        if(module.courseData===undefined || module.courseData.length===0){ 
-            setCourses([{coursename:"",coursecode:""}])
-           
-         }
-         else if(module.courseData[module.courseData.length-1].coursecode!==""){ 
-            setCourses([...module.courseData,{coursecode:"",coursename:""}])
-           
-         } 
+      module.setModal(true)      
+      let courses=[]
+      try{
+      for(let i = 0  ;i < module.courseData.length;i++){
+        if(module.courseData[i].lecturerId===null){ 
+            offeredCourses.push(module.courseData[i])
+          } 
       }
-      else{ 
+      setOfferedCourses(offeredCourses)
+      console.log(offeredCourses)
+      setSelectedCourses(module.selectedCourses)
+      console.log(module)
       
-        if(module.lecturerData.courses===undefined || module.lecturerData.courses.length===0){
-            setCourses([{coursecode:"",coursename:""}])
-      
-        }
-        else if(module.lecturerData.courses[module.lecturerData.courses.length-1].coursecode!==""){ 
-            setCourses([...module.lecturerData.courses,{coursecode:"",coursename:""}])
-           
-        }
-      }
-
-      
+    }catch(e){
+      alert("No courses found")
+    }
   }
 
   const handleClose = async() => {  
      setOpen(false) 
-     module.setCourses(courses)
      module.setModal(false)
      
      //Remove deleted courses
@@ -61,92 +51,55 @@ export default function AddModal(module) {
         if(removed.length>0){
           await module.removeCourses(removed,module.lecturerData)
         }
-     
         //Add new courses
         let newcourses=[]
-        for(let i=0;i<courses.length;i++){
-          if(courses[i].coursecode!=="" ){
-            if(module.courseData.find(course=>course.coursecode===courses[i].coursecode)===undefined){
-              newcourses.push(courses[i])
-            }
-          }
+        for(let i=0;i<selectedCourses.length;i++){
+           if(selectedCourses[i].lecturerId===null ){
+               newcourses.push(selectedCourses[i])
+           }
         }
-        let courseList=await module.findCourses(newcourses)
-       
-        if(newcourses.length>courseList.length)
-             alert("Course(s) not found")
-       
-        if(courseList.length>0){
-          await module.addCourses(module.lecturerData,courseList)
-        }
-
-        module.setCourses([])
+        await module.addCourses(module.lecturerData,newcourses)
+        module.setOfferedCourses(offeredCourses)
       }
-      else { 
-        module.setCourses(courses)
-      }
-      
-      setCourses([])
+       else { 
+         module.setSelectedCourses(selectedCourses)
+         module.setOfferedCourses(offeredCourses)
+       }
+      setOfferedCourses([])
+      setSelectedCourses([])
+  
 }
 
 const handleAdd = async(event) => {
   event.preventDefault()
-  const course = {
-      coursename: "",
-      coursecode: ""
-    };
-    setCourses([...courses,course])
-    event.target.reset()
-  };
+  let index=-1
+  if(selected!==null || selected!==undefined){
+    for(let i=0;i<offeredCourses.length;i++){
+      if(offeredCourses[i].id===selected.id){ 
+        index=i
+        break;
+      }
+    }
+  } 
+  setSelectedCourses([...selectedCourses,selected])
+  offeredCourses.splice(index,1)
+  setOfferedCourses(offeredCourses)
+
+    //event.target.reset()
+}
 
 const handleRemove = async(index) => {
-    const remove=[...removed]
-    remove.push(courses[index])
+    const remove=[...removed,selectedCourses[index]]
+    offeredCourses.push(selectedCourses[index])
+    selectedCourses.splice(index,1)
     setRemoved(remove)
-    const rows = [...courses]
-    rows.splice(index, 1)
-    setCourses( rows )
+    setOfferedCourses(offeredCourses)
+    setSelectedCourses(selectedCourses)
+   
   }
 
-  const handleNameChange= async(index,event) => { 
-    if(courses[index]===undefined){
-      courses[index]={
-        coursecode:"",
-        coursename:""
-      }
-    }
-    if(courses.length<=index){
-         courses[index]= { 
-            coursename:"",
-            coursecode:""
-         }
-      }
-      courses[index]= { 
-      coursename:event.target.value,
-      coursecode:courses[index].coursecode
-    }
-      setCourses(courses)
-  }
-
-  const handleCodeChange = async(index,event)=> {  
-    if(courses[index]===undefined){
-      courses[index]={
-        coursecode:"",
-        coursename:""
-      }
-    }
-    if(courses.length<=index){
-         courses[index]= { 
-            coursename:"",
-            coursecode:""
-         }
-      }
-    
-    courses[index]= { 
-        coursename:courses[index].coursename,
-        coursecode:event.target.value
-    }
-      setCourses(courses)
+  const handleSelect = async(index)=>{
+      setSelected(offeredCourses[index])
   }
    
   return (
@@ -171,18 +124,14 @@ const handleRemove = async(index) => {
             <thead>
               <tr>                
                 <th scope="col">Course Code</th>
-                <th scope="col">Course Name</th>
               </tr>
             </thead>
             <tbody>
-              { courses.slice(0,courses.length-1).map((val, key)=>{    
+              { selectedCourses.map((val, key)=>{    
                   return (
                     <tr key={key}>
                       <td>   
                           {val.coursecode}
-                      </td>
-                      <td>
-                        {val.coursename}
                       </td>
                       <td>
                         <button onClick={(e)=>handleRemove(key)}
@@ -201,31 +150,29 @@ const handleRemove = async(index) => {
           <form onSubmit={(e)=>handleAdd(e)}>
             <div className="form-row">
               <div className="form-group col-6">
-            <input 
-              type="text"
-              name="coursecode"
-              defaultValue=""
-              required
-              onChange={(e)=>handleCodeChange(courses.length-1,e)}
-              className="form-control"
-              /> 
-              </div>
-              <div className="form-group col-6">
-             <input 
-              type="text"
-              name="coursename"
-              defaultValue=""
-              required
-              onChange={(e)=>handleNameChange(courses.length-1,e)}
-              className="form-control"
-              />  
+             <select 
+                  onChange={(e)=>handleSelect(e.target.value)}
+                  //value={selected}
+                  className="custom-select">
+                 <option key="{}"> </option>
+               { offeredCourses.map((val, key)=>{
+                return( 
+                  <option key={val.coursecode}
+                  value={key}>{val.coursecode}</option>
+                )
+                
+              })
+
+              }
+             </select>
               </div>
               <button type="submit" 
                className="btn btn-primary" 
                 data-testid="addButton">Add</button>
               </div> 
           </form>
-          <button onClick={handleClose}
+          <button
+            onClick={handleClose} 
             type="submit" 
             className="btn btn-primary float-right"
             data-testid="submitCourses" 
