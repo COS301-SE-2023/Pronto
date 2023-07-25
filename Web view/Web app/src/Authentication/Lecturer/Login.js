@@ -164,23 +164,15 @@ function Login() {
 
   //select institution
   const [institutionId, setInstitutionId] = React.useState("");
-  const [isInstitutudeIdValid, setIsInstitutudeIdValid] = React.useState(false);
+  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
+  
   const setAndPrintInstitutionIdError = (isInstitutudeIdInvalid) => {
-    if (isInstitutudeIdInvalid) {
-      setIsInstitutudeIdValid(false);
-      setsignUpError("Please Select An Institution");
-      return;
-    }
-    setIsInstitutudeIdValid(true);
+    if (isInstitutudeIdInvalid) setsignUpError("Please Select An Institution");
   };
 
   const handleInstitutionSelection = (event) => {
     setInstitutionId(event.value);
-    if (!event.value) {
-      setIsInstitutudeIdValid(false);
-      return;
-    }
-    setIsInstitutudeIdValid(true);
+    setIsInstitudeSelected(true);
   };
 
   return (
@@ -224,14 +216,17 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-          <SelectInputWrapper isInstitutudeIdValid={isInstitutudeIdValid}>
-            <Select
-              options={institutionInfo}
-              defaultValue={institutionId}
-              onChange={handleInstitutionSelection}
-              placeholder="Select an Institution"
-            ></Select>
-          </SelectInputWrapper>
+
+          <StyledSelectInput
+            options={institutionInfo}
+            defaultValue={institutionId}
+            onChange={handleInstitutionSelection}
+            placeholder="Select an Institution"
+            classNamePrefix="SelectInput"
+            autocomplete={true}
+            isSelectionValid={isInstitudeSelected}
+          ></StyledSelectInput>
+
           <Input
             type="password"
             placeholder="Password"
@@ -557,26 +552,40 @@ const CriteriaMessage = styled.span`
   color: ${({ isValid }) => (isValid ? "green" : "inherit")};
 `;
 
-const SelectInputWrapper = styled.div`
-  background-color: #eee;
-  border: none;
-  border-radius: 25px;
-  margin: 8px 0;
+const StyledSelectInput = styled(Select)`
   width: 100%;
-  font: inherit;
 
-  select {
+  .SelectInput__control {
     background-color: #eee;
-    border-radius: 25px;
-    width: 100%;
-    height: inherit;
-    font: inherit;
-    padding: 12px 15px;
     border: none;
-    &:focus {
-      border: ${({ isInstitutudeIdValid }) =>
-        isInstitutudeIdValid ? "2px solid green" : "2px solid #e32f45"};
-    }
+    border-radius: 25px;
+    margin: 8px 0;
+  }
+
+  .SelectInput__control--is-focused {
+    border: ${({ isSelectionValid }) =>
+      isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+    box-shadow: none;
+  }
+
+  .SelectInput__control:hover {
+    border-color: #eee;
+  }
+
+  .SelectInput__menu {
+    background-color: #eee;
+  }
+
+  .SelectInput__option:hover {
+    background-color: #ec7281;
+  }
+
+  .SelectInput__option--is-selected {
+    background-color: #e32f45;
+  }
+
+  .SelectInput__single-value .SelectInput__control--is-focused {
+    background-color: purple;
   }
 `;
 
