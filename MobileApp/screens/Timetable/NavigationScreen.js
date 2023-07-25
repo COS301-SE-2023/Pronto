@@ -124,7 +124,7 @@ const NavigationScreen = () => {
             </MapView>
             <View style={styles.searchContainer}>
                 <GooglePlacesAutocomplete
-                    styles={{ textInput: styles.input }}
+                    styles={styles.input}
                     placeholder="Origin"
                     query={{
                         key: '',
@@ -139,7 +139,7 @@ const NavigationScreen = () => {
                     }}
                 />
                 <GooglePlacesAutocomplete
-                    styles={{ textInput: styles.input }}
+                    styles={styles.input}
                     placeholder="Destination"
                     query={{
                         key: '',
@@ -162,26 +162,22 @@ const NavigationScreen = () => {
                     <Text style={[styles.buttonText, { color: 'white', fontWeight: 600 }]}>Get Directions</Text>
                 </TouchableOpacity>
                 {route && (
-                    <View>
-                        <Text style={styles.distanceText}>Distance: {distance} </Text>
-                        <Text style={styles.distanceText}>{travelTime} </Text>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.infoText}>Distance: {distance}</Text>
+                        <Text style={styles.infoText}>{travelTime}</Text>
                     </View>
                 )}
             </View>
         </View>
     );
 };
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: '#f5f5f5',
     },
     mapStyle: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        flex: 1,
     },
     searchContainer: {
         position: 'absolute',
@@ -192,27 +188,38 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 4,
         elevation: 4,
-        padding: 8,
+        padding: 16,
         borderRadius: 8,
-        top: Constants.statusBarHeight + 8,
+        top: "3%",
+        alignSelf: 'center', // Center the search container horizontally
     },
     input: {
         borderColor: '#888',
         borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 8,
+        padding: 8,
     },
     button: {
         backgroundColor: '#e32f45',
         paddingVertical: 12,
-        marginTop: 16,
         borderRadius: 4,
     },
     buttonText: {
         textAlign: 'center',
+        color: 'white',
+        fontWeight: 'bold',
     },
-    distanceText: {
-        marginTop: 8,
+    infoContainer: {
+        marginTop: 16,
+        alignItems: 'center',
+    },
+    infoText: {
         textAlign: 'center',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
+
 
 export default NavigationScreen;
