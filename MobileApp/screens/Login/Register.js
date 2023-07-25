@@ -26,6 +26,7 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+
   //validate email input sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
 
@@ -112,6 +113,7 @@ const Register = ({ navigation }) => {
 
     if (errorMessage !== "") {
       Alert.alert("Error(s)", errorMessage);
+
       return;
     }
 
@@ -123,6 +125,7 @@ const Register = ({ navigation }) => {
         password,
         attributes: { email, family_name: surname, name },
         clientMetadata: { role: "Student" },
+
       });
 
       navigation.navigate("ConfirmEmail", { email });

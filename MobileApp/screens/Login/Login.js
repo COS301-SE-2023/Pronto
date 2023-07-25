@@ -42,6 +42,7 @@ const Login = ({ navigation }) => {
         role: "Student",
       });
 
+v
       //  navigation.navigate("Timetable");
     } catch (e) {
       Alert.alert("Sign in error", e.message);
@@ -51,6 +52,7 @@ const Login = ({ navigation }) => {
   };
 
   //validate password on sign in
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -101,6 +103,7 @@ const Login = ({ navigation }) => {
             }}
             onFocus={() => setIsTypingPassword(true)}
           />
+
         </View>
 
         <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>

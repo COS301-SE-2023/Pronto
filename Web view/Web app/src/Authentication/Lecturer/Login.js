@@ -37,6 +37,7 @@ function Login() {
       setLoading(false);
       return;
     }
+
     try {
       await Auth.signIn(email, password);
       setsignInError("");
