@@ -54,7 +54,7 @@ export default function InstitutionNavigation() {
                         </a>
                     </li>
                     <li className="nav-item text-center" data-testid={'EditUniversityInfo'}>
-                        <a href="src/Institution VIew/Navigation/InstitutionNavigation#" className="nav-link" data-testid={'EditUniversityInfoLink'}>
+                        <a href="/edit-university-info" className="nav-link" data-testid={'EditUniversityInfoLink'}>
                             <b>Edit University Info</b>
                         </a>
                     </li>
