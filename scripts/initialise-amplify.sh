@@ -2,17 +2,19 @@
 set -e
 IFS='|'
 
+echo "'${AWS_ACCESS_KEY_ID}' '${AWS_SECRET_ACCESS_KEY}'"
+
 AWSCLOUDFORMATIONCONFIG="{\
 \"configLevel\":\"project\",\
-\"useProfile\":true,\
-\"profileName\":\"amplify_dev\",\
+\"useProfile\":false,\
 \"accessKeyId\":\"${AWS_ACCESS_KEY_ID}\",\
 \"secretAccessKey\":\"${AWS_SECRET_ACCESS_KEY}\",\
 \"region\":\"us-east-1\"\
 }"
 AMPLIFY="{\
 \"projectName\":\"pronto\",\
-\"appId\":\"d1kit50gzhvboi\",\
+\"appId\":\"d3j57fmadrzn3\",\
+
 \"envName\":\"dev\",\
 \"defaultEditor\":\"code\"\
 }"
@@ -23,7 +25,7 @@ PROVIDERS="{\
 \"awscloudformation\":$AWSCLOUDFORMATIONCONFIG\
 }"
 
-amplify init \
+amplify pull \
 --amplify $AMPLIFY \
 --frontend $FRONTEND \
 --providers $PROVIDERS \
