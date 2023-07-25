@@ -199,6 +199,48 @@ const Home = () => {
       );
     }
   }
-};
+  else {
+    return (
+      <div>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            {/*Lecturer pages routing*/}
+            <Route path="/lecturer-login" element={<LecturerLogin />} />
+            <Route
+              path="/lecturer-confirm-email"
+              element={<LecturerConfirmEmail />}
+            />
+            <Route
+              path="/lecturer-forgot-password"
+              element={<LecturerForgotPassword />}
+            />
+
+            {/*Institution pages routing*/}
+            <Route path="/institution-login" element={<InstitutionLogin />} />
+            <Route
+              path="/institution-confirm-email"
+              element={<InstitutionConfirmEmail />}
+            />
+            <Route
+              path="/institution-successful-apply"
+              element={<InstitutionSuccessfulApply />}
+            />
+            <Route
+              path="/institution-forgot-password"
+              element={<InstitutionForgotPassword />}
+            />
+
+            <Route
+              path="/edit-university-info"
+              element={<EditUniversityInfo />}
+            />
+          </Routes>
+        </Router>
+      </div>
+    );
+  }
+}
+
 
 export default Home;
