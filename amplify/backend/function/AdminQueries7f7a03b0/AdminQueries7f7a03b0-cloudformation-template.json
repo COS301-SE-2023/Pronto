@@ -1,72 +1,19 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.1.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"10.6.2\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
     "env": {
       "Type": "String"
     },
     "authpronto5f713f59UserPoolId": {
       "Type": "String",
       "Default": "authpronto5f713f59UserPoolId"
-========
-    "DOMAINBLACKLIST": {
-      "Type": "String",
-      "Default": ""
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-    },
-    "DOMAINWHITELIST": {
-      "Type": "String",
-      "Default": ""
-    },
-    "modules": {
-      "Type": "String",
-      "Default": "",
-      "Description": "Comma-delimited list of modules to be executed by a lambda trigger. Sent to resource as an env variable."
-    },
-    "resourceName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "trigger": {
-      "Type": "String",
-      "Default": "true"
-    },
-    "functionName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "roleName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentResource": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentStack": {
-      "Type": "String",
-      "Default": ""
-    },
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-    "s3Key": {
-      "Type": "String"
-========
-    "env": {
-      "Type": "String"
     },
     "deploymentBucketName": {
       "Type": "String"
     },
     "s3Key": {
       "Type": "String"
-    },
-    "lecturersGroupName": {
-      "Type": "String"
-    },
-    "adminGroupName": {
-      "Type": "String"
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
     }
   },
   "Conditions": {
@@ -91,20 +38,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
             "AdminQueries7f7a03b0",
-========
-            "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
             {
               "Fn::Join": [
                 "",
                 [
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
                   "AdminQueries7f7a03b0",
-========
-                  "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
                   "-",
                   {
                     "Ref": "env"
@@ -119,29 +58,9 @@
             "ENV": {
               "Ref": "env"
             },
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
             "GROUP": "adminUserGroup",
             "USERPOOL": {
               "Ref": "authpronto5f713f59UserPoolId"
-========
-            "MODULES": {
-              "Ref": "modules"
-            },
-            "REGION": {
-              "Ref": "AWS::Region"
-            },
-            "DOMAINWHITELIST": {
-              "Ref": "DOMAINWHITELIST"
-            },
-            "DOMAINBLACKLIST": {
-              "Ref": "DOMAINBLACKLIST"
-            },
-            "LecturersGroupName": {
-              "Ref": "lecturersGroupName"
-            },
-            "AdminGroupName": {
-              "Ref": "adminGroupName"
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
             }
           }
         },
@@ -151,11 +70,7 @@
             "Arn"
           ]
         },
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
         "Runtime": "nodejs14.x",
-========
-        "Runtime": "nodejs18.x",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
         "Timeout": 25,
         "Code": {
           "S3Bucket": {
@@ -173,20 +88,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
             "AdminQueries7f7a03b0LambdaRole",
-========
-            "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
             {
               "Fn::Join": [
                 "",
                 [
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
                   "AdminQueries7f7a03b0LambdaRole",
-========
-                  "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
                   "-",
                   {
                     "Ref": "env"
@@ -252,7 +159,6 @@
                   }
                 ]
               }
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
             },
             {
               "Effect": "Allow",
@@ -288,8 +194,6 @@
                   ]
                 ]
               }
-========
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
             }
           ]
         }
@@ -310,6 +214,11 @@
         ]
       }
     },
+    "Region": {
+      "Value": {
+        "Ref": "AWS::Region"
+      }
+    },
     "LambdaExecutionRole": {
       "Value": {
         "Ref": "LambdaExecutionRole"
@@ -321,11 +230,6 @@
           "LambdaExecutionRole",
           "Arn"
         ]
-      }
-    },
-    "Region": {
-      "Value": {
-        "Ref": "AWS::Region"
       }
     }
   }
