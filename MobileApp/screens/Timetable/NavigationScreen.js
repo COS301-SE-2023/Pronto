@@ -125,7 +125,7 @@ const NavigationScreen = () => {
             <View style={styles.searchContainer}>
                 <GooglePlacesAutocomplete
                     styles={styles.input}
-                    placeholder="Origin"
+                    placeholder="Your location"
                     query={{
                         key: '',
                         language: 'en',
@@ -138,6 +138,7 @@ const NavigationScreen = () => {
                         });
                     }}
                 />
+                <View style={styles.line} />
                 <GooglePlacesAutocomplete
                     styles={styles.input}
                     placeholder="Destination"
@@ -218,6 +219,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    line: {
+        borderBottomColor: 'grey',
+        borderBottomWidth: 1,
+        marginBottom: 8,
     },
 });
 
