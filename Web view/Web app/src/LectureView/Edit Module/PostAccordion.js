@@ -29,6 +29,7 @@ export default function PostAccordion(course) {
   const [error, setError] = React.useState("");
   const [selectedLocation, setSelectedLocation] = React.useState("");
 
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -53,7 +54,6 @@ export default function PostAccordion(course) {
     // Add your custom logic here to handle adding the value to the database
   };
 
-
   {
     /*Default location for the map*/
   }
@@ -65,7 +65,6 @@ export default function PostAccordion(course) {
   if (!isLoaded) {
     return <div>Loading</div>;
   }
-
 
   const handleSubmit = async (event) => {
     try {
