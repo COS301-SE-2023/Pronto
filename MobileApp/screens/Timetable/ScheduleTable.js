@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions } from "react-native";
+import {View, TouchableOpacity, Text, Dimensions, Alert} from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import{API,Auth} from 'aws-amplify'
@@ -156,7 +156,7 @@ const ScheduleTable= () => {
              }
           }
       }catch(e){
-        Alert(error)
+      //  Alert(e)
       }
   }
 

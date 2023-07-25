@@ -27,6 +27,7 @@ export default function PostAccordion(course) {
   const [date, setDate] = React.useState("")
   const [error, setError] = React.useState("")
 
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -50,7 +51,6 @@ export default function PostAccordion(course) {
     console.log('Selected location:', location);
     // Add your custom logic here to handle adding the value to the database
   };
-
 
   {
     /*Default location for the map*/
