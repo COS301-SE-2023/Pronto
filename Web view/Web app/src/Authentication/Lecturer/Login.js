@@ -164,12 +164,14 @@ function Login() {
 
   //select institution
   const [institutionId, setInstitutionId] = React.useState("");
+  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
   const setAndPrintInstitutionIdError = (isInstitutudeIdInvalid) => {
     if (isInstitutudeIdInvalid) setsignUpError("Please Select An Institution");
   };
 
   const handleInstitutionSelection = (event) => {
     setInstitutionId(event.value);
+    setIsInstitudeSelected(true);
   };
 
   return (
