@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Constants from 'expo-constants';
+import StepByStepInstructions from '../../components/StepByStepInstructions';
 import MapViewDirections from "react-native-maps-directions";
 
 const { width, height } = Dimensions.get('window');
@@ -24,6 +24,8 @@ const NavigationScreen = () => {
     const [route, setRoute] = useState(false);
     const [distance, setDistance] = useState("");
     const [travelTime, setTravelTime] = useState("");
+    const [instructions, setInstructions] = useState([]);
+
 
     function calculateTime(passedDistance, metric) {
 
@@ -77,7 +79,7 @@ const NavigationScreen = () => {
                 calculateTime(newdistance, "km");
                 setDistance(newdistance.toFixed(2).toString() + " kilometers"); // Update the distance state
 
-                console.log("time is " + travelTime);
+
             } else {
                 calculateTime(distance, "m");
                 setDistance(distance.toFixed(2).toString() + " meters"); // Update the distance state
@@ -93,14 +95,16 @@ const NavigationScreen = () => {
 
     // this function will handle the data from the MapViewDirections component
     function handleOnReady(result) {
-
         // extract the step-by-step instructions from the result object
         const steps = result.legs[0].steps.map((step, index) => {
             const instructions = step.html_instructions.replace(/<[^>]*>/g, '');
-            console.log(instructions); // the variable we need to print the step by step instructions
+            return instructions;
         });
 
+        setInstructions(steps);
     }
+
+
 
     return (
         <View style={styles.container}>
@@ -179,8 +183,18 @@ const NavigationScreen = () => {
                         <Text style={styles.infoText}>{travelTime}</Text>
                     </View>
                 )}
+
+
+
+
             </View>
+            {instructions.length > 0 && (
+                <View style={styles.instructionsContainer}>
+                    <StepByStepInstructions instructions={instructions} />
+                </View>
+            )}
         </View>
+
     );
 };
 const styles = StyleSheet.create({
@@ -205,6 +219,10 @@ const styles = StyleSheet.create({
         top: "3%",
         alignSelf: 'center', // Center the search container horizontally
     },
+    instructionsContainer: {
+        justifyContent: 'center', // Center the content vertically
+        alignItems: 'center', // Center the content horizontally
+    },
     input: {
         borderColor: '#888',
         borderWidth: 1,
@@ -228,8 +246,9 @@ const styles = StyleSheet.create({
     },
     infoText: {
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: 'bold',
+        marginBottom: 10,
     },
     line: {
         borderBottomColor: 'grey',
