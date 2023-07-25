@@ -159,7 +159,7 @@ const NavigationScreen = () => {
                         setRoute(true);
                     }}
                 >
-                    <Text style={styles.buttonText}>Trace Route</Text>
+                    <Text style={[styles.buttonText, { color: 'white', fontWeight: 600 }]}>Get Directions</Text>
                 </TouchableOpacity>
                 {route && (
                     <View>
