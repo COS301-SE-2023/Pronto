@@ -556,6 +556,32 @@ const StyledSelectInput = styled(Select)`
     border-radius: 25px;
     margin: 8px 0;
   }
+
+  .SelectInput__control--is-focused {
+    border: ${({ isSelectionValid }) =>
+      isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+    box-shadow: none;
+  }
+
+  .SelectInput__control:hover {
+    border-color: #eee;
+  }
+
+  .SelectInput__menu {
+    background-color: #eee;
+  }
+
+  .SelectInput__option:hover {
+    background-color: #ec7281;
+  }
+
+  .SelectInput__option--is-selected {
+    background-color: #e32f45;
+  }
+
+  .SelectInput__single-value .SelectInput__control--is-focused {
+    background-color: purple;
+  }
 `;
 
 export default Login;
