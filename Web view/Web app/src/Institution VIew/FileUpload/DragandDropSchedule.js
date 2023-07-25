@@ -31,20 +31,20 @@ function DropzoneComponent() {
 
   const createFolder = async (folderName) => {
     try {
-      const studentFilesKey = `${folderName}/StudentFiles/`; // Include the trailing slash for "StudentFiles" folder
+      const scheduleFilesKey = `${folderName}/Schedule/`;
 
-      // Check if "StudentFiles" folder exists
-      const studentFilesExists = await Storage.list(studentFilesKey);
+      // List all files in the "Schedule" folder
+      const fileList = await Storage.list(scheduleFilesKey);
 
-      if (!studentFilesExists || studentFilesExists.length === 0) {
-        // If "StudentFiles" folder does not exist, create it
-        await Storage.put(studentFilesKey, "", {
-          contentType: "application/octet-stream",
-        });
-      }
+      // Delete all files in the "Schedule" folder
+      await Promise.all(
+        fileList.map(async (file) => {
+          await Storage.remove(file.key);
+        })
+      );
 
-      // Add the file to the "StudentFiles" folder
-      await Storage.put(studentFilesKey + selectedFile.name, selectedFile, {
+      // Add the new file to the "Schedule" folder
+      await Storage.put(scheduleFilesKey + selectedFile.name, selectedFile, {
         progressCallback: ({ loaded, total }) => {
           const progress = Math.round((loaded / total) * 100);
           setUploadProgress(progress);
@@ -74,7 +74,7 @@ function DropzoneComponent() {
   const handleSubmit = async () => {
     if (selectedFile) {
       try {
-        const fileKey = `${folderNameS3}/StudentFiles/${selectedFile.name}`;
+        const fileKey = `${folderNameS3}/Schedule/${selectedFile.name}`;
         await Storage.put(fileKey, selectedFile, {
           progressCallback: ({ loaded, total }) => {
             const progress = Math.round((loaded / total) * 100);
@@ -164,7 +164,7 @@ function DropzoneComponent() {
       <input
         id="fileInput"
         type="file"
-        accept=".pdf"
+        accept=".xls, .xlsx"
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />

@@ -41,8 +41,6 @@ const Login = ({ navigation }) => {
       const response = await Auth.signIn(username, password, {
         role: "Student",
       });
-
-v
       //  navigation.navigate("Timetable");
     } catch (e) {
       Alert.alert("Sign in error", e.message);

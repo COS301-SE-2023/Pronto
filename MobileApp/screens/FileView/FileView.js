@@ -13,6 +13,7 @@ import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
+//graphQL call to get the university of the student, which will be used to get the file from that folder.
 let studentUniversity = "UniversityOfPretoria";
 
 const BucketFilesScreen = () => {
@@ -28,9 +29,12 @@ const BucketFilesScreen = () => {
     try {
       setIsRefreshing(true);
       setIsLoading(true);
-      const response = await Storage.list(studentUniversity + "/", {
-        pageSize: 1000,
-      });
+      const response = await Storage.list(
+        studentUniversity + "/StudentFiles/",
+        {
+          pageSize: 1000,
+        }
+      );
       const files = response.results;
       setFileList(files);
       setIsLoading(false);
@@ -52,7 +56,7 @@ const BucketFilesScreen = () => {
   };
 
   const renderFileItem = ({ item }) => {
-    const fileName = item.key.replace(studentUniversity + "/", ""); // Extract file name
+    const fileName = item.key.replace(studentUniversity + "/StudentFiles/", ""); // Extract file name
     if (fileName === "") {
       return null; // Skip rendering the item if the file name is empty
     }
@@ -78,8 +82,20 @@ const BucketFilesScreen = () => {
           color="#e32f45"
           style={styles.icon}
         />
-        <Text style={styles.heading}>File List:</Text>
+        <Text style={styles.heading}>File List</Text>
       </View>
+      <View style={{}}>
+        <Text
+          style={{
+            textAlign: "center",
+            fontWeight: "200",
+            marginBottom: "2%",
+          }}
+        >
+          Click the files from your unviersity to download and view them
+        </Text>
+      </View>
+
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#e32f45" />
