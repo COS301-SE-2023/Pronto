@@ -37,7 +37,7 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2023-08-14T06:43:37.483Z",
+                "apiKeyExpirationDate": "2023-08-02T15:29:59.974Z",
                 "apiKeyExpirationDays": 30,
                 "description": "GraphQL API Key"
               },
@@ -77,15 +77,6 @@
           "category": "function",
           "resourceName": "pronto5f713f59PreSignup",
           "triggerProvider": "Cognito"
-        },
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup",
-          "triggerProvider": "Cognito"
         }
       ],
       "frontendAuthConfig": {
@@ -94,12 +85,7 @@
           "SMS"
         ],
         "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [
-            "REQUIRES_LOWERCASE",
-            "REQUIRES_NUMBERS",
-            "REQUIRES_SYMBOLS",
-            "REQUIRES_UPPERCASE"
-          ],
+          "passwordPolicyCharacters": [],
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
@@ -163,14 +149,6 @@
   },
   "parameters": {
     "AMPLIFY_function_AdminQueries7f7a03b0_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries7f7a03b0"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueries7f7a03b0_group": {
       "usedBy": [
         {
           "category": "function",

@@ -32,13 +32,11 @@
       "email",
       "family_name",
       "name"
-      
     ],
     "userpoolClientReadAttributes": [
       "email",
       "family_name",
       "name"
-     
     ],
     "userpoolClientLambdaRole": "pronto5f713f59_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": true,
@@ -55,13 +53,12 @@
       ],
       "PreSignup": [
         "custom"
-      ]     
+      ]
     },
     "userPoolGroupList": [
       "adminUserGroup",
       "lecturerUserGroup",
       "studentUserGroup"
-   
     ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
@@ -82,16 +79,6 @@
     "dependsOn": [
       {
         "category": "function",
-        "resourceName": "pronto5f713f59PostAuthentication",
-        "triggerProvider": "Cognito",
-        "attributes": [
-          "Arn",
-          "Name"
-        ]
-      },
-      {
-        "category": "function",
-        "resourceName": "pronto5f713f59PreSignup",
         "resourceName": "pronto5f713f59PostAuthentication",
         "triggerProvider": "Cognito",
         "attributes": [

@@ -34,7 +34,6 @@ type Admin @model @auth(rules: [{ allow: owner }]) {
   email: String!
   institution: Institution @belongsTo(fields: ["institutionId"])
 }
-
 type Lecturer
   @model
   @auth(rules: [{ allow: public, operations: [read] }, { allow: owner }]) {
@@ -47,7 +46,6 @@ type Lecturer
   institution: Institution! @belongsTo(fields: ["institutionId"])
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
 }
-
 type Student
   @model
   @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
@@ -81,7 +79,6 @@ type Course
   id: ID!
   institutionId: ID! @index(name: "byCourse")
   lecturerId: ID
-  coursecode: String!
   coursename: String
   semester: Int
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])

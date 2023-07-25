@@ -14,9 +14,6 @@
     },
     "s3Key": {
       "Type": "String"
-    },
-    "group": {
-      "Type": "String"
     }
   },
   "Conditions": {
@@ -61,9 +58,7 @@
             "ENV": {
               "Ref": "env"
             },
-            "GROUP": {
-              "Ref": "group"
-            },
+            "GROUP": "adminUserGroup",
             "USERPOOL": {
               "Ref": "authpronto5f713f59UserPoolId"
             }

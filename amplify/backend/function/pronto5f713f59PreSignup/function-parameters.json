@@ -15,6 +15,9 @@
   "skipEdit": true,
   "environmentVariableList": [
     {
+      "cloudFormationParameterName": "lecturersGroupName",
+      "environmentVariableName": "LecturersGroupName",
+    },
       "cloudFormationParameterName": "appClientId",
       "environmentVariableName": "AppClientId"
     },
@@ -37,10 +40,6 @@
     {
       "cloudFormationParameterName": "adminGroupName",
       "environmentVariableName": "AdminGroupName"
-    },
-    {
-      "cloudFormationParameterName": "lecturersGroupName",
-      "environmentVariableName": "LecturersGroupName"
     }
   ]
 }

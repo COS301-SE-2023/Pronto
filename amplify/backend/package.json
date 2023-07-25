@@ -1,9 +1,6 @@
 {
   "name": "pronto-backend",
-  "name": "pronto-backend",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -18,8 +15,6 @@
     "test:unit:watch:silent": "jest --watch --silent unit"
   },
   "devDependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.363.0",
-    "jest": "^29.6.0"
     "@aws-sdk/client-cognito-identity-provider": "^3.363.0",
     "jest": "^29.6.0"
   }
