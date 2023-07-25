@@ -18,6 +18,7 @@ import PlacesAutocomplete, {
 import styled from "styled-components";
 import { createAnnouncement, updateAnnouncement } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
+<<<<<<< Updated upstream
 import { ErrorModal } from '../../ErrorModal'
 export default function PostAccordion(course) {
   const [expanded, setExpanded] = React.useState(false);
@@ -26,6 +27,19 @@ export default function PostAccordion(course) {
   const [body, setBody] = React.useState("")
   const [date, setDate] = React.useState("")
   const [error, setError] = React.useState("")
+=======
+import {ErrorModal} from '../../ErrorModal'
+import {useJsApiLoader} from "@react-google-maps/api";
+export default function PostAccordion(course) {
+  const [expanded, setExpanded] = React.useState(false);
+  const[announcement,setAnnouncement]=React.useState("")
+  const[title,setTitle]=React.useState("")
+  const[body,setBody]=React.useState("")
+  const[date,setDate]=React.useState("")
+  const[error,setError]=React.useState("");
+  const [selectedLocation, setSelectedLocation] = React.useState("");
+
+>>>>>>> Stashed changes
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -178,17 +192,12 @@ export default function PostAccordion(course) {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion
-        expanded={expanded === "panel2"}
-        onChange={handleChange("panel2")}
-        data-testid={"accordion2"}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
-          aria-controls="panel2bh-content"
-          id="panel2bh-header"
-          data-testid={"accordionDrop2"}
+        <Accordion
+            expanded={expanded === "panel2"}
+            onChange={handleChange("panel2")}
+            data-testid={"accordion2"}
         >
+<<<<<<< Updated upstream
           <Typography
             sx={{
               width: "100%",
@@ -247,6 +256,76 @@ export default function PostAccordion(course) {
 
             <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
               <AccordionSummary
+=======
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
+                aria-controls="panel2bh-content"
+                id="panel2bh-header"
+                data-testid={"accordionDrop2"}
+            >
+                <Typography
+                    sx={{
+                        width: "100%",
+                        flexShrink: 0,
+                        fontWeight: "bold",
+                        textAlign: "center",
+                    }}
+                >
+                    Post due assignment
+                </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <form onSubmit={(e) => handleSubmit(e)}>
+                    <div className="form-group row">
+                        <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
+                        <div className="col-sm-10">
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="colFormLabel"
+                                data-testid="title2"
+                                required
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group row">
+                        <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Information: </label>
+                        <div className='col-sm-10'>
+          <textarea
+              type="text"
+              className="form-control"
+              id="colFormLabel"
+              data-testid="body2"
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+          ></textarea>
+                        </div>
+                    </div>
+                    <div className="form-group row">
+                        <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+                        <div className="col-sm-10">
+                            <input
+                                type="date"
+                                className="form-control"
+                                id="colFormLabel"
+                                data-testid="date2"
+                                required
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <button className="post-button">Post</button>
+                </form>
+            </AccordionDetails>
+        </Accordion>
+
+
+        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+            <AccordionSummary
+>>>>>>> Stashed changes
                 expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                 aria-controls="panel3bh-content"
                 id="panel3bh-header"
