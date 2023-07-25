@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect } from "react";
 import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
 import LectureHomePage from "./LectureView/Edit Module/LectureHomePage";
 import LecturerLogin from "./Authentication/Lecturer/Login";
@@ -12,10 +13,12 @@ import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulA
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
+import EditUniversityInfo from "./Institution VIew/EditInformation/EditInfo";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify, Auth, Hub } from "aws-amplify";
+import HomePage from "./HomePage";
 import config from "./aws-exports";
 import PostAccordion from "./LectureView/Edit Module/PostAccordion";
 import Dashboard from "./Institution VIew/Dashboard/Dashboard";
@@ -69,6 +72,7 @@ const Home = () => {
           <Router>
             <Routes>
               {/*Lecturer pages routing*/}
+              <Route path="/" element={<HomePage />} />
               <Route path="/lecturer-login" element={<LecturerLogin />} />
               <Route
                 path="/lecturer-confirm-email"
@@ -113,7 +117,7 @@ const Home = () => {
           <Router>
             <Routes>
               {/*Lecturer pages routing*/}
-
+              <Route path="/" element={<HomePage />} />
               <Route path="/lecture-homepage" element={<LectureHomePage />} />
               <Route path="edit-module" element={<EditModuleInfo />} />
               <Route
@@ -159,6 +163,7 @@ const Home = () => {
         <div>
           <Router>
             <Routes>
+              <Route path="/" element={<HomePage />} />
               {/*Lecturer pages routing*/}
               <Route path="/lecturer-login" element={<LecturerLogin />} />
               <Route
@@ -183,6 +188,11 @@ const Home = () => {
               <Route
                 path="/institution-forgot-password"
                 element={<InstitutionForgotPassword />}
+              />
+
+              <Route
+                path="/edit-university-info"
+                element={<EditUniversityInfo />}
               />
             </Routes>
           </Router>

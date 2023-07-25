@@ -107,7 +107,7 @@ const handleRemove = async(index) => {
       <div className="form-group col-6">
       
       <button onClick={handleOpen}  
-      className="btn btn-primary"
+      className="btn btn-danger"
       data-testid="submitButton">View</button>
       <Modal
         open={open}
@@ -167,14 +167,14 @@ const handleRemove = async(index) => {
              </select>
               </div>
               <button type="submit" 
-               className="btn btn-primary" 
+               className="btn btn-danger" 
                 data-testid="addButton">Add</button>
               </div> 
           </form>
           <button
             onClick={handleClose} 
             type="submit" 
-            className="btn btn-primary float-right"
+            className="btn btn-danger float-right"
             data-testid="submitCourses" 
               >
             Done 

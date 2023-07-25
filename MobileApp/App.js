@@ -7,7 +7,12 @@ import Register from "./screens/Login/Register";
 import Login from "./screens/Login/Login";
 import ResetPassword from "./screens/Login/ResetPassword";
 import VerifyCode from "./screens/Login/VerifyCode";
+import AccountSettings from "./screens/Timetable/AccountSettings";
 import ConfirmEmail from "./screens/Login/ConfirmEmail";
+import PrivacyPolicyScreen from "./screens/Settings/PrivacyPolicy";
+import ProfilePage from "./screens/Settings/Profile";
+import AboutScreen from "./screens/Settings/About";
+import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, Text } from "react-native";
 
@@ -61,8 +66,8 @@ export default function App() {
         <Text
           style={{
             color: "#e32f45",
-            fontSize: 30,
-            fontWeight: "bold",
+            fontSize: 24,
+            fontWeight: 200,
             marginBottom: 20,
             textAlign: "center",
           }}
@@ -73,75 +78,90 @@ export default function App() {
       </View>
     );
   }
-
   return (
     <NavigationContainer>
-      {user ? (
-        <Tabs />
-      ) : (
-        <>
-          <Stack.Navigator>
+      <Stack.Navigator>
+        {user ? (
+          <>
+            <Stack.Screen
+              name="Tabs"
+              component={Tabs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AccountSettings"
+              component={AccountSettings}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Notification Preferences"
+              component={NotificationPreferences}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Privacy Policy"
+              component={PrivacyPolicyScreen}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Profile Page"
+              component={ProfilePage}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
+              name="Reset Password"
+              component={ResetPassword}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
+              name="Delete Account"
+              component={DeleteAccountPage}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
+              name="About"
+              component={AboutScreen}
+              options={{ headerShown: true }}
+            />
+          </>
+        ) : (
+          <>
             <Stack.Screen
               name="Welcome"
               component={WelcomeScreen}
-              options={{
-                headerShown: false,
-              }}
+              options={{ headerShown: false }}
             />
-
             <Stack.Screen
               name="Register"
               component={Register}
-              options={{
-                headerShown: false,
-              }}
+              options={{ headerShown: false }}
             />
-
             <Stack.Screen
               name="Login"
               component={Login}
-              options={{
-                headerShown: false,
-              }}
+              options={{ headerShown: false }}
             />
-
             <Stack.Screen
               name="ResetPassword"
               component={ResetPassword}
-              options={{
-                headerShown: false,
-              }}
+              options={{ headerShown: false }}
             />
-
             <Stack.Screen
               name="VerifyCode"
               component={VerifyCode}
-              options={{
-                headerShown: false,
-              }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="ConfirmEmail"
               component={ConfirmEmail}
-              options={{
-                headerShown: false,
-              }}
+              options={{ headerShown: false }}
             />
-          </Stack.Navigator>
-        </>
-      )}
+          </>
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
-
-    /* <NavigationContainer>
-      <Tabs />
-
-      <Stack.Screen
-        name="NotificationPreferences"
-        component={NotificationPreferences}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </NavigationContainer> */
   );
 }
