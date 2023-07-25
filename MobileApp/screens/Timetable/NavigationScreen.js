@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import React, { useEffect, useState } from 'react';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import Constants from 'expo-constants';
 import MapViewDirections from "react-native-maps-directions";
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
@@ -109,8 +109,8 @@ const NavigationScreen = () => {
                 provider={PROVIDER_GOOGLE}
                 initialRegion={initialRegion}
             >
-                {origin && <Marker coordinate={origin} title="Origin"/>}
-                {destination && <Marker coordinate={destination} title="Destination"/>}
+                {origin && <Marker coordinate={origin} title="Origin" />}
+                {destination && <Marker coordinate={destination} title="Destination" />}
                 {route && origin && destination && (
                     <MapViewDirections
                         origin={origin}
@@ -124,7 +124,7 @@ const NavigationScreen = () => {
             </MapView>
             <View style={styles.searchContainer}>
                 <GooglePlacesAutocomplete
-                    styles={{textInput: styles.input}}
+                    styles={{ textInput: styles.input }}
                     placeholder="Origin"
                     query={{
                         key: '',
@@ -139,7 +139,7 @@ const NavigationScreen = () => {
                     }}
                 />
                 <GooglePlacesAutocomplete
-                    styles={{textInput: styles.input}}
+                    styles={{ textInput: styles.input }}
                     placeholder="Destination"
                     query={{
                         key: '',
@@ -161,8 +161,12 @@ const NavigationScreen = () => {
                 >
                     <Text style={styles.buttonText}>Trace Route</Text>
                 </TouchableOpacity>
-                <Text style={styles.distanceText}>Distance: {distance} </Text>
-                <Text style={styles.distanceText}>{travelTime} </Text>
+                {route && (
+                    <View>
+                        <Text style={styles.distanceText}>Distance: {distance} </Text>
+                        <Text style={styles.distanceText}>{travelTime} </Text>
+                    </View>
+                )}
             </View>
         </View>
     );
@@ -184,7 +188,7 @@ const styles = StyleSheet.create({
         width: '90%',
         backgroundColor: 'white',
         shadowColor: 'black',
-        shadowOffset: {width: 2, height: 2},
+        shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 4,
         elevation: 4,
@@ -197,7 +201,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     button: {
-        backgroundColor: '#bbb',
+        backgroundColor: '#e32f45',
         paddingVertical: 12,
         marginTop: 16,
         borderRadius: 4,
