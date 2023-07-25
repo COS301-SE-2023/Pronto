@@ -9,7 +9,7 @@ const SearchFilter = ({ data, input, setInput, addToModules }) => {
         data={data}
         renderItem={({ item }) => {
           if (
-            item.code.toLowerCase().includes(input.toLowerCase()) &&
+            // item.coursecode.toLowerCase().includes(input.toLowerCase()) &&
             input != ""
           ) {
             return (
@@ -27,7 +27,8 @@ const SearchFilter = ({ data, input, setInput, addToModules }) => {
                           textAlign: "center",
                         }}
                       >
-                        {item.code} : {item.name}
+                        {item.coursecode} 
+                        {/* : {item.name} */}
                       </Text>
                       <Text
                         style={{

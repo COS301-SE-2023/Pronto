@@ -30,6 +30,7 @@ jobs:
         uses: github/super-linter@v5
         env:
           VALIDATE_ALL_CODEBASE: false
+          VALIDATE_PYTHON_BLACK: true
           IGNORE_GITIGNORED_FILES: true
           IGNORE_GENERATED_FILES: true
           DEFAULT_BRANCH: master

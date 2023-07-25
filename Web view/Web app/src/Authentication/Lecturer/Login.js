@@ -165,6 +165,7 @@ function Login() {
   //select institution
   const [institutionId, setInstitutionId] = React.useState("");
   const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
+  
   const setAndPrintInstitutionIdError = (isInstitutudeIdInvalid) => {
     if (isInstitutudeIdInvalid) setsignUpError("Please Select An Institution");
   };
@@ -215,6 +216,7 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+
           <StyledSelectInput
             options={institutionInfo}
             defaultValue={institutionId}
@@ -224,6 +226,7 @@ function Login() {
             autocomplete={true}
             isSelectionValid={isInstitudeSelected}
           ></StyledSelectInput>
+
           <Input
             type="password"
             placeholder="Password"
