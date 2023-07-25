@@ -94,14 +94,27 @@ const NavigationScreen = () => {
     }, [origin, destination]);
 
     // this function will handle the data from the MapViewDirections component
+    // this function will handle the data from the MapViewDirections component
+    // this function will handle the data from the MapViewDirections component
+    // this function will handle the data from the MapViewDirections component
+    // this function will handle the data from the MapViewDirections component
     function handleOnReady(result) {
         // extract the step-by-step instructions from the result object
         const steps = result.legs[0].steps.map((step, index) => {
-            const instructions = step.html_instructions.replace(/<[^>]*>/g, '');
-            return instructions;
+            // Remove the destination part from the last instruction
+            const isLastStep = index === result.legs[0].steps.length - 1;
+            const instruction = isLastStep
+                ? step.html_instructions.split('<div')[0]
+                : step.html_instructions;
+
+            // Use a regular expression to remove HTML tags from the instructions
+            let cleanInstructions = instruction.replace(/<[^>]*>/g, '');
+
+            return cleanInstructions;
         });
 
         setInstructions(steps);
+
     }
 
 
@@ -220,8 +233,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center', // Center the search container horizontally
     },
     instructionsContainer: {
-        justifyContent: 'center', // Center the content vertically
-        alignItems: 'center', // Center the content horizontally
+        position: 'absolute',
+        marginTop: 30,
+        width: '90%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: "center",
     },
     input: {
         borderColor: '#888',
