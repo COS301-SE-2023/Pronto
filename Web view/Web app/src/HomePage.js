@@ -44,7 +44,7 @@ function HomePage() {
 
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
-                    <Card sx={{ maxWidth: 400, borderRadius: '10px' }} style={{ border: "1px solid #e32f45" }}>
+                    <Card sx={{ maxWidth: 400, borderRadius: '10px', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.4)' }}>
                       <CardMedia
                         component="img"
                         height="150"
@@ -70,7 +70,7 @@ function HomePage() {
                   </Grid>
 
                   <Grid item xs={6}>
-                    <Card sx={{ maxWidth: 400, borderRadius: '10px' }} style={{ border: "1px solid #e32f45" }}>
+                    <Card sx={{ maxWidth: 400, borderRadius: '10px', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.4)' }}>
                       <CardMedia
                         component="img"
                         height="150"
