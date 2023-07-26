@@ -221,6 +221,7 @@ const EditTimetable = ({ onSearch }) => {
             let s=student
             s.timetable=create.data.createTimetable
             s.timetableId=s.timetable.id
+            console.log(update)
             setStudent(s)
             setTimetable(timetable)
        }
