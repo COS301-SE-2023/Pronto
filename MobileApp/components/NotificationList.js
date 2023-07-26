@@ -12,6 +12,8 @@ const NotificationList = () => {
   const [expanded3, setExpanded3] = useState(true);
   const[student,setStudent]=useState(null)
   const[announcements,setAnnouncements]=useState([])
+  const[reminders,setReminders]=useState([])
+  const[dueDates,setDueDates]=useState([])
   const handlePress1 = () => setExpanded1(!expanded1);
   const handlePress2 = () => setExpanded2(!expanded2);
   const handlePress3 = () => setExpanded3(!expanded3);
@@ -83,16 +85,27 @@ const NotificationList = () => {
               stu=stu.data.listStudents.items[0]
               setStudent(stu)
               let a=[]
+              let r=[]
+              let d=[]
               for(let i=0;i<stu.enrollments.items.length;i++){
                 for(let j=0;j<stu.enrollments.items[i].course.announcents.items.length;j++){
                   a.push(stu.enrollments.items[i].course.announcents.items[j])
+                  if(i%2===1){
+                    r.push(stu.enrollments.items[i].course.announcents.items[j])
+                  }
+                  else{
+                    d.push(stu.enrollments.items[i].course.announcents.items[j])
+                  }
                 }
               }
               setAnnouncements(a)
+              setReminders(r)
+              setDueDates(d)
             }
          }
       }catch(er){
-        Alert(error)
+        Alert.alert(error)
+        console.log(error)
       }
   }
 
@@ -113,6 +126,24 @@ const NotificationList = () => {
           onPress={handlePress1}
           style={{ backgroundColor: "white" }}
         >
+          {reminders.map((val,key)=>(
+                  <Card
+                    key={key}
+                    style={{
+                    marginBottom: 10,
+                    backgroundColor: "white",
+                  }}
+                  value={key}
+                  onPress={(e)=>showFullMessage(val)}
+                >
+                <Card.Content>
+                  <Text>
+                    {val.course.cousecode} {" "} { val.start}
+                  </Text>
+                </Card.Content>
+              </Card>
+              ))}
+              
           <Card
             style={{
               margin: 10,
@@ -150,6 +181,23 @@ const NotificationList = () => {
           onPress={handlePress2}
           style={{ backgroundColor: "white" }}
         >
+             {dueDates.map((val,key)=>(
+                  <Card
+                    key={key}
+                    style={{
+                    marginBottom: 10,
+                    backgroundColor: "white",
+                  }}
+                  value={key}
+                  onPress={(e)=>showFullMessage(val)}
+                >
+                <Card.Content>
+                  <Text>
+                    {val.course.cousecode} {" "} { val.start}
+                  </Text>
+                </Card.Content>
+              </Card>
+              ))}
           <Card
             style={{
               margin: 10,
