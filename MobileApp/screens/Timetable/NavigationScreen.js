@@ -196,7 +196,6 @@ const NavigationScreen = () => {
                         <Text style={styles.infoText}>{travelTime}</Text>
                     </View>
                 )}
-
             </View>
             {instructions.length > 0 && (
                 <View style={styles.instructionsContainer}>
@@ -207,6 +206,8 @@ const NavigationScreen = () => {
     );
 }
 
+    );
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -241,7 +242,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 125,
         paddingLeft: 10,
-
     },
     input: {
         borderColor: '#888',

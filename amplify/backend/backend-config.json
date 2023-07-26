@@ -85,17 +85,7 @@
           "SMS"
         ],
         "passwordProtectionSettings": {
-<<<<<<< HEAD
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
-        },
-        "signupAttributes": [
-=======
-<<<<<<<<< Temporary merge branch 1
-          "passwordPolicyCharacters": [
-=========
             "passwordPolicyCharacters": [
->>>>>>>>> Temporary merge branch 2
             "REQUIRES_LOWERCASE",
             "REQUIRES_NUMBERS",
             "REQUIRES_SYMBOLS",
@@ -104,8 +94,6 @@
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-          "ADDRESS",
->>>>>>> dev
           "EMAIL",
           "FAMILY_NAME",
           "NAME"
@@ -164,7 +152,6 @@
       "service": "Lambda"
     }
   },
-<<<<<<< HEAD
   "parameters": {
     "AMPLIFY_function_AdminQueries7f7a03b0_deploymentBucketName": {
       "usedBy": [
@@ -269,46 +256,8 @@
           "resourceName": "pronto5f713f59PreSignup"
         }
       ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_studentsGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-=======
-<<<<<<<<< Temporary merge branch 1
-  "parameters": {
-    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
->>>>>>> dev
-        }
-      ]
     }
   },
-<<<<<<< HEAD
-=======
-=========
->>>>>>>>> Temporary merge branch 2
->>>>>>> dev
   "storage": {
     "prontoBlobeStore": {
       "dependsOn": [
