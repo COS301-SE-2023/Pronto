@@ -196,10 +196,6 @@ const NavigationScreen = () => {
                         <Text style={styles.infoText}>{travelTime}</Text>
                     </View>
                 )}
-
-
-
-
             </View>
             {instructions.length > 0 && (
                 <View style={styles.instructionsContainer}>
@@ -207,6 +203,8 @@ const NavigationScreen = () => {
                 </View>
             )}
         </View>
+    );
+}
 
     );
 };
@@ -214,6 +212,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f5f5f5',
+    },
+    mapContainer: {
+        flex: 1,
+        position: 'relative',
     },
     mapStyle: {
         flex: 1,
@@ -230,16 +232,16 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 8,
         top: "3%",
-        alignSelf: 'center', // Center the search container horizontally
+        alignSelf: 'center',
     },
     instructionsContainer: {
         position: 'absolute',
-        marginTop: 30,
-        width: '90%',
-        height: '100%',
+        bottom: 0,
+        width: '98%',
         justifyContent: 'center',
         alignItems: 'center',
-        alignSelf: "center",
+        marginBottom: 125,
+        paddingLeft: 10,
     },
     input: {
         borderColor: '#888',
