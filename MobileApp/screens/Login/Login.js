@@ -99,7 +99,7 @@ const Login = ({ navigation }) => {
             onChangeText={(value) => {
               setPassword(value);
             }}
-            onFocus={() => setIsTypingPassword(true)}
+
           />
 
         </View>
