@@ -104,12 +104,9 @@ const NotificationList = ({navigation}) => {
               setDueDates(d)
             
             }
-            //console.log(a)
-            //console.log(d)
-            //console.log(r)
          }
       }catch(er){
-       // Alert.alert(error)
+       Alert.alert(error)
         console.log(er)
       }
   }
@@ -118,12 +115,7 @@ const NotificationList = ({navigation}) => {
     fetchAnnouncements()
   },[])
 
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     fetchAnnouncements()
-  //   });
-  //   return unsubscribe
-  // }, [navigation])
+ 
 
   return (
     <View>
