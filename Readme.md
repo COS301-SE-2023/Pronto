@@ -47,6 +47,8 @@ Pronto is a React Native application that helps students to create their timetab
 | <img src="Documentation/ReadME Resources/Images/andile.jpg" width=200px height=150px> <br/> **Andile Ngwenya**            | Final year BSc Computer Science student at the University of Pretoria. Has some experience in web development and interests in data analytics.<br> Email: u20612894@tuks.co.za                                  | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/andile-ngwenya-840686267) <br> [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/u20612894)                   |
 | <img src="Documentation/ReadME Resources/Images/jonel.jpg" width=200px height=150px> <br/> **Jonel Albuquerque**          | Final year BSc Information and Knowledge systems student at the University of Pretoria. Joburg West top achiever in information technology with experience in web applications.<br> Email: u21598267@tuks.co.za | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jonel-albuquerque-5b82b723a) <br> [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/u21598267)        |
 
+<br><br>
+
 # Extra Information
 
 ### Refer to the technical installation Manual for all inforamtion regarding how to install and run the app.
