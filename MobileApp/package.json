@@ -16,12 +16,9 @@
     ]
   },
   "dependencies": {
-<<<<<<<< HEAD:MobileApp/package.json
     "@aws-amplify/ui-react": "^4.6.4",
     "@expo/metro-config": "^0.7.1",
-========
     "@aws-sdk/client-cognito-identity-provider": "^3.352.0",
->>>>>>>> dev:package.json
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^18.0.1",
     "@react-native-async-storage/async-storage": "^1.18.1",
