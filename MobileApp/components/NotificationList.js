@@ -3,7 +3,7 @@ import { Alert, View, StyleSheet, Text } from "react-native";
 import { List, Card, Avatar, Modal } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { listStudents,listInstitutions} from "../graphql/queries";
+import { listStudents,listInstitutions,createStudent} from "../graphql/queries";
 import{Auth,API} from "aws-amplify"
 
 const NotificationList = ({navigation}) => {
