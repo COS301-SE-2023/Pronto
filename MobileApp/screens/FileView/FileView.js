@@ -24,6 +24,7 @@ const BucketFilesScreen = () => {
   const [studentUniversity,setStudentUniversity]=useState("")
 
   useEffect(() => {
+    setUniversityName();
     fetchFileList();
   }, []);
 
@@ -110,6 +111,7 @@ const BucketFilesScreen = () => {
   };
 
   const handleRefresh = () => {
+    setUniversityName()
     fetchFileList();
   };
 
