@@ -6,7 +6,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { listStudents} from "../graphql/queries";
 import{Auth,API} from "aws-amplify"
 
-const NotificationList = () => {
+const NotificationList = ({navigation}) => {
   const [expanded1, setExpanded1] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
   const [expanded3, setExpanded3] = useState(true);
@@ -23,7 +23,8 @@ const NotificationList = () => {
   };
 
   const fetchAnnouncements = async() => {
-      try{
+    let error="There appears to ne a network error. Please try again"  
+    try{
         let error="There appears to be a network issue.Please try again later"
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
@@ -90,7 +91,7 @@ const NotificationList = () => {
               for(let i=0;i<stu.enrollments.items.length;i++){
                 for(let j=0;j<stu.enrollments.items[i].course.announcents.items.length;j++){
                   a.push(stu.enrollments.items[i].course.announcents.items[j])
-                  if(i%2===1){
+                  if(j%2===1){
                     r.push(stu.enrollments.items[i].course.announcents.items[j])
                   }
                   else{
@@ -101,17 +102,28 @@ const NotificationList = () => {
               setAnnouncements(a)
               setReminders(r)
               setDueDates(d)
+            
             }
+            //console.log(a)
+            //console.log(d)
+            //console.log(r)
          }
       }catch(er){
-        Alert.alert(error)
-        console.log(error)
+       // Alert.alert(error)
+        console.log(er)
       }
   }
 
   useEffect( () => {
     fetchAnnouncements()
   },[])
+
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     fetchAnnouncements()
+  //   });
+  //   return unsubscribe
+  // }, [navigation])
 
   return (
     <View>
@@ -138,13 +150,13 @@ const NotificationList = () => {
                 >
                 <Card.Content>
                   <Text>
-                    {val.course.cousecode} {" "} { val.start}
+                  {val.course.coursecode} {": "} {val.start}
                   </Text>
                 </Card.Content>
               </Card>
               ))}
               
-          <Card
+          {/* <Card
             style={{
               margin: 10,
               backgroundColor: "white",
@@ -156,8 +168,8 @@ const NotificationList = () => {
                 COS 301: Lecture venue changed from North Hall to IT 2-27
               </Text>
             </Card.Content>
-          </Card>
-
+          </Card> */}
+{/* 
           <Card
             style={{
               margin: 10,
@@ -168,7 +180,7 @@ const NotificationList = () => {
             <Card.Content>
               <Text>COS 332: Change in lecture time</Text>
             </Card.Content>
-          </Card>
+          </Card> */}
         </List.Accordion>
 
         <List.Accordion
@@ -193,12 +205,12 @@ const NotificationList = () => {
                 >
                 <Card.Content>
                   <Text>
-                    {val.course.cousecode} {" "} { val.start}
+                    {val.course.coursecode} {": "} {val.start}
                   </Text>
                 </Card.Content>
               </Card>
               ))}
-          <Card
+          {/* <Card
             style={{
               margin: 10,
               backgroundColor: "white",
@@ -208,7 +220,7 @@ const NotificationList = () => {
             <Card.Content>
               <Text>COS216: Assignment due soon</Text>
             </Card.Content>
-          </Card>
+          </Card> */}
         </List.Accordion>
 
         <List.Accordion
@@ -221,7 +233,7 @@ const NotificationList = () => {
           onPress={handlePress3}
           style={{ backgroundColor: "white" }}
         >
-          <Card
+          {/* <Card
             style={{
               margin: 10,
               backgroundColor: "white",
@@ -231,7 +243,7 @@ const NotificationList = () => {
             <Card.Content>
               <Text>IMY310: Remeber your pens for the semester test</Text>
             </Card.Content>
-          </Card>
+          </Card> */}
         </List.Accordion>
       </List.Section>
 
