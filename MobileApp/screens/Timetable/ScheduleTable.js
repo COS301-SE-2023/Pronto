@@ -70,11 +70,11 @@ const ScheduleTable = ({navigation}) => {
         authMode: "AMAZON_COGNITO_USER_POOLS"
       })
 
-      //Student does not exist so create them
+      // //Student does not exist so create them
       if (stu.data.listStudents.items.length === 0) {
         let domain = studentEmail.split("@")[1]
 
-        //Find Institution via domain
+      //   //Find Institution via domain
         let institution = await API.graphql({
           query: listInstitutions,
           variables: {
@@ -150,15 +150,19 @@ const ScheduleTable = ({navigation}) => {
             changed = true
           }
 
-          if (changed) {
+           if(changed===true){
             //setStudent(stu)
             setActivities(act)
             createScheduleArray(act)
-          }
-        }
-        
+           }
+
+        // }
+        console.log(changed)
+        }    
       }
-      console.log(act)
+      //console.log(changed)
+     console.log(act)
+     console.log(activities)
     } catch (e) {
       console.log("From fetch activivties")
       console.log(e)
@@ -167,7 +171,7 @@ const ScheduleTable = ({navigation}) => {
   }
 
 
-  fetchActivities()
+  //fetchActivities()
   //console.log("fecthing")
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
