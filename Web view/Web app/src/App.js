@@ -50,6 +50,7 @@ const Home = () => {
     Amplify.configure(config);
   }, []);
 
+
   useEffect(() => {
     const listener = (data) => {
       if (data.payload.event === "signIn" || data.payload.event === "signOut") {
