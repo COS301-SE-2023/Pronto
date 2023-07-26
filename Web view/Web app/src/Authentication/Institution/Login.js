@@ -39,7 +39,7 @@ function Login() {
       return;
     }
     try {
-      await Auth.signIn(email, password);
+      await Auth.signIn(email, password,{role:"Admin"});
       setsignInError("");
       //navigate to lecturer home page
       navigate("/institution-homepage");
@@ -96,7 +96,6 @@ function Login() {
           email: email,
           name: name,
           family_name: "",
-          address: "",
         },
         clientMetadata: {
           role: "Admin",

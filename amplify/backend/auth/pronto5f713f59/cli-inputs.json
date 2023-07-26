@@ -106,6 +106,9 @@
     "adminQueries": false,
     "hostedUI": false,
     "authProviders": [],
-    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PostAuthentication\",\n    \"lambdaFunctionName\": \"pronto5f713f59PostAuthentication\"\n  },\n  {\n    \"triggerType\": \"PreSignUp\",\n    \"lambdaFunctionName\": \"pronto5f713f59PreSignup\"\n  }\n]"
+    "authTriggerConnections": [
+      "{\"triggerType\":\"PostAuthentication\",\"lambdaFunctionName\":\"pronto5f713f59PostAuthentication\"}",
+      "{\"triggerType\":\"PreSignUp\",\"lambdaFunctionName\":\"pronto5f713f59PreSignup\"}"
+    ]
   }
 }

@@ -16,7 +16,26 @@
   "environmentVariableList": [
     {
       "cloudFormationParameterName": "lecturersGroupName",
-      "environmentVariableName": "LecturersGroupName"
+      "environmentVariableName": "LecturersGroupName",
+    },
+      "cloudFormationParameterName": "appClientId",
+      "environmentVariableName": "AppClientId"
+    },
+    {
+      "cloudFormationParameterName": "appClientIdWeb",
+      "environmentVariableName": "AppClientIdWeb"
+    },
+    {
+      "cloudFormationParameterName": "studentsGroupName",
+      "environmentVariableName": "StudentsGroupName"
+    },
+    {
+      "cloudFormationParameterName": "apiApiProntoGraphqlapiendpoint",
+      "environmentVariableName": "API_API_PRONTO_GRAPHQLAPIENDPOINT"
+    },
+    {
+      "cloudFormationParameterName": "apiApiProntoGraphqlapikey",
+      "environmentVariableName": "API_API_PRONTO_GRAPHQLAPIKEY"
     },
     {
       "cloudFormationParameterName": "adminGroupName",
