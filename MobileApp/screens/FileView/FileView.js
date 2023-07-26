@@ -12,6 +12,8 @@ import {
 import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { Auth,API} from "aws-amplify"
+import { listInstitutions,listStudents } from "../../graphql/queries";
 
 //graphQL call to get the university of the student, which will be used to get the file from that folder.
 //let studentUniversity = "UniversityOfPretoria";
@@ -83,6 +85,7 @@ const BucketFilesScreen = () => {
       }
     }catch(e){
       Alert.alert(error)
+      console.log(e)
     }
   }
 

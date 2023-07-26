@@ -71,16 +71,18 @@ const EditTimetable = ({ onSearch }) => {
                 })
                 setCourses(search.data.searchCourses.items)
     }catch(e){
-      Alert(error)
+      Alert.alert(error)
+      console.log(e)
     }
    }
   }
   
   const fetchCourses= async()=>{ 
+    let error="There appear to be network issues.Please try again later"
     try{
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
-        let error="There appear to be network issues.Please try again later"
+        
 
         if(student===null){
           setActivities([])
@@ -140,6 +142,7 @@ const EditTimetable = ({ onSearch }) => {
         
         //Student  found
         else{
+              console.log(stu)
               stu=stu.data.listStudents.items[0]
               let c=[]
               for(let i=0;i<stu.enrollments.items.length;i++){
@@ -163,7 +166,8 @@ const EditTimetable = ({ onSearch }) => {
                  }
                 }
     }catch(e){
-      Alert(error)
+      Alert.alert(error)
+      console.log(e)
     }
   }
 
@@ -172,14 +176,15 @@ const EditTimetable = ({ onSearch }) => {
     }, [])
 
   const handleSave = async()=>{
-       try{
+    
+    let error="There appears to be a network issue.Please try again"
+    try{
         //Create enrollment if it doesnt exist
         let activityIds=[]
         for(let i=0;i<activities.length;i++){
           activityIds.push(activities[i].id)
         }
 
-        let error="There appears to be a network issue.Please try again"
 
         if((selectedModule!==null && selectedModule!==undefined ) && student.enrollments.items.filter((item)=>item.course.id===selectedModule.id).length===0){
           enroll={
@@ -191,6 +196,7 @@ const EditTimetable = ({ onSearch }) => {
             variables:{input:enroll},
             authMode:"AMAZON_COGNITO_USER_POOLS"
           })
+          console.log(newEnrollment)
 
            let s=student
            student.enrollments.items.push(newEnrollment.data.createEnrollment)
@@ -206,6 +212,7 @@ const EditTimetable = ({ onSearch }) => {
             variables:{input:newTimetable},
             authMode:"AMAZON_COGNITO_USER_POOLS",
           })
+          console.log(create)
             let update=await API.graphql({
               query:updateStudent,
               variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id}},
@@ -229,6 +236,7 @@ const EditTimetable = ({ onSearch }) => {
             variables:{input:newTimetable},
             authMode:"AMAZON_COGNITO_USER_POOLS",
           })
+          console.log(update)
           let s=student
           s.timetable=update.data.updateTimetable
           let upd=await API.graphql({
@@ -241,7 +249,9 @@ const EditTimetable = ({ onSearch }) => {
       }
         toggleModal(null)
       }catch(e){
-         Alert(error)
+        console.log("from edit")
+        console.log(e)
+         Alert.alert(error)
       }
   }
   const addActivity = (activity)=>{ 
@@ -271,8 +281,10 @@ const EditTimetable = ({ onSearch }) => {
                 variables:{input:{id:student.enrollments.items[i].id}},
                 authMode:"AMAZON_COGNITO_USER_POOLS",
              })
+             console.log(del)
           }catch(er){
             Alert(error)
+            console.log(er)
           }
           student.enrollments.items.splice[i,1]
           break

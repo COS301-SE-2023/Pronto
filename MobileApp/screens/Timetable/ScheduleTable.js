@@ -156,8 +156,11 @@ const ScheduleTable = () => {
             createScheduleArray(act)
           }
         }
+        console.log(act)
       }
     } catch (e) {
+      console.log("From fetch activivties")
+      console.log(e)
       Alert.alert(error)
     }
   }
