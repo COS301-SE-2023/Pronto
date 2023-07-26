@@ -6,7 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActions } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import ProntoSvg from './Authentication/Institution/ProntoLogo.svg';
 
 function HomePage() {
   return (
@@ -25,7 +25,7 @@ function HomePage() {
       <CardMedia
       component="img"
       height="150"
-      image={require("./Authentication/Institution/ProntoLogo.png")}
+      src = {ProntoSvg}
       alt="logo"
       sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
       />
