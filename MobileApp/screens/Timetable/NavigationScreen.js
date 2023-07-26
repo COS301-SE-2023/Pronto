@@ -132,7 +132,7 @@ const NavigationScreen = () => {
                     <MapViewDirections
                         origin={origin}
                         destination={destination}
-                        apikey={'AIzaSyAKdd4K5exUek6U-u9c-7DPUwuUNHgXNjg'}
+                        apikey={''}
                         strokeColor={'#395cda'}
                         strokeWidth={4}
                         onReady={handleOnReady}
@@ -147,7 +147,7 @@ const NavigationScreen = () => {
                         styles={styles.input}
                         placeholder="Your location"
                         query={{
-                            key: 'AIzaSyAKdd4K5exUek6U-u9c-7DPUwuUNHgXNjg',
+                            key: '',
                             language: 'en',
                         }}
                         fetchDetails={true}
@@ -169,7 +169,7 @@ const NavigationScreen = () => {
                         styles={styles.input}
                         placeholder="Destination"
                         query={{
-                            key: 'AIzaSyAKdd4K5exUek6U-u9c-7DPUwuUNHgXNjg',
+                            key: '',
                             language: 'en',
                         }}
                         fetchDetails={true}
@@ -206,8 +206,8 @@ const NavigationScreen = () => {
     );
 }
 
-
-
+    );
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
