@@ -30,7 +30,6 @@ export default function PostAccordion(course) {
   const [selectedLocation, setSelectedLocation] = React.useState("");
 
 
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
