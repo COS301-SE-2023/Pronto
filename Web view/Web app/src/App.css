@@ -19,21 +19,6 @@
     text-transform: uppercase;
     transition: background-color 0.2s ease-in-out;
   }
-/* App.css */
-@keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  .CardContainer .MuiCard-root {
-    animation: fadeIn 0.5s ease;
-  }
-  
-  /* App.css */
 
 .custom-button {
     color: white; /* Set the desired text color */

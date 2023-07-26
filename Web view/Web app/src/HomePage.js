@@ -33,6 +33,7 @@ function HomePage() {
             backgroundColor: "transparent", // Set the background color to transparent
             borderRadius: '20px',
             '& .MuiCard-root': {
+              transform: 'translateY(0)',
               transition: 'transform 0.2s ease-in-out',
             },
             '& .MuiCard-root:hover': {
@@ -43,6 +44,8 @@ function HomePage() {
             transition: 'opacity 1s ease-in-out', // Define the animation duration and timing function
           }}
         >
+
+
           <CardContent>
             <CardMedia
               component="img"
@@ -53,8 +56,11 @@ function HomePage() {
             />
 
             <Grid container spacing={2}>
+
               <Grid item xs={6}>
-                <Card sx={{ maxWidth: 400, borderRadius: '10px', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.4)' }}>
+
+
+                <Card sx={{ maxWidth: 400, borderRadius: '10px', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.4)', opacity: isLoaded ? 1 : 0, transition: 'opacity 1s ease-in-out 0.2s' }}>
                   <CardMedia
                     component="img"
                     height="150"
