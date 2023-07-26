@@ -55,7 +55,6 @@ function Login() {
     event.preventDefault();
     const errors = []; // Create an array to hold error messages
 
-
     if (confirmPassword !== signUpPassword) {
       errors.push("Passwords do not match");
     }
