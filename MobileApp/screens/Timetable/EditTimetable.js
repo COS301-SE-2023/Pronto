@@ -45,7 +45,7 @@ const EditTimetable = ({ onSearch }) => {
 
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
-      setSelectedModules((prevModules) => [...prevModules, module]);
+      setSelectedModules((prevModules) => [module,...prevModules]);
     }
     setInput("");
   };

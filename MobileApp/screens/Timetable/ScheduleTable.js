@@ -6,7 +6,7 @@ import { API, Auth } from 'aws-amplify'
 import { listStudents } from "../../graphql/queries"
 import { createStudent } from "../../graphql/mutations";
 
-const ScheduleTable = () => {
+const ScheduleTable = ({navigation}) => {
 
   // const[student,setStudent]=useState(null)
   const [activities, setActivities] = useState([])
@@ -156,8 +156,9 @@ const ScheduleTable = () => {
             createScheduleArray(act)
           }
         }
-        console.log(act)
+        
       }
+      console.log(act)
     } catch (e) {
       console.log("From fetch activivties")
       console.log(e)
@@ -166,12 +167,21 @@ const ScheduleTable = () => {
   }
 
 
+  //fetchActivities()
+  console.log("fecthing")
   useEffect(() => {
-    fetchActivities()
-  }, [])
+    const unsubscribe = navigation.addListener('focus', () => {
+      // Put the logic to refresh the screen here
+      console.log('Screen is focused. Refreshing...');
+      // You can call a function to fetch fresh data or update state here
+      // For example, you can call a function that fetches data from an API
+      fetchActivities()
+    });
+    //fetchActivities()
+    return unsubscribe
+  }, [navigation])
 
-  fetchActivities()
-
+  
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
     for (const moduleKey in modules) {

@@ -56,7 +56,6 @@ const BucketFilesScreen = () => {
     
     let error="There appears to be a network error.Please try again later"
     try{
-      if(studentUniversity===""){
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email
         let domain=studentEmail.split('@')[1]
@@ -82,7 +81,6 @@ const BucketFilesScreen = () => {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
         .join(""); // Join the words without spaces
         setStudentUniversity(sU) 
-      }
     }catch(e){
       Alert.alert(error)
       console.log(e)
