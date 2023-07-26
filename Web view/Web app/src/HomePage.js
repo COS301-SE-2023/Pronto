@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ProntoSvg from './Authentication/Institution/ProntoLogo.svg';
 
+
 function HomePage() {
   return (
     <div className="BG">
@@ -20,27 +21,31 @@ function HomePage() {
         justifyContent="center"
         sx={{ minHeight: '100vh' }}
       >
-        <Grid item xs={3} className="CardContainer"> {/* Add className here */}
+        <Grid item xs={3} className="CardContainer">
           <Box
             sx={{
               maxWidth: 2000,
               borderRadius: '20px',
-              boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.4)', // Add the boxShadow property for the shadow effect
-              backgroundColor: "white"
+              '& .MuiCard-root': {
+                transition: 'transform 0.2s ease-in-out', // Adding transition for the floating effect
+              },
+              '& .MuiCard-root:hover': {
+                transform: 'translateY(-10px)', // Applying the floating effect on hover
+                boxShadow: '0px 14px 28px rgba(0, 0, 0, 0.25), 0px 10px 10px rgba(0, 0, 0, 0.22)', // Adjust the shadow as per your preference
+              },
             }}
           >
-            <Card sx={{ maxWidth: 2000, borderRadius: '20px' }} style={{ backgroundColor: "white" }}>
-              <CardMedia
-                component="img"
-                height="150"
-                src={ProntoSvg}
-                alt="logo"
-                sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
-              />
+            <Card sx={{ maxWidth: 2000, borderRadius: '10px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
+
               <CardContent>
-                <Typography color={"white"} gutterBottom variant="h4" component="div" align="center" sx={{ fontWeight: 'bold', m: 1 }}>
-                  Welcome to Pronto!
-                </Typography>
+                <CardMedia
+                  component="img"
+                  height="110" // Set the desired height of the logo
+
+                  image={ProntoSvg} // Use the imported Pronto logo SVG
+                  alt="Pronto Logo"
+                  sx={{ display: 'block', marginBottom: 2, paddingTop: '1em', objectFit: 'contain' }}
+                />
 
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
@@ -62,7 +67,7 @@ function HomePage() {
                       </CardContent>
                       <CardActions style={{ justifyContent: 'center' }}>
                         {/* Add the custom styles to the Button component */}
-                        <Button sx={{ borderRadius: '20px', backgroundColor: "#e32f45" }} size="small" color="error" variant="contained" href="/institution-login">
+                        <Button sx={{ borderRadius: '20px', backgroundColor: "#e32f45", marginBottom: 5 }} size="small" color="error" variant="contained" href="/institution-login">
                           Continue as institution &#8594;
                         </Button>
                       </CardActions>
@@ -88,7 +93,7 @@ function HomePage() {
                       </CardContent>
                       <CardActions style={{ justifyContent: 'center' }}>
                         {/* Add the custom styles to the Button component */}
-                        <Button sx={{ borderRadius: '20px', backgroundColor: "#e32f45" }} size="small" color="error" variant="contained" href="/lecturer-login">
+                        <Button sx={{ borderRadius: '20px', backgroundColor: "#e32f45", marginBottom: 5 }} size="small" color="error" variant="contained" href="/lecturer-login">
                           Continue as lecturer &#8594;
                         </Button>
                       </CardActions>

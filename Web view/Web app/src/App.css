@@ -6,37 +6,8 @@
     height: 100vh;
   }
   
-  .CardContainer {
-    animation: slideInFromTop 0.8s ease-in-out;
-  }
-  
-  .CardContainer > .MuiCard-root {
-    margin-bottom: 1.5rem;
-  }
-  
-  .CardContainer > .MuiCard-root:last-child {
-    margin-bottom: 0;
-  }
-  
-  .CardContainer .MuiCard-root {
-    width: 100%;
-  }
-  
-  .CardContainer .MuiCard-root .MuiCardMedia-root {
-    margin: 0 auto;
-  }
-  
-  .CardContainer .MuiCard-root .MuiCardContent-root {
-    text-align: center;
-  }
-  
   .CardContainer .MuiCard-root .MuiTypography-root {
     color: #444;
-  }
-  
-  .CardContainer .MuiCard-root .MuiCardActions-root {
-    display: flex;
-    justify-content: center;
   }
   
   .CardContainer .MuiCard-root .MuiButton-root {
@@ -48,8 +19,19 @@
     text-transform: uppercase;
     transition: background-color 0.2s ease-in-out;
   }
-  
-  .CardContainer .MuiCard-root .MuiButton-root:hover {
-    background-color: #c61c33;
+/* App.css */
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
+  
+  .CardContainer .MuiCard-root {
+    animation: fadeIn 0.5s ease;
+  }
+  
+
   
