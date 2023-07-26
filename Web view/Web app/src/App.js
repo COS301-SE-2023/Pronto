@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
 import LectureHomePage from "./LectureView/Edit Module/LectureHomePage";
@@ -24,6 +23,7 @@ import config from "./aws-exports";
 Amplify.configure(config);
 
 const Home = () => {
+
   useEffect(() => {
     Amplify.configure(config);
   }, []);
@@ -45,10 +45,12 @@ const Home = () => {
             path="/lecturer-forgot-password"
             element={<LecturerForgotPassword />}
           />
+
           <Route path="/lecture-homepage" element={<LectureHomePage />} />
           <Route path="edit-module" element={<EditModuleInfo />} />
           <Route path="recent-announcement" element={<RecentAnnouncement />} />
           <Route path="personal-info" element={<PersonalInformation />} />
+
 
           {/*Institution pages routing*/}
           <Route path="/institution-login" element={<InstitutionLogin />} />
