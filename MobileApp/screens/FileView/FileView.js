@@ -34,9 +34,10 @@ const BucketFilesScreen = () => {
     try {
       setIsRefreshing(true);
       setIsLoading(true);
-      await setUniversityName()
+      let name=await setUniversityName()
+      console.log(name)
       const response = await Storage.list(
-        studentUniversity + "/StudentFiles/",
+        name + "/StudentFiles/",
         {
           pageSize: 1000,
         }
@@ -45,6 +46,7 @@ const BucketFilesScreen = () => {
       setFileList(files);
       setIsLoading(false);
       setIsRefreshing(false);
+      
     } catch (error) {
       Alert.alert("Error fetching file list:", error);
       setIsLoading(false);
@@ -80,7 +82,8 @@ const BucketFilesScreen = () => {
         sU = words
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
         .join(""); // Join the words without spaces
-        setStudentUniversity(sU) 
+        await setStudentUniversity(sU) 
+        return sU
     }catch(e){
       Alert.alert(error)
       console.log(e)

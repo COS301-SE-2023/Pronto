@@ -167,17 +167,12 @@ const ScheduleTable = ({navigation}) => {
   }
 
 
-  //fetchActivities()
-  console.log("fecthing")
+  fetchActivities()
+  //console.log("fecthing")
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      // Put the logic to refresh the screen here
-      console.log('Screen is focused. Refreshing...');
-      // You can call a function to fetch fresh data or update state here
-      // For example, you can call a function that fetches data from an API
       fetchActivities()
     });
-    //fetchActivities()
     return unsubscribe
   }, [navigation])
 
