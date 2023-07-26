@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, Dimensions, Alert } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
-import { listStudents } from "../../graphql/queries"
+import { listStudents,listInstitutions } from "../../graphql/queries"
 import { createStudent } from "../../graphql/mutations";
 
 const ScheduleTable = ({navigation}) => {
