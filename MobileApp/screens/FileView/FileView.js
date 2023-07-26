@@ -14,12 +14,14 @@ import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 //graphQL call to get the university of the student, which will be used to get the file from that folder.
-let studentUniversity = "UniversityOfPretoria";
+//let studentUniversity = "UniversityOfPretoria";
 
 const BucketFilesScreen = () => {
   const [fileList, setFileList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const [studentUniversity,setStudentUniversity]=useState("")
 
   useEffect(() => {
     fetchFileList();
@@ -29,6 +31,7 @@ const BucketFilesScreen = () => {
     try {
       setIsRefreshing(true);
       setIsLoading(true);
+      await setUniversityName()
       const response = await Storage.list(
         studentUniversity + "/StudentFiles/",
         {
@@ -45,6 +48,43 @@ const BucketFilesScreen = () => {
       setIsRefreshing(false);
     }
   };
+
+  const setUniversityName = async()=>{
+    
+    let error="There appears to be a network error.Please try again later"
+    try{
+      if(studentUniversity===""){
+        let user=await Auth.currentAuthenticatedUser()
+        let studentEmail=user.attributes.email
+        let domain=studentEmail.split('@')[1]
+        let institution=await API.graphql({
+                        query:listInstitutions,
+                        variables:{ 
+                                filter :{ 
+                                  domains :{ 
+                                    contains:domain
+                                }
+                            }
+                        },
+                       authMode:"API_KEY",
+                    })
+          
+        if(institution.data.listInstitutions.items.length===0){
+            error="Could not determine insititution"
+            throw Error()
+        }
+        sU=institution.data.listInstitutions.items[0].name
+        const words = sU.split(/\s+/); // Split the name into words
+        sU = words
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
+        .join(""); // Join the words without spaces
+        setStudentUniversity(sU) 
+      }
+    }catch(e){
+      Alert.alert(error)
+    }
+  }
+
 
   const openFile = async (fileKey) => {
     try {
