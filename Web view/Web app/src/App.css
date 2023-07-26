@@ -1,42 +1,55 @@
 .BG {
-    background-color: white;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-  
-  @keyframes slideInFromTop {
-    0% {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  
-  .BG {
-    background-color: white;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
   }
   
   .CardContainer {
-    animation: slideInFromTop 0.8s ease-in-out; /* Apply animation to the container */
+    animation: slideInFromTop 0.8s ease-in-out;
   }
   
-  /* Add a delay to each Card to create staggered entrance effect */
-  .CardContainer > .MuiCard-root:nth-child(odd) {
-    animation-delay: 0.2s;
+  .CardContainer > .MuiCard-root {
+    margin-bottom: 1.5rem;
   }
   
-  .CardContainer > .MuiCard-root:nth-child(even) {
-    animation-delay: 0.4s;
+  .CardContainer > .MuiCard-root:last-child {
+    margin-bottom: 0;
+  }
+  
+  .CardContainer .MuiCard-root {
+    width: 100%;
+  }
+  
+  .CardContainer .MuiCard-root .MuiCardMedia-root {
+    margin: 0 auto;
+  }
+  
+  .CardContainer .MuiCard-root .MuiCardContent-root {
+    text-align: center;
+  }
+  
+  .CardContainer .MuiCard-root .MuiTypography-root {
+    color: #444;
+  }
+  
+  .CardContainer .MuiCard-root .MuiCardActions-root {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .CardContainer .MuiCard-root .MuiButton-root {
+    border-radius: 20px;
+    background-color: #e32f45;
+    color: white;
+    font-weight: bold;
+    padding: 0.8rem 2rem;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .CardContainer .MuiCard-root .MuiButton-root:hover {
+    background-color: #c61c33;
   }
   
