@@ -4,6 +4,8 @@ import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
+import institutionInfo from "../../assets/data/universityInfo.json";
+import Select from "react-select";
 
 function Login() {
   //sign in states
@@ -39,7 +41,7 @@ function Login() {
     }
 
     try {
-      await Auth.signIn(email, password);
+      await Auth.signIn(email, password, { role: "Lecturer" });
       setsignInError("");
       //navigate to lecturer home page
       navigate("/lecture-homepage");
@@ -55,6 +57,10 @@ function Login() {
 
     if (confirmPassword !== signUpPassword) {
       errors.push("Passwords do not match");
+    }
+
+    if (!institutionId) {
+      errors.push("Please Select An Institution");
     }
 
     if (!nameIsValid) {
@@ -100,15 +106,17 @@ function Login() {
           email: email,
           name: name,
           family_name: surname,
-          address: "",
         },
         clientMetadata: {
           role: "Lecturer",
+          institutionId: institutionId,
+
         },
       });
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message);
+      console.log(e);
     }
     setLoading(false);
   };
@@ -183,6 +191,19 @@ function Login() {
     setPasswordMatch(value === signUpPassword);
   };
 
+  //select institution
+  const [institutionId, setInstitutionId] = React.useState("");
+  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
+
+  const setAndPrintInstitutionIdError = (isInstitutudeIdInvalid) => {
+    if (isInstitutudeIdInvalid) setsignUpError("Please Select An Institution");
+  };
+
+  const handleInstitutionSelection = (event) => {
+    setInstitutionId(event.value);
+    setIsInstitudeSelected(true);
+  };
+
   return (
     <Container>
       <SignUpContainer signin={signIn}>
@@ -224,6 +245,17 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+
+          <StyledSelectInput
+            options={institutionInfo}
+            defaultValue={institutionId}
+            onChange={handleInstitutionSelection}
+            placeholder="Select an Institution"
+            classNamePrefix="SelectInput"
+            autocomplete={true}
+            isSelectionValid={isInstitudeSelected}
+          ></StyledSelectInput>
+
           <Input
             type="password"
             placeholder="Password"
@@ -428,13 +460,13 @@ const Input = styled.input`
   width: 100%;
   &:focus {
     ${(props) =>
-      props.isValidEmail ||
+    props.isValidEmail ||
       props.isValidPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
-        ? `border: 2px solid green;`
-        : `border: 1px solid grey`}
+      ? `border: 2px solid green;`
+      : `border: 1px solid grey`}
   }
 `;
 
@@ -544,6 +576,43 @@ const CriteriaMessage = styled.span`
   margin-right: 10px;
   font-size: 12px;
   color: ${({ isValid }) => (isValid ? "green" : "inherit")};
+`;
+
+const StyledSelectInput = styled(Select)`
+  width: 100%;
+
+  .SelectInput__control {
+    background-color: #eee;
+    border: none;
+    border-radius: 25px;
+    margin: 8px 0;
+  }
+
+  .SelectInput__control--is-focused {
+    border: ${({ isSelectionValid }) =>
+    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+    box-shadow: none;
+  }
+
+  .SelectInput__control:hover {
+    border-color: #eee;
+  }
+
+  .SelectInput__menu {
+    background-color: #eee;
+  }
+
+  .SelectInput__option:hover {
+    background-color: #ec7281;
+  }
+
+  .SelectInput__option--is-selected {
+    background-color: #e32f45;
+  }
+
+  .SelectInput__single-value .SelectInput__control--is-focused {
+    background-color: purple;
+  }
 `;
 
 export default Login;
