@@ -1,9 +1,42 @@
-.BG{
-    background: rgb(227,47,69);
-    background: linear-gradient(0deg, rgba(227,47,69,1) 0%, rgba(255,255,255,1) 100%);
+.BG {
+    background-color: white;
     position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;   
-}
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  
+  @keyframes slideInFromTop {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .BG {
+    background-color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  
+  .CardContainer {
+    animation: slideInFromTop 0.8s ease-in-out; /* Apply animation to the container */
+  }
+  
+  /* Add a delay to each Card to create staggered entrance effect */
+  .CardContainer > .MuiCard-root:nth-child(odd) {
+    animation-delay: 0.2s;
+  }
+  
+  .CardContainer > .MuiCard-root:nth-child(even) {
+    animation-delay: 0.4s;
+  }
+  
