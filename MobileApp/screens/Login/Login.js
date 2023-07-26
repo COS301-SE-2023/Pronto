@@ -30,7 +30,6 @@ const Login = ({ navigation }) => {
   };
 
   const [isTypingEmail, setIsTypingEmail] = useState(false);
-  const [isTypingPassword, setIsTypingPassword] = useState(false);
 
   const onSignInPressed = async (data) => {
     if (loading) {
@@ -43,6 +42,7 @@ const Login = ({ navigation }) => {
         role: "Student",
       });
 
+v
       //  navigation.navigate("Timetable");
     } catch (e) {
       Alert.alert("Sign in error", e.message);
@@ -52,14 +52,7 @@ const Login = ({ navigation }) => {
   };
 
   //validate password on sign in
-  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
-  const validateSignInPassword = (value) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const isValidSignInPassword = regex.test(value);
 
-    setPasswordSignInIsValid(isValidSignInPassword);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -107,22 +100,10 @@ const Login = ({ navigation }) => {
             value={password}
             onChangeText={(value) => {
               setPassword(value);
-              setPasswordSignInIsValid(value);
-              validateSignInPassword(value);
             }}
             onFocus={() => setIsTypingPassword(true)}
           />
-          {isTypingPassword && passwordSignInIsValid && (
-            <View style={styles.iconContainer}>
-              <Ionicons name="checkmark-circle" size={24} color="green" />
-            </View>
-          )}
 
-          {isTypingPassword && !passwordSignInIsValid && (
-            <View style={styles.iconContainer}>
-              <MaterialIcons name="cancel" size={24} color="red" />
-            </View>
-          )}
         </View>
 
         <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>

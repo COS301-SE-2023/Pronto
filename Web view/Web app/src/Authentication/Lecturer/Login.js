@@ -30,6 +30,14 @@ function Login() {
 
     setLoading(true);
     event.preventDefault();
+
+    // Add email validation check
+    if (!emailIsValid) {
+      setsignInError("Please enter a valid email address.");
+      setLoading(false);
+      return;
+    }
+
     try {
       await Auth.signIn(email, password);
       setsignInError("");
@@ -43,10 +51,40 @@ function Login() {
 
   const onSignUpPressed = async (event) => {
     event.preventDefault();
+    const errors = []; // Create an array to hold error messages
+
     if (confirmPassword !== signUpPassword) {
-      setsignUpError("Passwords do not match");
+      errors.push("Passwords do not match");
+    }
+
+    if (!nameIsValid) {
+      errors.push("Please enter a valid name.");
+    }
+
+    if (!surnameIsValid) {
+      errors.push("Please enter a valid surname.");
+    }
+
+    if (!emailIsValid) {
+      errors.push("Please enter a valid email address.");
+    }
+
+    if (!passwordIsValid) {
+      errors.push(
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&)."
+      );
+    }
+
+    if (errors.length > 0) {
+      // Combine all error messages into a single string separated by <div> elements
+      const errorMessage = errors.map((error, index) => (
+        <div key={index}>{error}</div>
+      ));
+      setsignUpError(errorMessage);
       return;
     }
+
+    setsignUpError(""); // Reset error message if all fields are valid
 
     if (loading) {
       return;
@@ -55,7 +93,6 @@ function Login() {
     setLoading(true);
 
     try {
-      // const response = await Auth.signIn(email, password);
       await Auth.signUp({
         username: email,
         password: signUpPassword,
@@ -66,10 +103,9 @@ function Login() {
           address: "",
         },
         clientMetadata: {
-          role: "Lecture",
+          role: "Lecturer",
         },
       });
-      setsignUpError("");
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message);
@@ -123,13 +159,6 @@ function Login() {
 
   //validating password for sign in
   const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
-  const validateSignInPassword = (value) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const isValidSignInPassword = regex.test(value);
-
-    setPasswordSignInIsValid(isValidSignInPassword);
-  };
 
   //validate name and surname for sign up
   const [nameIsValid, setNameIsValid] = useState(false);
@@ -282,9 +311,7 @@ function Login() {
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
-              validateSignInPassword(event.target.value);
             }}
-            isValidSignInPassword={passwordSignInIsValid}
           />
           <Button onClick={onSignInPressed}>
             {loading ? "Signing in..." : "Sign in"}
@@ -403,12 +430,11 @@ const Input = styled.input`
     ${(props) =>
       props.isValidEmail ||
       props.isValidPassword ||
-      props.isValidSignInPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
         ? `border: 2px solid green;`
-        : `border: 1px solid #e32f45;`}
+        : `border: 1px solid grey`}
   }
 `;
 

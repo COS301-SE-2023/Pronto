@@ -66,7 +66,7 @@ const Home = () => {
             path="/institution-forgot-password"
             element={<InstitutionForgotPassword />}
           />
-          
+
           <Route path="/add-lecturer" element={<AddLecturer />} />
           <Route
             path="/institution-homepage"

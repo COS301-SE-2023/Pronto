@@ -89,6 +89,66 @@ node_modules/
 .vscode
 .env
 
+# dependencies
+/node_modules
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Jetbrains
+.idea/
+.idea_modules/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+
+# AWS User-specific
+.idea/**/aws.xml
+
+# Expo
+node_modules/
+.expo/
+.cache/
+.git/
+*.log
+*.tgz
+.DS_Store
+
+# WebStorm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS and editor files
+.DS_Store
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*.bak
+*.tmp
+*.tmp.*
+*.~*
+*.DS_Store?
+
+.vscode
+.env
+
 
 # dependencies
 /node_modules
