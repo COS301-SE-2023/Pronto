@@ -142,10 +142,19 @@ const EditTimetable = ({ onSearch }) => {
         
         //Student  found
         else{
-              console.log(stu)
-              stu=stu.data.listStudents.items[0]
-              console.log(stu)
-              console.log(user.attributes)
+              let found=false
+        for(let i=0;i<stu.data.listStudents.items.length;i++){
+           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
+              stu=stu.data.listStudents.items[i]
+              found=true
+              break
+           }
+        }
+              //console.log(stu)
+             // stu=stu.data.listStudents.items[0]
+              //console.log(stu)
+              //console.log(user.attributes)
+              if(found){
               let c=[]
               for(let i=0;i<stu.enrollments.items.length;i++){
                   c.push(stu.enrollments.items[i].course)
@@ -166,6 +175,24 @@ const EditTimetable = ({ onSearch }) => {
                 setActivities(activities)
             }
                  }
+                 else{
+                      let newStudent={
+                          institutionId:institution.id,
+                          firstname: user.attributes.name,
+                          lastname: user.attributes.family_name,
+                          userRole: "Student",
+                          email: studentEmail   
+                    }
+                      let create=await API.graphql({
+                          query:createStudent,
+                          variables:{input:newStudent},
+                          authMode:"AMAZON_COGNITO_USER_POOLS"
+                    })
+                    console.log(create)
+         }        
+                 }
+  
+                
           //      }
             //    console.log(student)
     }catch(e){

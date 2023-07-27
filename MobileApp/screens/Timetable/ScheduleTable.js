@@ -57,7 +57,7 @@ const ScheduleTable = ({navigation}) => {
     try {
       let user = await Auth.currentAuthenticatedUser()
       let studentEmail = user.attributes.email;
-
+      console.log(user.attributes)
       let act = []
 
       let stu = await API.graphql({
@@ -111,17 +111,28 @@ const ScheduleTable = ({navigation}) => {
           variables: { input: newStudent },
           authMode: "AMAZON_COGNITO_USER_POOLS"
         })
+        console.log(stu)
         stu = create.data.createStudent
       }
 
       //Student  found
       else {
-        stu = stu.data.listStudents.items[0]
+        //stu = stu.data.listStudents.items[0]
+        let found=false
+        for(let i=0;i<stu.data.listStudents.items.length;i++){
+           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
+              stu=stu.data.listStudents.items[i]
+              found=true
+              break
+           }
+        }
+        if(found){
         let c = []
         for (let i = 0; i < stu.enrollments.items.length; i++) {
           c.push(stu.enrollments.items[i].course)
         }
-
+           
+        console.log(stu)
         if (stu.timetable !== null) {
           for (let i = 0; i < stu.timetable.activityId.length; i++) {
             for (let j = 0; j < c.length; j++) {
@@ -161,10 +172,28 @@ const ScheduleTable = ({navigation}) => {
             setActivities(act)
             createScheduleArray(act)
            }
+          }
+        }
+        else{
+            let newStudent = {
+              institutionId: institution.id,
+              firstname: user.attributes.name,
+              lastname: user.attributes.family_name,
+              userRole: "Student",
+              email: studentEmail
+            }
 
+            let create = await API.graphql({
+              query: createStudent,
+              variables: { input: newStudent },
+              authMode: "AMAZON_COGNITO_USER_POOLS"
+            })
+           console.log(stu)
+            stu = create.data.createStudent
+          }
         // }
         }    
-      }
+    
     } catch (e) {
       Alert.alert(error)
     }

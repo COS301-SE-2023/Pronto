@@ -125,3 +125,32 @@ export const updateStudent=`mutation UpdateStudent(
     studentTimetableId
   }
 }`
+
+export const deleteStudent=`mutation DeleteStudent(
+  $input: DeleteStudentInput!
+  $condition: ModelStudentConditionInput
+) {
+  deleteStudent(input: $input, condition: $condition) {
+    institutionId
+    id
+    firstname
+    lastname
+    userRole
+    email
+    timetable {
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+    }
+    enrollments {
+      nextToken
+      startedAt
+    }
+    createdAt
+    updatedAt
+    studentTimetableId
+    owner
+  }
+}`
