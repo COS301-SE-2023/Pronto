@@ -72,10 +72,8 @@ exports.handler = async (event) => {
         if (
           await isAdminAllocated(event.request.clientMetadata.institutionId)
         ) {
-          event.response.autoConfirmUser = false;
           throw new Error(`Institution has an admin already.`);
         }
-        event.response.autoConfirmUser = true;
         break;
       case ROLES.Lecture:
         const isLectureEmailPartOfInst = await isLectureEmailPartOfInstitution(
@@ -84,10 +82,8 @@ exports.handler = async (event) => {
         );
 
         if (!isLectureEmailPartOfInst) {
-          event.response.autoConfirmUser = false;
           throw new Error(`Lecturer email is not part of the Institution.`);
         }
-        event.response.autoConfirmUser = true;
         break;
       case ROLES.Student:
         if (
@@ -100,7 +96,6 @@ exports.handler = async (event) => {
             `The provided student email does not match the selected institutions student emails format.
           Please use your institution provided email.`
           );
-        event.response.autoConfirmUser = true;
         break;
     }
   } catch (preAuthError) {
