@@ -84,7 +84,7 @@ const EditTimetable = ({ onSearch }) => {
         let studentEmail=user.attributes.email;
         
 
-        if(student===null){
+        //if(student===null){
           setActivities([])
           let stu=await API.graphql({
                 query:listStudents,
@@ -95,7 +95,7 @@ const EditTimetable = ({ onSearch }) => {
                       }
                     }
                                } ,
-          authMode:"AMAZON_COGNITO_USER_POOLS"                
+          authMode:"API_KEY"                
         })
   
         setStudent(stu.data.listStudents.items[0])
@@ -144,6 +144,8 @@ const EditTimetable = ({ onSearch }) => {
         else{
               console.log(stu)
               stu=stu.data.listStudents.items[0]
+              console.log(stu)
+              console.log(user.attributes)
               let c=[]
               for(let i=0;i<stu.enrollments.items.length;i++){
                   c.push(stu.enrollments.items[i].course)
@@ -164,7 +166,8 @@ const EditTimetable = ({ onSearch }) => {
                 setActivities(activities)
             }
                  }
-                }
+          //      }
+            //    console.log(student)
     }catch(e){
       Alert.alert(error)
       console.log(e)
@@ -270,6 +273,7 @@ const EditTimetable = ({ onSearch }) => {
       
       let s=student
       let del
+      console.log(item)
       let act=activities.filter((activity)=>activity.courseId===item.id)
       handleSave()
       let error="Failed to remove course.Please try again later"

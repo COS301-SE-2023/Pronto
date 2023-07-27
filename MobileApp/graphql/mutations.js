@@ -86,22 +86,6 @@ export const createEnrollment=`mutation CreateEnrollment(
     id
     studentId
     courseId
-    course {
-      id
-      coursecode
-      activity{
-              items{
-                courseId
-                activityname
-                id
-                day
-                start
-                end
-                venue 
-                group
-              }
-            }
-    }
   }
 }
 `

@@ -67,7 +67,7 @@ const ScheduleTable = ({navigation}) => {
             }
           }
         },
-        authMode: "AMAZON_COGNITO_USER_POOLS"
+        authMode: "API_KEY"
       })
 
       // //Student does not exist so create them
@@ -145,11 +145,20 @@ const ScheduleTable = ({navigation}) => {
                 break
               }
             }
+            // act = act.filter((value, index, self) =>
+            //     index === self.findIndex((t) => (
+            //      t.id === value.id 
+            // )))
+               
           }
           else {
             changed = true
           }
 
+          act = act.filter((value, index, self) =>
+                index === self.findIndex((t) => (
+                 t.id === value.id 
+            )))
            if(changed===true){
             //setStudent(stu)
             setActivities(act)
@@ -161,8 +170,8 @@ const ScheduleTable = ({navigation}) => {
         }    
       }
       //console.log(changed)
-     console.log(act)
-     console.log(activities)
+    console.log(act)
+     //console.log(activities)
     } catch (e) {
       console.log("From fetch activivties")
       console.log(e)
