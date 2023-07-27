@@ -21,6 +21,7 @@ const NotificationList = ({navigation}) => {
   const showFullMessage = (key) => {
     Alert.alert(key.description);
   };
+  console.log(navigation)
 
   const fetchAnnouncements = async() => {
     let error="There appears to ne a network error. Please try again"  
@@ -111,11 +112,17 @@ const NotificationList = ({navigation}) => {
       }
   }
 
-  useEffect( () => {
-    fetchAnnouncements()
-  },[])
+  // useEffect( () => {
+  //   fetchAnnouncements()
+  // },[])
 
- 
+     useEffect(() => {
+     const unsubscribe = navigation.addListener('focus', () => {
+  //     fetchAnnouncements()
+    console.log("Refresh")
+     });
+     return unsubscribe
+   }, [navigation])
 
   return (
     <View>

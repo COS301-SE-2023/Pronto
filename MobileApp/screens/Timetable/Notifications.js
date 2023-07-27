@@ -2,10 +2,12 @@ import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import NotificationList from "../../components/NotificationList";
 
-const Notifications = () => {
+const Notifications = ({navigation}) => {
+  //console.log(navigation)
   return (
     <View>
-      <NotificationList />
+      <NotificationList 
+      navigation={navigation}/>
     </View>
   );
 };
