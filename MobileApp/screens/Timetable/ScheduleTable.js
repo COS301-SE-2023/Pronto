@@ -168,15 +168,9 @@ const ScheduleTable = ({navigation}) => {
            }
 
         // }
-        console.log(changed)
         }    
       }
-      //console.log(changed)
-    console.log(act)
-     //console.log(activities)
     } catch (e) {
-      console.log("From fetch activivties")
-      console.log(e)
       Alert.alert(error)
     }
   }
