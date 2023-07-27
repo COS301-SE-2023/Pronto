@@ -147,11 +147,7 @@ const ScheduleTable = ({navigation}) => {
                 break
               }
             }
-            // act = act.filter((value, index, self) =>
-            //     index === self.findIndex((t) => (
-            //      t.id === value.id 
-            // )))
-               
+
           }
           else {
             changed = true
@@ -162,7 +158,6 @@ const ScheduleTable = ({navigation}) => {
                  t.id === value.id 
             )))
            if(changed===true){
-            //setStudent(stu)
             setActivities(act)
             createScheduleArray(act)
            }
@@ -175,15 +170,13 @@ const ScheduleTable = ({navigation}) => {
     }
   }
 
-
   //fetchActivities()
-  //console.log("fecthing")
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     fetchActivities()
-  //   });
-  //   return unsubscribe
-  // }, [navigation])
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchActivities()
+    });
+    return unsubscribe
+  }, [navigation])
 
   
   const createScheduleArray = async (modules) => {
