@@ -28,6 +28,8 @@ const ScheduleTable = ({navigation}) => {
     ].indexOf(dayOfWeek);
     const results = [];
     let month = date.getMonth()
+
+
     // Loop through each month of the year
     for (month; month < 12; month++) {
       // Create a new date object for the first day of the month
@@ -182,12 +184,12 @@ const ScheduleTable = ({navigation}) => {
 
   //fetchActivities()
   //console.log("fecthing")
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      fetchActivities()
-    });
-    return unsubscribe
-  }, [navigation])
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     fetchActivities()
+  //   });
+  //   return unsubscribe
+  // }, [navigation])
 
   
   const createScheduleArray = async (modules) => {
