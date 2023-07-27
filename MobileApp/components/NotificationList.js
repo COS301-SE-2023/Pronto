@@ -29,7 +29,6 @@ const NotificationList = ({navigation}) => {
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
       
-        if(student===null){
           let stu=await API.graphql({
                 query:listStudents,
                 variables:{
@@ -104,15 +103,12 @@ const NotificationList = ({navigation}) => {
               setDueDates(d)
             
             }
-         }
       }catch(er){
        Alert.alert(error)
       }
   }
 
-  // useEffect( () => {
-  //   fetchAnnouncements()
-  // },[])
+  
 
      useEffect(() => {
      const unsubscribe = navigation.addListener('focus', () => {
