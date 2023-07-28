@@ -473,7 +473,7 @@ const EditTimetable = ({ onSearch }) => {
             color="#000000"
           />
 
-          <View style={styles.modalContent}>
+          <ScrollView contentContainerStyle={styles.modalContent}>
             {selectedModule && (
               <View key={selectedModule.id}>
                 <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
@@ -541,23 +541,26 @@ const EditTimetable = ({ onSearch }) => {
                     activityNumber={i + 1}
                   />
                 ))}
-                <Button
-                  icon="check"
-                  mode="contained"
-                  style={{
-                    backgroundColor: "#e32f45",
-                    marginVertical: 10,
-                    marginHorizontal: 20,
-                  }}
-                  outlined={true}
-                  onPress={() => handleSave()}
-                  testID="save-button"
-                >
-                  Save
-                </Button>
               </View>
             )}
-          </View>
+          </ScrollView>
+          <Button
+            icon="check"
+            mode="contained"
+            style={{
+              backgroundColor: "#e32f45",
+              marginVertical: 10,
+              marginHorizontal: 20,
+            }}
+            outlined={true}
+            onPress={() => handleSave()}
+            testID="save-button"
+          >
+            Save
+          </Button>
+
+
+
         </View>
       </Modal>
 
@@ -588,8 +591,9 @@ const styles = StyleSheet.create({
   modalContent: {
     alignItems: "center",
     marginTop: 50,
-    marginBottom: 20,
+    marginBottom: 100,
     width: "80%",
+    paddingBottom: "10%"
   },
   moduleCode: {
     fontSize: 20,
