@@ -43,20 +43,17 @@ const DeleteAccountPage = () => {
           variables:{input:{id:stu.id}},
           authMode:"AMAZON_COGNITO_USER_POOLS"
         })
-        console.log(del)
       }
       await Auth.currentAuthenticatedUser().then((user) => {
         return Auth.deleteUser(user);
       });
-      //await Auth.signOut()
+      
       Alert.alert(
         "Account Deleted",
         "Your account has been successfully deleted."
       );
     } catch (error) {
 
-      console.log("Error deleting account:", error);
-      console.log(error)
       Alert.alert("Error","An error occurred while deleting your account. Please try again later."
       );
     }

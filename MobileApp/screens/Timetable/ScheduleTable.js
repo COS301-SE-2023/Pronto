@@ -57,7 +57,7 @@ const ScheduleTable = ({navigation}) => {
     try {
       let user = await Auth.currentAuthenticatedUser()
       let studentEmail = user.attributes.email;
-      //console.log(user.attributes)
+      
       let act = []
 
       let stu = await API.graphql({
@@ -71,7 +71,7 @@ const ScheduleTable = ({navigation}) => {
         },
         authMode: "API_KEY"
       })
-      //console.log(stu)
+      
 
        let found=false
         for(let i=0;i<stu.data.listStudents.items.length;i++){
@@ -120,7 +120,6 @@ const ScheduleTable = ({navigation}) => {
           variables: { input: newStudent },
           authMode: "AMAZON_COGNITO_USER_POOLS"
         })
-        console.log(stu)
         stu = create.data.createStudent
       }
 
@@ -177,7 +176,6 @@ const ScheduleTable = ({navigation}) => {
     
     } catch (e) {
       Alert.alert(error)
-      console.log(e)
     }
   }
 

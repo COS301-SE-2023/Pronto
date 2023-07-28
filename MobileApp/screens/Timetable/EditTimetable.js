@@ -72,7 +72,6 @@ const EditTimetable = ({ onSearch }) => {
                 setCourses(search.data.searchCourses.items)
     }catch(e){
       Alert.alert(error)
-      console.log(e)
     }
    }
   }
@@ -146,18 +145,11 @@ const EditTimetable = ({ onSearch }) => {
             variables:{input:newStudent},
             authMode:"AMAZON_COGNITO_USER_POOLS"
         })
-           console.log(create)
          }
-        
         
         //Student  found
         else{
-            
         
-              //console.log(stu)
-             // stu=stu.data.listStudents.items[0]
-              //console.log(stu)
-              //console.log(user.attributes)
               let c=[]
               for(let i=0;i<stu.enrollments.items.length;i++){
                   c.push(stu.enrollments.items[i].course)
@@ -177,19 +169,14 @@ const EditTimetable = ({ onSearch }) => {
                 }
                 setActivities(act)
                 //setStudent(stu)
-                //console.log(stu)
             }
             setStudent(stu)
-            //console.log(stu.enrollments.items)
-            //console.log(student)
-
-            //console.log(user.attributes)
+            
           }   
-          //      }
-            //    console.log(student)
+          
     }catch(e){
       Alert.alert(error)
-      console.log(e)
+    
     }
   }
 
@@ -226,7 +213,7 @@ const EditTimetable = ({ onSearch }) => {
             variables:{input:enroll},
             authMode:"AMAZON_COGNITO_USER_POOLS"
           })
-        //  console.log(newEnrollment)
+    
 
            let s=student
            student.enrollments.items.push(newEnrollment.data.createEnrollment)
@@ -242,7 +229,7 @@ const EditTimetable = ({ onSearch }) => {
             variables:{input:newTimetable},
             authMode:"AMAZON_COGNITO_USER_POOLS",
           })
-          //console.log(create)
+          
             let update=await API.graphql({
               query:updateStudent,
               variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id}},
@@ -251,13 +238,12 @@ const EditTimetable = ({ onSearch }) => {
             let s=student
             s.timetable=create.data.createTimetable
             s.timetableId=s.timetable.id
-            //console.log(update)
+            
             setStudent(s)
             setTimetable(timetable)
        }
       else{
-        //console.log("Logging student")
-        //console.log(student)
+        
         if(student===null){
           fetchCourses()
           throw Error()
@@ -268,13 +254,13 @@ const EditTimetable = ({ onSearch }) => {
           activityId:activityIds
         }
         
-        //console.log(newTimetable)
+        
         let update=await API.graphql({
             query:updateTimetable,
             variables:{input:newTimetable},
             authMode:"AMAZON_COGNITO_USER_POOLS",
           })
-          //console.log(update)
+          
           let s=student
           s.timetable=update.data.updateTimetable
           let upd=await API.graphql({
@@ -287,9 +273,7 @@ const EditTimetable = ({ onSearch }) => {
       }
         toggleModal(null)
       }catch(e){
-        console.log("from edit")
-        console.log(e)
-         Alert.alert(error)
+        Alert.alert(error)
       }
   }
   const addActivity = (activity)=>{ 
@@ -307,35 +291,19 @@ const EditTimetable = ({ onSearch }) => {
       
       let s=student
       let del
-      //console.log(item)
-      //console.log(activities)
-      console.log("Activites before")
-      console.log(activities)
       let act=activities.filter((activity)=>activity.courseId!==item.id)
-      console.log("Activities after")
-      console.log(act)
-      
-      
       let error="Failed to remove course.Please try again later"
        
-      //console.log(student.enrollments.items)
       try{
       for(let i=0;i<student.enrollments.items.length;i++){
         if(student.enrollments.items[i].courseId===item.id){
-        //  try{
-          //console.log(student.enrollments.items[i].owner)
+        
               del= await API.graphql({
                  query:deleteEnrollment,
                  variables:{input:{id:student.enrollments.items[i].id}},
                  authMode:"AMAZON_COGNITO_USER_POOLS",
             })
-              console.log(del)
-          // }catch(er){
-          //   Alert(error)
-          //   console.log(er)
-          // }
-          //5458b4c8-6051-7074-360e-04964ee4bbeb
-          //5458b4c8-6051-7074-360e-04964ee4bbeb
+          
           student.enrollments.items.splice[i,1]
          
           break
@@ -349,8 +317,6 @@ const EditTimetable = ({ onSearch }) => {
       setActivities(act)
       setSelectedModule(null)
     }catch(e){
-      console.log("from delete")
-      console.log(e)
       Alert.alert(error)
     }
     };

@@ -39,7 +39,7 @@ const NotificationList = ({navigation}) => {
                                } ,
           authMode:"API_KEY"                
         })
-        console.log(stu)
+      
         let found=false
         for(let i=0;i<stu.data.listStudents.items.length;i++){
            if(stu.data.listStudents.items[i].owner===user.attributes.sub){
@@ -113,7 +113,6 @@ const NotificationList = ({navigation}) => {
             
             }
       }catch(er){
-       console.log(er)
         Alert.alert(error)
       }
   }

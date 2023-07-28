@@ -44,13 +44,6 @@ const Timetable = () => {
         }).start();
     };
 
-    const hook = ()=>{
-        console.log("Hook")
-    }
-    useEffect(()=>{
-        hook()
-    },"")
-
     function handleClose() {
         // If the side panel is open, close it
         if(isSPanelOpen) {

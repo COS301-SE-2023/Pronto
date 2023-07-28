@@ -35,7 +35,6 @@ const BucketFilesScreen = () => {
       setIsRefreshing(true);
       setIsLoading(true);
       let name=await setUniversityName()
-      console.log(name)
       const response = await Storage.list(
         name + "/StudentFiles/",
         {
@@ -86,7 +85,6 @@ const BucketFilesScreen = () => {
         return sU
     }catch(e){
       Alert.alert(error)
-      console.log(e)
     }
   }
 
