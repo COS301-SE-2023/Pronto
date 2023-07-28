@@ -17,6 +17,7 @@ const NotificationList = ({ navigation }) => {
   const handlePress1 = () => setExpanded1(!expanded1);
   const handlePress2 = () => setExpanded2(!expanded2);
   const handlePress3 = () => setExpanded3(!expanded3);
+  const [loading, setLoading] = useState(true);
 
   const showFullMessage = (key) => {
     Alert.alert(key.description);
@@ -110,10 +111,12 @@ const NotificationList = ({ navigation }) => {
         setAnnouncements(a)
         setReminders(r)
         setDueDates(d)
+        setLoading(false);
 
       }
     } catch (er) {
       Alert.alert(error)
+      setLoading(false);
     }
   }
 
@@ -251,40 +254,61 @@ const NotificationList = ({ navigation }) => {
       <Card.Content>
         <List.Section title="Recent Announcements">
           <View>
-            <ScrollView style={{ height: "70%" }}>
-              {announcements.map((val, key) => (
-                <Card
-                  key={key}
-                  style={{
-                    marginBottom: 10,
-                    backgroundColor: "white",
-                  }}
-                  value={key}
-                  onPress={(e) => showFullMessage(val)}
-                >
-                  <Card.Content>
-                    <Card.Title
-                      key={key}
-                      title={val.course.coursecode}
-                      subtitle={val.start}
-                      left={(props) => (
-                        <Avatar.Icon
-                          {...props}
-                          icon="brain"
-                          color="#e32f45"
-                          style={{ backgroundColor: "white" }}
-                        />
-                      )}
-                    />
-                  </Card.Content>
-                </Card>
-              ))}
+            {loading ? (
+              <Text
+                style={{
+                  fontSize: 30,
+                  fontWeight: 200,
+                  color: "#e32f45",
+                  textAlign: "center"
+                }}
+              >Loading announcements...</Text>
+            ) : announcements.length === 0 ? (
+              <Text
+                style={{
+                  fontSize: 30,
+                  fontWeight: 200,
+                  color: "#e32f45",
+                  textAlign: "center"
+                }}
+              >No recent announcements</Text>
+            ) : (
+              < ScrollView style={{ height: "70%" }}>
+                {announcements.map((val, key) => (
+                  <Card
+                    key={key}
+                    style={{
+                      marginBottom: 10,
+                      backgroundColor: "white",
+                    }}
+                    value={key}
+                    onPress={(e) => showFullMessage(val)}
+                  >
+                    <Card.Content>
+                      <Card.Title
+                        key={key}
+                        title={val.course.coursecode}
+                        subtitle={val.start}
+                        left={(props) => (
+                          <Avatar.Icon
+                            {...props}
+                            icon="brain"
+                            color="#e32f45"
+                            style={{ backgroundColor: "white" }}
+                          />
+                        )}
+                      />
+                    </Card.Content>
+                  </Card>
+                ))}
 
-            </ScrollView>
+              </ScrollView>
+            )}
           </View>
+
         </List.Section>
       </Card.Content>
-    </View>
+    </View >
   );
 };
 
