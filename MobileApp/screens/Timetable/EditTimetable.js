@@ -45,7 +45,7 @@ const EditTimetable = ({ onSearch }) => {
 
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
-      setSelectedModules((prevModules) => [...prevModules, module]);
+      setSelectedModules((prevModules) => [module,...prevModules]);
     }
     setInput("");
   };
@@ -54,7 +54,7 @@ const EditTimetable = ({ onSearch }) => {
 
   const handleSearch = async(text)=>{
     setInput(text)
-    let error="There appears to be a network issue"
+    let error="There appear to be network issues.Please try again later"
 
     if(text!==null){
        try{ 
@@ -71,19 +71,20 @@ const EditTimetable = ({ onSearch }) => {
                 })
                 setCourses(search.data.searchCourses.items)
     }catch(e){
-      Alert(error)
+      Alert.alert(error)
     }
    }
   }
   
   const fetchCourses= async()=>{ 
+    let error="There appear to be network issues.Please try again later"
     try{
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
-        let error="There appear to be network issues.Please try again later"
-
-        if(student===null){
-          setActivities([])
+        
+        //if(student===null){
+        //  setActivities([])
+        let act=[]
           let stu=await API.graphql({
                 query:listStudents,
                 variables:{
@@ -93,13 +94,21 @@ const EditTimetable = ({ onSearch }) => {
                       }
                     }
                                } ,
-          authMode:"AMAZON_COGNITO_USER_POOLS"                
+          authMode:"API_KEY"                
         })
   
-        setStudent(stu.data.listStudents.items[0])
+       // setStudent(stu.data.listStudents.items[0])
+        let found=false 
+        for(let i=0;i<stu.data.listStudents.items.length;i++){
+           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
+              stu=stu.data.listStudents.items[i]
+              found=true
+              break
+           }
+        }
         
-       //Student does not exist so create them
-        if(stu.data.listStudents.items.length===0){
+        //Student not found so create them
+        if(found===false){
           let domain=studentEmail.split("@")[1]
           
           //Find Institution via domain
@@ -135,12 +144,12 @@ const EditTimetable = ({ onSearch }) => {
             query:createStudent,
             variables:{input:newStudent},
             authMode:"AMAZON_COGNITO_USER_POOLS"
-          })
+        })
          }
         
         //Student  found
         else{
-              stu=stu.data.listStudents.items[0]
+        
               let c=[]
               for(let i=0;i<stu.enrollments.items.length;i++){
                   c.push(stu.enrollments.items[i].course)
@@ -153,17 +162,21 @@ const EditTimetable = ({ onSearch }) => {
                   for(let j=0;j<c.length;j++){
                     let index=c[j].activity.items.find(item=>item.id===stu.timetable.activityId[i])
                     if(index!==undefined){
-                      activities.push(index)
+                      act.push(index)
                       break;
                     }
                 }
                 }
-                setActivities(activities)
+                setActivities(act)
+                //setStudent(stu)
             }
-                 }
-                }
+            setStudent(stu)
+            
+          }   
+          
     }catch(e){
-      Alert(error)
+      Alert.alert(error)
+    
     }
   }
 
@@ -172,16 +185,25 @@ const EditTimetable = ({ onSearch }) => {
     }, [])
 
   const handleSave = async()=>{
-       try{
+    
+    let error="There appear to be network issues.Please try again later"
+    try{
         //Create enrollment if it doesnt exist
         let activityIds=[]
+        
+
         for(let i=0;i<activities.length;i++){
-          activityIds.push(activities[i].id)
+          if(activities[i]!=undefined){
+            activityIds.push(activities[i].id)
+          }
         }
 
-        let error="There appears to be a network issue.Please try again"
 
-        if((selectedModule!==null && selectedModule!==undefined ) && student.enrollments.items.filter((item)=>item.course.id===selectedModule.id).length===0){
+       if(student===null){
+        fetchCourses()
+        throw Error()
+       }
+        if((selectedModule!==null && selectedModule!==undefined ) && student.enrollments.items.filter((item)=>item.courseId===selectedModule.id).length===0){
           enroll={
             courseId:selectedModule.id,
             studentId:student.id,
@@ -191,6 +213,7 @@ const EditTimetable = ({ onSearch }) => {
             variables:{input:enroll},
             authMode:"AMAZON_COGNITO_USER_POOLS"
           })
+    
 
            let s=student
            student.enrollments.items.push(newEnrollment.data.createEnrollment)
@@ -206,6 +229,7 @@ const EditTimetable = ({ onSearch }) => {
             variables:{input:newTimetable},
             authMode:"AMAZON_COGNITO_USER_POOLS",
           })
+          
             let update=await API.graphql({
               query:updateStudent,
               variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id}},
@@ -214,21 +238,29 @@ const EditTimetable = ({ onSearch }) => {
             let s=student
             s.timetable=create.data.createTimetable
             s.timetableId=s.timetable.id
+            
             setStudent(s)
             setTimetable(timetable)
        }
       else{
         
+        if(student===null){
+          fetchCourses()
+          throw Error()
+        }
         let newTimetable={
           id:student.studentTimetableId,
           studentId:student.id,
           activityId:activityIds
         }
+        
+        
         let update=await API.graphql({
             query:updateTimetable,
             variables:{input:newTimetable},
             authMode:"AMAZON_COGNITO_USER_POOLS",
           })
+          
           let s=student
           s.timetable=update.data.updateTimetable
           let upd=await API.graphql({
@@ -241,7 +273,7 @@ const EditTimetable = ({ onSearch }) => {
       }
         toggleModal(null)
       }catch(e){
-         Alert(error)
+        Alert.alert(error)
       }
   }
   const addActivity = (activity)=>{ 
@@ -259,31 +291,34 @@ const EditTimetable = ({ onSearch }) => {
       
       let s=student
       let del
-      let act=activities.filter((activity)=>activity.courseId===item.id)
-      handleSave()
+      let act=activities.filter((activity)=>activity.courseId!==item.id)
       let error="Failed to remove course.Please try again later"
-
+       
+      try{
       for(let i=0;i<student.enrollments.items.length;i++){
-        if(student.enrollments.items[i].course.id===item.id){
-          try{
-             del= await API.graphql({
-                query:deleteEnrollment,
-                variables:{input:{id:student.enrollments.items[i].id}},
-                authMode:"AMAZON_COGNITO_USER_POOLS",
-             })
-          }catch(er){
-            Alert(error)
-          }
+        if(student.enrollments.items[i].courseId===item.id){
+        
+              del= await API.graphql({
+                 query:deleteEnrollment,
+                 variables:{input:{id:student.enrollments.items[i].id}},
+                 authMode:"AMAZON_COGNITO_USER_POOLS",
+            })
+          
           student.enrollments.items.splice[i,1]
+         
           break
         }
       }
+      await handleSave()
       setStudent(student)
-      setSelectedModules((prevModules) =>
+     setSelectedModules((prevModules) =>
         prevModules.filter((module) => module.id !== item.id)
       );
       setActivities(act)
       setSelectedModule(null)
+    }catch(e){
+      Alert.alert(error)
+    }
     };
 
     return (

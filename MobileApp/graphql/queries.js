@@ -224,8 +224,8 @@ export const listStudents=`query ListStudents(
       id
       firstname
       lastname
-      userRole
       email
+      owner
       studentTimetableId
       timetable { 
         activities{ 
@@ -248,6 +248,8 @@ export const listStudents=`query ListStudents(
       enrollments { 
         items{
           id
+          courseId
+          owner
           course{ 
             id
             coursecode

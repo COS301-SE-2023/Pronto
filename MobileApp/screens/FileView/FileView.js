@@ -12,6 +12,8 @@ import {
 import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { Auth,API} from "aws-amplify"
+import { listInstitutions,listStudents } from "../../graphql/queries";
 
 //graphQL call to get the university of the student, which will be used to get the file from that folder.
 //let studentUniversity = "UniversityOfPretoria";
@@ -32,9 +34,9 @@ const BucketFilesScreen = () => {
     try {
       setIsRefreshing(true);
       setIsLoading(true);
-      await setUniversityName()
+      let name=await setUniversityName()
       const response = await Storage.list(
-        studentUniversity + "/StudentFiles/",
+        name + "/StudentFiles/",
         {
           pageSize: 1000,
         }
@@ -43,6 +45,7 @@ const BucketFilesScreen = () => {
       setFileList(files);
       setIsLoading(false);
       setIsRefreshing(false);
+      
     } catch (error) {
       Alert.alert("Error fetching file list:", error);
       setIsLoading(false);
@@ -52,9 +55,8 @@ const BucketFilesScreen = () => {
 
   const setUniversityName = async()=>{
     
-    let error="There appears to be a network error.Please try again later"
+    let error="There appear to be network issues.Please try again later"
     try{
-      if(studentUniversity===""){
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email
         let domain=studentEmail.split('@')[1]
@@ -79,8 +81,8 @@ const BucketFilesScreen = () => {
         sU = words
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
         .join(""); // Join the words without spaces
-        setStudentUniversity(sU) 
-      }
+        await setStudentUniversity(sU) 
+        return sU
     }catch(e){
       Alert.alert(error)
     }

@@ -86,22 +86,7 @@ export const createEnrollment=`mutation CreateEnrollment(
     id
     studentId
     courseId
-    course {
-      id
-      coursecode
-      activity{
-              items{
-                courseId
-                activityname
-                id
-                day
-                start
-                end
-                venue 
-                group
-              }
-            }
-    }
+    owner
   }
 }
 `
@@ -115,6 +100,7 @@ export const deleteEnrollment=`mutation DeleteEnrollment(
     courseId
   }
 }`
+
 export const updateStudent=`mutation UpdateStudent(
   $input: UpdateStudentInput!
   $condition: ModelStudentConditionInput
@@ -139,5 +125,33 @@ export const updateStudent=`mutation UpdateStudent(
     createdAt
     updatedAt
     studentTimetableId
+  }
+}`
+
+export const deleteStudent=`mutation DeleteStudent(
+  $input: DeleteStudentInput!
+  $condition: ModelStudentConditionInput
+) {
+  deleteStudent(input: $input, condition: $condition) {
+    institutionId
+    id
+    firstname
+    lastname
+    userRole
+    email
+    timetable {
+      id
+      studentId
+      activityId
+      createdAt
+      updatedAt
+    }
+    enrollments {
+      nextToken
+    }
+    createdAt
+    updatedAt
+    studentTimetableId
+    owner
   }
 }`

@@ -7,23 +7,54 @@ import {
   Alert,
   ImageBackground,
 } from "react-native";
-import { Auth } from "aws-amplify";
-
+import { Auth,API } from "aws-amplify";
+import{listStudents} from "../../graphql/queries"
+import { deleteStudent } from "../../graphql/mutations";
 const DeleteAccountPage = () => {
   const handleDeleteAccount = async () => {
     try {
+          
+          let user=await Auth.currentAuthenticatedUser()
+          let studentEmail=user.attributes.email;
+          let stu=await API.graphql({
+                query:listStudents,
+                variables:{
+                    filter :{ 
+                      email : { 
+                          eq:studentEmail
+                      }
+                    }
+                               } ,
+          authMode:"API_KEY"                
+        })
+        //stu=stu.data.listStudents.items[0]
+        let found=false
+        for(let i=0;i<stu.data.listStudents.items.length;i++){
+           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
+              stu=stu.data.listStudents.items[i]
+              found=true
+              break
+           }
+        }
+        if(found){
+                
+        let del=await API.graphql({
+          query:deleteStudent,
+          variables:{input:{id:stu.id}},
+          authMode:"AMAZON_COGNITO_USER_POOLS"
+        })
+      }
       await Auth.currentAuthenticatedUser().then((user) => {
         return Auth.deleteUser(user);
       });
+      
       Alert.alert(
         "Account Deleted",
         "Your account has been successfully deleted."
       );
     } catch (error) {
-      console.log("Error deleting account:", error);
-      Alert.alert(
-        "Error",
-        "An error occurred while deleting your account. Please try again later."
+
+      Alert.alert("Error","An error occurred while deleting your account. Please try again later."
       );
     }
   };
