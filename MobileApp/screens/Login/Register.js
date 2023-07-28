@@ -245,11 +245,15 @@ const Register = ({ navigation }) => {
         </View>
 
         <View style={styles.inputContainer}>
+          {/* Update the boxStyles prop for SelectList */}
           <SelectList
             setSelected={(institutionId) => setInstitutionId(institutionId)}
             data={institutionInfo}
             save="key"
-            boxStyles={[styles.input, { padding: 0, backgroundColor: "transparent" }]}
+            boxStyles={[
+              styles.input,
+              { paddingVertical: 16, backgroundColor: "#E7DADA", opacity: 0.7, textAlignVertical: "center" },
+            ]}
             defaultOption={{ key: "notSet", value: "Select University" }}
             placeholder="Select University"
             searchPlaceholder="Search University"
