@@ -55,7 +55,6 @@ function Login() {
     event.preventDefault();
     const errors = []; // Create an array to hold error messages
 
-
     if (confirmPassword !== signUpPassword) {
       errors.push("Passwords do not match");
     }
@@ -111,7 +110,6 @@ function Login() {
         clientMetadata: {
           role: "Lecturer",
           institutionId: institutionId,
-
         },
       });
       navigate("/lecturer-confirm-email", { state: { email: email } });
@@ -246,7 +244,6 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-
           <StyledSelectInput
             options={institutionInfo}
             defaultValue={institutionId}
@@ -256,7 +253,6 @@ function Login() {
             autocomplete={true}
             isSelectionValid={isInstitudeSelected}
           ></StyledSelectInput>
-
           <Input
             type="password"
             placeholder="Password"
@@ -346,10 +342,10 @@ function Login() {
               setPassword(event.target.value);
             }}
           />
-          <Button onClick={onSignInPressed}>
+          <Button type="submit" onClick={onSignInPressed}>
             {loading ? "Signing in..." : "Sign in"}
           </Button>
-          <Anchor href="/lecturer-forgot-password">
+          <Anchor type="text/html" href="/lecturer-forgot-password">
             Forgot your password?
           </Anchor>
           {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
@@ -369,7 +365,9 @@ function Login() {
           <RightOverlayPanel signin={signIn}>
             <Title>No Account?</Title>
             <Paragraph>Click here to verify a lecturer account</Paragraph>
-            <GhostButton onClick={() => toggle(false)}>Sign Up</GhostButton>
+            <GhostButton type="button" onClick={() => toggle(false)}>
+              Sign Up
+            </GhostButton>
           </RightOverlayPanel>
         </Overlay>
       </OverlayContainer>
@@ -461,13 +459,13 @@ const Input = styled.input`
   width: 100%;
   &:focus {
     ${(props) =>
-    props.isValidEmail ||
+      props.isValidEmail ||
       props.isValidPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
-      ? `border: 2px solid green;`
-      : `border: 1px solid grey`}
+        ? `border: 2px solid green;`
+        : `border: 1px solid grey`}
   }
 `;
 
@@ -591,7 +589,7 @@ const StyledSelectInput = styled(Select)`
 
   .SelectInput__control--is-focused {
     border: ${({ isSelectionValid }) =>
-    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+      isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
     box-shadow: none;
   }
 
