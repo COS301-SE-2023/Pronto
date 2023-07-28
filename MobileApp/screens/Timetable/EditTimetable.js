@@ -29,6 +29,7 @@ const EditTimetable = ({ onSearch }) => {
   const [timetable, setTimetable] = useState(null)
   const [activities, setActivities] = useState([])
   const [student, setStudent] = useState(null)
+  const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
 
   const toggleModal = (module) => {
     if (module) {
@@ -79,6 +80,7 @@ const EditTimetable = ({ onSearch }) => {
   const fetchCourses = async () => {
     let error = "There appear to be network issues.Please try again later"
     try {
+      setIsLoading(true); // Set loading state to true during API call
       let user = await Auth.currentAuthenticatedUser()
       let studentEmail = user.attributes.email;
 
@@ -173,8 +175,9 @@ const EditTimetable = ({ onSearch }) => {
         setStudent(stu)
 
       }
-
+      setIsLoading(false); // Set loading state to false after courses are fetched
     } catch (e) {
+      setIsLoading(false); // Set loading state to false if error
       Alert.alert(error)
 
     }
@@ -414,8 +417,26 @@ const EditTimetable = ({ onSearch }) => {
         data={selectedModules}
         renderItem={oneModule}
         ListEmptyComponent={
-          !input &&
-          selectedModules.length === 0 && (
+          !input && courses.length === 0 && isLoading ? ( // Use isLoading state to conditionally render loading message
+            <View
+              style={{
+                flexDirection: "row",
+                textAlign: "center",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: "bold",
+                  color: "black",
+                }}
+              >
+                Fetching your modules...
+              </Text>
+            </View>
+          ) : (
             <View
               style={{
                 flexDirection: "row",
