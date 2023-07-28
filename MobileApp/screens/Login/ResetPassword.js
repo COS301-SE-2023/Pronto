@@ -31,6 +31,12 @@ const ResetPassword = ({ navigation }) => {
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
   const onResetPasswordPressed = async () => {
+
+    if (!emailIsValid) {
+      Alert.alert("Error", "Please enter a valid email");
+      return;
+    }
+
     if (loading) return;
 
     setLoading(true);
