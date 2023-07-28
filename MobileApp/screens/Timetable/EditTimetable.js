@@ -295,7 +295,7 @@ const EditTimetable = ({ onSearch }) => {
       let s = student
       let del
       let act = activities.filter((activity) => activity.courseId !== item.id)
-      let error = "Failed to remove course.Please try again later"
+      let error = "Failed to remove course. Please try again later"
 
       try {
         for (let i = 0; i < student.enrollments.items.length; i++) {
@@ -417,7 +417,7 @@ const EditTimetable = ({ onSearch }) => {
         data={selectedModules}
         renderItem={oneModule}
         ListEmptyComponent={
-          !input && courses.length === 0 && isLoading ? ( // Use isLoading state to conditionally render loading message
+          (isLoading && input !== '') ? ( // Display the "Fetching your modules..." text while loading and input is not empty
             <View
               style={{
                 flexDirection: "row",
@@ -428,37 +428,41 @@ const EditTimetable = ({ onSearch }) => {
             >
               <Text
                 style={{
-                  fontSize: 24,
-                  fontWeight: "bold",
-                  color: "black",
+                  fontSize: 30,
+                  fontWeight: 200,
+                  color: "#e32f45",
                 }}
               >
                 Fetching your modules...
               </Text>
             </View>
-          ) : (
-            <View
-              style={{
-                flexDirection: "row",
-                textAlign: "center",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text
+          ) : ( // Display the "You have no modules" text after loading is completed and no courses are found
+            input === '' && courses.length === 0 && !isLoading ? (
+              <View
                 style={{
-                  fontSize: 24,
-                  fontWeight: "bold",
-                  color: "black",
+                  flexDirection: "row",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                You have no modules
-              </Text>
-            </View>
+                <Text
+                  style={{
+                    fontSize: 30,
+                    fontWeight: 200,
+                    color: "#e32f45",
+                  }}
+                >
+                  You have no modules
+                </Text>
+              </View>
+            ) : null
           )
         }
         style={styles.moduleList} // Set a specific height for FlatList
       />
+
+
 
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
@@ -557,7 +561,7 @@ const EditTimetable = ({ onSearch }) => {
         </View>
       </Modal>
 
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
