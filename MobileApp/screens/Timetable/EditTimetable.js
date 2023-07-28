@@ -54,7 +54,7 @@ const EditTimetable = ({ onSearch }) => {
 
   const handleSearch = async(text)=>{
     setInput(text)
-    let error="There appears to be a network issue"
+    let error="There appear to be network issues.Please try again later"
 
     if(text!==null){
        try{ 
@@ -186,7 +186,7 @@ const EditTimetable = ({ onSearch }) => {
 
   const handleSave = async()=>{
     
-    let error="There appears to be a network issue.Please try again"
+    let error="There appear to be network issues.Please try again later"
     try{
         //Create enrollment if it doesnt exist
         let activityIds=[]

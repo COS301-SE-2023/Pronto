@@ -55,7 +55,7 @@ const BucketFilesScreen = () => {
 
   const setUniversityName = async()=>{
     
-    let error="There appears to be a network error.Please try again later"
+    let error="There appear to be network issues.Please try again later"
     try{
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email

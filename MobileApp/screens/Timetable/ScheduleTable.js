@@ -51,7 +51,7 @@ const ScheduleTable = ({navigation}) => {
     return results;
   }
 
-  let error = "There seem to be network problems. Try again later";
+  let error = "There appear to be network issues.Please try again later";
 
   const fetchActivities = async () => {
     try {

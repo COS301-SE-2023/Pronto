@@ -23,7 +23,7 @@ const NotificationList = ({navigation}) => {
   };
   
   const fetchAnnouncements = async() => {
-    let error="There appears to ne a network error. Please try again"  
+    let error="There appear to be network issues.Please try again later"  
     try{
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
