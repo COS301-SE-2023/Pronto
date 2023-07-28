@@ -25,7 +25,6 @@ const NotificationList = ({navigation}) => {
   const fetchAnnouncements = async() => {
     let error="There appears to ne a network error. Please try again"  
     try{
-        let error="There appears to be a network issue.Please try again later"
         let user=await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
       
@@ -40,9 +39,18 @@ const NotificationList = ({navigation}) => {
                                } ,
           authMode:"API_KEY"                
         })
+        console.log(stu)
+        let found=false
+        for(let i=0;i<stu.data.listStudents.items.length;i++){
+           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
+              stu=stu.data.listStudents.items[i]
+              found=true
+              break
+           }
+        }
         
        //Student does not exist so create them
-        if(stu.data.listStudents.items.length===0){
+        if(found===false){
           let domain=studentEmail.split("@")[1]
           
           //Find Institution via domain
@@ -64,7 +72,8 @@ const NotificationList = ({navigation}) => {
           }
     
           institution=institution.data.listInstitutions.items[0]
-          
+        
+
           //Create student
           let newStudent={
             institutionId:institution.id,
@@ -82,7 +91,7 @@ const NotificationList = ({navigation}) => {
         
         //Student  found
         else{
-              stu=stu.data.listStudents.items[0]
+              //stu=stu.data.listStudents.items[0]
               setStudent(stu)
               let a=[]
               let r=[]
@@ -104,7 +113,8 @@ const NotificationList = ({navigation}) => {
             
             }
       }catch(er){
-       Alert.alert(error)
+       console.log(er)
+        Alert.alert(error)
       }
   }
 

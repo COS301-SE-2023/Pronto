@@ -86,6 +86,7 @@ export const createEnrollment=`mutation CreateEnrollment(
     id
     studentId
     courseId
+    owner
   }
 }
 `
@@ -99,6 +100,7 @@ export const deleteEnrollment=`mutation DeleteEnrollment(
     courseId
   }
 }`
+
 export const updateStudent=`mutation UpdateStudent(
   $input: UpdateStudentInput!
   $condition: ModelStudentConditionInput
@@ -146,7 +148,6 @@ export const deleteStudent=`mutation DeleteStudent(
     }
     enrollments {
       nextToken
-      startedAt
     }
     createdAt
     updatedAt

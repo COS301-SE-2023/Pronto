@@ -43,12 +43,12 @@ const DeleteAccountPage = () => {
           variables:{input:{id:stu.id}},
           authMode:"AMAZON_COGNITO_USER_POOLS"
         })
-      
         console.log(del)
       }
       await Auth.currentAuthenticatedUser().then((user) => {
         return Auth.deleteUser(user);
       });
+      //await Auth.signOut()
       Alert.alert(
         "Account Deleted",
         "Your account has been successfully deleted."

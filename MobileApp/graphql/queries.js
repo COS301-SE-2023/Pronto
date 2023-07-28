@@ -248,6 +248,8 @@ export const listStudents=`query ListStudents(
       enrollments { 
         items{
           id
+          courseId
+          owner
           course{ 
             id
             coursecode

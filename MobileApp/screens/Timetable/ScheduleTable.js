@@ -57,7 +57,7 @@ const ScheduleTable = ({navigation}) => {
     try {
       let user = await Auth.currentAuthenticatedUser()
       let studentEmail = user.attributes.email;
-      console.log(user.attributes)
+      //console.log(user.attributes)
       let act = []
 
       let stu = await API.graphql({
@@ -71,9 +71,18 @@ const ScheduleTable = ({navigation}) => {
         },
         authMode: "API_KEY"
       })
+      //console.log(stu)
 
+       let found=false
+        for(let i=0;i<stu.data.listStudents.items.length;i++){
+           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
+              stu=stu.data.listStudents.items[i]
+              found=true
+              break
+           }
+        }
       // //Student does not exist so create them
-      if (stu.data.listStudents.items.length === 0) {
+      if (found===false) {
         let domain = studentEmail.split("@")[1]
 
       //   //Find Institution via domain
@@ -118,21 +127,10 @@ const ScheduleTable = ({navigation}) => {
       //Student  found
       else {
         //stu = stu.data.listStudents.items[0]
-        let found=false
-        for(let i=0;i<stu.data.listStudents.items.length;i++){
-           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
-              stu=stu.data.listStudents.items[i]
-              found=true
-              break
-           }
-        }
-        if(found){
-        let c = []
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          c.push(stu.enrollments.items[i].course)
-        }
-           
-        console.log(stu)
+         let c=[]
+              for(let i=0;i<stu.enrollments.items.length;i++){
+                  c.push(stu.enrollments.items[i].course)
+              }
         if (stu.timetable !== null) {
           for (let i = 0; i < stu.timetable.activityId.length; i++) {
             for (let j = 0; j < c.length; j++) {
@@ -173,29 +171,13 @@ const ScheduleTable = ({navigation}) => {
             createScheduleArray(act)
            }
           }
-        }
-        else{
-            let newStudent = {
-              institutionId: institution.id,
-              firstname: user.attributes.name,
-              lastname: user.attributes.family_name,
-              userRole: "Student",
-              email: studentEmail
-            }
-
-            let create = await API.graphql({
-              query: createStudent,
-              variables: { input: newStudent },
-              authMode: "AMAZON_COGNITO_USER_POOLS"
-            })
-           console.log(stu)
-            stu = create.data.createStudent
-          }
+        
         // }
         }    
     
     } catch (e) {
       Alert.alert(error)
+      console.log(e)
     }
   }
 
