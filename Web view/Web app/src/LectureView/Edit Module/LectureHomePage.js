@@ -19,7 +19,6 @@ const LectureHomePage = () => {
       }
       else{
         let lecturer_email=user.attributes.email
-        console.log(lecturer_email)
         const lec=await API.graphql({ 
                     query:listLecturers,
                     variables:{ 
@@ -31,7 +30,6 @@ const LectureHomePage = () => {
                   },
                 authMode:"API_KEY",
                 })
-
         if(lec.data.listLecturers.items.length>0){     
           await setLecturer(lec.data.listLecturers.items[0])
             let courseList=await API.graphql({ 
@@ -45,7 +43,7 @@ const LectureHomePage = () => {
                   },
                 authMode:"API_KEY",
                 })
-          console.log(courseList)
+          
           
           courseList=courseList.data.listCourses.items 
           setCourses(courseList)
@@ -63,7 +61,6 @@ const LectureHomePage = () => {
           else{ 
             setError("Something went wrong.Please try again later")
           }
-          console.log(error)
     }
   }
   
