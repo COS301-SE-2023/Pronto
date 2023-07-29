@@ -8,20 +8,26 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
+  ImageBackground
 } from "react-native";
 import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { Auth, API } from "aws-amplify"
+import { listInstitutions, listStudents } from "../../graphql/queries";
 
 //graphQL call to get the university of the student, which will be used to get the file from that folder.
-let studentUniversity = "UniversityOfPretoria";
+//let studentUniversity = "UniversityOfPretoria";
 
 const BucketFilesScreen = () => {
   const [fileList, setFileList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  const [studentUniversity, setStudentUniversity] = useState("")
+
   useEffect(() => {
+    setUniversityName();
     fetchFileList();
   }, []);
 
@@ -29,8 +35,9 @@ const BucketFilesScreen = () => {
     try {
       setIsRefreshing(true);
       setIsLoading(true);
+      let name = await setUniversityName()
       const response = await Storage.list(
-        studentUniversity + "/StudentFiles/",
+        name + "/StudentFiles/",
         {
           pageSize: 1000,
         }
@@ -39,12 +46,49 @@ const BucketFilesScreen = () => {
       setFileList(files);
       setIsLoading(false);
       setIsRefreshing(false);
+
     } catch (error) {
       Alert.alert("Error fetching file list:", error);
       setIsLoading(false);
       setIsRefreshing(false);
     }
   };
+
+  const setUniversityName = async () => {
+
+    let error = "There appear to be network issues.Please try again later"
+    try {
+      let user = await Auth.currentAuthenticatedUser()
+      let studentEmail = user.attributes.email
+      let domain = studentEmail.split('@')[1]
+      let institution = await API.graphql({
+        query: listInstitutions,
+        variables: {
+          filter: {
+            domains: {
+              contains: domain
+            }
+          }
+        },
+        authMode: "API_KEY",
+      })
+
+      if (institution.data.listInstitutions.items.length === 0) {
+        error = "Could not determine insititution"
+        throw Error()
+      }
+      sU = institution.data.listInstitutions.items[0].name
+      const words = sU.split(/\s+/); // Split the name into words
+      sU = words
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
+        .join(""); // Join the words without spaces
+      await setStudentUniversity(sU)
+      return sU
+    } catch (e) {
+      Alert.alert(error)
+    }
+  }
+
 
   const openFile = async (fileKey) => {
     try {
@@ -70,6 +114,7 @@ const BucketFilesScreen = () => {
   };
 
   const handleRefresh = () => {
+    setUniversityName()
     fetchFileList();
   };
 
@@ -94,6 +139,12 @@ const BucketFilesScreen = () => {
         >
           Click the files from your unviersity to download and view them
         </Text>
+        <ImageBackground
+          resizeMode="contain"
+          //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+          source={require("../../assets/icons/files.png")}
+          style={styles.image}
+        />
       </View>
 
       {isLoading ? (
@@ -163,6 +214,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 120,
   },
+  image: {
+    width: 200, // Specify the desired width
+    height: 200, // Specify the desired height
+    alignSelf: "center",
+  },
+  heading: {
+    fontSize: 25, // Adjust the font size as desired
+    color: "#e32f45",
+    marginLeft: 10,
+
+  },
+
 });
 
 export default BucketFilesScreen;

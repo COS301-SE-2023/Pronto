@@ -55,7 +55,6 @@ function Login() {
     event.preventDefault();
     const errors = []; // Create an array to hold error messages
 
-
     if (confirmPassword !== signUpPassword) {
       errors.push("Passwords do not match");
     }
@@ -78,7 +77,7 @@ function Login() {
 
     if (!passwordIsValid) {
       errors.push(
-        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&)."
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
       );
     }
 
@@ -111,7 +110,6 @@ function Login() {
         clientMetadata: {
           role: "Lecturer",
           institutionId: institutionId,
-
         },
       });
       navigate("/lecturer-confirm-email", { state: { email: email } });
@@ -134,7 +132,7 @@ function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const validatePassword = (value) => {
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidPassword = regex.test(value);
 
     setPasswordIsValid(isValidPassword);
@@ -144,7 +142,7 @@ function Login() {
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[@$!%*?&]/.test(value),
+      specialChar: /[!@#$%^&*()?]/.test(value),
     });
   };
 
@@ -196,10 +194,6 @@ function Login() {
   const [institutionId, setInstitutionId] = React.useState("");
   const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
 
-  const setAndPrintInstitutionIdError = (isInstitutudeIdInvalid) => {
-    if (isInstitutudeIdInvalid) setsignUpError("Please Select An Institution");
-  };
-
   const handleInstitutionSelection = (event) => {
     setInstitutionId(event.value);
     setIsInstitudeSelected(true);
@@ -246,7 +240,6 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-
           <StyledSelectInput
             options={institutionInfo}
             defaultValue={institutionId}
@@ -256,7 +249,6 @@ function Login() {
             autocomplete={true}
             isSelectionValid={isInstitudeSelected}
           ></StyledSelectInput>
-
           <Input
             type="password"
             placeholder="Password"
@@ -306,7 +298,7 @@ function Login() {
                 </CriteriaMessage>
                 <CriteriaMessage isValid={passwordCriteria.specialChar}>
                   {passwordCriteria.specialChar ? "✓" : "x"} Special character
-                  (@$!%*?&)
+                  (!@#$%^&*()?)
                 </CriteriaMessage>
               </>
             )}
@@ -346,10 +338,10 @@ function Login() {
               setPassword(event.target.value);
             }}
           />
-          <Button onClick={onSignInPressed}>
+          <Button type="submit" onClick={onSignInPressed}>
             {loading ? "Signing in..." : "Sign in"}
           </Button>
-          <Anchor href="/lecturer-forgot-password">
+          <Anchor type="text/html" href="/lecturer-forgot-password">
             Forgot your password?
           </Anchor>
           {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
@@ -369,7 +361,9 @@ function Login() {
           <RightOverlayPanel signin={signIn}>
             <Title>No Account?</Title>
             <Paragraph>Click here to verify a lecturer account</Paragraph>
-            <GhostButton onClick={() => toggle(false)}>Sign Up</GhostButton>
+            <GhostButton type="button" onClick={() => toggle(false)}>
+              Sign Up
+            </GhostButton>
           </RightOverlayPanel>
         </Overlay>
       </OverlayContainer>

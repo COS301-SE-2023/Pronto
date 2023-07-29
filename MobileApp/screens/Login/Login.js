@@ -60,6 +60,13 @@ const Login = ({ navigation }) => {
           <Text style={styles.subtitle}>
             Welcome back, sign in to access all your features!
           </Text>
+
+          <ImageBackground
+            resizeMode="contain"
+            //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+            source={require("../../assets/icons/login.png")}
+            style={styles.image}
+          />
         </View>
 
         <View style={styles.inputContainer}>
@@ -99,7 +106,7 @@ const Login = ({ navigation }) => {
             onChangeText={(value) => {
               setPassword(value);
             }}
-            onFocus={() => setIsTypingPassword(true)}
+
           />
 
         </View>
@@ -204,6 +211,11 @@ const styles = StyleSheet.create({
     top: "50%",
     right: 10,
     transform: [{ translateY: -12 }],
+  },
+  image: {
+    width: 200, // Specify the desired width
+    height: 200, // Specify the desired height
+    alignSelf: "center",
   },
 });
 
