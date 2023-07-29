@@ -1,35 +1,77 @@
-name: Build status
+name: Unit and Integration Tests
 
 on:
   push:
-    branches: [ "frontend-dev" ]
+    branches: [main, dev, frontend-navigation-update]
   pull_request:
-    branches: [ "frontend-dev" ]
+    branches: [main, dev, frontend-navigation-update]
 
 jobs:
-  build:
-
-    runs-on: windows-latest
-
+  build-mobile:
+    runs-on:  ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 18.x]
-        # Version 18 has been used : Node.js 18 LTS
-
+        node-version: [18.x]
+    defaults:
+      run:
+        working-directory: ./MobileApp
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm run test --if-present
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - run: npm test -- --u
 
+  build-web:
+    runs-on:  ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    defaults:
+      run:
+        working-directory: "Web view/Web app"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version}}
+      - run: |
+          npm ci
+          npm run build --if-present
+          npm test
+
+  build-backend:
+    runs-on:  ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    defaults:
+      run:
+        working-directory: "amplify/backend"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version}}
+      - run: |
+          npm ci
+          npm test
+
+  cypress-tests-web-app:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "Web view/Web app"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies and run Cypress tests
+        run: |
+          npm ci
+          npx cypress run 
 
 
