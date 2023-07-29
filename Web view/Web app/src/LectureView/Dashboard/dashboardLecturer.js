@@ -1,22 +1,30 @@
 import * as React from 'react';
 import styled from "styled-components";
 import LecturerNavigation from "../LecturerNavigation";
+import EditNoteIcon from '@mui/icons-material/EditNote';
 
 const DashboardLecturer = () => {
-    return (
-        <div>
-            <LeftContainer>
-                <LecturerNavigation/>
-            </LeftContainer>
-            <RightContainer>
-                <div>
-                    <div className={"row ml-3"}>
-                        <h1>Dashboard Lecturer</h1>
+    return (<div>
+        <LeftContainer>
+            <LecturerNavigation/>
+        </LeftContainer>
+        <RightContainer>
+
+            <div className={"grid"}>
+                <div className={"row ml-3"} style={{alignItems: "center", height: "90vh"}}>
+                    <div className={"col-4"} style={{
+                        display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
+                    }}>
+                            <EditNoteIcon style={{fontSize: "250px", cursor: "pointer"}}/>
+
+                        <span style={{fontSize: "30px"}}>Edit Module Info</span>
                     </div>
                 </div>
-            </RightContainer>
-        </div>
-    )
+            </div>
+
+
+        </RightContainer>
+    </div>)
 }
 const LeftContainer = styled.div`
   position: absolute;
@@ -37,4 +45,7 @@ const RightContainer = styled.div`
   z-index: 2;
 
 `;
+
+
 export default DashboardLecturer;
+
