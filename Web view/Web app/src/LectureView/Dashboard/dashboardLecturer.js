@@ -17,7 +17,11 @@ const DashboardLecturer = () => {
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
-                            <EditNoteIcon style={{fontSize: "250px", cursor: "pointer"}}/>
+                            <EditNoteIcon style={{fontSize: "250px", cursor: "pointer"}}
+                            onClick={() => {
+                                window.location.href = "/lecture-homepage";
+                            }}
+                            />
 
                         <span style={{fontSize: "30px"}}>Edit Module Info</span>
                     </div>
@@ -25,7 +29,11 @@ const DashboardLecturer = () => {
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
-                        <CampaignIcon style={{fontSize: "250px", cursor: "pointer"}}/>
+                        <CampaignIcon style={{fontSize: "250px", cursor: "pointer"}}
+                                      onClick={() => {
+                                          window.location.href = "/recent-announcement";
+                                      }}
+                        />
 
                         <span style={{fontSize: "30px"}}>Annoucements</span>
                     </div>
@@ -33,7 +41,11 @@ const DashboardLecturer = () => {
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
-                        <SettingsAccessibilityIcon style={{fontSize: "250px", cursor: "pointer"}}/>
+                        <SettingsAccessibilityIcon style={{fontSize: "250px", cursor: "pointer"}}
+                                                   onClick={() => {
+                                                       window.location.href = "/personal-info";
+                                                   }}
+                        />
 
                         <span style={{fontSize: "30px"}}>Edit Personal Info</span>
                     </div>
