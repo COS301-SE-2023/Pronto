@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from "styled-components";
 import LecturerNavigation from "../LecturerNavigation";
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import CampaignIcon from '@mui/icons-material/Campaign';
 
 const DashboardLecturer = () => {
     return (<div>
@@ -18,6 +19,14 @@ const DashboardLecturer = () => {
                             <EditNoteIcon style={{fontSize: "250px", cursor: "pointer"}}/>
 
                         <span style={{fontSize: "30px"}}>Edit Module Info</span>
+                    </div>
+
+                    <div className={"col-4"} style={{
+                        display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
+                    }}>
+                        <CampaignIcon style={{fontSize: "250px", cursor: "pointer"}}/>
+
+                        <span style={{fontSize: "30px"}}>Annoucements</span>
                     </div>
                 </div>
             </div>
