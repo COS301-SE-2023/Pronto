@@ -77,7 +77,7 @@ function Login() {
 
     if (!passwordIsValid) {
       errors.push(
-        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&)."
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
       );
     }
 
@@ -298,7 +298,7 @@ function Login() {
                 </CriteriaMessage>
                 <CriteriaMessage isValid={passwordCriteria.specialChar}>
                   {passwordCriteria.specialChar ? "✓" : "x"} Special character
-                  (@$!%*?&)
+                  (!@#$%^&*()?)
                 </CriteriaMessage>
               </>
             )}
@@ -455,13 +455,13 @@ const Input = styled.input`
   width: 100%;
   &:focus {
     ${(props) =>
-      props.isValidEmail ||
+    props.isValidEmail ||
       props.isValidPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
-        ? `border: 2px solid green;`
-        : `border: 1px solid grey`}
+      ? `border: 2px solid green;`
+      : `border: 1px solid grey`}
   }
 `;
 
@@ -585,7 +585,7 @@ const StyledSelectInput = styled(Select)`
 
   .SelectInput__control--is-focused {
     border: ${({ isSelectionValid }) =>
-      isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
     box-shadow: none;
   }
 

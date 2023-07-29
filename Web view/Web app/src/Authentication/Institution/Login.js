@@ -39,7 +39,7 @@ function Login() {
       return;
     }
     try {
-      await Auth.signIn(email, password,{role:"Admin"});
+      await Auth.signIn(email, password, { role: "Admin" });
       setsignInError("");
       //navigate to lecturer home page
       navigate("/institution-homepage");
@@ -64,7 +64,7 @@ function Login() {
 
     if (!passwordIsValid) {
       errors.push(
-        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&)."
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
       );
     }
     if (confirmPassword !== signUpPassword) {
@@ -249,7 +249,7 @@ function Login() {
                 </CriteriaMessage>
                 <CriteriaMessage isValid={passwordCriteria.specialChar}>
                   {passwordCriteria.specialChar ? "✓" : "x"} Special character
-                  (@$!%*?&)
+                  (!@#$%^&*()?)
                 </CriteriaMessage>
               </>
             )}
@@ -405,13 +405,13 @@ const Input = styled.input`
   width: 100%;
   &:focus {
     ${(props) =>
-      props.isValidEmail ||
+    props.isValidEmail ||
       props.isValidPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
-        ? `border: 2px solid green;`
-        : `border: 1px solid grey`}
+      ? `border: 2px solid green;`
+      : `border: 1px solid grey`}
   }
 `;
 
