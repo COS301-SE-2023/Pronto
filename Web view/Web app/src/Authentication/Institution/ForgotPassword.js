@@ -28,7 +28,7 @@ function ForgotPassword() {
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const validatePassword = (value) => {
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidPassword = regex.test(value);
 
     setPasswordIsValid(isValidPassword);
@@ -38,7 +38,7 @@ function ForgotPassword() {
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[@$!%*?&]/.test(value),
+      specialChar: /[!@#$%^&*()?]/.test(value),
     });
   };
 
@@ -314,14 +314,14 @@ const Input = styled.input`
   width: 100%;
   &:focus {
     ${(props) =>
-      props.isValidEmail ||
+    props.isValidEmail ||
       props.isValidPassword ||
       props.isValidSignInPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
-        ? `border: 2px solid green;`
-        : `border: 1px solid #e32f45;`}
+      ? `border: 2px solid green;`
+      : `border: 1px solid #e32f45;`}
   }
 `;
 

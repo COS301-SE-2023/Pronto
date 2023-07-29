@@ -77,7 +77,7 @@ function Login() {
 
     if (!passwordIsValid) {
       errors.push(
-        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&)."
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
       );
     }
 
@@ -132,7 +132,7 @@ function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const validatePassword = (value) => {
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidPassword = regex.test(value);
 
     setPasswordIsValid(isValidPassword);
@@ -142,7 +142,7 @@ function Login() {
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[@$!%*?&]/.test(value),
+      specialChar: /[!@#$%^&*()?]/.test(value),
     });
   };
 
@@ -193,10 +193,6 @@ function Login() {
   //select institution
   const [institutionId, setInstitutionId] = React.useState("");
   const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const setAndPrintInstitutionIdError = (isInstitutudeIdInvalid) => {
-    if (isInstitutudeIdInvalid) setsignUpError("Please Select An Institution");
-  };
 
   const handleInstitutionSelection = (event) => {
     setInstitutionId(event.value);
@@ -302,7 +298,7 @@ function Login() {
                 </CriteriaMessage>
                 <CriteriaMessage isValid={passwordCriteria.specialChar}>
                   {passwordCriteria.specialChar ? "✓" : "x"} Special character
-                  (@$!%*?&)
+                  (!@#$%^&*()?)
                 </CriteriaMessage>
               </>
             )}
@@ -459,13 +455,13 @@ const Input = styled.input`
   width: 100%;
   &:focus {
     ${(props) =>
-      props.isValidEmail ||
+    props.isValidEmail ||
       props.isValidPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
-        ? `border: 2px solid green;`
-        : `border: 1px solid grey`}
+      ? `border: 2px solid green;`
+      : `border: 1px solid grey`}
   }
 `;
 
@@ -589,7 +585,7 @@ const StyledSelectInput = styled(Select)`
 
   .SelectInput__control--is-focused {
     border: ${({ isSelectionValid }) =>
-      isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
     box-shadow: none;
   }
 

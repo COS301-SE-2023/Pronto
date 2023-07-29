@@ -31,6 +31,12 @@ const ResetPassword = ({ navigation }) => {
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
   const onResetPasswordPressed = async () => {
+
+    if (!emailIsValid) {
+      Alert.alert("Error", "Please enter a valid email");
+      return;
+    }
+
     if (loading) return;
 
     setLoading(true);
@@ -48,9 +54,16 @@ const ResetPassword = ({ navigation }) => {
       <View style={styles.contentContainer}>
         <View style={styles.centered}>
           <Text style={styles.title}>Reset Password</Text>
+
           <Text style={styles.subtitle}>
             Forgot your password? No problem, just reset it here!
           </Text>
+          <ImageBackground
+            resizeMode="contain"
+            //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+            source={require("../../assets/icons/reset-password.png")}
+            style={styles.image}
+          />
         </View>
 
         <View style={styles.inputContainer}>
@@ -177,6 +190,11 @@ const styles = StyleSheet.create({
     top: "50%",
     right: 10,
     transform: [{ translateY: -12 }],
+  },
+  image: {
+    width: 200, // Specify the desired width
+    height: 200, // Specify the desired height
+    alignSelf: "center",
   },
 });
 
