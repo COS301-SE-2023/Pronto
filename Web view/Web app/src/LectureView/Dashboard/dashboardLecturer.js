@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LecturerNavigation from "../LecturerNavigation";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
 
 const DashboardLecturer = () => {
     return (<div>
@@ -28,6 +29,16 @@ const DashboardLecturer = () => {
 
                         <span style={{fontSize: "30px"}}>Annoucements</span>
                     </div>
+
+                    <div className={"col-4"} style={{
+                        display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
+                    }}>
+                        <SettingsAccessibilityIcon style={{fontSize: "250px", cursor: "pointer"}}/>
+
+                        <span style={{fontSize: "30px"}}>Edit Personal Info</span>
+                    </div>
+
+
                 </div>
             </div>
 
