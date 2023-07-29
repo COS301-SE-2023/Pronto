@@ -71,7 +71,7 @@ const PasswordCriteriaMessage = ({ criteria }) => {
             specialChar ? styles.criteriaMet : styles.criteriaNotMet,
           ]}
         >
-          - At least one special character (@$!%*?&){" "}
+          - At least one special character (!@#$%^&*()?){" "}
           {specialChar && (
             <Ionicons name="checkmark-circle" size={16} color="green" />
           )}

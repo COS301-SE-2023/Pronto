@@ -50,7 +50,7 @@ const Register = ({ navigation }) => {
   const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
   const validateSignUpPassword = (value) => {
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidSignUpPassword = regex.test(value);
 
     setPasswordSignUpIsValid(isValidSignUpPassword);
@@ -60,7 +60,7 @@ const Register = ({ navigation }) => {
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[@$!%*?&]/.test(value),
+      specialChar: /[!@#$%^&*()?]/.test(value),
     });
   };
 
