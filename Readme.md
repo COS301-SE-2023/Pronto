@@ -21,7 +21,10 @@ Pronto is a React Native application that helps students to create their timetab
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Demo3%20SRS.pdf">🧾 SRS Document</a></div>
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Architectural%20Requirements.pdf">🧾 Architectural Requirement</a></div>
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Code%20Quality%20Standards.pdf">🧾 Code Quality Standards</a></div>
-<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Technical%20Installation.pdf">🧾 Technical Installation Manual</a></div><br>
+
+### Manuals
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/User%20Manual.pdf">🧾 User Manual</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Technical%20Installation.pdf">🧾 Technical Installation Manual</a></div>
 
 ### Previous SRS versions
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%201%20documents/Demo%201%20SRS.pdf">🧾 Demo 1: SRS Document</a></div>
@@ -51,5 +54,7 @@ Pronto is a React Native application that helps students to create their timetab
 
 # Extra Information
 
-### Refer to the technical installation Manual for all inforamtion regarding how to install and run the app.
+### Refer to the technical installation Manual for all inforamtion regarding how to install and run the app. 
+### For directions/clarification on how to use the app, refer to the user manual.
+
 ### Feel free to contact the team via our email address: AgileArchitectsCapstone@gmail.com
