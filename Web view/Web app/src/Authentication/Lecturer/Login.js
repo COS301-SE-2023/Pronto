@@ -132,7 +132,7 @@ function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const validatePassword = (value) => {
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidPassword = regex.test(value);
 
     setPasswordIsValid(isValidPassword);
@@ -142,7 +142,7 @@ function Login() {
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[@$!%*?&]/.test(value),
+      specialChar: /[!@#$%^&*()?]/.test(value),
     });
   };
 
@@ -193,10 +193,6 @@ function Login() {
   //select institution
   const [institutionId, setInstitutionId] = React.useState("");
   const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const setAndPrintInstitutionIdError = (isInstitutudeIdInvalid) => {
-    if (isInstitutudeIdInvalid) setsignUpError("Please Select An Institution");
-  };
 
   const handleInstitutionSelection = (event) => {
     setInstitutionId(event.value);
