@@ -27,76 +27,9 @@ const NavigationScreen = () => {
     const [instructions, setInstructions] = useState([]);
 
 
-    function calculateTime(passedDistance, metric) {
-
-        if (metric === "km") {
-
-            //calculate the time to travel the route
-            const averageSpeed = 30; // Average speed in km/h
-            const time = (passedDistance * 1000) / (averageSpeed / 3.6); // Time in seconds
-            const hours = Math.floor(time / 3600);
-            const minutes = Math.floor((time % 3600) / 60);
-            const formattedTime = `${hours}h ${minutes}m`;
-            setTravelTime(formattedTime); // Update the duration state
-        } else {
-
-            //calculate the time to travel the route
-            const averageSpeed = 1.5; // Average speed ratio
-            const time = passedDistance / (averageSpeed / 3.6); // Time in seconds
-
-            const hours = Math.floor(time / 3600);
-
-            const minutes = Math.floor((time % 3600) / 60);
-            const formattedTime = `Walking time: ${hours}h ${minutes}m`;
-            setTravelTime(formattedTime); // Update the duration state
-        }
-
-    }
-
-    const calculateDistance = () => {
-        if (origin && destination) {
-            const R = 6371; // Radius of the Earth in kilometers
-            const lat1 = origin.latitude;
-            const lon1 = origin.longitude;
-            const lat2 = destination.latitude;
-            const lon2 = destination.longitude;
-
-            const dLat = ((lat2 - lat1) * Math.PI) / 180;
-            const dLon = ((lon2 - lon1) * Math.PI) / 180;
-
-            const a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos((lat1 * Math.PI) / 180) *
-                Math.cos((lat2 * Math.PI) / 180) *
-                Math.sin(dLon / 2) *
-                Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-            const distance = R * c * 1000; // Distance in meters
-            if (distance >= 1000) {
-                const newdistance = distance / 1000;
-                //caluclate time
-                calculateTime(newdistance, "km");
-                setDistance(newdistance.toFixed(2).toString() + " kilometers"); // Update the distance state
 
 
-            } else {
-                calculateTime(distance, "m");
-                setDistance(distance.toFixed(2).toString() + " meters"); // Update the distance state
-            }
 
-
-        }
-    };
-
-    useEffect(() => {
-        calculateDistance();
-    }, [origin, destination]);
-
-    // this function will handle the data from the MapViewDirections component
-    // this function will handle the data from the MapViewDirections component
-    // this function will handle the data from the MapViewDirections component
-    // this function will handle the data from the MapViewDirections component
     // this function will handle the data from the MapViewDirections component
     function handleOnReady(result) {
         // extract the step-by-step instructions from the result object
@@ -114,6 +47,9 @@ const NavigationScreen = () => {
         });
 
         setInstructions(steps);
+        //round the distance to 2 decimal places
+        setDistance(result.distance.toFixed(2) + "km");
+        setTravelTime(result.duration.toFixed(2) + " mins");
 
     }
 
@@ -135,6 +71,7 @@ const NavigationScreen = () => {
                         apikey={''}
                         strokeColor={'#395cda'}
                         strokeWidth={4}
+                        mode={"WALKING"}
                         onReady={handleOnReady}
                     />
                 )}
@@ -190,7 +127,7 @@ const NavigationScreen = () => {
                 >
                     <Text style={[styles.buttonText, { color: 'white', fontWeight: 600 }]}>Get Directions</Text>
                 </TouchableOpacity>
-                {route && (
+                {travelTime && distance &&  (
                     <View style={styles.infoContainer}>
                         <Text style={styles.infoText}>Distance: {distance}</Text>
                         <Text style={styles.infoText}>{travelTime}</Text>
@@ -205,6 +142,8 @@ const NavigationScreen = () => {
         </View>
     );
 }
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
