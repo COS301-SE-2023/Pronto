@@ -121,6 +121,12 @@ export default function RecentAnnouncement() {
             announcementList.push.apply(announcementList,announcement.data.listAnnouncements.items)
           }
         }
+         announcementList = announcementList.sort((a, b) => {
+            if (a.createdAt >= b.createdAt)
+              return -1
+            else
+              return 1
+          })
       
         setAnnouncements(announcementList)
       }
