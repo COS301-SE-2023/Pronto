@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import "./LectureHome.css";
 import {API,Auth} from 'aws-amplify'
 import { listLecturers,listAnnouncements, listCourses } from '../graphql/queries';
+import { deleteAnnouncement } from '../graphql/mutations';
 import { ErrorModal } from '../ErrorModal';
 
 const StyledMenu = styled((props) => (
@@ -63,10 +64,12 @@ export default function RecentAnnouncement() {
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
+    console.log(event.target.value)
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+   // console.log("close")
   };
 
   const fetchAnnouncements = async()=>{ 
@@ -135,8 +138,26 @@ export default function RecentAnnouncement() {
           else{ 
             setError("Something went wrong.Please try again later")
           }
-          console.log(error)
       }
+  }
+  
+  const handleDelete = async(key)=>{
+    console.log(key)
+    console.log(announcements[key])
+    try{
+        let del= await API.graphql({
+          query:deleteAnnouncement,
+          variables:{input:{id:announcements[key].id}},
+          authMode:"AMAZON_COGNITO_USER_POOLS",
+        })
+        const rows=[...announcements]
+        rows.splice(key,1)
+        setAnnouncements(rows)
+    }catch(e){
+      setError("Something went wrong.Please try again later")
+    }  
+
+        //setAnchorEl(null)
   }
 
   React.useEffect(()=>  { 
@@ -172,13 +193,16 @@ export default function RecentAnnouncement() {
                         aria-expanded={open ? 'true' : undefined}
                         variant="contained"
                         disableElevation
-                        onClick={handleClick}
-                        endIcon={<KeyboardArrowDownIcon />}
+                        onClick={(e)=>handleDelete(e.target.value)}
+                        value={key}
+                        // endIcon={<KeyboardArrowDownIcon />}
                       >
-                        Options
+                        {/* Options */}
+                        {/* <DeleteIcon /> */}
+                            Delete
                       </Button>
 
-                      <StyledMenu
+                      {/* <StyledMenu
                         id="demo-customized-menu"
                         MenuListProps={{
                         'aria-labelledby': 'demo-customized-button',
@@ -187,11 +211,13 @@ export default function RecentAnnouncement() {
                         open={open}
                         onClose={handleClose}
                       >
-                        <MenuItem onClick={handleClose} disableRipple>
+                        <MenuItem 
+                        value={key}
+                        onClick={(e)=>handleDelete(e.target.value)} disableRipple>
                           <DeleteIcon />
                             Delete
                         </MenuItem>
-                      </StyledMenu>
+                      </StyledMenu> */}
                     </div>
                   </div>
                )

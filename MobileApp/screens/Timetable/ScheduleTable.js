@@ -3,10 +3,10 @@ import { View, TouchableOpacity, Text, Dimensions, Alert } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
-import { listStudents } from "../../graphql/queries"
+import { listStudents,listInstitutions } from "../../graphql/queries"
 import { createStudent } from "../../graphql/mutations";
 
-const ScheduleTable = () => {
+const ScheduleTable = ({navigation}) => {
 
   // const[student,setStudent]=useState(null)
   const [activities, setActivities] = useState([])
@@ -28,6 +28,8 @@ const ScheduleTable = () => {
     ].indexOf(dayOfWeek);
     const results = [];
     let month = date.getMonth()
+
+
     // Loop through each month of the year
     for (month; month < 12; month++) {
       // Create a new date object for the first day of the month
@@ -49,13 +51,13 @@ const ScheduleTable = () => {
     return results;
   }
 
-  let error = "There seem to be network problems. Try again later";
+  let error = "There appear to be network issues.Please try again later";
 
   const fetchActivities = async () => {
     try {
       let user = await Auth.currentAuthenticatedUser()
       let studentEmail = user.attributes.email;
-
+      
       let act = []
 
       let stu = await API.graphql({
@@ -67,14 +69,23 @@ const ScheduleTable = () => {
             }
           }
         },
-        authMode: "AMAZON_COGNITO_USER_POOLS"
+        authMode: "API_KEY"
       })
+      
 
-      //Student does not exist so create them
-      if (stu.data.listStudents.items.length === 0) {
+       let found=false
+        for(let i=0;i<stu.data.listStudents.items.length;i++){
+           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
+              stu=stu.data.listStudents.items[i]
+              found=true
+              break
+           }
+        }
+      // //Student does not exist so create them
+      if (found===false) {
         let domain = studentEmail.split("@")[1]
 
-        //Find Institution via domain
+      //   //Find Institution via domain
         let institution = await API.graphql({
           query: listInstitutions,
           variables: {
@@ -114,12 +125,11 @@ const ScheduleTable = () => {
 
       //Student  found
       else {
-        stu = stu.data.listStudents.items[0]
-        let c = []
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          c.push(stu.enrollments.items[i].course)
-        }
-
+        //stu = stu.data.listStudents.items[0]
+         let c=[]
+              for(let i=0;i<stu.enrollments.items.length;i++){
+                  c.push(stu.enrollments.items[i].course)
+              }
         if (stu.timetable !== null) {
           for (let i = 0; i < stu.timetable.activityId.length; i++) {
             for (let j = 0; j < c.length; j++) {
@@ -145,30 +155,39 @@ const ScheduleTable = () => {
                 break
               }
             }
+
           }
           else {
             changed = true
           }
 
-          if (changed) {
-            //setStudent(stu)
+          act = act.filter((value, index, self) =>
+                index === self.findIndex((t) => (
+                 t.id === value.id 
+            )))
+           if(changed===true){
             setActivities(act)
             createScheduleArray(act)
+           }
           }
-        }
-      }
+        
+        // }
+        }    
+    
     } catch (e) {
       Alert.alert(error)
     }
   }
 
-
+  //fetchActivities()
   useEffect(() => {
-    fetchActivities()
-  }, [])
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchActivities()
+    });
+    return unsubscribe
+  }, [navigation])
 
-  fetchActivities()
-
+  
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
     for (const moduleKey in modules) {
