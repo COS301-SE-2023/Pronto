@@ -43,7 +43,7 @@ export default function PostAccordion(course) {
 
   const defaultProps = {
     center: {
-      lat: -25.753899044547357,
+      lat: -25.753899044547356,
       lng: 28.23134724523217
     },
     zoom: 16
