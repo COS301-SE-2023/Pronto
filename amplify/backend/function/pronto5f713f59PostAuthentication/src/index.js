@@ -1,11 +1,11 @@
 /**
 ========
 /* Amplify Params - DO NOT EDIT
-	AUTH_PRONTOAUTH_USERPOOLID
-	ENV
-	REGION
+  AUTH_PRONTOAUTH_USERPOOLID
+  ENV
+  REGION
 Amplify Params - DO NOT EDIT */ /**
->>>>>>>> dev:amplify/backend/function/prontoAuthPostConfirmation/src/index.js
+>>>>>>> dev
  * @fileoverview
  *
  * This CloudFormation Trigger creates a handler which awaits the other handlers

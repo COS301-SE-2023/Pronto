@@ -23,8 +23,8 @@ const BucketFilesScreen = () => {
   const [fileList, setFileList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-
   const [studentUniversity, setStudentUniversity] = useState("")
+
 
   useEffect(() => {
     setUniversityName();
@@ -36,6 +36,7 @@ const BucketFilesScreen = () => {
       setIsRefreshing(true);
       setIsLoading(true);
       let name = await setUniversityName()
+
       const response = await Storage.list(
         name + "/StudentFiles/",
         {
