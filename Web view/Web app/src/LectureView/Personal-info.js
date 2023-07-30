@@ -24,21 +24,10 @@ const PersonalInfoPage = () => {
     const handleSubmit =async(event)=>{ 
         event.preventDefault()
         try{
-            if(newPassword===confirmPassword){
-                if(oldPassword!==newPassword){
-                    Auth.changePassword(user, oldPassword, newPassword)
-                    setError("Password change successful")
-                }
-                else{ 
-                    setError("New password cannot be the same as old password")
-                }
-            }
-            else{
-                setError("New password does not match confirm password")
-            }
+            Auth.changePassword(user, oldPassword, newPassword)
+            setError("Password change succesful")
         }catch(error){ 
              setError("Password change failed")
-             console.log(error)
         }
         setOldPassword("")
         setNewPassword("")
@@ -53,7 +42,7 @@ const PersonalInfoPage = () => {
 
     React.useEffect(()=> { 
         fetchLecturer()
-    },"")
+    },[])
 
     return (
       <div style={{ display: 'inline-flex' }}>
@@ -70,7 +59,7 @@ const PersonalInfoPage = () => {
                     
                     <tr>
                     <td>Name:</td>
-                    <td>{userAttributes.name + userAttributes.family_name}</td>
+                    <td>{String(userAttributes.name + userAttributes.family_name)}</td>
                     </tr>
 
                     <tr>
@@ -108,7 +97,7 @@ const PersonalInfoPage = () => {
                     <input
                      type="password" 
                      className="form-control" 
-                     id="colFormLabel" 
+                     id="old-password" 
                      data-testid="pword" 
                      required
                      value={oldPassword}
@@ -122,7 +111,7 @@ const PersonalInfoPage = () => {
                     <input  
                     type="password"  
                     className="form-control" 
-                    id="colFormLabel" 
+                    id="new-password" 
                     data-testid="repword" 
                     required
                     value={newPassword}
@@ -136,7 +125,7 @@ const PersonalInfoPage = () => {
                     <input 
                         type="password" 
                         className="form-control" 
-                        id="colFormLabel" 
+                        id="confirm-password" 
                         data-testid="newpword"
                         value={confirmPassword}
                         onChange={(e)=>setConfirmPassword(e.target.value)}

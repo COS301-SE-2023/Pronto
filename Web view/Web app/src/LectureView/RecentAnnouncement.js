@@ -64,12 +64,10 @@ export default function RecentAnnouncement() {
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
-    console.log(event.target.value)
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
-   // console.log("close")
   };
 
   const fetchAnnouncements = async()=>{ 
@@ -142,8 +140,6 @@ export default function RecentAnnouncement() {
   }
   
   const handleDelete = async(key)=>{
-    console.log(key)
-    console.log(announcements[key])
     try{
         let del= await API.graphql({
           query:deleteAnnouncement,

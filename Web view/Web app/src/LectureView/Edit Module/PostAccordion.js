@@ -16,13 +16,12 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 
 import styled from "styled-components";
-import { createAnnouncement, updateAnnouncement } from '../../graphql/mutations';
+import { createAnnouncement } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { useJsApiLoader } from "@react-google-maps/api";
 export default function PostAccordion(course) {
   const [expanded, setExpanded] = React.useState(false);
-  const [announcement, setAnnouncement] = React.useState("")
   const [title, setTitle] = React.useState("")
   const [body, setBody] = React.useState("")
   const [date, setDate] = React.useState("")
@@ -96,7 +95,6 @@ export default function PostAccordion(course) {
         setError("Something went wrong.Please try again later")
 
       }
-      console.log(error)
     }
     setTitle("")
     setBody("")
@@ -134,7 +132,7 @@ export default function PostAccordion(course) {
                 <input
                   type="text"
                   className="form-control"
-                  id="colFormLabel"
+                  id="title-col-2"
                   data-testid="title2"
                   required
                   value={title}
@@ -147,7 +145,7 @@ export default function PostAccordion(course) {
                 <textarea
                   type="text"
                   className="form-control"
-                  id="colFormLabel"
+                  id="body"
                   data-testid="body2"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}></textarea>
@@ -160,7 +158,7 @@ export default function PostAccordion(course) {
                 <input
                   type="date"
                   className="form-control"
-                  id="colFormLabel"
+                  id="date-col-2"
                   data-testid="date2"
                   required
                   value={date}
@@ -202,7 +200,7 @@ export default function PostAccordion(course) {
                 <input
                   type="text"
                   className="form-control"
-                  id="colFormLabel"
+                  id="title-col"
                   data-testid="title2"
                   required
                   value={title}
@@ -216,7 +214,7 @@ export default function PostAccordion(course) {
                 <textarea
                   type="text"
                   className="form-control"
-                  id="colFormLabel"
+                  id="information-col"
                   data-testid="body2"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
@@ -229,7 +227,7 @@ export default function PostAccordion(course) {
                 <input
                   type="date"
                   className="form-control"
-                  id="colFormLabel"
+                  id="date-col"
                   data-testid="date2"
                   required
                   value={date}
