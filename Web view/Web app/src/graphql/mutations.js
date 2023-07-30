@@ -237,6 +237,23 @@ export const updateInstitution=`mutation UpdateInstitution(
 
 }`
 
+export const deleteAnnouncement=`mutation DeleteAnnouncement(
+  $input: DeleteAnnouncementInput!
+  $condition: ModelAnnouncementConditionInput
+) {
+  deleteAnnouncement(input: $input, condition: $condition) {
+    id
+    courseId
+    description
+    start
+    end
+    date
+    venue
+    createdAt
+    updatedAt
+  }
+}
+`
 export const updateAdmin=`mutation UpdateAdmin(
   $input: UpdateAdminInput!
   $condition: ModelAdminConditionInput
