@@ -29,4 +29,34 @@ describe("Testing lecturer home page", () => {
       .contains(this.navAttributes.EDITMODULE.LABEL);
   });
 
+  it("asserts nav routing", function () {
+    cy.LecturerSignIn(
+      this.users.lecturers[0].email,
+      this.users.lecturers[0].password
+    );
+
+    cy.get(`a[href="${this.navAttributes.EDITPERSONAL.HREF}"]`).click();
+    cy.url({ timeout: 10 * 1000 }).should(
+      "eq",
+      `${Cypress.config().baseUrl + "/" + this.navAttributes.EDITPERSONAL.HREF}`
+    );
+    cy.go("back");
+
+    cy.get(`a[href="${this.navAttributes.RECENTANNOUNCEMENTS.HREF}"]`).click();
+    cy.url({ timeout: 10 * 1000 }).should(
+      "eq",
+      `${
+        Cypress.config().baseUrl +
+        "/" +
+        this.navAttributes.RECENTANNOUNCEMENTS.HREF
+      }`
+    );
+    cy.go("back");
+
+    cy.get(`a[href="${this.navAttributes.EDITMODULE.HREF}"]`).click();
+    cy.url({ timeout: 10 * 1000 }).should(
+      "eq",
+      `${Cypress.config().baseUrl + this.navAttributes.EDITMODULE.HREF}`
+    );
+  });
 });
