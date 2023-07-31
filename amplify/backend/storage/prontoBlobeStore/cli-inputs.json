@@ -4,11 +4,7 @@
   "bucketName": "pronto-storage-bucket",
   "storageAccess": "auth",
   "guestAccess": [],
-  "authAccess": [
-    "CREATE_AND_UPDATE",
-    "READ"
-  ],
-  "triggerFunction": "NONE",
+  "authAccess": [],
   "groupAccess": {
     "adminUserGroup": [
       "CREATE_AND_UPDATE",
