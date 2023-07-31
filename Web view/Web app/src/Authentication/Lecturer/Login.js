@@ -4,6 +4,7 @@ import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
+import Select from "react-select";
 
 function Login() {
   //sign in states
@@ -19,6 +20,30 @@ function Login() {
   const [signUpPassword, setSignUpPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
+  //university info
+  const universityInfo = [
+    {
+      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
+      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
+    },
+  ];
+
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -30,8 +55,16 @@ function Login() {
 
     setLoading(true);
     event.preventDefault();
+
+    // Add email validation check
+    if (!emailIsValid) {
+      setsignInError("Please enter a valid email address.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      await Auth.signIn(email, password);
+      await Auth.signIn(email, password, { role: "Lecturer" });
       setsignInError("");
       //navigate to lecturer home page
       navigate("/lecture-homepage");
@@ -43,10 +76,44 @@ function Login() {
 
   const onSignUpPressed = async (event) => {
     event.preventDefault();
+    const errors = []; // Create an array to hold error messages
+
     if (confirmPassword !== signUpPassword) {
-      setsignUpError("Passwords do not match");
+      errors.push("Passwords do not match");
+    }
+
+    if (!institutionId) {
+      errors.push("Please Select An Institution");
+    }
+
+    if (!nameIsValid) {
+      errors.push("Please enter a valid name.");
+    }
+
+    if (!surnameIsValid) {
+      errors.push("Please enter a valid surname.");
+    }
+
+    if (!emailIsValid) {
+      errors.push("Please enter a valid email address.");
+    }
+
+    if (!passwordIsValid) {
+      errors.push(
+        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
+      );
+    }
+
+    if (errors.length > 0) {
+      // Combine all error messages into a single string separated by <div> elements
+      const errorMessage = errors.map((error, index) => (
+        <div key={index}>{error}</div>
+      ));
+      setsignUpError(errorMessage);
       return;
     }
+
+    setsignUpError(""); // Reset error message if all fields are valid
 
     if (loading) {
       return;
@@ -55,7 +122,6 @@ function Login() {
     setLoading(true);
 
     try {
-      // const response = await Auth.signIn(email, password);
       await Auth.signUp({
         username: email,
         password: signUpPassword,
@@ -63,16 +129,16 @@ function Login() {
           email: email,
           name: name,
           family_name: surname,
-          address: "",
         },
         clientMetadata: {
-          role: "Lecture",
+          role: "Lecturer",
+          institutionId: institutionId,
         },
       });
-      setsignUpError("");
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
-      setsignUpError(e.message);
+      setsignUpError(e.message.split("Error: ")[1]);
+      console.log(e);
     }
     setLoading(false);
   };
@@ -89,7 +155,7 @@ function Login() {
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const validatePassword = (value) => {
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidPassword = regex.test(value);
 
     setPasswordIsValid(isValidPassword);
@@ -99,7 +165,7 @@ function Login() {
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[@$!%*?&]/.test(value),
+      specialChar: /[!@#$%^&*()?]/.test(value),
     });
   };
 
@@ -121,15 +187,7 @@ function Login() {
     setPasswordIsFocused(false);
   };
 
-  //validating password for sign in
-  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
-  const validateSignInPassword = (value) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const isValidSignInPassword = regex.test(value);
 
-    setPasswordSignInIsValid(isValidSignInPassword);
-  };
 
   //validate name and surname for sign up
   const [nameIsValid, setNameIsValid] = useState(false);
@@ -153,6 +211,16 @@ function Login() {
   const validateConfirmPassword = (value) => {
     setPasswordMatch(value === signUpPassword);
   };
+
+  //select institution
+  const [institutionId, setInstitutionId] = React.useState("");
+  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
+
+  const handleInstitutionSelection = (event) => {
+    setInstitutionId(event.value);
+    setIsInstitudeSelected(true);
+  };
+
 
   return (
     <Container>
@@ -195,6 +263,16 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+          <StyledSelectInput
+            options={universityInfo}
+            defaultValue={institutionId}
+            onChange={handleInstitutionSelection}
+            placeholder="Select an Institution"
+            classNamePrefix="SelectInput"
+            autoComplete="on"
+            spellCheck="true"
+            isSelectionValid={isInstitudeSelected}
+          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
@@ -219,7 +297,7 @@ function Login() {
           />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
-          <Button onClick={onSignUpPressed}>
+          <Button type="submit" onClick={onSignUpPressed}>
             {loading ? "Signing up..." : "Sign up"}
           </Button>
           <div
@@ -244,7 +322,7 @@ function Login() {
                 </CriteriaMessage>
                 <CriteriaMessage isValid={passwordCriteria.specialChar}>
                   {passwordCriteria.specialChar ? "✓" : "x"} Special character
-                  (@$!%*?&)
+                  (!@#$%^&*()?)
                 </CriteriaMessage>
               </>
             )}
@@ -282,14 +360,12 @@ function Login() {
             value={password}
             onChange={(event) => {
               setPassword(event.target.value);
-              validateSignInPassword(event.target.value);
             }}
-            isValidSignInPassword={passwordSignInIsValid}
           />
-          <Button onClick={onSignInPressed}>
+          <Button type="submit" onClick={onSignInPressed}>
             {loading ? "Signing in..." : "Sign in"}
           </Button>
-          <Anchor href="/lecturer-forgot-password">
+          <Anchor type="text/html" href="/lecturer-forgot-password">
             Forgot your password?
           </Anchor>
           {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
@@ -303,13 +379,17 @@ function Login() {
             <Paragraph>
               Please sign in to access all of Pronto's features
             </Paragraph>
-            <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
+            <GhostButton type="button" onClick={() => toggle(true)}>
+              Sign In
+            </GhostButton>
           </LeftOverlayPanel>
 
-          <RightOverlayPanel signin={signIn}>
+          <RightOverlayPanel class="rightOverlay" signin={signIn}>
             <Title>No Account?</Title>
             <Paragraph>Click here to verify a lecturer account</Paragraph>
-            <GhostButton onClick={() => toggle(false)}>Sign Up</GhostButton>
+            <GhostButton type="button" onClick={() => toggle(false)}>
+              Sign Up
+            </GhostButton>
           </RightOverlayPanel>
         </Overlay>
       </OverlayContainer>
@@ -401,14 +481,13 @@ const Input = styled.input`
   width: 100%;
   &:focus {
     ${(props) =>
-      props.isValidEmail ||
+    props.isValidEmail ||
       props.isValidPassword ||
-      props.isValidSignInPassword ||
       props.isValidName ||
       props.isValidSurname ||
       props.passwordMatch // Add the condition here
-        ? `border: 2px solid green;`
-        : `border: 1px solid #e32f45;`}
+      ? `border: 2px solid green;`
+      : `border: 1px solid grey`}
   }
 `;
 
@@ -518,6 +597,43 @@ const CriteriaMessage = styled.span`
   margin-right: 10px;
   font-size: 12px;
   color: ${({ isValid }) => (isValid ? "green" : "inherit")};
+`;
+
+const StyledSelectInput = styled(Select)`
+  width: 100%;
+
+  .SelectInput__control {
+    background-color: #eee;
+    border: none;
+    border-radius: 25px;
+    margin: 8px 0;
+  }
+
+  .SelectInput__control--is-focused {
+    border: ${({ isSelectionValid }) =>
+    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+    box-shadow: none;
+  }
+
+  .SelectInput__control:hover {
+    border-color: #eee;
+  }
+
+  .SelectInput__menu {
+    background-color: #eee;
+  }
+
+  .SelectInput__option:hover {
+    background-color: #ec7281;
+  }
+
+  .SelectInput__option--is-selected {
+    background-color: #e32f45;
+  }
+
+  .SelectInput__single-value .SelectInput__control--is-focused {
+    background-color: purple;
+  }
 `;
 
 export default Login;

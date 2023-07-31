@@ -1,1 +1,3 @@
 src/models
+# cypress
+test/e2e/cypress/support/**.command.js

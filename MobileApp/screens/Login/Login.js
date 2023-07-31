@@ -30,7 +30,6 @@ const Login = ({ navigation }) => {
   };
 
   const [isTypingEmail, setIsTypingEmail] = useState(false);
-  const [isTypingPassword, setIsTypingPassword] = useState(false);
 
   const onSignInPressed = async (data) => {
     if (loading) {
@@ -39,7 +38,9 @@ const Login = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await Auth.signIn(username, password);
+      const response = await Auth.signIn(username, password, {
+        role: "Student",
+      });
       //  navigation.navigate("Timetable");
     } catch (e) {
       Alert.alert("Sign in error", e.message);
@@ -49,14 +50,7 @@ const Login = ({ navigation }) => {
   };
 
   //validate password on sign in
-  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
-  const validateSignInPassword = (value) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const isValidSignInPassword = regex.test(value);
 
-    setPasswordSignInIsValid(isValidSignInPassword);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,6 +60,13 @@ const Login = ({ navigation }) => {
           <Text style={styles.subtitle}>
             Welcome back, sign in to access all your features!
           </Text>
+
+          <ImageBackground
+            resizeMode="contain"
+            //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+            source={require("../../assets/icons/login.png")}
+            style={styles.image}
+          />
         </View>
 
         <View style={styles.inputContainer}>
@@ -104,22 +105,10 @@ const Login = ({ navigation }) => {
             value={password}
             onChangeText={(value) => {
               setPassword(value);
-              setPasswordSignInIsValid(value);
-              validateSignInPassword(value);
             }}
-            onFocus={() => setIsTypingPassword(true)}
-          />
-          {isTypingPassword && passwordSignInIsValid && (
-            <View style={styles.iconContainer}>
-              <Ionicons name="checkmark-circle" size={24} color="green" />
-            </View>
-          )}
 
-          {isTypingPassword && !passwordSignInIsValid && (
-            <View style={styles.iconContainer}>
-              <MaterialIcons name="cancel" size={24} color="red" />
-            </View>
-          )}
+          />
+
         </View>
 
         <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>
@@ -222,6 +211,11 @@ const styles = StyleSheet.create({
     top: "50%",
     right: 10,
     transform: [{ translateY: -12 }],
+  },
+  image: {
+    width: 200, // Specify the desired width
+    height: 200, // Specify the desired height
+    alignSelf: "center",
   },
 });
 

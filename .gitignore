@@ -5,7 +5,7 @@ node_modules/
 .git/
 *.log
 *.tgz
-.DS_Store
+amplify\team-provider-info.json
 
 # WebStorm
 .idea/
@@ -88,28 +88,8 @@ node_modules/
 
 .vscode
 .env
+*.vtl
 
-#amplify-do-not-edit-begin
-amplify/\#current-cloud-backend
-amplify/.config/local-*
-amplify/logs
-amplify/mock-data
-amplify/mock-api-resources
-amplify/backend/amplify-meta.json
-amplify/backend/.temp
-build/
-dist/
-node_modules/
-aws-exports.js
-awsconfiguration.json
-amplifyconfiguration.json
-amplifyconfiguration.dart
-amplify-build-config.json
-amplify-gradle-config.json
-amplifytools.xcconfig
-.secret-*
-**.sample
-#amplify-do-not-edit-end
 
 # dependencies
 /node_modules
@@ -167,6 +147,8 @@ node_modules/
 *.~*
 *.DS_Store?
 
+team-provider-info.json
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -188,4 +170,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-

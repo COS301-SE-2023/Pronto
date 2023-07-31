@@ -1,74 +1,218 @@
-import React, { useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, TouchableOpacity, Text, Dimensions, Alert } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
-import modules from "../../assets/data/mock/modules.json";
+import { API, Auth } from 'aws-amplify'
+import { listStudents,listInstitutions } from "../../graphql/queries"
+import { createStudent } from "../../graphql/mutations";
 
-//function to take in a day, and give all dates of the year that a day occurs
-function getDatesForDayOfWeek(dayOfWeek) {
-  const date = new Date();
-  const year = date.getFullYear();
-  const dayIndex = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ].indexOf(dayOfWeek);
-  const results = [];
+const ScheduleTable = ({navigation}) => {
 
-  // Loop through each month of the year
-  for (let month = 0; month < 12; month++) {
-    // Create a new date object for the first day of the month
-    const firstDayOfMonth = new Date(year, month, 1);
+  // const[student,setStudent]=useState(null)
+  const [activities, setActivities] = useState([])
+  const [schedule, setSchedule] = useState(null)
+  var scheduleArray = {}
 
-    // Find the first occurrence of the specified day of the week
-    const diff = dayIndex - firstDayOfMonth.getDay();
-    let dayOfMonth = diff >= 0 ? diff + 1 : diff + 8;
+  //function to take in a day, and give all dates of the year that a day occurs
+  const getDatesForDayOfWeek = (dayOfWeek) => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const dayIndex = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ].indexOf(dayOfWeek);
+    const results = [];
+    let month = date.getMonth()
 
-    // Loop through the rest of the month, adding dates for the specified day of the week
-    while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
-      const dateString = `${year}-${(month + 1)
-        .toString()
-        .padStart(2, "0")}-${dayOfMonth.toString().padStart(2, "0")}`;
-      results.push(dateString);
-      dayOfMonth += 7;
+
+    // Loop through each month of the year
+    for (month; month < 12; month++) {
+      // Create a new date object for the first day of the month
+      const firstDayOfMonth = new Date(year, month, 1);
+
+      // Find the first occurrence of the specified day of the week
+      const diff = dayIndex - firstDayOfMonth.getDay();
+      let dayOfMonth = diff >= 0 ? diff + 1 : diff + 8;
+
+      // Loop through the rest of the month, adding dates for the specified day of the week
+      while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
+        const dateString = `${year}-${(month + 1)
+          .toString()
+          .padStart(2, "0")}-${dayOfMonth.toString().padStart(2, "0")}`;
+        results.push(dateString);
+        dayOfMonth += 7;
+      }
+    }
+    return results;
+  }
+
+  let error = "There appear to be network issues.Please try again later";
+
+  const fetchActivities = async () => {
+    try {
+      let user = await Auth.currentAuthenticatedUser()
+      let studentEmail = user.attributes.email;
+      
+      let act = []
+
+      let stu = await API.graphql({
+        query: listStudents,
+        variables: {
+          filter: {
+            email: {
+              eq: studentEmail
+            }
+          }
+        },
+        authMode: "API_KEY"
+      })
+      
+
+       let found=false
+        for(let i=0;i<stu.data.listStudents.items.length;i++){
+           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
+              stu=stu.data.listStudents.items[i]
+              found=true
+              break
+           }
+        }
+      // //Student does not exist so create them
+      if (found===false) {
+        let domain = studentEmail.split("@")[1]
+
+      //   //Find Institution via domain
+        let institution = await API.graphql({
+          query: listInstitutions,
+          variables: {
+            filter: {
+              domains: {
+                contains: domain
+              }
+            }
+          },
+          authMode: "API_KEY",
+        })
+
+        //Institution not found
+        if (institution.data.listInstitutions.items.length === 0) {
+          error = "Could not determine institution"
+          throw Error()
+        }
+
+        institution = institution.data.listInstitutions.items[0]
+
+        //Create student
+        let newStudent = {
+          institutionId: institution.id,
+          firstname: user.attributes.name,
+          lastname: user.attributes.family_name,
+          userRole: "Student",
+          email: studentEmail
+        }
+
+        let create = await API.graphql({
+          query: createStudent,
+          variables: { input: newStudent },
+          authMode: "AMAZON_COGNITO_USER_POOLS"
+        })
+        stu = create.data.createStudent
+      }
+
+      //Student  found
+      else {
+        //stu = stu.data.listStudents.items[0]
+         let c=[]
+              for(let i=0;i<stu.enrollments.items.length;i++){
+                  c.push(stu.enrollments.items[i].course)
+              }
+        if (stu.timetable !== null) {
+          for (let i = 0; i < stu.timetable.activityId.length; i++) {
+            for (let j = 0; j < c.length; j++) {
+              let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+              if (index !== undefined) {
+                act.push(index)
+                break;
+              }
+            }
+          }
+          act = act.sort((a, b) => {
+            if (a.start <= b.start)
+              return -1
+            else
+              return 1
+          })
+
+          let changed = false
+          if (act.length === activities.length) {
+            for (let i = 0; i < act.length; i++) {
+              if (act[i].id !== activities[i].id) {
+                changed = true
+                break
+              }
+            }
+
+          }
+          else {
+            changed = true
+          }
+
+          act = act.filter((value, index, self) =>
+                index === self.findIndex((t) => (
+                 t.id === value.id 
+            )))
+           if(changed===true){
+            setActivities(act)
+            createScheduleArray(act)
+           }
+          }
+        
+        // }
+        }    
+    
+    } catch (e) {
+      Alert.alert(error)
     }
   }
 
-  return results;
-}
-
-function createScheduleArray(modules) {
-  const scheduleArray = {};
-  for (const moduleKey in modules) {
-    const dates = getDatesForDayOfWeek(modules[moduleKey].day);
-    dates.forEach((date) => {
-      if (!scheduleArray[date]) {
-        scheduleArray[date] = [];
-      }
-      scheduleArray[date].push({
-        id: modules[moduleKey].id,
-        code: modules[moduleKey].code,
-        time: modules[moduleKey].time,
-        frequency: modules[moduleKey].frequency,
-        venue: modules[moduleKey].venue,
-        day: modules[moduleKey].day,
-        height: 50,
-      });
+  //fetchActivities()
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchActivities()
     });
+    return unsubscribe
+  }, [navigation])
+
+  
+  const createScheduleArray = async (modules) => {
+    scheduleArray = {};
+    for (const moduleKey in modules) {
+      const dates = getDatesForDayOfWeek(modules[moduleKey].day);
+      dates.forEach((date) => {
+        if (!scheduleArray[date]) {
+          scheduleArray[date] = [];
+        }
+        let t = modules[moduleKey].start + "-" + modules[moduleKey].end
+        scheduleArray[date].push({
+          id: modules[moduleKey].id,
+          code: modules[moduleKey].course.coursecode,
+          time: t,
+          frequency: 1,
+          venue: modules[moduleKey].venue,
+          day: modules[moduleKey].day,
+          height: 50,
+        });
+
+      });
+    }
+
+    setSchedule(scheduleArray)
   }
-  return scheduleArray;
-}
 
-var scheduleArray = createScheduleArray(modules);
-
-//scheduleArray.concat(createScheduleArray(modules["COS301"]));
-//console.log(scheduleArray);
-
-const ScheduleTable = () => {
   const renderItem = (module) => {
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
@@ -107,7 +251,7 @@ const ScheduleTable = () => {
             fontSize: 25,
             color: "#748c94",
           }}
-          // #1E90FF
+        // #1E90FF
         >
           No events today
         </Text>
@@ -124,7 +268,7 @@ const ScheduleTable = () => {
   return (
     <View style={{ height: windowHeight, width: windowWidth }}>
       <Agenda
-        items={scheduleArray}
+        items={schedule}
         selected={year + "-" + month + "-" + date}
         renderItem={renderItem}
         showOnlySelectedDayItems={true}
@@ -136,15 +280,15 @@ const ScheduleTable = () => {
           agendaDayTextColor: "#e32f45",
           agendaDayNumColor: "#e32f45",
           agendaTodayColor: "#e32f45",
-          //further styling options if needed
-          //  textDisabledColor: "#e32f45",
-          //   agendaTodayColor: "#e32f45", // today in list
-          //   monthTextColor: "#e32f45", // name in calendar
-          //    textDefaultColor: "#e32f45",
-          // todayBackgroundColor: "#e32f45",
-          // selectedDayTextColor: "#e32f45", // calendar sel date
-          //  dayTextColor: "#e32f45", // calendar day
-          //  textSectionTitleColor: "#e32f45",
+          //         //further styling options if needed
+          //         //  textDisabledColor: "#e32f45",
+          //         //   agendaTodayColor: "#e32f45", // today in list
+          //         //   monthTextColor: "#e32f45", // name in calendar
+          //         //    textDefaultColor: "#e32f45",
+          //         // todayBackgroundColor: "#e32f45",
+          //         // selectedDayTextColor: "#e32f45", // calendar sel date
+          //         //  dayTextColor: "#e32f45", // calendar day
+          //         //  textSectionTitleColor: "#e32f45",
         }}
       />
     </View>

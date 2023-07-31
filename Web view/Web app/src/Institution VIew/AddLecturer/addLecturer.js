@@ -1,65 +1,72 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse} from "../../graphql/mutations"; 
-import { lecturersByInstitutionId,listCourses,listInstitutions} from "../../graphql/queries";
-import  {API} from 'aws-amplify';
-import { Auth } from "aws-amplify";
-import AddModal from './addCourse'
+import { createLecturer, deleteLecturer,updateCourse} from "../../graphql/mutations"; 
+import { lecturersByInstitutionId,listInstitutions,listLecturers} from "../../graphql/queries";
+import  {API,Auth} from 'aws-amplify';
+import AddModal from './addCourse';
+import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 
 const AddLecturer = () => {
     const [firstName,setFirstName]=useState("")
     const [lastName,setLastName]=useState("")
     const [email,setEmail]= useState("")
-    const [courses,setCourses]=useState([{coursename:"",coursecode:""}])  
+    const [courses,setCourses]=useState([])  
     const [filterAttribute,setFilterAttribute]=useState("")
     const [searchValue,setSearchValue]=useState("")
     const [lecturers ,setLecturers]= useState([])
     const[isModalOpened,setIsModalOpened]=useState(false)
     const[searchIcon,setSearchIcon]=useState(false)
-    const[institutionId,setInstitutionId]=useState("")
+    const[institution,setInstitution]=useState("")
+    const[offeredCourses,setOfferedCourses]=useState([])
+    const[selectedCourses,setSelectedCourses]=useState([])
+    const[error,setError]=useState("")
 
     const handleAdd=  async(event) => { 
         event.preventDefault()
-        
         if(!isModalOpened){
-            let user=await Auth.currentAuthenticatedUser() 
-            let courseList=[]
-            courseList=await findCourses(courses)
+            //courseList=await findCourses(courses)
             
             let lecturer={
-                institutionId:user.username, 
+                institutionId:institution.id,
                 firstname:firstName,
                 lastname:lastName,
-                userRole:"lecturer",
+                userRole:"Lecturer",
                 email:email,
             }
-
-            try{   
+            
+             try{       
                 let mutation=await API.graphql({
                     query: createLecturer,
                     variables:{input:lecturer},
                     authMode:'AMAZON_COGNITO_USER_POOLS',
                     })
       
-                lecturer=mutation.data.createLecturer
-                lecturer.courses=[]
-                lecturers.push(mutation.data.createLecturer)
+                 lecturer=mutation.data.createLecturer
+                 lecturer.courses=[]
+                 lecturers.push(mutation.data.createLecturer)
                   
-                //Add lecturer to courses
-                await addCourses(lecturer,courseList)
-                if(lecturers.length<19)
-                    setLecturers(lecturers)       
-                  
-             }catch(e){    
-                  alert("Something went wrong")
-              }    
+                 //Add lecturer to courses
+                 await addCourses(lecturer,selectedCourses)
+                 if(lecturers.length<19)
+                        setLecturers(lecturers)
 
-            //Reset state
+             }catch(error){    
+                let e=error.errors[0].message
+                if(e.search("Unathorized")!==-1){ 
+                    setError("You are not authorized to perform this action.Please log out and log in")
+                }
+                else if(e.search("Network")!==-1){
+                    setError("Request failed due to network issues")
+                }
+                else{ 
+                    setError("Something went wrong.Please try again later")
+                }     
+            }    
             setFirstName("")
             setLastName("")
             setEmail("")
-            setCourses([{coursename:"",coursecode:""}])    
+            setSelectedCourses([])
       }
     }
 
@@ -71,12 +78,8 @@ const AddLecturer = () => {
             
             try{ 
                 let updatedCourseData={
-                id:courseList[i].id,   
-                institutionId:courseList[i].institutionId,
-                coursecode:courseList[i].coursecode,
-                coursename:courseList[i].coursename,
-                lecturerId:null, 
-                 _version:courseList[i]._version
+                    id:courseList[i].id,   
+                    lecturerId:null, 
                 }
         
             let update=await API.graphql({
@@ -86,8 +89,17 @@ const AddLecturer = () => {
             }) 
             lecturer.courses.splice(i,1)
             
-    }catch(e){ 
-        alert("Could not remove course from lecturer")
+    }catch(error){ 
+         let e=error.errors[0].message
+          if(e.search("Unathorized")!==-1){ 
+            setError("You are not authorized to perform this action.Please log out and log in")
+          }
+          else if(e.search("Network")!==-1){
+            setError("Request failed due to network issues")
+          }
+          else{ 
+            setError("Something went wrong.Please try again later")
+          }
     }
     }
 }
@@ -98,16 +110,14 @@ const AddLecturer = () => {
           lecturer.courses=[]
         if(courseList===undefined)
             return
-        for(let i=0;i<courseList.length;i++){
         
+        for(let i=0;i<courseList.length;i++){
             try{ 
                 let updatedCourseData={
-                id:courseList[i].id,   
-                institutionId:courseList[i].institutionId,
-                coursecode:courseList[i].coursecode,
-                coursename:courseList[i].coursename,
-                lecturerId:lecturer.id, 
-                 _version:courseList[i]._version
+                    id:courseList[i].id,   
+                    institutionId:institution.id,
+                    coursecode:courseList[i].coursecode,
+                    lecturerId:lecturer.id, 
                 }
         
             let update=await API.graphql({
@@ -115,46 +125,27 @@ const AddLecturer = () => {
                 variables:{input:updatedCourseData},
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             }) 
-            lecturer.courses.push(update.data.updateCourse) 
+            lecturer.courses.items.push(update.data.updateCourse)
             setLecturers(lecturers)
-    }catch(e){ 
-        alert("could not add course to lecturer")
+
+    }catch(error){ 
+         let e=error.errors[0].message
+          if(e.search("Unathorized")!==-1){ 
+            setError("You are not authorized to perform this action.Please log out and log in")
+          }
+          else if(e.search("Network")!==-1){
+            setError("Request failed due to network issues")
+          }
+          else{ 
+            setError("Something went wrong.Please try again later")
+          }
     }
     }
 }
 
-    const findCourses= async(courses)=>{
-        let courseList=[]
-            
-        for(let i=0;i<courses.length;i++){   
-        if(courses[i].coursecode!==""){    
-            try{
-                let id=await API.graphql({
-                    query:listCourses,
-                    variables: { 
-                    filter: { 
-                        coursecode : { 
-                                        eq:courses[i].coursecode
-                                        }
-                                    }
-                            },
-                    authMode:"AMAZON_COGNITO_USER_POOLS"
-                    })
-            
-                courseList.push(id.data.listCourses.items[0]) 
-                }
-                catch(e){
-                    alert("Course not found!")
-                }
-        }
-    } 
-    return courseList.filter(element=>element!==undefined)
-    }
-
     const handleRemove= async(lecturer,index) =>{
         let lec={ 
            id : lecturer.id,
-           _version:lecturer._version
         }
          try{
             let removeMutation=await API.graphql({
@@ -165,71 +156,84 @@ const AddLecturer = () => {
             let courseList=lecturer.courses
             if(courseList!==undefined){
                 await removeCourses(courseList,lecturer)
+                setOfferedCourses([...offeredCourses,courseList])
                 
         }
             const rows=[...lecturers]
             rows.splice(index,1)
             setLecturers(rows)
         }
-        catch(e){
-            alert("Could not delete lecturer")
+        catch(error){
+            let e=error.errors[0].message
+            if(e.search("Unathorized")!==-1){ 
+                setError("You are not authorized to perform this action.Please log out and log in")
+            }
+            else if(e.search("Network")!==-1){
+                setError("Request failed due to network issues")
+            }
+            else{ 
+                setError("Something went wrong.Please try again later")
+            } 
         }
     }
 
     const fetchLecturers = async()=>{
-        
         try{
-             //Fetch institution via domain of user email
-            //  if(institutionId===""){
-            //  
-            //     let domain=await Auth.currentAuthenticatedUser().attributes.email.split("@")[1]
-            //         let institution=await API.graphql({
-            //             query:listInstitutions,
-            //             variables:{
-            //                 filter:{
-            //                     domains:{
-            //                         contains:domain
-            //                     }
-            //                 }
-            //             }
-            //         })
-            //         setInstitutionId(institution.data.listInstitutions.items[0].id)
-            //     }
-
-            //Get lecturers
-            let user= await Auth.currentAuthenticatedUser()
-            let lecturerslist=await API.graphql(
-                {
-                query:lecturersByInstitutionId, 
-                variables:{ 
-                            institutionId:user.username,
-                            limit: 50
-                    },
-                authMode:'AMAZON_COGNITO_USER_POOLS',
-                }
-           ) 
-           lecturerslist=lecturerslist.data.lecturersByInstitutionId.items
-           lecturerslist=lecturerslist.filter(lecturer=>lecturer._deleted===null)
-           
-           //Get courses
-           for(let i=0;i<lecturerslist.length;i++){   
-                let course=await API.graphql({
-                    query:listCourses,
+            let user=await Auth.currentAuthenticatedUser()
+            if(user===undefined){
+                setError("You are not logged in! Please click on the logout button and log in to use    Pronto")       
+            }
+            else{
+                let domain=user.attributes.email.split("@")[1]
+                let institution=await API.graphql({
+                    query:listInstitutions,
                     variables:{
-                            filter:{
-                                lecturerId:{
-                                    eq:lecturerslist[i].id
+                        filter:{
+                            domains:{
+                                contains:domain
                             }
                         }
                     },
-                    authMode:"AMAZON_COGNITO_USER_POOLS"
-                })        
-               lecturerslist[i].courses=course.data.listCourses.items
-            }        
-            setLecturers(lecturerslist)
+                    authMode:'AMAZON_COGNITO_USER_POOLS',
+                })
+                if(institution.data.listInstitutions.items.length===0){
+                    setError("Oops! We could not find your Institution.Please contact the developers for further assistance")
+                } 
+                else{
+                    institution=institution.data.listInstitutions.items[0]
+                    setInstitution(institution)   
+                    setCourses(institution.courses.items)
+                    let lecturerList=institution.lecturer.items
+                    for(let i=0;i<courses.length;i++){ 
+                        if(courses[i].lecturerId===null){
+                            offeredCourses.push(courses[i])
+                        }
+
+                        if(courses[i].lecturerId!==null){
+                        for(let j=0;j<lecturerList.length;j++){
+                            if(lecturerList[j].id===courses[i].lecturerId){ 
+                                lecturerList[j].courses.items.push(courses[i])
+                                break
+                            }
+                        }
+
+                        }
+                    }
+                    setLecturers(lecturerList)
+                }
+            }
         }
-        catch(error){ 
-            alert("could not fetch lecturer information")
+        catch(error){   
+             let e=error.errors[0].message
+            if(e.search("Unathorized")!==-1){ 
+                setError("You are not authorized to perform this action.Please log out and log in")
+            }
+            else if(e.search("Network")!==-1){
+                setError("Request failed due to network issues")
+            }
+            else{ 
+                setError("Something went wrong.Please try again later")
+            }
         }
     }
     
@@ -242,7 +246,8 @@ const AddLecturer = () => {
                     let search= await API.graphql({
                         query:lecturersByInstitutionId,
                         variables:  { 
-                           institutionId : institution.username,  
+                            //institutionId : institution.username,  
+                            institutionId:institution.id,
                             filter : { 
                                 firstname: { 
                                      eq: searchValue 
@@ -251,14 +256,15 @@ const AddLecturer = () => {
                         },
                         authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
-                    setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+                    setLecturers(search.data.lecturersByInstitutionId.items)
                 }
                 else if(filterAttribute==="lastname"){ 
                     let search= await API.graphql({
                         query:lecturersByInstitutionId,
                         variables:  { 
-                               institutionId : institution.username,  
-                                filter : { 
+                               //institutionId : institution.username,  
+                               institutionId:institution.id, 
+                               filter : { 
                                     lastname: { 
                                          eq: searchValue 
                                     } 
@@ -272,8 +278,9 @@ const AddLecturer = () => {
                     let search= await API.graphql({
                     query:lecturersByInstitutionId,
                     variables:  { 
-                               institutionId : institution.username,  
-                                filter : { 
+                               //institutionId : institution.username,  
+                               institutionId:institution.id, 
+                               filter : { 
                                     email: { 
                                          eq: searchValue 
                                     } 
@@ -290,8 +297,17 @@ const AddLecturer = () => {
             fetchLecturers()
             setSearchIcon(!searchIcon)
         }
-       }catch(e){
-        alert("Search failed")
+       }catch(error){
+            let e=error.errors[0].message
+            if(e.search("Unathorized")!==-1){ 
+                setError("You are not authorized to perform this action.Please log out and log in")
+            }
+            else if(e.search("Network")!==-1){
+                setError("Request failed due to network issues")
+            }
+            else{ 
+                setError("Something went wrong.Please try again later")
+            }
        } 
     } 
     
@@ -301,6 +317,7 @@ const AddLecturer = () => {
     
     return (  
         <div style={{ display: 'inline-flex' }}>
+             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             <nav style={{ width: '20%' }} data-testid="InstitutionNavigation">
                 {/* Navigation bar content */}
                 <InstitutionNavigation />
@@ -366,12 +383,16 @@ const AddLecturer = () => {
                                     <AddModal 
                                        updateFlag={(false)}
                                        lecturerData={(null)}
-                                       findCourses={findCourses}
+                                       //findCourses={findCourses}
                                        addCourses={addCourses}
                                        removeCourses={removeCourses}
                                        courseData={courses}
                                        setModal={setIsModalOpened}
                                        setCourses={setCourses}
+                                       selectedCourses={selectedCourses}
+                                       offeredCourses={offeredCourses}
+                                       setSelectedCourses={setSelectedCourses}
+                                       setOfferedCourses={setOfferedCourses}
                                        className="form-control"
                                     />
                                 </div>
@@ -379,7 +400,7 @@ const AddLecturer = () => {
 
                             <button
                                 type="submit"
-                                className="btn btn-primary w-100"
+                                className="btn btn-danger w-100"
                                 data-testid="submitButton"
                             >
                                 Add
@@ -402,14 +423,14 @@ const AddLecturer = () => {
                     />
                     <div className="input-group-append">
                         <button onClick={handleSearch}
-                            className="btn btn-outline-primary"
+                            className="btn btn-outline-danger"
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            style={{ backgroundColor: searchIcon ? "#C21F39" : "white" }}
+                            style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }} 
                         >
                             <div className="input-group-append">
-                               <SearchSharpIcon/>
+                               <SearchSharpIcon style={{"color":"#e32f45"}}/>
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}
@@ -450,7 +471,7 @@ const AddLecturer = () => {
                                    return (
                                     <tr key={key}>
                                         <td>{val.firstname}</td>
-                                        <td>{val.lastname}</td>
+                                        <td>{val.lastname}</td> 
                                         <td>
                                             <a href="mailto:" data-testid="lecturerEmail">
                                                 {val.email}
@@ -460,14 +481,17 @@ const AddLecturer = () => {
                                         <AddModal
                                             updateFlag={(true)}
                                             lecturerData={val}
-                                            findCourses={findCourses}
-                                            removeCourses={removeCourses}
                                             addCourses={addCourses}
-                                            courseData={val.courses}
+                                            removeCourses={removeCourses}
+                                            courseData={courses}
                                             setModal={setIsModalOpened}
                                             setCourses={setCourses}
+                                            selectedCourses={val.courses.items}
+                                            offeredCourses={offeredCourses}
+                                            setSelectedCourses={setSelectedCourses}
+                                            setOfferedCourses={setOfferedCourses}
                                             />
-                                        </td>
+                                        </td> 
                                         <td>
                                             <button onClick={() => {handleRemove(val,key)}} 
                                                 type="button" 
@@ -478,8 +502,8 @@ const AddLecturer = () => {
                                             </button>
                                         </td>
                                   </tr>
-                                )
-                             })} 
+                                 )
+                              })} 
                             </tbody>
                         </table>
                     </div>

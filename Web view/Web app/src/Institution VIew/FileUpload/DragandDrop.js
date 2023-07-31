@@ -1,40 +1,62 @@
 import React, { useState, useEffect } from "react";
-import { Amplify, Storage } from "aws-amplify";
-
-// Folder name for S3 bucket
-let folderNameS3 = "UniversityOfPretoria";
+import { Amplify, Storage, Auth } from "aws-amplify";
 
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [message, setMessage] = useState("");
+  const [user, setUser] = useState(null);
+  const [folderNameS3, setFolderNameS3] = useState("");
 
-  const createFolder = async (folderName) => {
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
     try {
-      const folderKey = `${folderName}/`; // Include the trailing slash ("/") to indicate it's a folder
-      await Storage.put(folderKey, "", {
-        contentType: "application/octet-stream", // Set the content type to a generic value
-      });
+      const userInfo = await Auth.currentUserInfo();
+      setUser(userInfo);
+      let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
+      const words = username.split(/\s+/); // Split the name into words
+      username = words
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
+        .join(""); // Join the words without spaces
+
+      setFolderNameS3(username);
+      setMessage("");
     } catch (error) {
-      setMessage("Error creating folder: " + error);
+      setMessage("Error fetching user data");
     }
   };
 
-  useEffect(() => {
-    Amplify.configure({
-      Auth: {
-        identityPoolId: "",
-        region: "us-east-1",
-      },
-      Storage: {
-        AWSS3: {
-          bucket: "",
-          region: "us-east-1",
-          keyPrefix: `${folderNameS3}/`,
+  const createFolder = async (folderName) => {
+    try {
+      const studentFilesKey = `${folderName}/StudentFiles/`; // Include the trailing slash for "StudentFiles" folder
+
+      // Check if "StudentFiles" folder exists
+      const studentFilesExists = await Storage.list(studentFilesKey);
+
+      if (!studentFilesExists || studentFilesExists.length === 0) {
+        // If "StudentFiles" folder does not exist, create it
+        await Storage.put(studentFilesKey, "", {
+          contentType: "application/octet-stream",
+        });
+      }
+
+      // Add the file to the "StudentFiles" folder
+      await Storage.put(studentFilesKey + selectedFile.name, selectedFile, {
+        progressCallback: ({ loaded, total }) => {
+          const progress = Math.round((loaded / total) * 100);
+          setUploadProgress(progress);
+          setMessage("Uploading file: " + selectedFile.name);
         },
-      },
-    });
-  }, []);
+      });
+
+      setMessage("File successfully uploaded: " + selectedFile.name);
+    } catch (error) {
+      setMessage("Error uploading file");
+    }
+  };
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
@@ -51,11 +73,8 @@ function DropzoneComponent() {
   // When submit is pressed
   const handleSubmit = async () => {
     if (selectedFile) {
-      // Perform file saving logic here
-      createFolder(folderNameS3);
-
       try {
-        const fileKey = `${folderNameS3}/${selectedFile.name}`;
+        const fileKey = `${folderNameS3}/StudentFiles/${selectedFile.name}`;
         await Storage.put(fileKey, selectedFile, {
           progressCallback: ({ loaded, total }) => {
             const progress = Math.round((loaded / total) * 100);

@@ -3,16 +3,17 @@ import {
   View,
   Text,
   TouchableOpacity,
-  SafeAreaView,
+  ScrollView,
   TextInput,
   ImageBackground,
   Dimensions,
   Alert,
 } from "react-native";
+import { SelectList } from "react-native-dropdown-select-list";
 import React, { useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
-
+import institutionInfo from "../../assets/data/universityInfo.json";
 import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
 
 const { height } = Dimensions.get("window");
@@ -25,7 +26,6 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  var address = "";
 
   //validate email input sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -37,11 +37,20 @@ const Register = ({ navigation }) => {
   };
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
+  //select instituition
+  const [institutionId, setInstitutionId] = React.useState("");
+
+  //Validate institutionId
+  const [isInstitutionIdValid, setIsInstitutionIdValid] = React.useState(false);
+  const validateInstitutionId = () => {
+    setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
+  };
+
   //validate password on sign up
   const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
   const validateSignUpPassword = (value) => {
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidSignUpPassword = regex.test(value);
 
     setPasswordSignUpIsValid(isValidSignUpPassword);
@@ -51,7 +60,7 @@ const Register = ({ navigation }) => {
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[@$!%*?&]/.test(value),
+      specialChar: /[!@#$%^&*()?]/.test(value),
     });
   };
 
@@ -88,19 +97,47 @@ const Register = ({ navigation }) => {
       return;
     }
 
-    if (confirmPassword !== password) {
-      Alert.alert("Error", "Passwords do not match");
+    let errorMessage = "";
+
+    if (!nameIsValid) {
+      errorMessage += "Please enter a valid name.\n";
+    }
+
+    if (!surnameIsValid) {
+      errorMessage += "Please enter a valid surname.\n";
+    }
+
+    if (!emailIsValid) {
+      errorMessage += "Please enter a valid email address.\n";
+    }
+
+    if (!isInstitutionIdValid) {
+      errorMessage += "Please select an institution.\n";
+    }
+
+    if (!passwordSignUpIsValid) {
+      errorMessage +=
+        "Please enter a password with at least 8 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.\n";
+    }
+
+    if (!passwordMatch) {
+      errorMessage += "Passwords do not match.\n";
+    }
+
+    if (errorMessage !== "") {
+      Alert.alert("Error(s)", errorMessage);
+
       return;
     }
 
     setLoading(true);
     try {
-      navigation.navigate("ConfirmEmail", { email });
+      // navigation.navigate("ConfirmEmail", { email });
       await Auth.signUp({
         username: email,
         password,
-        attributes: { address, email, family_name: surname, name },
-        clientMetadata: { ROLES: "Student" },
+        attributes: { email, family_name: surname, name },
+        clientMetadata: { role: "Student", institutionId: institutionId },
       });
 
       navigation.navigate("ConfirmEmail", { email });
@@ -119,7 +156,7 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
       <View style={styles.contentContainer}>
         <View style={styles.centered}>
           <Text style={styles.title}>Create Account</Text>
@@ -208,6 +245,23 @@ const Register = ({ navigation }) => {
         </View>
 
         <View style={styles.inputContainer}>
+          {/* Update the boxStyles prop for SelectList */}
+          <SelectList
+            setSelected={(institutionId) => setInstitutionId(institutionId)}
+            data={institutionInfo}
+            save="key"
+            boxStyles={[
+              styles.input,
+              { paddingVertical: 16, backgroundColor: "#E7DADA", opacity: 0.7, textAlignVertical: "center" },
+            ]}
+            defaultOption={{ key: "notSet", value: "Select University" }}
+            placeholder="Select University"
+            searchPlaceholder="Search University"
+            onSelect={(institutionId) => validateInstitutionId(institutionId)}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
           <TextInput
             placeholder="Password"
             autoCapitalize="none"
@@ -284,14 +338,11 @@ const Register = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   contentContainer: {
     flex: 1,
     justifyContent: "center",

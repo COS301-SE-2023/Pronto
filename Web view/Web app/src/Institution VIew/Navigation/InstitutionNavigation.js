@@ -33,7 +33,7 @@ export default function InstitutionNavigation() {
                 <ul className="navbar-nav">
         
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
-                        <a href="/" className="nav-link" data-testid={'dashboardLink'}>
+                        <a href="/dashboard" className="nav-link" data-testid={'dashboardLink'}>
                             <b>Dashboard</b>
                         </a>
                     </li>
@@ -54,7 +54,7 @@ export default function InstitutionNavigation() {
                         </a>
                     </li>
                     <li className="nav-item text-center" data-testid={'EditUniversityInfo'}>
-                        <a href="src/Institution VIew/Navigation/InstitutionNavigation#" className="nav-link" data-testid={'EditUniversityInfoLink'}>
+                        <a href="/edit-university-info" className="nav-link" data-testid={'EditUniversityInfoLink'}>
                             <b>Edit University Info</b>
                         </a>
                     </li>
