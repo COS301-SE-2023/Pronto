@@ -4,7 +4,6 @@ import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import institutionInfo from "../../assets/data/universityInfo.json";
 import Select from "react-select";
 
 function Login() {
@@ -20,6 +19,30 @@ function Login() {
   const [surname, setSurname] = React.useState("");
   const [signUpPassword, setSignUpPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  //university info
+  const universityInfo = [
+    {
+      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
+      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
+    },
+  ];
 
   const navigate = useNavigate();
 
@@ -114,7 +137,7 @@ function Login() {
       });
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
-      setsignUpError(e.message);
+      setsignUpError(e.message.split("Error: ")[1]);
       console.log(e);
     }
     setLoading(false);
@@ -164,8 +187,7 @@ function Login() {
     setPasswordIsFocused(false);
   };
 
-  //validating password for sign in
-  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
+
 
   //validate name and surname for sign up
   const [nameIsValid, setNameIsValid] = useState(false);
@@ -198,6 +220,7 @@ function Login() {
     setInstitutionId(event.value);
     setIsInstitudeSelected(true);
   };
+
 
   return (
     <Container>
@@ -241,12 +264,13 @@ function Login() {
             isValidEmail={emailIsValid}
           />
           <StyledSelectInput
-            options={institutionInfo}
+            options={universityInfo}
             defaultValue={institutionId}
             onChange={handleInstitutionSelection}
             placeholder="Select an Institution"
             classNamePrefix="SelectInput"
-            autocomplete={true}
+            autoComplete="on"
+            spellCheck="true"
             isSelectionValid={isInstitudeSelected}
           ></StyledSelectInput>
           <Input
@@ -273,7 +297,7 @@ function Login() {
           />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
-          <Button onClick={onSignUpPressed}>
+          <Button type="submit" onClick={onSignUpPressed}>
             {loading ? "Signing up..." : "Sign up"}
           </Button>
           <div
@@ -355,10 +379,12 @@ function Login() {
             <Paragraph>
               Please sign in to access all of Pronto's features
             </Paragraph>
-            <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
+            <GhostButton type="button" onClick={() => toggle(true)}>
+              Sign In
+            </GhostButton>
           </LeftOverlayPanel>
 
-          <RightOverlayPanel signin={signIn}>
+          <RightOverlayPanel class="rightOverlay" signin={signIn}>
             <Title>No Account?</Title>
             <Paragraph>Click here to verify a lecturer account</Paragraph>
             <GhostButton type="button" onClick={() => toggle(false)}>
