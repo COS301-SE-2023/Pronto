@@ -1,0 +1,14 @@
+{
+  "EDITMODULE": {
+    "LABEL": "Edit Module Information",
+    "HREF": "/lecture-homepage"
+  },
+  "RECENTANNOUNCEMENTS": {
+    "LABEL": "Recent Announcements",
+    "HREF": "/recent-announcement"
+  },
+  "EDITPERSONAL": {
+    "LABEL": "Edit Personal Information",
+    "HREF": "/personal-info"
+  }
+}
