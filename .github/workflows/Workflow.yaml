@@ -8,23 +8,24 @@ on:
 
 jobs:
   
-  cypress-tests-web-app:
+  cypress-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "Web view/Web app"
+        working-directory: "Web view/Web app"  # Replace this with the actual path to your React app
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Install node modules
-        run: npm install
-      - name: Cypress run
-        uses: cypress-io/github-action@v5
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v2
         with:
-          build: npm run build
-          start: npm start
+          node-version: 18.x
+      
+      - name: Install dependencies and run Cypress tests
+        run: |
+          npm ci
+          npx cypress run
 
 
 
