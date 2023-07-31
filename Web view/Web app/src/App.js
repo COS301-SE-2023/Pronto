@@ -20,8 +20,8 @@ import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify, Auth, Hub } from "aws-amplify";
 import HomePage from "./HomePage";
 import config from "./aws-exports";
-import PostAccordion from "./LectureView/Edit Module/PostAccordion";
 import Dashboard from "./Institution VIew/Dashboard/Dashboard";
+import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
 
 Amplify.configure(config);
 
@@ -72,6 +72,7 @@ const Home = () => {
             <Routes>
               {/*Lecturer pages routing*/}
               <Route path="/" element={<HomePage />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/lecturer-login" element={<LecturerLogin />} />
               <Route
                 path="/lecturer-confirm-email"
@@ -106,6 +107,10 @@ const Home = () => {
                 path="/upload-student-files"
                 element={<StudentFileUploadPage />}
               />
+              <Route
+                path="/edit-university-info"
+                element={<EditUniversityInfo />}
+              />
             </Routes>
           </Router>
         </div>
@@ -118,6 +123,7 @@ const Home = () => {
               {/*Lecturer pages routing*/}
               <Route path="/" element={<HomePage />} />
               <Route path="/lecture-homepage" element={<LectureHomePage />} />
+              <Route path="/lecturer-dashboard" element={<DashboardLecturer />} />
               <Route path="edit-module" element={<EditModuleInfo />} />
               <Route
                 path="recent-announcement"
