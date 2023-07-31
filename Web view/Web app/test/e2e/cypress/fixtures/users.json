@@ -1,13 +1,114 @@
 {
   "lecturers": [
     {
-      "name": "Nelda",
-      "surname": "Anderson",
-      "email": "NeldaAnderson.Pronto.Test.User.Lecturer@up.ac.za",
-      "password": "@wN4RafYInPdDZuFwija1",
+      "name": "bandisa",
+      "surname": "m",
+      "email": "bandisamasilela@gmail.com",
+      "password": "12345678Up@"
+    },
+    {
+      "name": "test",
+      "surname": "lecturer",
+      "email": "prontotestuserlecturer@gmail.com",
+      "password": "12345678@Up",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Katlynn",
+      "surname": "Abbott",
+      "email": "KatlynnAbbott.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@bpmfel1K4w6eLjUoPy1p",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Alfonzo",
+      "surname": "Marks",
+      "email": "AlfonzoMarks.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@_wiyTvtUmVoXqEG5r2RN",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Donna",
+      "surname": "Herman",
+      "email": "DonnaHerman.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@GMr6eBlV32G39BvYO7n2",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Bethany",
+      "surname": "Nader",
+      "email": "BethanyNader.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@cZQtU5OzU428SItJM9x5",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Shawna",
+      "surname": "Breitenberg",
+      "email": "ShawnaBreitenberg.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@0toWLLaDniWWdUjPhriD",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Delphine",
+      "surname": "Kunze",
+      "email": "DelphineKunze.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@WjNnRkiP8oHi5ynOFuKQ",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Floy",
+      "surname": "Bergstrom",
+      "email": "FloyBergstrom.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@tSmjHFeIrVMbuf4LAPYY",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Kobe",
+      "surname": "Ratke",
+      "email": "KobeRatke.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@bF3nIrnJa5q5wQmPWBoH",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Earline",
+      "surname": "Schneider",
+      "email": "EarlineSchneider.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@q1qR7KttD4v0beLBxHsM",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Autumn",
+      "surname": "Reilly",
+      "email": "AutumnReilly.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@zawIlAtgF32TJVT06938",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Mariah",
+      "surname": "Leannon",
+      "email": "MariahLeannon.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@EhUl3fh0ae2n_AWoMCQL",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Brigitte",
+      "surname": "Kovacek",
+      "email": "BrigitteKovacek.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@itfRy19FkIkJPKU8dTfj",
+      "institutionName": "university of pretoria"
+    },
+    {
+      "name": "Leta",
+      "surname": "Littel",
+      "email": "LetaLittel.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@VLDzOna8qbCSsx2Trezx",
       "institutionName": "university of pretoria"
     }
   ],
-  "students": [{}],
-  "admins": [{}]
+  "students": [
+    {}
+  ],
+  "admins": [
+    {}
+  ]
 }
