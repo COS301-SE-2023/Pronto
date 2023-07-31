@@ -58,7 +58,7 @@ export default function PostAccordion(course) {
     /*Default location for the map*/
   }
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
     libraries: ["places"],
   });
 
@@ -291,7 +291,7 @@ export default function PostAccordion(course) {
             <div className="map">
               <div style={{ height: '50vh', width: '100%' }}>
                 <GoogleMapReact
-                  bootstrapURLKeys={{ key: "" }}
+                  bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API }}
                   defaultCenter={defaultProps.center}
                   defaultZoom={defaultProps.zoom}
                   yesIWantToUseGoogleMapApiInternals
