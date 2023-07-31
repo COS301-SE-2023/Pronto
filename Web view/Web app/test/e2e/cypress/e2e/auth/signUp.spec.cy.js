@@ -70,4 +70,58 @@ describe("Testing sign up input and error handling", () => {
       .children()
       .contains(this.authErrors.INVALIDPASSWORD);
   });
+
+  it(`should test name requierd field`, function () {
+    const lectureTestUser = this.users.lecturers.pop();
+    cy.get("input[placeholder=Surname").type(lectureTestUser.surname);
+    cy.get("input[type=email]").eq(0).type(lectureTestUser.email);
+    cy.get(`input[class^=${this.reactSelectAttributes.classNamePrefix}]`).type(
+      `${lectureTestUser.institutionName}{enter}`
+    );
+    cy.get("input[type=password]").eq(0).type(lectureTestUser.password);
+    cy.get("input[type=password]").eq(1).type(lectureTestUser.password);
+    cy.get("button[type=submit").eq(0).click({ force: true });
+
+    //assert error message
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .should("have.length", 1);
+    cy.contains(this.authErrors.INVALIDNAME);
+  });
+
+  it(`should test surname is provided`, function () {
+    const lectureTestUser = this.users.lecturers.pop();
+    cy.get("input[placeholder=Name").eq(0).type(lectureTestUser.name);
+    cy.get("input[type=email]").eq(0).type(lectureTestUser.email);
+    cy.get(`input[class^=${this.reactSelectAttributes.classNamePrefix}]`).type(
+      `${lectureTestUser.institutionName}{enter}`
+    );
+    cy.get("input[type=password]").eq(0).type(lectureTestUser.password);
+    cy.get("input[type=password]").eq(1).type(lectureTestUser.password);
+    cy.get("button[type=submit").eq(0).click({ force: true });
+
+    //assert error message
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .should("have.length", 1);
+    cy.contains(this.authErrors.INVALIDSURNAME);
+  });
+
+  it(`should test email is provided`, function () {
+    const lectureTestUser = this.users.lecturers.pop();
+    cy.get("input[placeholder=Name").eq(0).type(lectureTestUser.name);
+    cy.get("input[placeholder=Surname").type(lectureTestUser.surname);
+    cy.get(`input[class^=${this.reactSelectAttributes.classNamePrefix}]`).type(
+      `${lectureTestUser.institutionName}{enter}`
+    );
+    cy.get("input[type=password]").eq(0).type(lectureTestUser.password);
+    cy.get("input[type=password]").eq(1).type(lectureTestUser.password);
+    cy.get("button[type=submit").eq(0).click({ force: true });
+
+    //assert error message
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .should("have.length", 1);
+    cy.contains(this.authErrors.INVALIDEMAIL);
+  });
 });
