@@ -11,7 +11,6 @@
 [![Open Issues](https://img.shields.io/github/issues/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues?q=is%3Aissue+is%3Aclosed)
 [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595?style=flat-square)](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595)
-![example workflow](https://github.com/COS301-SE-2023/Pronto/actions/workflows/Workflow.yaml/badge.svg)
 
 ## Description
 
@@ -34,7 +33,9 @@ Pronto is a React Native application that helps students to create their timetab
 
 <div><a href="https://drive.google.com/file/d/1HWyxFvWtt6HvSSNpiXuQ2BRM43qTEhgU/view?usp=share_link">📽️ Demo 1</a></div>
 <div><a href="https://drive.google.com/file/d/1iLCdIK4_AjSgFtfEThRByqWEbvSH73xt/view?usp=drive_link">📽️ Demo 2</a></div>
-<div><a href="https://drive.google.com/file/d/1iLCdIK4_AjSgFtfEThRByqWEbvSH73xt/view?usp=drive_link">📽️ Demo 3</a></div>
+
+<div><a href="https://drive.google.com/file/d/1ImiTyPSyAo8VTLaCVQV2lIR6TQg5sghs/view?usp=sharing">📽️ Demo 3</a></div>
+
 
 ## Project Management
 
