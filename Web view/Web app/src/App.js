@@ -107,6 +107,10 @@ const Home = () => {
                 path="/upload-student-files"
                 element={<StudentFileUploadPage />}
               />
+              <Route
+                path="/edit-university-info"
+                element={<EditUniversityInfo />}
+              />
             </Routes>
           </Router>
         </div>
