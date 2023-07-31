@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StepByStepInstructions from '../../components/StepByStepInstructions';
 import MapViewDirections from "react-native-maps-directions";
+import { GOOGLE_API_KEY } from "@env";
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -19,6 +20,7 @@ const initialRegion = {
 };
 
 const NavigationScreen = () => {
+
     const [origin, setOrigin] = useState(null);
     const [destination, setDestination] = useState(null);
     const [route, setRoute] = useState(false);
@@ -68,7 +70,7 @@ const NavigationScreen = () => {
                     <MapViewDirections
                         origin={origin}
                         destination={destination}
-                        apikey={''}
+                        apikey={GOOGLE_API_KEY}
                         strokeColor={'#395cda'}
                         strokeWidth={4}
                         mode={"WALKING"}
@@ -84,7 +86,7 @@ const NavigationScreen = () => {
                         styles={styles.input}
                         placeholder="Your location"
                         query={{
-                            key: '',
+                            key: GOOGLE_API_KEY,
                             language: 'en',
                         }}
                         fetchDetails={true}
@@ -106,7 +108,7 @@ const NavigationScreen = () => {
                         styles={styles.input}
                         placeholder="Destination"
                         query={{
-                            key: '',
+                            key: GOOGLE_API_KEY,
                             language: 'en',
                         }}
                         fetchDetails={true}
@@ -127,7 +129,7 @@ const NavigationScreen = () => {
                 >
                     <Text style={[styles.buttonText, { color: 'white', fontWeight: 600 }]}>Get Directions</Text>
                 </TouchableOpacity>
-                {travelTime && distance &&  (
+                {travelTime && distance && (
                     <View style={styles.infoContainer}>
                         <Text style={styles.infoText}>Distance: {distance}</Text>
                         <Text style={styles.infoText}>{travelTime}</Text>

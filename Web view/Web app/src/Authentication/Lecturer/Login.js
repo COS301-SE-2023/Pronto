@@ -4,7 +4,6 @@ import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import institutionInfo from "../../assets/data/universityInfo.json";
 import Select from "react-select";
 
 function Login() {
@@ -20,6 +19,30 @@ function Login() {
   const [surname, setSurname] = React.useState("");
   const [signUpPassword, setSignUpPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  //university info
+  const universityInfo = [
+    {
+      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
+      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
+    },
+  ];
 
   const navigate = useNavigate();
 
@@ -164,8 +187,7 @@ function Login() {
     setPasswordIsFocused(false);
   };
 
-  //validating password for sign in
-  const [passwordSignInIsValid, setPasswordSignInIsValid] = useState(false);
+
 
   //validate name and surname for sign up
   const [nameIsValid, setNameIsValid] = useState(false);
@@ -198,6 +220,7 @@ function Login() {
     setInstitutionId(event.value);
     setIsInstitudeSelected(true);
   };
+
 
   return (
     <Container>
@@ -241,7 +264,7 @@ function Login() {
             isValidEmail={emailIsValid}
           />
           <StyledSelectInput
-            options={institutionInfo}
+            options={universityInfo}
             defaultValue={institutionId}
             onChange={handleInstitutionSelection}
             placeholder="Select an Institution"
