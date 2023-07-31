@@ -1,8 +1,13 @@
-[
-  {
-    "name": "test",
-    "surname": "lecturer",
-    "email": "test.user.lecturer@gmail.com",
-    "password": "weAkP@ssw0rd"
-  }
-]
+{
+  "lecturers": [
+    {
+      "name": "Nelda",
+      "surname": "Anderson",
+      "email": "NeldaAnderson.Pronto.Test.User.Lecturer@up.ac.za",
+      "password": "@wN4RafYInPdDZuFwija1",
+      "institutionName": "university of pretoria"
+    }
+  ],
+  "students": [{}],
+  "admins": [{}]
+}
