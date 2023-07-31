@@ -1,4 +1,4 @@
-Cypress.Commands.add("signIn", (email, password) => {
+Cypress.Commands.add("LecturerSignIn", (email, password) => {
   cy.visit("/lecturer-login");
 
   // asserting UI layout
@@ -6,7 +6,7 @@ Cypress.Commands.add("signIn", (email, password) => {
   cy.contains("Lecturer Login");
   cy.get("input[type=email]").should("have.length", 2);
   cy.get("input[type=password]").should("have.length", 3);
-  cy.get("button[type=submit]").should("exist");
+  cy.get("button[type=submit]").should("have.length", 2);
   cy.get(`a[type="text/html"]`).should("exist");
 
   cy.contains("No Account?");
@@ -16,7 +16,7 @@ Cypress.Commands.add("signIn", (email, password) => {
   // asserting input sequence
   cy.get("input[type=email]").eq(1).type(email);
   cy.get("input[type=password]").eq(2).type(`${password}`);
-  cy.get("button[type=submit").click();
+  cy.get("button[type=submit").eq(1).click();
 
   //asserting routing
   cy.url({ timeout: 10 * 1000 }).should(

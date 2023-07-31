@@ -2,6 +2,7 @@ name: Unit and Integration tests
 
 on:
   push:
+
     branches: [main, dev, integration, backend]
   pull_request:
     branches: [main, dev,  integration, backend]
