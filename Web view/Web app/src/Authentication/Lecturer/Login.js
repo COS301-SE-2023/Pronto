@@ -114,7 +114,7 @@ function Login() {
       });
       navigate("/lecturer-confirm-email", { state: { email: email } });
     } catch (e) {
-      setsignUpError(e.message);
+      setsignUpError(e.message.split("Error: ")[1]);
       console.log(e);
     }
     setLoading(false);
@@ -250,7 +250,8 @@ function Login() {
             onChange={handleInstitutionSelection}
             placeholder="Select an Institution"
             classNamePrefix="SelectInput"
-            autocomplete={true}
+            autoComplete="on"
+            spellCheck="true"
             isSelectionValid={isInstitudeSelected}
           ></StyledSelectInput>
           <Input
@@ -277,7 +278,7 @@ function Login() {
           />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
-          <Button onClick={onSignUpPressed}>
+          <Button type="submit" onClick={onSignUpPressed}>
             {loading ? "Signing up..." : "Sign up"}
           </Button>
           <div
@@ -359,10 +360,12 @@ function Login() {
             <Paragraph>
               Please sign in to access all of Pronto's features
             </Paragraph>
-            <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
+            <GhostButton type="button" onClick={() => toggle(true)}>
+              Sign In
+            </GhostButton>
           </LeftOverlayPanel>
 
-          <RightOverlayPanel signin={signIn}>
+          <RightOverlayPanel class="rightOverlay" signin={signIn}>
             <Title>No Account?</Title>
             <Paragraph>Click here to verify a lecturer account</Paragraph>
             <GhostButton type="button" onClick={() => toggle(false)}>
