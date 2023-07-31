@@ -2,30 +2,25 @@ name: Unit and Integration Tests
 
 on:
   push:
-    branches: [ main, dev, integration, backend ]
+    branches: [main, dev, integration, backend]
   pull_request:
-    branches: [ main, dev, integration, backend ]
+    branches: [main, dev, integration, backend]
 
 jobs:
-  
-  cypress-tests:
+
+  e2e-tests:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "Web view/Web app"  # Replace this with the actual path to your React app
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Setup Node.js 18.x
+
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18.x
-      
-      - name: Install dependencies and run Cypress tests
-        run: |
-          npm ci
-          npx cypress run
+          node-version: 18
 
+      - name: Install dependencies
+        run: npm ci
 
-
+      - name: Run React app and Cypress e2e tests
+        run: npx start-server-and-test start http://localhost:3000 cypress:run
