@@ -5,10 +5,10 @@
   },
   "RECENTANNOUNCEMENTS": {
     "LABEL": "Recent Announcements",
-    "HREF": "/recent-announcement"
+    "HREF": "recent-announcement"
   },
   "EDITPERSONAL": {
     "LABEL": "Edit Personal Information",
-    "HREF": "/personal-info"
+    "HREF": "personal-info"
   }
 }
