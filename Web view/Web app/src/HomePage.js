@@ -11,6 +11,8 @@ import ProntoSvg from './Authentication/Institution/ProntoLogo.svg';
 function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
+
+
   useEffect(() => {
     // After the component has mounted, set the isLoaded state to true
     setIsLoaded(true);
