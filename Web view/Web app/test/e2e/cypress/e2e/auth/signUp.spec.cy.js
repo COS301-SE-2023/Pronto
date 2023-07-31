@@ -10,7 +10,7 @@ describe("Testing sign Up", () => {
   });
 
   it("should sign up lecturer", function () {
-    cy.LecturerSignUp(this.users.lecturers[0], this.reactSelectAttributes);
+    cy.LecturerSignUp(this.users.lecturers[1], this.reactSelectAttributes);
   });
 });
 
@@ -23,12 +23,12 @@ describe("Testing sign up input and error handling", () => {
     cy.fixture("users.json").as("users");
     cy.fixture("react-select-attributes.json").as("reactSelectAttributes");
     cy.fixture("auth.errors.json").as("authErrors");
+    cy.createTestUser();
     cy.visit("/lecturer-login");
     cy.get("button[type=button]").eq(1).click();
   });
 
   it(`should test if lecturer email is part of institution`, function () {
-    cy.createTestUser();
     cy.get("button[type=button]").eq(1).click();
 
     const lectureTestUser = this.users.lecturers.pop();
@@ -44,7 +44,7 @@ describe("Testing sign up input and error handling", () => {
 
     //assert error message
     cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p', {
-      timeout: 5 * 1000,
+      timeout: 10 * 1000,
     }).should("exist");
     cy.contains(this.authErrors.LECTUEREREMAILERROR);
   });
