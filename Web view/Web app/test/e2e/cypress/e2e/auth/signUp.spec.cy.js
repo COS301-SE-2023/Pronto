@@ -48,4 +48,26 @@ describe("Testing sign up input and error handling", () => {
     }).should("exist");
     cy.contains(this.authErrors.LECTUEREREMAILERROR);
   });
+
+  it("should check if all fields are required", function () {
+    cy.get("button[type=submit").eq(0).click({ force: true });
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .should("have.length", 5);
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .contains(this.authErrors.INVALIDNAME);
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .contains(this.authErrors.INVALIDSURNAME);
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .contains(this.authErrors.INVALIDEMAIL);
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .contains(this.authErrors.INSTITUTIONERROR);
+    cy.xpath('//*[@id="root"]/div[2]/div/div[1]/form/p')
+      .children()
+      .contains(this.authErrors.INVALIDPASSWORD);
+  });
 });
