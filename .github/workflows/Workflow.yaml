@@ -2,16 +2,16 @@ name: Unit and Integration Tests
 
 on:
   push:
-    branches: [main, dev, frontend-navigation-update]
+    branches: [ main, dev, integration, backend ]
   pull_request:
-    branches: [main, dev, frontend-navigation-update]
+    branches: [ main, dev, integration, backend ]
 
 jobs:
   build-mobile:
-    runs-on:  ubuntu-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [ 18.x ]
     defaults:
       run:
         working-directory: ./MobileApp
@@ -26,10 +26,10 @@ jobs:
       - run: npm test -- --u
 
   build-web:
-    runs-on:  ubuntu-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [ 18.x ]
     defaults:
       run:
         working-directory: "Web view/Web app"
@@ -45,10 +45,10 @@ jobs:
           npm test
 
   build-backend:
-    runs-on:  ubuntu-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [ 18.x ]
     defaults:
       run:
         working-directory: "amplify/backend"
@@ -68,10 +68,14 @@ jobs:
       run:
         working-directory: "Web view/Web app"
     steps:
-      - uses: actions/checkout@v3
-      - name: Install dependencies and run Cypress tests
-        run: |
-          npm ci
-          npx cypress run 
+      - name: Checkout
+        uses: actions/checkout@v3
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          build: npm run build
+          start: npm start
 
 
