@@ -14,6 +14,11 @@ describe("Testing lecturer home page", () => {
       this.users.lecturers[0].email,
       this.users.lecturers[0].password
     );
+
+    cy.get("img[alt=Logo]").should("have.length", 1);
+    cy.get(`div[class="lecturer-name"]`)
+      .should("have.length", 1)
+      .contains(this.users.lecturers[0].name + this.users.lecturers[0].surname);
     cy.get(`a[class="nav-link"]`).should("have.length", 3);
     cy.get(`a[href="${this.navAttributes.EDITPERSONAL.HREF}"]`)
       .should("have.length", 1)
