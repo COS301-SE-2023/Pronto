@@ -1,13 +1,27 @@
 {
   "lecturers": [
     {
-      "name": "Nelda",
-      "surname": "Anderson",
-      "email": "NeldaAnderson.Pronto.Test.User.Lecturer@up.ac.za",
-      "password": "@wN4RafYInPdDZuFwija1",
+      "name": "bandisa",
+      "surname": "m",
+      "email": "bandisamasilela@gmail.com",
+      "password": "12345678Up@"
+    },
+    {
+      "name": "test",
+      "surname": "lecturer",
+      "email": "prontotestuserlecturer@gmail.com",
+      "password": "12345678@Up",
       "institutionName": "university of pretoria"
-    }
+    },
+    {
+      "name": "John",
+      "surname": "Doe",
+      "email": "ndie2001@gmail.com",
+      "password": "October2001!",
+      "institutionName": "university of pretoria"
+    },
+    {}
   ],
-  "students": [{}],
-  "admins": [{}]
+  "admins": [{}],
+  "students": [{}]
 }
