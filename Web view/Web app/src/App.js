@@ -29,7 +29,6 @@ const Home = () => {
   //use this part to see if user is logged in or out and then determine what pages they can access
   const [user, setUser] = useState(undefined);
   const [userGroup, setUserGroup] = useState(null);
-
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({});
