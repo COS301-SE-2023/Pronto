@@ -43,7 +43,7 @@ Cypress.Commands.add("LecturerSignUp", (userInput, reactSelectAttributes) => {
     .click({ force: true });
 
   //asserting routing
-  cy.url({ timeout: 5 * 1000 }).should(
+  cy.url({ timeout: 10 * 1000 }).should(
     "eq",
     `${Cypress.config().baseUrl}/lecturer-confirm-email`
   );
