@@ -69,4 +69,4 @@ jobs:
           sleep 30
 
       - name: Run Cypress tests
-        run: npx cypress run --config baseUrl=http://localhost:3000
+        run: npx cypress run
