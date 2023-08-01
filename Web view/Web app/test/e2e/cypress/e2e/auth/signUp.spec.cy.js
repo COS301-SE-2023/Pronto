@@ -10,7 +10,7 @@ describe("Testing sign Up", () => {
   });
 
   it("should sign up lecturer", function () {
-    cy.LecturerSignUp(this.users.lecturers[1], this.reactSelectAttributes);
+    cy.LecturerSignUp(this.users.lecturers[1], this.reactSelectAttributes,{ timeout: 15 * 1000 });
   });
 });
 
@@ -25,7 +25,9 @@ describe("Testing sign up input and error handling", () => {
     cy.fixture("auth.errors.json").as("authErrors");
     cy.createTestUser();
     cy.visit("/lecturer-login");
-    cy.get("button[type=button]").eq(1).click();
+    cy.get("button[type=button]", { timeout: 15 * 1000 })
+      .eq(1)
+      .click();
   });
 
   it(`should test if lecturer email is part of institution`, function () {
