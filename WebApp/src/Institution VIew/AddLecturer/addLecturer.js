@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer,updateCourse} from "../../graphql/mutations"; 
+import { createLecturer, deleteLecturer,updateCourse, updateInstitution} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listInstitutions,listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
@@ -45,13 +45,35 @@ const AddLecturer = () => {
                  lecturer=mutation.data.createLecturer
                  lecturer.courses=[]
                  lecturers.push(mutation.data.createLecturer)
-                  
+                
+                let emails
+                if(institution.lectureremails===null){
+                    emails=[]
+                    emails.push(email)
+                }
+                else{
+                    emails=institution.lectureremails
+                    emails.push(email)
+                }
+                console.log(emails)
+                 let update={
+                     id:institution.id,
+                     lectureremails:emails
+                  }
+
+                  let u=await API.graphql({
+                    query:updateInstitution,
+                    variables:{input:update},
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                  })
                  //Add lecturer to courses
                  await addCourses(lecturer,selectedCourses)
                  if(lecturers.length<19)
                         setLecturers(lecturers)
-
+                setInstitution(institution)
              }catch(error){    
+                if(error.errors===undefined)
+                    setError("Something went wrong.Try again later")
                 let e=error.errors[0].message
                 if(e.search("Unathorized")!==-1){ 
                     setError("You are not authorized to perform this action.Please log out and log in")
@@ -254,12 +276,10 @@ const AddLecturer = () => {
                         },
                         authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
-                    console.log(search.data.lecturersByInstitutionId.items)
-                    let l=[]
-                    l=[...search.data.lecturersByInstitutionId.items]
+                    
                     //console.log(l)
                     //console.log(lecturers)
-                    //setLecturers(search.data.lecturersByInstitutionId.items)
+                    setLecturers(search.data.lecturersByInstitutionId.items)
                 }
                 else if(filterAttribute==="lastname"){ 
                     let search= await API.graphql({
@@ -274,14 +294,13 @@ const AddLecturer = () => {
                             },
                     authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })   
-                     console.log(search.data.lecturersByInstitutionId.items)
+                    
                     setLecturers(search.data.lecturersByInstitutionId.items)
                 }
                 else if(filterAttribute==="email"){
                     let search= await API.graphql({
                     query:lecturersByInstitutionId,
                     variables:  { 
-                               //institutionId : institution.username,  
                                institutionId:institution.id, 
                                filter : { 
                                     email: { 
@@ -291,7 +310,7 @@ const AddLecturer = () => {
                             },
                     authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
-                    console.log(search.data.lecturersByInstitutionId.items)
+                    
                     setLecturers(search.data.lecturersByInstitutionId.items)
             }
             setSearchIcon(!searchIcon)
@@ -493,7 +512,6 @@ const AddLecturer = () => {
                                             setModal={setIsModalOpened}
                                             setCourses={setCourses}
                                             selectedCourses={val.courses.items}
-                                            //selectedCourses={[]}
                                             offeredCourses={offeredCourses}
                                             setSelectedCourses={setSelectedCourses}
                                             setOfferedCourses={setOfferedCourses}

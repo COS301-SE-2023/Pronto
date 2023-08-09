@@ -82,6 +82,7 @@ export const listInstitutions=`query ListInstitutions(
       closingTime
       minimumDuration
       domains
+      lectureremails
       admin { 
         id
         firstname
