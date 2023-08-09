@@ -25,7 +25,6 @@ const AddLecturer = () => {
     const handleAdd=  async(event) => { 
         event.preventDefault()
         if(!isModalOpened){
-            //courseList=await findCourses(courses)
             
             let lecturer={
                 institutionId:institution.id,
@@ -277,8 +276,7 @@ const AddLecturer = () => {
                         authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
                     
-                    //console.log(l)
-                    //console.log(lecturers)
+                   
                     setLecturers(search.data.lecturersByInstitutionId.items)
                 }
                 else if(filterAttribute==="lastname"){ 
@@ -322,18 +320,21 @@ const AddLecturer = () => {
         }
        }catch(error){
        
-        console.log(error)
+            if(error.errors!==undefined){
             let e=error.errors[0].message
-            // if(e.search("Unathorized")!==-1){ 
-            //     setError("You are not authorized to perform this action.Please log out and log in")
-            // }
-            // else if(e.search("Network")!==-1){
-            //     setError("Request failed due to network issues")
-            // }
-            // else{ 
-            //     setError("Something went wrong.Please try again later")
-            // }
+            if(e.search("Unathorized")!==-1){ 
+                setError("You are not authorized to perform this action.Please log out and log in")
+            }
+            else if(e.search("Network")!==-1){
+                setError("Request failed due to network issues")
+            }
+            else{ 
+                setError("Something went wrong.Please try again later")
+            }
+       } else {
+               setError("Something went wrong.Please try again later")
        } 
+    }
     } 
     
     useEffect(() => {
