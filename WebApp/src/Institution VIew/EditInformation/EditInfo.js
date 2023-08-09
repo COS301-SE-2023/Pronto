@@ -63,21 +63,21 @@ const EditInfoPage = () => {
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Old password: </label>
                     <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel" data-testid="pword" required></input>
+                    <input type="password" class="form-control" id="colFormLabel" data-testid="pword" required></input>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">New password: </label>
                     <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel" data-testid="repword" required></input>
+                    <input type="password" class="form-control" id="colFormLabel" data-testid="repword" required></input>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Confirm password: </label>
                     <div class="col-sm-10">
-                    <input type="text" class="form-control" id="colFormLabel" data-testid="newpword"></input>
+                    <input type="password" class="form-control" id="colFormLabel" data-testid="newpword"></input>
                     </div>
                 </div>
 
