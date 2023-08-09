@@ -2,26 +2,6 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.1.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-<<<<<<< HEAD
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
-========
-    "env": {
-      "Type": "String"
-    },
-    "authpronto5f713f59UserPoolId": {
-      "Type": "String",
-      "Default": "authpronto5f713f59UserPoolId"
-    "DOMAINBLACKLIST": {
-      "Type": "String",
-      "Default": ""
-    },
-    "DOMAINWHITELIST": {
-      "Type": "String",
-      "Default": ""
-    },
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-=======
->>>>>>> dev
     "modules": {
       "Type": "String",
       "Default": "",
@@ -59,16 +39,6 @@
     },
     "s3Key": {
       "Type": "String"
-<<<<<<< HEAD
-=======
-<<<<<<<< HEAD:Web view/Web app/amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
-========
-    },
-    "authprontoAuthUserPoolId": {
-      "Type": "String",
-      "Default": "authprontoAuthUserPoolId"
->>>>>>>> dev:amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
->>>>>>> dev
     },
     "appClientId": {
       "Type": "String"
@@ -79,47 +49,11 @@
     "studentsGroupName": {
       "Type": "String"
     },
-<<<<<<< HEAD
-    "appClientId": {
-      "Type": "String"
-    },
-    "appClientIdWeb": {
-      "Type": "String"
-    },
-    "studentsGroupName": {
-      "Type": "String"
-    },
-    "apiApiProntoGraphqlapiendpoint": {
-      "Type": "String"
-    },
-    "apiApiProntoGraphqlapikey": {
-=======
     "lecturersGroupName": {
->>>>>>> dev
       "Type": "String"
     },
     "adminGroupName": {
       "Type": "String"
-<<<<<<< HEAD
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
-=======
-<<<<<<<< HEAD:Web view/Web app/amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
->>>>>>> dev
-========
-    },
-    "appClientId": {
-      "Type": "String"
-    },
-    "appClientIdWeb": {
-      "Type": "String"
-<<<<<<< HEAD
-    },
-    "lecturersGroupName": {
-      "Type": "String"
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-=======
->>>>>>>> dev:amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
->>>>>>> dev
     }
   },
   "Conditions": {
@@ -144,28 +78,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-<<<<<<< HEAD
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
             "pronto5f713f59PostAuthentication",
-========
-            "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-=======
-            "pronto5f713f59PostAuthentication",
->>>>>>> dev
             {
               "Fn::Join": [
                 "",
                 [
-<<<<<<< HEAD
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
                   "pronto5f713f59PostAuthentication",
-========
-                  "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-=======
-                  "pronto5f713f59PostAuthentication",
->>>>>>> dev
                   "-",
                   {
                     "Ref": "env"
@@ -180,81 +98,17 @@
             "ENV": {
               "Ref": "env"
             },
-<<<<<<< HEAD
-            "GROUP": "adminUserGroup",
-            "USERPOOL": {
-              "Ref": "authpronto5f713f59UserPoolId"
-=======
->>>>>>> dev
             "MODULES": {
               "Ref": "modules"
             },
             "REGION": {
               "Ref": "AWS::Region"
             },
-<<<<<<< HEAD
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
-            "AppClientId": {
-              "Ref": "appClientId"
-========
-            "DOMAINWHITELIST": {
-              "Ref": "DOMAINWHITELIST"
-            },
-            "DOMAINBLACKLIST": {
-              "Ref": "DOMAINBLACKLIST"
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-            },
-            "AppClientIdWeb": {
-              "Ref": "appClientIdWeb"
-            },
-            "StudentsGroupName": {
-              "Ref": "studentsGroupName"
             "AppClientId": {
               "Ref": "appClientId"
             },
             "AppClientIdWeb": {
               "Ref": "appClientIdWeb"
-            },
-            "StudentsGroupName": {
-              "Ref": "studentsGroupName"
-            },
-            "API_API_PRONTO_GRAPHQLAPIENDPOINT": {
-              "Ref": "apiApiProntoGraphqlapiendpoint"
-            },
-            "API_API_PRONTO_GRAPHQLAPIKEY": {
-              "Ref": "apiApiProntoGraphqlapikey"
-            },
-            "AdminGroupName": {
-              "Ref": "adminGroupName"
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
-========
-            },
-            "AppClientId": {
-              "Ref": "appClientId"
-            },
-            "AppClientIdWeb": {
-              "Ref": "appClientIdWeb"
-            },
-            "LecturersGroupName": {
-              "Ref": "lecturersGroupName"
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-=======
-<<<<<<<< HEAD:Web view/Web app/amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
-            "GROUP": {
-              "Ref": "GROUP"
-<<<<<<<< HEAD:Web view/Web app/amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
-========
-            },
-            "AUTH_PRONTOAUTH_USERPOOLID": {
-              "Ref": "authprontoAuthUserPoolId"
->>>>>>>> dev:amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
-========
-            "AppClientId": {
-              "Ref": "appClientId"
-            },
-            "AppClientIdWeb": {
-              "Ref": "appClientIdWeb"
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
             },
             "StudentsGroupName": {
               "Ref": "studentsGroupName"
@@ -264,16 +118,6 @@
             },
             "AdminGroupName": {
               "Ref": "adminGroupName"
-<<<<<<<< HEAD:Web view/Web app/amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
-========
-            },
-            "AppClientId": {
-              "Ref": "appClientId"
-            },
-            "AppClientIdWeb": {
-              "Ref": "appClientIdWeb"
->>>>>>>> dev:amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
->>>>>>> dev
             }
           }
         },
@@ -301,28 +145,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-<<<<<<< HEAD
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
             "pronto5f713f59PostAuthentication",
-========
-            "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-=======
-            "pronto5f713f59PostAuthentication",
->>>>>>> dev
             {
               "Fn::Join": [
                 "",
                 [
-<<<<<<< HEAD
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
                   "pronto5f713f59PostAuthentication",
-========
-                  "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-=======
-                  "pronto5f713f59PostAuthentication",
->>>>>>> dev
                   "-",
                   {
                     "Ref": "env"
@@ -388,95 +216,10 @@
                   }
                 ]
               }
-<<<<<<< HEAD
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PostAuthentication/pronto5f713f59PostAuthentication-cloudformation-template.json
-=======
             }
           ]
         }
       }
-<<<<<<<< HEAD:Web view/Web app/amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
->>>>>>> dev
-========
-    },
-    "AmplifyResourcesPolicy": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "amplify-lambda-execution-policy",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "cognito-identity:Describe*",
-                "cognito-identity:Get*",
-                "cognito-identity:List*",
-                "cognito-idp:Describe*",
-                "cognito-idp:AdminGetDevice",
-                "cognito-idp:AdminGetUser",
-                "cognito-idp:AdminList*",
-                "cognito-idp:List*",
-                "cognito-sync:Describe*",
-                "cognito-sync:Get*",
-                "cognito-sync:List*",
-                "iam:ListOpenIdConnectProviders",
-                "iam:ListRoles",
-                "sns:ListPlatformApplications",
-                "cognito-idp:ForgotPassword",
-                "cognito-idp:UpdateAuthEventFeedback",
-                "cognito-idp:UpdateResourceServer",
-                "cognito-idp:UpdateUserPoolClient",
-                "cognito-idp:AdminUpdateUserAttributes",
-                "cognito-idp:UpdateUserAttributes",
-                "cognito-idp:UpdateUserPoolDomain",
-                "cognito-idp:UpdateIdentityProvider",
-                "cognito-idp:UpdateGroup",
-                "cognito-idp:AdminUpdateAuthEventFeedback",
-                "cognito-idp:UpdateDeviceStatus",
-                "cognito-idp:UpdateUserPool"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:cognito-idp:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":userpool/",
-                      {
-                        "Ref": "authprontoAuthUserPoolId"
-                      }
-                    ]
-                  ]
-                }
-              ]
-<<<<<<< HEAD
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-=======
->>>>>>> dev
-            }
-          ]
-        }
-      }
-<<<<<<< HEAD
-=======
->>>>>>>> dev:amplify/backend/function/prontoAuthPostConfirmation/prontoAuthPostConfirmation-cloudformation-template.json
->>>>>>> dev
     }
   },
   "Outputs": {
@@ -512,8 +255,4 @@
       }
     }
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> dev

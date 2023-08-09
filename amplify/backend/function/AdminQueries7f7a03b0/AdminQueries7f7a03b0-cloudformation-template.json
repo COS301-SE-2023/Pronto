@@ -1,134 +1,22 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-<<<<<<< HEAD
   "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"10.6.2\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-=======
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.1.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
-  "Parameters": {
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-    "DOMAINBLACKLIST": {
-      "Type": "String",
-      "Default": ""
-========
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
     "env": {
       "Type": "String"
     },
     "authpronto5f713f59UserPoolId": {
       "Type": "String",
       "Default": "authpronto5f713f59UserPoolId"
-<<<<<<< HEAD
-=======
-========
-    "DOMAINBLACKLIST": {
-      "Type": "String",
-      "Default": ""
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-    },
-    "DOMAINWHITELIST": {
-      "Type": "String",
-      "Default": ""
-    },
-    "modules": {
-      "Type": "String",
-      "Default": "",
-      "Description": "Comma-delimited list of modules to be executed by a lambda trigger. Sent to resource as an env variable."
-    },
-    "resourceName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "trigger": {
-      "Type": "String",
-      "Default": "true"
-    },
-    "functionName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "roleName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentResource": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentStack": {
-      "Type": "String",
-      "Default": ""
-    },
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-    "s3Key": {
-      "Type": "String"
-========
-    "env": {
-      "Type": "String"
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-    },
-    "DOMAINWHITELIST": {
-      "Type": "String",
-      "Default": ""
-    },
-    "modules": {
-      "Type": "String",
-      "Default": "",
-      "Description": "Comma-delimited list of modules to be executed by a lambda trigger. Sent to resource as an env variable."
-    },
-    "resourceName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "trigger": {
-      "Type": "String",
-      "Default": "true"
-    },
-    "functionName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "roleName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentResource": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentStack": {
-      "Type": "String",
-      "Default": ""
-    },
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-    "env": {
-      "Type": "String"
->>>>>>> dev
     },
     "deploymentBucketName": {
       "Type": "String"
     },
     "s3Key": {
       "Type": "String"
-<<<<<<< HEAD
-=======
     },
-========
-    "s3Key": {
+    "group": {
       "Type": "String"
-    },
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-    "lecturersGroupName": {
-      "Type": "String"
-    },
-    "adminGroupName": {
-      "Type": "String"
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-========
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
     }
   },
   "Conditions": {
@@ -153,36 +41,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-<<<<<<< HEAD
             "AdminQueries7f7a03b0",
-=======
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-            "pronto5f713f59PreSignup",
-========
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-            "AdminQueries7f7a03b0",
-========
-            "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
             {
               "Fn::Join": [
                 "",
                 [
-<<<<<<< HEAD
                   "AdminQueries7f7a03b0",
-=======
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-                  "pronto5f713f59PreSignup",
-========
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-                  "AdminQueries7f7a03b0",
-========
-                  "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
                   "-",
                   {
                     "Ref": "env"
@@ -197,38 +61,11 @@
             "ENV": {
               "Ref": "env"
             },
-<<<<<<< HEAD
-            "GROUP": "adminUserGroup",
+            "GROUP": {
+              "Ref": "group"
+            },
             "USERPOOL": {
               "Ref": "authpronto5f713f59UserPoolId"
-=======
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-========
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-            "GROUP": "adminUserGroup",
-            "USERPOOL": {
-              "Ref": "authpronto5f713f59UserPoolId"
-========
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-            "MODULES": {
-              "Ref": "modules"
-            },
-            "REGION": {
-              "Ref": "AWS::Region"
-            },
-            "DOMAINWHITELIST": {
-              "Ref": "DOMAINWHITELIST"
-            },
-            "DOMAINBLACKLIST": {
-              "Ref": "DOMAINBLACKLIST"
-            },
-            "LecturersGroupName": {
-              "Ref": "lecturersGroupName"
-            },
-            "AdminGroupName": {
-              "Ref": "adminGroupName"
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
->>>>>>> dev
             }
           }
         },
@@ -238,19 +75,7 @@
             "Arn"
           ]
         },
-<<<<<<< HEAD
         "Runtime": "nodejs14.x",
-=======
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-        "Runtime": "nodejs18.x",
-========
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-        "Runtime": "nodejs14.x",
-========
-        "Runtime": "nodejs18.x",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
         "Timeout": 25,
         "Code": {
           "S3Bucket": {
@@ -268,36 +93,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-<<<<<<< HEAD
             "AdminQueries7f7a03b0LambdaRole",
-=======
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-            "pronto5f713f59PreSignup",
-========
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-            "AdminQueries7f7a03b0LambdaRole",
-========
-            "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
             {
               "Fn::Join": [
                 "",
                 [
-<<<<<<< HEAD
                   "AdminQueries7f7a03b0LambdaRole",
-=======
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-                  "pronto5f713f59PreSignup",
-========
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
-                  "AdminQueries7f7a03b0LambdaRole",
-========
-                  "pronto5f713f59PreSignup",
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
                   "-",
                   {
                     "Ref": "env"
@@ -363,12 +164,6 @@
                   }
                 ]
               }
-<<<<<<< HEAD
-=======
-<<<<<<<< HEAD:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
-========
-<<<<<<<< HEAD:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
             },
             {
               "Effect": "Allow",
@@ -404,12 +199,6 @@
                   ]
                 ]
               }
-<<<<<<< HEAD
-=======
-========
->>>>>>>> dev:amplify/backend/function/pronto5f713f59PreSignup/pronto5f713f59PreSignup-cloudformation-template.json
->>>>>>>> dev:amplify/backend/function/AdminQueries7f7a03b0/AdminQueries7f7a03b0-cloudformation-template.json
->>>>>>> dev
             }
           ]
         }
@@ -430,14 +219,11 @@
         ]
       }
     },
-<<<<<<< HEAD
     "Region": {
       "Value": {
         "Ref": "AWS::Region"
       }
     },
-=======
->>>>>>> dev
     "LambdaExecutionRole": {
       "Value": {
         "Ref": "LambdaExecutionRole"
@@ -450,14 +236,6 @@
           "Arn"
         ]
       }
-<<<<<<< HEAD
-=======
-    },
-    "Region": {
-      "Value": {
-        "Ref": "AWS::Region"
-      }
->>>>>>> dev
     }
   }
 }

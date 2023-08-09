@@ -1,4 +1,10 @@
 {
+  "analytics": {
+    "prontoEmailNotifications": {
+      "providerPlugin": "awscloudformation",
+      "service": "Pinpoint"
+    }
+  },
   "api": {
     "AdminQueries": {
       "authorizationType": "AMAZON_COGNITO_USER_POOLS",
@@ -37,7 +43,7 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2023-08-02T15:29:59.974Z",
+                "apiKeyExpirationDate": "2023-08-14T06:43:37.483Z",
                 "apiKeyExpirationDays": 30,
                 "description": "GraphQL API Key"
               },
@@ -85,27 +91,10 @@
           "SMS"
         ],
         "passwordProtectionSettings": {
-<<<<<<< HEAD
-<<<<<<<<< Temporary merge branch 1
-          "passwordPolicyCharacters": [
-=========
-            "passwordPolicyCharacters": [
->>>>>>>>> Temporary merge branch 2
-=======
-            "passwordPolicyCharacters": [
->>>>>>> dev
-            "REQUIRES_LOWERCASE",
-            "REQUIRES_NUMBERS",
-            "REQUIRES_SYMBOLS",
-            "REQUIRES_UPPERCASE"
-          ],
+          "passwordPolicyCharacters": [],
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-<<<<<<< HEAD
-          "ADDRESS",
-=======
->>>>>>> dev
           "EMAIL",
           "FAMILY_NAME",
           "NAME"
@@ -164,33 +153,16 @@
       "service": "Lambda"
     }
   },
-<<<<<<< HEAD
-<<<<<<<<< Temporary merge branch 1
-  "parameters": {
-    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-=======
   "parameters": {
     "AMPLIFY_function_AdminQueries7f7a03b0_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries7f7a03b0"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries7f7a03b0_group": {
       "usedBy": [
         {
           "category": "function",
@@ -270,6 +242,38 @@
         }
       ]
     },
+    "AMPLIFY_function_pronto5f713f59PreSignup_apiApiProntoGraphqlapiendpoint": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_apiApiProntoGraphqlapikey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_appClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_appClientIdWeb": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
     "AMPLIFY_function_pronto5f713f59PreSignup_deploymentBucketName": {
       "usedBy": [
         {
@@ -291,16 +295,18 @@
         {
           "category": "function",
           "resourceName": "pronto5f713f59PreSignup"
->>>>>>> dev
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_studentsGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
         }
       ]
     }
   },
-<<<<<<< HEAD
-=========
->>>>>>>>> Temporary merge branch 2
-=======
->>>>>>> dev
   "storage": {
     "prontoBlobeStore": {
       "dependsOn": [
