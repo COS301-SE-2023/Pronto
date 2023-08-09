@@ -166,6 +166,11 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
       lastname
       userRole
       email
+      courses{
+        items{
+          id
+        }
+      }
       createdAt
       updatedAt
       owner
