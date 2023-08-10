@@ -23,7 +23,8 @@ const EditInfoPage = () => {
         event.preventDefault()
         try{
             //Auth.changePassword(user, oldPassword, newPassword)
-            
+            console.log(oldPassword)
+            console.log(newPassword)
         }catch(error){ 
         }
         setOldPassword("")
@@ -88,47 +89,47 @@ const EditInfoPage = () => {
                     </AccordionSummary>
                 <AccordionDetails>
                     <form>
-                    <div class="form-group row">
-                        <label for="colFormLabel" class="col-sm-2 col-form-label">Old password: </label>
-                        <div class="col-sm-10">
-                            <input 
-                                type="password" 
-                                class="form-control" 
-                                id="colFormLabel1" 
-                                data-testid="pword" 
-                                required
-                                value={oldPassword}
-                                onChange={(e)=>setOldPassword(e.target.value)}></input>
+                        <div class="form-group row">
+                            <label htmlfor="colFormLabel" class="col-sm-2 col-form-label">Old password: </label>
+                            <div class="col-sm-10">
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="colFormLabel1" 
+                                    data-testid="pword" 
+                                    required
+                                    value={oldPassword}
+                                    onChange={(e)=>setOldPassword(e.target.value)}></input>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group row">
-                        <label for="colFormLabel" class="col-sm-2 col-form-label">New password: </label>
-                        <div class="col-sm-10">
-                            <input 
-                                type="password" 
-                                class="form-control" 
-                                id="colFormLabel2" 
-                                data-testid="repword"   
-                                required
-                                value={newPassword}
-                                onChange={(e)=>setNewPassword(e.target.value)}></input>
+                        <div class="form-group row">
+                            <label htmlfor="colFormLabel" class="col-sm-2 col-form-label">New password: </label>
+                            <div class="col-sm-10">
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="colFormLabel2" 
+                                    data-testid="repword"   
+                                    required
+                                    value={newPassword}
+                                    onChange={(e)=>setNewPassword(e.target.value)}></input>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group row">
-                        <label for="colFormLabel" class="col-sm-2 col-form-label">Confirm password: </label>
-                        <div class="col-sm-10">
-                            <input  
-                                type="password" 
-                                class="form-control" 
-                                id="colFormLabel3" 
-                                data-testid="newpword"
-                                required
-                                value={confirmPassword}
-                                onChange={(e)=>setConfirmPassword(e.target.value)}></input>
+                        <div class="form-group row">
+                            <label htmlfor="colFormLabel" class="col-sm-2 col-form-label">Confirm password: </label>
+                            <div class="col-sm-10">
+                                <input  
+                                    type="password" 
+                                    class="form-control" 
+                                    id="colFormLabel3" 
+                                    data-testid="newpword"
+                                    required
+                                    value={confirmPassword}
+                                    onChange={(e)=>setConfirmPassword(e.target.value)}></input>
+                            </div>
                         </div>
-                    </div>
 
                     <button className="post-button">Update</button>
                 </form>
