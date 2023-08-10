@@ -5,7 +5,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Auth} from 'aws-amplify'
+import {Auth,Storage} from 'aws-amplify'
 import { ErrorModal } from '../../ErrorModal';
 import '../Navigation/Navigation.css';
 
@@ -17,6 +17,9 @@ const EditInfoPage = () => {
     const[userAttributes,setUserAttributes]=React.useState("")
     const[confirmPassword,setConfirmPassword]=React.useState("");
     const[error,setError]=React.useState("")
+    const [selectedFile, setSelectedFile] = React.useState(null);
+    const [uploadProgress, setUploadProgress] = React.useState(0);
+    const [folderNameS3, setFolderNameS3] = React.useState("");
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -35,9 +38,16 @@ const EditInfoPage = () => {
     };
 
     const setAdmin = async()=>{
-        let u=await Auth.currentAuthenticatedUser()
-        setUser(u)
-        setUserAttributes(u.attributes)
+        let userInfo=await Auth.currentAuthenticatedUser()
+        setUser(userInfo)
+        setUserAttributes(userInfo.attributes)
+        let username = userInfo?.attributes?.name; 
+      const words = username.split(/\s+/); 
+      username = words
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
+        .join(""); 
+
+      setFolderNameS3(username);
     };
 
     React.useEffect(()=> { 
