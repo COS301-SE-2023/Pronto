@@ -26,6 +26,7 @@ const EditInfoPage = () => {
             console.log(oldPassword)
             console.log(newPassword)
         }catch(error){ 
+            console.log(error)
         }
         setOldPassword("")
         setNewPassword("")
