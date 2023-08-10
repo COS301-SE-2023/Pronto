@@ -10,16 +10,30 @@ import '../Navigation/Navigation.css';
 
 const EditInfoPage = () => {
     const [expanded, setExpanded] = React.useState(false);
-    const[user,setUser]=React.useState(null)
+    const[user,setUser]=React.useState(null);
+    const[oldPassword,setOldPassword]=React.useState("");
+    const[newPassword,setNewPassword]=React.useState("");
+    const[confirmPassword,setConfirmPassword]=React.useState("");
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
+    };
+
+    const handleSubmit =async(event)=>{ 
+        event.preventDefault()
+        try{
+            Auth.changePassword(user, oldPassword, newPassword)
+        }catch(error){ 
+        }
+        setOldPassword("")
+        setNewPassword("")
+        setConfirmPassword("")
     };
 
     const setAdmin = async()=>{
         let u=await Auth.currentAuthenticatedUser()
         setUser(u)
         
-    }
+    };
 
       React.useEffect(()=> { 
         setAdmin()
