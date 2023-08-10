@@ -20,15 +20,23 @@ export default function InstitutionNavigation() {
     return (
         <div className={'grid'}>
             <nav className="vertical-navbar col-4 p-4" >
-                <div className="top">
+                <div className="top"
+                      style={{  width: "calc(12vw)",
+                                height: "calc(25vh)" ,   
+                                justifyContent:"center",
+                                justifyItems:"center",
+                                maxWidth:"100%",
+                                maxHeight:"100%"}}
+                    >
                 <img
-                src={logo}
-                alt="Logo"
-                className="logo offset-2 img-fluid mr-1"
-                width={"175px"}
-                height={"155px"}
-                data-testid={'UniversityImage'}
-                />
+                    src={logo}
+                    alt="Logo"
+                    className="logo offset-2 img-fluid mr-1"
+                    width={"175px"}
+                    height={"155px"}
+                    style={{maxWidth:"100%",maxHeight:"100%",border:"2px solid black",padding:"2px"}}
+                    data-testid={'UniversityImage'}
+                    />
                 </div>
                 <ul className="navbar-nav">
         
