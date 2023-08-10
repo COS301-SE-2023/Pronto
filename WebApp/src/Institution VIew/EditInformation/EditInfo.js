@@ -276,6 +276,67 @@ const EditInfoPage = () => {
                     </AccordionDetails>
                 </Accordion>
             </div>
+            <div>
+                <Accordion expanded ={ expanded==='panel4'} onChange={handleChange('panel4')}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}} />}
+                        aria-controls="panel1bh-content"
+                        id="panel1bh-header"
+                        style={{"width": "100%"}}
+                        data-testid={'paccordionDrop'}>
+                        <Typography
+                            sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }}>
+                            Edit Admin Information
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <div className="card shadow">
+                            <div className="card-body">
+                                <form>
+                                    <div className="form-row">
+                                    {/* First name */}
+                                        <div className="form-group col-6">
+                                            <label htmlFor="name">First Name</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="admin-name"
+                                                    //placeholder="John"
+                                                    data-testid="adminfirstName"
+                                                    required
+                                                    //value={firstName}
+                                                    //onChange={(e)=>setFirstName(e.target.value)}
+                                                    />
+                                        </div>
+
+                                {/* Last name */}
+                                        <div className="form-group col-6">
+                                            <label htmlFor="lastname">Last Name</label>
+                                                <input
+                                                type="text"
+                                                className="form-control"
+                                                id="lastname"
+                                                //placeholder="Doe"
+                                                data-testid="adminlastName"
+                                                required
+                                                //value={lastName}
+                                                //onChange={(e)=>setLastName(e.target.value)}
+                                        />
+                                        </div>
+                                    </div>
+                                     <button
+                                        type="submit"
+                                        className="btn btn-danger w-100"
+                                        data-testid="editButton"
+                                    >
+                                        Edit
+                                    </button>
+                        </form>    
+                        </div>
+                        </div>
+                    </AccordionDetails>
+                </Accordion>
+            </div>
            
         </main>
   
