@@ -39,7 +39,7 @@ const EditInfoPage = () => {
                     
                     <tr>
                     <td>Institution name:</td>
-                    <td>University of Pretoria</td>
+                    <td>{user.attributes.name}</td>
                     </tr>
 
                     <tr>
@@ -49,7 +49,7 @@ const EditInfoPage = () => {
 
                     <tr>
                     <td>Email address:</td>
-                    <td>ProntoAdmin@up.ac.za</td>
+                    <td>{user.attributes.email}</td>
                     </tr>
             
                 </tbody>
