@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function InstitutionNavigation() {
   const navigate = useNavigate();
-  //const [logo,setLogo]=React.useState('../../images/logo.svg')
+  
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
