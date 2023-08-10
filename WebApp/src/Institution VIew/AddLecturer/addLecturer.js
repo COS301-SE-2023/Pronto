@@ -54,7 +54,6 @@ const AddLecturer = () => {
                     emails=institution.lectureremails
                     emails.push(email)
                 }
-                console.log(emails)
                  let update={
                      id:institution.id,
                      lectureremails:emails
@@ -65,24 +64,29 @@ const AddLecturer = () => {
                     variables:{input:update},
                     authMode:"AMAZON_COGNITO_USER_POOLS"
                   })
+
                  //Add lecturer to courses
                  await addCourses(lecturer,selectedCourses)
                  if(lecturers.length<19)
                         setLecturers(lecturers)
                 setInstitution(institution)
+                
              }catch(error){    
-                if(error.errors===undefined)
-                    setError("Something went wrong.Try again later")
-                let e=error.errors[0].message
-                if(e.search("Unathorized")!==-1){ 
-                    setError("You are not authorized to perform this action.Please log out and log in")
-                }
-                else if(e.search("Network")!==-1){
-                    setError("Request failed due to network issues")
+                if(error.errors!==undefined){
+                    let e=error.errors[0].message
+                    if(e.search("Unathorized")!==-1){ 
+                        setError("You are not authorized to perform this action.Please log out and log in")
+                    }
+                    else if(e.search("Network")!==-1){
+                        setError("Request failed due to network issues")
+                    }
+                    else{ 
+                        setError("Something went wrong.Please try again later")
+                    }     
                 }
                 else{ 
-                    setError("Something went wrong.Please try again later")
-                }     
+                    setError("Your request could not be processed")
+                }
             }    
             setFirstName("")
             setLastName("")
@@ -103,27 +107,32 @@ const AddLecturer = () => {
                     lecturerId:null, 
                 }
         
-            let update=await API.graphql({
-                query:updateCourse,
-                variables:{input:updatedCourseData},
-                authMode:"AMAZON_COGNITO_USER_POOLS"
-            }) 
-            lecturer.courses.splice(i,1)
+                let update=await API.graphql({
+                    query:updateCourse,
+                    variables:{input:updatedCourseData},
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                }) 
+                lecturer.courses.splice(i,1)
             
-    }catch(error){ 
-         let e=error.errors[0].message
-          if(e.search("Unathorized")!==-1){ 
-            setError("You are not authorized to perform this action.Please log out and log in")
-          }
-          else if(e.search("Network")!==-1){
-            setError("Request failed due to network issues")
-          }
-          else{ 
-            setError("Something went wrong.Please try again later")
-          }
+            }catch(error){ 
+                if(error.errors!==undefined){ 
+                    let e=error.errors[0].message
+                    if(e.search("Unathorized")!==-1){ 
+                        setError("You are not authorized to perform this action.Please log out and log in")
+                    }
+                    else if(e.search("Network")!==-1){
+                        setError("Request failed due to network issues")
+                    }
+                    else{ 
+                        setError("Something went wrong.Please try again later")
+                    }
+                }
+                else{ 
+                    setError("Your request could not be processed")
+                }
+            }
+        }
     }
-    }
-}
 
     const addCourses=async(lecturer,courseList)=>{ 
         
@@ -150,17 +159,23 @@ const AddLecturer = () => {
             setLecturers(lecturers)
 
     }catch(error){ 
-         let e=error.errors[0].message
-          if(e.search("Unathorized")!==-1){ 
-            setError("You are not authorized to perform this action.Please log out and log in")
-          }
-          else if(e.search("Network")!==-1){
-            setError("Request failed due to network issues")
-          }
-          else{ 
-            setError("Something went wrong.Please try again later")
-          }
+        if(error.errors!==undefined){
+            let e=error.errors[0].message
+            if(e.search("Unathorized")!==-1){ 
+                setError("You are not authorized to perform this action.Please log out and log in")
+            }
+            else if(e.search("Network")!==-1){
+                setError("Request failed due to network issues")
+            } 
+            else{ 
+                setError("Something went wrong.Please try again later")
+            }
+        }
+        else {
+            setError("Your request could not be processed")
+        }
     }
+    
     }
 }
 
@@ -185,16 +200,21 @@ const AddLecturer = () => {
             setLecturers(rows)
         }
         catch(error){
-            let e=error.errors[0].message
-            if(e.search("Unathorized")!==-1){ 
-                setError("You are not authorized to perform this action.Please log out and log in")
+            if(error.errors!==undefined){
+                let e=error.errors[0].message
+                if(e.search("Unathorized")!==-1){ 
+                    setError("You are not authorized to perform this action.Please log out and log in")
+                }
+                else if(e.search("Network")!==-1){
+                    setError("Request failed due to network issues")
+                }
+                else{ 
+                    setError("Something went wrong.Please try again later")
+                } 
             }
-            else if(e.search("Network")!==-1){
-                setError("Request failed due to network issues")
+            else{
+                setError("Your request could not be processed")
             }
-            else{ 
-                setError("Something went wrong.Please try again later")
-            } 
         }
     }
 
@@ -222,8 +242,6 @@ const AddLecturer = () => {
                 } 
                 else{
                     institution=institution.data.listInstitutions.items[0]
-                    setInstitution(institution)   
-                    setCourses(institution.courses.items)
                     let lecturerList=institution.lecturer.items
                     for(let i=0;i<courses.length;i++){ 
                         if(courses[i].lecturerId===null){
@@ -240,20 +258,28 @@ const AddLecturer = () => {
 
                         }
                     }
+
+                    setInstitution(institution)   
+                    setCourses(institution.courses.items)
                     setLecturers(lecturerList)
                 }
             }
         }
         catch(error){   
-             let e=error.errors[0].message
-            if(e.search("Unathorized")!==-1){ 
-                setError("You are not authorized to perform this action.Please log out and log in")
+            if(error.errors!==undefined){
+                let e=error.errors[0].message
+                if(e.search("Unathorized")!==-1){ 
+                    setError("You are not authorized to perform this action.Please log out and log in")
+                }
+                else if(e.search("Network")!==-1){
+                    setError("Request failed due to network issues")
+                }
+                else{ 
+                    setError("Something went wrong.Please try again later")
+                }
             }
-            else if(e.search("Network")!==-1){
-                setError("Request failed due to network issues")
-            }
-            else{ 
-                setError("Something went wrong.Please try again later")
+            else{
+               setError("Your request could not be processed")
             }
         }
     }
@@ -261,7 +287,7 @@ const AddLecturer = () => {
     const handleSearch = async() => { 
         try{ 
             if(searchIcon===false){
-                //let institution=await Auth.currentAuthenticatedUser()
+               
                 if(filterAttribute==="firstname"){
                     let search= await API.graphql({
                         query:lecturersByInstitutionId,
@@ -321,20 +347,21 @@ const AddLecturer = () => {
        }catch(error){
        
             if(error.errors!==undefined){
-            let e=error.errors[0].message
-            if(e.search("Unathorized")!==-1){ 
-                setError("You are not authorized to perform this action.Please log out and log in")
-            }
-            else if(e.search("Network")!==-1){
-                setError("Request failed due to network issues")
-            }
-            else{ 
-                setError("Something went wrong.Please try again later")
-            }
-       } else {
-               setError("Something went wrong.Please try again later")
-       } 
-    }
+                let e=error.errors[0].message
+                if(e.search("Unathorized")!==-1){ 
+                    setError("You are not authorized to perform this action.Please log out and log in")
+                }
+                else if(e.search("Network")!==-1){
+                    setError("Request failed due to network issues")
+                }
+                else{ 
+                    setError("Something went wrong.Please try again later")
+                }
+            } 
+            else {
+                   setError("Your request could not be processed")
+            } 
+        }
     } 
     
     useEffect(() => {

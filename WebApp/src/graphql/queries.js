@@ -94,6 +94,7 @@ export const listInstitutions=`query ListInstitutions(
            id
            lecturerId
            coursecode
+           coursename
         }
       }
       lecturer{ 
@@ -106,6 +107,7 @@ export const listInstitutions=`query ListInstitutions(
             items{ 
               id 
               coursecode
+              coursename
             }
           }
         }
@@ -170,6 +172,7 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
       courses{
         items{
           id
+          coursename
         }
       }
       createdAt
@@ -192,6 +195,7 @@ export const listCourses=`query ListCourses(
       institutionId
       lecturerId
       coursecode
+      coursename
       semester
       createdAt
       updatedAt
