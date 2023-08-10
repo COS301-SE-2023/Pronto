@@ -42,7 +42,9 @@ const AddLecturer = () => {
                     })
       
                  lecturer=mutation.data.createLecturer
-                 lecturer.courses=[]
+                 lecturer.courses={
+                    items :[]
+                 }
                  lecturers.push(mutation.data.createLecturer)
                 
                 let emails
@@ -67,10 +69,11 @@ const AddLecturer = () => {
 
                  //Add lecturer to courses
                  await addCourses(lecturer,selectedCourses)
+                 console.log(lecturer)
                  if(lecturers.length<19)
                         setLecturers(lecturers)
                 setInstitution(institution)
-                
+
              }catch(error){    
                 if(error.errors!==undefined){
                     let e=error.errors[0].message
