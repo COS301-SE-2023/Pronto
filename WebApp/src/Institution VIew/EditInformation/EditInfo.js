@@ -15,6 +15,16 @@ const EditInfoPage = () => {
         setExpanded(isExpanded ? panel : false);
     };
 
+    const setAdmin = async()=>{
+        let u=await Auth.currentAuthenticatedUser()
+        setUser(u)
+        
+    }
+
+      React.useEffect(()=> { 
+        setAdmin()
+    },[])
+
     return (
       <div style={{ display: 'inline-flex' }}>
         <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
