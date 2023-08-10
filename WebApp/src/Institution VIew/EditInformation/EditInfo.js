@@ -20,6 +20,7 @@ const EditInfoPage = () => {
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [uploadProgress, setUploadProgress] = React.useState(0);
     const [folderNameS3, setFolderNameS3] = React.useState("");
+    const[message,setMessage]=React.useState("")
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -46,13 +47,44 @@ const EditInfoPage = () => {
       username = words
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
         .join(""); 
-
+      
       setFolderNameS3(username);
     };
 
+    const handleFileSelect = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    
+    };
+
+  
+    const handleFileDrop = (event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        setSelectedFile(file);
+    };
+
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+    };
+
+    const handleClick = (event) => {
+        event.preventDefault();
+        document.getElementById("fileInput").click();
+    };
+
+    const handleDragEnter = (event) => {
+        event.preventDefault();
+    };
+
+    const handleFileSubmit = async()=>{ 
+
+    }
+
     React.useEffect(()=> { 
         setAdmin()
-    },[])
+    },[]);
 
     return (
       <div style={{ display: 'inline-flex' }}>
@@ -164,6 +196,65 @@ const EditInfoPage = () => {
                         </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
+                        <div>
+                            <div
+                                className="dropzone text-center"
+                                onDrop={handleFileDrop}
+                                onDragOver={handleDragOver}
+                                onDragEnter={handleDragEnter}
+                                style={{
+                                    height: "100px",
+                                    border: "1px dashed",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    display: "flex",
+                                }}>
+                                {selectedFile ? (
+                                    <div>
+                                        Selected File: {selectedFile.name}
+                                        <button
+                                            onClick={handleFileSubmit}
+                                            className={"btn m-3"}
+                                            style={{ backgroundColor: "#e32f45", color: "white" }}
+                                        >
+                                            Submit
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div id={"dropzone"} onClick={handleClick}>
+                                        Drag and drop your file here or{" "}
+                                        <label htmlFor="fileInput" className="file-label">
+                                          click here
+                                    </label>{" "}
+                                    to select a file.
+                                </div>
+                            )}
+                        </div>
+                        {selectedFile && (
+                            <div className="progress" style={{ marginTop: "5%", height: "30px" }}>
+                                <div
+                                    className="progress-bar"
+                                    role="progressbar"
+                                    style={{ width: `${uploadProgress}%`, backgroundColor: "#e32f45" }}
+                                    aria-valuenow={uploadProgress}
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                >
+                                    {uploadProgress}%
+                                </div>
+                            </div>
+                        )}
+                    {message && (
+                        <div style={{ marginTop: "5%", color: "green" }}>{message}</div>
+                    )}
+                        <input
+                            id="fileInput"
+                            type="file"
+                            accept=".png"
+                            onChange={handleFileSelect}
+                            style={{ display: "none" }}
+                        />
+                        </div>
                     </AccordionDetails>
                 </Accordion>
             </div>
