@@ -258,6 +258,24 @@ const EditInfoPage = () => {
                     </AccordionDetails>
                 </Accordion>
             </div>
+            <div>
+                <Accordion expanded ={ expanded==='panel3'} onChange={handleChange('panel3')}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon style={{"color":"#e32f45"}} />}
+                        aria-controls="panel1bh-content"
+                        id="panel1bh-header"
+                        style={{"width": "100%"}}
+                        data-testid={'paccordionDrop'}>
+                        <Typography
+                            sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold',textAlign:"center" }}>
+                            Edit domains
+                        </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+
+                    </AccordionDetails>
+                </Accordion>
+            </div>
            
         </main>
   
