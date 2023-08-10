@@ -6,6 +6,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Auth} from 'aws-amplify'
+import { ErrorModal } from '../../ErrorModal';
 import '../Navigation/Navigation.css';
 
 const EditInfoPage = () => {
@@ -15,6 +16,7 @@ const EditInfoPage = () => {
     const[newPassword,setNewPassword]=React.useState("");
     const[userAttributes,setUserAttributes]=React.useState("")
     const[confirmPassword,setConfirmPassword]=React.useState("");
+    const[error,setError]=React.useState("")
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -22,11 +24,10 @@ const EditInfoPage = () => {
     const handleSubmit =async(event)=>{ 
         event.preventDefault()
         try{
-            //Auth.changePassword(user, oldPassword, newPassword)
-            console.log(oldPassword)
-            console.log(newPassword)
+            Auth.changePassword(user, oldPassword, newPassword)
+            setError("Password changed successfully")
         }catch(error){ 
-            console.log(error)
+            setError("Password change failed")
         }
         setOldPassword("")
         setNewPassword("")
@@ -45,6 +46,7 @@ const EditInfoPage = () => {
 
     return (
       <div style={{ display: 'inline-flex' }}>
+         {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
         <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
             {/* Navigation bar content */}
             <InstitutionNavigation />
