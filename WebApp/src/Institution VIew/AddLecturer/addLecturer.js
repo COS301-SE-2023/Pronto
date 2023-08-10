@@ -69,7 +69,6 @@ const AddLecturer = () => {
 
                  //Add lecturer to courses
                  await addCourses(lecturer,selectedCourses)
-                 console.log(lecturer)
                  if(lecturers.length<19)
                         setLecturers(lecturers)
                 setInstitution(institution)
