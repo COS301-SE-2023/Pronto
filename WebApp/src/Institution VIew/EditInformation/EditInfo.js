@@ -51,7 +51,7 @@ const EditInfoPage = () => {
   
         <main style={{ width: '900px',marginTop: '30px' }}>
             <h1 className="moduleHead">Edit University Information</h1>
-            <table class="table table-sm">
+            <table className="table table-sm">
                 <tbody>
                     
                     <tr>
@@ -88,13 +88,13 @@ const EditInfoPage = () => {
                 
                     </AccordionSummary>
                 <AccordionDetails>
-                    <form>
-                        <div class="form-group row">
-                            <label htmlfor="colFormLabel" class="col-sm-2 col-form-label">Old password: </label>
-                            <div class="col-sm-10">
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group row">
+                            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Old password: </label>
+                            <div className="col-sm-10">
                                 <input 
                                     type="password" 
-                                    class="form-control" 
+                                    className="form-control" 
                                     id="colFormLabel1" 
                                     data-testid="pword" 
                                     required
@@ -103,12 +103,12 @@ const EditInfoPage = () => {
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label htmlfor="colFormLabel" class="col-sm-2 col-form-label">New password: </label>
-                            <div class="col-sm-10">
+                        <div className="form-group row">
+                            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">New password: </label>
+                            <div className="col-sm-10">
                                 <input 
                                     type="password" 
-                                    class="form-control" 
+                                    className="form-control" 
                                     id="colFormLabel2" 
                                     data-testid="repword"   
                                     required
@@ -117,12 +117,12 @@ const EditInfoPage = () => {
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label htmlfor="colFormLabel" class="col-sm-2 col-form-label">Confirm password: </label>
-                            <div class="col-sm-10">
+                        <div className="form-group row">
+                            <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Confirm password: </label>
+                            <div className="col-sm-10">
                                 <input  
                                     type="password" 
-                                    class="form-control" 
+                                    className="form-control" 
                                     id="colFormLabel3" 
                                     data-testid="newpword"
                                     required
