@@ -5,8 +5,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Auth,Storage} from 'aws-amplify'
+import {Auth,Storage,API} from 'aws-amplify'
 import { ErrorModal } from '../../ErrorModal';
+import { listInstitutions } from '../../graphql/queries';
 import '../Navigation/Navigation.css';
 
 const EditInfoPage = () => {
@@ -21,6 +22,7 @@ const EditInfoPage = () => {
     const [uploadProgress, setUploadProgress] = React.useState(0);
     const [folderNameS3, setFolderNameS3] = React.useState("");
     const[message,setMessage]=React.useState("")
+    const[institution,setInstitution]=React.useState(null)
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -38,7 +40,7 @@ const EditInfoPage = () => {
         setConfirmPassword("")
     };
 
-    const setAdmin = async()=>{
+    const fetchAdminInfo = async()=>{
         let userInfo=await Auth.currentAuthenticatedUser()
         setUser(userInfo)
         setUserAttributes(userInfo.attributes)
@@ -49,6 +51,23 @@ const EditInfoPage = () => {
         .join(""); 
       
       setFolderNameS3(username);
+    //   try{
+    //       let domain=userInfo.attributes.email.split('@')[1]
+    //       let i=await API.graphql({
+    //         query:listInstitutions,
+    //         variables:{
+    //             filter:{
+    //                 domains:{
+    //                     contains:domain
+    //                 }
+    //             }
+    //         },
+    //         authMode:"AMAZON_COGNITO_USER_POOLS"
+    //       })
+    //       setInstitution(i.data.listInstitutions.items[0])
+    //   }catch(error){
+    //     console.log(error)
+    //   }
     };
 
     const handleFileSelect = (event) => {
@@ -56,6 +75,14 @@ const EditInfoPage = () => {
         setSelectedFile(file);
     
     };
+
+    const handleAdminEdit = async()=>{
+        try{
+
+        }catch(error){
+
+        }
+    }
 
   
     const handleFileDrop = (event) => {
@@ -79,11 +106,32 @@ const EditInfoPage = () => {
     };
 
     const handleFileSubmit = async()=>{ 
+    //      if (selectedFile) {
+    //          try {
+    //             const fileKey = `${folderNameS3}/Logo/logo`;
+    //             let a=await Storage.put(fileKey, selectedFile, {
+    //                 progressCallback: ({ loaded, total }) => {
+    //                 const progress = Math.round((loaded / total) * 100);
+    //                 setUploadProgress(progress);
+    //                 setMessage("Uploading file: " + selectedFile.name);
+    //             },
+    //         });
+    //     console.log(a)
+    //     console.log(a.key)        
+    //     setMessage("File successfully uploaded: " + selectedFile.name);
+    //   } catch (error) {
+    //     console.log(error)
+    //     setMessage("Error uploading file");
+    //   }
 
+    //   // Reset the selected file and upload progress
+    //   setSelectedFile(null);
+    //   setUploadProgress(0);
+    // }
     }
 
     React.useEffect(()=> { 
-        setAdmin()
+        fetchAdminInfo()
     },[]);
 
     return (
@@ -292,7 +340,7 @@ const EditInfoPage = () => {
                     <AccordionDetails>
                         <div className="card shadow">
                             <div className="card-body">
-                                <form>
+                                <form >
                                     <div className="form-row">
                                     {/* First name */}
                                         <div className="form-group col-6">

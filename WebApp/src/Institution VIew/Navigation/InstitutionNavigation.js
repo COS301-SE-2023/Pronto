@@ -1,11 +1,13 @@
 import * as React from "react";
 import "./Navigation.css";
-import logo from "../../images/logo.svg";
-import { Auth } from "aws-amplify";
+import logo from "../../images/university_logo.svg";
+import { Auth,Storage,API } from "aws-amplify";
+import { listInstitutions } from "../../graphql/queries";
 import { useNavigate } from "react-router-dom";
 
 export default function InstitutionNavigation() {
   const navigate = useNavigate();
+  //const [logo,setLogo]=React.useState('../../images/logo.svg')
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -16,6 +18,28 @@ export default function InstitutionNavigation() {
       console.log(e.message);
     }
   };
+
+  const fetchLogo = async()=>{
+    console.log("fectching")
+    try{
+        let user=await Auth.currentAuthenticatedUser();
+        let name=user.attributes.name;
+        const universityName = name.split(/\s+/); 
+      name = universityName
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
+        .join("");
+        // let l=await Storage.get(name+'/logo/logo.png',{validateObjectExistence:true,expires:3600})
+        // console.log(l)
+        // setLogo(l)
+        console.log(logo)
+    }catch(error){
+        console.log(error)
+    }
+  }
+
+  React.useEffect(()=> { 
+        fetchLogo()
+    },[]);
 
     return (
         <div className={'grid'}>
