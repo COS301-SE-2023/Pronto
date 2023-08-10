@@ -13,6 +13,7 @@ const EditInfoPage = () => {
     const[user,setUser]=React.useState(null);
     const[oldPassword,setOldPassword]=React.useState("");
     const[newPassword,setNewPassword]=React.useState("");
+    const[userAttributes,setUserAttributes]=React.useState("")
     const[confirmPassword,setConfirmPassword]=React.useState("");
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -32,10 +33,10 @@ const EditInfoPage = () => {
     const setAdmin = async()=>{
         let u=await Auth.currentAuthenticatedUser()
         setUser(u)
-        
+        setUserAttributes(u.attributes)
     };
 
-      React.useEffect(()=> { 
+    React.useEffect(()=> { 
         setAdmin()
     },[])
 
@@ -53,7 +54,7 @@ const EditInfoPage = () => {
                     
                     <tr>
                     <td>Institution name:</td>
-                    <td>{user.attributes.name}</td>
+                    <td>{userAttributes.name}</td>
                     </tr>
 
                     <tr>
@@ -63,7 +64,7 @@ const EditInfoPage = () => {
 
                     <tr>
                     <td>Email address:</td>
-                    <td>{user.attributes.email}</td>
+                    <td>{userAttributes.email}</td>
                     </tr>
             
                 </tbody>
@@ -88,21 +89,37 @@ const EditInfoPage = () => {
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Old password: </label>
                     <div class="col-sm-10">
-                    <input type="password" class="form-control" id="colFormLabel" data-testid="pword" required></input>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="colFormLabel1" 
+                        data-testid="pword" 
+                        required
+                        value={oldPassword}
+                        onChange={(e)=>setOldPassword(e.target.value)}></input>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">New password: </label>
                     <div class="col-sm-10">
-                    <input type="password" class="form-control" id="colFormLabel" data-testid="repword" required></input>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="colFormLabel2" 
+                        data-testid="repword"   
+                        required></input>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-2 col-form-label">Confirm password: </label>
                     <div class="col-sm-10">
-                    <input type="password" class="form-control" id="colFormLabel" data-testid="newpword"></input>
+                    <input  
+                        type="password" 
+                        class="form-control" 
+                        id="colFormLabel3" 
+                        data-testid="newpword"></input>
                     </div>
                 </div>
 
