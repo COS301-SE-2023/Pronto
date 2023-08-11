@@ -7,7 +7,7 @@ import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
 import InstitutionLogin from "./Authentication/Institution/Login";
 import InstitutionForgotPassword from "./Authentication/Institution/ForgotPassword";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
@@ -22,48 +22,10 @@ import HomePage from "./HomePage";
 import config from "./aws-exports";
 import Dashboard from "./Institution VIew/Dashboard/Dashboard";
 import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
+import { RequireLecturerAuth } from "./RequireLecturerAuth";
+import { RequireAdminAuth } from "./RequireAdminAuth";
 
 Amplify.configure(config);
-
-
-//use this part to see if user is logged in or out and then determine what pages they can access
-const [user, setUser] = useState(undefined);
-const [userGroup, setUserGroup] = useState(null);
-const checkUser = async () => {
-  try {
-    const authUser = await Auth.currentAuthenticatedUser({});
-    const group =
-      authUser.signInUserSession.idToken.payload["cognito:groups"];
-    setUser(authUser);
-    setUserGroup(group);
-  } catch (e) {
-    setUser(null);
-  }
-};
-
-useEffect(() => {
-  checkUser();
-}, []);
-
-//end
-useEffect(() => {
-  Amplify.configure(config);
-}, []);
-
-
-useEffect(() => {
-  const listener = (data) => {
-    if (data.payload.event === "signIn" || data.payload.event === "signOut") {
-      checkUser();
-    }
-  };
-  Hub.listen("auth", listener);
-  return () => Hub.remove("auth", listener);
-}, []);
-
-if (user === undefined) {
-  return <div>Loading...</div>;
-}
 
 function MyRoutes()
 {
@@ -196,6 +158,38 @@ function MyRoutes()
 }
 
 function App(){
+  const [user, setUser] = useState(undefined);
+  const [userGroup, setUserGroup] = useState(null);
+  const checkUser = async () => {
+    try {
+      const authUser = await Auth.currentAuthenticatedUser({});
+      const group =
+        authUser.signInUserSession.idToken.payload["cognito:groups"];
+      setUser(authUser);
+      setUserGroup(group);
+    } catch (e) {
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  useEffect(() => {
+    Amplify.configure(config);
+  }, []);
+
+
+  useEffect(() => {
+    const listener = (data) => {
+      if (data.payload.event === "signIn" || data.payload.event === "signOut") {
+        checkUser();
+      }
+    };
+    Hub.listen("auth", listener);
+    return () => Hub.remove("auth", listener);
+  }, []);
   return (
     <Authenticator.Provider>
       <MyRoutes />
