@@ -133,8 +133,6 @@ const Home = () => {
 
               {/*Institution pages routing*/}
 
-              <Route path="/add-lecturer" element={<AddLecturer />} />
-
               <Route path="/lecturer-login" element={<LecturerLogin />} />
               <Route
                 path="/lecturer-confirm-email"
@@ -194,11 +192,6 @@ const Home = () => {
                 path="/institution-forgot-password"
                 element={<InstitutionForgotPassword />}
               />
-
-              <Route
-                path="/edit-university-info"
-                element={<EditUniversityInfo />}
-              />
             </Routes>
           </Router>
         </div>
@@ -235,11 +228,6 @@ const Home = () => {
             <Route
               path="/institution-forgot-password"
               element={<InstitutionForgotPassword />}
-            />
-
-            <Route
-              path="/edit-university-info"
-              element={<EditUniversityInfo />}
             />
           </Routes>
         </Router>
