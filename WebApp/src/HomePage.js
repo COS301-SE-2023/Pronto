@@ -19,7 +19,18 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="BG">
+    <div class="hero">
+
+      <div class="cube"></div>
+      <div class="cube"></div>
+      <div class="cube"></div>
+      <div class="cube"></div>
+      <div class="cube"></div>
+      <div class="cube"></div>
+      <div class="cube"></div>
+      <div class="cube"></div>
+      <div class="cube"></div>
+
       <Grid
         container
         spacing={0}
@@ -29,7 +40,9 @@ function HomePage() {
         sx={{ minHeight: '100vh' }}
       >
 
-        <Card sx={{ padding: 5, borderRadius: '10px', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.4)', opacity: isLoaded ? 1 : 0, transition: 'opacity 1s ease-in-out 0.2s' }}>
+
+
+        <Card sx={{ padding: 5, borderRadius: '10px', transition: 'opacity 1s ease-in-out 0.2s' }}>
           <Box
             sx={{
               maxWidth: 2000,
@@ -129,7 +142,6 @@ function HomePage() {
           </Box>
         </Card>
       </Grid>
-
     </div >
   );
 }
