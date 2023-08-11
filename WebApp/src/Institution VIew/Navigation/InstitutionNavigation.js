@@ -47,14 +47,14 @@ export default function InstitutionNavigation() {
         })
         inst=inst.data.listInstitutions.items[0];
         
-        if(inst.logo!==null && inst.logo!==undefined){
-            let l=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600,download:false});
-            console.log(l)
-            setInstitutionLogo(l);
-        }
-        else{
-            console.log("Sticking to default")
-        }
+        // if(inst.logo!==null && inst.logo!==undefined){
+        //     let l=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600,download:false});
+        //     console.log(l)
+        //     setInstitutionLogo(l);
+        // }
+        // else{
+        //     console.log("Sticking to default")
+        // }
 
         setInstitution(inst);
     }catch(error){
