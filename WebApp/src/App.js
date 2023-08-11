@@ -102,37 +102,53 @@ function MyRoutes()
       <Route
         path="/dashboard"
         element={
-          <RequireAuth>
+          <RequireAdminAuth>
             <Dashboard />
-          </RequireAuth>
+          </RequireAdminAuth>
         }
       />
       <Route
         path="/add-lecturer"
         element={
-          <RequireAuth>
+          <RequireAdminAuth>
             <AddLecturer />
-          </RequireAuth>
+          </RequireAdminAuth>
         }
       />
       <Route
         path="/institution-homepage"
         element={
-          <RequireAuth>
+          <RequireAdminAuth>
             <InstitutionHomePage />
-          </RequireAuth>
+          </RequireAdminAuth>
         }
       />
       <Route
-        path=""
+        path="/upload-schedule"
         element={
-          <RequireAuth>
+          <RequireAdminAuth>
             <FileUploadPage />
-          </RequireAuth>
+          </RequireAdminAuth>
+        }
+      />
+      <Route
+        path="/upload-student-files"
+        element={
+          <RequireAdminAuth>
+            <StudentFileUploadPage />
+          </RequireAdminAuth>
+        }
+      />
+      <Route
+        path="/edit-university-info"
+        element={
+          <RequireAdminAuth>
+            <EditUniversityInfo />
+          </RequireAdminAuth>
         }
       />
 
-
+      {/*Protected lecturer routing*/}
 
 
 
