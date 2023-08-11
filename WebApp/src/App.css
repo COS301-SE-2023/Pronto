@@ -26,37 +26,37 @@
   border-color: #e32f45;
 }
 .cube:nth-child(2) {
-  -webkit-animation-delay: 2s;
-  animation-delay: 2s;
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
   left: 25vw;
   top: 40vh;
 }
 
 /* Add new cubes */
 .cube:nth-child(3) {
-  -webkit-animation-delay: 4s;
-  animation-delay: 4s;
+  -webkit-animation-delay: 2s;
+  animation-delay: 2s;
   left: 65vw;
   top: 10vh;
 }
 
 .cube:nth-child(4) {
-  -webkit-animation-delay: 6s;
-  animation-delay: 6s;
+  -webkit-animation-delay: 4s;
+  animation-delay: 4s;
   left: 90vw;
   top: 10vh;
 }
 
 .cube:nth-child(5) {
-  -webkit-animation-delay: 8s;
-  animation-delay: 8s;
+  -webkit-animation-delay: 6s;
+  animation-delay: 6s;
   left: 10vw;
   top: 85vh;
 }
 
 .cube:nth-child(6) {
-  -webkit-animation-delay: 10s;
-  animation-delay: 10s;
+  -webkit-animation-delay: 8s;
+  animation-delay: 8s;
   left: 15vw;
   top: 50vh;
 }
@@ -64,22 +64,22 @@
 /* Add more cubes... */
 
 .cube:nth-child(7) {
-  -webkit-animation-delay: 12s;
-  animation-delay: 12s;
+  -webkit-animation-delay: 10s;
+  animation-delay: 10s;
   left: 80vw;
   top: 60vh;
 }
 
 .cube:nth-child(8) {
-  -webkit-animation-delay: 14s;
-  animation-delay: 14s;
+  -webkit-animation-delay: 12s;
+  animation-delay: 12s;
   left: 90vw;
   top: 90vh;
 }
 
 .cube:nth-child(9) {
-  -webkit-animation-delay: 16s;
-  animation-delay: 16s;
+  -webkit-animation-delay: 14s;
+  animation-delay: 14s;
   left: 10vw;
   top: 8vh;
 }
