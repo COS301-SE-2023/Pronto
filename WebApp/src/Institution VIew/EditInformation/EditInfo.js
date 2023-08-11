@@ -8,27 +8,29 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Auth,Storage,API} from 'aws-amplify'
 import { ErrorModal } from '../../ErrorModal';
 import { listInstitutions } from '../../graphql/queries';
-import { updateAdmin } from '../../graphql/mutations';
+import { updateAdmin,updateInstitution } from '../../graphql/mutations';
 import { useLocation } from 'react-router-dom';
 import '../Navigation/Navigation.css';
 
 const EditInfoPage = () => {
     const [expanded, setExpanded] = React.useState(false);
-    const[user,setUser]=React.useState(null);
-    const[oldPassword,setOldPassword]=React.useState("");
-    const[newPassword,setNewPassword]=React.useState("");
+    const[user,setUser] = React.useState(null);
+    const[oldPassword,setOldPassword] = React.useState("");
+    const[newPassword,setNewPassword] = React.useState("");
     const[error,setError]=React.useState("");
-    const[userAttributes,setUserAttributes]=React.useState("")
-    const[confirmPassword,setConfirmPassword]=React.useState("");
+    const[userAttributes,setUserAttributes] = React.useState("")
+    const[confirmPassword,setConfirmPassword] = React.useState("");
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [uploadProgress, setUploadProgress] = React.useState(0);
     const [folderNameS3, setFolderNameS3] = React.useState("");
-    const[message,setMessage]=React.useState("");
+    const[message,setMessage] = React.useState("");
     const state = useLocation();
-    const[institution,setInstitution]=React.useState(state.state);
-    const[admin,setAdmin]=React.useState(state.state.admin);
-    const[firstName,setFirstName]=React.useState("");
-    const[lastName,setLastName]=React.useState("");
+    const[institution,setInstitution] = React.useState(state.state);
+    const[admin,setAdmin] = React.useState(state.state.admin);
+    const[firstName,setFirstName] = React.useState("");
+    const[lastName,setLastName] = React.useState("");
+    const[domain,setDomain] = React.useState("")
+    const[domains,setDomains] = React.useState(state.state.domains)
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -79,17 +81,32 @@ const EditInfoPage = () => {
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             });
             let i=institution;
-            i.admin=newAdmin;
+            i.admin=newAdmin.data.updateAdmin;
             setInstitution(i);
             setAdmin(newAdmin.data.updateAdmin);
             setFirstName("");
             setLastName("");
             setError("Updated successfully")
         }catch(error){
-
+            setError("Could not update Admin")
         }
     }
 
+    const handleAddDomain = async(event)=>{
+        event.preventDefault()
+        console.log(domain)
+        if(domains.indexOf(domain)===-1){
+            domains.push(domain)
+            setDomains(domains)
+        }
+        setDomain("")
+    }
+
+    const handleRemoveDomain = async(event,key)=>{
+        const d = [...domains]
+        d.splice(key,1)
+        setDomains(d)
+    }
   
     const handleFileDrop = (event) => {
         event.preventDefault();
@@ -111,33 +128,64 @@ const EditInfoPage = () => {
         event.preventDefault();
     };
 
-    const handleFileSubmit = async()=>{ 
-    //      if (selectedFile) {
-    //          try {
-                let type=selectedFile.name.split('.')[1]
-                type = 'image/'+type
-                   //const fileKey = `${folderNameS3}/Logo/logo`;
-    //             let a=await Storage.put(fileKey, selectedFile, {
-    //                 contentType: type,    
-    //                 progressCallback: ({ loaded, total }) => {
-    //                      const progress = Math.round((loaded / total) * 100);
-    //                      setUploadProgress(progress);
-    //                      setMessage("Uploading file: " + selectedFile.name);
-    //                      },
-    //                  });
-    //     console.log(a)
-    //     //console.log(a.key)        
-    //     setMessage("File successfully uploaded: " + selectedFile.name);
-    //   } catch (error) {
-    //     console.log(error)
-    //     setMessage("Error uploading file");
-    //   }
+    const handleDomainEdit = async(event)=>{
+        event.preventDefault();
+        try{
+             let inst={
+                id:institution.id,
+                domains:domains,
+             };
+             let update=await API.graphql({
+                query:updateInstitution,
+                variables:{input:inst},
+                authMode:"AMAZON_COGNITO_USER_POOLS"
+             });
+             setInstitution(update.data.updateInstitution)
+            setError("Domains updated successfully")
+           console.log(domains)
+        }catch(error){
+            setError("Something went wrong")
+        }
+    }
 
-    //   // Reset the selected file and upload progress
-    //   setSelectedFile(null);
-    //   setUploadProgress(0);
-        //window.location.reload();
-    // }   
+    const handleFileSubmit = async(event)=>{ 
+       event.preventDefault()
+        if (selectedFile) {
+            try {
+                    
+                const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;
+                let a=await Storage.put(fileKey, selectedFile, {    
+                                contentType:"image/*",
+                                progressCallback: ({ loaded, total }) => {
+                                const progress = Math.round((loaded / total) * 100);
+                                setUploadProgress(progress);
+                                setMessage("Uploading file: " + selectedFile.name);
+                            },
+                        });
+                console.log(a)
+             
+                let inst={
+                   id:institution.id,
+                   logo:fileKey
+                }
+                let update= await API.graphql({
+                    query:updateInstitution,
+                    variables:{input:inst}
+                })
+                console.log(update)
+               setInstitution(update.data.updateInstitution)
+        //console.log(a.key)        
+        setMessage("File successfully uploaded: " + selectedFile.name);
+      } catch (error) {
+        console.log(error)
+        setMessage("Error uploading file");
+      }
+
+      // Reset the selected file and upload progress
+      setSelectedFile(null);
+      setUploadProgress(0);
+        
+    }   
      
     }
 
@@ -331,7 +379,62 @@ const EditInfoPage = () => {
                         </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-
+                         <table
+                            className="table table-hover"
+                            style={{ alignItems: 'center' }}
+                        >
+                         <thead>
+                            <tr>                
+                                <th scope="col">Domain</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                         {domains.map((key,val)=>{
+                            return ( 
+                               <tr key={val}>
+                                    <td>{key}</td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            onClick={(e)=>handleRemoveDomain(e,val)}
+                                            className="btn btn-danger">
+                                                Remove
+                                        </button> 
+                                    </td> 
+                               </tr>
+                            )}
+                         )}
+                         </tbody>
+                         </table>
+                         <form onSubmit={handleAddDomain}> 
+                          <div className="form-row">
+                            <div className="form-group col-6">
+                            {/* <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Enter domain here: </label> */}
+                                <input 
+                                    type="text" 
+                                    className="form-control" 
+                                    id="colFormLabel5" 
+                                    data-testid="domain"
+                                    value={domain}
+                                    required
+                                    onChange={(e)=>setDomain(e.target.value)}></input>
+                            </div>
+                            <div className='form-group col-6'>
+                                <button 
+                                    type="submit"
+                                    className="btn btn-danger">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                            
+                        </form>
+                          <button 
+                            type="submit"
+                            onClick={handleDomainEdit}
+                            className="btn btn-danger">
+                                Done
+                          </button>
                     </AccordionDetails>
                 </Accordion>
             </div>

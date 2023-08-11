@@ -8,6 +8,7 @@ import { useNavigate,useLocation,Link } from "react-router-dom";
 export default function InstitutionNavigation() {
   const navigate = useNavigate();
   const[institution,setInstitution]=React.useState(null)
+  const[instituitionLogo,setInstitutionLogo]=React.useState(logo)
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -20,7 +21,6 @@ export default function InstitutionNavigation() {
   };
 
   const fetchLogo = async()=>{
-    //console.log("fectching")
     try{
         let user=await Auth.currentAuthenticatedUser();
         let name=user.attributes.name;
@@ -46,6 +46,16 @@ export default function InstitutionNavigation() {
             authMode:"AMAZON_COGNITO_USER_POOLS"
         })
         inst=inst.data.listInstitutions.items[0];
+        
+        if(inst.logo!==null && inst.logo!==undefined){
+            let l=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600,download:false});
+            console.log(l)
+            setInstitutionLogo(l);
+        }
+        else{
+            console.log("Sticking to default")
+        }
+
         setInstitution(inst);
     }catch(error){
         console.log(error)
@@ -68,7 +78,7 @@ export default function InstitutionNavigation() {
                                 maxHeight:"100%"}}
                     >
                 <img
-                    src={logo}
+                    src={instituitionLogo}
                     alt="Logo"
                     className="logo offset-2 img-fluid mr-1"
                     // width={"175px"}

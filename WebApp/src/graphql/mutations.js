@@ -214,6 +214,7 @@ export const updateInstitution=`mutation UpdateInstitution(
     name
     location
     pageUrl
+    logo
     campusMapUrl
     openingTime
     closingTime
@@ -265,22 +266,6 @@ export const updateAdmin=`mutation UpdateAdmin(
     lastname
     userRole
     email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
     owner
