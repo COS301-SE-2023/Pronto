@@ -149,9 +149,46 @@ function MyRoutes()
       />
 
       {/*Protected lecturer routing*/}
-
-
-
+      <Route
+        path="/lecture-homepage"
+        element={
+          <RequireLecturerAuth>
+            <LectureHomePage />
+          </RequireLecturerAuth>
+        }
+      />
+      <Route
+        path="/lecturer-dashboard"
+        element={
+          <RequireLecturerAuth>
+            <DashboardLecturer />
+          </RequireLecturerAuth>
+        }
+      />
+      <Route
+        path="edit-module"
+        element={
+          <RequireLecturerAuth>
+            <EditModuleInfo />
+          </RequireLecturerAuth>
+        }
+      />
+      <Route
+        path="recent-announcement"
+        element={
+          <RequireLecturerAuth>
+            <RecentAnnouncement />
+          </RequireLecturerAuth>
+        }
+      />
+      <Route
+        path="personal-info"
+        element={
+          <RequireLecturerAuth>
+            <PersonalInformation />
+          </RequireLecturerAuth>
+        }
+      />
 
     </Routes>
     </BrowserRouter>
