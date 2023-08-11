@@ -74,6 +74,7 @@ export const listInstitutions=`query ListInstitutions(
   listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      logo
       name
       location
       pageUrl

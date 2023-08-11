@@ -8,6 +8,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Auth,Storage,API} from 'aws-amplify'
 import { ErrorModal } from '../../ErrorModal';
 import { listInstitutions } from '../../graphql/queries';
+import { updateAdmin } from '../../graphql/mutations';
+import { useLocation } from 'react-router-dom';
 import '../Navigation/Navigation.css';
 
 const EditInfoPage = () => {
@@ -15,14 +17,19 @@ const EditInfoPage = () => {
     const[user,setUser]=React.useState(null);
     const[oldPassword,setOldPassword]=React.useState("");
     const[newPassword,setNewPassword]=React.useState("");
+    const[error,setError]=React.useState("");
     const[userAttributes,setUserAttributes]=React.useState("")
     const[confirmPassword,setConfirmPassword]=React.useState("");
-    const[error,setError]=React.useState("")
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [uploadProgress, setUploadProgress] = React.useState(0);
     const [folderNameS3, setFolderNameS3] = React.useState("");
-    const[message,setMessage]=React.useState("")
-    const[institution,setInstitution]=React.useState(null)
+    const[message,setMessage]=React.useState("");
+    const state = useLocation();
+    const[institution,setInstitution]=React.useState(state.state);
+    const[admin,setAdmin]=React.useState(state.state.admin);
+    const[firstName,setFirstName]=React.useState("");
+    const[lastName,setLastName]=React.useState("");
+
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -51,34 +58,33 @@ const EditInfoPage = () => {
         .join(""); 
       
       setFolderNameS3(username);
-    //   try{
-    //       let domain=userInfo.attributes.email.split('@')[1]
-    //       let i=await API.graphql({
-    //         query:listInstitutions,
-    //         variables:{
-    //             filter:{
-    //                 domains:{
-    //                     contains:domain
-    //                 }
-    //             }
-    //         },
-    //         authMode:"AMAZON_COGNITO_USER_POOLS"
-    //       })
-    //       setInstitution(i.data.listInstitutions.items[0])
-    //   }catch(error){
-    //     console.log(error)
-    //   }
     };
 
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
-    
     };
 
-    const handleAdminEdit = async()=>{
+    const handleAdminEdit = async(event)=>{
+        event.preventDefault();
         try{
-
+            let update={
+                id:admin.id,
+                firstname:firstName,
+                lastname:lastName,
+            };
+            let newAdmin= await API.graphql({
+                query:updateAdmin,
+                variables:{input:update},
+                authMode:"AMAZON_COGNITO_USER_POOLS"
+            });
+            let i=institution;
+            i.admin=newAdmin;
+            setInstitution(i);
+            setAdmin(newAdmin.data.updateAdmin);
+            setFirstName("");
+            setLastName("");
+            setError("Updated successfully")
         }catch(error){
 
         }
@@ -108,16 +114,19 @@ const EditInfoPage = () => {
     const handleFileSubmit = async()=>{ 
     //      if (selectedFile) {
     //          try {
-    //             const fileKey = `${folderNameS3}/Logo/logo`;
+                let type=selectedFile.name.split('.')[1]
+                type = 'image/'+type
+                   //const fileKey = `${folderNameS3}/Logo/logo`;
     //             let a=await Storage.put(fileKey, selectedFile, {
+    //                 contentType: type,    
     //                 progressCallback: ({ loaded, total }) => {
-    //                 const progress = Math.round((loaded / total) * 100);
-    //                 setUploadProgress(progress);
-    //                 setMessage("Uploading file: " + selectedFile.name);
-    //             },
-    //         });
+    //                      const progress = Math.round((loaded / total) * 100);
+    //                      setUploadProgress(progress);
+    //                      setMessage("Uploading file: " + selectedFile.name);
+    //                      },
+    //                  });
     //     console.log(a)
-    //     console.log(a.key)        
+    //     //console.log(a.key)        
     //     setMessage("File successfully uploaded: " + selectedFile.name);
     //   } catch (error) {
     //     console.log(error)
@@ -127,7 +136,9 @@ const EditInfoPage = () => {
     //   // Reset the selected file and upload progress
     //   setSelectedFile(null);
     //   setUploadProgress(0);
-    // }
+        //window.location.reload();
+    // }   
+     
     }
 
     React.useEffect(()=> { 
@@ -298,7 +309,7 @@ const EditInfoPage = () => {
                         <input
                             id="fileInput"
                             type="file"
-                            accept=".png"
+                            accept=".png , .jpg ,.jpeg , .svg"
                             onChange={handleFileSelect}
                             style={{ display: "none" }}
                         />
@@ -340,7 +351,7 @@ const EditInfoPage = () => {
                     <AccordionDetails>
                         <div className="card shadow">
                             <div className="card-body">
-                                <form >
+                                <form onSubmit={handleAdminEdit}>
                                     <div className="form-row">
                                     {/* First name */}
                                         <div className="form-group col-6">
@@ -349,11 +360,11 @@ const EditInfoPage = () => {
                                                     type="text"
                                                     className="form-control"
                                                     id="admin-name"
-                                                    //placeholder="John"
+                                                    placeholder={admin.firstname}
                                                     data-testid="adminfirstName"
                                                     required
-                                                    //value={firstName}
-                                                    //onChange={(e)=>setFirstName(e.target.value)}
+                                                    value={firstName}
+                                                    onChange={(e)=>setFirstName(e.target.value)}
                                                     />
                                         </div>
 
@@ -364,11 +375,11 @@ const EditInfoPage = () => {
                                                 type="text"
                                                 className="form-control"
                                                 id="lastname"
-                                                //placeholder="Doe"
+                                                placeholder={admin.lastname}
                                                 data-testid="adminlastName"
                                                 required
-                                                //value={lastName}
-                                                //onChange={(e)=>setLastName(e.target.value)}
+                                                value={lastName}
+                                                onChange={(e)=>setLastName(e.target.value)}
                                         />
                                         </div>
                                     </div>

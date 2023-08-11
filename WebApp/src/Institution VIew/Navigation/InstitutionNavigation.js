@@ -3,11 +3,11 @@ import "./Navigation.css";
 import logo from "../../images/university_logo.svg";
 import { Auth,Storage,API } from "aws-amplify";
 import { listInstitutions } from "../../graphql/queries";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation,Link } from "react-router-dom";
 
 export default function InstitutionNavigation() {
   const navigate = useNavigate();
-  
+  const[institution,setInstitution]=React.useState(null)
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -20,18 +20,33 @@ export default function InstitutionNavigation() {
   };
 
   const fetchLogo = async()=>{
-    console.log("fectching")
+    //console.log("fectching")
     try{
         let user=await Auth.currentAuthenticatedUser();
         let name=user.attributes.name;
+        let domain=user.attributes.email.split('@')[1]
         const universityName = name.split(/\s+/); 
       name = universityName
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
         .join("");
-        // let l=await Storage.get(name+'/logo/logo.png',{validateObjectExistence:true,expires:3600})
-        // console.log(l)
-        // setLogo(l)
-        console.log(logo)
+        //  let l=await Storage.get(name+'Logo/logo',{validateObjectExistence:true})
+         //console.log(l)
+         // logo=l
+       // console.log("Reloading")
+      //  console.log(logo)
+       let inst=await API.graphql({
+        query:listInstitutions,
+        variables: { 
+            filter : {
+                    domains :{
+                    contains : domain
+                    }
+                }
+            },
+            authMode:"AMAZON_COGNITO_USER_POOLS"
+        })
+        inst=inst.data.listInstitutions.items[0];
+        setInstitution(inst);
     }catch(error){
         console.log(error)
     }
@@ -46,7 +61,7 @@ export default function InstitutionNavigation() {
             <nav className="vertical-navbar col-4 p-4" >
                 <div className="top"
                       style={{  width: "calc(12vw)",
-                                height: "calc(25vh)" ,   
+                                height: "calc(19vh)" ,   
                                 justifyContent:"center",
                                 justifyItems:"center",
                                 maxWidth:"100%",
@@ -56,9 +71,9 @@ export default function InstitutionNavigation() {
                     src={logo}
                     alt="Logo"
                     className="logo offset-2 img-fluid mr-1"
-                    width={"175px"}
-                    height={"155px"}
-                    style={{maxWidth:"100%",maxHeight:"100%",border:"2px solid black",padding:"2px"}}
+                    // width={"175px"}
+                    // height={"155px"}
+                    style={{width:"100%",height:"100%",border:"2px solid black",padding:"2px"}}
                     data-testid={'UniversityImage'}
                     />
                 </div>
@@ -85,12 +100,20 @@ export default function InstitutionNavigation() {
                             <b>Add/Remove Lecturer</b>
                         </a>
                     </li>
-                    <li className="nav-item text-center" data-testid={'EditUniversityInfo'}>
+                    {/* <li className="nav-item text-center" data-testid={'EditUniversityInfo'}>
                         <a href="/edit-university-info" className="nav-link" data-testid={'EditUniversityInfoLink'}>
                             <b>Edit University Info</b>
                         </a>
+                    </li> */}
+                    <li className="nav-item text-center">
+                        <Link 
+                            to={'/edit-university-info'}  
+                                state={institution}
+                                className="nav-link"   
+                                >     
+                            <b>Edit University Info</b>
+                        </Link>
                     </li>
-
                 </ul>
 
             </nav>
