@@ -40,6 +40,7 @@ const Home = () => {
       setUser(null);
     }
   };
+  
   useEffect(() => {
     checkUser();
   }, []);
