@@ -1,10 +1,10 @@
+import {useState} from "react";
 import { useLocation, Navigate } from 'react-router-dom';
 import { Auth } from "aws-amplify";
 
-const [user, setUser] = useState(undefined);
-const [userGroup, setUserGroup] = useState(null);
-
 export async function RequireLecturerAuth({ children }) {
+  const [user, setUser] = useState(undefined);
+  const [userGroup, setUserGroup] = useState(null);
     const location = useLocation();
     try {
       const authUser = await Auth.currentAuthenticatedUser({});

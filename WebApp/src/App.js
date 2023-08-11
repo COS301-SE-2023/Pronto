@@ -18,6 +18,7 @@ import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUplo
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
 import { Amplify, Auth, Hub } from "aws-amplify";
+import { Authenticator } from '@aws-amplify/ui-react';
 import HomePage from "./HomePage";
 import config from "./aws-exports";
 import Dashboard from "./Institution VIew/Dashboard/Dashboard";
