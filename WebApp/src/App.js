@@ -71,7 +71,7 @@ function MyRoutes()
     <BrowserRouter>
     <Routes>
     <Route path="/" element={<HomePage />} />
-    
+
       {/*Lecturer pages routing*/}
       <Route path="/lecturer-login" element={<LecturerLogin />} />
       <Route
@@ -97,6 +97,46 @@ function MyRoutes()
         path="/institution-forgot-password"
         element={<InstitutionForgotPassword />}
       />
+
+      {/*Protected admin routing*/}
+      <Route
+        path="/dashboard"
+        element={
+          <RequireAuth>
+            <Dashboard />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/add-lecturer"
+        element={
+          <RequireAuth>
+            <AddLecturer />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/institution-homepage"
+        element={
+          <RequireAuth>
+            <InstitutionHomePage />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path=""
+        element={
+          <RequireAuth>
+            <FileUploadPage />
+          </RequireAuth>
+        }
+      />
+
+
+
+
+
+
     </Routes>
     </BrowserRouter>
   )
