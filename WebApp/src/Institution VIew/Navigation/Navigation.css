@@ -1,44 +1,81 @@
+/* Updated styles for the navbar */
 .vertical-navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 20%;
     height: 100vh;
-    background-color: #ffffff;
+    background-color: #f7f7f7; /* Light gray background */
     padding: 20px;
-    border-right:  1px solid black;
+    border-right: 1px solid #ddd; /* Light gray border */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Shadow */
+    transition: width 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Add space between top content and logout button */
+    align-items: center;
 }
 
+/* Center the links vertically */
 .navbar-nav {
     list-style-type: none;
     padding: 0;
-    margin-top: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1; /* Allow content to expand and center vertically */
+    justify-content: center; /* Center the content vertically */
 }
 
 .nav-item {
-    margin-bottom: 15px;
+    margin: 10px 0;
+ 
 }
 
 .nav-link {
-    color: #333;
+    color: #555;
     text-decoration: none;
-    font-size: 1.1rem;
-    border-bottom: 1px solid transparent;
+    font-size: 1.2rem;
+    transition: color 0.3s;
 }
 
 .nav-link:hover {
     color: #e32f45;
-    border-bottom: 1px solid #e32f45;
 }
 
-.lecturer-name{
-    margin-top: 10%;
-    font-size: medium;
-    font-weight: bold;
-    color: #464646;
+/* Logo styling */
+.logo {
+    display: block;
+    margin: 0 auto;
+    max-width: 150px; /* Set a max width */
+    border-radius: 50%; /* Circular shape */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Centered text style for top */
+.top {
     text-align: center;
+    margin-top: 40px;
+    margin-bottom: 30px; /* Adjust the space at the bottom */
 }
 
-.top{
-    margin-bottom:60%;
+/* Updated logout button styling */
+.logoutbtn {
+    text-align: center;
+    padding: 15px 0; /* Reduced padding for the logout button */
+    background-color: transparent; /* Set the background to transparent */
+    border: none; /* Remove any border */
+    width: 100%;
+}
+
+/* Media query for smaller screens (e.g., 13 inch) */
+@media (max-width: 768px) {
+    .vertical-navbar {
+        width: 100%; /* Full width on smaller screens */
+    }
+
+    .logoutbtn {
+        position: static; /* Static position on smaller screens */
+    }
 }
