@@ -9,6 +9,7 @@ export default function InstitutionNavigation() {
   const navigate = useNavigate();
   const[institution,setInstitution]=React.useState(null)
   const[instituitionLogo,setInstitutionLogo]=React.useState(null)
+  let log=logo
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -29,11 +30,6 @@ export default function InstitutionNavigation() {
       name = universityName
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
         .join("");
-        //  let l=await Storage.get(name+'Logo/logo',{validateObjectExistence:true})
-         //console.log(l)
-         // logo=l
-       // console.log("Reloading")
-      //  console.log(logo)
         let inst=await API.graphql({
             query:listInstitutions,
             variables: { 
@@ -46,20 +42,18 @@ export default function InstitutionNavigation() {
             authMode:"AMAZON_COGNITO_USER_POOLS"
         })
         inst=inst.data.listInstitutions.items[0];
-        
-        // if(inst.logo!==null && inst.logo!==undefined){
-        //     let l=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600,download:false});
-        //     console.log(l)
-        //     setInstitutionLogo(l);
-        // }
-        // else{
-        //     console.log("Sticking to default")
-        //     setInstitutionLogo(logo)
-        // }
-
+        if(inst.logo!==null && inst.logo!==undefined){
+           let l=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600});
+            setInstitutionLogo(l);
+        }
+        else{
+            console.log("Sticking to default")
+            setInstitutionLogo(logo)
+        }
         setInstitution(inst);
     }catch(error){
         console.log(error)
+        setInstitutionLogo(logo)
     }
   }
 
@@ -79,7 +73,7 @@ export default function InstitutionNavigation() {
                                 maxHeight:"100%"}}
                     >
                 <img
-                    src={logo}
+                    src={instituitionLogo}
                     alt="Logo"
                     className="logo offset-2 img-fluid mr-1"
                     // width={"175px"}
@@ -87,14 +81,9 @@ export default function InstitutionNavigation() {
                     style={{width:"100%",height:"100%",border:"2px solid black",padding:"2px"}}
                     data-testid={'UniversityImage'}
                     />
-                    
                 </div>
                 <ul className="navbar-nav">
-        
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
-                        {/* <a href="/dashboard" className="nav-link" data-testid={'dashboardLink'}>
-                            <b>Dashboard</b>
-                        </a> */}
                         <Link 
                             to={'/dashboard'}  
                                 state={institution}
@@ -104,9 +93,6 @@ export default function InstitutionNavigation() {
                         </Link>
                     </li>
                     <li className="nav-item text-center" data-testid={'UploadSchedule'}>
-                        {/* <a href="/upload-schedule" className="nav-link" data-testid={'UploadScheduleLink'}>
-                           <b>Upload Schedule</b>
-                        </a> */}
                         <Link 
                             to={'/upload-schedule'}  
                                 state={institution}
@@ -116,10 +102,6 @@ export default function InstitutionNavigation() {
                         </Link>
                     </li>
                     <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
-                        {/* <a href="/upload-student-files" className="nav-link p-2" data-testid={'UploadStudentFilesLink'}>
-                            <b>Upload Student Files</b>
-
-                        </a> */}
                         <Link 
                             to={'/upload-student-files'}  
                                 state={institution}
@@ -129,9 +111,6 @@ export default function InstitutionNavigation() {
                         </Link>
                     </li>
                     <li className="nav-item text-center" data-testid={'AddLecturer'}>
-                        {/* <a href="/add-lecturer" className="nav-link" data-testid={'AddLecturerLink'}>
-                            <b>Add/Remove Lecturer</b>
-                        </a> */}
                         <Link 
                             to={'/add-lecturer'}  
                                 state={institution}
@@ -140,11 +119,6 @@ export default function InstitutionNavigation() {
                             <b>Add/Remove Lecturer</b>
                         </Link>
                     </li>
-                    {/* <li className="nav-item text-center" data-testid={'EditUniversityInfo'}>
-                        <a href="/edit-university-info" className="nav-link" data-testid={'EditUniversityInfoLink'}>
-                            <b>Edit University Info</b>
-                        </a>
-                    </li> */}
                     <li className="nav-item text-center">
                         <Link 
                             to={'/edit-university-info'}  
@@ -155,7 +129,6 @@ export default function InstitutionNavigation() {
                         </Link>
                     </li>
                 </ul>
-
             </nav>
             <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
                 <button className={"btn btn-danger btn-lg btn-block"} style={{borderRadius:"25px"}} data-testid={'LogoutButton'} onClick={onSignOut}>Log Out</button>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState,useEffect} from 'react';
 import InstitutionNavigation from '../Navigation/InstitutionNavigation';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -13,23 +13,23 @@ import { useLocation } from 'react-router-dom';
 import '../Navigation/Navigation.css';
 
 const EditInfoPage = () => {
-    const [expanded, setExpanded] = React.useState(false);
-    const[user,setUser] = React.useState(null);
-    const[oldPassword,setOldPassword] = React.useState("");
-    const[newPassword,setNewPassword] = React.useState("");
-    const[error,setError]=React.useState("");
-    const[confirmPassword,setConfirmPassword] = React.useState("");
-    const [selectedFile, setSelectedFile] = React.useState(null);
-    const [uploadProgress, setUploadProgress] = React.useState(0);
-    const [folderNameS3, setFolderNameS3] = React.useState("");
-    const[message,setMessage] = React.useState("");
+    const [expanded, setExpanded] = useState(false);
+    const[user,setUser] = useState(null);
+    const[oldPassword,setOldPassword] = useState("");
+    const[newPassword,setNewPassword] = useState("");
+    const[error,setError] = useState("");
+    const[confirmPassword,setConfirmPassword] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [folderNameS3, setFolderNameS3] = useState("");
+    const[message,setMessage] = useState("");
     const state = useLocation();
-    const[institution,setInstitution] = React.useState(state.state);
-    const[admin,setAdmin] = React.useState(null);
-    const[firstName,setFirstName] = React.useState("");
-    const[lastName,setLastName] = React.useState("");
-    const[domain,setDomain] = React.useState("")
-    const[domains,setDomains] = React.useState([])
+    const[institution,setInstitution] = useState(state.state);
+    const[admin,setAdmin] = useState(null);
+    const[firstName,setFirstName] = useState("");
+    const[lastName,setLastName] = useState("");
+    const[domain,setDomain] = useState("")
+    const[domains,setDomains] = useState([])
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -128,6 +128,7 @@ const EditInfoPage = () => {
     }
 
     const handleRemoveDomain = async(event,key)=>{
+        event.preventDefault()
         const d = [...domains]
         d.splice(key,1)
         setDomains(d)
@@ -174,50 +175,46 @@ const EditInfoPage = () => {
     }
 
     const handleFileSubmit = async(event)=>{ 
-       //event.preventDefault()
+        //event.preventDefault()
         if (selectedFile) {
             try {
                     
-                const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;
-                let type=selectedFile.name.split('.')[1]
-                type="image/"+type
-                console.log(type)
-        //         let a=await Storage.put(fileKey, selectedFile, {    
-        //                         contentType:type,
-        //                         progressCallback: ({ loaded, total }) => {
-        //                         const progress = Math.round((loaded / total) * 100);
-        //                         setUploadProgress(progress);
-        //                         setMessage("Uploading file: " + selectedFile.name);
-        //                     },
-        //                 });
-        //         console.log(a)
+                const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;       
+                let a=await Storage.put(fileKey, selectedFile, {    
+                                contentType: "image/png",
+                                progressCallback: ({ loaded, total }) => {
+                                const progress = Math.round((loaded / total) * 100);
+                                setUploadProgress(progress);
+                                setMessage("Uploading file: " + selectedFile.name);
+                            },
+                        });
+                console.log(a);
              
-        //         let inst={
-        //            id:institution.id,
-        //            logo:fileKey
-        //         }
-        //         let update= await API.graphql({
-        //             query:updateInstitution,
-        //             variables:{input:inst}
-        //         })
-        //         console.log(update)
-        //        setInstitution(update.data.updateInstitution)
-        // //console.log(a.key)        
-        // setMessage("File successfully uploaded: " + selectedFile.name);
-      } catch (error) {
-        console.log(error)
-        setMessage("Error uploading file");
-      }
+                let inst={
+                   id:institution.id,
+                   logo:fileKey
+                };
+                let update= await API.graphql({
+                    query:updateInstitution,
+                    variables:{input:inst},
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                })
+                console.log(update);
+                setInstitution(update.data.updateInstitution);      
+                setMessage("File successfully uploaded: " + selectedFile.name);
+            } catch (error) {
+                console.log(error);
+                setMessage("Error uploading file");
+            }
 
-      // Reset the selected file and upload progress
-      setSelectedFile(null);
-      setUploadProgress(0);
-        
-    }   
-     
+            // Reset the selected file and upload progress
+            setSelectedFile(null);
+            setUploadProgress(0);
+            window.location.reload()
+        }   
     }
 
-    React.useEffect(()=> { 
+    useEffect(()=> { 
         fetchAdminInfo()
     },[]);
 
@@ -385,7 +382,7 @@ const EditInfoPage = () => {
                         <input
                             id="fileInput"
                             type="file"
-                            accept=".png , .jpg ,.jpeg , .svg"
+                            accept=".png"
                             onChange={handleFileSelect}
                             style={{ display: "none" }}
                         />
