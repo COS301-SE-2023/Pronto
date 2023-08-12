@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Amplify, Storage, Auth } from "aws-amplify";
+import FileUpload from '../../images/FileUpload.png';
 
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -109,7 +110,9 @@ function DropzoneComponent() {
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <h6 style={{ marginBottom: "5px" }}>These files represent essential resources and materials that students enrolled in the university will be able to access directly from the mobile app.</h6>
+      <img src={FileUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="FileUpload" />
       <div
         className="dropzone text-center"
         onDrop={handleFileDrop}
@@ -117,6 +120,7 @@ function DropzoneComponent() {
         onDragEnter={handleDragEnter}
         style={{
           height: "100px",
+          width: "100%",
           border: "1px dashed",
           justifyContent: "center",
           alignItems: "center",
