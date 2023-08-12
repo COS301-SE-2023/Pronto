@@ -3,18 +3,18 @@
     top: 0;
     left: 0;
     width: 20%;
-    height: calc(100vh - 40px); /* Subtract 40px for the logout button's height + padding */
-    background-color: #f7f7f7; /* Light gray background */
-    border: 1px solid #ddd; /* Light gray border */
-    border-radius: 20px; /* Rounded edges */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Slight shadow for floating appearance */
+    height: calc(100vh - 40px);
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); /* Increased shadow intensity */
     transition: width 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between; /* Distribute items along the container with space between */
-    padding: 20px; /* Add padding */
-    margin: 1% ; /* Center the navbar horizontally and add a small margin at the top and bottom */
+    justify-content: space-between;
+    padding: 20px;
+    margin: 1%;
 }
 
 /* Center the links vertically */
