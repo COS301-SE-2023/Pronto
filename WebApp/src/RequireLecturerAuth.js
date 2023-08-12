@@ -1,12 +1,14 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import { useLocation, Navigate } from 'react-router-dom';
 import { Auth } from "aws-amplify";
 
-export async function RequireLecturerAuth({ children }) {
-    const [user, setUser] = useState(undefined);
-    const [userGroup, setUserGroup] = useState(null);
-    const location = useLocation();
+export function RequireLecturerAuth({ children }) {
 
+  const [user, setUser] = useState(undefined);
+  const [userGroup, setUserGroup] = useState(null);
+  const location = useLocation();
+
+  const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({});
       const group =
@@ -16,9 +18,13 @@ export async function RequireLecturerAuth({ children }) {
     } catch (e) {
       setUser(null);
     }
-    
-    if( (!user) || (userGroup !== "lecturerUserGroup") ){
-        return <Navigate to="/lecturer-login" state={{ from: location }} replace />;
-    }
-    return children;
   };
+  useEffect(() => {
+    checkUser();
+  }, []);
+    
+  if( (!user) || (userGroup !== "lecturerUserGroup") ){
+    return <Navigate to="/lecturer-login" state={{ from: location }} replace />;
+  }
+  return children;
+};
