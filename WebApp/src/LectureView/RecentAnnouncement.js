@@ -12,6 +12,21 @@ import { API, Auth } from 'aws-amplify'
 import { listLecturers, listAnnouncements, listCourses } from '../graphql/queries';
 import { deleteAnnouncement } from '../graphql/mutations';
 import { ErrorModal } from '../ErrorModal';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialog-paper': {
+    minWidth: '400px',
+    borderRadius: '8px',
+    padding: theme.spacing(2),
+    boxShadow: '2', // Remove the shadow
+    backdropFilter: "blur(5px)",
+  },
+}));
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -145,7 +160,17 @@ export default function RecentAnnouncement() {
     }
   }
 
-  const handleDelete = async (key) => {
+
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = React.useState(false);
+  const [deleteConfirmationIndex, setDeleteConfirmationIndex] = React.useState(null);
+
+  const handleDelete = (key) => {
+    // Set the index of the announcement to be deleted and open the confirmation dialog
+    setDeleteConfirmationIndex(key);
+    setDeleteConfirmationOpen(true);
+  }
+
+  const handleConfirmDelete = async (key) => {
     try {
       let del = await API.graphql({
         query: deleteAnnouncement,
@@ -156,11 +181,13 @@ export default function RecentAnnouncement() {
       rows.splice(key, 1)
       setAnnouncements(rows)
     } catch (e) {
-      setError("Something went wrong.Please try again later")
+      setError("Something went wrong. Please try again later")
     }
 
-    //setAnchorEl(null)
+    // Close the confirmation modal
+    setDeleteConfirmationOpen(false);
   }
+
 
   React.useEffect(() => {
     // Set initial state to indicate that announcements are being fetched
@@ -168,6 +195,8 @@ export default function RecentAnnouncement() {
 
     fetchAnnouncements();
   }, []);
+
+
 
 
   return (
@@ -193,7 +222,7 @@ export default function RecentAnnouncement() {
               display: "flex",
               justifyContent: "center"
             }
-          }>Fetching your courses...</p>
+          }>Fetching announcements...</p>
         ) : (
           announcements.map((val, key) => {
             return (
@@ -205,6 +234,9 @@ export default function RecentAnnouncement() {
                 <div className="card-body">
                   <h5 className="card-title">{val.start}</h5>
                   <p className="card-text">{val.description}</p>
+
+
+
 
                   <Button
                     id="demo-customized-button"
@@ -244,7 +276,27 @@ export default function RecentAnnouncement() {
           })
         )}
 
-      </main>
-    </div>
+      </main >
+      <StyledDialog
+        open={deleteConfirmationOpen}
+        onClose={() => setDeleteConfirmationOpen(false)}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this announcement?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteConfirmationOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button value={deleteConfirmationIndex} onClick={(e) => handleConfirmDelete(e.target.value)} variant="contained" color="error" sx={{ ml: 2 }}>
+            Delete
+          </Button>
+        </DialogActions>
+      </StyledDialog>
+
+    </div >
   );
 }
