@@ -15,7 +15,7 @@ const Dashboard = () => {
             <RightContainer>
 
                 <div className={"grid"} style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" }}>
-                    <h1 style={{ borderBottom: "2px solid black" }}>Dashboard</h1>
+                    <h1>Dashboard</h1>
                     <div className={"row ml-3"} style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
@@ -70,6 +70,7 @@ const RightContainer = styled.div`
 
 const HoverableIcon = styled.div`
   display: flex;
+  color: #555;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
