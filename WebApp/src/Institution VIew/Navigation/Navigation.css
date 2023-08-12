@@ -90,3 +90,14 @@
         position: static; /* Static position on smaller screens */
     }
 }
+
+.button-no-border {
+    border: none;
+    outline: none;
+    background-color: transparent; /* Optional: You can set the background color if needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  }
