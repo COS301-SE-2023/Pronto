@@ -1,15 +1,14 @@
-import * as React from "react";
+import {useState,useEffect} from "react";
 import "./Navigation.css";
 import logo from "../../images/university_logo.svg";
 import { Auth,Storage,API } from "aws-amplify";
 import { listInstitutions } from "../../graphql/queries";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate,Link, useLocation } from "react-router-dom";
 
-export default function InstitutionNavigation() {
+export default function InstitutionNavigation({props}) {
   const navigate = useNavigate();
-  const[institution,setInstitution]=React.useState(null)
-  const[instituitionLogo,setInstitutionLogo]=React.useState(null)
-  let log=logo
+  const state=useLocation();
+  const[institution,setInstitution]=useState(state.state)
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -23,41 +22,53 @@ export default function InstitutionNavigation() {
 
   const fetchLogo = async()=>{
     try{
-        let user=await Auth.currentAuthenticatedUser();
-        let name=user.attributes.name;
-        let domain=user.attributes.email.split('@')[1]
-        const universityName = name.split(/\s+/); 
-      name = universityName
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
-        .join("");
-        let inst=await API.graphql({
-            query:listInstitutions,
-            variables: { 
-                filter : {
-                        domains :{
-                            contains : domain
+
+        if(institution===undefined || institution===null){
+            let user=await Auth.currentAuthenticatedUser();
+            let name=user.attributes.name;
+            let domain=user.attributes.email.split('@')[1]
+            const universityName = name.split(/\s+/); 
+            name = universityName
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
+            .join("");
+
+            let inst=await API.graphql({
+                query:listInstitutions,
+                variables: { 
+                    filter : {
+                            domains :{
+                                contains : domain
+                            }
                         }
-                    }
-                },
-            authMode:"AMAZON_COGNITO_USER_POOLS"
-        })
-        inst=inst.data.listInstitutions.items[0];
-        if(inst.logo!==null && inst.logo!==undefined){
-           let l=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600});
-            setInstitutionLogo(l);
+                    },
+                authMode:"AMAZON_COGNITO_USER_POOLS"
+            })
+            inst=inst.data.listInstitutions.items[0];
+            console.log("fectching")
+            if(inst.logo!==null && inst.logo!==undefined ){
+               inst.logoUrl=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600});
+            }
+            else{
+                inst.logoUrl=logo
+            }
+            setInstitution(inst);
         }
-        else{
-            console.log("Sticking to default")
-            setInstitutionLogo(logo)
+        else{ 
+            if(institution.logoUrl===undefined || institution.logoUrl===null){
+                let inst=institution
+                inst.logoUrl=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600});
+                setInstitution(inst) 
+            }
         }
-        setInstitution(inst);
     }catch(error){
-        console.log(error)
-        setInstitutionLogo(logo)
+        let i =institution;
+        i.logoUrl=logo;
+        setInstitution(i);
     }
   }
 
-  React.useEffect(()=> { 
+
+  useEffect(()=> { 
         fetchLogo()
     },[]);
 
@@ -73,7 +84,7 @@ export default function InstitutionNavigation() {
                                 maxHeight:"100%"}}
                     >
                 <img
-                    src={instituitionLogo}
+                    src={institution!==undefined? institution!==null? institution.logoUrl : " " : "  "}
                     alt="Logo"
                     className="logo offset-2 img-fluid mr-1"
                     // width={"175px"}

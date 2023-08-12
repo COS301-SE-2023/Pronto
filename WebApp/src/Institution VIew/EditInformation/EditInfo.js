@@ -25,11 +25,9 @@ const EditInfoPage = () => {
     const[message,setMessage] = useState("");
     const state = useLocation();
     const[institution,setInstitution] = useState(state.state);
-    const[admin,setAdmin] = useState(null);
     const[firstName,setFirstName] = useState("");
     const[lastName,setLastName] = useState("");
     const[domain,setDomain] = useState("")
-    const[domains,setDomains] = useState([])
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -73,17 +71,12 @@ const EditInfoPage = () => {
                 
                 inst=inst.data.listInstitutions.items[0];
                 setInstitution(inst);
-                setAdmin(inst.admin);
-                setDomains(inst.domains);
             }catch(error){
                setError("Could not fetch your Institutions information");
-               console.log(error);
             }
         }
         else{
             setInstitution(state.state);
-            setAdmin(state.state.admin);
-            setDomains(state.state.domains);
         }
     };
 
@@ -95,8 +88,9 @@ const EditInfoPage = () => {
     const handleAdminEdit = async(event)=>{
         event.preventDefault();
         try{
+            
             let update={
-                id:admin.id,
+                id:institution.admin.id,
                 firstname:firstName,
                 lastname:lastName,
             };
@@ -108,7 +102,6 @@ const EditInfoPage = () => {
             let i=institution;
             i.admin=newAdmin.data.updateAdmin;
             setInstitution(i);
-            setAdmin(newAdmin.data.updateAdmin);
             setFirstName("");
             setLastName("");
             setError("Updated successfully")
@@ -119,19 +112,19 @@ const EditInfoPage = () => {
 
     const handleAddDomain = async(event)=>{
         event.preventDefault()
-        console.log(domain)
-        if(domains.indexOf(domain)===-1){
-            domains.push(domain)
-            setDomains(domains)
+        if(institution.domains.indexOf(domain)===-1){
+            institution.domains.push(domain)
+            //setDomains(domains)
         }
         setDomain("")
     }
 
     const handleRemoveDomain = async(event,key)=>{
         event.preventDefault()
-        const d = [...domains]
-        d.splice(key,1)
-        setDomains(d)
+        //const d = [...institution.domains]
+       // d.splice(key,1)
+        //setDomains(d)
+        institution.domains.splice(key,1)
     }
   
     const handleFileDrop = (event) => {
@@ -157,39 +150,44 @@ const EditInfoPage = () => {
     const handleDomainEdit = async(event)=>{
         event.preventDefault();
         try{
+            let logoUrl=null;
+            if(institution.logoUrl!==undefined && institution.logoUrl !==null){
+                logoUrl=institution.logoUrl;
+            };
+
              let inst={
                 id:institution.id,
-                domains:domains,
+                domains:institution.domains,
              };
              let update=await API.graphql({
                 query:updateInstitution,
                 variables:{input:inst},
                 authMode:"AMAZON_COGNITO_USER_POOLS"
              });
-             setInstitution(update.data.updateInstitution)
-            setError("Domains updated successfully")
-           console.log(domains)
+             update.data.updateInstitution.logoUrl=logoUrl;
+             setInstitution(update.data.updateInstitution);
+             setError("Domains updated successfully");
+           
         }catch(error){
-            setError("Something went wrong")
+            setError("Something went wrong");
         }
     }
 
     const handleFileSubmit = async(event)=>{ 
-        //event.preventDefault()
+        
         if (selectedFile) {
             try {
-                    
+                 
                 const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;       
                 let a=await Storage.put(fileKey, selectedFile, {    
                                 contentType: "image/png",
                                 progressCallback: ({ loaded, total }) => {
-                                const progress = Math.round((loaded / total) * 100);
-                                setUploadProgress(progress);
-                                setMessage("Uploading file: " + selectedFile.name);
-                            },
-                        });
-                console.log(a);
-             
+                                     const progress = Math.round((loaded / total) * 100);
+                                     setUploadProgress(progress);
+                                     setMessage("Uploading file: " + selectedFile.name);
+                                 },
+                             });
+                     
                 let inst={
                    id:institution.id,
                    logo:fileKey
@@ -198,12 +196,11 @@ const EditInfoPage = () => {
                     query:updateInstitution,
                     variables:{input:inst},
                     authMode:"AMAZON_COGNITO_USER_POOLS"
-                })
-                console.log(update);
+                });
+                update.data.updateInstitution.logoUrl=null;
                 setInstitution(update.data.updateInstitution);      
                 setMessage("File successfully uploaded: " + selectedFile.name);
             } catch (error) {
-                console.log(error);
                 setMessage("Error uploading file");
             }
 
@@ -414,7 +411,7 @@ const EditInfoPage = () => {
                         </tr>
                         </thead>
                         <tbody>
-                         {domains.map((key,val)=>{
+                         {institution && institution.domains.map((key,val)=>{
                             return ( 
                                <tr key={val}>
                                     <td>{key}</td>
@@ -488,7 +485,7 @@ const EditInfoPage = () => {
                                                     type="text"
                                                     className="form-control"
                                                     id="admin-name"
-                                                    placeholder={admin !==null? admin.firstname: " "}
+                                                    placeholder={institution!==null? institution.admin.firstname: " "}
                                                     data-testid="adminfirstName"
                                                     required
                                                     value={firstName}
@@ -503,7 +500,7 @@ const EditInfoPage = () => {
                                                 type="text"
                                                 className="form-control"
                                                 id="lastname"
-                                                placeholder={admin!==null? admin.lastname : " "}
+                                                placeholder={institution!==null? institution.admin.lastname : " "}
                                                 data-testid="adminlastName"
                                                 required
                                                 value={lastName}
