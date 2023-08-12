@@ -26,6 +26,7 @@ import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
 import { RequireLecturerAuth } from "./RequireLecturerAuth";
 import { RequireAdminAuth } from "./RequireAdminAuth";
 
+Auth.configure(config);
 Amplify.configure(config);
 
 function MyRoutes()
@@ -159,38 +160,10 @@ function MyRoutes()
 }
 
 function App(){
-  const [user, setUser] = useState(undefined);
-  const [userGroup, setUserGroup] = useState(null);
-  const checkUser = async () => {
-    try {
-      const authUser = await Auth.currentAuthenticatedUser({});
-      const group =
-        authUser.signInUserSession.idToken.payload["cognito:groups"];
-      setUser(authUser);
-      setUserGroup(group);
-    } catch (e) {
-      setUser(null);
-    }
-  };
-
-  useEffect(() => {
-    checkUser();
-  }, []);
-
   useEffect(() => {
     Amplify.configure(config);
   }, []);
 
-
-  useEffect(() => {
-    const listener = (data) => {
-      if (data.payload.event === "signIn" || data.payload.event === "signOut") {
-        checkUser();
-      }
-    };
-    Hub.listen("auth", listener);
-    return () => Hub.remove("auth", listener);
-  }, []);
   return (
     <Authenticator.Provider>
       <MyRoutes />
