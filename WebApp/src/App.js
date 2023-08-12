@@ -35,123 +35,123 @@ function MyRoutes()
     <Routes>
     <Route path="/" element={<HomePage />} />
 
-      {/*Lecturer pages routing*/}
-      <Route path="/lecturer-login" element={<LecturerLogin />} />
-      <Route
-        path="/lecturer-confirm-email"
-        element={<LecturerConfirmEmail />}
-      />
-      <Route
-        path="/lecturer-forgot-password"
-        element={<LecturerForgotPassword />}
-      />
+    {/*Lecturer login/register pages*/}
+    <Route path="/lecturer-login" element={<LecturerLogin />} />
+    <Route
+      path="/lecturer-confirm-email"
+      element={<LecturerConfirmEmail />}
+    />
+    <Route
+      path="/lecturer-forgot-password"
+      element={<LecturerForgotPassword />}
+    />
 
-      {/*Institution pages routing*/}
-      <Route path="/institution-login" element={<InstitutionLogin />} />
-      <Route
-        path="/institution-confirm-email"
-        element={<InstitutionConfirmEmail />}
-      />
-      <Route
-        path="/institution-successful-apply"
-        element={<InstitutionSuccessfulApply />}
-      />
-      <Route
-        path="/institution-forgot-password"
-        element={<InstitutionForgotPassword />}
-      />
+    {/*Institution login/register pages*/}
+    <Route path="/institution-login" element={<InstitutionLogin />} />
+    <Route
+      path="/institution-confirm-email"
+      element={<InstitutionConfirmEmail />}
+    />
+    <Route
+      path="/institution-successful-apply"
+      element={<InstitutionSuccessfulApply />}
+    />
+    <Route
+      path="/institution-forgot-password"
+      element={<InstitutionForgotPassword />}
+    />
 
-      {/*Protected admin routing*/}
-      <Route
-        path="/dashboard"
-        element={
-          <RequireAdminAuth>
-            <Dashboard />
-          </RequireAdminAuth>
-        }
-      />
-      <Route
-        path="/add-lecturer"
-        element={
-          <RequireAdminAuth>
-            <AddLecturer />
-          </RequireAdminAuth>
-        }
-      />
-      <Route
-        path="/institution-homepage"
-        element={
-          <RequireAdminAuth>
-            <InstitutionHomePage />
-          </RequireAdminAuth>
-        }
-      />
-      <Route
-        path="/upload-schedule"
-        element={
-          <RequireAdminAuth>
-            <FileUploadPage />
-          </RequireAdminAuth>
-        }
-      />
-      <Route
-        path="/upload-student-files"
-        element={
-          <RequireAdminAuth>
-            <StudentFileUploadPage />
-          </RequireAdminAuth>
-        }
-      />
-      <Route
-        path="/edit-university-info"
-        element={
-          <RequireAdminAuth>
-            <EditUniversityInfo />
-          </RequireAdminAuth>
-        }
-      />
+    {/*Protected admin routing*/}
+    <Route
+      path="/dashboard"
+      element={
+        <RequireAdminAuth>
+          <Dashboard />
+        </RequireAdminAuth>
+      }
+    />
+    <Route
+      path="/add-lecturer"
+      element={
+        <RequireAdminAuth>
+          <AddLecturer />
+        </RequireAdminAuth>
+      }
+    />
+    <Route
+      path="/institution-homepage"
+      element={
+        <RequireAdminAuth>
+          <InstitutionHomePage />
+        </RequireAdminAuth>
+      }
+    />
+    <Route
+      path="/upload-schedule"
+      element={
+        <RequireAdminAuth>
+          <FileUploadPage />
+        </RequireAdminAuth>
+      }
+    />
+    <Route
+      path="/upload-student-files"
+      element={
+        <RequireAdminAuth>
+          <StudentFileUploadPage />
+        </RequireAdminAuth>
+      }
+    />
+    <Route
+      path="/edit-university-info"
+      element={
+        <RequireAdminAuth>
+          <EditUniversityInfo />
+        </RequireAdminAuth>
+      }
+    />
 
-      {/*Protected lecturer routing*/}
-      <Route
-        path="/lecture-homepage"
-        element={
-          <RequireLecturerAuth>
-            <LectureHomePage />
-          </RequireLecturerAuth>
-        }
-      />
-      <Route
-        path="/lecturer-dashboard"
-        element={
-          <RequireLecturerAuth>
-            <DashboardLecturer />
-          </RequireLecturerAuth>
-        }
-      />
-      <Route
-        path="edit-module"
-        element={
-          <RequireLecturerAuth>
-            <EditModuleInfo />
-          </RequireLecturerAuth>
-        }
-      />
-      <Route
-        path="recent-announcement"
-        element={
-          <RequireLecturerAuth>
-            <RecentAnnouncement />
-          </RequireLecturerAuth>
-        }
-      />
-      <Route
-        path="personal-info"
-        element={
-          <RequireLecturerAuth>
-            <PersonalInformation />
-          </RequireLecturerAuth>
-        }
-      />
+    {/*Protected lecturer routing*/}
+    <Route
+      path="/lecture-homepage"
+      element={
+        <RequireLecturerAuth>
+          <LectureHomePage />
+        </RequireLecturerAuth>
+      }
+    />
+    <Route
+      path="/lecturer-dashboard"
+      element={
+        <RequireLecturerAuth>
+          <DashboardLecturer />
+        </RequireLecturerAuth>
+      }
+    />
+    <Route
+      path="edit-module"
+      element={
+        <RequireLecturerAuth>
+          <EditModuleInfo />
+        </RequireLecturerAuth>
+      }
+    />
+    <Route
+      path="recent-announcement"
+      element={
+        <RequireLecturerAuth>
+          <RecentAnnouncement />
+        </RequireLecturerAuth>
+      }
+    />
+    <Route
+      path="personal-info"
+      element={
+        <RequireLecturerAuth>
+          <PersonalInformation />
+        </RequireLecturerAuth>
+      }
+    />
 
     </Routes>
     </BrowserRouter>

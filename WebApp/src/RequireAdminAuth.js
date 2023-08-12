@@ -16,7 +16,7 @@ export async function RequireAdminAuth({ children }) {
       setUser(null);
     }
     if( (!user) || (userGroup != "adminUserGroup") ){
-        return <Navigate to="/lecturer-login" state={{ from: location }} replace />;
+        return <Navigate to="/institution-login" state={{ from: location }} replace />;
     }
     return children;
   };

@@ -16,7 +16,7 @@ export async function RequireLecturerAuth({ children }) {
       setUser(null);
     }
     if( (!user) || (userGroup != "lecturerUserGroup") ){
-        return <Navigate to="/institution-login" state={{ from: location }} replace />;
+        return <Navigate to="/lecturer-login" state={{ from: location }} replace />;
     }
     return children;
   };
