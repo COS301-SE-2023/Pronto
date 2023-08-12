@@ -18,7 +18,6 @@ const EditInfoPage = () => {
     const[oldPassword,setOldPassword] = React.useState("");
     const[newPassword,setNewPassword] = React.useState("");
     const[error,setError]=React.useState("");
-    const[userAttributes,setUserAttributes] = React.useState("")
     const[confirmPassword,setConfirmPassword] = React.useState("");
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [uploadProgress, setUploadProgress] = React.useState(0);
@@ -26,11 +25,11 @@ const EditInfoPage = () => {
     const[message,setMessage] = React.useState("");
     const state = useLocation();
     const[institution,setInstitution] = React.useState(state.state);
-    const[admin,setAdmin] = React.useState(state.state.admin);
+    const[admin,setAdmin] = React.useState(null);
     const[firstName,setFirstName] = React.useState("");
     const[lastName,setLastName] = React.useState("");
     const[domain,setDomain] = React.useState("")
-    const[domains,setDomains] = React.useState(state.state.domains)
+    const[domains,setDomains] = React.useState([])
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -50,16 +49,42 @@ const EditInfoPage = () => {
     };
 
     const fetchAdminInfo = async()=>{
+        
         let userInfo=await Auth.currentAuthenticatedUser()
-        setUser(userInfo)
-        setUserAttributes(userInfo.attributes)
         let username = userInfo?.attributes?.name; 
-      const words = username.split(/\s+/); 
-      username = words
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
-        .join(""); 
-      
-      setFolderNameS3(username);
+        const words = username.split(/\s+/); 
+        username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");     
+        setUser(userInfo); 
+        setFolderNameS3(username);
+        if(state.state===null || state.state===undefined){
+            try{
+                let dom=userInfo.attributes.email.split('@')[1]
+                let inst=await API.graphql({
+                    query:listInstitutions,
+                    variables: { 
+                        filter : {
+                            domains :{
+                                contains : dom
+                            }
+                        }
+                    },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                });
+                
+                inst=inst.data.listInstitutions.items[0];
+                setInstitution(inst);
+                setAdmin(inst.admin);
+                setDomains(inst.domains);
+            }catch(error){
+               setError("Could not fetch your Institutions information");
+               console.log(error);
+            }
+        }
+        else{
+            setInstitution(state.state);
+            setAdmin(state.state.admin);
+            setDomains(state.state.domains);
+        }
     };
 
     const handleFileSelect = (event) => {
@@ -149,33 +174,36 @@ const EditInfoPage = () => {
     }
 
     const handleFileSubmit = async(event)=>{ 
-       event.preventDefault()
+       //event.preventDefault()
         if (selectedFile) {
             try {
                     
                 const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;
-                let a=await Storage.put(fileKey, selectedFile, {    
-                                contentType:"image/*",
-                                progressCallback: ({ loaded, total }) => {
-                                const progress = Math.round((loaded / total) * 100);
-                                setUploadProgress(progress);
-                                setMessage("Uploading file: " + selectedFile.name);
-                            },
-                        });
-                console.log(a)
+                let type=selectedFile.name.split('.')[1]
+                type="image/"+type
+                console.log(type)
+        //         let a=await Storage.put(fileKey, selectedFile, {    
+        //                         contentType:type,
+        //                         progressCallback: ({ loaded, total }) => {
+        //                         const progress = Math.round((loaded / total) * 100);
+        //                         setUploadProgress(progress);
+        //                         setMessage("Uploading file: " + selectedFile.name);
+        //                     },
+        //                 });
+        //         console.log(a)
              
-                let inst={
-                   id:institution.id,
-                   logo:fileKey
-                }
-                let update= await API.graphql({
-                    query:updateInstitution,
-                    variables:{input:inst}
-                })
-                console.log(update)
-               setInstitution(update.data.updateInstitution)
-        //console.log(a.key)        
-        setMessage("File successfully uploaded: " + selectedFile.name);
+        //         let inst={
+        //            id:institution.id,
+        //            logo:fileKey
+        //         }
+        //         let update= await API.graphql({
+        //             query:updateInstitution,
+        //             variables:{input:inst}
+        //         })
+        //         console.log(update)
+        //        setInstitution(update.data.updateInstitution)
+        // //console.log(a.key)        
+        // setMessage("File successfully uploaded: " + selectedFile.name);
       } catch (error) {
         console.log(error)
         setMessage("Error uploading file");
@@ -208,7 +236,7 @@ const EditInfoPage = () => {
                     
                     <tr>
                     <td>Institution name:</td>
-                    <td>{userAttributes.name}</td>
+                    <td>{user!==null? user.attributes.name:" "}</td>
                     </tr>
 
                     <tr>
@@ -218,7 +246,7 @@ const EditInfoPage = () => {
 
                     <tr>
                     <td>Email address:</td>
-                    <td>{userAttributes.email}</td>
+                    <td>{user!=null? user.attributes.email:" "}</td>
                     </tr>
             
                 </tbody>
@@ -463,7 +491,7 @@ const EditInfoPage = () => {
                                                     type="text"
                                                     className="form-control"
                                                     id="admin-name"
-                                                    placeholder={admin.firstname}
+                                                    placeholder={admin !==null? admin.firstname: " "}
                                                     data-testid="adminfirstName"
                                                     required
                                                     value={firstName}
@@ -478,7 +506,7 @@ const EditInfoPage = () => {
                                                 type="text"
                                                 className="form-control"
                                                 id="lastname"
-                                                placeholder={admin.lastname}
+                                                placeholder={admin!==null? admin.lastname : " "}
                                                 data-testid="adminlastName"
                                                 required
                                                 value={lastName}

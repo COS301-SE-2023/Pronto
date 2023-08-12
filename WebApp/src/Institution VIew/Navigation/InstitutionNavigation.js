@@ -3,12 +3,12 @@ import "./Navigation.css";
 import logo from "../../images/university_logo.svg";
 import { Auth,Storage,API } from "aws-amplify";
 import { listInstitutions } from "../../graphql/queries";
-import { useNavigate,useLocation,Link } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
 export default function InstitutionNavigation() {
   const navigate = useNavigate();
   const[institution,setInstitution]=React.useState(null)
-  const[instituitionLogo,setInstitutionLogo]=React.useState(logo)
+  const[instituitionLogo,setInstitutionLogo]=React.useState(null)
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -34,15 +34,15 @@ export default function InstitutionNavigation() {
          // logo=l
        // console.log("Reloading")
       //  console.log(logo)
-       let inst=await API.graphql({
-        query:listInstitutions,
-        variables: { 
-            filter : {
-                    domains :{
-                    contains : domain
+        let inst=await API.graphql({
+            query:listInstitutions,
+            variables: { 
+                filter : {
+                        domains :{
+                            contains : domain
+                        }
                     }
-                }
-            },
+                },
             authMode:"AMAZON_COGNITO_USER_POOLS"
         })
         inst=inst.data.listInstitutions.items[0];
@@ -54,6 +54,7 @@ export default function InstitutionNavigation() {
         // }
         // else{
         //     console.log("Sticking to default")
+        //     setInstitutionLogo(logo)
         // }
 
         setInstitution(inst);
@@ -78,7 +79,7 @@ export default function InstitutionNavigation() {
                                 maxHeight:"100%"}}
                     >
                 <img
-                    src={instituitionLogo}
+                    src={logo}
                     alt="Logo"
                     className="logo offset-2 img-fluid mr-1"
                     // width={"175px"}
@@ -86,29 +87,58 @@ export default function InstitutionNavigation() {
                     style={{width:"100%",height:"100%",border:"2px solid black",padding:"2px"}}
                     data-testid={'UniversityImage'}
                     />
+                    
                 </div>
                 <ul className="navbar-nav">
         
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
-                        <a href="/dashboard" className="nav-link" data-testid={'dashboardLink'}>
+                        {/* <a href="/dashboard" className="nav-link" data-testid={'dashboardLink'}>
                             <b>Dashboard</b>
-                        </a>
+                        </a> */}
+                        <Link 
+                            to={'/dashboard'}  
+                                state={institution}
+                                className="nav-link"   
+                                >     
+                            <b>Dashboard</b>
+                        </Link>
                     </li>
                     <li className="nav-item text-center" data-testid={'UploadSchedule'}>
-                        <a href="/upload-schedule" className="nav-link" data-testid={'UploadScheduleLink'}>
+                        {/* <a href="/upload-schedule" className="nav-link" data-testid={'UploadScheduleLink'}>
                            <b>Upload Schedule</b>
-                        </a>
+                        </a> */}
+                        <Link 
+                            to={'/upload-schedule'}  
+                                state={institution}
+                                className="nav-link"   
+                                >     
+                            <b>Upload Schedule</b>
+                        </Link>
                     </li>
                     <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
-                        <a href="/upload-student-files" className="nav-link p-2" data-testid={'UploadStudentFilesLink'}>
+                        {/* <a href="/upload-student-files" className="nav-link p-2" data-testid={'UploadStudentFilesLink'}>
                             <b>Upload Student Files</b>
 
-                        </a>
+                        </a> */}
+                        <Link 
+                            to={'/upload-student-files'}  
+                                state={institution}
+                                className="nav-link"   
+                                >     
+                            <b>Upload Student Files</b>
+                        </Link>
                     </li>
                     <li className="nav-item text-center" data-testid={'AddLecturer'}>
-                        <a href="/add-lecturer" className="nav-link" data-testid={'AddLecturerLink'}>
+                        {/* <a href="/add-lecturer" className="nav-link" data-testid={'AddLecturerLink'}>
                             <b>Add/Remove Lecturer</b>
-                        </a>
+                        </a> */}
+                        <Link 
+                            to={'/add-lecturer'}  
+                                state={institution}
+                                className="nav-link"   
+                                >     
+                            <b>Add/Remove Lecturer</b>
+                        </Link>
                     </li>
                     {/* <li className="nav-item text-center" data-testid={'EditUniversityInfo'}>
                         <a href="/edit-university-info" className="nav-link" data-testid={'EditUniversityInfoLink'}>
