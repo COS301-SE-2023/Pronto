@@ -80,19 +80,27 @@ export default function InstitutionNavigation({props}) {
                                 height: "calc(19vh)" ,   
                                 justifyContent:"center",
                                 justifyItems:"center",
+                                textAlign:"center",
                                 maxWidth:"100%",
+                                padding:"2px",
                                 maxHeight:"100%"}}
                     >
-                <img
-                    src={institution!==undefined? institution!==null? institution.logoUrl : " " : "  "}
-                    alt="Logo"
-                    className="logo offset-2 img-fluid mr-1"
-                    // width={"175px"}
-                    // height={"155px"}
-                    style={{width:"100%",height:"100%",border:"2px solid black",padding:"2px"}}
-                    data-testid={'UniversityImage'}
+                    <img
+                        src={institution!==undefined? institution!==null? institution.logoUrl : " " : "  "}
+                        alt="Logo"
+                        className="logo offset-2 img-fluid mr-1"
+                        // width={"175px"}
+                        // height={"155px"}
+                        style={{width:"100%",height:"100%",border:"2px solid black",padding:"0px"}}
+                        data-testid={'UniversityImage'}
                     />
+                  <div className="institution-name">
+                        <b>
+                            {institution && institution.name}
+                        </b>
+                    </div>
                 </div>
+                  
                 <ul className="navbar-nav">
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
                         <Link 
