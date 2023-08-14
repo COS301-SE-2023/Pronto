@@ -41,7 +41,7 @@ animation: swing3 ease-in-out 1.5s infinite alternate;
     0% { transform: rotate(-3deg); }
     100% { transform: rotate(8deg); }
 }
-h1{
+#err{
   font-family: 'Fjalla One';
   text-align: center; 
   color: #666;

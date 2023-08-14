@@ -57,7 +57,7 @@ function NotFound() {
     </svg>
     </div>
     <div className = "bottomDiv">
-    <h1>PAGE NOT FOUND</h1>
+    <h1 id="err">PAGE NOT FOUND</h1>
     
     <div className="logoutbtn">
     <button
