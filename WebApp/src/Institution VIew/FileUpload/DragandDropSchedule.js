@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Amplify, Storage, Auth } from "aws-amplify";
+import ScheduleUpload from '../../images/ScheduleUpload.png';
 
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -109,7 +110,18 @@ function DropzoneComponent() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        marginLeft: "10%", // Adjust this value to shift content to the right
+      }}
+    >
+      <h6 style={{ marginBottom: "5px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
+      <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
       <div
         className="dropzone text-center"
         onDrop={handleFileDrop}
@@ -117,6 +129,7 @@ function DropzoneComponent() {
         onDragEnter={handleDragEnter}
         style={{
           height: "100px",
+          width: "100%",
           border: "1px dashed",
           justifyContent: "center",
           alignItems: "center",
