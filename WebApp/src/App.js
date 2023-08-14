@@ -6,7 +6,6 @@ import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
 import InstitutionLogin from "./Authentication/Institution/Login";
 import InstitutionForgotPassword from "./Authentication/Institution/ForgotPassword";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
@@ -16,14 +15,17 @@ import EditUniversityInfo from "./Institution VIew/EditInformation/EditInfo";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
-import { Amplify, Auth } from "aws-amplify";
-import { Authenticator } from '@aws-amplify/ui-react';
-import HomePage from "./HomePage";
-import config from "./aws-exports";
+import NotFound from "./NotFound";
 import Dashboard from "./Institution VIew/Dashboard/Dashboard";
 import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
 import { RequireLecturerAuth } from "./RequireLecturerAuth";
 import { RequireAdminAuth } from "./RequireAdminAuth";
+import HomePage from "./HomePage";
+import { Amplify, Auth } from "aws-amplify";
+import { Authenticator } from '@aws-amplify/ui-react';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import config from "./aws-exports";
+
 
 Auth.configure(config);
 Amplify.configure(config);
@@ -60,6 +62,10 @@ function MyRoutes()
       path="/institution-forgot-password"
       element={<InstitutionForgotPassword />}
     />
+
+    {/*Invalid page*/}
+    <Route path="/404" element={<NotFound />} />
+    <Route path="*" element={<Navigate to="/404" />} />
 
     {/*Protected admin routing*/}
     <Route
