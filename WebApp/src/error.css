@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-top: 50%;
+  margin-top: 30%;
 }
 .bottomDiv{
   display: flex;
@@ -17,6 +17,7 @@
 .four1{
 animation: swing ease-in-out 1.5s infinite alternate;
     display: inline-block;
+    color: #e32f45;
 }
 .zero{
   animation: swing2 ease-in-out 1.5s infinite alternate;
