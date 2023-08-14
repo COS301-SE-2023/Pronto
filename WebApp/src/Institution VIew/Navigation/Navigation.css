@@ -38,7 +38,26 @@
     color: #464646;
     text-align: center;
 }
+.institution-name {
+    margin-top: 0%;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+    width: calc(12vw);
+    padding: 2px;
+}
 
 .top{
-    margin-bottom:60%;
+    margin-bottom: 60%;
+}
+
+.img-box {
+    width: calc(12vw);
+    height: calc(19vh);
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+    max-width: 100%;
+    padding: 0px;
+    max-height: 100%;
 }
