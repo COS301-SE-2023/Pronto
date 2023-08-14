@@ -105,7 +105,7 @@ export default function PostAccordion(course) {
 
     <div>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'}>
+      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
           aria-controls="panel1bh-content"
@@ -174,6 +174,7 @@ export default function PostAccordion(course) {
         expanded={expanded === "panel2"}
         onChange={handleChange("panel2")}
         data-testid={"accordion2"}
+        style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
@@ -241,7 +242,7 @@ export default function PostAccordion(course) {
       </Accordion>
 
 
-      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
           aria-controls="panel3bh-content"
@@ -314,6 +315,7 @@ export default function PostAccordion(course) {
         expanded={expanded === "panel4"}
         onChange={handleChange("panel4")}
         data-testid={"accordion4"}
+        style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
@@ -354,4 +356,5 @@ const MapSuggestionsContainer = styled.div`
       padding: 5px;
 
       `;
+
 
