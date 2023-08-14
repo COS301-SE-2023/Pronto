@@ -33,12 +33,10 @@ export default function AddModal(module) {
           } 
       }
       setOfferedCourses(offeredCourses)
-      console.log(offeredCourses)
       setSelectedCourses(module.selectedCourses)
-      console.log(module)
       
     }catch(e){
-      alert("No courses found")
+      //alert("No courses found")
     }
   }
 
@@ -124,6 +122,7 @@ const handleRemove = async(index) => {
             <thead>
               <tr>                
                 <th scope="col">Course Code</th>
+                <th scope="col">Course Name</th>
               </tr>
             </thead>
             <tbody>
@@ -133,6 +132,9 @@ const handleRemove = async(index) => {
                       <td>   
                           {val.coursecode}
                       </td>
+                     <td>
+                          {val.coursename}
+                     </td>
                       <td>
                         <button onClick={(e)=>handleRemove(key)}
                           type="button" 
@@ -158,7 +160,7 @@ const handleRemove = async(index) => {
                { offeredCourses.map((val, key)=>{
                 return( 
                   <option key={val.coursecode}
-                  value={key}>{val.coursecode}</option>
+                  value={key}>{val.coursecode + "-" + val.coursename}</option>
                 )
                 
               })

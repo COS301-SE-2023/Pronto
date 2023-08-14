@@ -65,43 +65,7 @@ export const updateCourse=`mutation UpdateCourse(
     institutionId
     lecturerId
     coursecode
-    semester
-    enrollments {
-      nextToken
-    }
-    activity {
-      nextToken
-    }
-    announcents {
-      nextToken
-    }
-    lecturer {
-      id
-      institutionId
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      owner
-    }
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-    }
+    coursename
     createdAt
     updatedAt
   }

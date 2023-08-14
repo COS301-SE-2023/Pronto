@@ -83,6 +83,7 @@ export const listInstitutions=`query ListInstitutions(
       closingTime
       minimumDuration
       domains
+      lectureremails
       admin { 
         id
         firstname
@@ -94,6 +95,7 @@ export const listInstitutions=`query ListInstitutions(
            id
            lecturerId
            coursecode
+           coursename
         }
       }
       lecturer{ 
@@ -106,6 +108,7 @@ export const listInstitutions=`query ListInstitutions(
             items{ 
               id 
               coursecode
+              coursename
             }
           }
         }
@@ -167,6 +170,12 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
       lastname
       userRole
       email
+      courses{
+        items{
+          id
+          coursename
+        }
+      }
       createdAt
       updatedAt
       owner
@@ -187,6 +196,7 @@ export const listCourses=`query ListCourses(
       institutionId
       lecturerId
       coursecode
+      coursename
       semester
       createdAt
       updatedAt

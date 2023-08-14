@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer,updateCourse} from "../../graphql/mutations"; 
+import { createLecturer, deleteLecturer,updateCourse, updateInstitution} from "../../graphql/mutations"; 
 import { lecturersByInstitutionId,listInstitutions,listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
@@ -17,7 +17,7 @@ const AddLecturer = () => {
     const [lecturers ,setLecturers]= useState([])
     const[isModalOpened,setIsModalOpened]=useState(false)
     const[searchIcon,setSearchIcon]=useState(false)
-    const[institution,setInstitution]=useState("")
+    const[institution,setInstitution]=useState(null)
     const[offeredCourses,setOfferedCourses]=useState([])
     const[selectedCourses,setSelectedCourses]=useState([])
     const[error,setError]=useState("")
@@ -25,7 +25,6 @@ const AddLecturer = () => {
     const handleAdd=  async(event) => { 
         event.preventDefault()
         if(!isModalOpened){
-            //courseList=await findCourses(courses)
             
             let lecturer={
                 institutionId:institution.id,
@@ -43,25 +42,53 @@ const AddLecturer = () => {
                     })
       
                  lecturer=mutation.data.createLecturer
-                 lecturer.courses=[]
+                 lecturer.courses={
+                    items :[]
+                 }
                  lecturers.push(mutation.data.createLecturer)
-                  
+                
+                let emails
+                if(institution.lectureremails===null){
+                    emails=[]
+                    emails.push(email)
+                }
+                else{
+                    emails=institution.lectureremails
+                    emails.push(email)
+                }
+                 let update={
+                     id:institution.id,
+                     lectureremails:emails
+                  }
+
+                  let u=await API.graphql({
+                    query:updateInstitution,
+                    variables:{input:update},
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                  })
+
                  //Add lecturer to courses
                  await addCourses(lecturer,selectedCourses)
                  if(lecturers.length<19)
                         setLecturers(lecturers)
+                setInstitution(institution)
 
              }catch(error){    
-                let e=error.errors[0].message
-                if(e.search("Unathorized")!==-1){ 
-                    setError("You are not authorized to perform this action.Please log out and log in")
-                }
-                else if(e.search("Network")!==-1){
-                    setError("Request failed due to network issues")
+                if(error.errors!==undefined){
+                    let e=error.errors[0].message
+                    if(e.search("Unathorized")!==-1){ 
+                        setError("You are not authorized to perform this action.Please log out and log in")
+                    }
+                    else if(e.search("Network")!==-1){
+                        setError("Request failed due to network issues")
+                    }
+                    else{ 
+                        setError("Something went wrong.Please try again later")
+                    }     
                 }
                 else{ 
-                    setError("Something went wrong.Please try again later")
-                }     
+                    setError("Your request could not be processed")
+                }
             }    
             setFirstName("")
             setLastName("")
@@ -82,27 +109,32 @@ const AddLecturer = () => {
                     lecturerId:null, 
                 }
         
-            let update=await API.graphql({
-                query:updateCourse,
-                variables:{input:updatedCourseData},
-                authMode:"AMAZON_COGNITO_USER_POOLS"
-            }) 
-            lecturer.courses.splice(i,1)
+                let update=await API.graphql({
+                    query:updateCourse,
+                    variables:{input:updatedCourseData},
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                }) 
+                lecturer.courses.splice(i,1)
             
-    }catch(error){ 
-         let e=error.errors[0].message
-          if(e.search("Unathorized")!==-1){ 
-            setError("You are not authorized to perform this action.Please log out and log in")
-          }
-          else if(e.search("Network")!==-1){
-            setError("Request failed due to network issues")
-          }
-          else{ 
-            setError("Something went wrong.Please try again later")
-          }
+            }catch(error){ 
+                if(error.errors!==undefined){ 
+                    let e=error.errors[0].message
+                    if(e.search("Unathorized")!==-1){ 
+                        setError("You are not authorized to perform this action.Please log out and log in")
+                    }
+                    else if(e.search("Network")!==-1){
+                        setError("Request failed due to network issues")
+                    }
+                    else{ 
+                        setError("Something went wrong.Please try again later")
+                    }
+                }
+                else{ 
+                    setError("Your request could not be processed")
+                }
+            }
+        }
     }
-    }
-}
 
     const addCourses=async(lecturer,courseList)=>{ 
         
@@ -129,17 +161,23 @@ const AddLecturer = () => {
             setLecturers(lecturers)
 
     }catch(error){ 
-         let e=error.errors[0].message
-          if(e.search("Unathorized")!==-1){ 
-            setError("You are not authorized to perform this action.Please log out and log in")
-          }
-          else if(e.search("Network")!==-1){
-            setError("Request failed due to network issues")
-          }
-          else{ 
-            setError("Something went wrong.Please try again later")
-          }
+        if(error.errors!==undefined){
+            let e=error.errors[0].message
+            if(e.search("Unathorized")!==-1){ 
+                setError("You are not authorized to perform this action.Please log out and log in")
+            }
+            else if(e.search("Network")!==-1){
+                setError("Request failed due to network issues")
+            } 
+            else{ 
+                setError("Something went wrong.Please try again later")
+            }
+        }
+        else {
+            setError("Your request could not be processed")
+        }
     }
+    
     }
 }
 
@@ -164,16 +202,21 @@ const AddLecturer = () => {
             setLecturers(rows)
         }
         catch(error){
-            let e=error.errors[0].message
-            if(e.search("Unathorized")!==-1){ 
-                setError("You are not authorized to perform this action.Please log out and log in")
+            if(error.errors!==undefined){
+                let e=error.errors[0].message
+                if(e.search("Unathorized")!==-1){ 
+                    setError("You are not authorized to perform this action.Please log out and log in")
+                }
+                else if(e.search("Network")!==-1){
+                    setError("Request failed due to network issues")
+                }
+                else{ 
+                    setError("Something went wrong.Please try again later")
+                } 
             }
-            else if(e.search("Network")!==-1){
-                setError("Request failed due to network issues")
+            else{
+                setError("Your request could not be processed")
             }
-            else{ 
-                setError("Something went wrong.Please try again later")
-            } 
         }
     }
 
@@ -201,8 +244,6 @@ const AddLecturer = () => {
                 } 
                 else{
                     institution=institution.data.listInstitutions.items[0]
-                    setInstitution(institution)   
-                    setCourses(institution.courses.items)
                     let lecturerList=institution.lecturer.items
                     for(let i=0;i<courses.length;i++){ 
                         if(courses[i].lecturerId===null){
@@ -219,34 +260,40 @@ const AddLecturer = () => {
 
                         }
                     }
+
+                    setInstitution(institution)   
+                    setCourses(institution.courses.items)
                     setLecturers(lecturerList)
                 }
             }
         }
         catch(error){   
-             let e=error.errors[0].message
-            if(e.search("Unathorized")!==-1){ 
-                setError("You are not authorized to perform this action.Please log out and log in")
+            if(error.errors!==undefined){
+                let e=error.errors[0].message
+                if(e.search("Unathorized")!==-1){ 
+                    setError("You are not authorized to perform this action.Please log out and log in")
+                }
+                else if(e.search("Network")!==-1){
+                    setError("Request failed due to network issues")
+                }
+                else{ 
+                    setError("Something went wrong.Please try again later")
+                }
             }
-            else if(e.search("Network")!==-1){
-                setError("Request failed due to network issues")
-            }
-            else{ 
-                setError("Something went wrong.Please try again later")
+            else{
+               setError("Your request could not be processed")
             }
         }
     }
     
     const handleSearch = async() => { 
         try{ 
-            
             if(searchIcon===false){
-                let institution=await Auth.currentAuthenticatedUser()
+               
                 if(filterAttribute==="firstname"){
                     let search= await API.graphql({
                         query:lecturersByInstitutionId,
-                        variables:  { 
-                            //institutionId : institution.username,  
+                        variables:  {  
                             institutionId:institution.id,
                             filter : { 
                                 firstname: { 
@@ -256,13 +303,14 @@ const AddLecturer = () => {
                         },
                         authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
+                    
+                   
                     setLecturers(search.data.lecturersByInstitutionId.items)
                 }
                 else if(filterAttribute==="lastname"){ 
                     let search= await API.graphql({
                         query:lecturersByInstitutionId,
-                        variables:  { 
-                               //institutionId : institution.username,  
+                        variables:  {   
                                institutionId:institution.id, 
                                filter : { 
                                     lastname: { 
@@ -272,13 +320,13 @@ const AddLecturer = () => {
                             },
                     authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })   
-                    setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+                    
+                    setLecturers(search.data.lecturersByInstitutionId.items)
                 }
                 else if(filterAttribute==="email"){
                     let search= await API.graphql({
                     query:lecturersByInstitutionId,
                     variables:  { 
-                               //institutionId : institution.username,  
                                institutionId:institution.id, 
                                filter : { 
                                     email: { 
@@ -288,7 +336,8 @@ const AddLecturer = () => {
                             },
                     authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
-                    setLecturers(search.data.lecturersByInstitutionId.items.filter(item=>item._deleted===null))
+                    
+                    setLecturers(search.data.lecturersByInstitutionId.items)
             }
             setSearchIcon(!searchIcon)
         }
@@ -298,17 +347,23 @@ const AddLecturer = () => {
             setSearchIcon(!searchIcon)
         }
        }catch(error){
-            let e=error.errors[0].message
-            if(e.search("Unathorized")!==-1){ 
-                setError("You are not authorized to perform this action.Please log out and log in")
-            }
-            else if(e.search("Network")!==-1){
-                setError("Request failed due to network issues")
-            }
-            else{ 
-                setError("Something went wrong.Please try again later")
-            }
-       } 
+       
+            if(error.errors!==undefined){
+                let e=error.errors[0].message
+                if(e.search("Unathorized")!==-1){ 
+                    setError("You are not authorized to perform this action.Please log out and log in")
+                }
+                else if(e.search("Network")!==-1){
+                    setError("Request failed due to network issues")
+                }
+                else{ 
+                    setError("Something went wrong.Please try again later")
+                }
+            } 
+            else {
+                   setError("Your request could not be processed")
+            } 
+        }
     } 
     
     useEffect(() => {
