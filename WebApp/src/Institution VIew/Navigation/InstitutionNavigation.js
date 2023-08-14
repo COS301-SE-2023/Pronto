@@ -5,17 +5,17 @@ import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 
 export default function InstitutionNavigation() {
-    const navigate = useNavigate();
-    const onSignOut = async (event) => {
-        event.preventDefault();
-        try {
-            await Auth.signOut();
-            //navigate to lecturer login
-            navigate("/institution-login");
-        } catch (e) {
-            console.log(e.message);
-        }
-    };
+  const navigate = useNavigate();
+  const onSignOut = async (event) => {
+    event.preventDefault();
+    try {
+      await Auth.signOut();
+      //navigate to homepage
+      navigate("/");
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
 
     return (
         <div className={'grid'}>

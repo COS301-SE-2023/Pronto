@@ -1,7 +1,7 @@
 import * as React from "react";
 import "../Institution VIew/Navigation/Navigation.css";
 import logo from "../images/logo.jpg";
-import { Auth, API } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 export default function LecturerNavigation() {
   const [user, setUser] = React.useState("");
@@ -11,8 +11,8 @@ export default function LecturerNavigation() {
     event.preventDefault();
     try {
       await Auth.signOut();
-      //navigate to lecturer login
-      navigate("/lecturer-login");
+      //navigate to homepage
+      navigate("/");
     } catch (e) {
       console.log(e.message);
     }
