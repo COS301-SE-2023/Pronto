@@ -26,7 +26,7 @@ export function RequireLecturerAuth({ children }) {
   };
   useEffect(() => {
     checkUser();
-  });
+  },[]);
 
   return children;
 };

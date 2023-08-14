@@ -26,7 +26,7 @@ export function RequireAdminAuth({ children }) {
   };
   useEffect(() => {
     checkUser();
-  });
+  },[]);
 
   return children;
 };
