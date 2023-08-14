@@ -4,6 +4,9 @@ import "./error.css";
 
 function NotFound() {
     const navigate = useNavigate();
+    const handleNavigateHome = () => {
+        navigate("/");
+    };
     return (
     <div class="container">
     <div class="four1">
@@ -48,9 +51,10 @@ function NotFound() {
     
     <div className="logoutbtn">
     <button
+    type = "button"
     className={"btn btn-danger btn-lg btn-block"}
     style={{ borderRadius: "25px", marginTop:"5%" }}
-    onClick={navigate("/")}
+    onClick={handleNavigateHome}
     >
     &#x2190; Take me home 
     </button>
