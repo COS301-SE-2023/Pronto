@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import "./error.css";
 
 function NotFound() {
+    const navigate = useNavigate();
     return (
     <div class="container">
     <div class="four1">
@@ -48,6 +50,7 @@ function NotFound() {
     <button
     className={"btn btn-danger btn-lg btn-block"}
     style={{ borderRadius: "25px", marginTop:"5%" }}
+    onClick={navigate("/")}
     >
     &#x2190; Take me home 
     </button>
