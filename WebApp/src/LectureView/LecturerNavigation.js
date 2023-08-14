@@ -75,19 +75,20 @@ export default function LecturerNavigation() {
             </a>
           </li>
         </ul>
+        <div className="logoutbtn">
+          <button
+            type="submit"
+            className={"btn btn-danger btn-lg btn-block"}
+            style={{ borderRadius: "25px" }}
+            data-testid={"LogoutButton"}
+            onClick={onSignOut}
+          >
+            Log Out
+          </button>
+        </div>
       </nav>
 
-      <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
-        <button
-          type="submit"
-          className={"btn btn-danger btn-lg btn-block"}
-          style={{ borderRadius: "25px" }}
-          data-testid={"LogoutButton"}
-          onClick={onSignOut}
-        >
-          Log Out
-        </button>
-      </div>
+
     </div>
   );
 }

@@ -13,7 +13,14 @@ const FileUploadPage = () => {
         style={{ width: "900px", marginTop: "250px" }}
         className={"text-center"}
       >
-        <h1>Upload Schedule</h1>
+        <h1 style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          marginLeft: "10%", // Adjust this value to shift content to the right
+        }}>Upload Schedule</h1>
         <DragandDropSchedule />
       </main>
     </div>
