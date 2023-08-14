@@ -15,16 +15,18 @@ export function RequireLecturerAuth({ children }) {
         authUser.signInUserSession.idToken.payload["cognito:groups"];
       setUser(authUser);
       setUserGroup(group);
+
+      if( (!user) || (userGroup !== "lecturerUserGroup") ){
+        return <Navigate to="/lecturer-login" state={{ from: location }} replace />;
+      }
+      
     } catch (e) {
       setUser(null);
     }
   };
   useEffect(() => {
     checkUser();
-  }, []);
-    
-  if( (!user) || (userGroup !== "lecturerUserGroup") ){
-    return <Navigate to="/lecturer-login" state={{ from: location }} replace />;
-  }
+  });
+
   return children;
 };

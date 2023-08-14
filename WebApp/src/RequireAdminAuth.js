@@ -1,30 +1,32 @@
-import { useEffect} from "react";
+import {useState, useEffect} from "react";
 import { useLocation, Navigate } from 'react-router-dom';
 import { Auth } from "aws-amplify";
 
-
 export function RequireAdminAuth({ children }) {
 
-  const User = null;
-  const UserGroup = null;
+  const [user, setUser] = useState(undefined);
+  const [userGroup, setUserGroup] = useState(null);
   const location = useLocation();
 
   const checkUser = async () => {
     try {
-      const User = await Auth.currentAuthenticatedUser({});
-      const UserGroup = User.signInUserSession.idToken.payload["cognito:groups"];
+      const authUser = await Auth.currentAuthenticatedUser({});
+      const group =
+        authUser.signInUserSession.idToken.payload["cognito:groups"];
+      setUser(authUser);
+      setUserGroup(group);
+      
+      if( (!user) || (userGroup !== "adminUserGroup") ){
+        return <Navigate to="/institution-login" state={{ from: location }} replace />;
+      }
+      
     } catch (e) {
-      User = null;
+      setUser(null);
     }
   };
   useEffect(() => {
     checkUser();
-  }, []);
-    
-  console.log(User);
-  console.log(UserGroup);
-  if( (!User) || (UserGroup !== "adminUserGroup") ){
-    return <Navigate to="/institution-login" state={{ from: location }} replace />;
-  }
+  });
+
   return children;
 };

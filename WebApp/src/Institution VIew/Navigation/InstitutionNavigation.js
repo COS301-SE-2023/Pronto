@@ -10,8 +10,8 @@ export default function InstitutionNavigation() {
     event.preventDefault();
     try {
       await Auth.signOut();
-      //navigate to lecturer login
-      navigate("/institution-login");
+      //navigate to homepage
+      navigate("/");
     } catch (e) {
       console.log(e.message);
     }

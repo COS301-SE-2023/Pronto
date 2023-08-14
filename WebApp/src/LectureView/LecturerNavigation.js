@@ -11,8 +11,8 @@ export default function LecturerNavigation() {
     event.preventDefault();
     try {
       await Auth.signOut();
-      //navigate to lecturer login
-      navigate("/lecturer-login");
+      //navigate to homepage
+      navigate("/");
     } catch (e) {
       console.log(e.message);
     }
