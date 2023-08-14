@@ -16,10 +16,6 @@ export function RequireAdminAuth({ children }) {
       setUser(authUser);
       setUserGroup(group);
       
-      if( (!user) || (userGroup !== "adminUserGroup") ){
-        return <Navigate to="/institution-login" state={{ from: location }} replace />;
-      }
-      
     } catch (e) {
       setUser(null);
     }
@@ -27,6 +23,10 @@ export function RequireAdminAuth({ children }) {
   useEffect(() => {
     checkUser();
   },[]);
+
+  if( (!user) || (userGroup !== "adminUserGroup") ){
+    return <Navigate to="/institution-login" state={{ from: location }} replace />;
+  }
 
   return children;
 };
