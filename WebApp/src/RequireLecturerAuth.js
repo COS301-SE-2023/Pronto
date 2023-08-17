@@ -1,31 +1,40 @@
-import { useState, useEffect } from "react";
-import { useLocation, Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Navigate } from 'react-router-dom';
 import { Auth } from "aws-amplify";
 
 export function RequireLecturerAuth({ children }) {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [checkUserComplete, setCheckUserComplete] = useState(false);
 
-  const [user, setUser] = useState(undefined);
-  const [userGroup, setUserGroup] = useState(null);
-  const location = useLocation();
-
-  const checkUser = async () => {
-    try {
-      const authUser = await Auth.currentAuthenticatedUser({});
-      const group =
-        authUser.signInUserSession.idToken.payload["cognito:groups"];
-      setUser(authUser);
-      setUserGroup(group);
-    } catch (e) {
-      setUser(null);
-    }
-  };
   useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const user = await Auth.currentAuthenticatedUser({});
+        const group = user.signInUserSession.idToken.payload["cognito:groups"][0];
+
+        if (group !== "lecturerUserGroup") {
+          setAuthenticated(false);
+        } else {
+          setAuthenticated(true);
+        }
+      } catch (error) {
+        setAuthenticated(false);
+      } finally {
+        setCheckUserComplete(true);
+      }
+    };
+
     checkUser();
   }, []);
 
-  if ((!user) || (userGroup !== "lecturerUserGroup")) {
-    return <Navigate to="/lecturer-login" state={{ from: location }} replace />;
+  if (!checkUserComplete) {
+    // Wait for checkUser to complete
+    return null; // or loading indicator
+  }
+
+  if (!authenticated) {
+    return <Navigate to="/lecturer-login" />;
   }
 
   return children;
-};
+}

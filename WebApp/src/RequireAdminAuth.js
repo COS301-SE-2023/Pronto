@@ -12,7 +12,6 @@ export function RequireAdminAuth({ children }) {
         const user = await Auth.currentAuthenticatedUser({});
         const group = user.signInUserSession.idToken.payload["cognito:groups"][0];
 
-
         if (group !== "adminUserGroup") {
           setAuthenticated(false);
         } else {
