@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useLocation, Navigate } from 'react-router-dom';
 import { Auth } from "aws-amplify";
 
@@ -21,10 +21,11 @@ export function RequireLecturerAuth({ children }) {
   };
   useEffect(() => {
     checkUser();
-  },[]);
-  
-  if( (!user) || (userGroup !== "lecturerUserGroup") ){
+  }, []);
+
+  if ((!user) || (userGroup !== "lecturerUserGroup")) {
     return <Navigate to="/lecturer-login" state={{ from: location }} replace />;
   }
+
   return children;
 };
