@@ -10,14 +10,13 @@ function NotFound() {
     };
     return (
     <div class="container">
-    <div class = "logo">
+    <div>
     <img
-              src={ProntoSvg}
-              alt="Logo"
-              style={{
-                marginBottom:"10%",
-                objectFit: "cover",
-              }}></img>
+        src={ProntoSvg}
+        alt="logo"
+        style={{
+        marginBottom:"10%",
+        }}></img>
     </div>
     <div class="four1">
         
