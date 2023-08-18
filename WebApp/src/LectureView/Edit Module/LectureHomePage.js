@@ -5,6 +5,9 @@ import { listCourses, listLecturers, getLecturer } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { Link } from "react-router-dom";
+import UserManual from "../HelpFiles/UserManual.pdf";
+import HelpButton from '../../HelpButton';
+
 const LectureHomePage = () => {
 
   const [courses, setCourses] = useState([])
@@ -55,13 +58,13 @@ const LectureHomePage = () => {
     } catch (error) {
       let e = error.errors[0].message
       if (e.search("Not Authorized") !== -1) {
-        setError("You are not authorized to perform this action.Please log out and log in")
+        setError("You are not authorized to perform this action. Please log out and log in")
       }
       else if (e.search("Network") !== -1) {
         setError("Request failed due to network issues")
       }
       else {
-        setError("Something went wrong.Please try again later")
+        setError("Something went wrong. Please try again later")
       }
     }
     finally {
@@ -105,6 +108,10 @@ const LectureHomePage = () => {
           ))
         )}
       </main>
+
+      <div>
+        <HelpButton pdfUrl={UserManual} />
+      </div>
     </div>
   );
 };

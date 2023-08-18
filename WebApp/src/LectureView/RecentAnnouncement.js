@@ -17,6 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import UserManual from "./HelpFiles/UserManual.pdf";
+import HelpButton from '../HelpButton';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
@@ -297,6 +299,9 @@ export default function RecentAnnouncement() {
         </DialogActions>
       </StyledDialog>
 
+      <div>
+        <HelpButton pdfUrl={UserManual} />
+      </div>
     </div >
   );
 }
