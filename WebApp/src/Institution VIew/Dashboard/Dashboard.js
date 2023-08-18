@@ -10,10 +10,10 @@ import HelpButton from '../../HelpButton';
 const Dashboard = () => {
     return (
         <div>
-            
+
             <LeftContainer>
                 <InstitutionNavigation />
-                
+
             </LeftContainer>
             <RightContainer>
 
@@ -50,6 +50,9 @@ const Dashboard = () => {
                 </div>
             </RightContainer>
 
+            <div>
+                <HelpButton pdfUrl="path/to/your/pdf.pdf" />
+            </div>
         </div>
     );
 };

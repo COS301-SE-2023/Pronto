@@ -6,6 +6,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../Navigation/Navigation.css';
+import HelpButton from '../../HelpButton';
 
 const EditInfoPage = () => {
     const [expanded, setExpanded] = React.useState(false);
@@ -16,6 +17,9 @@ const EditInfoPage = () => {
 
     return (
         <div style={{ display: 'inline-flex' }}>
+            <div>
+                <HelpButton pdfUrl="path/to/your/pdf.pdf" />
+            </div>
             <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
                 {/* Navigation bar content */}
                 <InstitutionNavigation />

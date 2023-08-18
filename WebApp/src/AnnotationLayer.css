@@ -1,4 +1,7 @@
 .help-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     width: 40px;
     height: 40px;
     background-color: #e32f45;
@@ -9,6 +12,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    z-index: 9999; /* Ensure the icon is above other content */
   }
   
   .pdf-overlay {

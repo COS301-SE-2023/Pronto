@@ -6,6 +6,7 @@ import { API, Auth } from 'aws-amplify';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import HelpButton from '../../HelpButton';
 
 const AddLecturer = () => {
     const [firstName, setFirstName] = useState("")
@@ -316,7 +317,11 @@ const AddLecturer = () => {
     }, [])
 
     return (
+
         <div style={{ display: 'inline-flex' }}>
+            <div>
+                <HelpButton pdfUrl="path/to/your/pdf.pdf" />
+            </div>
 
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             <nav style={{ width: '20%' }} data-testid="InstitutionNavigation">
@@ -513,6 +518,9 @@ const AddLecturer = () => {
                     </div>
                 </div>
             </main>
+
+
+
         </div>
     );
 };
