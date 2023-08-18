@@ -30,7 +30,7 @@ const LectureHomePage = () => {
               }
             }
           },
-          authMode: "API_KEY",
+          authMode: "AMAZON_COGNITO_USER_POOLS",
         })
         if (lec.data.listLecturers.items.length > 0) {
           await setLecturer(lec.data.listLecturers.items[0])
@@ -43,7 +43,7 @@ const LectureHomePage = () => {
                 }
               }
             },
-            authMode: "API_KEY",
+            authMode: "AMAZON_COGNITO_USER_POOLS",
           })
 
 
