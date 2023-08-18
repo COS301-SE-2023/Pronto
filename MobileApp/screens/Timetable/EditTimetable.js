@@ -68,7 +68,7 @@ const EditTimetable = ({ onSearch }) => {
               }
             }
           },
-          authMode: "API_KEY"
+          authMode: "AMAZON_COGNITO_USER_POOLS"
         })
         setCourses(search.data.searchCourses.items)
       } catch (e) {
@@ -96,7 +96,7 @@ const EditTimetable = ({ onSearch }) => {
             }
           }
         },
-        authMode: "API_KEY"
+        authMode: "AMAZON_COGNITO_USER_POOLS"
       })
 
       // setStudent(stu.data.listStudents.items[0])
@@ -123,7 +123,7 @@ const EditTimetable = ({ onSearch }) => {
               }
             }
           },
-          authMode: "API_KEY",
+          authMode: "AMAZON_COGNITO_USER_POOLS",
         })
 
         //Institution not found
