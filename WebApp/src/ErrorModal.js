@@ -6,11 +6,16 @@ const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
+  textAlign: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
   transform: 'translate(-50%, -50%)',
   width: '80%',
   bgcolor: 'background.paper',
-  borderRadius: '10px',
-  boxShadow: 24,
+  borderRadius: '20px',
+  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
   p: 4,
 };
 
@@ -43,6 +48,7 @@ export function ErrorModal(errorMessage) {
 
         >
           <Box sx={style}>
+            <h1>Error</h1>
             <p>{errorMessage.errorMessage}</p>
             <button
               onClick={handleClose}
@@ -52,9 +58,11 @@ export function ErrorModal(errorMessage) {
               style={{
                 backgroundColor: "#e32f45",
                 color: "white",
+                width: "20%",
+                borderRadius: "20px",
               }}
             >
-              Ok
+              OK
             </button>
           </Box>
         </Modal>

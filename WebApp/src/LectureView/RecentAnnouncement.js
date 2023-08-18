@@ -151,13 +151,13 @@ export default function RecentAnnouncement() {
     } catch (error) {
       let e = error.errors[0].message
       if (e.search("Not Authorized") !== -1) {
-        setError("You are not authorized to perform this action.Please log out and log in")
+        setError("You are not authorized to perform this action. Please log out and log in")
       }
       else if (e.search("Network") !== -1) {
         setError("Request failed due to network issues")
       }
       else {
-        setError("Something went wrong.Please try again later")
+        setError("Something went wrong. Please try again later")
       }
     }
   }
