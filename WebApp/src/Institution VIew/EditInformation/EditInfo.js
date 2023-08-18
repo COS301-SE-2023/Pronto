@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../Navigation/Navigation.css';
 import HelpButton from '../../HelpButton';
-import UserManual from "./UserManual.pdf";
+import UserManual from "../HelpFiles/UserManual.pdf";
 
 const EditInfoPage = () => {
     const [expanded, setExpanded] = React.useState(false);

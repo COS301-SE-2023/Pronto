@@ -6,6 +6,7 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import SchoolIcon from '@mui/icons-material/School';
 import EditIcon from '@mui/icons-material/Edit';
 import HelpButton from '../../HelpButton';
+import UserManual from "../HelpFiles/UserManual.pdf";
 
 const Dashboard = () => {
     return (
@@ -51,7 +52,7 @@ const Dashboard = () => {
             </RightContainer>
 
             <div>
-                <HelpButton pdfUrl="path/to/your/pdf.pdf" />
+                <HelpButton pdfUrl={UserManual} />
             </div>
         </div>
     );

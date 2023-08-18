@@ -42,6 +42,11 @@ const HelpButton = ({ pdfUrl }) => {
             {showPDF && (
                 <div className="pdf-overlay">
                     <div className="pdf-modal">
+                        <div className="pdf-top-bar">
+                            <button className="pdf-close-button" onClick={togglePDF}>
+                                Close
+                            </button>
+                        </div>
                         <Document
                             file={pdfUrl}
                             onLoadSuccess={onDocumentLoadSuccess}
@@ -67,9 +72,6 @@ const HelpButton = ({ pdfUrl }) => {
                                 Next
                             </button>
                         </div>
-                        <button className="close-button" onClick={togglePDF}>
-                            Close
-                        </button>
                     </div>
                 </div>
             )}

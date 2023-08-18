@@ -7,6 +7,7 @@ import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import HelpButton from '../../HelpButton';
+import UserManual from "../HelpFiles/UserManual.pdf";
 
 const AddLecturer = () => {
     const [firstName, setFirstName] = useState("")
@@ -320,7 +321,7 @@ const AddLecturer = () => {
 
         <div style={{ display: 'inline-flex' }}>
             <div>
-                <HelpButton pdfUrl="path/to/your/pdf.pdf" />
+                <HelpButton pdfUrl={UserManual} />
             </div>
 
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
