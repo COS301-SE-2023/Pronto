@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Amplify, Storage, Auth } from "aws-amplify";
 import ScheduleUpload from '../../images/ScheduleUpload.png';
 import HelpButton from '../../HelpButton';
+import UserManual from "../HelpFiles/UserManual.pdf";
 
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -183,7 +184,7 @@ function DropzoneComponent() {
         style={{ display: "none" }}
       />
       <div>
-        <HelpButton pdfUrl="path/to/your/pdf.pdf" />
+        <HelpButton pdfUrl={UserManual} />
       </div>
     </div>
   );
