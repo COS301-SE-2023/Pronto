@@ -236,7 +236,8 @@ const AddLecturer = () => {
                         institutionId:admin.institutionId,
                         limit:10,
                         nextToken:nextToken
-                    }
+                    },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
                 });
                 lecturers.push(nextSet.data.lecturersByInstitutionId.items);
                 nextToken=nextSet.data.lecturersByInstitutionId.nextToken;
@@ -247,11 +248,6 @@ const AddLecturer = () => {
                 nextSet=await API.graphql({
                     query:searchLecturers,
                     variables:{
-                        filter:{
-                            filterAttribute :{ 
-                                matchPhrasePrefix:searchValue
-                            }
-                        },
                         limit:10,
                         nextToken:nextToken
                     },
@@ -356,14 +352,15 @@ const AddLecturer = () => {
                     let search= await API.graphql({
                         query:searchLecturers,
                         variables:  {  
-                            filter : { 
-                                firstname: { 
-                                     matchPhrasePrefix: searchValue 
-                                } 
-                           }
+                                filter : {
+                                    and : [
+                                        {firstname : {eq:searchValue}},
+                                        {institutionId:{eq:admin.institutionId}}
+                                    ]
+                                }
                         },
                         authMode:"AMAZON_COGNITO_USER_POOLS"         
-                    })
+                    });
                     
                    console.log(search)
                     setLecturers(search.data.searchLecturers.items)
@@ -406,7 +403,7 @@ const AddLecturer = () => {
             setSearchIcon(!searchIcon)
         }
        }catch(error){
-       
+           console.log(error)
             if(error.errors!==undefined){
                 let e=error.errors[0].message
                 if(e.search("Unathorized")!==-1){ 
