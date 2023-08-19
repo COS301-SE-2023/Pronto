@@ -10,7 +10,6 @@ export const listLecturers=`query ListLecturers(
       institutionId
       firstname
       lastname
-      userRole
       email
       courses { 
         items{ 
@@ -44,7 +43,6 @@ export const getInstitution=`query GetInstitution($id: ID!) {
       institutionId
       firstname
       lastname
-      userRole
       email
       createdAt
       updatedAt
@@ -125,7 +123,6 @@ export const getAdmin=`query GetAdmin($id: ID!) {
     institutionId
     firstname
     lastname
-    userRole
     email
     institution {
       id
@@ -168,7 +165,6 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
       institutionId
       firstname
       lastname
-      userRole
       email
       courses{
         items{
@@ -216,7 +212,6 @@ export const listAdmins=`query ListAdmins(
       institutionId
       firstname
       lastname
-      userRole
       email
       createdAt
       updatedAt
@@ -266,7 +261,6 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     institutionId
     firstname
     lastname
-    userRole
     email
     institution {
       id
@@ -292,3 +286,85 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     owner
   }
 }`
+
+export const searchLectur=`query SearchLecturers( 
+    $filter: SearchableLecturerFilterInput, 
+    $sort: [SearchableLecturerSortInput], 
+    $limit: Int, 
+    $nextToken: String, 
+    $from: Int, 
+    $aggregates: [SearchableLecturerAggregationInput] 
+    ){
+      searchLecturers(
+        filter: $filter
+        sort: $sort
+        limit: $limit
+        nextToken: $nextToken
+        from: $from
+        aggregates: $aggregates
+      ){
+        items{
+          id
+          firstname
+          lastname
+          email
+          courses{
+            items{
+              id
+              coursecode
+            }
+          }
+          institutionId
+        }
+        nextToken
+      }
+}`
+
+export const searchLecturers=`query SearchLecturers(
+  $filter: SearchableLecturerFilterInput
+  $sort: [SearchableLecturerSortInput]
+  $limit: Int
+  $nextToken: String
+  $from: Int
+  $aggregates: [SearchableLecturerAggregationInput]
+) {
+  searchLecturers(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+    aggregates: $aggregates
+  ) {
+    items {
+      id
+      institutionId
+      firstname
+      lastname
+      email
+      courses{
+        items{
+          id
+          coursecode
+        }
+      }
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
+`

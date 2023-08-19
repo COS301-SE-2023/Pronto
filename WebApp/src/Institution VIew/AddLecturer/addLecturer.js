@@ -1,26 +1,31 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer,updateCourse, updateInstitution} from "../../graphql/mutations"; 
-import { lecturersByInstitutionId,listInstitutions,listLecturers} from "../../graphql/queries";
+import { lecturersByInstitutionId,listInstitutions,listLecturers,listAdmins} from "../../graphql/queries";
+import {useLocation} from 'react-router-dom';
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 
 const AddLecturer = () => {
-    const [firstName,setFirstName]=useState("")
-    const [lastName,setLastName]=useState("")
-    const [email,setEmail]= useState("")
-    const [courses,setCourses]=useState([])  
-    const [filterAttribute,setFilterAttribute]=useState("")
-    const [searchValue,setSearchValue]=useState("")
-    const [lecturers ,setLecturers]= useState([])
-    const[isModalOpened,setIsModalOpened]=useState(false)
-    const[searchIcon,setSearchIcon]=useState(false)
-    const[institution,setInstitution]=useState(null)
-    const[offeredCourses,setOfferedCourses]=useState([])
-    const[selectedCourses,setSelectedCourses]=useState([])
-    const[error,setError]=useState("")
+    const [firstName,setFirstName]=useState("");
+    const [lastName,setLastName]=useState("");
+    const [email,setEmail]= useState("");
+    const [courses,setCourses]=useState([]);  
+    const [filterAttribute,setFilterAttribute]=useState("");
+    const [searchValue,setSearchValue]=useState("");
+    const [lecturers ,setLecturers]= useState([]);
+    const[isModalOpened,setIsModalOpened]=useState(false);
+    const[searchIcon,setSearchIcon]=useState(false);
+    const[institution,setInstitution]=useState(null);
+    const[offeredCourses,setOfferedCourses]=useState([]);
+    const[selectedCourses,setSelectedCourses]=useState([]);
+    const[error,setError]=useState("");
+    const state=useLocation();
+    const[admin,setAdmin]=useState(state.state);
+
+    let nextToken=null;
 
     const handleAdd=  async(event) => { 
         event.preventDefault()
@@ -222,53 +227,66 @@ const AddLecturer = () => {
 
     const fetchLecturers = async()=>{
         try{
-            let user=await Auth.currentAuthenticatedUser()
-            if(user===undefined){
-                setError("You are not logged in! Please click on the logout button and log in to use    Pronto")       
-            }
-            else{
-                let domain=user.attributes.email.split("@")[1]
-                let institution=await API.graphql({
-                    query:listInstitutions,
+            if(admin===null || admin===undefined){
+                let user=await Auth.currentAuthenticatedUser();
+                let adminEmail=user.attributes.email;
+                let adminData=await API.graphql({
+                    query:listAdmins,
                     variables:{
                         filter:{
-                            domains:{
-                                contains:domain
+                            email:{
+                                email:adminEmail
                             }
                         }
                     },
                     authMode:'AMAZON_COGNITO_USER_POOLS',
                 })
-                if(institution.data.listInstitutions.items.length===0){
-                    setError("Oops! We could not find your Institution.Please contact the developers for further assistance")
+                if(admin.data.listAdmins.items.length===0){
+                    setError("Oops! We could not find your Institution.Please contact the developers for further assistance");
                 } 
-                else{
-                    institution=institution.data.listInstitutions.items[0]
-                    let lecturerList=institution.lecturer.items
-                    for(let i=0;i<courses.length;i++){ 
-                        if(courses[i].lecturerId===null){
-                            offeredCourses.push(courses[i])
-                        }
+        
+                adminData=adminData.data.listAdmins.items[0];
+ 
+                let lecturerList=await API.graphql({
+                    query:lecturersByInstitutionId,
+                    variables:{
+                        institutionId:admin.institutionId,
+                        limit:10
+                    },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                });
 
-                        if(courses[i].lecturerId!==null){
-                        for(let j=0;j<lecturerList.length;j++){
-                            if(lecturerList[j].id===courses[i].lecturerId){ 
-                                lecturerList[j].courses.items.push(courses[i])
-                                break
-                            }
-                        }
-
-                        }
+                console.log(lecturerList);
+                let courses=adminData.institution.courses.items;
+                for(let i=0;i<courses.length;i++){
+                    if(courses[i].lecturerId===null){
+                        offeredCourses.push(courses[i]);
                     }
+                }
+                    // }
 
-                    setInstitution(institution)   
-                    setCourses(institution.courses.items)
-                    setLecturers(lecturerList)
+                    //setInstitution(insti)   
+                    setAdmin(adminData);
+                    setOfferedCourses(offeredCourses);
+                    setLecturers(lecturerList.data.listLecturers.items);
+                }
+                else if(lecturers===null || lecturers===undefined){
+                    let lecturerList=await API.graphql({
+                        query:lecturersByInstitutionId,
+                        variables:{
+                            institutionId:admin.institutionId,
+                            limit:20
+                        },
+                        authMode:"AMAZON_COGNITO_USER_POOLS"
+                    });
+                    console.log(lecturerList);
+                    setLecturers(lecturerList.data.listLecturers.items);
                 }
             }
-        }
+      //  }
         catch(error){   
             if(error.errors!==undefined){
+                console.log(error);
                 let e=error.errors[0].message
                 if(e.search("Unathorized")!==-1){ 
                     setError("You are not authorized to perform this action.Please log out and log in")
@@ -438,10 +456,9 @@ const AddLecturer = () => {
                                     <AddModal 
                                        updateFlag={(false)}
                                        lecturerData={(null)}
-                                       //findCourses={findCourses}
                                        addCourses={addCourses}
                                        removeCourses={removeCourses}
-                                       courseData={courses}
+                                       courseData={offeredCourses}
                                        setModal={setIsModalOpened}
                                        setCourses={setCourses}
                                        selectedCourses={selectedCourses}
