@@ -2,14 +2,16 @@ import {useState,useEffect} from "react";
 import "./Navigation.css";
 import logo from "../../images/university_logo.svg";
 import { Auth,Storage,API } from "aws-amplify";
-import { listAdmins, listInstitutions } from "../../graphql/queries";
+import { listAdmins, listInstitutions ,lecturersByInstitutionId} from "../../graphql/queries";
 import { useNavigate,Link, useLocation } from "react-router-dom";
 
 export default function InstitutionNavigation({props}) {
   const navigate = useNavigate();
   const state=useLocation();
-  const[institution,setInstitution]=useState(state.state)
-  const[admin,setAdmin]=useState(state.state)
+  //const[institution,setInstitution]=useState(state.state)
+  const[admin,setAdmin]=useState(state.state);
+  
+  
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -24,14 +26,9 @@ export default function InstitutionNavigation({props}) {
   const fetchLogo = async()=>{
     try{
 
-        if(admin===undefined || admin===null){
+        if(admin===null || admin===undefined){
             let user=await Auth.currentAuthenticatedUser();
-            let name=user.attributes.name;
             let email=user.attributes.email
-            const universityName = name.split(/\s+/); 
-            name = universityName
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
-            .join("");
 
             let adminData=await API.graphql({
                 query:listAdmins,
@@ -43,31 +40,31 @@ export default function InstitutionNavigation({props}) {
                         },    
                     },
                 authMode:"AMAZON_COGNITO_USER_POOLS"
-            })
+            });
+
+            adminData=adminData.data.listAdmins.items[0];
             
-            //console.log(adminData)
-            adminData=adminData.data.listAdmins.items[0]
-        //     if(adminData.institution.logo!==null && adminData.institution.logo!==undefined ){
-        //        adminData.institution.logoUrl=await Storage.get(adminData.institution.logo,{validateObjectExistence:true,expires:3600});
-        //    }
-        //    else{
-        //         adminData.institution.logoUrl=logo
-        //     }
-            setAdmin(adminData)
-        }
+            if(adminData.institution.logo!==null && adminData.institution.logo!==undefined ){
+               adminData.institution.logoUrl=await Storage.get(adminData.institution.logo,{validateObjectExistence:true,expires:3600});
+           }
+           else{
+                adminData.institution.logoUrl=logo;
+            }
+            setAdmin(adminData);
+       }
         else{ 
             if(admin.institution.logoUrl===undefined || admin.institution.logoUrl===null){
-                let adminData=admin
-                adminData.institution.logoUrl=logo
-                // admin.institution.logoUrl=await Storage.get(admin.institution.logo,{validateObjectExistence:true,expires:3600});
-                setAdmin(adminData) 
+                let adminData=admin;
+                adminData.institution.logoUrl=logo;
+                admin.institution.logoUrl=await Storage.get(admin.institution.logo,{validateObjectExistence:true,expires:3600});
+                setAdmin(adminData); 
             }
         }
     }catch(error){
-        console.log(error)
+        
         let a =admin;
-        a.logoUrl=logo;
-        setInstitution(a);
+        a.institution.logoUrl=logo;
+        setAdmin(a);
     }
   }
 

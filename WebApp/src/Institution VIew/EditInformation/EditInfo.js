@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Auth,Storage,API} from 'aws-amplify'
 import { ErrorModal } from '../../ErrorModal';
-import { listAdmins } from '../../graphql/queries';
+import { listAdmins,lecturersByInstitutionId } from '../../graphql/queries';
 import { updateAdmin,updateInstitution } from '../../graphql/mutations';
 import { useLocation } from 'react-router-dom';
 import '../Navigation/Navigation.css';
@@ -27,9 +27,8 @@ const EditInfoPage = () => {
     const[admin,setAdmin]=useState(state.state)
     const[firstName,setFirstName] = useState("");
     const[lastName,setLastName] = useState("");
-    const[domain,setDomain] = useState("")
-
-    console.log(state)
+    const[domain,setDomain] = useState("");
+    
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -70,7 +69,8 @@ const EditInfoPage = () => {
                     },
                     authMode:"AMAZON_COGNITO_USER_POOLS"
                 });
-                
+
+              
                 adminData=adminData.data.listAdmins.items[0];
                 setAdmin(adminData);
             }catch(error){
