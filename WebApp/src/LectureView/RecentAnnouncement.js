@@ -55,10 +55,11 @@ export default function RecentAnnouncement() {
   
   const [anchorEl, setAnchorEl] = useState(null);
   const state=useLocation();
-  const [lecturer,setLecturer]=useState(null);
+  const [lecturer,setLecturer]=useState(state.state);
   const[courses,setCourses]=useState([]);
   const[announcements,setAnnouncements]=useState([]);
   const[error,setError]=useState("");
+  const[nextToken,setNextToken]=useState("");
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -88,14 +89,11 @@ export default function RecentAnnouncement() {
           lec=lec.data.listLecturers.items[0];  
           await setLecturer(lec);
         }
-        //let courses=lec.data.listLecturers.items[0].courses.items;
-        console.log(lecturer)
-        let courses=lec.courses.items;
 
+        let courses=lec.courses.items;
         let year=new Date().getFullYear();
         let filter=`{"filter" : { "or" : [`;
         for(let i=0;i<courses.length;i++){
-          //c.push(courses[i].id)
           if(i===courses.length-1){
             filter+=`{"courseId":{"eq":"${courses[i].id}" } }`;
           }
@@ -103,41 +101,17 @@ export default function RecentAnnouncement() {
           filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
           }
         }
-        filter+=`] },"limit":"2" ,"year":"${year}","sortedDirection":"DESC"}`;
+        filter+=`] },"limit":"6" ,"year":"${year}","sortedDirection":"DESC"}`;
         let variables=JSON.parse(filter);
-        let announcementList=await API.graphql({
-          query:announcementsByDate,
-          variables:variables, 
-         authMode:"AMAZON_COGNITO_USER_POOLS"
-          });
 
+        let announcementList=await API.graphql({
+            query:announcementsByDate,
+            variables:variables, 
+            authMode:"AMAZON_COGNITO_USER_POOLS"
+          });
          console.log(announcementList);
-         announcementList=announcementList.data.listAnnouncements.items;
-         announcementList = announcementList.sort((a, b) => {
-            if (a.createdAt >= b.createdAt)
-              return -1
-            else
-              return 1
-          })
-          setAnnouncements(announcementList);
-        //}
-        // else{
-        //   let courses=lecturer.courses.items;
-        //   let filter=`{"filter" : { "or" : [`
-        //   for(let i=0;i<courses.length;i++){
-        //     if(i===courses.length-1){
-        //       filter+=`{"courseId":{"eq":"${courses[i].id}" } }`;
-        //     }
-        //     else{
-        //       filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
-        //     }
-        //   }
-        //    filter+=`] },"limit":"2" }`;
-          
-        // }
-      //}
-    //}
-      
+         setAnnouncements(announcementList.data.announcementsByDate.items);         
+         setNextToken(announcementList.data.announcementsByDate.nextToken);
       }catch(error){
           console.log(error);
           if(error.errors!==undefined){
@@ -170,6 +144,36 @@ export default function RecentAnnouncement() {
     }  
 
         //setAnchorEl(null)
+  }
+
+  const loadMore = async()=>{
+    try{
+      console.log("More");
+      let courses=lecturer.courses.items;
+        let year=new Date().getFullYear();
+        let filter=`{"filter" : { "or" : [`;
+        for(let i=0;i<courses.length;i++){
+          if(i===courses.length-1){
+            filter+=`{"courseId":{"eq":"${courses[i].id}" } }`;
+          }
+          else{
+          filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
+          }
+        }
+        filter+=`] },"limit":"2" ,"year":"${year}","sortedDirection":"DESC","nextToken":"${nextToken}"}`;
+        let variables=JSON.parse(filter);
+        let announcementList=await API.graphql({
+            query:announcementsByDate,
+            variables:variables, 
+            authMode:"AMAZON_COGNITO_USER_POOLS"
+          });
+          console.log(announcementList);
+        announcements.push.apply(announcementList.data.announcementsByDate.items);  
+        setNextToken(announcementList.data.announcementsByDate.nextToken);
+        setAnnouncements(announcements);
+    }catch(error){
+      console.log(error);
+    }
   }
 
   useEffect(()=>  { 
@@ -234,6 +238,11 @@ export default function RecentAnnouncement() {
                   </div>
                )
             })}
+            <div>
+              <div style={{paddingLeft:"42.5%",paddingRight:"42.5%"}}>
+              {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>}
+              </div>
+            </div> 
 
           </main>
       </div>
