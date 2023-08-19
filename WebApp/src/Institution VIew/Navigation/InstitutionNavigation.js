@@ -2,13 +2,14 @@ import {useState,useEffect} from "react";
 import "./Navigation.css";
 import logo from "../../images/university_logo.svg";
 import { Auth,Storage,API } from "aws-amplify";
-import { listInstitutions } from "../../graphql/queries";
+import { listAdmins, listInstitutions } from "../../graphql/queries";
 import { useNavigate,Link, useLocation } from "react-router-dom";
 
 export default function InstitutionNavigation({props}) {
   const navigate = useNavigate();
   const state=useLocation();
   const[institution,setInstitution]=useState(state.state)
+  const[admin,setAdmin]=useState(state.state)
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -23,47 +24,50 @@ export default function InstitutionNavigation({props}) {
   const fetchLogo = async()=>{
     try{
 
-        if(institution===undefined || institution===null){
+        if(admin===undefined || admin===null){
             let user=await Auth.currentAuthenticatedUser();
             let name=user.attributes.name;
-            let domain=user.attributes.email.split('@')[1]
+            let email=user.attributes.email
             const universityName = name.split(/\s+/); 
             name = universityName
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
             .join("");
 
-            let inst=await API.graphql({
-                query:listInstitutions,
+            let adminData=await API.graphql({
+                query:listAdmins,
                 variables: { 
                     filter : {
-                            domains :{
-                                contains : domain
+                            email :{
+                                eq : email
                             }
-                        }
+                        },    
                     },
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             })
-            inst=inst.data.listInstitutions.items[0];
-            console.log("fectching")
-            if(inst.logo!==null && inst.logo!==undefined ){
-               inst.logoUrl=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600});
-            }
-            else{
-                inst.logoUrl=logo
-            }
-            setInstitution(inst);
+            
+            console.log(adminData)
+            adminData=adminData.data.listAdmins.items[0]
+        //     if(adminData.institution.logo!==null && adminData.institution.logo!==undefined ){
+        //        adminData.institution.logoUrl=await Storage.get(adminData.institution.logo,{validateObjectExistence:true,expires:3600});
+        //    }
+        //    else{
+        //         adminData.institution.logoUrl=logo
+        //     }
+            setAdmin(adminData)
         }
         else{ 
-            if(institution.logoUrl===undefined || institution.logoUrl===null){
-                let inst=institution
-                inst.logoUrl=await Storage.get(inst.logo,{validateObjectExistence:true,expires:3600});
-                setInstitution(inst) 
+            if(admin.institution.logoUrl===undefined || admin.institution.logoUrl===null){
+                let adminData=admin
+                adminData.institution.logoUrl=logo
+                // admin.institution.logoUrl=await Storage.get(admin.institution.logo,{validateObjectExistence:true,expires:3600});
+                setAdmin(adminData) 
             }
         }
     }catch(error){
-        let i =institution;
-        i.logoUrl=logo;
-        setInstitution(i);
+        console.log(error)
+        let a =admin;
+        a.logoUrl=logo;
+        setInstitution(a);
     }
   }
 
@@ -86,7 +90,7 @@ export default function InstitutionNavigation({props}) {
                                 maxHeight:"100%"}}
                     >
                     <img
-                        src={institution!==undefined? institution!==null? institution.logoUrl : " " : "  "}
+                        src={admin!==undefined? admin!==null? admin.institution.logoUrl : " " : "  "}
                         alt="Logo"
                         className="logo offset-2 img-fluid mr-1"
                         // width={"175px"}
@@ -94,12 +98,12 @@ export default function InstitutionNavigation({props}) {
                         style={{width:"100%",height:"100%",border:"2px solid black",padding:"0px"}}
                         data-testid={'UniversityImage'}
                     />
-                  <div className="institution-name">
+                   <div className="institution-name">
                         <b>
-                            {institution && institution.name}
+                            {admin && admin.institution && admin.institution.name}
                         </b>
-                    </div>
-                </div>
+                    </div> 
+                </div> 
                   
                 <ul className="navbar-nav">
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
