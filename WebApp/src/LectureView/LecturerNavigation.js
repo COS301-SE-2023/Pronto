@@ -44,6 +44,15 @@ export default function LecturerNavigation() {
         </div>
 
         <ul className="navbar-nav">
+        <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
+            <a
+              href="/lecturer/dashboard"
+              className="nav-link"
+              data-testid={"LecturerDashboardLink"}
+            >
+              <b>Dashboard</b>
+            </a>
+          </li>
           <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
             <a
               href="/lecture-homepage"
