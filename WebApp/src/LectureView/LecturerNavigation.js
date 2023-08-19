@@ -1,11 +1,15 @@
-import * as React from "react";
+import {useEffect,useState} from "react";
 import "../Institution VIew/Navigation/Navigation.css";
 import logo from "../images/logo.jpg";
 import { Auth, API } from "aws-amplify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation,Link } from "react-router-dom";
+import { listLecturers } from "../graphql/queries";
+
 export default function LecturerNavigation() {
-  const [user, setUser] = React.useState("");
+  const [user, setUser] = useState("");
   const navigate = useNavigate();
+  const state = useLocation();
+  const[lecturer,setLecturer] = useState(state.state);
 
   const onSignOut = async (event) => {
     event.preventDefault();
@@ -24,8 +28,30 @@ export default function LecturerNavigation() {
     setUser(u);
   };
 
-  React.useEffect(() => {
+  const fetchLecturer = async() =>{ 
+    let u = await Auth.currentAuthenticatedUser();
+    let lecturer_email=u.attributes.email;
+    if(lecturer===null || lecturer===undefined ){
+      const lec=await API.graphql({ 
+                query:listLecturers,
+                    variables:{ 
+                        filter: { 
+                           email: { 
+                            eq : lecturer_email
+                        }
+                     }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                });
+        if(lec.data.listLecturers.items.length>0){
+          setLecturer(lec.data.listLecturers.items[0]);
+        }        
+    }
+  }
+
+  useEffect(() => {
     userSet();
+    fetchLecturer();
   });
 
   return (
@@ -45,34 +71,59 @@ export default function LecturerNavigation() {
 
         <ul className="navbar-nav">
           <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
-            <a
+            {/* <a
               href="/lecture-homepage"
               className="nav-link"
               data-testid={"EditModuleInfoLink"}
             >
               <b>Edit Module Information</b>
-            </a>
+            </a> */}
+            <Link 
+              to={'/lecture-homepage'}  
+              state={lecturer}
+              className="nav-link"
+                >       
+                <b>Edit Module Information</b>
+            </Link>
+
           </li>
           <li
             className="nav-item text-center"
             data-testid={"RecentAnnouncements"}
           >
-            <a
+            {/* <a
               href="recent-announcement"
               className="nav-link"
               data-testid={"RecentAnnouncementsLink"}
             >
               <b>Recent Announcements</b>
-            </a>
+            </a> */}
+            <Link 
+              to={'/recent-announcement'}  
+              state={lecturer}
+              className="nav-link"
+                >       
+                <b>Recent Announcements</b>
+            </Link>
+
           </li>
           <li className="nav-item text-center" data-testid={"EditPersonalInfo"}>
-            <a
+            {/* <a
               href="personal-info"
               className="nav-link"
               data-testid={"EditPersonalInfoLink"}
             >
               <b>Edit Personal Information</b>
-            </a>
+            </a> */}
+
+            <Link 
+              to={'/personal-info'}  
+              state={lecturer}
+              className="nav-link"
+                >       
+                <b>Edit Personal Information</b>
+            </Link>
+
           </li>
         </ul>
       </nav>

@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import LecturerNavigation from "../LecturerNavigation";
 import PostAccordion from "../Edit Module/PostAccordion";
 import "../LectureHome.css";
 import { useLocation } from "react-router-dom";
 
-const PostReminder = (props) => { 
+const PostReminder = () => { 
   const state=useLocation()
   const p =async()=>{ 
     if(state.state===null){ 

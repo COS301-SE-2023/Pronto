@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -21,14 +20,13 @@ import { API } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { useJsApiLoader } from "@react-google-maps/api";
 export default function PostAccordion(course) {
-  const [expanded, setExpanded] = React.useState(false);
-  const [title, setTitle] = React.useState("")
-  const [body, setBody] = React.useState("")
-  const [date, setDate] = React.useState("")
-  const [error, setError] = React.useState("");
-  const [selectedLocation, setSelectedLocation] = React.useState("");
-
-
+  
+  const [expanded, setExpanded] = useState(false);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [date, setDate] = useState("");
+  const [error, setError] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -66,39 +64,41 @@ export default function PostAccordion(course) {
     return <div>Loading</div>;
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event,type) => {
     try {
       event.preventDefault()
       let announcement = {
         courseId: course.course.id,
-        description: body,
-        start: title,
-        end: course.course.coursecode,
+        body: body,
+        title: title,
         date: date,
-        venue: "",
-      }
+        year: new Date().getFullYear(),
+        type:type
+      };
+
       let mutation = await API.graphql({
         query: createAnnouncement,
         variables: { input: announcement },
         authMode: "AMAZON_COGNITO_USER_POOLS",
-      })
-      setError("Announcement posted succesfully")
+      });
+
+      setError("Announcement posted succesfully");
     } catch (error) {
-      let e = error.errors[0].message
+      console.log(error);
+      let e = error.errors[0].message;
       if (e.search("Not Authorized") !== -1) {
-        setError("You are not authorized to perform this action.Please log out and log in")
+        setError("You are not authorized to perform this action.Please log out and log in");
       }
       else if (e.search("Network") !== -1) {
-        setError("Request failed due to network issues")
+        setError("Request failed due to network issues");
       }
       else {
-        setError("Something went wrong.Please try again later")
-
+        setError("Something went wrong.Please try again later");
       }
     }
-    setTitle("")
-    setBody("")
-    setDate("")
+    setTitle("");
+    setBody("");
+    setDate("");
   }
 
   return (
@@ -125,7 +125,7 @@ export default function PostAccordion(course) {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e,"Reminder")}>
             <div className="form-group row">
               <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
               <div className="col-sm-10">
@@ -193,7 +193,7 @@ export default function PostAccordion(course) {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e,"Due Assignment")}>
             <div className="form-group row">
               <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
               <div className="col-sm-10">

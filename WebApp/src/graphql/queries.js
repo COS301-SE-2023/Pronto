@@ -245,6 +245,11 @@ export const listAnnouncements=`query ListAnnouncements(
       id
       description
       start
+      course{
+        coursecode
+      }
+      body
+      title
       end
       date
       venue
@@ -368,3 +373,35 @@ export const searchLecturers=`query SearchLecturers(
   }
 }
 `
+
+export const announcementsByDate=`query AnnouncementsByDate ( 
+        $year: String!,  
+        $createdAt: ModelStringKeyConditionInput, 
+        $sortDirection: ModelSortDirection, 
+        $filter: ModelAnnouncementFilterInput, 
+        $limit: Int, 
+        $nextToken: String
+      ){
+          announcementsByDate( 
+            year:$year,  
+            createdAt: $createdAt, 
+            sortDirection: $sortDirection, 
+            filter: $filter, 
+            limit: $limit, 
+            nextToken: $nextToken
+            ){ 
+              items{ 
+                id
+                title
+                body
+                date
+                createdAt
+                course{
+                  coursecode   
+                }
+                type
+              }
+              nextToken
+            }
+}`
+           
