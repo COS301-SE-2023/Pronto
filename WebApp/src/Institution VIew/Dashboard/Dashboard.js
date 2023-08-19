@@ -19,13 +19,13 @@ const Dashboard = () => {
                     <div className={"row ml-3"} style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
-                                <DriveFolderUploadIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { window.location.href = "/upload-schedule"; }} />
+                                <DriveFolderUploadIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { window.location.href = "/institution/upload-schedule"; }} />
                                 <span style={{ fontSize: "40px" }}>Upload Schedule</span>
                             </HoverableIcon>
                         </div>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
-                                <CloudUploadIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { window.location.href = "/upload-student-files"; }} />
+                                <CloudUploadIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { window.location.href = "/institution/upload-student-files"; }} />
                                 <span style={{ fontSize: "40px" }}>Upload File</span>
                             </HoverableIcon>
                         </div>
@@ -33,13 +33,13 @@ const Dashboard = () => {
                     <div className={"row ml-3"} style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
-                                <SchoolIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { window.location.href = "/add-lecturer"; }} />
+                                <SchoolIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { window.location.href = "/institution/add-lecturer"; }} />
                                 <span style={{ fontSize: "40px" }}>Add/Remove Lecturer</span>
                             </HoverableIcon>
                         </div>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
-                                <EditIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { window.location.href = "/edit-university-info"; }} />
+                                <EditIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { window.location.href = "/institution/edit-info"; }} />
                                 <span style={{ fontSize: "40px" }}>Edit University Info</span>
                             </HoverableIcon>
                         </div>
