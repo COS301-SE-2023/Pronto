@@ -16,7 +16,7 @@ import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUplo
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
 import NotFound from "./NotFound";
-import Dashboard from "./Institution VIew/Dashboard/Dashboard";
+import InstitutionDashboard from "./Institution VIew/Dashboard/Dashboard";
 import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
 import { RequireLecturerAuth } from "./RequireLecturerAuth";
 import { RequireAdminAuth } from "./RequireAdminAuth";
@@ -72,7 +72,7 @@ function MyRoutes()
       path="/dashboard"
       element={
         <RequireAdminAuth>
-          <Dashboard />
+          <InstitutionDashboard />
         </RequireAdminAuth>
       }
     />
@@ -119,7 +119,15 @@ function MyRoutes()
 
     {/*Protected lecturer routing*/}
     <Route
-      path="/lecture-homepage"
+      path="/lecturer/dashboard"
+      element={
+        <RequireAdminAuth>
+          <DashboardLecturer />
+        </RequireAdminAuth>
+      }
+    />
+    <Route
+      path="/lecturer/homepage"
       element={
         <RequireLecturerAuth>
           <LectureHomePage />
@@ -127,15 +135,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/lecturer-dashboard"
-      element={
-        <RequireLecturerAuth>
-          <DashboardLecturer />
-        </RequireLecturerAuth>
-      }
-    />
-    <Route
-      path="edit-module"
+      path="lecturer/editmodule"
       element={
         <RequireLecturerAuth>
           <EditModuleInfo />
@@ -143,7 +143,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="recent-announcement"
+      path="lecturer/announcement"
       element={
         <RequireLecturerAuth>
           <RecentAnnouncement />
@@ -151,7 +151,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="personal-info"
+      path="lecturer/personalinfo"
       element={
         <RequireLecturerAuth>
           <PersonalInformation />
