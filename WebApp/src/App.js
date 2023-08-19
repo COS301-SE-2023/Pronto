@@ -38,28 +38,28 @@ function MyRoutes()
     <Route path="/" element={<HomePage />} />
 
     {/*Lecturer login/register pages*/}
-    <Route path="/lecturer-login" element={<LecturerLogin />} />
+    <Route path="/lecturer/login" element={<LecturerLogin />} />
     <Route
-      path="/lecturer-confirm-email"
+      path="/lecturer/confirm-email"
       element={<LecturerConfirmEmail />}
     />
     <Route
-      path="/lecturer-forgot-password"
+      path="/lecturer/forgot-password"
       element={<LecturerForgotPassword />}
     />
 
     {/*Institution login/register pages*/}
-    <Route path="/institution-login" element={<InstitutionLogin />} />
+    <Route path="/institution/login" element={<InstitutionLogin />} />
     <Route
-      path="/institution-confirm-email"
+      path="/institution/confirm-email"
       element={<InstitutionConfirmEmail />}
     />
     <Route
-      path="/institution-successful-apply"
+      path="/institution/successful-apply"
       element={<InstitutionSuccessfulApply />}
     />
     <Route
-      path="/institution-forgot-password"
+      path="/institution/forgot/password"
       element={<InstitutionForgotPassword />}
     />
 
@@ -69,7 +69,7 @@ function MyRoutes()
 
     {/*Protected admin routing*/}
     <Route
-      path="/dashboard"
+      path="/institution/dashboard"
       element={
         <RequireAdminAuth>
           <InstitutionDashboard />
@@ -77,7 +77,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/add-lecturer"
+      path="/institution/add-lecturer"
       element={
         <RequireAdminAuth>
           <AddLecturer />
@@ -85,7 +85,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/institution-homepage"
+      path="/institution/homepage"
       element={
         <RequireAdminAuth>
           <InstitutionHomePage />
@@ -93,7 +93,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/upload-schedule"
+      path="/institution/upload-schedule"
       element={
         <RequireAdminAuth>
           <FileUploadPage />
@@ -101,7 +101,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/upload-student-files"
+      path="/institution/upload-student-files"
       element={
         <RequireAdminAuth>
           <StudentFileUploadPage />
@@ -109,7 +109,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/edit-university-info"
+      path="/institution/edit-info"
       element={
         <RequireAdminAuth>
           <EditUniversityInfo />
@@ -135,7 +135,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="lecturer/editmodule"
+      path="/lecturer/edit-module"
       element={
         <RequireLecturerAuth>
           <EditModuleInfo />
@@ -143,7 +143,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="lecturer/announcement"
+      path="/lecturer/announcement"
       element={
         <RequireLecturerAuth>
           <RecentAnnouncement />
@@ -151,7 +151,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="lecturer/personalinfo"
+      path="/lecturer/personal-info"
       element={
         <RequireLecturerAuth>
           <PersonalInformation />
