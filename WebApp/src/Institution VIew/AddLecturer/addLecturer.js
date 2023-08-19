@@ -1,7 +1,7 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer,updateCourse, updateInstitution} from "../../graphql/mutations"; 
-import { lecturersByInstitutionId,searchLecturers,listInstitutions,listLecturers,listAdmins} from "../../graphql/queries";
+import { lecturersByInstitutionId,searchLecturers,listAdmins} from "../../graphql/queries";
 import {useLocation} from 'react-router-dom';
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
@@ -18,7 +18,6 @@ const AddLecturer = () => {
     const [lecturers ,setLecturers]= useState([]);
     const[isModalOpened,setIsModalOpened]=useState(false);
     const[searchIcon,setSearchIcon]=useState(false);
-    const[institution,setInstitution]=useState(null);
     const[offeredCourses,setOfferedCourses]=useState([]);
     const[selectedCourses,setSelectedCourses]=useState([]);
     const[error,setError]=useState("");
@@ -32,7 +31,7 @@ const AddLecturer = () => {
         if(!isModalOpened){
             
             let lecturer={
-                institutionId:institution.id,
+                institutionId:admin.institution.id,
                 firstname:firstName,
                 lastname:lastName,
                 userRole:"Lecturer",
@@ -53,16 +52,16 @@ const AddLecturer = () => {
                  lecturers.push(mutation.data.createLecturer)
                 
                 let emails
-                if(institution.lectureremails===null){
+                if(admin.institution.lectureremails===null){
                     emails=[]
                     emails.push(email)
                 }
                 else{
-                    emails=institution.lectureremails
+                    emails=admin.institution.lectureremails
                     emails.push(email)
                 }
                  let update={
-                     id:institution.id,
+                     id:admin.institutionId,
                      lectureremails:emails
                   }
 
@@ -152,7 +151,7 @@ const AddLecturer = () => {
             try{ 
                 let updatedCourseData={
                     id:courseList[i].id,   
-                    institutionId:institution.id,
+                    institutionId:admin.institution.id,
                     coursecode:courseList[i].coursecode,
                     lecturerId:lecturer.id, 
                 }
@@ -468,9 +467,9 @@ const AddLecturer = () => {
         }
     } 
     
-    useEffect(() => {
-        fetchLecturers();
-    }, [])
+    // useEffect(() => {
+    //     fetchLecturers();
+    // }, [])
     
     return (  
         <div style={{ display: 'inline-flex' }}>
@@ -660,9 +659,15 @@ const AddLecturer = () => {
                                   </tr>
                                  )
                               })}
-                              {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>} 
+                            
                             </tbody>
+                          
                         </table>
+                          <div>
+                            <div style={{paddingLeft:"42.5%",paddingRight:"42.5%"}}>
+                              {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>}
+                              </div>
+                          </div> 
                     </div>
                 </div>
             </main>
