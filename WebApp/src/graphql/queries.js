@@ -221,6 +221,20 @@ export const listAdmins=`query ListAdmins(
       createdAt
       updatedAt
       owner
+      institution{
+        id
+        name
+        logo
+        domains
+        lectureremails
+        courses{
+          items{
+            id
+            coursecode
+          }
+        }
+        owner
+      }
     }
     nextToken
   }
