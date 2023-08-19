@@ -3,9 +3,9 @@ name: Unit and Integration tests
 on:
   push:
 
-    branches: [main, dev, integration, backend]
+    branches: []
   pull_request:
-    branches: [main, dev,  integration, backend]
+    branches: []
 
 jobs:
   build-mobile:
