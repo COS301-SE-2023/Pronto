@@ -1,30 +1,35 @@
 import React, { useEffect } from "react";
-import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
-import Modules from "./LectureView/Edit Module/Modules";
+
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
+
 import InstitutionLogin from "./Authentication/Institution/Login";
 import InstitutionForgotPassword from "./Authentication/Institution/ForgotPassword";
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
+
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
 import EditUniversityInfo from "./Institution VIew/EditInformation/EditInfo";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
+import InstitutionDashboard from "./Institution VIew/Dashboard/Dashboard";
+
+import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
+import Modules from "./LectureView/Edit Module/Modules";
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
-import NotFound from "./NotFound";
-import InstitutionDashboard from "./Institution VIew/Dashboard/Dashboard";
 import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
-import { RequireLecturerAuth } from "./RequireLecturerAuth";
-import { RequireAdminAuth } from "./RequireAdminAuth";
+
+import { RequireLecturerAuth } from "./RouteAuthComponents/RequireLecturerAuth";
+import { RequireAdminAuth } from "./RouteAuthComponents/RequireAdminAuth";
+import NotFound from "./Error pages/NotFound";
 import HomePage from "./HomePage";
+
 import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import config from "./aws-exports";
-
 
 Auth.configure(config);
 Amplify.configure(config);
