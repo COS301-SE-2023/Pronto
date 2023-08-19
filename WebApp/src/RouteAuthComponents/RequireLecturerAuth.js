@@ -33,7 +33,7 @@ export function RequireLecturerAuth({ children }) {
   }
 
   if (!authenticated) {
-    return <Navigate to="/lecturer-login" />;
+    return <Navigate to="/lecturer/login" />;
   }
 
   return children;
