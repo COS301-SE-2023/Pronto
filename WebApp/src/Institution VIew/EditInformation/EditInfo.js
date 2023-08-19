@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Auth,Storage,API} from 'aws-amplify'
 import { ErrorModal } from '../../ErrorModal';
-import { listInstitutions } from '../../graphql/queries';
+import { listAdmins } from '../../graphql/queries';
 import { updateAdmin,updateInstitution } from '../../graphql/mutations';
 import { useLocation } from 'react-router-dom';
 import '../Navigation/Navigation.css';
@@ -24,11 +24,12 @@ const EditInfoPage = () => {
     const [folderNameS3, setFolderNameS3] = useState("");
     const[message,setMessage] = useState("");
     const state = useLocation();
-    const[institution,setInstitution] = useState(state.state);
+    const[admin,setAdmin]=useState(state.state)
     const[firstName,setFirstName] = useState("");
     const[lastName,setLastName] = useState("");
     const[domain,setDomain] = useState("")
 
+    console.log(state)
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -57,26 +58,24 @@ const EditInfoPage = () => {
         if(state.state===null || state.state===undefined){
             try{
                 let dom=userInfo.attributes.email.split('@')[1]
-                let inst=await API.graphql({
-                    query:listInstitutions,
+                let email=userInfo.attributes.email
+                let adminData=await API.graphql({
+                    query:listAdmins,
                     variables: { 
                         filter : {
-                            domains :{
-                                contains : dom
+                            email :{
+                                eq : email
                             }
                         }
                     },
                     authMode:"AMAZON_COGNITO_USER_POOLS"
                 });
                 
-                inst=inst.data.listInstitutions.items[0];
-                setInstitution(inst);
+                adminData=adminData.data.listAdmins.items[0];
+                setAdmin(adminData);
             }catch(error){
                setError("Could not fetch your Institutions information");
             }
-        }
-        else{
-            setInstitution(state.state);
         }
     };
 
@@ -90,7 +89,7 @@ const EditInfoPage = () => {
         try{
             
             let update={
-                id:institution.admin.id,
+                id:admin.id,
                 firstname:firstName,
                 lastname:lastName,
             };
@@ -99,32 +98,28 @@ const EditInfoPage = () => {
                 variables:{input:update},
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             });
-            let i=institution;
-            i.admin=newAdmin.data.updateAdmin;
-            setInstitution(i);
+            let i=admin.institution.logoUrl;
+            newAdmin.data.updateAdmin.institution.logoUrl=i;
+            setAdmin(newAdmin);
             setFirstName("");
             setLastName("");
-            setError("Updated successfully")
+            setError("Updated successfully");
         }catch(error){
-            setError("Could not update Admin")
+            setError("Could not update Admin");
         }
     }
 
     const handleAddDomain = async(event)=>{
         event.preventDefault()
-        if(institution.domains.indexOf(domain)===-1){
-            institution.domains.push(domain)
-            //setDomains(domains)
+        if(admin.institution.domains.indexOf(domain)===-1){
+            admin.institution.domains.push(domain);
         }
         setDomain("")
     }
 
     const handleRemoveDomain = async(event,key)=>{
-        event.preventDefault()
-        //const d = [...institution.domains]
-       // d.splice(key,1)
-        //setDomains(d)
-        institution.domains.splice(key,1)
+        event.preventDefault();
+        admin.institution.domains.splice(key,1);
     }
   
     const handleFileDrop = (event) => {
@@ -151,13 +146,13 @@ const EditInfoPage = () => {
         event.preventDefault();
         try{
             let logoUrl=null;
-            if(institution.logoUrl!==undefined && institution.logoUrl !==null){
-                logoUrl=institution.logoUrl;
+            if(admin.institution.logoUrl!==undefined && admin.institution.logoUrl !==null){
+                logoUrl=admin.institution.logoUrl;
             };
 
              let inst={
-                id:institution.id,
-                domains:institution.domains,
+                id:admin.institution.id,
+                domains:admin.institution.domains,
              };
              let update=await API.graphql({
                 query:updateInstitution,
@@ -165,7 +160,9 @@ const EditInfoPage = () => {
                 authMode:"AMAZON_COGNITO_USER_POOLS"
              });
              update.data.updateInstitution.logoUrl=logoUrl;
-             setInstitution(update.data.updateInstitution);
+             let newAdmin=admin;
+             newAdmin.institution=update.data.updateInstitution;
+             setAdmin(newAdmin);
              setError("Domains updated successfully");
            
         }catch(error){
@@ -189,7 +186,7 @@ const EditInfoPage = () => {
                              });
                      
                 let inst={
-                   id:institution.id,
+                   id:admin.institution.id,
                    logo:fileKey
                 };
                 let update= await API.graphql({
@@ -198,7 +195,9 @@ const EditInfoPage = () => {
                     authMode:"AMAZON_COGNITO_USER_POOLS"
                 });
                 update.data.updateInstitution.logoUrl=null;
-                setInstitution(update.data.updateInstitution);      
+                let newAdmin=admin;
+                newAdmin.institution=update.data.updateInstitution;
+                setAdmin(newAdmin);      
                 setMessage("File successfully uploaded: " + selectedFile.name);
             } catch (error) {
                 setMessage("Error uploading file");
@@ -411,7 +410,7 @@ const EditInfoPage = () => {
                         </tr>
                         </thead>
                         <tbody>
-                         {institution && institution.domains.map((key,val)=>{
+                         {admin && admin.institution && admin.institution.domains.map((key,val)=>{
                             return ( 
                                <tr key={val}>
                                     <td>{key}</td>
@@ -485,7 +484,7 @@ const EditInfoPage = () => {
                                                     type="text"
                                                     className="form-control"
                                                     id="admin-name"
-                                                    placeholder={institution!==null? institution.admin.firstname: " "}
+                                                    placeholder={admin!==null? admin.firstname: " "}
                                                     data-testid="adminfirstName"
                                                     required
                                                     value={firstName}
@@ -500,7 +499,7 @@ const EditInfoPage = () => {
                                                 type="text"
                                                 className="form-control"
                                                 id="lastname"
-                                                placeholder={institution!==null? institution.admin.lastname : " "}
+                                                placeholder={admin!==null? admin.lastname : " "}
                                                 data-testid="adminlastName"
                                                 required
                                                 value={lastName}

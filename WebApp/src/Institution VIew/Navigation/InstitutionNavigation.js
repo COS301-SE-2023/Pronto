@@ -45,7 +45,7 @@ export default function InstitutionNavigation({props}) {
                 authMode:"AMAZON_COGNITO_USER_POOLS"
             })
             
-            console.log(adminData)
+            //console.log(adminData)
             adminData=adminData.data.listAdmins.items[0]
         //     if(adminData.institution.logo!==null && adminData.institution.logo!==undefined ){
         //        adminData.institution.logoUrl=await Storage.get(adminData.institution.logo,{validateObjectExistence:true,expires:3600});
@@ -109,7 +109,7 @@ export default function InstitutionNavigation({props}) {
                     <li className="nav-item text-center" data-testid={'Dashboard'}>
                         <Link 
                             to={'/dashboard'}  
-                                state={institution}
+                                state={admin}
                                 className="nav-link"   
                                 >     
                             <b>Dashboard</b>
@@ -118,7 +118,7 @@ export default function InstitutionNavigation({props}) {
                     <li className="nav-item text-center" data-testid={'UploadSchedule'}>
                         <Link 
                             to={'/upload-schedule'}  
-                                state={institution}
+                                state={admin}
                                 className="nav-link"   
                                 >     
                             <b>Upload Schedule</b>
@@ -127,7 +127,7 @@ export default function InstitutionNavigation({props}) {
                     <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
                         <Link 
                             to={'/upload-student-files'}  
-                                state={institution}
+                                state={admin}
                                 className="nav-link"   
                                 >     
                             <b>Upload Student Files</b>
@@ -136,7 +136,7 @@ export default function InstitutionNavigation({props}) {
                     <li className="nav-item text-center" data-testid={'AddLecturer'}>
                         <Link 
                             to={'/add-lecturer'}  
-                                state={institution}
+                                state={admin}
                                 className="nav-link"   
                                 >     
                             <b>Add/Remove Lecturer</b>
@@ -145,7 +145,7 @@ export default function InstitutionNavigation({props}) {
                     <li className="nav-item text-center">
                         <Link 
                             to={'/edit-university-info'}  
-                                state={institution}
+                                state={admin}
                                 className="nav-link"   
                                 >     
                             <b>Edit University Info</b>
