@@ -225,8 +225,52 @@ const AddLecturer = () => {
         }
     }
 
+    const loadMore = async()=>{
+        try{
+
+            let nextSet=[];
+            if(searchIcon===false){
+                nextSet=await API.graphql({
+                    query:lecturersByInstitutionId,
+                    variables:{
+                        institutionId:admin.institutionId,
+                        limit:10,
+                        nextToken:nextToken
+                    }
+                });
+                lecturers.push(nextSet.data.lecturersByInstitutionId.items);
+                nextToken=nextSet.data.lecturersByInstitutionId.nextToken;
+                setLecturers(lecturers);
+                console.log(nextSet);
+            }
+            else{
+                nextSet=await API.graphql({
+                    query:searchLecturers,
+                    variables:{
+                        filter:{
+                            filterAttribute :{ 
+                                matchPhrasePrefix:searchValue
+                            }
+                        },
+                        limit:10,
+                        nextToken:nextToken
+                    },
+                    authMode:"AMAZON_COGNITO_USER_POOLS"
+                });
+                console.log(nextSet);
+                lecturers.push(nextSet.data.lecturersByInstitutionId.items);
+                nextToken=nextSet.data.lecturersByInstitutionId.nextToken;
+                setLecturers(lecturers)
+            }
+
+        }catch(error){
+
+        }
+    }
+
     const fetchLecturers = async()=>{
         try{
+            console.log("fetching")
             if(admin===null || admin===undefined){
                 let user=await Auth.currentAuthenticatedUser();
                 let adminEmail=user.attributes.email;
@@ -257,36 +301,36 @@ const AddLecturer = () => {
                 });
 
                 console.log(lecturerList);
+                nextToken=lecturerList.data.lecturersByInstitutionId.nextToken;
                 let courses=adminData.institution.courses.items;
                 for(let i=0;i<courses.length;i++){
                     if(courses[i].lecturerId===null){
                         offeredCourses.push(courses[i]);
                     }
-                }
-                    // }
-
-                    //setInstitution(insti)   
+                }   
                     setAdmin(adminData);
                     setOfferedCourses(offeredCourses);
                     setLecturers(lecturerList.data.listLecturers.items);
                 }
-                else if(lecturers===null || lecturers===undefined){
+
+                else if(lecturers.length===[] || lecturers===null){
+                    console.log("fetch lecturers");
                     let lecturerList=await API.graphql({
                         query:lecturersByInstitutionId,
                         variables:{
                             institutionId:admin.institutionId,
-                            limit:20
+                            limit:10
                         },
                         authMode:"AMAZON_COGNITO_USER_POOLS"
                     });
                     console.log(lecturerList);
-                    setLecturers(lecturerList.data.listLecturers.items);
+                    setLecturers(lecturerList.data.lecturersByInstitutionId.items);
+                    nextToken=lecturerList.data.lecturersByInstitutionId.nextToken;
                 }
             }
-      //  }
         catch(error){   
+            console.log(error);
             if(error.errors!==undefined){
-                console.log(error);
                 let e=error.errors[0].message
                 if(e.search("Unathorized")!==-1){ 
                     setError("You are not authorized to perform this action.Please log out and log in")
