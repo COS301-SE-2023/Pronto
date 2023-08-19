@@ -226,6 +226,19 @@ export const updateAdmin=`mutation UpdateAdmin(
   updateAdmin(input: $input, condition: $condition) {
     id
     institutionId
+    institution{
+      id
+      name
+      domains
+      logo
+      lectureremails
+      courses{
+        items{
+          coursecode
+          id
+        }
+      }
+    }
     firstname
     lastname
     userRole
