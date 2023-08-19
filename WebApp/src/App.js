@@ -63,7 +63,7 @@ function MyRoutes()
       element={<InstitutionSuccessfulApply />}
     />
     <Route
-      path="/institution/forgot/password"
+      path="/institution/forgot-password"
       element={<InstitutionForgotPassword />}
     />
 
@@ -114,9 +114,9 @@ function MyRoutes()
     <Route
       path="/lecturer/dashboard"
       element={
-        <RequireAdminAuth>
+        <RequireLecturerAuth>
           <DashboardLecturer />
-        </RequireAdminAuth>
+        </RequireLecturerAuth>
       }
     />
     <Route
