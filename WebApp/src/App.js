@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
-import LectureHomePage from "./LectureView/Edit Module/LectureHomePage";
+import Modules from "./LectureView/Edit Module/Modules";
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
@@ -127,10 +127,10 @@ function MyRoutes()
       }
     />
     <Route
-      path="/lecturer/homepage"
+      path="/lecturer/modules"
       element={
         <RequireLecturerAuth>
-          <LectureHomePage />
+          <Modules />
         </RequireLecturerAuth>
       }
     />
