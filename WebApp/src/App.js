@@ -6,7 +6,6 @@ import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
 import InstitutionLogin from "./Authentication/Institution/Login";
 import InstitutionForgotPassword from "./Authentication/Institution/ForgotPassword";
-import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
@@ -81,14 +80,6 @@ function MyRoutes()
       element={
         <RequireAdminAuth>
           <AddLecturer />
-        </RequireAdminAuth>
-      }
-    />
-    <Route
-      path="/institution/homepage"
-      element={
-        <RequireAdminAuth>
-          <InstitutionHomePage />
         </RequireAdminAuth>
       }
     />
