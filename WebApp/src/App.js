@@ -67,9 +67,6 @@ function MyRoutes()
       element={<InstitutionForgotPassword />}
     />
 
-    {/*Invalid page*/}
-    <Route path="/404" element={<NotFound />} />
-    <Route path="*" element={<Navigate to="/404" />} />
 
     {/*Protected admin routing*/}
     <Route
@@ -154,6 +151,10 @@ function MyRoutes()
         </RequireLecturerAuth>
       }
     />
+
+    {/*Invalid page*/}
+    <Route path="*" element={<Navigate to="/404" />} />
+    <Route path="/404" element={<NotFound />} />
 
     </Routes>
     </BrowserRouter>
