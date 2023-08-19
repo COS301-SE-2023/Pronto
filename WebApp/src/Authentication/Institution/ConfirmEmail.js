@@ -24,7 +24,7 @@ function ConfirmEmail() {
     try {
       await Auth.confirmSignUp(email, code);
       setError("");
-      navigate("/institution-successful-apply");
+      navigate("/institution/successful-apply");
     } catch (e) {
       setError(e.message);
     }

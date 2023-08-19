@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function SuccessfulApply() {
   const navigate = useNavigate();
   const onHomeClick = () => {
-    navigate("/institution-login");
+    navigate("/institution/login");
   };
 
   return (
