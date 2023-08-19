@@ -10,7 +10,10 @@ export const createLecturer=`mutation CreateLecturer(
     userRole
     email
     courses {
-      nextToken
+      items{
+        id
+        coursecode
+      }
     }
     createdAt
     updatedAt
