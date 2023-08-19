@@ -1,7 +1,7 @@
 import {React,useState,useEffect} from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer,updateCourse, updateInstitution} from "../../graphql/mutations"; 
-import { lecturersByInstitutionId,listInstitutions,listLecturers,listAdmins} from "../../graphql/queries";
+import { lecturersByInstitutionId,searchLecturers,listInstitutions,listLecturers,listAdmins} from "../../graphql/queries";
 import {useLocation} from 'react-router-dom';
 import  {API,Auth} from 'aws-amplify';
 import AddModal from './addCourse';
@@ -310,52 +310,49 @@ const AddLecturer = () => {
                
                 if(filterAttribute==="firstname"){
                     let search= await API.graphql({
-                        query:lecturersByInstitutionId,
+                        query:searchLecturers,
                         variables:  {  
-                            institutionId:institution.id,
                             filter : { 
                                 firstname: { 
-                                     eq: searchValue 
+                                     matchPhrasePrefix: searchValue 
                                 } 
                            }
                         },
                         authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
                     
-                   
-                    setLecturers(search.data.lecturersByInstitutionId.items)
+                   console.log(search)
+                    setLecturers(search.data.searchLecturers.items)
                 }
                 else if(filterAttribute==="lastname"){ 
                     let search= await API.graphql({
-                        query:lecturersByInstitutionId,
-                        variables:  {   
-                               institutionId:institution.id, 
+                        query:searchLecturers,
+                        variables:  {    
                                filter : { 
                                     lastname: { 
-                                         eq: searchValue 
+                                         matchPhrasePrefix: searchValue 
                                     } 
                                 }
                             },
                     authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })   
                     
-                    setLecturers(search.data.lecturersByInstitutionId.items)
+                    setLecturers(search.data.searchLecturers.items)
                 }
                 else if(filterAttribute==="email"){
                     let search= await API.graphql({
-                    query:lecturersByInstitutionId,
-                    variables:  { 
-                               institutionId:institution.id, 
+                    query:searchLecturers,
+                    variables:{ 
                                filter : { 
                                     email: { 
-                                         eq: searchValue 
+                                         matchPhrasePrefix: searchValue 
                                     } 
                                 }
                             },
                     authMode:"AMAZON_COGNITO_USER_POOLS"         
                     })
                     
-                    setLecturers(search.data.lecturersByInstitutionId.items)
+                    setLecturers(search.data.searchLecturers.items)
             }
             setSearchIcon(!searchIcon)
         }
