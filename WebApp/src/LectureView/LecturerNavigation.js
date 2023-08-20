@@ -2,7 +2,7 @@ import {useEffect,useState} from "react";
 import "../Institution VIew/Navigation/Navigation.css";
 import logo from "../images/university_logo.svg";
 import { Auth, API ,Storage} from "aws-amplify";
-import { useNavigate,useLocation,Link } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { listLecturers } from "../graphql/queries";
 
 export default function LecturerNavigation(lecturerData) {
@@ -57,17 +57,13 @@ export default function LecturerNavigation(lecturerData) {
       }
 
       else if(lec.institution.logoUrl===undefined){
-        
-        console.log(lec.institution.logoUrl);
         lec.institution.logoUrl=await Storage.get(lec.institution.logo,{validateObjectExistence:true,expires:3600});
-        console.log("here");
         setLecturer(lec);
       }
      
-      //console.log(lec);
   }catch(error){
-    console.log(error);
-  }
+    
+    }
   }
 
   useEffect(() => {

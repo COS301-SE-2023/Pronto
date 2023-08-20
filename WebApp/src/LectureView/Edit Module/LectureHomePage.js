@@ -35,7 +35,6 @@ const LectureHomePage = () => {
           
         }
     }catch(error){
-      console.log(error);
       if(error.errors!==undefined){
          let e=error.errors[0].message;
           if(e.search("Not Authorized")!==-1){ 

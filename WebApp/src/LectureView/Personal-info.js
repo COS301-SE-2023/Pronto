@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState,useEffect} from 'react';
 import LecturerNavigation from './LecturerNavigation';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -12,15 +12,13 @@ import { listLecturers } from '../graphql/queries';
 import { useLocation } from 'react-router-dom';
 
 const PersonalInfoPage = () => {
-    const [expanded, setExpanded] = React.useState(false);
-    const[oldPassword,setOldPassword]=React.useState("");
-    const[newPassword,setNewPassword]=React.useState("");
-    const[confirmPassword,setConfirmPassword]=React.useState("");
-    const[user,setUser]=React.useState("");
-    const[userAttributes,setUserAttributes]=React.useState("");
-    const[error,setError]=React.useState("");
+    const [expanded, setExpanded] = useState(false);
+    const[oldPassword,setOldPassword]= useState("");
+    const[newPassword,setNewPassword]= useState("");
+    const[confirmPassword,setConfirmPassword]= useState("");
+    const[error,setError]= useState("");
     const state=useLocation();
-    const[lecturer,setLecturer]=React.useState(state.state);
+    const[lecturer,setLecturer]= useState(state.state);
 
     
     const handleChange = (panel) => (event, isExpanded) => {
@@ -30,6 +28,7 @@ const PersonalInfoPage = () => {
     const handleSubmit =async(event)=>{ 
         event.preventDefault()
         try{
+            const user = await Auth.currentAuthenticatedUser();
             Auth.changePassword(user, oldPassword, newPassword)
             setError("Password change succesful")
         }catch(error){ 
@@ -58,11 +57,10 @@ const PersonalInfoPage = () => {
                 });
                 setLecturer(lec.data.listLecturers.items[0]);
         }
-        //setUser(u)
-        //setUserAttributes(u.attributes)
+        
     }
 
-    React.useEffect(()=> { 
+    useEffect(()=> { 
         fetchLecturer()
     },[])
 
