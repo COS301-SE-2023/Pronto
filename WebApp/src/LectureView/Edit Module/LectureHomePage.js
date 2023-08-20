@@ -1,26 +1,22 @@
-import React, {useState,useEffect} from "react";
+import {useState,useEffect} from "react";
 import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
-import { listCourses ,listLecturers,getLecturer} from "../../graphql/queries";
+import {  listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import {ErrorModal} from '../../ErrorModal'
 import { Link,useLocation } from "react-router-dom";
 const LectureHomePage = () => {
 
-  const [courses,setCourses]=useState([])
   const state=useLocation();
   const [lecturer,setLecturer]=useState(state.state);
   const [error, setError] = useState('')
 
-  console.log(state);
-
   const fetchCourses=async()=>{ 
     try{
-  //    console.log(lecturer);
       if(lecturer===null || lecturer===undefined || lecturer.courses===undefined){
         const user=await Auth.currentAuthenticatedUser();
         let lecturer_email=user.attributes.email;
-        const lec=await API.graphql({ 
+        let lec=await API.graphql({ 
                     query:listLecturers,
                     variables:{ 
                         filter: { 
@@ -35,9 +31,11 @@ const LectureHomePage = () => {
          if(lec.data.listLecturers.items.length===0){
            throw Error();
           }
-          setLecturer(lec.data.listLecturers.items[0]);
+          setLecturer(lec);
+          
         }
     }catch(error){
+      console.log(error);
       if(error.errors!==undefined){
          let e=error.errors[0].message;
           if(e.search("Not Authorized")!==-1){ 
@@ -65,7 +63,7 @@ const LectureHomePage = () => {
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }}>
           {/* Navigation bar content */}
-          <LecturerNavigation />
+          <LecturerNavigation props={lecturer}/>
       </nav>
 
       <main style={{ width: '900px',marginTop: '30px' }}>

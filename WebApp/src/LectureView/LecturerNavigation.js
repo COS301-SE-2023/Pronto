@@ -1,16 +1,15 @@
 import {useEffect,useState} from "react";
 import "../Institution VIew/Navigation/Navigation.css";
-import logo from "../images/logo.jpg";
-import { Auth, API } from "aws-amplify";
+import logo from "../images/university_logo.svg";
+import { Auth, API ,Storage} from "aws-amplify";
 import { useNavigate,useLocation,Link } from "react-router-dom";
 import { listLecturers } from "../graphql/queries";
 
-export default function LecturerNavigation() {
+export default function LecturerNavigation(lecturerData) {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
-  const state = useLocation();
-  const[lecturer,setLecturer] = useState(state.state);
-
+  const[lecturer,setLecturer] = useState(lecturerData.props);
+ 
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -31,8 +30,10 @@ export default function LecturerNavigation() {
   const fetchLecturer = async() =>{ 
     let u = await Auth.currentAuthenticatedUser();
     let lecturer_email=u.attributes.email;
-    if(lecturer===null || lecturer===undefined ){
-      const lec=await API.graphql({ 
+    let lec=lecturer;
+    try{
+      if(lecturer===null || lecturer===undefined || lecturer.courses===undefined){
+        lec=await API.graphql({ 
                 query:listLecturers,
                     variables:{ 
                         filter: { 
@@ -43,31 +44,66 @@ export default function LecturerNavigation() {
                   },
                 authMode:"AMAZON_COGNITO_USER_POOLS",
                 });
-        if(lec.data.listLecturers.items.length>0){
-          setLecturer(lec.data.listLecturers.items[0]);
-        }        
-    }
+
+        if(lec.data.listLecturers.items.length===0){
+          throw Error()
+        }
+        lec=lec.data.listLecturers.items[0];
+        setLecturer(lec)
+      }
+
+      if(lec.institution.logo===null){
+        lec.institution.logoUrl=logo;
+      }
+
+      else if(lec.institution.logoUrl===undefined){
+        
+        console.log(lec.institution.logoUrl);
+        lec.institution.logoUrl=await Storage.get(lec.institution.logo,{validateObjectExistence:true,expires:3600});
+        console.log("here");
+        setLecturer(lec);
+      }
+     
+      //console.log(lec);
+  }catch(error){
+    console.log(error);
+  }
   }
 
   useEffect(() => {
-    userSet();
+   // userSet();
     fetchLecturer();
   });
 
   return (
     <div className={"grid"}>
       <nav className="vertical-navbar col-4 p-4">
-        <div className="top">
-          <img
-            src={logo}
-            alt="Logo"
-            className="logo offset-2 img-fluid mr-1"
-            width={"175px"}
-            height={"155px"}
-            data-testid={"UniversityImage"}
-          />
-          <div className="lecturer-name">{user}</div>
-        </div>
+        <div className="top"
+                      style={{  width: "calc(12vw)",
+                                height: "calc(19vh)" ,   
+                                justifyContent:"center",
+                                justifyItems:"center",
+                                textAlign:"center",
+                                maxWidth:"100%",
+                                padding:"2px",
+                                maxHeight:"100%"}}
+                    >
+                    <img
+                        src={lecturer!==undefined? lecturer!==null? lecturer.institution.logoUrl : " " : "  "}
+                        alt="Logo"
+                        className="logo offset-2 img-fluid mr-1"
+                        // width={"175px"}
+                        // height={"155px"}
+                        style={{width:"100%",height:"100%",border:"2px solid black",padding:"0px"}}
+                        data-testid={'UniversityImage'}
+                    />
+                   <div className="institution-name">
+                        <b>
+                            {lecturer && (lecturer.firstname +" "+ lecturer.lastname)}
+                        </b>
+                    </div> 
+                </div> 
+                
 
         <ul className="navbar-nav">
           <li className="nav-item text-center" data-testid={"EditModuleInfo"}>

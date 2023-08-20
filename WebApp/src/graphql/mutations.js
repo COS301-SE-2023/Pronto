@@ -268,3 +268,15 @@ export const createCourse=`mutation CreateCourse(
   }
 }`
 
+export const updateActivity=`mutation UpdateActivity(
+  $input: UpdateActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  updateActivity(input: $input, condition: $condition) {
+    id
+    courseId
+    activityname
+    createdAt
+    updatedAt
+  }
+}`

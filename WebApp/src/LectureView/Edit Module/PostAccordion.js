@@ -15,10 +15,11 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 
 import styled from "styled-components";
-import { createAnnouncement } from '../../graphql/mutations';
+import { createAnnouncement,updateActivity } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { useJsApiLoader } from "@react-google-maps/api";
+
 export default function PostAccordion(course) {
   
   const [expanded, setExpanded] = useState(false);
@@ -26,9 +27,10 @@ export default function PostAccordion(course) {
   const [body, setBody] = useState("");
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
+  const [activity,setActivity] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
 
-  console.log(course);
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -47,10 +49,25 @@ export default function PostAccordion(course) {
     zoom: 16
   };
 
-  const handleSelect = (location) => {
-    setSelectedLocation(location);
-    console.log('Selected location:', location);
+  const handleSelect = async(location,event) => {
+    try{
+      event.preventDefault();
+      setSelectedLocation(location);
+      console.log('Selected location:', location);
+      
+
+      // let newVenue = await API.graphql({
+      //   query:updateActivity,
+      //   variables:{input : {id:activity.id,coordinates:location}},
+      //   authMode:"AMAZON_COGNITO_USER_POOLS"
+      // });
+      // console.log(newVenue);
+      // setActivity("");
+    }catch(error){
+
+    }
     // Add your custom logic here to handle adding the value to the database
+
   };
 
   {
@@ -63,6 +80,17 @@ export default function PostAccordion(course) {
 
   if (!isLoaded) {
     return <div>Loading</div>;
+
+  }
+
+  const handleSelectActivity = async(event)=>{
+    try{
+      if(event<course.course.activity.items.length && event>0 && event!==""){
+        setActivity(course.course.activity.items[event]);
+      }
+    }catch(error){
+      setError("Something went wrong.Please try again later");
+     }
   }
 
   const handleSubmit = async (event,type) => {
@@ -85,7 +113,6 @@ export default function PostAccordion(course) {
 
       setError("Announcement posted succesfully");
     } catch (error) {
-      console.log(error);
       let e = error.errors[0].message;
       if (e.search("Not Authorized") !== -1) {
         setError("You are not authorized to perform this action.Please log out and log in");
@@ -248,18 +275,17 @@ export default function PostAccordion(course) {
           aria-controls="panel3bh-content"
           id="panel3bh-header"
         >
-          <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >Add lecture venue</Typography>
+          <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >Update lecture venue</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <select 
-                  onChange={(e)=>handleSelect(e.target.value)}
-                  //value={selected}
+                  onChange={e=>handleSelectActivity(e.target.value)}
                   className="custom-select">
-                 <option key="{}"> </option>
-                   {course && course.activity && course.activity.map((val, key)=>{
+                 <option ></option>
+                   {course && course.course && course.course.activity && course.course.activity.items.map((val, key)=>{
                 return( 
-                  <option key={val.id}
-                  value={val.id}>{val.activityname}</option>
+                  <option key={key}
+                  value={key}>{val.activityname.replace("L","Lecture ").replace("P","Practical ").replace("T","Tutorial ").replace("0","")}</option>
                 ) 
                    } 
                    ) 
@@ -325,7 +351,7 @@ export default function PostAccordion(course) {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion
+      {/* <Accordion
         expanded={expanded === "panel4"}
         onChange={handleChange("panel4")}
         data-testid={"accordion4"}
@@ -355,8 +381,8 @@ export default function PostAccordion(course) {
             </IconButton>
           </div>
         </AccordionDetails>
-      </Accordion>
-    </div>
+      </Accordion> */}
+    </div> 
   );
 }
 //add styling

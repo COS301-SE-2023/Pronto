@@ -426,6 +426,10 @@ const AddLecturer = () => {
     const handleSearch = async() => { 
         try{ 
             if(searchIcon===false){  
+                // let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] }}`;
+                // let variables= JSON.parse(filter);
+                // console.log(variables);
+
                 if(filterAttribute==="firstname"){
                     let search= await API.graphql({
                         query:searchLecturers,

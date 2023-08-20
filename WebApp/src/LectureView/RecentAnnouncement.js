@@ -6,7 +6,7 @@ import Menu from '@mui/material/Menu';
 import LecturerNavigation from "./LecturerNavigation";
 import "./LectureHome.css";
 import {API,Auth} from 'aws-amplify';
-import { listLecturers,listAnnouncements,announcementsByDate, listCourses } from '../graphql/queries';
+import { listLecturers,announcementsByDate} from '../graphql/queries';
 import { deleteAnnouncement } from '../graphql/mutations';
 import { ErrorModal } from '../ErrorModal';
 
@@ -56,7 +56,6 @@ export default function RecentAnnouncement() {
   const [anchorEl, setAnchorEl] = useState(null);
   const state=useLocation();
   const [lecturer,setLecturer]=useState(state.state);
-  const[courses,setCourses]=useState([]);
   const[announcements,setAnnouncements]=useState([]);
   const[error,setError]=useState("");
   const[nextToken,setNextToken]=useState("");
@@ -73,6 +72,7 @@ export default function RecentAnnouncement() {
   const fetchAnnouncements = async()=>{ 
       try{
         let lec=lecturer;
+        //Lecturers information was not passed successfuly so fecth it again
         if(lecturer===null || lecturer===undefined || lecturer.courses===undefined){
           let user=await Auth.currentAuthenticatedUser();
           let lecturer_email=user.attributes.email
@@ -91,42 +91,51 @@ export default function RecentAnnouncement() {
           await setLecturer(lec);
         }
 
-        let courses=lec.courses.items;
-        let year=new Date().getFullYear();
-        let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i].id}" } }`;
+        if(announcements.length===0){
+          
+          //Build a filter based on courses
+          let courses=lec.courses.items;
+          let year=new Date().getFullYear();
+          let filter=`{"filter" : { "or" : [`;
+          for(let i=0;i<courses.length;i++){
+            if(i===courses.length-1){
+              filter+=`{"courseId":{"eq":"${courses[i].id}" } }`;
+            }
+            else{
+              filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
+            }
           }
-          else{
-          filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
-          }
-        }
-        filter+=`] },"limit":"${limit}" ,"year":"${year}","sortDirection":"DESC"}`;
-        let variables=JSON.parse(filter);
+          filter+=`] },"limit":"${limit}" ,"year":"${year}","sortDirection":"DESC"}`;
+          let variables=JSON.parse(filter);
 
-        let announcementList=await API.graphql({
+        //Fecth annnouncements and order them by date
+          let announcementList=await API.graphql({
             query:announcementsByDate,
             variables:variables, 
             authMode:"AMAZON_COGNITO_USER_POOLS"
           });
-         console.log(announcementList);
-         setAnnouncements(announcementList.data.announcementsByDate.items);         
-         setNextToken(announcementList.data.announcementsByDate.nextToken);
+         
+          setAnnouncements(announcementList.data.announcementsByDate.items);         
+          setNextToken(announcementList.data.announcementsByDate.nextToken);
+        }
       }catch(error){
-          console.log(error);
+          
           if(error.errors!==undefined){
-          let e=error.errors[0].message
-          if(e.search("Not Authorized")!==-1){ 
-            setError("You are not authorized to perform this action.Please log out and log in")
-          }
-          else if(e.search("Network")!==-1){
-            setError("Request failed due to network issues")
+           
+            let e=error.errors[0].message
+            if(e.search("Not Authorized")!==-1){ 
+              setError("You are not authorized to perform this action.Please log out and log in");
+            }
+            else if(e.search("Network")!==-1){
+              setError("Request failed due to network issues");
+            }
+            else{ 
+              setError("Something went wrong.Please try again later");
+            }
           }
           else{ 
-            setError("Something went wrong.Please try again later")
+            setError("Your request could not be processed at this time");
           }
-      }
     }
   }
   
@@ -136,20 +145,17 @@ export default function RecentAnnouncement() {
           query:deleteAnnouncement,
           variables:{input:{id:announcements[key].id}},
           authMode:"AMAZON_COGNITO_USER_POOLS",
-        })
-        const rows=[...announcements]
-        rows.splice(key,1)
-        setAnnouncements(rows)
+        });
+        const rows=[...announcements];
+        rows.splice(key,1);
+        setAnnouncements(rows);
     }catch(e){
-      setError("Something went wrong.Please try again later")
+      setError("Something went wrong.Please try again later");
     }  
-
-        //setAnchorEl(null)
   }
 
   const loadMore = async()=>{
     try{
-      //console.log("More");
       let courses=lecturer.courses.items;
         let year=new Date().getFullYear();
         let filter=`{"filter" : { "or" : [`;
@@ -168,16 +174,15 @@ export default function RecentAnnouncement() {
             variables:variables, 
             authMode:"AMAZON_COGNITO_USER_POOLS"
           });
-          //console.log(announcementList);
+      
         let list=announcementList.data.announcementsByDate.items;
         for(let i=0;i<list.length;i++){
           announcements.push(list[i]);
-        }
-        //announcements.push.apply(announcementList.data.announcementsByDate.items);  
+        }  
         setNextToken(announcementList.data.announcementsByDate.nextToken);
         setAnnouncements(announcements);
     }catch(error){
-      console.log(error);
+      setError("Your request could not be processed at this time");
     }
   }
 
@@ -190,7 +195,8 @@ export default function RecentAnnouncement() {
        {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
           {/* Navigation bar content */}
-          <LecturerNavigation />
+          <LecturerNavigation   props={lecturer}
+                                list={{announcements:{data:{announcementsByDate:{items:announcements,nextToken:nextToken}}}}}/>
       </nav>
        
         <main style={{ width: '900px',marginTop: '30px' }}>

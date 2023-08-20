@@ -8,6 +8,9 @@ export const listLecturers=`query ListLecturers(
     items {
       id
       institutionId
+      institution{
+        logo
+      }
       firstname
       lastname
       email
