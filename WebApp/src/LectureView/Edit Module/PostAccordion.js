@@ -250,6 +250,20 @@ export default function PostAccordion(course) {
           <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >Add lecture venue</Typography>
         </AccordionSummary>
         <AccordionDetails>
+          <select 
+                  onChange={(e)=>handleSelect(e.target.value)}
+                  //value={selected}
+                  className="custom-select">
+                 <option key="{}"> </option>
+                   {course && course.activity && course.activity.map((val, key)=>{
+                return( 
+                  <option key={val.id}
+                  value={val.id}>{val.activityname}</option>
+                ) 
+                   } 
+                   ) 
+                  }
+             </select>   
           <form>
             <div className="form-group row">
               <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
