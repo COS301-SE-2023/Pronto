@@ -69,6 +69,7 @@ export default function RecentAnnouncement() {
     setAnchorEl(null);
   };
 
+  let limit=2;
   const fetchAnnouncements = async()=>{ 
       try{
         let lec=lecturer;
@@ -101,7 +102,7 @@ export default function RecentAnnouncement() {
           filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
           }
         }
-        filter+=`] },"limit":"6" ,"year":"${year}","sortedDirection":"DESC"}`;
+        filter+=`] },"limit":"${limit}" ,"year":"${year}","sortedDirection":"DESC"}`;
         let variables=JSON.parse(filter);
 
         let announcementList=await API.graphql({
@@ -160,7 +161,7 @@ export default function RecentAnnouncement() {
           filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
           }
         }
-        filter+=`] },"limit":"2" ,"year":"${year}","sortedDirection":"DESC","nextToken":"${nextToken}"}`;
+        filter+=`] },"limit":"${limit}" ,"year":"${year}","sortedDirection":"DESC","nextToken":"${nextToken}"}`;
         let variables=JSON.parse(filter);
         let announcementList=await API.graphql({
             query:announcementsByDate,

@@ -170,6 +170,16 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
         items{
           id
           coursename
+          items{ 
+            activity{ 
+              items{
+                id
+                activityname
+                coordinates
+                venue
+              }
+            }
+          }
         }
       }
       createdAt
@@ -290,39 +300,6 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     updatedAt
     owner
   }
-}`
-
-export const searchLectur=`query SearchLecturers( 
-    $filter: SearchableLecturerFilterInput, 
-    $sort: [SearchableLecturerSortInput], 
-    $limit: Int, 
-    $nextToken: String, 
-    $from: Int, 
-    $aggregates: [SearchableLecturerAggregationInput] 
-    ){
-      searchLecturers(
-        filter: $filter
-        sort: $sort
-        limit: $limit
-        nextToken: $nextToken
-        from: $from
-        aggregates: $aggregates
-      ){
-        items{
-          id
-          firstname
-          lastname
-          email
-          courses{
-            items{
-              id
-              coursecode
-            }
-          }
-          institutionId
-        }
-        nextToken
-      }
 }`
 
 export const searchLecturers=`query SearchLecturers(
