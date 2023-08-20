@@ -15,6 +15,14 @@ export const listLecturers=`query ListLecturers(
         items{ 
           id 
           coursecode
+          activity{ 
+            items{
+              id
+              activityname
+              venue
+              coordinates
+            }
+          }
         }
       }
       createdAt
@@ -170,16 +178,6 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
         items{
           id
           coursename
-          items{ 
-            activity{ 
-              items{
-                id
-                activityname
-                coordinates
-                venue
-              }
-            }
-          }
         }
       }
       createdAt

@@ -102,7 +102,7 @@ export default function RecentAnnouncement() {
           filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
           }
         }
-        filter+=`] },"limit":"${limit}" ,"year":"${year}","sortedDirection":"DESC"}`;
+        filter+=`] },"limit":"${limit}" ,"year":"${year}","sortDirection":"DESC"}`;
         let variables=JSON.parse(filter);
 
         let announcementList=await API.graphql({
@@ -149,7 +149,7 @@ export default function RecentAnnouncement() {
 
   const loadMore = async()=>{
     try{
-      console.log("More");
+      //console.log("More");
       let courses=lecturer.courses.items;
         let year=new Date().getFullYear();
         let filter=`{"filter" : { "or" : [`;
@@ -161,15 +161,19 @@ export default function RecentAnnouncement() {
           filter+=`{"courseId":{"eq":"${courses[i].id}" } },`;
           }
         }
-        filter+=`] },"limit":"${limit}" ,"year":"${year}","sortedDirection":"DESC","nextToken":"${nextToken}"}`;
+        filter+=`] },"limit":"${limit}" ,"year":"${year}","sortDirection":"DESC","nextToken":"${nextToken}"}`;
         let variables=JSON.parse(filter);
         let announcementList=await API.graphql({
             query:announcementsByDate,
             variables:variables, 
             authMode:"AMAZON_COGNITO_USER_POOLS"
           });
-          console.log(announcementList);
-        announcements.push.apply(announcementList.data.announcementsByDate.items);  
+          //console.log(announcementList);
+        let list=announcementList.data.announcementsByDate.items;
+        for(let i=0;i<list.length;i++){
+          announcements.push(list[i]);
+        }
+        //announcements.push.apply(announcementList.data.announcementsByDate.items);  
         setNextToken(announcementList.data.announcementsByDate.nextToken);
         setAnnouncements(announcements);
     }catch(error){
