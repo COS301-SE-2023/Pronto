@@ -44,9 +44,18 @@ export default function LecturerNavigation() {
         </div>
 
         <ul className="navbar-nav">
+        <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
+            <a
+              href="/lecturer/dashboard"
+              className="nav-link"
+              data-testid={"LecturerDashboardLink"}
+            >
+              <b>Dashboard</b>
+            </a>
+          </li>
           <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
             <a
-              href="/lecture-homepage"
+              href="/lecturer/modules"
               className="nav-link"
               data-testid={"EditModuleInfoLink"}
             >
@@ -58,7 +67,7 @@ export default function LecturerNavigation() {
             data-testid={"RecentAnnouncements"}
           >
             <a
-              href="recent-announcement"
+              href="/lecturer/announcement"
               className="nav-link"
               data-testid={"RecentAnnouncementsLink"}
             >
@@ -67,7 +76,7 @@ export default function LecturerNavigation() {
           </li>
           <li className="nav-item text-center" data-testid={"EditPersonalInfo"}>
             <a
-              href="personal-info"
+              href="/lecturer/personal-info"
               className="nav-link"
               data-testid={"EditPersonalInfoLink"}
             >

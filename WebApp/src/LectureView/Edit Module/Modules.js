@@ -5,7 +5,7 @@ import { listCourses, listLecturers, getLecturer } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { Link } from "react-router-dom";
-const LectureHomePage = () => {
+const Modules = () => {
 
   const [courses, setCourses] = useState([])
   const [lecturer, setLecturer] = useState('')
@@ -109,4 +109,4 @@ const LectureHomePage = () => {
   );
 };
 
-export default LectureHomePage;
+export default Modules;

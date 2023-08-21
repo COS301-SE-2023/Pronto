@@ -33,7 +33,7 @@ export function RequireAdminAuth({ children }) {
   }
 
   if (!authenticated) {
-    return <Navigate to="/institution-login" />;
+    return <Navigate to="/institution/login" />;
   }
 
   return children;

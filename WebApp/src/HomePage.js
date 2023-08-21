@@ -100,7 +100,7 @@ function HomePage() {
                         size="large"
                         color="error"
                         variant="contained"
-                        href="/institution-login"
+                        href="/institution/login"
                       >
                         Continue as institution &#8594;
                       </Button>
@@ -131,7 +131,7 @@ function HomePage() {
                         sx={{ borderRadius: '20px', backgroundColor: "#e32f45", marginBottom: 5 }}
                         size="large"
                         color="error"
-                        variant="contained" href="/lecturer-login">
+                        variant="contained" href="/lecturer/login">
                         Continue as lecturer &#8594;
                       </Button>
                     </CardActions>

@@ -34,28 +34,28 @@ export default function InstitutionNavigation() {
                     <ul className="navbar-nav">
 
                         <li className="nav-item text-center" data-testid={'Dashboard'}>
-                            <a href="/dashboard" className="nav-link" data-testid={'dashboardLink'}>
+                            <a href="/institution/dashboard" className="nav-link" data-testid={'dashboardLink'}>
                                 <b>Dashboard</b>
                             </a>
                         </li>
                         <li className="nav-item text-center" data-testid={'UploadSchedule'}>
-                            <a href="/upload-schedule" className="nav-link" data-testid={'UploadScheduleLink'}>
+                            <a href="/institution/upload-schedule" className="nav-link" data-testid={'UploadScheduleLink'}>
                                 <b>Upload Schedule</b>
                             </a>
                         </li>
                         <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
-                            <a href="/upload-student-files" className="nav-link p-2" data-testid={'UploadStudentFilesLink'}>
+                            <a href="/institution/upload-student-files" className="nav-link p-2" data-testid={'UploadStudentFilesLink'}>
                                 <b>Upload Student Files</b>
 
                             </a>
                         </li>
                         <li className="nav-item text-center" data-testid={'AddLecturer'}>
-                            <a href="/add-lecturer" className="nav-link" data-testid={'AddLecturerLink'}>
+                            <a href="/institution/add-lecturer" className="nav-link" data-testid={'AddLecturerLink'}>
                                 <b>Add/Remove Lecturer</b>
                             </a>
                         </li>
                         <li className="nav-item text-center" data-testid={'EditUniversityInfo'}>
-                            <a href="/edit-university-info" className="nav-link" data-testid={'EditUniversityInfoLink'}>
+                            <a href="/institution/edit-info" className="nav-link" data-testid={'EditUniversityInfoLink'}>
                                 <b>Edit University Info</b>
                             </a>
                         </li>
