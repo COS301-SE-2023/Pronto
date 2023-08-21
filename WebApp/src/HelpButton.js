@@ -51,28 +51,20 @@ const HelpButton = ({ pdfUrl }) => {
                         <Document
                             file={pdfUrl}
                             onLoadSuccess={onDocumentLoadSuccess}
+
                         >
-                            <Page pageNumber={currentPage} />
+                            {Array.from(new Array(numPages), (el, index) => (
+                                <Page
+                                    renderTextLayer={false}
+                                    renderAnnotationLayer={false}
+                                    customTextRenderer={false}
+                                    key={`page_${index + 1}`}
+                                    className="pdf-page"
+                                    pageNumber={index + 1}
+                                />
+                            ))}
                         </Document>
-                        <div className="pdf-controls">
-                            <button
-                                className="pdf-control-button"
-                                onClick={goToPrevPage}
-                                disabled={currentPage === 1}
-                            >
-                                Previous
-                            </button>
-                            <span>
-                                Page {currentPage} of {numPages}
-                            </span>
-                            <button
-                                className="pdf-control-button"
-                                onClick={goToNextPage}
-                                disabled={currentPage === numPages}
-                            >
-                                Next
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             )}
