@@ -36,7 +36,7 @@ const AccountSettings = () => {
       title: "About",
       subTitle: "About the Pronto application",
       onPress: () => navigation.navigate("About"),
-    },
+    }
   ];
 
   return (
