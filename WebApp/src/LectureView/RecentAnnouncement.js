@@ -105,7 +105,7 @@ export default function RecentAnnouncement() {
               }
             }
           },
-          authMode: "API_KEY",
+          authMode: "AMAZON_COGNITO_USER_POOLS",
         })
         await setLecturer(lec.data.listLecturers.items[0])
         if (lec.data.listLecturers.items.length > 0) {
@@ -118,7 +118,7 @@ export default function RecentAnnouncement() {
                 }
               }
             },
-            authMode: "API_KEY",
+            authMode: "AMAZON_COGNITO_USER_POOLS",
           })
           await setCourses(course.data.listCourses.items)
           let announcementList = []
@@ -144,7 +144,7 @@ export default function RecentAnnouncement() {
             else
               return 1
           })
-
+          announcementList = announcementList.filter(a=>a.type!==null)
           setAnnouncements(announcementList)
         }
       }
@@ -230,12 +230,12 @@ export default function RecentAnnouncement() {
             return (
               <div className="card" data-testid="card1" key={key}>
                 <div className="card-header">
-                  <div className="subjectCode">{val.end}</div>
+                  <div className="subjectCode">{val.course.coursecode}</div>
                   <div className="postDate">{val.date}</div>
                 </div>
                 <div className="card-body">
-                  <h5 className="card-title">{val.start}</h5>
-                  <p className="card-text">{val.description}</p>
+                  <h5 className="card-title">{val.title}</h5>
+                  <p className="card-text">{val.body}</p>
 
 
 

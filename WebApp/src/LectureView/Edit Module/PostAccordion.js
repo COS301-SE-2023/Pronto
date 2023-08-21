@@ -66,16 +66,18 @@ export default function PostAccordion(course) {
     return <div>Loading</div>;
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event,type) => {
     try {
       event.preventDefault()
+      let d=new Date().getFullYear()
       let announcement = {
         courseId: course.course.id,
-        description: body,
-        start: title,
-        end: course.course.coursecode,
+        body: body,
+        title: title,
         date: date,
-        venue: "",
+        type: type,
+        year:d
+
       }
       let mutation = await API.graphql({
         query: createAnnouncement,
@@ -125,7 +127,7 @@ export default function PostAccordion(course) {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e,"Reminder")}>
             <div className="form-group row">
               <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
               <div className="col-sm-10">
@@ -194,7 +196,7 @@ export default function PostAccordion(course) {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e,"Due Assignment")}>
             <div className="form-group row">
               <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
               <div className="col-sm-10">

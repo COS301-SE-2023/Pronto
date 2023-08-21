@@ -228,6 +228,12 @@ export const listAnnouncements=`query ListAnnouncements(
       end
       date
       venue
+      title
+      body
+      type
+      course{
+        coursecode
+      }
       createdAt
       updatedAt
     }
