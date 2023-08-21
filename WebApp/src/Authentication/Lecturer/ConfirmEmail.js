@@ -24,7 +24,7 @@ function ConfirmEmail() {
     try {
       await Auth.confirmSignUp(email, code, { role: "Lecturer" });
       setError("");
-      navigate("/lecturer-login");
+      navigate("/lecturer/login");
     } catch (e) {
       setError(e.message);
     }

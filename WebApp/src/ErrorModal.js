@@ -1,16 +1,21 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 
 const style = {
-  position:'absolute',
+  position: 'absolute',
   top: '50%',
   left: '50%',
+  textAlign: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
   transform: 'translate(-50%, -50%)',
   width: '80%',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
+  borderRadius: '20px',
+  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
   p: 4,
 };
 
@@ -19,41 +24,49 @@ export function ErrorModal(errorMessage) {
 
   const [open, setOpen] = useState(true);
 
-  const handleOpen = async()=>{ 
+  const handleOpen = async () => {
     setOpen(true)
   }
 
-  const handleClose= async()=>{ 
+  const handleClose = async () => {
     setOpen(false)
     errorMessage.setError("")
   }
 
-    return (
-    <div className="form-row">                            
+  return (
+    <div className="form-row">
       <div className="form-group col-6">
-      
-      {/* <button onClick={handleOpen}  
+
+        {/* <button onClick={handleOpen}  
       className="btn btn-primary"
       data-testid="submitButton">View</button> */}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-        <p>{errorMessage.errorMessage}</p>
-          <button
-            onClick={handleClose} 
-            type="submit" 
-            className="btn btn-primary float-right"
-            data-testid="submitCourses" 
-              >
-            Ok 
-          </button>
-        </Box>
-      </Modal>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+
+        >
+          <Box sx={style}>
+            <h1>Error</h1>
+            <p>{errorMessage.errorMessage}</p>
+            <button
+              onClick={handleClose}
+              type="submit"
+              className="btn btn-primary float-right"
+              data-testid="submitCourses"
+              style={{
+                backgroundColor: "#e32f45",
+                color: "white",
+                width: "20%",
+                borderRadius: "20px",
+              }}
+            >
+              OK
+            </button>
+          </Box>
+        </Modal>
+      </div>
     </div>
-  </div>
   );
 }

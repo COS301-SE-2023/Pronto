@@ -6,6 +6,8 @@ import { API, Auth } from 'aws-amplify';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import HelpButton from '../../HelpButton';
+import UserManual from "../HelpFiles/InstitutionInstructions.pdf";
 
 const AddLecturer = () => {
     const [firstName, setFirstName] = useState("")
@@ -54,13 +56,13 @@ const AddLecturer = () => {
             } catch (error) {
                 let e = error.errors[0].message
                 if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action.Please log out and log in")
+                    setError("You are not authorized to perform this action. Please log out and log in")
                 }
                 else if (e.search("Network") !== -1) {
                     setError("Request failed due to network issues")
                 }
                 else {
-                    setError("Something went wrong.Please try again later")
+                    setError("Something went wrong. Please try again later")
                 }
             }
             setFirstName("")
@@ -92,13 +94,13 @@ const AddLecturer = () => {
             } catch (error) {
                 let e = error.errors[0].message
                 if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action.Please log out and log in")
+                    setError("You are not authorized to perform this action. Please log out and log in")
                 }
                 else if (e.search("Network") !== -1) {
                     setError("Request failed due to network issues")
                 }
                 else {
-                    setError("Something went wrong.Please try again later")
+                    setError("Something went wrong. Please try again later")
                 }
             }
         }
@@ -131,13 +133,13 @@ const AddLecturer = () => {
             } catch (error) {
                 let e = error.errors[0].message
                 if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action.Please log out and log in")
+                    setError("You are not authorized to perform this action. Please log out and log in")
                 }
                 else if (e.search("Network") !== -1) {
                     setError("Request failed due to network issues")
                 }
                 else {
-                    setError("Something went wrong.Please try again later")
+                    setError("Something went wrong. Please try again later")
                 }
             }
         }
@@ -166,13 +168,13 @@ const AddLecturer = () => {
         catch (error) {
             let e = error.errors[0].message
             if (e.search("Unathorized") !== -1) {
-                setError("You are not authorized to perform this action.Please log out and log in")
+                setError("You are not authorized to perform this action. Please log out and log in")
             }
             else if (e.search("Network") !== -1) {
                 setError("Request failed due to network issues")
             }
             else {
-                setError("Something went wrong.Please try again later")
+                setError("Something went wrong. Please try again later")
             }
         }
     }
@@ -197,7 +199,7 @@ const AddLecturer = () => {
                     authMode: 'AMAZON_COGNITO_USER_POOLS',
                 })
                 if (institution.data.listInstitutions.items.length === 0) {
-                    setError("Oops! We could not find your Institution.Please contact the developers for further assistance")
+                    setError("Oops! We could not find your Institution. Please contact the developers for further assistance")
                 }
                 else {
                     institution = institution.data.listInstitutions.items[0]
@@ -226,13 +228,13 @@ const AddLecturer = () => {
         catch (error) {
             let e = error.errors[0].message
             if (e.search("Unathorized") !== -1) {
-                setError("You are not authorized to perform this action.Please log out and log in")
+                setError("You are not authorized to perform this action. Please log out and log in")
             }
             else if (e.search("Network") !== -1) {
                 setError("Request failed due to network issues")
             }
             else {
-                setError("Something went wrong.Please try again later")
+                setError("Something went wrong. Please try again later")
             }
         }
     }
@@ -300,13 +302,13 @@ const AddLecturer = () => {
         } catch (error) {
             let e = error.errors[0].message
             if (e.search("Unathorized") !== -1) {
-                setError("You are not authorized to perform this action.Please log out and log in")
+                setError("You are not authorized to perform this action. Please log out and log in")
             }
             else if (e.search("Network") !== -1) {
                 setError("Request failed due to network issues")
             }
             else {
-                setError("Something went wrong.Please try again later")
+                setError("Something went wrong. Please try again later")
             }
         }
     }
@@ -316,7 +318,11 @@ const AddLecturer = () => {
     }, [])
 
     return (
+
         <div style={{ display: 'inline-flex' }}>
+            <div>
+                <HelpButton pdfUrl={UserManual} />
+            </div>
 
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             <nav style={{ width: '20%' }} data-testid="InstitutionNavigation">
@@ -513,6 +519,9 @@ const AddLecturer = () => {
                     </div>
                 </div>
             </main>
+
+
+
         </div>
     );
 };

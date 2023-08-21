@@ -17,6 +17,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import UserManual from "./HelpFiles/LecturerInstructions.pdf";
+import HelpButton from '../HelpButton';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
@@ -149,13 +151,13 @@ export default function RecentAnnouncement() {
     } catch (error) {
       let e = error.errors[0].message
       if (e.search("Not Authorized") !== -1) {
-        setError("You are not authorized to perform this action.Please log out and log in")
+        setError("You are not authorized to perform this action. Please log out and log in")
       }
       else if (e.search("Network") !== -1) {
         setError("Request failed due to network issues")
       }
       else {
-        setError("Something went wrong.Please try again later")
+        setError("Something went wrong. Please try again later")
       }
     }
   }
@@ -297,6 +299,9 @@ export default function RecentAnnouncement() {
         </DialogActions>
       </StyledDialog>
 
+      <div>
+        <HelpButton pdfUrl={UserManual} />
+      </div>
     </div >
   );
 }
