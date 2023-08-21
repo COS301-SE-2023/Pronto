@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState,useEffect} from 'react';
 import LecturerNavigation from './LecturerNavigation';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -6,17 +6,21 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../Institution VIew/Navigation/Navigation.css';
-import {Auth} from 'aws-amplify'
-import { ErrorModal } from '../ErrorModal';
+import {Auth,API} from 'aws-amplify'
+import { ErrorModal } from '../ErrorModal'; 
+import { listLecturers } from '../graphql/queries';
+import { useLocation } from 'react-router-dom';
 
 const PersonalInfoPage = () => {
-    const [expanded, setExpanded] = React.useState(false);
-    const[oldPassword,setOldPassword]=React.useState("")
-    const[newPassword,setNewPassword]=React.useState("")
-    const[confirmPassword,setConfirmPassword]=React.useState("")
-    const[user,setUser]=React.useState("")
-    const[userAttributes,setUserAttributes]=React.useState("")
-    const[error,setError]=React.useState("")
+    const [expanded, setExpanded] = useState(false);
+    const[oldPassword,setOldPassword]= useState("");
+    const[newPassword,setNewPassword]= useState("");
+    const[confirmPassword,setConfirmPassword]= useState("");
+    const[error,setError]= useState("");
+    const state=useLocation();
+    const[lecturer,setLecturer]= useState(state.state);
+
+    
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -24,6 +28,7 @@ const PersonalInfoPage = () => {
     const handleSubmit =async(event)=>{ 
         event.preventDefault()
         try{
+            const user = await Auth.currentAuthenticatedUser();
             Auth.changePassword(user, oldPassword, newPassword)
             setError("Password change succesful")
         }catch(error){ 
@@ -36,11 +41,26 @@ const PersonalInfoPage = () => {
     
     const fetchLecturer =async()=>{
         let u=await Auth.currentAuthenticatedUser()
-        setUser(u)
-        setUserAttributes(u.attributes)
+        if(lecturer!==null){
+            const user=await Auth.currentAuthenticatedUser();
+        let lecturer_email=user.attributes.email;
+        let lec=await API.graphql({ 
+                    query:listLecturers,
+                    variables:{ 
+                        filter: { 
+                           email: { 
+                            eq : lecturer_email
+                        }
+                     }
+                  },
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                });
+                setLecturer(lec.data.listLecturers.items[0]);
+        }
+        
     }
 
-    React.useEffect(()=> { 
+    useEffect(()=> { 
         fetchLecturer()
     },[])
 
@@ -49,7 +69,7 @@ const PersonalInfoPage = () => {
         {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
         <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
             {/* Navigation bar content */}
-            <LecturerNavigation />
+            <LecturerNavigation props={lecturer}/>
         </nav>
   
         <main style={{ width: '900px',marginTop: '30px' }}>
@@ -59,7 +79,7 @@ const PersonalInfoPage = () => {
                     
                     <tr>
                     <td>Name:</td>
-                    <td>{String(userAttributes.name + userAttributes.family_name)}</td>
+                    <td>{lecturer && (lecturer.firstname+" "+lecturer.lastname)}</td>
                     </tr>
 
                     <tr>
@@ -69,7 +89,7 @@ const PersonalInfoPage = () => {
 
                     <tr>
                     <td>Email address:</td>
-                    <td>{userAttributes.email}</td>
+                    <td>{lecturer && (lecturer.email)}</td>
                     </tr>
             
                 </tbody>

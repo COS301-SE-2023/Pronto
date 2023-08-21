@@ -1,25 +1,22 @@
-import React, {useState,useEffect} from "react";
+import {useState,useEffect} from "react";
 import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
-import { listCourses ,listLecturers,getLecturer} from "../../graphql/queries";
+import {  listLecturers} from "../../graphql/queries";
 import  {API,Auth} from 'aws-amplify';
 import {ErrorModal} from '../../ErrorModal'
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 const LectureHomePage = () => {
 
-  const [courses,setCourses]=useState([])
-  const [lecturer,setLecturer]=useState('')
+  const state=useLocation();
+  const [lecturer,setLecturer]=useState(state.state);
   const [error, setError] = useState('')
 
   const fetchCourses=async()=>{ 
     try{
-      const user=await Auth.currentAuthenticatedUser()
-      if(user===undefined){
-        setError("You are not logged in! Please click on the logout button and log in to use Pronto")
-      }
-      else{
-        let lecturer_email=user.attributes.email
-        const lec=await API.graphql({ 
+      if(lecturer===null || lecturer===undefined || lecturer.courses===undefined){
+        const user=await Auth.currentAuthenticatedUser();
+        let lecturer_email=user.attributes.email;
+        let lec=await API.graphql({ 
                     query:listLecturers,
                     variables:{ 
                         filter: { 
@@ -28,42 +25,33 @@ const LectureHomePage = () => {
                         }
                      }
                   },
-                authMode:"API_KEY",
-                })
-        if(lec.data.listLecturers.items.length>0){     
-          await setLecturer(lec.data.listLecturers.items[0])
-            let courseList=await API.graphql({ 
-                    query:listCourses,
-                    variables:{ 
-                        filter: { 
-                           lecturerId: { 
-                            eq : lec.data.listLecturers.items[0].id
-                        }
-                     }
-                  },
-                authMode:"API_KEY",
-                })
+                authMode:"AMAZON_COGNITO_USER_POOLS",
+                });
+                
+         if(lec.data.listLecturers.items.length===0){
+           throw Error();
+          }
+          setLecturer(lec);
           
-          
-          courseList=courseList.data.listCourses.items 
-          setCourses(courseList)
-            
-         }
         }
     }catch(error){
-         let e=error.errors[0].message
+      if(error.errors!==undefined){
+         let e=error.errors[0].message;
           if(e.search("Not Authorized")!==-1){ 
-            setError("You are not authorized to perform this action.Please log out and log in")
+            setError("You are not authorized to perform this action.Please log out and log in");
           }
           else if(e.search("Network")!==-1){
-            setError("Request failed due to network issues")
+            setError("Request failed due to network issues");
           }
           else{ 
-            setError("Something went wrong.Please try again later")
+            setError("Something went wrong.Please try again later");
           }
+    }else{
+      setError("Your request could not be processed at this time");
     }
+
   }
-  
+  }  
 
   useEffect(() => {
         fetchCourses();
@@ -74,12 +62,12 @@ const LectureHomePage = () => {
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }}>
           {/* Navigation bar content */}
-          <LecturerNavigation />
+          <LecturerNavigation props={lecturer}/>
       </nav>
 
       <main style={{ width: '900px',marginTop: '30px' }}>
         <h1 className="moduleHead">Courses</h1>
-          {courses.map((val, key)=>{    
+          {lecturer && lecturer.courses && lecturer.courses.items.map((val, key)=>{    
               return (
                 <Link 
                   to={'/edit-module'}  

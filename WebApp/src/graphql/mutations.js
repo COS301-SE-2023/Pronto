@@ -10,7 +10,10 @@ export const createLecturer=`mutation CreateLecturer(
     userRole
     email
     courses {
-      nextToken
+      items{
+        id
+        coursecode
+      }
     }
     createdAt
     updatedAt
@@ -226,6 +229,19 @@ export const updateAdmin=`mutation UpdateAdmin(
   updateAdmin(input: $input, condition: $condition) {
     id
     institutionId
+    institution{
+      id
+      name
+      domains
+      logo
+      lectureremails
+      courses{
+        items{
+          coursecode
+          id
+        }
+      }
+    }
     firstname
     lastname
     userRole
@@ -252,3 +268,15 @@ export const createCourse=`mutation CreateCourse(
   }
 }`
 
+export const updateActivity=`mutation UpdateActivity(
+  $input: UpdateActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  updateActivity(input: $input, condition: $condition) {
+    id
+    courseId
+    activityname
+    createdAt
+    updatedAt
+  }
+}`
