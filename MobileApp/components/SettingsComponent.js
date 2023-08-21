@@ -1,17 +1,24 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
 import { Auth } from "aws-amplify";
 import { NavigationContainer } from "@react-navigation/native";
 import NotificationPreferences from "../screens/Notifications/NotificationPreferences";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 
 const SettingsComponent = ({ settingsOptions }) => {
+  const navigation = useNavigation();
+
   const onLogoutPressed = () => {
     Auth.signOut();
+  };
+
+  const onHelpPressed = () => {
+    navigation.navigate("Help");
   };
 
   const Stack = createNativeStackNavigator();
@@ -85,7 +92,7 @@ const SettingsComponent = ({ settingsOptions }) => {
               top: "12%", // Adjust the top position as needed
               right: "8%", // Adjust the right position as needed
             }}
-            // onPress={onHelpPressed} // Implement the function for the help action
+            onPress={onHelpPressed} // Implement the function for the help action
             testID="help-button"
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
