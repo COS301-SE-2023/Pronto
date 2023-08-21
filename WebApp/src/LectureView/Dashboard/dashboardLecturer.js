@@ -21,7 +21,7 @@ const DashboardLecturer = () => {
                     }}>
                         <EditNoteIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
-                                window.location.href = "/lecture-homepage";
+                                window.location.href = "/lecturer/modules";
                             }}
                         />
 
@@ -33,7 +33,7 @@ const DashboardLecturer = () => {
                     }}>
                         <CampaignIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
-                                window.location.href = "/recent-announcement";
+                                window.location.href = "/lecturer/announcement";
                             }}
                         />
 
@@ -45,7 +45,7 @@ const DashboardLecturer = () => {
                     }}>
                         <SettingsAccessibilityIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
-                                window.location.href = "/personal-info";
+                                window.location.href = "/lecturer/personal-info";
                             }}
                         />
 

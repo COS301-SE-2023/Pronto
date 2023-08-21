@@ -67,7 +67,7 @@ function Login() {
       await Auth.signIn(email, password, { role: "Lecturer" });
       setsignInError("");
       //navigate to lecturer home page
-      navigate("/lecture-homepage");
+      navigate("/lecturer/dashboard");
     } catch (e) {
       setsignInError(e.message);
     }
@@ -135,7 +135,7 @@ function Login() {
           institutionId: institutionId,
         },
       });
-      navigate("/lecturer-confirm-email", { state: { email: email } });
+      navigate("/lecturer/confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message.split("Error: ")[1]);
       console.log(e);
@@ -365,7 +365,7 @@ function Login() {
           <Button type="submit" onClick={onSignInPressed}>
             {loading ? "Signing in..." : "Sign in"}
           </Button>
-          <Anchor type="text/html" href="/lecturer-forgot-password">
+          <Anchor type="text/html" href="/lecturer/forgot-password">
             Forgot your password?
           </Anchor>
           {signInError && <ErrorText>{signInError}</ErrorText>}{" "}

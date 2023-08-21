@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 import UserManual from "../HelpFiles/LecturerInstructions.pdf";
 import HelpButton from '../../HelpButton';
 
-const LectureHomePage = () => {
+
+const Modules = () => {
 
   const [courses, setCourses] = useState([])
   const [lecturer, setLecturer] = useState('')
@@ -116,4 +117,4 @@ const LectureHomePage = () => {
   );
 };
 
-export default LectureHomePage;
+export default Modules;

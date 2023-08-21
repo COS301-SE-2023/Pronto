@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import "./error.css";
-import ProntoSvg from './Authentication/Institution/ProntoLogo.svg';
+import ProntoSvg from './ProntoLogo.svg';
 
 function NotFound() {
     const navigate = useNavigate();
@@ -10,14 +10,13 @@ function NotFound() {
     };
     return (
     <div class="container">
-    <div class = "logo">
+    <div>
     <img
-              src={ProntoSvg}
-              alt="Logo"
-              style={{
-                marginBottom:"10%",
-                objectFit: "cover",
-              }}></img>
+        src={ProntoSvg}
+        alt="logo"
+        style={{
+        marginBottom:"10%",
+        }}></img>
     </div>
     <div class="four1">
         
