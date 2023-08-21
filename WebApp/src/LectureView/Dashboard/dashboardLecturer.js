@@ -19,6 +19,7 @@ const DashboardLecturer = () => {
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
+                        <HoverableIcon>
                         <EditNoteIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
                                 window.location.href = "/lecturer/modules";
@@ -26,11 +27,13 @@ const DashboardLecturer = () => {
                         />
 
                         <span style={{ fontSize: "30px" }}>Edit Module Info</span>
+                        </HoverableIcon>
                     </div>
 
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
+                        <HoverableIcon>
                         <CampaignIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
                                 window.location.href = "/lecturer/announcement";
@@ -38,18 +41,20 @@ const DashboardLecturer = () => {
                         />
 
                         <span style={{ fontSize: "30px" }}>Annoucements</span>
+                        </HoverableIcon>
                     </div>
 
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
+                        <HoverableIcon>
                         <SettingsAccessibilityIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
                                 window.location.href = "/lecturer/personal-info";
                             }}
                         />
-
                         <span style={{ fontSize: "30px" }}>Edit Personal Info</span>
+                        </HoverableIcon>
                     </div>
 
 
@@ -81,6 +86,18 @@ const RightContainer = styled.div`
   width: 80%;
   z-index: 2;
 
+`;
+
+const HoverableIcon = styled.div`
+  display: flex;
+  color: #555;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+    color: #e32f45;
+  }
 `;
 
 
