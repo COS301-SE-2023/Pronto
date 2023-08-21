@@ -5,7 +5,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
 import HelpButton from '../../HelpButton';
-import UserManual from "../HelpFiles/UserManual.pdf";
+import UserManual from "../HelpFiles/LecturerInstructions.pdf";
 
 const DashboardLecturer = () => {
     return (<div>

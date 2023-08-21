@@ -3,7 +3,7 @@ import LecturerNavigation from "../LecturerNavigation";
 import PostAccordion from "../Edit Module/PostAccordion";
 import "../LectureHome.css";
 import { useLocation } from "react-router-dom";
-import UserManual from "../HelpFiles/UserManual.pdf";
+import UserManual from "../HelpFiles/LecturerInstructions.pdf";
 import HelpButton from '../../HelpButton';
 
 const PostReminder = (props) => {

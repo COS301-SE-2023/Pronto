@@ -5,7 +5,7 @@ import { listCourses, listLecturers, getLecturer } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { Link } from "react-router-dom";
-import UserManual from "../HelpFiles/UserManual.pdf";
+import UserManual from "../HelpFiles/LecturerInstructions.pdf";
 import HelpButton from '../../HelpButton';
 
 const LectureHomePage = () => {

@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../Institution VIew/Navigation/Navigation.css';
 import { Auth } from 'aws-amplify';
 import { ErrorModal } from '../ErrorModal';
-import UserManual from "./HelpFiles/UserManual.pdf";
+import UserManual from "./HelpFiles/LecturerInstructions.pdf";
 import HelpButton from '../HelpButton';
 
 const PersonalInfoPage = () => {

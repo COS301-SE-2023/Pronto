@@ -32,6 +32,7 @@ const HelpButton = ({ pdfUrl }) => {
         if (currentPage < numPages) {
             setCurrentPage(currentPage + 1);
         }
+
     };
 
     return (
