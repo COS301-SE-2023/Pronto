@@ -8,6 +8,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../Institution VIew/Navigation/Navigation.css';
 import { Auth } from 'aws-amplify';
 import { ErrorModal } from '../ErrorModal';
+import UserManual from "./HelpFiles/LecturerInstructions.pdf";
+import HelpButton from '../HelpButton';
 
 const PersonalInfoPage = () => {
     const [expanded, setExpanded] = React.useState(false);
@@ -142,6 +144,9 @@ const PersonalInfoPage = () => {
 
             </main>
 
+            <div>
+                <HelpButton pdfUrl={UserManual} />
+            </div>
         </div>
     );
 };

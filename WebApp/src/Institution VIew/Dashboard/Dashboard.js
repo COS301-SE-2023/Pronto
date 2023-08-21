@@ -5,12 +5,16 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import SchoolIcon from '@mui/icons-material/School';
 import EditIcon from '@mui/icons-material/Edit';
+import HelpButton from '../../HelpButton';
+import UserManual from "../HelpFiles/InstitutionInstructions.pdf";
 
 const Dashboard = () => {
     return (
         <div>
+
             <LeftContainer>
                 <InstitutionNavigation />
+
             </LeftContainer>
             <RightContainer>
 
@@ -46,6 +50,10 @@ const Dashboard = () => {
                     </div>
                 </div>
             </RightContainer>
+
+            <div>
+                <HelpButton pdfUrl={UserManual} />
+            </div>
         </div>
     );
 };
