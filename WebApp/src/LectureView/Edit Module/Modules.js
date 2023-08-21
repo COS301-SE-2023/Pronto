@@ -101,7 +101,7 @@ const Modules = () => {
           }>Fetching your courses...</p>
         ) : (
           courses.map((val, key) => (
-            <Link to={'/edit-module'} state={val} key={val.coursecode}>
+            <Link to={'/lecturer/edit-module'} state={val} key={val.coursecode}>
               <button className="content-button" key={val.coursecode}>
                 {val.coursecode}
               </button>
