@@ -6,7 +6,7 @@ import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import SchoolIcon from '@mui/icons-material/School';
 import EditIcon from '@mui/icons-material/Edit';
 import HelpButton from '../../HelpButton';
-import UserManual from "../HelpFiles/UserManual.pdf";
+import UserManual from "../HelpFiles/InstitutionInstructions.pdf";
 
 const Dashboard = () => {
     return (
