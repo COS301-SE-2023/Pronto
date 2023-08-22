@@ -7,7 +7,7 @@ import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import HelpButton from '../../HelpButton';
-import UserManual from "../HelpFiles/InstitutionInstructions.pdf";
+import UserManual from "../HelpFiles/AddLecturer.pdf";
 
 const AddLecturer = () => {
     const [firstName, setFirstName] = useState("")
