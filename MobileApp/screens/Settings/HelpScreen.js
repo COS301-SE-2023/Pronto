@@ -1,83 +1,83 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useRef } from 'react';
+import { View, Image, Dimensions } from 'react-native';
+import Carousel from 'react-native-snap-carousel';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const HelpScreen = () => {
+  const manualImages = [
+    require('../../assets/UserManualPages/UserManual-01.png'),
+    require('../../assets/UserManualPages/UserManual-02.png'),
+    require('../../assets/UserManualPages/UserManual-03.png'),
+    require('../../assets/UserManualPages/UserManual-04.png'),
+    require('../../assets/UserManualPages/UserManual-05.png'),
+    require('../../assets/UserManualPages/UserManual-06.png'),
+    require('../../assets/UserManualPages/UserManual-07.png'),
+    require('../../assets/UserManualPages/UserManual-08.png'),
+    require('../../assets/UserManualPages/UserManual-09.png'),
+    require('../../assets/UserManualPages/UserManual-10.png'),
+    require('../../assets/UserManualPages/UserManual-11.png'),
+    require('../../assets/UserManualPages/UserManual-12.png'),
+    require('../../assets/UserManualPages/UserManual-13.png'),
+    require('../../assets/UserManualPages/UserManual-14.png'),
+    require('../../assets/UserManualPages/UserManual-15.png'),
+    require('../../assets/UserManualPages/UserManual-16.png'),
+    require('../../assets/UserManualPages/UserManual-17.png'),
+    require('../../assets/UserManualPages/UserManual-18.png'),
+    require('../../assets/UserManualPages/UserManual-19.png'),
+    // Add more images as needed
+  ];
+
+  const carouselRef = useRef(null); // Create a ref for the Carousel component
+
+  const renderItem = ({ item }) => {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Image source={item} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />
+      </View>
+    );
+  };
+
+  const goToPreviousSlide = () => {
+    if (carouselRef.current) {
+      carouselRef.current.snapToPrev(); // Use the snapToPrev method of the Carousel
+    }
+  };
+
+  const goToNextSlide = () => {
+    if (carouselRef.current) {
+      carouselRef.current.snapToNext(); // Use the snapToNext method of the Carousel
+    }
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>About Pronto</Text>
-      <Text style={styles.text}>
-        Pronto is a web/mobile application designed specifically for students to
-        efficiently manage their academic tasks, schedules, and deadlines. With
-        Pronto, you can stay organized and never miss an important assignment or
-        exam again.
-      </Text>
-      <Text style={styles.text}>
-        Our mission is to provide a single, consolidated platform for students
-        and educational institutions to enhance the learning experience. We
-        believe that by leveraging technology, students can optimize their time
-        and focus on what truly matters - their education.
-      </Text>
-      <Text style={styles.subheading}>Key Features:</Text>
-      <Text style={styles.listItem}>
-        1. Schedule Management: Load and track your lecture schedules,
-        assignment due dates, test schedules, and examination dates all in one
-        place.
-      </Text>
-      <Text style={styles.listItem}>
-        2. Reminders and Notifications: Set up personalized reminders for
-        upcoming tasks and receive notifications to ensure you stay on top of
-        your academic responsibilities.
-      </Text>
-      <Text style={styles.listItem}>
-        3. Campus Maps: Access campus maps to easily navigate your educational
-        institution's facilities and find your way around.
-      </Text>
-      <Text style={styles.listItem}>
-        4. Institution Pages: Educational institutions can maintain their own
-        page within the app to provide students with important information, such
-        as class schedules, campus events, and announcements.
-      </Text>
-      <Text style={styles.listItem}>
-        5. User-Friendly Interface: Pronto offers an intuitive and user-friendly
-        interface, making it easy for students of all levels to navigate and
-        utilize the app effectively.
-      </Text>
-      <Text style={styles.text}>
-        We are committed to continuously improving and expanding our services to
-        meet the needs of students and educational institutions. Your feedback
-        is valuable to us, and we encourage you to reach out to us with any
-        suggestions or concerns you may have.
-      </Text>
-      <Text style={styles.text}>
-        Thank you for choosing Pronto as your academic companion!
-      </Text>
-    </ScrollView>
+    <View style={{ flex: 1 }}>
+      <Carousel
+        ref={carouselRef} // Attach the ref to the Carousel
+        data={manualImages}
+        renderItem={renderItem}
+        sliderWidth={Dimensions.get('window').width}
+        itemWidth={Dimensions.get('window').width * 0.8}
+      />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 100, marginBottom: 100 }}>
+        <Icon.Button
+          name="keyboard-arrow-left" // Material Icons name for left arrow
+          size={40}
+          backgroundColor="transparent" // Set background color to transparent
+          underlayColor="transparent" // Set underlay color to transparent
+          color="#e32f45"
+          onPress={goToPreviousSlide} // Call the function to go to the previous slide
+        />
+        <Icon.Button
+          name="keyboard-arrow-right" // Material Icons name for right arrow
+          size={40}
+          backgroundColor="transparent" // Set background color to transparent
+          underlayColor="transparent" // Set underlay color to transparent
+          color="#e32f45"
+          onPress={goToNextSlide} // Call the function to go to the next slide
+        />
+      </View>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  text: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  subheading: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  listItem: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-});
 
 export default HelpScreen;

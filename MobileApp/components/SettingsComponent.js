@@ -82,6 +82,7 @@ const SettingsComponent = ({ settingsOptions }) => {
             style={{
               position: "absolute",
               shadowColor: '#000',
+
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.2,
               shadowRadius: 2,
@@ -96,8 +97,8 @@ const SettingsComponent = ({ settingsOptions }) => {
             testID="help-button"
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text style={{ color: "grey", marginRight: 5 }}>Need help</Text>
-              <Icon name="help-circle-outline" size={50} color="grey" />
+              <Text style={{ color: "black", marginRight: 5, fontWeight: "400" }}>Need help</Text>
+              <Icon name="help-circle-outline" size={50} color="#e32f45" />
             </View>
 
           </TouchableOpacity>
