@@ -113,7 +113,7 @@ function DropzoneComponent() {
 
   return (
     <div>
-      <h6 style={{ marginBottom: "5px" }}>These files represent essential resources and materials that students enrolled in the university will be able to access directly from the mobile app.</h6>
+      <h6 style={{ marginBottom: "10px" }}>These files represent essential resources and materials that students enrolled in the university will be able to access directly from the mobile app.</h6>
       <img src={FileUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="FileUpload" />
       <div
         className="dropzone text-center"
@@ -123,10 +123,14 @@ function DropzoneComponent() {
         style={{
           height: "100px",
           width: "100%",
-          border: "1px dashed",
+          backgroundColor: "#f7f7f7",
+          border: "1px solid #ddd",
+          borderRadius: "50px",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", /* Increased shadow intensity */
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
+          cursor: "pointer",
         }}
       >
         {selectedFile ? (

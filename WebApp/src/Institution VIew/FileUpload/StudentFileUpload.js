@@ -10,7 +10,7 @@ const StudentFileUploadPage = () => {
         <InstitutionNavigation />
       </nav>
       <main
-        style={{ marginTop: "2%", marginLeft: "21%", width: "85%", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}
+        style={{ marginLeft: "25%", maxWidth: "1200px", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}
         className={"text-center"}
       >
         <h1 style={{
@@ -19,9 +19,9 @@ const StudentFileUploadPage = () => {
           alignItems: "center",
           justifyContent: "center",
           width: "100%",
-          marginLeft: "8%", // Adjust this value to shift content to the right
+
         }}>Upload Student Files</h1>
-        
+
         <DragandDrop />
       </main>
     </div>

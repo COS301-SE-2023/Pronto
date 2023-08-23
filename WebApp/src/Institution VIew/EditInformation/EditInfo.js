@@ -21,12 +21,12 @@ const EditInfoPage = () => {
             <div>
                 <HelpButton pdfUrl={UserManual} />
             </div>
-            <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
+            <nav data-testid='InstitutionNavigation'>
                 {/* Navigation bar content */}
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '900px', marginTop: '30px' }}>
+            <main style={{ width: '1200px', marginTop: '30px', marginLeft: "25%" }}>
                 <h1 className="moduleHead">Edit University Information</h1>
                 <table class="table table-sm">
                     <tbody>

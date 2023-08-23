@@ -113,7 +113,7 @@ function DropzoneComponent() {
 
   return (
     <div>
-      <h6 style={{ marginBottom: "5px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
+      <h6 style={{ marginBottom: "10px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
       <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
       <div
         className="dropzone text-center"
@@ -123,7 +123,6 @@ function DropzoneComponent() {
         style={{
           height: "100px",
           width: "100%",
-
           backgroundColor: "#f7f7f7",
           border: "1px solid #ddd",
           borderRadius: "50px",
