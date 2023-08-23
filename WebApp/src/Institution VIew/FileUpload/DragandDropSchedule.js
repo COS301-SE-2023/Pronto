@@ -112,16 +112,7 @@ function DropzoneComponent() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        marginLeft: "10%", // Adjust this value to shift content to the right
-      }}
-    >
+    <div>
       <h6 style={{ marginBottom: "5px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
       <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
       <div
@@ -132,10 +123,15 @@ function DropzoneComponent() {
         style={{
           height: "100px",
           width: "100%",
-          border: "1px dashed",
+
+          backgroundColor: "#f7f7f7",
+          border: "1px solid #ddd",
+          borderRadius: "50px",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", /* Increased shadow intensity */
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
+          cursor: "pointer",
         }}
       >
         {selectedFile ? (
@@ -159,23 +155,27 @@ function DropzoneComponent() {
           </div>
         )}
       </div>
-      {selectedFile && (
-        <div className="progress" style={{ marginTop: "5%", height: "30px" }}>
-          <div
-            className="progress-bar"
-            role="progressbar"
-            style={{ width: `${uploadProgress}%`, backgroundColor: "#e32f45" }}
-            aria-valuenow={uploadProgress}
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            {uploadProgress}%
+      {
+        selectedFile && (
+          <div className="progress" style={{ marginTop: "5%", height: "30px" }}>
+            <div
+              className="progress-bar"
+              role="progressbar"
+              style={{ width: `${uploadProgress}%`, backgroundColor: "#e32f45" }}
+              aria-valuenow={uploadProgress}
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              {uploadProgress}%
+            </div>
           </div>
-        </div>
-      )}
-      {message && (
-        <div style={{ marginTop: "5%", color: "green" }}>{message}</div>
-      )}
+        )
+      }
+      {
+        message && (
+          <div style={{ marginTop: "5%", color: "green" }}>{message}</div>
+        )
+      }
       <input
         id="fileInput"
         type="file"
@@ -186,7 +186,7 @@ function DropzoneComponent() {
       <div>
         <HelpButton pdfUrl={UserManual} />
       </div>
-    </div>
+    </div >
   );
 }
 
