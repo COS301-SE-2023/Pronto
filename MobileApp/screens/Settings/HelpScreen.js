@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { View, Image, Dimensions } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Image, Dimensions, StyleSheet, Text } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -27,7 +27,8 @@ const HelpScreen = () => {
     // Add more images as needed
   ];
 
-  const carouselRef = useRef(null); // Create a ref for the Carousel component
+  const carouselRef = useRef(null);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const renderItem = ({ item }) => {
     return (
@@ -39,45 +40,80 @@ const HelpScreen = () => {
 
   const goToPreviousSlide = () => {
     if (carouselRef.current) {
-      carouselRef.current.snapToPrev(); // Use the snapToPrev method of the Carousel
+      carouselRef.current.snapToPrev();
     }
   };
 
   const goToNextSlide = () => {
     if (carouselRef.current) {
-      carouselRef.current.snapToNext(); // Use the snapToNext method of the Carousel
+      carouselRef.current.snapToNext();
     }
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
+      <Text style={styles.heading}>How to use Pronto:</Text>
+      <Text style={{ marginHorizontal: 50 }}>Feeling uncertain about navigating Pronto? Let this guide be your compass to explore its features and functionalities.</Text>
       <Carousel
-        ref={carouselRef} // Attach the ref to the Carousel
+        ref={carouselRef}
         data={manualImages}
         renderItem={renderItem}
         sliderWidth={Dimensions.get('window').width}
         itemWidth={Dimensions.get('window').width * 0.8}
+        onSnapToItem={(index) => setActiveSlide(index)} // Update active slide
       />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 100, marginBottom: 100 }}>
+      <View style={styles.pagination}>
+        <Text style={styles.paginationText}>
+          {activeSlide + 1} / {manualImages.length}
+        </Text>
+      </View>
+      <View style={styles.arrowContainer}>
         <Icon.Button
-          name="keyboard-arrow-left" // Material Icons name for left arrow
+          name="keyboard-arrow-left"
           size={40}
-          backgroundColor="transparent" // Set background color to transparent
-          underlayColor="transparent" // Set underlay color to transparent
+          backgroundColor="transparent"
+          underlayColor="transparent"
           color="#e32f45"
-          onPress={goToPreviousSlide} // Call the function to go to the previous slide
+          onPress={goToPreviousSlide}
         />
         <Icon.Button
-          name="keyboard-arrow-right" // Material Icons name for right arrow
+          name="keyboard-arrow-right"
           size={40}
-          backgroundColor="transparent" // Set background color to transparent
-          underlayColor="transparent" // Set underlay color to transparent
+          backgroundColor="transparent"
+          underlayColor="transparent"
           color="#e32f45"
-          onPress={goToNextSlide} // Call the function to go to the next slide
+          onPress={goToNextSlide}
         />
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 200,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  pagination: {
+    marginTop: 10,
+  },
+  paginationText: {
+    fontSize: 18,
+    color: '#555',
+  },
+  arrowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 100,
+    marginBottom: 50,
+  },
+});
 
 export default HelpScreen;
