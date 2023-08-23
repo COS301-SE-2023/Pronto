@@ -32,8 +32,8 @@ const HelpScreen = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Image source={item} style={{ width: '100%', height: '100%', resizeMode: 'contain' }} />
+      <View style={styles.carouselItem}>
+        <Image source={item} style={styles.image} />
       </View>
     );
   };
@@ -52,15 +52,17 @@ const HelpScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>How to use Pronto:</Text>
-      <Text style={{ marginHorizontal: 50 }}>Feeling uncertain about navigating Pronto? Let this guide be your compass to explore its features and functionalities.</Text>
+      <Text style={styles.heading}>How to Use Pronto</Text>
+      <Text style={styles.subHeading}>
+        Feeling uncertain about navigating Pronto? Let this guide be your compass to explore its features and functionalities.
+      </Text>
       <Carousel
         ref={carouselRef}
         data={manualImages}
         renderItem={renderItem}
         sliderWidth={Dimensions.get('window').width}
         itemWidth={Dimensions.get('window').width * 0.8}
-        onSnapToItem={(index) => setActiveSlide(index)} // Update active slide
+        onSnapToItem={(index) => setActiveSlide(index)}
       />
       <View style={styles.pagination}>
         <Text style={styles.paginationText}>
@@ -96,10 +98,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-    fontSize: 24,
-    fontWeight: 200,
-    marginTop: 20,
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginTop: 40,
+    marginBottom: 10,
+    color: '#e32f45',
+  },
+  subHeading: {
+    fontSize: 18,
+    marginHorizontal: 20,
     marginBottom: 20,
+    textAlign: 'center',
+    color: '#555',
+  },
+  carouselItem: {
+    borderRadius: 10, // Rounded edges
+    overflow: 'hidden', // Clip content
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
   pagination: {
     marginTop: 10,
