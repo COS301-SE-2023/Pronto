@@ -5,25 +5,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const HelpScreen = () => {
   const manualImages = [
-    require('../../assets/UserManualPages/UserManual-01.png'),
-    require('../../assets/UserManualPages/UserManual-02.png'),
-    require('../../assets/UserManualPages/UserManual-03.png'),
-    require('../../assets/UserManualPages/UserManual-04.png'),
-    require('../../assets/UserManualPages/UserManual-05.png'),
-    require('../../assets/UserManualPages/UserManual-06.png'),
-    require('../../assets/UserManualPages/UserManual-07.png'),
-    require('../../assets/UserManualPages/UserManual-08.png'),
-    require('../../assets/UserManualPages/UserManual-09.png'),
-    require('../../assets/UserManualPages/UserManual-10.png'),
-    require('../../assets/UserManualPages/UserManual-11.png'),
-    require('../../assets/UserManualPages/UserManual-12.png'),
-    require('../../assets/UserManualPages/UserManual-13.png'),
-    require('../../assets/UserManualPages/UserManual-14.png'),
-    require('../../assets/UserManualPages/UserManual-15.png'),
-    require('../../assets/UserManualPages/UserManual-16.png'),
-    require('../../assets/UserManualPages/UserManual-17.png'),
-    require('../../assets/UserManualPages/UserManual-18.png'),
-    require('../../assets/UserManualPages/UserManual-19.png'),
+    require('../../assets/UserManualPages/UserManual-1.png'),
+    require('../../assets/UserManualPages/UserManual-2.png'),
+    require('../../assets/UserManualPages/UserManual-3.png'),
+    require('../../assets/UserManualPages/UserManual-4.png'),
+    require('../../assets/UserManualPages/UserManual-5.png'),
+    require('../../assets/UserManualPages/UserManual-6.png'),
+    require('../../assets/UserManualPages/UserManual-7.png'),
+    require('../../assets/UserManualPages/UserManual-8.png'),
+    require('../../assets/UserManualPages/UserManual-9.png'),
     // Add more images as needed
   ];
 
