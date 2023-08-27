@@ -17,13 +17,13 @@
 Pronto is a React Native application that helps students to create their timetables in an easy and convenient way. They will also be able to receive reminders, test date and due assignment updates from lecturers. The navigation feature will also make directions to venue halls much easier for pupils that are unfamiliar to the campus.
 
 ## Documentation
-<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Demo3%20SRS.pdf">🧾 SRS Document</a></div>
-<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Architectural%20Requirements.pdf">🧾 Architectural Requirement</a></div>
-<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Code%20Quality%20Standards.pdf">🧾 Code Quality Standards</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Demo4%20SRS.pdf">🧾 SRS Document</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Architectural%20Requirements.pdf">🧾 Architectural Requirement</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Code%20Quality%20Standards.pdf">🧾 Code Quality Standards</a></div>
 
 ### Manuals
-<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/User%20Manual.pdf">🧾 User Manual</a></div>
-<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%203%20documents/Technical%20Installation.pdf">🧾 Technical Installation Manual</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/User%20Manual.pdf">🧾 User Manual</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Technical%20Installation.pdf">🧾 Technical Installation Manual</a></div>
 
 ### Previous SRS versions
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%201%20documents/Demo%201%20SRS.pdf">🧾 Demo 1: SRS Document</a></div>
