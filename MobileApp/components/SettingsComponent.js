@@ -1,15 +1,24 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
 import { Auth } from "aws-amplify";
 import { NavigationContainer } from "@react-navigation/native";
 import NotificationPreferences from "../screens/Notifications/NotificationPreferences";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 
 const SettingsComponent = ({ settingsOptions }) => {
+  const navigation = useNavigation();
+
   const onLogoutPressed = () => {
     Auth.signOut();
+  };
+
+  const onHelpPressed = () => {
+    navigation.navigate("Help");
   };
 
   const Stack = createNativeStackNavigator();
@@ -53,12 +62,13 @@ const SettingsComponent = ({ settingsOptions }) => {
         ))}
 
         <View style={{ height: "100%" }}>
+
           <Button
             icon="logout"
             mode="contained"
             style={{
               backgroundColor: "#e32f45",
-              marginVertical: 40,
+              marginVertical: 20,
               marginHorizontal: 20,
             }}
             outlined={true}
@@ -67,9 +77,34 @@ const SettingsComponent = ({ settingsOptions }) => {
           >
             Logout
           </Button>
+
+          <TouchableOpacity
+            style={{
+              position: "absolute",
+              shadowColor: '#000',
+
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.2,
+              shadowRadius: 2,
+              elevation: 3,
+              borderRadius: 25, // Half of the width/height for a circular shape
+              justifyContent: "center",
+              alignItems: "center",
+              top: "12%", // Adjust the top position as needed
+              right: "8%", // Adjust the right position as needed
+            }}
+            onPress={onHelpPressed} // Implement the function for the help action
+            testID="help-button"
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ color: "black", marginRight: 5, fontWeight: "400" }}>Need help</Text>
+              <Icon name="help-circle-outline" size={50} color="#e32f45" />
+            </View>
+
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </View>
+      </ScrollView >
+    </View >
   );
 };
 
