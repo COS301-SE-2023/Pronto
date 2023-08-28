@@ -59,19 +59,19 @@ describe('InstitutionNavigation', () => {
             </Router>
         );
         const dashboardLink = screen.getByTestId('dashboardLink');
-        expect(dashboardLink).toHaveAttribute('href', '/dashboard');
+        expect(dashboardLink).toHaveAttribute('href', '/institution/dashboard');
 
         const uploadScheduleLink = screen.getByTestId('UploadScheduleLink');
-        expect(uploadScheduleLink).toHaveAttribute('href', '/upload-schedule');
+        expect(uploadScheduleLink).toHaveAttribute('href', '/institution/upload-schedule');
 
         const uploadStudentFilesLink = screen.getByTestId('UploadStudentFilesLink');
-        expect(uploadStudentFilesLink).toHaveAttribute('href', '/upload-student-files');
+        expect(uploadStudentFilesLink).toHaveAttribute('href', '/institution/upload-student-files');
 
         const addLecturerLink = screen.getByTestId('AddLecturerLink');
-        expect(addLecturerLink).toHaveAttribute('href', '/add-lecturer');
+        expect(addLecturerLink).toHaveAttribute('href', '/institution/add-lecturer');
 
         const editUniversityInfoLink = screen.getByTestId('EditUniversityInfoLink');
-        expect(editUniversityInfoLink).toHaveAttribute('href', '/edit-university-info');
+        expect(editUniversityInfoLink).toHaveAttribute('href', '/institution/edit-info');
     });
 
 // Test that uses fireEvent to check if the logout button is clickable and redirects to the login page by calling the logout function

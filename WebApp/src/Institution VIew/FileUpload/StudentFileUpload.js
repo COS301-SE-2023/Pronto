@@ -4,16 +4,24 @@ import DragandDrop from "./DragandDrop";
 
 const StudentFileUploadPage = () => {
   return (
-    <div style={{ display: "inline-flex" }}>
-      <nav style={{ width: "20%" }}>
+    <div>
+      <nav>
         {/* Navigation bar content */}
         <InstitutionNavigation />
       </nav>
       <main
-        style={{ width: "900px", marginTop: "250px" }}
+        style={{ marginLeft: "25%", maxWidth: "1200px", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}
         className={"text-center"}
       >
-        <h1>Upload Student Files</h1>
+        <h1 style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+
+        }}>Upload Student Files</h1>
+
         <DragandDrop />
       </main>
     </div>

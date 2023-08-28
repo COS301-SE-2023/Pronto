@@ -4,50 +4,57 @@ import LecturerNavigation from "../LecturerNavigation";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
+import HelpButton from '../../HelpButton';
+import UserManual from "../HelpFiles/LecturerInstructions.pdf";
 
 const DashboardLecturer = () => {
     return (<div>
         <LeftContainer>
-            <LecturerNavigation/>
+            <LecturerNavigation />
         </LeftContainer>
         <RightContainer>
 
             <div className={"grid"}>
-                <div className={"row ml-3"} style={{alignItems: "center", height: "90vh"}}>
+                <div className={"row ml-3"} style={{ alignItems: "center", height: "90vh" }}>
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
-                            <EditNoteIcon style={{fontSize: "250px", cursor: "pointer"}}
+                        <HoverableIcon>
+                        <EditNoteIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
-                                window.location.href = "/lecture-homepage";
+                                window.location.href = "/lecturer/modules";
                             }}
-                            />
+                        />
 
-                        <span style={{fontSize: "30px"}}>Edit Module Info</span>
+                        <span style={{ fontSize: "30px" }}>Edit Module Info</span>
+                        </HoverableIcon>
                     </div>
 
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
-                        <CampaignIcon style={{fontSize: "250px", cursor: "pointer"}}
-                                      onClick={() => {
-                                          window.location.href = "/recent-announcement";
-                                      }}
+                        <HoverableIcon>
+                        <CampaignIcon style={{ fontSize: "250px", cursor: "pointer" }}
+                            onClick={() => {
+                                window.location.href = "/lecturer/announcement";
+                            }}
                         />
 
-                        <span style={{fontSize: "30px"}}>Annoucements</span>
+                        <span style={{ fontSize: "30px" }}>Annoucements</span>
+                        </HoverableIcon>
                     </div>
 
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
-                        <SettingsAccessibilityIcon style={{fontSize: "250px", cursor: "pointer"}}
-                                                   onClick={() => {
-                                                       window.location.href = "/personal-info";
-                                                   }}
+                        <HoverableIcon>
+                        <SettingsAccessibilityIcon style={{ fontSize: "250px", cursor: "pointer" }}
+                            onClick={() => {
+                                window.location.href = "/lecturer/personal-info";
+                            }}
                         />
-
-                        <span style={{fontSize: "30px"}}>Edit Personal Info</span>
+                        <span style={{ fontSize: "30px" }}>Edit Personal Info</span>
+                        </HoverableIcon>
                     </div>
 
 
@@ -56,6 +63,9 @@ const DashboardLecturer = () => {
 
 
         </RightContainer>
+        <div>
+            <HelpButton pdfUrl={UserManual} />
+        </div>
     </div>)
 }
 const LeftContainer = styled.div`
@@ -76,6 +86,18 @@ const RightContainer = styled.div`
   width: 80%;
   z-index: 2;
 
+`;
+
+const HoverableIcon = styled.div`
+  display: flex;
+  color: #555;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+    color: #e32f45;
+  }
 `;
 
 

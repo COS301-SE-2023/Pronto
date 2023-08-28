@@ -1,21 +1,22 @@
-import {useEffect,useState} from "react";
+import { useEffect, useState } from "react";
 import "../Institution VIew/Navigation/Navigation.css";
 import logo from "../images/university_logo.svg";
-import { Auth, API ,Storage} from "aws-amplify";
-import { useNavigate,Link } from "react-router-dom";
+import { Auth, API, Storage } from "aws-amplify";
+import { useNavigate, Link } from "react-router-dom";
 import { listLecturers } from "../graphql/queries";
+
 
 export default function LecturerNavigation(lecturerData) {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
-  const[lecturer,setLecturer] = useState(lecturerData.props);
- 
+  const [lecturer, setLecturer] = useState(lecturerData.props);
+
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
       await Auth.signOut();
-      //navigate to lecturer login
-      navigate("/lecturer-login");
+      //navigate to homepage
+      navigate("/");
     } catch (e) {
       console.log(e.message);
     }
@@ -27,47 +28,47 @@ export default function LecturerNavigation(lecturerData) {
     setUser(u);
   };
 
-  const fetchLecturer = async() =>{ 
+  const fetchLecturer = async () => {
     let u = await Auth.currentAuthenticatedUser();
-    let lecturer_email=u.attributes.email;
-    let lec=lecturer;
-    try{
-      if(lecturer===null || lecturer===undefined || lecturer.courses===undefined){
-        lec=await API.graphql({ 
-                query:listLecturers,
-                    variables:{ 
-                        filter: { 
-                           email: { 
-                            eq : lecturer_email
-                        }
-                     }
-                  },
-                authMode:"AMAZON_COGNITO_USER_POOLS",
-                });
+    let lecturer_email = u.attributes.email;
+    let lec = lecturer;
+    try {
+      if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
+        lec = await API.graphql({
+          query: listLecturers,
+          variables: {
+            filter: {
+              email: {
+                eq: lecturer_email
+              }
+            }
+          },
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+        });
 
-        if(lec.data.listLecturers.items.length===0){
+        if (lec.data.listLecturers.items.length === 0) {
           throw Error()
         }
-        lec=lec.data.listLecturers.items[0];
+        lec = lec.data.listLecturers.items[0];
         setLecturer(lec)
       }
 
-      if(lec.institution.logo===null){
-        lec.institution.logoUrl=logo;
+      if (lec.institution.logo === null) {
+        lec.institution.logoUrl = logo;
       }
 
-      else if(lec.institution.logoUrl===undefined){
-        lec.institution.logoUrl=await Storage.get(lec.institution.logo,{validateObjectExistence:true,expires:3600});
+      else if (lec.institution.logoUrl === undefined) {
+        lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
         setLecturer(lec);
       }
-     
-  }catch(error){
-    
+
+    } catch (error) {
+
     }
   }
 
   useEffect(() => {
-   // userSet();
+    // userSet();
     fetchLecturer();
   });
 
@@ -75,47 +76,54 @@ export default function LecturerNavigation(lecturerData) {
     <div className={"grid"}>
       <nav className="vertical-navbar col-4 p-4">
         <div className="top"
-                      style={{  width: "calc(12vw)",
-                                height: "calc(19vh)" ,   
-                                justifyContent:"center",
-                                justifyItems:"center",
-                                textAlign:"center",
-                                maxWidth:"100%",
-                                padding:"2px",
-                                maxHeight:"100%"}}
-                    >
-                    <img
-                        src={lecturer!==undefined? lecturer!==null? lecturer.institution.logoUrl : " " : "  "}
-                        alt="Logo"
-                        className="logo offset-2 img-fluid mr-1"
-                        // width={"175px"}
-                        // height={"155px"}
-                        style={{width:"100%",height:"100%",border:"2px solid black",padding:"0px"}}
-                        data-testid={'UniversityImage'}
-                    />
-                   <div className="institution-name">
-                        <b>
-                            {lecturer && (lecturer.firstname +" "+ lecturer.lastname)}
-                        </b>
-                    </div> 
-                </div> 
-                
+          style={{
+            width: "calc(12vw)",
+            height: "calc(19vh)",
+            justifyContent: "center",
+            justifyItems: "center",
+            textAlign: "center",
+            maxWidth: "100%",
+            padding: "2px",
+            maxHeight: "100%"
+          }}
+        >
+          <img
+            src={lecturer !== undefined ? lecturer !== null ? lecturer.institution.logoUrl : " " : "  "}
+            alt="Logo"
+            className="logo offset-2 img-fluid mr-1"
+            // width={"175px"}
+            // height={"155px"}
+            style={{ width: "100%", height: "100%", border: "2px solid black", padding: "0px" }}
+            data-testid={'UniversityImage'}
+          />
+          <div className="institution-name">
+            <b>
+              {lecturer && (lecturer.firstname + " " + lecturer.lastname)}
+            </b>
+          </div>
+        </div>
+
 
         <ul className="navbar-nav">
-          <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
-            {/* <a
-              href="/lecture-homepage"
+          <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
+            <a
+              href="/lecturer/dashboard"
               className="nav-link"
-              data-testid={"EditModuleInfoLink"}
+              data-testid={"LecturerDashboardLink"}
             >
-              <b>Edit Module Information</b>
-            </a> */}
-            <Link 
-              to={'/lecture-homepage'}  
+              <b>Dashboard</b>
+            </a>
+          </li>
+          <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
+
+
+
+            <Link
+              to={'/lecture/dashboard'}
               state={lecturer}
               className="nav-link"
-                >       
-                <b>Edit Module Information</b>
+            >
+              <b>Edit Module Information</b>
             </Link>
 
           </li>
@@ -123,54 +131,42 @@ export default function LecturerNavigation(lecturerData) {
             className="nav-item text-center"
             data-testid={"RecentAnnouncements"}
           >
-            {/* <a
-              href="recent-announcement"
-              className="nav-link"
-              data-testid={"RecentAnnouncementsLink"}
-            >
-              <b>Recent Announcements</b>
-            </a> */}
-            <Link 
-              to={'/recent-announcement'}  
+
+            <Link
+              to={'/lecturer/announcement'}
               state={lecturer}
               className="nav-link"
-                >       
-                <b>Recent Announcements</b>
+            >
+              <b>Recent Announcements</b>
             </Link>
 
           </li>
           <li className="nav-item text-center" data-testid={"EditPersonalInfo"}>
-            {/* <a
-              href="personal-info"
-              className="nav-link"
-              data-testid={"EditPersonalInfoLink"}
-            >
-              <b>Edit Personal Information</b>
-            </a> */}
 
-            <Link 
-              to={'/personal-info'}  
+            <Link
+              to={'/lecturer/personal-info'}
               state={lecturer}
               className="nav-link"
-                >       
-                <b>Edit Personal Information</b>
+            >
+              <b>Edit Personal Information</b>
             </Link>
 
           </li>
         </ul>
+        <div className="logoutbtn">
+          <button
+            type="submit"
+            className={"btn btn-danger btn-lg btn-block"}
+            style={{ borderRadius: "25px" }}
+            data-testid={"LogoutButton"}
+            onClick={onSignOut}
+          >
+            Log Out
+          </button>
+        </div>
       </nav>
 
-      <div className="logoutbtn fixed-bottom col-2 p-4 ml-4">
-        <button
-          type="submit"
-          className={"btn btn-danger btn-lg btn-block"}
-          style={{ borderRadius: "25px" }}
-          data-testid={"LogoutButton"}
-          onClick={onSignOut}
-        >
-          Log Out
-        </button>
-      </div>
+
     </div>
   );
 }

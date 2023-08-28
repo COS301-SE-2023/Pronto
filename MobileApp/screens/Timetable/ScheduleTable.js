@@ -8,7 +8,7 @@ import { createStudent } from "../../graphql/mutations";
 
 const ScheduleTable = ({navigation}) => {
 
-  // const[student,setStudent]=useState(null)
+
   const [activities, setActivities] = useState([])
   const [schedule, setSchedule] = useState(null)
   var scheduleArray = {}
@@ -69,7 +69,7 @@ const ScheduleTable = ({navigation}) => {
             }
           }
         },
-        authMode: "API_KEY"
+        authMode: "AMAZON_COGNITO_USER_POOLS"
       })
       
 
@@ -95,7 +95,7 @@ const ScheduleTable = ({navigation}) => {
               }
             }
           },
-          authMode: "API_KEY",
+          authMode: "AMAZON_COGNTIO_USER_POOLS",
         })
 
         //Institution not found
@@ -125,7 +125,7 @@ const ScheduleTable = ({navigation}) => {
 
       //Student  found
       else {
-        //stu = stu.data.listStudents.items[0]
+        
          let c=[]
               for(let i=0;i<stu.enrollments.items.length;i++){
                   c.push(stu.enrollments.items[i].course)
@@ -171,7 +171,6 @@ const ScheduleTable = ({navigation}) => {
            }
           }
         
-        // }
         }    
     
     } catch (e) {
@@ -179,7 +178,6 @@ const ScheduleTable = ({navigation}) => {
     }
   }
 
-  //fetchActivities()
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchActivities()
