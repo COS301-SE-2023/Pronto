@@ -53,11 +53,11 @@ const NotificationList = ({ navigation }) => {
     
          setStudent(stu)
          let courses=[];
-         //console.log(stu);
+         
          for(let i=0;i<stu.enrollments.items.length;i++){
           courses.push(stu.enrollments.items[i].courseId);
          }
-         console.log(courses)
+         
           let filter=`{"filter" : { "or" : [`;
         for(let i=0;i<courses.length;i++){
           if(i===courses.length-1){
@@ -68,27 +68,23 @@ const NotificationList = ({ navigation }) => {
           }
         }
      
-          filter+=`] },"limit":"1" ,"year":"${year}","sortDirection":"DESC"}`;
+          filter+=`] },"limit":"1" ,"sortDirection":"DESC"}`;
         
         let variables = JSON.parse(filter)
         //Fecth annnouncements and order them by date
           let announcementList=await API.graphql({
-            query:announcementsByDate,
+            query:listAnnouncements,
             variables:variables
           })
           ;
-          console.log(announcementList.data.announcementsByDate.items);
-          setAnnouncements(announcementList.data.announcementsByDate.items);
-          setNextToken(announcementList.data.announcementsByDate.nextToken);
-          console.log(announcementList.data.announcementsByDate.nextToken);
-        // setAnnouncements(announcementList.data.announcementsByDate.items);
-        // console.log(announcementList.data.announcementsByDate);
-        // setNextToken(announcementList.data.announcementsByDate.nextToken);
+        
+          setAnnouncements(announcementList.data.listAnnouncements.items);
+          setNextToken(announcementList.data.listAnnouncements.nextToken);
+
         setLoading(false);
 
     } catch (er) {
       Alert.alert(error)
-      console.log(er);
       setLoading(false);
     }
   }
@@ -97,13 +93,13 @@ const NotificationList = ({ navigation }) => {
   const loadMore =async()=>{
     try{
 
+      let stu=student;
       let year=new Date().getFullYear();
       let courses=[];
-         //console.log(stu);
+        
          for(let i=0;i<stu.enrollments.items.length;i++){
           courses.push(stu.enrollments.items[i].courseId);
          }
-         console.log(courses)
           let filter=`{"filter" : { "or" : [`;
         for(let i=0;i<courses.length;i++){
           if(i===courses.length-1){
@@ -114,33 +110,27 @@ const NotificationList = ({ navigation }) => {
           }
         }
         
-        filter+=`] },"limit":"1",year":"${year}","sortDirection":"DESC","nextToken":"${nextToken}"}`;
+        filter+=`] },"limit":"1","sortDirection":"DESC","nextToken":"${nextToken}"}`;
         
         let variables = JSON.parse(filter)
+       
+
         //Fecth annnouncements and order them by date
           let announcementList=await API.graphql({
-            query:announcementsByDate,
+            query:listAnnouncements,
             variables:variables
           })
           ;
-        // //Fecth annnouncements and order them by date
-        //   let announcementList=await API.graphql({
-        //     query:announcementsByDate,
-        //     variables:{
-        //       year:year,
-        //       limit : 1
-        //     }, 
-        //   })
-
-          let a=announcementList.data.announcementsByDate.items;
+        
+          let a=announcementList.data.listAnnouncements.items;
           for(let i=0;i<a.length;i++){
             announcements.push(a[i]);
           }
-          setNextToken(announcementList.data.announcementsByDate.items);
+          setNextToken(announcementList.data.listAnnouncements.nextToken);
           setAnnouncements(announcements)
 
     }catch(error){
-      console.log(error)
+      Alert.alert(error);
     }
 
   }

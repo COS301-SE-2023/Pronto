@@ -344,7 +344,9 @@ export const listAnnouncements = `query ListAnnouncements(
         course{
           coursecode
         }
+        type
       }
+
       nextToken
     }
   }
