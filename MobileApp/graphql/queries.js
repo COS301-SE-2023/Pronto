@@ -14,18 +14,17 @@ export const announcementsByCourseId=`query AnnouncementsByCourseId(
   ) {
     items {
       id
-      courseId
-      description
-      start
-      end
+      body
+      title
       date
       venue
       createdAt
-      updatedAt
     }
     nextToken
   }
 }`
+
+
 
 export const activitiesByCourseId=`query ActivitiesByCourseId(
   $courseId: ID!
@@ -129,8 +128,6 @@ export const coursesByInstitutionId=`query CoursesByInstitutionId(
       coursecode
       coursename
       semester
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -206,8 +203,6 @@ export const enrollmentsByStudentId=`query EnrollmentsByStudentId(
         coursecode
       }
       year
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -221,6 +216,9 @@ export const listStudents=`query ListStudents(
   listStudents(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       institutionId
+      institution{
+        name
+      }
       id
       firstname
       lastname
@@ -228,6 +226,7 @@ export const listStudents=`query ListStudents(
       owner
       studentTimetableId
       timetable { 
+        id
         activities{ 
            items { 
               id
@@ -253,24 +252,11 @@ export const listStudents=`query ListStudents(
           course{ 
             id
             coursecode
-            announcents{ 
-              items{
-                id
-                courseId
-                description
-                start
-                end
-                date
-                venue
-                course{
-                  coursecode
-                }
-              }
-            }
             activity{
               items{
                 courseId
                 activityname
+                coordinates
                 id
                 day
                 start
@@ -316,11 +302,8 @@ export const listCourses=`query ListCourses(
     items {
       id
       institutionId
-      lecturerId
       coursecode
       semester
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -355,13 +338,45 @@ export const listAnnouncements = `query ListAnnouncements(
       items {
         id
         courseId
-        description
-        start
-        end
+        body
+        title
         date
-        venue
+        course{
+          coursecode
+        }
       }
       nextToken
     }
   }
 `;
+
+export const announcementsByDate=`query AnnouncementsByDate ( 
+        $year: String!,  
+        $createdAt: ModelStringKeyConditionInput, 
+        $sortDirection: ModelSortDirection, 
+        $filter: ModelAnnouncementFilterInput, 
+        $limit: Int, 
+        $nextToken: String
+      ){
+          announcementsByDate( 
+            year:$year,  
+            createdAt: $createdAt, 
+            sortDirection: $sortDirection, 
+            filter: $filter, 
+            limit: $limit, 
+            nextToken: $nextToken
+            ){ 
+              items{ 
+                id
+                title
+                body
+                date
+                createdAt
+                course{
+                  coursecode   
+                }
+                type
+              }
+              nextToken
+            }
+}`;

@@ -1,8 +1,9 @@
-import  { useState, useEffect } from "react";
-import { Alert, View, StyleSheet, Text } from "react-native";
-import { List, Card, Avatar } from "react-native-paper";
+import React, { useState, useEffect } from "react";
+import { Alert, View, StyleSheet, Text ,Button} from "react-native";
+import { List, Card, Avatar, Modal } from "react-native-paper";
 import { ScrollView } from "react-native";
-import { listStudents, listInstitutions, createStudent } from "../graphql/queries";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { listStudents, listInstitutions, createStudent,announcementsByDate, listAnnouncements } from "../graphql/queries";
 import { Auth, API } from "aws-amplify"
 
 const NotificationList = ({ navigation }) => {
@@ -17,14 +18,15 @@ const NotificationList = ({ navigation }) => {
   const handlePress2 = () => setExpanded2(!expanded2);
   const handlePress3 = () => setExpanded3(!expanded3);
   const [loading, setLoading] = useState(true);
-
+  const [nextToken,setNextToken]=useState(null)
   const showFullMessage = (key) => {
-    Alert.alert(key.description);
+    Alert.alert(key.body);
   };
 
   const fetchAnnouncements = async () => {
     let error = "There appear to be network issues. Please try again later"
     try {
+      setLoading(true);
       let user = await Auth.currentAuthenticatedUser()
       let studentEmail = user.attributes.email;
 
@@ -37,7 +39,6 @@ const NotificationList = ({ navigation }) => {
             }
           }
         },
-        authMode: "AMAZON_COGNITO_USER_POOLS"
       })
 
       let found = false
@@ -49,77 +50,100 @@ const NotificationList = ({ navigation }) => {
         }
       }
 
-      //Student does not exist so create them
-      if (found === false) {
-        let domain = studentEmail.split("@")[1]
-
-        //Find Institution via domain
-        let institution = await API.graphql({
-          query: listInstitutions,
-          variables: {
-            filter: {
-              domains: {
-                contains: domain
-              }
-            }
-          },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
-        })
-
-        if (institution.data.listInstitutions.items.length === 0) {
-          error = "Could not determine institution"
-          throw Error("")
-        }
-
-        institution = institution.data.listInstitutions.items[0]
-
-
-        //Create student
-        let newStudent = {
-          institutionId: institution.id,
-          firstname: user.attributes.name,
-          lastname: user.attributes.family_name,
-          userRole: "Student",
-          email: studentEmail
-        }
-        let create = await API.graphql({
-          query: createStudent,
-          variables: { input: newStudent },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
-      }
-
-      //Student  found
-      else {
-        //stu=stu.data.listStudents.items[0]
-        setStudent(stu)
-        let a = []
-        let r = []
-        let d = []
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          for (let j = 0; j < stu.enrollments.items[i].course.announcents.items.length; j++) {
-            a.push(stu.enrollments.items[i].course.announcents.items[j])
-            if (j % 2 === 1) {
-              r.push(stu.enrollments.items[i].course.announcents.items[j])
-            }
-            else {
-              d.push(stu.enrollments.items[i].course.announcents.items[j])
-            }
+    
+         setStudent(stu)
+         let courses=[];
+         //console.log(stu);
+         for(let i=0;i<stu.enrollments.items.length;i++){
+          courses.push(stu.enrollments.items[i].courseId);
+         }
+         console.log(courses)
+          let filter=`{"filter" : { "or" : [`;
+        for(let i=0;i<courses.length;i++){
+          if(i===courses.length-1){
+            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+          }
+          else{
+            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
           }
         }
-        setAnnouncements(a)
-        setReminders(r)
-        setDueDates(d)
+     
+          filter+=`] },"limit":"1" ,"year":"${year}","sortDirection":"DESC"}`;
+        
+        let variables = JSON.parse(filter)
+        //Fecth annnouncements and order them by date
+          let announcementList=await API.graphql({
+            query:announcementsByDate,
+            variables:variables
+          })
+          ;
+          console.log(announcementList.data.announcementsByDate.items);
+          setAnnouncements(announcementList.data.announcementsByDate.items);
+          setNextToken(announcementList.data.announcementsByDate.nextToken);
+          console.log(announcementList.data.announcementsByDate.nextToken);
+        // setAnnouncements(announcementList.data.announcementsByDate.items);
+        // console.log(announcementList.data.announcementsByDate);
+        // setNextToken(announcementList.data.announcementsByDate.nextToken);
         setLoading(false);
 
-      }
     } catch (er) {
       Alert.alert(error)
+      console.log(er);
       setLoading(false);
     }
   }
 
 
+  const loadMore =async()=>{
+    try{
+
+      let year=new Date().getFullYear();
+      let courses=[];
+         //console.log(stu);
+         for(let i=0;i<stu.enrollments.items.length;i++){
+          courses.push(stu.enrollments.items[i].courseId);
+         }
+         console.log(courses)
+          let filter=`{"filter" : { "or" : [`;
+        for(let i=0;i<courses.length;i++){
+          if(i===courses.length-1){
+            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+          }
+          else{
+            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
+          }
+        }
+        
+        filter+=`] },"limit":"1",year":"${year}","sortDirection":"DESC","nextToken":"${nextToken}"}`;
+        
+        let variables = JSON.parse(filter)
+        //Fecth annnouncements and order them by date
+          let announcementList=await API.graphql({
+            query:announcementsByDate,
+            variables:variables
+          })
+          ;
+        // //Fecth annnouncements and order them by date
+        //   let announcementList=await API.graphql({
+        //     query:announcementsByDate,
+        //     variables:{
+        //       year:year,
+        //       limit : 1
+        //     }, 
+        //   })
+
+          let a=announcementList.data.announcementsByDate.items;
+          for(let i=0;i<a.length;i++){
+            announcements.push(a[i]);
+          }
+          setNextToken(announcementList.data.announcementsByDate.items);
+          setAnnouncements(announcements)
+
+    }catch(error){
+      console.log(error)
+    }
+
+  }
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -141,7 +165,7 @@ const NotificationList = ({ navigation }) => {
           onPress={handlePress1}
           style={{ backgroundColor: "white" }}
         >
-          {reminders.map((val, key) => (
+          {announcements.filter(item=>item.type==="Reminder").map((val, key) => (
             <Card
               key={key}
               style={{
@@ -196,7 +220,7 @@ const NotificationList = ({ navigation }) => {
           onPress={handlePress2}
           style={{ backgroundColor: "white" }}
         >
-          {dueDates.map((val, key) => (
+          {announcements.filter(item=>item.type==="Due Date").map((val, key) => (
             <Card
               key={key}
               style={{
@@ -208,7 +232,7 @@ const NotificationList = ({ navigation }) => {
             >
               <Card.Content>
                 <Text>
-                  {val.course.coursecode} {": "} {val.start}
+                  {val.course.coursecode} {": "} {val.title}
                 </Text>
               </Card.Content>
             </Card>
@@ -287,7 +311,7 @@ const NotificationList = ({ navigation }) => {
                       <Card.Title
                         key={key}
                         title={val.course.coursecode}
-                        subtitle={val.start}
+                        subtitle={val.title}
                         left={(props) => (
                           <Avatar.Icon
                             {...props}
@@ -300,11 +324,17 @@ const NotificationList = ({ navigation }) => {
                     </Card.Content>
                   </Card>
                 ))}
+                 <Text>
+          { nextToken !==null ? <Button title="Load More" onPress={loadMore}></Button> :  " "}
+        </Text>
+     
 
               </ScrollView>
             )}
+            {/* <button onClick={loadMore}> </button> */}
+            
           </View>
-
+       
         </List.Section>
       </Card.Content>
     </View >
