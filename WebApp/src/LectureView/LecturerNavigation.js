@@ -1,11 +1,15 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import "../Institution VIew/Navigation/Navigation.css";
-import logo from "../images/logo.jpg";
-import { Auth } from "aws-amplify";
-import { useNavigate } from "react-router-dom";
-export default function LecturerNavigation() {
-  const [user, setUser] = React.useState("");
+import logo from "../images/university_logo.svg";
+import { Auth, API, Storage } from "aws-amplify";
+import { useNavigate, Link } from "react-router-dom";
+import { listLecturers } from "../graphql/queries";
+
+
+export default function LecturerNavigation(lecturerData) {
+  const [user, setUser] = useState("");
   const navigate = useNavigate();
+  const [lecturer, setLecturer] = useState(lecturerData.props);
 
   const onSignOut = async (event) => {
     event.preventDefault();
@@ -24,27 +28,84 @@ export default function LecturerNavigation() {
     setUser(u);
   };
 
-  React.useEffect(() => {
-    userSet();
+  const fetchLecturer = async () => {
+    let u = await Auth.currentAuthenticatedUser();
+    let lecturer_email = u.attributes.email;
+    let lec = lecturer;
+    try {
+      if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
+        lec = await API.graphql({
+          query: listLecturers,
+          variables: {
+            filter: {
+              email: {
+                eq: lecturer_email
+              }
+            }
+          },
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+        });
+
+        if (lec.data.listLecturers.items.length === 0) {
+          throw Error()
+        }
+        lec = lec.data.listLecturers.items[0];
+        setLecturer(lec)
+      }
+
+      if (lec.institution.logo === null) {
+        lec.institution.logoUrl = logo;
+      }
+
+      else if (lec.institution.logoUrl === undefined) {
+        lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+        setLecturer(lec);
+      }
+
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(() => {
+    // userSet();
+    fetchLecturer();
   });
 
   return (
     <div className={"grid"}>
       <nav className="vertical-navbar col-4 p-4">
-        <div className="top">
+        <div className="top"
+          style={{
+            width: "calc(12vw)",
+            height: "calc(19vh)",
+            justifyContent: "center",
+            justifyItems: "center",
+            textAlign: "center",
+            maxWidth: "100%",
+            padding: "2px",
+            maxHeight: "100%"
+          }}
+        >
           <img
-            src={logo}
+            src={lecturer !== undefined ? lecturer !== null ? lecturer.institution.logoUrl : " " : "  "}
             alt="Logo"
             className="logo offset-2 img-fluid mr-1"
-            width={"175px"}
-            height={"155px"}
-            data-testid={"UniversityImage"}
+            // width={"175px"}
+            // height={"155px"}
+            style={{ width: "100%", height: "100%", border: "2px solid black", padding: "0px" }}
+            data-testid={'UniversityImage'}
           />
-          <div className="lecturer-name">{user}</div>
+          <div className="institution-name">
+            <b>
+              {lecturer && (lecturer.firstname + " " + lecturer.lastname)}
+            </b>
+          </div>
         </div>
 
+
         <ul className="navbar-nav">
-        <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
+          <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
             <a
               href="/lecturer/dashboard"
               className="nav-link"
@@ -54,34 +115,42 @@ export default function LecturerNavigation() {
             </a>
           </li>
           <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
-            <a
-              href="/lecturer/modules"
+
+
+
+            <Link
+              to={'/lecture/dashboard'}
+              state={lecturer}
               className="nav-link"
-              data-testid={"EditModuleInfoLink"}
             >
               <b>Edit Module Information</b>
-            </a>
+            </Link>
+
           </li>
           <li
             className="nav-item text-center"
             data-testid={"RecentAnnouncements"}
           >
-            <a
-              href="/lecturer/announcement"
+
+            <Link
+              to={'/lecturer/announcement'}
+              state={lecturer}
               className="nav-link"
-              data-testid={"RecentAnnouncementsLink"}
             >
               <b>Recent Announcements</b>
-            </a>
+            </Link>
+
           </li>
           <li className="nav-item text-center" data-testid={"EditPersonalInfo"}>
-            <a
-              href="/lecturer/personal-info"
+
+            <Link
+              to={'/lecturer/personal-info'}
+              state={lecturer}
               className="nav-link"
-              data-testid={"EditPersonalInfoLink"}
             >
               <b>Edit Personal Information</b>
-            </a>
+            </Link>
+
           </li>
         </ul>
         <div className="logoutbtn">

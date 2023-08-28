@@ -10,7 +10,10 @@ export const createLecturer=`mutation CreateLecturer(
     userRole
     email
     courses {
-      nextToken
+      items{
+        id
+        coursecode
+      }
     }
     createdAt
     updatedAt
@@ -65,43 +68,7 @@ export const updateCourse=`mutation UpdateCourse(
     institutionId
     lecturerId
     coursecode
-    semester
-    enrollments {
-      nextToken
-    }
-    activity {
-      nextToken
-    }
-    announcents {
-      nextToken
-    }
-    lecturer {
-      id
-      institutionId
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      owner
-    }
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-    }
+    coursename
     createdAt
     updatedAt
   }
@@ -214,6 +181,7 @@ export const updateInstitution=`mutation UpdateInstitution(
     name
     location
     pageUrl
+    logo
     campusMapUrl
     openingTime
     closingTime
@@ -261,26 +229,23 @@ export const updateAdmin=`mutation UpdateAdmin(
   updateAdmin(input: $input, condition: $condition) {
     id
     institutionId
+    institution{
+      id
+      name
+      domains
+      logo
+      lectureremails
+      courses{
+        items{
+          coursecode
+          id
+        }
+      }
+    }
     firstname
     lastname
     userRole
     email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-    }
     createdAt
     updatedAt
     owner
@@ -303,3 +268,15 @@ export const createCourse=`mutation CreateCourse(
   }
 }`
 
+export const updateActivity=`mutation UpdateActivity(
+  $input: UpdateActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  updateActivity(input: $input, condition: $condition) {
+    id
+    courseId
+    activityname
+    createdAt
+    updatedAt
+  }
+}`

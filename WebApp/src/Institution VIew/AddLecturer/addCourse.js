@@ -33,9 +33,7 @@ export default function AddModal(module) {
         }
       }
       setOfferedCourses(offeredCourses)
-      console.log(offeredCourses)
       setSelectedCourses(module.selectedCourses)
-      console.log(module)
 
     } catch (e) {
       alert("No courses found")
@@ -134,6 +132,9 @@ export default function AddModal(module) {
                         {val.coursecode}
                       </td>
                       <td>
+                        {val.coursename}
+                      </td>
+                      <td>
                         <button onClick={(e) => handleRemove(key)}
                           type="button"
                           className="btn btn-danger"
@@ -185,7 +186,7 @@ export default function AddModal(module) {
 
       </div>
 
-      
+
     </div>
 
 
