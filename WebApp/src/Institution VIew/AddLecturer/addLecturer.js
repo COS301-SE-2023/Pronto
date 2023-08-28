@@ -7,7 +7,7 @@ import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import HelpButton from '../../HelpButton';
-import UserManual from "../HelpFiles/InstitutionInstructions.pdf";
+import UserManual from "../HelpFiles/AddLecturer.pdf";
 
 const AddLecturer = () => {
     const [firstName, setFirstName] = useState("")
@@ -331,7 +331,7 @@ const AddLecturer = () => {
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '900px', marginTop: '10%' }}>
+            <main style={{ width: '900px', marginTop: '20%' }}>
                 {/* Input forms content */}
                 <h1 className="text-center">Add a lecturer</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to add lecturers to your institution and assign them to their courses. This will allow lecturers to sign up for an account.</h6>
