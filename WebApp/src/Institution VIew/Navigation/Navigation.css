@@ -15,6 +15,7 @@
     justify-content: space-between;
     padding: 20px;
     margin: 1%;
+    max-height: fit-content;
 }
 
 /* Center the links vertically */
@@ -27,6 +28,7 @@
     align-items: center;
     flex-grow: 1; /* Allow content to expand and center vertically */
     justify-content: center; /* Center the content vertically */
+    max-height: fit-content;
 }
 
 .nav-item {
@@ -66,8 +68,9 @@
 /* Centered text style for top */
 .top {
     text-align: center;
-    margin-top: 35px;
-    margin-bottom: 35px; /* Adjust the space at the bottom */
+    margin-top: 0px;
+        margin-bottom: 10px;
+        /* Adjust the space at the bottom */
 }
 .institution-name {
     margin-top: 0%;
@@ -86,6 +89,7 @@
     border: none; /* Remove any border */
     width: 100%;
     margin: 0 auto; /* Horizontally center the button within its container */
+    max-height: fit-content;
 }
 
 /* Media query for smaller screens (e.g., 13 inch) */
@@ -111,5 +115,5 @@
   }
 
 .grid {
-    max-height: 100vh;
+    height: 80vh;
 }

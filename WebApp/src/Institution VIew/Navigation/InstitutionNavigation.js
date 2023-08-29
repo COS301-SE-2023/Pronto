@@ -13,6 +13,7 @@ export default function InstitutionNavigation({ props }) {
     //const [admin, setAdmin] = useState(state.state);
     const {admin,setAdmin} =useAdmin();
 
+//    console.log(admin);
     const onSignOut = async (event) => {
         event.preventDefault();
         try {
@@ -24,54 +25,41 @@ export default function InstitutionNavigation({ props }) {
         }
     };
 
-    const fetchLogo = async () => {
-        try {
 
-            if (admin === null || admin === undefined) {
-                let user = await Auth.currentAuthenticatedUser();
-                let email = user.attributes.email
+    const fetchAdmin =async()=>{
 
+         try{
+              if(admin===null || admin===undefined){
+                let user=await Auth.currentAuthenticatedUser();
+                let adminEmail=user.attributes.email
                 let adminData = await API.graphql({
                     query: listAdmins,
                     variables: {
                         filter: {
                             email: {
-                                eq: email
+                                eq: adminEmail
                             }
                         },
                     },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
                 });
-
-                adminData = adminData.data.listAdmins.items[0];
-
-                if (adminData.institution.logo !== null && adminData.institution.logo !== undefined) {
-                    adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-                }
-                else {
-                    adminData.institution.logoUrl = logo;
-                }
+                if(adminData.data.listAdmins.items.length>0){
+                    adminData = adminData.data.listAdmins.items[0];
+                    if(adminData.institution.logo!==null){
+                        adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                    }
                 setAdmin(adminData);
-            }
-            else {
-                if (admin.institution.logoUrl === undefined || admin.institution.logoUrl === null) {
-                    let adminData = admin;
-                    adminData.institution.logoUrl = logo;
-                    admin.institution.logoUrl = await Storage.get(admin.institution.logo, { validateObjectExistence: true, expires: 3600 });
-                    setAdmin(adminData);
                 }
-            }
-        } catch (error) {
+          }
 
-            let a = admin;
-            a.institution.logoUrl = logo;
-            setAdmin(a);
-        }
+    }catch(error){
+    
+    }
     }
 
 
     useEffect(() => {
-        //fetchLogo()
+       
+        fetchAdmin()
     }, []);
 
     return (
