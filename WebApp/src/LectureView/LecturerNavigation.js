@@ -93,13 +93,13 @@ export default function LecturerNavigation(lecturerData) {
 
         <ul className="navbar-nav">
           <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
-            <a
-              href="/lecturer/dashboard"
+            <Link
+              to={'/lecturer/dashboard'}
+              state={lecturer}
               className="nav-link"
-              data-testid={"LecturerDashboardLink"}
             >
               <b>Dashboard</b>
-            </a>
+            </Link>
           </li>
 
           <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
@@ -151,8 +151,6 @@ export default function LecturerNavigation(lecturerData) {
           </button>
         </div>
       </nav>
-
-
     </div>
   );
 }

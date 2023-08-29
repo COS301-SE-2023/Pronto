@@ -82,79 +82,76 @@ export default function InstitutionNavigation({ props }) {
                         src={admin !== undefined ? admin !== null ? admin.institution.logoUrl : " " : "  "}
                         alt="Logo"
                         className="logo offset-2 img-fluid mr-1"
-                        width={"175px"}
-                        height={"155px"}
+                        style={{ width: "175px", height: "155px" }}
                         data-testid={'UniversityImage'}
                     />
 
-                    <div className="institution-name">
+                    <div className="institution-name" style={{paddingTop:'5%'}}>
                         <b>
                             {admin && admin.institution && admin.institution.name}
                         </b>
                     </div>
                 </div>
 
-                <div className="nav-links-container">
-                    <ul className="navbar-nav">
-                        <li className="nav-item text-center" data-testid={'Dashboard'}>
-                            <Link
-                                to={'/institution/dashboard'}
-                                state={admin}
-                                className="nav-link"
-                            >
-                                <b>Dashboard</b>
-                            </Link>
-                        </li>
-                        <li className="nav-item text-center" data-testid={'UploadSchedule'}>
-                            <Link
-                                to={'/institution/upload-schedule'}
-                                state={admin}
-                                className="nav-link"
-                            >
-                                <b>Upload Schedule</b>
-                            </Link>
-                        </li>
-                        <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
-                            <Link
-                                to={'/institution/upload-student-files'}
-                                state={admin}
-                                className="nav-link"
-                            >
-                                <b>Upload Student Files</b>
-                            </Link>
-                        </li>
-                        <li className="nav-item text-center" data-testid={'AddLecturer'}>
-                            <Link
-                                to={'/institution/add-lecturer'}
-                                state={admin}
-                                className="nav-link"
-                            >
-                                <b>Add/Remove Lecturer</b>
-                            </Link>
-                        </li>
-                        <li className="nav-item text-center">
-                            <Link
-                                to={'/institution/edit-info'}
-                                state={admin}
-                                className="nav-link"
-                            >
-                                <b>Edit University Info</b>
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
+                <ul className="navbar-nav">
+                    <li className="nav-item text-center" data-testid={'Dashboard'}>
+                        <Link
+                            to={'/institution/dashboard'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                        <b>Dashboard</b>
+                        </Link>
+                    </li>
+                    <li className="nav-item text-center" data-testid={'UploadSchedule'}>
+                        <Link
+                            to={'/institution/upload-schedule'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Upload Schedule</b>
+                        </Link>
+                    </li>
+                    <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
+                        <Link
+                            to={'/institution/upload-student-files'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Upload Student Files</b>
+                        </Link>
+                    </li>
+                    <li className="nav-item text-center" data-testid={'AddLecturer'}>
+                        <Link
+                            to={'/institution/add-lecturer'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Add/Remove Lecturer</b>
+                        </Link>
+                    </li>
+                    <li className="nav-item text-center">
+                        <Link
+                            to={'/institution/edit-info'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Edit University Info</b>
+                        </Link>
+                    </li>
+                </ul>
+                
                 <div className="logoutbtn">
                     <button
                         className="btn btn-danger btn-lg btn-block"
                         style={{ borderRadius: "25px" }}
-                        data-testid="LogoutButton"
+                        data-testid={"LogoutButton"}
                         onClick={onSignOut}
                     >
                         Log Out
                     </button>
                 </div>
             </nav >
-
 
         </div >
 
