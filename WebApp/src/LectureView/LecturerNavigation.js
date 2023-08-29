@@ -4,13 +4,15 @@ import logo from "../images/university_logo.svg";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate, Link } from "react-router-dom";
 import { listLecturers } from "../graphql/queries";
-
+import { useLecturer } from "../ContextProviders/LecturerContext";
 
 export default function LecturerNavigation(lecturerData) {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
-  const [lecturer, setLecturer] = useState(lecturerData.props);
+  //const [lecturer, setLecturer] = useState(lecturerData.props);
 
+  const { lecturer,setLecturer} =useLecturer();
+   console.log(lecturer);
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -24,7 +26,7 @@ export default function LecturerNavigation(lecturerData) {
 
   const userSet = async () => {
     let u = await Auth.currentAuthenticatedUser();
-    u = u.attributes.name + u.attributes.family_name;
+    u = u.attributes.name +" "+ u.attributes.family_name;
     setUser(u);
   };
 
@@ -68,8 +70,8 @@ export default function LecturerNavigation(lecturerData) {
   }
 
   useEffect(() => {
-    // userSet();
-    fetchLecturer();
+     userSet();
+    //fetchLecturer();
   });
 
   return (
@@ -86,7 +88,7 @@ export default function LecturerNavigation(lecturerData) {
           
           <div className="lecturer-name" style={{paddingTop:'5%'}}>
             <b>
-              {lecturer && (lecturer.firstname + " " + lecturer.lastname)}
+              {user}
             </b>
           </div>
         </div>
@@ -95,7 +97,7 @@ export default function LecturerNavigation(lecturerData) {
           <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
             <Link
               to={'/lecturer/dashboard'}
-              state={lecturer}
+              //state={lecturer}
               className="nav-link"
             >
               <b>Dashboard</b>
@@ -105,7 +107,7 @@ export default function LecturerNavigation(lecturerData) {
           <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
             <Link
               to={'/lecturer/modules'}
-              state={lecturer}
+              //state={lecturer}
               className="nav-link"
             >
               <b>Edit Module Information</b>
@@ -120,7 +122,7 @@ export default function LecturerNavigation(lecturerData) {
 
             <Link
               to={'/lecturer/announcement'}
-              state={lecturer}
+              //state={lecturer}
               className="nav-link"
             >
               <b>Recent Announcements</b>
@@ -131,7 +133,7 @@ export default function LecturerNavigation(lecturerData) {
 
             <Link
               to={'/lecturer/personal-info'}
-              state={lecturer}
+              //state={lecturer}
               className="nav-link"
             >
               <b>Edit Personal Information</b>
@@ -151,6 +153,7 @@ export default function LecturerNavigation(lecturerData) {
           </button>
         </div>
       </nav>
+      
     </div>
   );
 }

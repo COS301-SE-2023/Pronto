@@ -6,8 +6,10 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
 import HelpButton from '../../HelpButton';
 import UserManual from "../HelpFiles/LecturerInstructions.pdf";
+import { useNavigate } from 'react-router-dom';
 
 const DashboardLecturer = () => {
+    const navigate= useNavigate();
     return (<div>
         <LeftContainer>
             <LecturerNavigation />
@@ -22,7 +24,8 @@ const DashboardLecturer = () => {
                         <HoverableIcon>
                         <EditNoteIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
-                                window.location.href = "/lecturer/modules";
+                            //    window.location.href = "/lecturer/modules";
+                                navigate("/lecturer/modules");
                             }}
                         />
 
@@ -36,7 +39,8 @@ const DashboardLecturer = () => {
                         <HoverableIcon>
                         <CampaignIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
-                                window.location.href = "/lecturer/announcement";
+                                //window.location.href = "/lecturer/announcement";
+                                navigate("/lecturer/announcement");
                             }}
                         />
 
@@ -50,7 +54,8 @@ const DashboardLecturer = () => {
                         <HoverableIcon>
                         <SettingsAccessibilityIcon style={{ fontSize: "250px", cursor: "pointer" }}
                             onClick={() => {
-                                window.location.href = "/lecturer/personal-info";
+                                //window.location.href = "/lecturer/personal-info";
+                                navigate("/lecturer/personal-info");
                             }}
                         />
                         <span style={{ fontSize: "30px" }}>Edit Personal Info</span>

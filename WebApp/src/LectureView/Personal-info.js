@@ -12,6 +12,7 @@ import { listLecturers } from '../graphql/queries';
 import { useLocation } from 'react-router-dom';
 import UserManual from "./HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../HelpButton';
+import { useLecturer } from '../ContextProviders/LecturerContext';
 
 const PersonalInfoPage = () => {
     const [expanded, setExpanded] = useState(false);
@@ -20,8 +21,8 @@ const PersonalInfoPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const state = useLocation();
-    const [lecturer, setLecturer] = useState(state.state);
-
+    //const [lecturer, setLecturer] = useState(state.state);
+    const {lecturer,setLecturer} = useLecturer();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -41,29 +42,30 @@ const PersonalInfoPage = () => {
         setConfirmPassword("")
     }
 
-    const fetchLecturer = async () => {
-        let u = await Auth.currentAuthenticatedUser()
-        if (lecturer !== null) {
-            const user = await Auth.currentAuthenticatedUser();
-            let lecturer_email = user.attributes.email;
-            let lec = await API.graphql({
-                query: listLecturers,
-                variables: {
-                    filter: {
-                        email: {
-                            eq: lecturer_email
-                        }
-                    }
-                },
-                authMode: "AMAZON_COGNITO_USER_POOLS",
-            });
-            setLecturer(lec.data.listLecturers.items[0]);
-        }
+    
+    // const fetchLecturer = async () => {
+    //     let u = await Auth.currentAuthenticatedUser()
+    //     if (lecturer !== null) {
+    //         const user = await Auth.currentAuthenticatedUser();
+    //         let lecturer_email = user.attributes.email;
+    //         let lec = await API.graphql({
+    //             query: listLecturers,
+    //             variables: {
+    //                 filter: {
+    //                     email: {
+    //                         eq: lecturer_email
+    //                     }
+    //                 }
+    //             },
+    //             authMode: "AMAZON_COGNITO_USER_POOLS",
+    //         });
+    //         setLecturer(lec.data.listLecturers.items[0]);
+    //     }
 
-    }
+    // }
 
     useEffect(() => {
-        fetchLecturer()
+      //  fetchLecturer()
     }, [])
 
     return (
