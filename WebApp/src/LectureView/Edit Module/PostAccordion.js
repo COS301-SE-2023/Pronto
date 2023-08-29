@@ -284,8 +284,9 @@ export default function PostAccordion(course) {
         <AccordionDetails>
           <select
             onChange={e => handleSelectActivity(e.target.value)}
-            className="custom-select">
-            <option ></option>
+            className="custom-select"
+            >
+            <option selected disabled>Select Activity</option>
             {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
               return (
                 <option key={key}
@@ -295,7 +296,7 @@ export default function PostAccordion(course) {
             )
             }
           </select>
-          <form>
+          <form style={{paddingTop:'15px'}}>
             <div className="form-group row">
               <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
               <div className="col-sm-10">
