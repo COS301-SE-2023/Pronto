@@ -190,7 +190,7 @@ const EditInfoPage = () => {
             try {
 
                 const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;
-                let a = await Storage.put(fileKey, selectedFile, {
+                let path = await Storage.put(fileKey, selectedFile, {
                     contentType: "image/png",
                     progressCallback: ({ loaded, total }) => {
                         const progress = Math.round((loaded / total) * 100);
@@ -208,9 +208,14 @@ const EditInfoPage = () => {
                     variables: { input: inst },
                     authMode: "AMAZON_COGNITO_USER_POOLS"
                 });
-                update.data.updateInstitution.logoUrl = null;
+          
                 let newAdmin = admin;
                 newAdmin.institution = update.data.updateInstitution;
+                try{
+                    newAdmin.institution.logoUrl= await Storage.get(newAdmin.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                }catch(error){
+
+                }
                 setAdmin(newAdmin);
                 setMessage("File successfully uploaded: " + selectedFile.name);
             } catch (error) {
