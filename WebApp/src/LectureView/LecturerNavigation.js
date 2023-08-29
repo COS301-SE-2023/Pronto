@@ -77,8 +77,10 @@ export default function LecturerNavigation(lecturerData) {
       <nav className="vertical-navbar col-4 p-4">
         <div className="top"
           style={{
+            
             width: "calc(12vw)",
             height: "calc(19vh)",
+            alignItems:'center',
             justifyContent: "center",
             justifyItems: "center",
             textAlign: "center",
@@ -91,12 +93,11 @@ export default function LecturerNavigation(lecturerData) {
             src={lecturer !== undefined ? lecturer !== null ? lecturer.institution.logoUrl : " " : "  "}
             alt="Logo"
             className="logo offset-2 img-fluid mr-1"
-            // width={"175px"}
-            // height={"155px"}
-            style={{ width: "100%", height: "100%", border: "2px solid black", padding: "0px" }}
+            style={{ width: "175px", height: "155px" }}
             data-testid={'UniversityImage'}
           />
-          <div className="institution-name">
+          
+          <div className="institution-name" style={{paddingTop:'5%'}}>
             <b>
               {lecturer && (lecturer.firstname + " " + lecturer.lastname)}
             </b>
