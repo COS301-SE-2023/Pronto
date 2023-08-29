@@ -114,17 +114,16 @@ export default function LecturerNavigation(lecturerData) {
               <b>Dashboard</b>
             </a>
           </li>
+
           <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
-
-
-
             <Link
-              to={'/lecture/dashboard'}
+              to={'/lecturer/modules'}
               state={lecturer}
               className="nav-link"
             >
               <b>Edit Module Information</b>
             </Link>
+           
 
           </li>
           <li
