@@ -11,6 +11,9 @@ export default function LecturerNavigation(lecturerData) {
   const navigate = useNavigate();
   //const [lecturer, setLecturer] = useState(lecturerData.props);
 
+  const lec=useLecturer()
+  console.log(lec)
+  console.log(navigate)
   const { lecturer, setLecturer } = useLecturer();
   const onSignOut = async (event) => {
     event.preventDefault();
@@ -27,6 +30,8 @@ export default function LecturerNavigation(lecturerData) {
     let u = await Auth.currentAuthenticatedUser();
     u = u.attributes.name + " " + u.attributes.family_name;
     setUser(u);
+    console.log(lecturer);
+    console.log(useLecturer);
   };
 
   const fetchLecturer = async () => {
@@ -44,7 +49,6 @@ export default function LecturerNavigation(lecturerData) {
               }
             }
           },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
         });
 
         if (lec.data.listLecturers.items.length === 0) {
@@ -70,11 +74,11 @@ export default function LecturerNavigation(lecturerData) {
 
   useEffect(() => {
     userSet();
-    //fetchLecturer();
+    fetchLecturer();
   });
 
   return (
-    <div className={"grid"} style={{maxHeight:"100vh"}}>
+    <div className={"grid"} >
       <nav className="vertical-navbar col-4 p-4">
         <div className="top">
           <img

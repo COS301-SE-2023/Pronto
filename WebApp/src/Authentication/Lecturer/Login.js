@@ -65,7 +65,7 @@ function Login() {
             }
           },
         });
-        console.log(lec);
+    
 
         if(lec.data.listLecturers.items.length>0){
           lec=lec.data.listLecturers.items[0];
@@ -74,7 +74,7 @@ function Login() {
            
           }
            setLecturer(lec);
-           console.log(lec);
+      
         }
       }catch(error){
         console.log(error);
