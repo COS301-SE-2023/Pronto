@@ -252,7 +252,7 @@ const EditInfoPage = () => {
                 </table>
 
                 <div>
-                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }} >
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel1bh-content"
@@ -316,7 +316,7 @@ const EditInfoPage = () => {
                     </Accordion>
                 </div>
                 <div>
-                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} data-testid={'paccordion2'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
+                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} data-testid={'paccordion2'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel2bh-content"
@@ -393,7 +393,7 @@ const EditInfoPage = () => {
                     </Accordion>
                 </div>
                 <div>
-                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
+                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel1bh-content"
@@ -466,68 +466,6 @@ const EditInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-                <div>
-                    <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                            style={{ "width": "100%" }}
-                            data-testid={'paccordionDrop'}>
-                            <Typography
-                                sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }}>
-                                Edit Admin Information
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <div className="card shadow">
-                                <div className="card-body">
-                                    <form onSubmit={handleAdminEdit}>
-                                        <div className="form-row">
-                                            {/* First name */}
-                                            <div className="form-group col-6">
-                                                <label htmlFor="name">First Name</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="admin-name"
-                                                    placeholder={admin !== null ? admin.firstname : " "}
-                                                    data-testid="adminfirstName"
-                                                    required
-                                                    value={firstName}
-                                                    onChange={(e) => setFirstName(e.target.value)}
-                                                />
-                                            </div>
-
-                                            {/* Last name */}
-                                            <div className="form-group col-6">
-                                                <label htmlFor="lastname">Last Name</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="lastname"
-                                                    placeholder={admin !== null ? admin.lastname : " "}
-                                                    data-testid="adminlastName"
-                                                    required
-                                                    value={lastName}
-                                                    onChange={(e) => setLastName(e.target.value)}
-                                                />
-                                            </div>
-                                        </div>
-                                        <button
-                                            type="submit"
-                                            className="btn btn-danger w-100"
-                                            data-testid="editButton"
-                                        >
-                                            Edit
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </AccordionDetails>
-                    </Accordion>
-                </div>
-
             </main>
 
         </div>
