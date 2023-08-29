@@ -81,7 +81,7 @@ export default function InstitutionNavigation({ props }) {
                     <img
                         src={admin !== undefined ? admin !== null ? admin.institution.logoUrl : " " : "  "}
                         alt="Logo"
-                        className="logo offset-2 img-fluid mr-1"
+                        className="logo offset-2 img-fluid mr-4.5"
                         style={{ width: "175px", height: "155px" }}
                         data-testid={'UniversityImage'}
                     />
