@@ -66,8 +66,8 @@
 /* Centered text style for top */
 .top {
     text-align: center;
-    margin-top: 40px;
-    margin-bottom: 30px; /* Adjust the space at the bottom */
+    margin-top: 35px;
+    margin-bottom: 35px; /* Adjust the space at the bottom */
 }
 .institution-name {
     margin-top: 0%;
