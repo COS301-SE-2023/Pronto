@@ -418,7 +418,7 @@ function Login() {
             </GhostButton>
           </LeftOverlayPanel>
 
-          <RightOverlayPanel class="rightOverlay" signin={signIn}>
+          <RightOverlayPanel className="rightOverlay" signin={signIn}>
             <Title>No Account?</Title>
             <Paragraph>Click here to verify a lecturer account</Paragraph>
             <GhostButton type="button" onClick={() => toggle(false)}>
