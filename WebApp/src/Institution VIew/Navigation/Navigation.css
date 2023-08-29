@@ -58,7 +58,7 @@
 .logo {
     display: block;
     margin: 0 auto;
-    max-width: 150px; /* Set a max width */
+   
     border-radius: 50%; /* Circular shape */
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }

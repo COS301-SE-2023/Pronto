@@ -82,11 +82,11 @@ export default function InstitutionNavigation({ props }) {
                         src={admin !== undefined ? admin !== null ? admin.institution.logoUrl : " " : "  "}
                         alt="Logo"
                         className="logo offset-2 img-fluid mr-4.5"
-                        style={{ width: "175px", height: "155px" }}
+                        style={{ width: "155px", height: "155px" }}
                         data-testid={'UniversityImage'}
                     />
 
-                    <div className="institution-name" style={{paddingTop:'5%'}}>
+                    <div className="institution-name" style={{ paddingTop: '5%' }}>
                         <b>
                             {admin && admin.institution && admin.institution.name}
                         </b>
@@ -100,7 +100,7 @@ export default function InstitutionNavigation({ props }) {
                             state={admin}
                             className="nav-link"
                         >
-                        <b>Dashboard</b>
+                            <b>Dashboard</b>
                         </Link>
                     </li>
                     <li className="nav-item text-center" data-testid={'UploadSchedule'}>
@@ -140,7 +140,7 @@ export default function InstitutionNavigation({ props }) {
                         </Link>
                     </li>
                 </ul>
-                
+
                 <div className="logoutbtn">
                     <button
                         className="btn btn-danger btn-lg btn-block"

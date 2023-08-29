@@ -11,7 +11,7 @@ export default function LecturerNavigation(lecturerData) {
   const navigate = useNavigate();
   //const [lecturer, setLecturer] = useState(lecturerData.props);
 
-  const { lecturer,setLecturer} =useLecturer();
+  const { lecturer, setLecturer } = useLecturer();
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -25,7 +25,7 @@ export default function LecturerNavigation(lecturerData) {
 
   const userSet = async () => {
     let u = await Auth.currentAuthenticatedUser();
-    u = u.attributes.name +" "+ u.attributes.family_name;
+    u = u.attributes.name + " " + u.attributes.family_name;
     setUser(u);
   };
 
@@ -69,7 +69,7 @@ export default function LecturerNavigation(lecturerData) {
   }
 
   useEffect(() => {
-     userSet();
+    userSet();
     //fetchLecturer();
   });
 
@@ -81,11 +81,11 @@ export default function LecturerNavigation(lecturerData) {
             src={lecturer !== undefined ? lecturer !== null ? lecturer.institution.logoUrl : " " : "  "}
             alt="Logo"
             className="logo offset-2 img-fluid mr-1"
-            style={{ width: "175px", height: "155px" }}
+            style={{ width: "155px", height: "155px" }}
             data-testid={'UniversityImage'}
           />
-          
-          <div className="lecturer-name" style={{paddingTop:'5%'}}>
+
+          <div className="lecturer-name" style={{ paddingTop: '5%' }}>
             <b>
               {user}
             </b>
@@ -111,7 +111,7 @@ export default function LecturerNavigation(lecturerData) {
             >
               <b>Edit Module Information</b>
             </Link>
-           
+
 
           </li>
           <li
@@ -152,7 +152,7 @@ export default function LecturerNavigation(lecturerData) {
           </button>
         </div>
       </nav>
-      
+
     </div>
   );
 }
