@@ -75,20 +75,7 @@ export default function LecturerNavigation(lecturerData) {
   return (
     <div className={"grid"}>
       <nav className="vertical-navbar col-4 p-4">
-        <div className="top"
-          style={{
-            
-            width: "calc(12vw)",
-            height: "calc(19vh)",
-            alignItems:'center',
-            justifyContent: "center",
-            justifyItems: "center",
-            textAlign: "center",
-            maxWidth: "100%",
-            padding: "2px",
-            maxHeight: "100%"
-          }}
-        >
+        <div className="top">
           <img
             src={lecturer !== undefined ? lecturer !== null ? lecturer.institution.logoUrl : " " : "  "}
             alt="Logo"
@@ -97,13 +84,12 @@ export default function LecturerNavigation(lecturerData) {
             data-testid={'UniversityImage'}
           />
           
-          <div className="institution-name" style={{paddingTop:'5%'}}>
+          <div className="lecturer-name" style={{paddingTop:'5%'}}>
             <b>
               {lecturer && (lecturer.firstname + " " + lecturer.lastname)}
             </b>
           </div>
         </div>
-
 
         <ul className="navbar-nav">
           <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
