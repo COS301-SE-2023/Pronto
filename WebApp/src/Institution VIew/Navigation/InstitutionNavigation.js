@@ -4,13 +4,14 @@ import logo from "../../images/university_logo.svg";
 import { Auth, Storage, API } from "aws-amplify";
 import { listAdmins, listInstitutions, lecturersByInstitutionId } from "../../graphql/queries";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useAdmin } from "../../ContextProviders/AdminContext";
 
 export default function InstitutionNavigation({ props }) {
     const navigate = useNavigate();
     const state = useLocation();
     //const[institution,setInstitution]=useState(state.state)
-    const [admin, setAdmin] = useState(state.state);
-
+    //const [admin, setAdmin] = useState(state.state);
+    const {admin,setAdmin} =useAdmin();
 
     const onSignOut = async (event) => {
         event.preventDefault();
@@ -70,7 +71,7 @@ export default function InstitutionNavigation({ props }) {
 
 
     useEffect(() => {
-        fetchLogo()
+        //fetchLogo()
     }, []);
 
     return (

@@ -74,7 +74,7 @@ export default function LecturerNavigation(lecturerData) {
   });
 
   return (
-    <div className={"grid"}>
+    <div className={"grid"} style={{maxHeight:"100vh"}}>
       <nav className="vertical-navbar col-4 p-4">
         <div className="top">
           <img

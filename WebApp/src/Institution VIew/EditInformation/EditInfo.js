@@ -13,6 +13,7 @@ import { useLocation } from 'react-router-dom';
 import '../Navigation/Navigation.css';
 import HelpButton from '../../HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";
+import { useAdmin } from '../../ContextProviders/AdminContext';
 
 const EditInfoPage = () => {
     const [expanded, setExpanded] = useState(false);
@@ -26,10 +27,12 @@ const EditInfoPage = () => {
     const [folderNameS3, setFolderNameS3] = useState("");
     const [message, setMessage] = useState("");
     const state = useLocation();
-    const [admin, setAdmin] = useState(state.state)
+    //const [admin, setAdmin] = useState(state.state)
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [domain, setDomain] = useState("");
+ 
+    const {admin,setAdmin} = useAdmin();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -47,6 +50,15 @@ const EditInfoPage = () => {
         setNewPassword("")
         setConfirmPassword("")
     };
+
+    const fecthUser = async()=>{
+        let userInfo = await Auth.currentAuthenticatedUser()
+        let username = userInfo?.attributes?.name;
+        const words = username.split(/\s+/);
+        username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
+        setUser(userInfo);
+        setFolderNameS3(username);
+    }
 
     const fetchAdminInfo = async () => {
 
@@ -213,7 +225,8 @@ const EditInfoPage = () => {
     }
 
     useEffect(() => {
-        fetchAdminInfo()
+        //fetchAdminInfo()
+        fecthUser();
     }, []);
 
     return (
