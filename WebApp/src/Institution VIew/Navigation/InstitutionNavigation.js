@@ -4,13 +4,14 @@ import logo from "../../images/university_logo.svg";
 import { Auth, Storage, API } from "aws-amplify";
 import { listAdmins, listInstitutions, lecturersByInstitutionId } from "../../graphql/queries";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useAdmin } from "../../ContextProviders/AdminContext";
 
 export default function InstitutionNavigation({ props }) {
     const navigate = useNavigate();
     const state = useLocation();
     //const[institution,setInstitution]=useState(state.state)
-    const [admin, setAdmin] = useState(state.state);
-
+    //const [admin, setAdmin] = useState(state.state);
+    const {admin,setAdmin} =useAdmin();
 
     const onSignOut = async (event) => {
         event.preventDefault();
@@ -70,7 +71,7 @@ export default function InstitutionNavigation({ props }) {
 
 
     useEffect(() => {
-        fetchLogo()
+        //fetchLogo()
     }, []);
 
     return (
@@ -82,11 +83,11 @@ export default function InstitutionNavigation({ props }) {
                         src={admin !== undefined ? admin !== null ? admin.institution.logoUrl : " " : "  "}
                         alt="Logo"
                         className="logo offset-2 img-fluid mr-4.5"
-                        style={{ width: "175px", height: "155px" }}
+                        style={{ width: "155px", height: "155px" }}
                         data-testid={'UniversityImage'}
                     />
 
-                    <div className="institution-name" style={{paddingTop:'5%'}}>
+                    <div className="institution-name" style={{ paddingTop: '5%' }}>
                         <b>
                             {admin && admin.institution && admin.institution.name}
                         </b>
@@ -100,7 +101,7 @@ export default function InstitutionNavigation({ props }) {
                             state={admin}
                             className="nav-link"
                         >
-                        <b>Dashboard</b>
+                            <b>Dashboard</b>
                         </Link>
                     </li>
                     <li className="nav-item text-center" data-testid={'UploadSchedule'}>
@@ -140,7 +141,7 @@ export default function InstitutionNavigation({ props }) {
                         </Link>
                     </li>
                 </ul>
-                
+
                 <div className="logoutbtn">
                     <button
                         className="btn btn-danger btn-lg btn-block"

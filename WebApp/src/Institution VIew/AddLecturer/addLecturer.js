@@ -9,6 +9,8 @@ import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import HelpButton from '../../HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
+import { useAdmin } from "../../ContextProviders/AdminContext";
+import { useLecturerList } from "../../ContextProviders/LecturerListContext";
 
 const AddLecturer = () => {
 
@@ -18,16 +20,19 @@ const AddLecturer = () => {
     const [courses, setCourses] = useState([]);
     const [filterAttribute, setFilterAttribute] = useState("");
     const [searchValue, setSearchValue] = useState("");
-    const [lecturers, setLecturers] = useState([]);
+    //const [lecturers, setLecturers] = useState([]);
     const [isModalOpened, setIsModalOpened] = useState(false);
     const [searchIcon, setSearchIcon] = useState(false);
     const [offeredCourses, setOfferedCourses] = useState([]);
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
     const state = useLocation();
-    const [admin, setAdmin] = useState(state.state);
-    const [nextToken, setNextToken] = useState("");
+    //const [admin, setAdmin] = useState(state.state);
+   // const [nextToken, setNextToken] = useState("");
     let limit = 2;
+
+    const{admin,setAdmin} = useAdmin();
+    const{lecturerList, setLecturerList, nextToken,setNextToken }=useLecturerList()
 
     const handleAdd = async (event) => {
         event.preventDefault()
@@ -83,9 +88,9 @@ const AddLecturer = () => {
 
                 //Add lecturer to courses
                 await addCourses(lecturer, selectedCourses)
-                if (lecturers.length <= 3) {
-                    lecturers.push(lecturer);
-                    setLecturers(lecturers);
+                if (lecturerList.length <= 3) {
+                    lecturerList.push(lecturer);
+                    setLecturerList(lecturerList);
                 }
 
             } catch (error) {
@@ -177,7 +182,7 @@ const AddLecturer = () => {
                 });
                 lecturer.courses.items.push(update.data.updateCourse);
             }
-            setLecturers(lecturers);
+            setLecturerList(lecturerList);
         } catch (error) {
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
@@ -228,10 +233,10 @@ const AddLecturer = () => {
             let a = admin;
             a.institution = u.data.updateInstitution;
             a.institution.logoUrl = admin.institution.logoUrl;
-            const rows = [...lecturers];
+            const rows = [...lecturerList];
             rows.splice(index, 1);
             setAdmin(a);
-            setLecturers(rows);
+            setLecturerList(rows);
         }
         catch (error) {
             if (error.errors !== undefined) {
@@ -268,10 +273,10 @@ const AddLecturer = () => {
                 });
                 let list = nextSet.data.lecturersByInstitutionId.items;
                 for (let i = 0; i < list.length; i++) {
-                    lecturers.push(list[i]);
+                    lecturerList.push(list[i]);
                 }
                 setNextToken(nextSet.data.lecturersByInstitutionId.nextToken);
-                setLecturers(lecturers);
+                setLecturerList(lecturerList);
             }
             else {
                 if (filterAttribute === "firstname") {
@@ -292,9 +297,9 @@ const AddLecturer = () => {
                     setNextToken(nextSet.data.searchLecturers.nextToken);
                     let list = nextSet.data.searchLecturers.items;
                     for (let i = 0; i < list.length; i++) {
-                        lecturers.push(list[i]);
+                        lecturerList.push(list[i]);
                     }
-                    setLecturers(lecturers);
+                    setLecturerList(lecturerList);
                 }
                 else if (filterAttribute === "lastname") {
                     let nextSet = await API.graphql({
@@ -315,11 +320,11 @@ const AddLecturer = () => {
 
                     let list = nextSet.data.searchLecturers.items;
                     for (let i = 0; i < list.length; i++) {
-                        lecturers.push(list[i]);
+                        lecturerList.push(list[i]);
                     }
 
                     setNextToken(nextSet.data.searchLecturers.nextToken);
-                    setLecturers(lecturers);
+                    setLecturerList(lecturerList);
                 }
                 else if (filterAttribute === "email") {
                     let nextSet = await API.graphql({
@@ -339,10 +344,10 @@ const AddLecturer = () => {
 
                     let list = nextSet.data.searchLecturers.items;
                     for (let i = 0; i < list.length; i++) {
-                        lecturers.push(list[i]);
+                        lecturerList.push(list[i]);
                     }
                     setNextToken(nextSet.data.searchLecturers.nextToken);
-                    setLecturers(lecturers);
+                    setLecturerList(lecturerList);
                 }
             }
 
@@ -353,61 +358,31 @@ const AddLecturer = () => {
 
     const fetchLecturers = async () => {
         try {
-            if (admin === null || admin === undefined) {
-                let user = await Auth.currentAuthenticatedUser();
-                let adminEmail = user.attributes.email;
-                let adminData = await API.graphql({
-                    query: listAdmins,
-                    variables: {
-                        filter: {
-                            email: {
-                                eq: adminEmail
-                            }
-                        }
-                    },
-                    authMode: 'AMAZON_COGNITO_USER_POOLS',
-                });
-                if (adminData.data.listAdmins.items.length === 0) {
-                    setError("Oops! We could not find your Institution.Please contact the developers for further assistance");
-                    throw new Error()
-                }
-                adminData = adminData.data.listAdmins.items[0];
-
-                let lecturerList = await API.graphql({
-                    query: lecturersByInstitutionId,
-                    variables: {
-                        institutionId: adminData.institutionId,
-                        limit: limit
-                    },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
-                });
-
-                let courses = adminData.institution.courses.items;
-                for (let i = 0; i < courses.length; i++) {
-                    if (courses[i].lecturerId === null) {
-                        offeredCourses.push(courses[i]);
-                    }
-                }
-
-                setNextToken(lecturerList.data.lecturersByInstitutionId.nextToken);
-                setAdmin(adminData);
-                setOfferedCourses(offeredCourses);
-                setLecturers(lecturerList.data.lecturersByInstitutionId.items);
-            }
-            else if (lecturers.length < 3) {
-                let lecturerList = await API.graphql({
+            
+            if(lecturerList.length<2){
+            let lecturers = await API.graphql({
                     query: lecturersByInstitutionId,
                     variables: {
                         institutionId: admin.institutionId,
                         limit: limit
-                    },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
-                });
-                setLecturers(lecturerList.data.lecturersByInstitutionId.items);
-                setNextToken(lecturerList.data.lecturersByInstitutionId.nextToken);
+                },     
+            });
+
+            let courses = admin.institution.courses.items;
+            for (let i = 0; i < courses.length; i++) {
+                if (courses[i].lecturerId === null) {
+                    offeredCourses.push(courses[i]);
+                }
             }
+            setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
+            setOfferedCourses(offeredCourses);
+            setLecturerList(lecturers.data.lecturersByInstitutionId.items);
+           // }
+        }
+             
         }
         catch (error) {
+            console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Unathorized") !== -1) {
@@ -448,7 +423,7 @@ const AddLecturer = () => {
                         authMode: "AMAZON_COGNITO_USER_POOLS"
                     });
                     setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturers(search.data.searchLecturers.items);
+                    setLecturerList(search.data.searchLecturers.items);
                 }
                 else if (filterAttribute === "lastname") {
                     let search = await API.graphql({
@@ -465,7 +440,7 @@ const AddLecturer = () => {
                         authMode: "AMAZON_COGNITO_USER_POOLS"
                     });
                     setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturers(search.data.searchLecturers.items);
+                    setLecturerList(search.data.searchLecturers.items);
                 }
                 else if (filterAttribute === "email") {
                     let search = await API.graphql({
@@ -483,12 +458,12 @@ const AddLecturer = () => {
                     });
 
                     setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturers(search.data.searchLecturers.items);
+                    setLecturerList(search.data.searchLecturers.items);
                 }
                 setSearchIcon(!searchIcon);
             }
             else {
-                let lecturerList = await API.graphql({
+                let lecturers = await API.graphql({
                     query: lecturersByInstitutionId,
                     variables: {
                         institutionId: admin.institutionId,
@@ -496,7 +471,7 @@ const AddLecturer = () => {
                     },
                     authMode: "AMAZON_COGNITO_USER_POOLS"
                 });
-                setLecturers(lecturerList.data.lecturersByInstitutionId.items);
+                setLecturerList(lecturers.data.lecturersByInstitutionId.items);
                 setSearchIcon(!searchIcon);
             }
         } catch (error) {
@@ -523,7 +498,7 @@ const AddLecturer = () => {
 
     return (
 
-        <div style={{ display: 'inline-flex' }}>
+        <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
             <div>
                 <HelpButton pdfUrl={UserManual} />
             </div>
@@ -662,7 +637,7 @@ const AddLecturer = () => {
                 </div>
                 <div
                     className="card shadow w-100"
-                    style={{ width: '500px' }}
+                    style={{ width: '500px' ,maxHeight:"100vh"}}
                 >
                     <div className="card-body">
                         <table
@@ -680,7 +655,7 @@ const AddLecturer = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {lecturers.map((val, key) => {
+                                {lecturerList.map((val, key) => {
                                     return (
                                         <tr key={key}>
                                             <td>{val.firstname}</td>

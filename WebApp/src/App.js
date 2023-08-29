@@ -174,9 +174,13 @@ function App(){
   return (
     <LecturerProvider>
       <AnnouncementProvider>
+      <AdminProvider>
+        <LecturerListProvider>
     <Authenticator.Provider>
       <MyRoutes />
     </Authenticator.Provider>
+    </LecturerListProvider>
+    </AdminProvider>
     </AnnouncementProvider>
     </LecturerProvider>
   );
