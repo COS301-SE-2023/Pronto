@@ -265,6 +265,10 @@ const EditInfoPage = () => {
                             <td>Email address:</td>
                             <td>{user != null ? user.attributes.email : " "}</td>
                         </tr>
+                         <tr>
+                            <td>Number of Lecturers:</td>
+                            <td>{admin != null ? admin?.institution?.lectureremails.length : " "}</td>
+                        </tr>
 
                     </tbody>
                 </table>

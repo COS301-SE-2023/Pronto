@@ -74,7 +74,7 @@ const PersonalInfoPage = () => {
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
                 {/* Navigation bar content */}
-                <LecturerNavigation props={lecturer} />
+                <LecturerNavigation  />
             </nav>
 
             <main style={{ width: '900px', marginTop: '30px' }}>
@@ -95,6 +95,11 @@ const PersonalInfoPage = () => {
                         <tr>
                             <td>Email address:</td>
                             <td>{lecturer && (lecturer.email)}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Institution Name:</td>
+                            <td>{lecturer && (lecturer.institution?.name)}</td>
                         </tr>
 
                     </tbody>

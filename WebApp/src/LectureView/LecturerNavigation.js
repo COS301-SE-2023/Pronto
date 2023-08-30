@@ -11,9 +11,6 @@ export default function LecturerNavigation(lecturerData) {
   const navigate = useNavigate();
   //const [lecturer, setLecturer] = useState(lecturerData.props);
 
-  const lec=useLecturer()
-  console.log(lec)
-  console.log(navigate)
   const { lecturer, setLecturer } = useLecturer();
   const onSignOut = async (event) => {
     event.preventDefault();
