@@ -18,13 +18,15 @@
   border: solid 1px #e32f45;
   transform-origin: top left;
   transform: scale(0) rotate(0deg) translate(-50%, -50%);
-  -webkit-animation: cube 12s ease-in forwards infinite;
-          animation: cube 12s ease-in forwards infinite;
+  -webkit-animation: cube 8s ease-in forwards infinite; /* Faster animation */
+  animation: cube 8s ease-in forwards infinite; /* Faster animation */
 }
 
 .cube:nth-child(2n) {
   border-color: #e32f45;
 }
+
+/* Adjust animation delays for all cubes */
 .cube:nth-child(2) {
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
@@ -34,29 +36,29 @@
 
 /* Add new cubes */
 .cube:nth-child(3) {
-  -webkit-animation-delay: 2s;
-  animation-delay: 2s;
+  -webkit-animation-delay: 0.5s; /* Earlier start */
+  animation-delay: 0.5s; /* Earlier start */
   left: 65vw;
   top: 10vh;
 }
 
 .cube:nth-child(4) {
-  -webkit-animation-delay: 4s;
-  animation-delay: 4s;
+  -webkit-animation-delay: 1s; /* Earlier start */
+  animation-delay: 1s; /* Earlier start */
   left: 90vw;
   top: 10vh;
 }
 
 .cube:nth-child(5) {
-  -webkit-animation-delay: 6s;
-  animation-delay: 6s;
+  -webkit-animation-delay: 1.5s; /* Earlier start */
+  animation-delay: 1.5s; /* Earlier start */
   left: 10vw;
   top: 85vh;
 }
 
 .cube:nth-child(6) {
-  -webkit-animation-delay: 8s;
-  animation-delay: 8s;
+  -webkit-animation-delay: 2s; /* Earlier start */
+  animation-delay: 2s; /* Earlier start */
   left: 15vw;
   top: 50vh;
 }
@@ -64,36 +66,28 @@
 /* Add more cubes... */
 
 .cube:nth-child(7) {
-  -webkit-animation-delay: 10s;
-  animation-delay: 10s;
+  -webkit-animation-delay: 2.5s;
+  animation-delay: 2.5s;
   left: 80vw;
   top: 60vh;
 }
 
 .cube:nth-child(8) {
-  -webkit-animation-delay: 12s;
-  animation-delay: 12s;
+  -webkit-animation-delay: 3s;
+  animation-delay: 3s;
   left: 90vw;
   top: 90vh;
 }
 
 .cube:nth-child(9) {
-  -webkit-animation-delay: 14s;
-  animation-delay: 14s;
+  -webkit-animation-delay: 3.5s;
+  animation-delay: 3.5s;
   left: 10vw;
   top: 8vh;
 }
 
-@-webkit-keyframes cube {
-  from {
-    transform: scale(0) rotate(0deg) translate(-50%, -50%);
-    opacity: 1;
-  }
-  to {
-    transform: scale(20) rotate(960deg) translate(-50%, -50%);
-    opacity: 0;
-  }
-}
+
+
 
 @keyframes cube {
   from {
@@ -101,12 +95,20 @@
     opacity: 1;
   }
   to {
-    transform: scale(20) rotate(960deg) translate(-50%, -50%);
+    transform: scale(15) rotate(720deg) translate(-50%, -50%);
     opacity: 0;
   }
 }
 
 
+.CardContainer .MuiCard-root {
+  /* Other styles... */
+  transition: opacity 0.5s ease-in-out;
+}
+
+.CardContainer .MuiCard-root.fade-out {
+  opacity: 0;
+}
 
   
   .CardContainer .MuiCard-root .MuiTypography-root {
