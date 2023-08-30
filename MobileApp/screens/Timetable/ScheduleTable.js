@@ -259,6 +259,10 @@ const ScheduleTable = ({ navigation }) => {
       ? { backgroundColor: "white", borderColor: "#e32f45", borderWidth: 1, borderStyle: "dashed" } // Apply clash styling
       : { backgroundColor: "white" }; // Default styling
 
+    const textStyle = module.isClash
+      ? { fontStyle: "italic" } // Apply italic style for clashes
+      : {}; // Default style
+
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
         <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}>
@@ -270,9 +274,9 @@ const ScheduleTable = ({ navigation }) => {
                 alignItems: "center",
               }}
             >
-              <Text>{module.code}</Text>
-              <Text>{module.venue}</Text>
-              <Text>{module.time}</Text>
+              <Text style={textStyle}>{module.code}</Text>
+              <Text style={textStyle}>{module.venue}</Text>
+              <Text style={textStyle}>{module.time}</Text>
             </View>
           </Card.Content>
         </Card>
