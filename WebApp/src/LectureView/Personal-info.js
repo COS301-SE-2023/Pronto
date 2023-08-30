@@ -242,7 +242,7 @@ const PersonalInfoPage = () => {
                                 </div>
                                <button
                                 type="submit"
-                                className="btn btn-danger w-100"
+                                className="post-button"
                             >
                                 Change Name
                             </button>
