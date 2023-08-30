@@ -291,38 +291,55 @@ const EditTimetable = ({ onSearch }) => {
   }
   const oneModule = ({ item }) => {
     const handleDelete = async () => {
+      Alert.alert(
+        "Confirm Deletion",
+        "Are you sure you want to remove this module?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            style: "destructive",
+            onPress: async () => {
+              let s = student;
+              let del;
+              let act = activities.filter(
+                (activity) => activity.courseId !== item.id
+              );
+              let error = "Failed to remove course. Please try again later";
 
-      let s = student
-      let del
-      let act = activities.filter((activity) => activity.courseId !== item.id)
-      let error = "Failed to remove course. Please try again later"
+              try {
+                for (let i = 0; i < student.enrollments.items.length; i++) {
+                  if (student.enrollments.items[i].courseId === item.id) {
+                    del = await API.graphql({
+                      query: deleteEnrollment,
+                      variables: { input: { id: student.enrollments.items[i].id } },
+                      authMode: "AMAZON_COGNITO_USER_POOLS",
+                    });
 
-      try {
-        for (let i = 0; i < student.enrollments.items.length; i++) {
-          if (student.enrollments.items[i].courseId === item.id) {
+                    student.enrollments.items.splice(i, 1);
 
-            del = await API.graphql({
-              query: deleteEnrollment,
-              variables: { input: { id: student.enrollments.items[i].id } },
-              authMode: "AMAZON_COGNITO_USER_POOLS",
-            })
-
-            student.enrollments.items.splice[i, 1]
-
-            break
-          }
-        }
-        await handleSave()
-        setStudent(student)
-        setSelectedModules((prevModules) =>
-          prevModules.filter((module) => module.id !== item.id)
-        );
-        setActivities(act)
-        setSelectedModule(null)
-      } catch (e) {
-        Alert.alert(error)
-      }
+                    break;
+                  }
+                }
+                await handleSave();
+                setStudent(student);
+                setSelectedModules((prevModules) =>
+                  prevModules.filter((module) => module.id !== item.id)
+                );
+                setActivities(act);
+                setSelectedModule(null);
+              } catch (e) {
+                Alert.alert(error);
+              }
+            },
+          },
+        ]
+      );
     };
+
 
     return (
       <View style={{ margin: 20 }}>
