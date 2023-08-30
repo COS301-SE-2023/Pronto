@@ -568,8 +568,9 @@ const EditTimetable = ({ onSearch }) => {
             mode="contained"
             style={{
               backgroundColor: "#e32f45",
-              marginVertical: 10,
-              marginHorizontal: 20,
+              width: "70%",
+              margin: "5%",
+              textAlign: "center"
             }}
             outlined={true}
             onPress={() => handleSave()}
