@@ -256,7 +256,7 @@ const ScheduleTable = ({ navigation }) => {
 
   const renderItem = (module) => {
     const cardStyle = module.isClash
-      ? { backgroundColor: "red" } // Apply clash styling
+      ? { backgroundColor: "white", borderColor: "#e32f45", borderWidth: 1, borderStyle: "dashed" } // Apply clash styling
       : { backgroundColor: "white" }; // Default styling
 
     return (
