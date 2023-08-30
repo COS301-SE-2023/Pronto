@@ -195,6 +195,7 @@ const PersonalInfoPage = () => {
                     </Accordion>
                 </div>
 
+{/* 
                 <div>
                     <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
                         <AccordionSummary
@@ -213,7 +214,7 @@ const PersonalInfoPage = () => {
                             
                             <form onSubmit={(e)=>handleNameChange(e)}>
                                 <div className="form-row">
-                                    {/* First name */}
+                                    {/* First name 
                                     <div className="form-group col-6">
                                         <label htmlFor="name">First Name</label>
                                          <input
@@ -226,7 +227,7 @@ const PersonalInfoPage = () => {
                                         />
                                     </div>
 
-                                    {/* Last name */}
+                                    {/* Last name 
                                     <div className="form-group col-6">
                                         <label htmlFor="lastname">Last Name</label>
                                             <input
@@ -248,7 +249,8 @@ const PersonalInfoPage = () => {
                             </form>
                         </AccordionDetails>
                     </Accordion>
-                </div>
+                </div> 
+            */}
 
 
             </main>
