@@ -21,6 +21,10 @@ const PersonalInfoPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const state = useLocation();
+    const [user,setUser]=useState();
+    const [firstName,setFirstName]=useState();
+    const [lastName,setLastName]=useState();
+
     //const [lecturer, setLecturer] = useState(state.state);
     const {lecturer,setLecturer} = useLecturer();
 
@@ -42,6 +46,14 @@ const PersonalInfoPage = () => {
         setConfirmPassword("")
     }
 
+    const fetchUser = async()=>{
+        try{
+             let u=await Auth.currentAuthenticatedUser();
+             setUser(u);
+        }catch(error){
+            setError("Something went wrong");
+        }
+    }
     
     // const fetchLecturer = async () => {
     //     let u = await Auth.currentAuthenticatedUser()
@@ -66,6 +78,7 @@ const PersonalInfoPage = () => {
 
     useEffect(() => {
       //  fetchLecturer()
+      fetchUser();
     }, [])
 
     return (
@@ -84,7 +97,7 @@ const PersonalInfoPage = () => {
 
                         <tr>
                             <td>Name:</td>
-                            <td>{lecturer && (lecturer.firstname + " " + lecturer.lastname)}</td>
+                            <td>{user && (user?.attributes?.name + " " + user.attributes.family_name)}</td>
                         </tr>
 
                         <tr>
@@ -106,13 +119,13 @@ const PersonalInfoPage = () => {
                 </table>
 
                 <div>
-                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" ,marginBottom:"15px" }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel1bh-content"
                             id="panel1bh-header"
                             style={{ "width": "100%" }}
-                            data-testid={'paccordionDrop'}
+                            data-testid={'paccordionDropNmae'}
                         >
                             <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >
                                 Change Password
@@ -164,6 +177,61 @@ const PersonalInfoPage = () => {
                                 </div>
 
                                 <button className="post-button">Update</button>
+                            </form>
+                        </AccordionDetails>
+                    </Accordion>
+                </div>
+
+                <div>
+                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
+                            aria-controls="panel2bh-content"
+                            id="panel2bh-header"
+                            style={{ "width": "100%" }}
+                            data-testid={'paccordionDrop'}
+                        >
+                            <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >
+                                Change Name
+                            </Typography>
+
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            
+                            <form>
+                                <div className="form-row">
+                                    {/* First name */}
+                                    <div className="form-group col-6">
+                                        <label htmlFor="name">First Name</label>
+                                         <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder={user?.attributes?.name}
+                                            required
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                        />
+                                    </div>
+
+                                    {/* Last name */}
+                                    <div className="form-group col-6">
+                                        <label htmlFor="lastname">Last Name</label>
+                                            <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder={user?.attributes?.family_name}
+                                            required
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                               <button
+                                type="submit"
+                                className="btn btn-danger w-100"
+                            >
+                                Change Name
+                            </button>
                             </form>
                         </AccordionDetails>
                     </Accordion>

@@ -235,7 +235,7 @@ const EditInfoPage = () => {
     }, []);
 
     return (
-        <div style={{ display: 'inline-flex' }}>
+        <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             <div>
                 <HelpButton pdfUrl={UserManual} />
@@ -246,7 +246,7 @@ const EditInfoPage = () => {
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '1200px', marginTop: '30px', marginLeft: "25%" }}>
+            <main style={{ width: '1200px', marginTop: "0%", marginLeft: "25%" }}>
                 <h1 className="moduleHead">Edit University Information</h1>
                 <table className="table table-sm">
                     <tbody>
