@@ -30,6 +30,7 @@ const EditTimetable = ({ onSearch }) => {
   const [activities, setActivities] = useState([])
   const [student, setStudent] = useState(null)
   const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
+  const [isSaving, setIsSaving] = useState(false);
 
   const toggleModal = (module) => {
     if (module) {
@@ -194,6 +195,7 @@ const EditTimetable = ({ onSearch }) => {
     let error = "There appear to be network issues.Please try again later"
     try {
       //Create enrollment if it doesnt exist
+      setIsSaving(true);
       let activityIds = []
 
 
@@ -276,8 +278,10 @@ const EditTimetable = ({ onSearch }) => {
         setStudent(s)
         setTimetable(update.data.updateTimetable)
       }
+      setIsSaving(false);
       toggleModal(null)
     } catch (e) {
+      setIsSaving(false);
       Alert.alert(error)
     }
   }
@@ -570,13 +574,20 @@ const EditTimetable = ({ onSearch }) => {
               backgroundColor: "#e32f45",
               width: "70%",
               margin: "5%",
-              textAlign: "center"
+              textAlign: "center",
+              color: "white",
             }}
+
             outlined={true}
+            disabled={isSaving}
             onPress={() => handleSave()}
             testID="save-button"
           >
-            Save
+            {isSaving ? (
+              <Text style={{ color: "white" }}>Saving...</Text> // Set white color for "Saving..." text
+            ) : (
+              "Save"
+            )}
           </Button>
 
 
