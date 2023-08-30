@@ -9,7 +9,7 @@ function NotFound() {
         navigate("/");
     };
     return (
-    <div class="container">
+    <div className="container">
     <div>
     <img
         src={ProntoSvg}
@@ -18,7 +18,7 @@ function NotFound() {
         marginBottom:"10%",
         }}></img>
     </div>
-    <div class="four1">
+    <div className="four1">
         
     <svg width="133px" height="234px" viewBox="0 0 133 234" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -30,7 +30,7 @@ function NotFound() {
         </g>
     </svg>
     </div>
-    <div class="zero">
+    <div className="zero">
         
     <svg width="148px" height="237px" viewBox="0 0 148 237" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -43,7 +43,7 @@ function NotFound() {
         </g>
     </svg>
     </div>
-    <div class="four2">
+    <div className="four2">
         
     <svg width="133px" height="234px" viewBox="0 0 133 234" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

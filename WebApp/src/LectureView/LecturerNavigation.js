@@ -51,18 +51,18 @@ export default function LecturerNavigation(lecturerData) {
           throw Error()
         }
         lec = lec.data.listLecturers.items[0];
-        setLecturer(lec)
-      }
+        //setLecturer(lec)
 
-      if (lec.institution.logo === null) {
-        lec.institution.logoUrl = logo;
-      }
+        if (lec.institution.logo === null) {
+          lec.institution.logoUrl = "";
+        }
 
-      else if (lec.institution.logoUrl === undefined) {
-        lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
-        setLecturer(lec);
-      }
+        else {
+          lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+          setLecturer(lec);
+        }
 
+    }
     } catch (error) {
 
     }

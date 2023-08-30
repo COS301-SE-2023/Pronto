@@ -17,7 +17,8 @@ import PlacesAutocomplete, {
 import styled from "styled-components";
 import { createAnnouncement, updateActivity } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
-import { ErrorModal } from '../../ErrorModal'
+import { ErrorModal } from '../../ErrorModal';
+import {SuccessModal} from "../../SuccessModal";
 import { useJsApiLoader } from "@react-google-maps/api";
 
 export default function PostAccordion(course) {
@@ -28,6 +29,7 @@ export default function PostAccordion(course) {
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
   const [activity, setActivity] = useState("");
+  const [message,setMessage]=useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
 
 
@@ -49,20 +51,31 @@ export default function PostAccordion(course) {
     zoom: 16
   };
 
+  const handleAddVenue = async(event)=>{
+    event.preventDefault();
+    try{
+      if(activity===""){
+        setError("Pick an activity to update");
+      }
+      else{
+        let update=await API.graphql({
+          query:updateActivity,
+          variables:{input:{id:activity.id,coordinates:selectedLocation}}
+        })
+        setMessage("Venue updated successfully");
+        setSelectedLocation("")
+      }
+    }catch(e){
+      console.log(e);
+    }
+  }
+
   const handleSelect = async (location, event) => {
+      
     try {
-      event.preventDefault();
+      //event.preventDefault();
       setSelectedLocation(location);
       console.log('Selected location:', location);
-
-
-      // let newVenue = await API.graphql({
-      //   query:updateActivity,
-      //   variables:{input : {id:activity.id,coordinates:location}},
-      //   authMode:"AMAZON_COGNITO_USER_POOLS"
-      // });
-      // console.log(newVenue);
-      // setActivity("");
     } catch (error) {
 
     }
@@ -86,8 +99,10 @@ export default function PostAccordion(course) {
 
   const handleSelectActivity = async (event) => {
     try {
+      
       if (event < course.course.activity.items.length && event > 0 && event !== "") {
         setActivity(course.course.activity.items[event]);
+       
       }
     } catch (error) {
       setError("Something went wrong. Please try again later");
@@ -114,7 +129,7 @@ export default function PostAccordion(course) {
         authMode: "AMAZON_COGNITO_USER_POOLS",
       });
 
-      setError("Announcement posted succesfully");
+      setMessage("Announcement posted succesfully");
     } catch (error) {
       let e = error.errors[0].message;
       if (e.search("Not Authorized") !== -1) {
@@ -136,6 +151,7 @@ export default function PostAccordion(course) {
 
     <div>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
+      {message && <SuccessModal  message={message} setMessage={setMessage}> {message} </SuccessModal>}
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
@@ -283,7 +299,7 @@ export default function PostAccordion(course) {
         </AccordionSummary>
         <AccordionDetails>
           <select
-            onChange={e => handleSelectActivity(e.target.value)}
+            onClick={(e) => handleSelectActivity(e.target.value)}
             className="custom-select"
             >
             <option selected disabled>Select Activity</option>
@@ -296,7 +312,7 @@ export default function PostAccordion(course) {
             )
             }
           </select>
-          <form style={{paddingTop:'15px'}}>
+          <form style={{paddingTop:'15px'}} onSubmit={(e)=>{handleAddVenue(e)}}>
             <div className="form-group row">
               <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
               <div className="col-sm-10">
