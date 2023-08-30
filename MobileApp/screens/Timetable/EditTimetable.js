@@ -43,13 +43,15 @@ const EditTimetable = ({ onSearch }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [module, ...prevModules]);
+    } else {
+      Alert.alert("Module Already Added", "This module is already added to your selection.");
     }
     setInput("");
   };
+
 
   const [input, setInput] = useState("");
 
