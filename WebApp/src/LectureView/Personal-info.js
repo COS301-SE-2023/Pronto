@@ -46,6 +46,19 @@ const PersonalInfoPage = () => {
         setConfirmPassword("")
     }
 
+    const handleNameChange = async(event) =>{ 
+        event.preventDefault();
+        try{
+            let i =await Auth.updateUserAttributes(user,{
+                name:firstName,
+                family_name:lastName
+            });
+            
+        }catch(error){
+            console.log(error);
+        }
+    }
+
     const fetchUser = async()=>{
         try{
              let u=await Auth.currentAuthenticatedUser();
@@ -198,7 +211,7 @@ const PersonalInfoPage = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             
-                            <form>
+                            <form onSubmit={(e)=>handleNameChange(e)}>
                                 <div className="form-row">
                                     {/* First name */}
                                     <div className="form-group col-6">

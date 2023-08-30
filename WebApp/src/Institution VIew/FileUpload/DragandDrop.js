@@ -112,7 +112,7 @@ function DropzoneComponent() {
   };
 
   return (
-    <div>
+    <div style={{maxHeight:"100%"}}>
       <h6 style={{ marginBottom: "10px" }}>These files represent essential resources and materials that students enrolled in the university will be able to access directly from the mobile app.</h6>
       <img src={FileUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="FileUpload" />
       <div

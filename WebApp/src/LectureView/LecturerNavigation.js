@@ -27,8 +27,7 @@ export default function LecturerNavigation(lecturerData) {
     let u = await Auth.currentAuthenticatedUser();
     u = u.attributes.name + " " + u.attributes.family_name;
     setUser(u);
-    console.log(lecturer);
-    console.log(useLecturer);
+   
   };
 
   const fetchLecturer = async () => {
