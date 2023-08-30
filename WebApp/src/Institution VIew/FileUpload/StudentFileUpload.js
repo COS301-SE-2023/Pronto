@@ -4,7 +4,7 @@ import DragandDrop from "./DragandDrop";
 
 const StudentFileUploadPage = () => {
   return (
-    <div >
+    <div style={{display:"inline-flex"}}>
       <nav>
         {/* Navigation bar content */}
         <InstitutionNavigation />
