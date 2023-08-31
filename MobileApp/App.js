@@ -68,13 +68,15 @@ export default function App() {
           resizeMode="contain"
 
           source={require("./assets/splash.gif")}
-          style={{ width: 393, height: 498, alignSelf: "center" }}
+          style={{ width: 403, height: 508, alignSelf: "center" }}
         />
+
         <View style={{ display: "flex", flexDirection: "row" }}>
           <ActivityIndicator color={"#e32f45"} size={"small"} />
           <Text style={{ color: "#e32f45" }}> Checking account details...</Text>
 
         </View>
+
 
       </View>
     );
