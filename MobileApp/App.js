@@ -14,7 +14,7 @@ import ProfilePage from "./screens/Settings/Profile";
 import AboutScreen from "./screens/Settings/About";
 import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, View, Text } from "react-native";
+import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
 
 import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
@@ -63,18 +63,19 @@ export default function App() {
           alignItems: "center",
         }}
       >
-        <Text
-          style={{
-            color: "#e32f45",
-            fontSize: 24,
-            fontWeight: 200,
-            marginBottom: 20,
-            textAlign: "center",
-          }}
-        >
-          Loading...
-        </Text>
-        <ActivityIndicator color={"#e32f45"} size={"large"} />
+
+        <ImageBackground
+          resizeMode="contain"
+
+          source={require("./assets/splash.gif")}
+          style={{ width: 393, height: 498, alignSelf: "center" }}
+        />
+        <View style={{ display: "flex", flexDirection: "row" }}>
+          <ActivityIndicator color={"#e32f45"} size={"small"} />
+          <Text style={{ color: "#e32f45" }}> Checking account details...</Text>
+
+        </View>
+
       </View>
     );
   }
