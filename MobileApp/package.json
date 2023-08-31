@@ -21,7 +21,7 @@
     "@expo/metro-config": "^0.7.1",
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^18.0.1",
-    "@react-native-async-storage/async-storage": "1.18.2",
+    "@react-native-async-storage/async-storage": "^1.18.2",
     "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-community/netinfo": "9.3.10",
     "@react-native-picker/picker": "2.4.10",
