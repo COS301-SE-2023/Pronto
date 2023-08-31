@@ -7,9 +7,8 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Auth, Storage, API } from 'aws-amplify'
 import { ErrorModal } from '../../ErrorModal';
-import { listAdmins, lecturersByInstitutionId } from '../../graphql/queries';
-import { updateAdmin, updateInstitution } from '../../graphql/mutations';
-import { useLocation } from 'react-router-dom';
+import { SuccessModal } from '../../SuccessModal';
+import { updateInstitution } from '../../graphql/mutations';
 import '../Navigation/Navigation.css';
 import HelpButton from '../../HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";
@@ -26,10 +25,7 @@ const EditInfoPage = () => {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [folderNameS3, setFolderNameS3] = useState("");
     const [message, setMessage] = useState("");
-    const state = useLocation();
-    //const [admin, setAdmin] = useState(state.state)
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [successMessage,setSuccessMessage] = useState("");
     const [domain, setDomain] = useState("");
  
     const {admin,setAdmin} = useAdmin();
@@ -41,8 +37,12 @@ const EditInfoPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            Auth.changePassword(user, oldPassword, newPassword)
-            setError("Password changed successfully")
+            if(newPassword===confirmPassword){
+                Auth.changePassword(user, oldPassword, newPassword);
+                setSuccessMessage("Password changed successfully");
+            }else{
+               setError("New password does not match confirm password");
+            }
         } catch (error) {
             setError("Password change failed")
         }
@@ -60,68 +60,11 @@ const EditInfoPage = () => {
         setFolderNameS3(username);
     }
 
-    const fetchAdminInfo = async () => {
-
-        let userInfo = await Auth.currentAuthenticatedUser()
-        let username = userInfo?.attributes?.name;
-        const words = username.split(/\s+/);
-        username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
-        setUser(userInfo);
-        setFolderNameS3(username);
-        if (state.state === null || state.state === undefined) {
-            try {
-                let dom = userInfo.attributes.email.split('@')[1]
-                let email = userInfo.attributes.email
-                let adminData = await API.graphql({
-                    query: listAdmins,
-                    variables: {
-                        filter: {
-                            email: {
-                                eq: email
-                            }
-                        }
-                    },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
-                });
-
-
-                adminData = adminData.data.listAdmins.items[0];
-                setAdmin(adminData);
-            } catch (error) {
-                setError("Could not fetch your Institutions information");
-            }
-        }
-    };
-
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
     };
 
-    const handleAdminEdit = async (event) => {
-        event.preventDefault();
-        try {
-
-            let update = {
-                id: admin.id,
-                firstname: firstName,
-                lastname: lastName,
-            };
-            let newAdmin = await API.graphql({
-                query: updateAdmin,
-                variables: { input: update },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
-            });
-            let i = admin.institution.logoUrl;
-            newAdmin.data.updateAdmin.institution.logoUrl = i;
-            setAdmin(newAdmin);
-            setFirstName("");
-            setLastName("");
-            setError("Updated successfully");
-        } catch (error) {
-            setError("Could not update Admin");
-        }
-    }
 
     const handleAddDomain = async (event) => {
         event.preventDefault()
@@ -177,10 +120,10 @@ const EditInfoPage = () => {
             let newAdmin = admin;
             newAdmin.institution = update.data.updateInstitution;
             setAdmin(newAdmin);
-            setError("Domains updated successfully");
+            setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
-            setError("Something went wrong");
+            setSuccessMessage("Something went wrong");
         }
     }
 
@@ -237,6 +180,7 @@ const EditInfoPage = () => {
     return (
         <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
+             {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
             <div>
                 <HelpButton pdfUrl={UserManual} />
             </div>
@@ -264,10 +208,6 @@ const EditInfoPage = () => {
                         <tr>
                             <td>Email address:</td>
                             <td>{user != null ? user.attributes.email : " "}</td>
-                        </tr>
-                         <tr>
-                            <td>Number of Lecturers:</td>
-                            <td>{admin != null ? admin?.institution?.lectureremails.length : " "}</td>
                         </tr>
 
                     </tbody>

@@ -29,7 +29,7 @@ export default function PostAccordion(course) {
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
   const [activity, setActivity] = useState("");
-  const [message,setMessage]=useState("");
+  const [successMessage,setSuccessMessage]=useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
 
 
@@ -62,7 +62,7 @@ export default function PostAccordion(course) {
           query:updateActivity,
           variables:{input:{id:activity.id,coordinates:selectedLocation}}
         })
-        setMessage("Venue updated successfully");
+        setSuccessMessage("Venue updated successfully");
         setSelectedLocation("")
       }
     }catch(e){
@@ -129,7 +129,7 @@ export default function PostAccordion(course) {
         authMode: "AMAZON_COGNITO_USER_POOLS",
       });
 
-      setMessage("Announcement posted succesfully");
+      setSuccessMessage("Announcement posted succesfully");
     } catch (error) {
       let e = error.errors[0].message;
       if (e.search("Not Authorized") !== -1) {
@@ -151,7 +151,7 @@ export default function PostAccordion(course) {
 
     <div>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
-      {message && <SuccessModal  message={message} setMessage={setMessage}> {message} </SuccessModal>}
+      {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}

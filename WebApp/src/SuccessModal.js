@@ -20,7 +20,7 @@ const style = {
 };
 
 
-export function SuccessModal(message) {
+export function SuccessModal(successMessage) {
 
   const [open, setOpen] = useState(true);
 
@@ -30,7 +30,7 @@ export function SuccessModal(message) {
 
   const handleClose = async () => {
     setOpen(false)
-    message.setMessage("")
+    successMessage.setSuccessMessage("")
   }
 
   return (
@@ -49,7 +49,7 @@ export function SuccessModal(message) {
         >
           <Box sx={style}>
             <h1>Success</h1>
-            <p>{message.message}</p>
+            <p>{successMessage.successMessage}</p>
             <button
               onClick={handleClose}
               type="submit"

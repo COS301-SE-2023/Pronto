@@ -8,8 +8,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../Institution VIew/Navigation/Navigation.css';
 import { Auth, API } from 'aws-amplify'
 import { ErrorModal } from '../ErrorModal';
+import { SuccessModal } from "../SuccessModal"
 import { listLecturers } from '../graphql/queries';
-import { useLocation } from 'react-router-dom';
 import UserManual from "./HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../HelpButton';
 import { useLecturer } from '../ContextProviders/LecturerContext';
@@ -20,12 +20,12 @@ const PersonalInfoPage = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-    const state = useLocation();
+   
     const [user,setUser]=useState();
+    const [successMessage,setSuccessMessage] =useState("");
     const [firstName,setFirstName]=useState();
     const [lastName,setLastName]=useState();
 
-    //const [lecturer, setLecturer] = useState(state.state);
     const {lecturer,setLecturer} = useLecturer();
 
     const handleChange = (panel) => (event, isExpanded) => {
@@ -35,28 +35,20 @@ const PersonalInfoPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            const user = await Auth.currentAuthenticatedUser();
-            Auth.changePassword(user, oldPassword, newPassword)
-            setError("Password change succesful")
+            if(newPassword===confirmPassword){
+                const user = await Auth.currentAuthenticatedUser();
+                Auth.changePassword(user, oldPassword, newPassword);
+                setSuccessMessage("Password change succesful");
+            }
+            else{
+                setError("New password does not match confirm password");
+            }
         } catch (error) {
             setError("Password change failed")
         }
         setOldPassword("")
         setNewPassword("")
         setConfirmPassword("")
-    }
-
-    const handleNameChange = async(event) =>{ 
-        event.preventDefault();
-        try{
-            let i =await Auth.updateUserAttributes(user,{
-                name:firstName,
-                family_name:lastName
-            });
-            
-        }catch(error){
-            console.log(error);
-        }
     }
 
     const fetchUser = async()=>{
@@ -91,13 +83,14 @@ const PersonalInfoPage = () => {
 
     useEffect(() => {
       //  fetchLecturer()
-      fetchUser();
+      //fetchUser();
     }, [])
 
     return (
 
         <div style={{ display: 'inline-flex' }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
+             {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
             <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
                 {/* Navigation bar content */}
                 <LecturerNavigation  />
@@ -110,7 +103,7 @@ const PersonalInfoPage = () => {
 
                         <tr>
                             <td>Name:</td>
-                            <td>{user && (user?.attributes?.name + " " + user.attributes.family_name)}</td>
+                            <td>{lecturer && (lecturer.firstname + " " + lecturer.lastname)}</td>
                         </tr>
 
                         <tr>
@@ -194,66 +187,8 @@ const PersonalInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-
-{/* 
-                <div>
-                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
-                            aria-controls="panel2bh-content"
-                            id="panel2bh-header"
-                            style={{ "width": "100%" }}
-                            data-testid={'paccordionDrop'}
-                        >
-                            <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >
-                                Change Name
-                            </Typography>
-
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            
-                            <form onSubmit={(e)=>handleNameChange(e)}>
-                                <div className="form-row">
-                                    {/* First name 
-                                    <div className="form-group col-6">
-                                        <label htmlFor="name">First Name</label>
-                                         <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder={user?.attributes?.name}
-                                            required
-                                            value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)}
-                                        />
-                                    </div>
-
-                                    {/* Last name 
-                                    <div className="form-group col-6">
-                                        <label htmlFor="lastname">Last Name</label>
-                                            <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder={user?.attributes?.family_name}
-                                            required
-                                            value={lastName}
-                                            onChange={(e) => setLastName(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-                               <button
-                                type="submit"
-                                className="post-button"
-                            >
-                                Change Name
-                            </button>
-                            </form>
-                        </AccordionDetails>
-                    </Accordion>
-                </div> 
-            */}
-
-
-            </main>
+                
+                </main>
 
             <div>
                 <HelpButton pdfUrl={UserManual} />
