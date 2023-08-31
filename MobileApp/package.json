@@ -7,7 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest "
+    "test": "jest --u"
   },
   "jest": {
     "preset": "jest-expo",
@@ -33,6 +33,7 @@
     "amazon-cognito-identity-js": "^6.2.0",
     "aws-amplify": "^5.2.4",
     "aws-amplify-react-native": "^7.0.2",
+    "expect": "^29.6.4",
     "expo": "^49.0.0",
     "expo-constants": "~14.4.2",
     "expo-status-bar": "~1.6.0",
