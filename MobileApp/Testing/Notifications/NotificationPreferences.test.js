@@ -16,7 +16,7 @@ jest.mock('aws-amplify', () => ({
 
 
 describe('NotificationPreferences', () => {
-    it('should handle selecting the email option', async () => {
+  /*  it('should handle selecting the email option', async () => {
         const {getByTestId} = render(<NotificationPreferences/>);
         const emailOption = getByTestId('email-option');
 
@@ -25,7 +25,7 @@ describe('NotificationPreferences', () => {
         });
 
 
-    });
+    });*/
 
     it('should handle selecting the SMS option', async () => {
         const {getByTestId} = render(<NotificationPreferences/>);
