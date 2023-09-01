@@ -2,8 +2,14 @@ type Institution
   @model
   @auth(
     rules: [
-      { allow: owner }
-      { allow: public, operations: [read, create, update] }
+      { allow: owner, ownerField: "owner" }
+      { allow: public, operations: [read, create] }
+      {
+        allow: groups
+        groups: ["studentUserGroup", "lecturerUserGroup"]
+        operations: [read]
+      }
+      { allow: groups, groups: ["adminUserGroup"], operations: [read, update] }
     ]
   ) {
   id: ID!
@@ -20,41 +26,67 @@ type Institution
   domains: [String]
   admin: Admin @hasOne(fields: ["adminId"])
   adminId: ID
+  owner: String
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
   students: [Student] @hasMany(indexName: "byStudent", fields: ["id"])
   lecturer: [Lecturer] @hasMany(indexName: "byLecturer", fields: ["id"])
 }
 
-type Admin @model @auth(rules: [{ allow: owner }]) {
+type Admin
+  @model
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "owner" }
+      { allow: groups, groups: ["adminUserGroup"], operations: [read] }
+    ]
+  ) {
   id: ID!
   institutionId: ID
   firstname: String!
   lastname: String!
   userRole: String!
-  email: String!
+  email: String! @index(name: "byEmail", queryField: "adminByEmail")
+  owner: String
   institution: Institution @belongsTo(fields: ["institutionId"])
 }
+
 type Lecturer
   @model
-  @auth(rules: [{ allow: public, operations: [read] }, { allow: owner }]) {
+  @searchable
+  @auth(
+    rules: [
+      { allow: owner }
+      {
+        allow: groups
+        groups: ["lecturerUserGroup", "adminUserGroup"]
+        operations: [read]
+      }
+    ]
+  ) {
   id: ID!
   institutionId: ID! @index(name: "byLecturer")
   firstname: String!
   lastname: String!
   userRole: String!
-  email: String!
+  email: ID! @index(name: "byEmail", queryField: "lecturerByEmail")
   institution: Institution! @belongsTo(fields: ["institutionId"])
-  courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
+  courses: [Course] @hasMany(indexName: "bycourse", fields: ["id"])
 }
+
 type Student
   @model
-  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+    ]
+  ) {
   institutionId: ID! @index(name: "byStudent")
   id: ID!
   firstname: String!
   lastname: String!
   userRole: String!
-  email: String!
+  email: String! @index(name: "byEmail", queryField: "studentByEmail")
   preference: String
   institution: Institution! @belongsTo(fields: ["institutionId"])
   timetable: Timetable @hasOne
@@ -63,7 +95,12 @@ type Student
 
 type Enrollment
   @model
-  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+    ]
+  ) {
   id: ID!
   studentId: ID! @index(name: "byEnrollment")
   courseId: ID!
@@ -75,12 +112,22 @@ type Enrollment
 type Course
   @model
   @searchable
-  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+  @auth(
+    rules: [
+      { allow: owner }
+      {
+        allow: groups
+        groups: ["studentUserGroup", "lecturerUserGroup", "adminUserGroup"]
+        operations: [read]
+      }
+    ]
+  ) {
   id: ID!
   institutionId: ID! @index(name: "byCourse")
-  lecturerId: ID
+  lecturerId: ID @index(name: "bycourse")
+  coursecode: String!
   coursename: String
-  semester: Int
+  semester: String
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
   activity: [Activity] @hasMany(indexName: "byActivity", fields: ["id"])
   announcents: [Announcement]
@@ -91,7 +138,12 @@ type Course
 
 type Timetable
   @model
-  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+    ]
+  ) {
   id: ID!
   studentId: ID!
   activityId: [String]!
@@ -101,8 +153,21 @@ type Timetable
 
 type Activity
   @model
-  @searchable
-  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+  @auth(
+    rules: [
+      { allow: owner }
+      {
+        allow: groups
+        groups: ["studentUserGroup", "adminUserGroup"]
+        operations: [read]
+      }
+      {
+        allow: groups
+        groups: ["lecturerUserGroup"]
+        operations: [read, update]
+      }
+    ]
+  ) {
   id: ID!
   courseId: ID! @index(name: "byActivity")
   activityname: String!
@@ -110,6 +175,7 @@ type Activity
   start: String!
   end: String!
   venue: String!
+  coordinates: String
   group: String!
   frequency: Int
   description: String!
@@ -118,14 +184,32 @@ type Activity
 
 type Announcement
   @model
-  @searchable
-  @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+  @auth(
+    rules: [
+      { allow: owner }
+      {
+        allow: groups
+        groups: ["studentUserGroup", "lecturerUserGroup", "adminUserGroup"]
+        operations: [read]
+      }
+    ]
+  ) {
   id: ID!
   courseId: ID! @index(name: "byAnnouncement")
-  description: String!
-  start: String!
-  end: String!
+  description: String
+  start: String
+  end: String
   date: String!
-  venue: String!
+  venue: String
   course: Course! @belongsTo(fields: ["courseId"])
+  body: String
+  title: String
+  type: String
+  year: String!
+    @index(
+      name: "announcementsByDate"
+      queryField: "announcementsByDate"
+      sortKeyFields: ["createdAt"]
+    )
+  createdAt: String!
 }

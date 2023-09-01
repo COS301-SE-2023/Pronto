@@ -50,7 +50,7 @@ const Register = ({ navigation }) => {
   const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
   const validateSignUpPassword = (value) => {
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidSignUpPassword = regex.test(value);
 
     setPasswordSignUpIsValid(isValidSignUpPassword);
@@ -60,7 +60,7 @@ const Register = ({ navigation }) => {
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
       digit: /\d/.test(value),
-      specialChar: /[@$!%*?&]/.test(value),
+      specialChar: /[!@#$%^&*()?]/.test(value),
     });
   };
 
@@ -156,7 +156,7 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
       <View style={styles.contentContainer}>
         <View style={styles.centered}>
           <Text style={styles.title}>Create Account</Text>
@@ -245,11 +245,15 @@ const Register = ({ navigation }) => {
         </View>
 
         <View style={styles.inputContainer}>
+          {/* Update the boxStyles prop for SelectList */}
           <SelectList
             setSelected={(institutionId) => setInstitutionId(institutionId)}
             data={institutionInfo}
             save="key"
-            boxStyles={styles.input}
+            boxStyles={[
+              styles.input,
+              { paddingVertical: 16, backgroundColor: "#E7DADA", opacity: 0.7, textAlignVertical: "center" },
+            ]}
             defaultOption={{ key: "notSet", value: "Select University" }}
             placeholder="Select University"
             searchPlaceholder="Search University"
@@ -339,9 +343,6 @@ const Register = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   contentContainer: {
     flex: 1,
     justifyContent: "center",
