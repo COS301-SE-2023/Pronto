@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Image, Dimensions, StyleSheet, Text, TouchableOpacity, Modal } from 'react-native';
+import { View, Image, Dimensions, StyleSheet, Text, TouchableOpacity, Modal, SafeAreaView } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -54,6 +54,18 @@ const HelpScreen = () => {
     }
   };
 
+  const goToPreviousSlideInModal = () => {
+    if (selectedImageIndex > 0) {
+      setSelectedImageIndex(selectedImageIndex - 1);
+    }
+  };
+
+  const goToNextSlideInModal = () => {
+    if (selectedImageIndex < manualImages.length - 1) {
+      setSelectedImageIndex(selectedImageIndex + 1);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>How to Use Pronto</Text>
@@ -94,15 +106,17 @@ const HelpScreen = () => {
       <Modal visible={modalVisible} transparent={true}>
         <View style={styles.modalContainer}>
           <Image source={manualImages[selectedImageIndex]} style={styles.modalImage} />
-          <Icon.Button
-            name="close"
-            size={40}
-            backgroundColor="transparent"
-            underlayColor="transparent"
-            color="#fff"
-            onPress={closeImageModal}
-            style={styles.closeButton}
-          />
+          <TouchableOpacity onPress={closeImageModal} style={styles.closeButton}>
+            <Icon name="close" size={40} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.modalNav}>
+            <TouchableOpacity onPress={goToPreviousSlideInModal}>
+              <Icon name="keyboard-arrow-left" size={40} color="#fff" style={{ paddingRight: 50 }} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={goToNextSlideInModal}>
+              <Icon name="keyboard-arrow-right" size={40} color="#fff" style={{ paddingLeft: 50 }} />
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -156,6 +170,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
+
   },
   modalImage: {
     width: Dimensions.get('window').width,
@@ -164,9 +179,16 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: 'absolute',
-    top: 20,
-    right: 20,
+    top: "10%",
+    right: "5%",
   },
+  modalNav: {
+    display: "flex",
+    flexDirection: "row",
+    position: 'absolute',
+    bottom: "10%",
+    right: "29%",
+  }
 });
 
 export default HelpScreen;
