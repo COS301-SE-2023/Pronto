@@ -8,10 +8,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../Institution VIew/Navigation/Navigation.css';
 import { Auth, API } from 'aws-amplify'
 import { ErrorModal } from '../ErrorModal';
+import { SuccessModal } from "../SuccessModal"
 import { listLecturers } from '../graphql/queries';
-import { useLocation } from 'react-router-dom';
 import UserManual from "./HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../HelpButton';
+import { useLecturer } from '../ContextProviders/LecturerContext';
 
 const PersonalInfoPage = () => {
     const [expanded, setExpanded] = useState(false);
@@ -19,9 +20,13 @@ const PersonalInfoPage = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-    const state = useLocation();
-    const [lecturer, setLecturer] = useState(state.state);
+   
+    const [user,setUser]=useState();
+    const [successMessage,setSuccessMessage] =useState("");
+    const [firstName,setFirstName]=useState();
+    const [lastName,setLastName]=useState();
 
+    const {lecturer,setLecturer} = useLecturer();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -30,9 +35,14 @@ const PersonalInfoPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            const user = await Auth.currentAuthenticatedUser();
-            Auth.changePassword(user, oldPassword, newPassword)
-            setError("Password change succesful")
+            if(newPassword===confirmPassword){
+                const user = await Auth.currentAuthenticatedUser();
+                Auth.changePassword(user, oldPassword, newPassword);
+                setSuccessMessage("Password change succesful");
+            }
+            else{
+                setError("New password does not match confirm password");
+            }
         } catch (error) {
             setError("Password change failed")
         }
@@ -41,38 +51,49 @@ const PersonalInfoPage = () => {
         setConfirmPassword("")
     }
 
-    const fetchLecturer = async () => {
-        let u = await Auth.currentAuthenticatedUser()
-        if (lecturer !== null) {
-            const user = await Auth.currentAuthenticatedUser();
-            let lecturer_email = user.attributes.email;
-            let lec = await API.graphql({
-                query: listLecturers,
-                variables: {
-                    filter: {
-                        email: {
-                            eq: lecturer_email
-                        }
-                    }
-                },
-                authMode: "AMAZON_COGNITO_USER_POOLS",
-            });
-            setLecturer(lec.data.listLecturers.items[0]);
+    const fetchUser = async()=>{
+        try{
+             let u=await Auth.currentAuthenticatedUser();
+             setUser(u);
+        }catch(error){
+            setError("Something went wrong");
         }
-
     }
+    
+    // const fetchLecturer = async () => {
+    //     let u = await Auth.currentAuthenticatedUser()
+    //     if (lecturer !== null) {
+    //         const user = await Auth.currentAuthenticatedUser();
+    //         let lecturer_email = user.attributes.email;
+    //         let lec = await API.graphql({
+    //             query: listLecturers,
+    //             variables: {
+    //                 filter: {
+    //                     email: {
+    //                         eq: lecturer_email
+    //                     }
+    //                 }
+    //             },
+    //             authMode: "AMAZON_COGNITO_USER_POOLS",
+    //         });
+    //         setLecturer(lec.data.listLecturers.items[0]);
+    //     }
+
+    // }
 
     useEffect(() => {
-        fetchLecturer()
+      //  fetchLecturer()
+      //fetchUser();
     }, [])
 
     return (
 
         <div style={{ display: 'inline-flex' }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
+             {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
             <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
                 {/* Navigation bar content */}
-                <LecturerNavigation props={lecturer} />
+                <LecturerNavigation  />
             </nav>
 
             <main style={{ width: '900px', marginTop: '30px' }}>
@@ -95,17 +116,22 @@ const PersonalInfoPage = () => {
                             <td>{lecturer && (lecturer.email)}</td>
                         </tr>
 
+                        <tr>
+                            <td>Institution Name:</td>
+                            <td>{lecturer && (lecturer.institution?.name)}</td>
+                        </tr>
+
                     </tbody>
                 </table>
 
                 <div>
-                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" ,marginBottom:"15px" }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel1bh-content"
                             id="panel1bh-header"
                             style={{ "width": "100%" }}
-                            data-testid={'paccordionDrop'}
+                            data-testid={'paccordionDropNmae'}
                         >
                             <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >
                                 Change Password
@@ -161,9 +187,8 @@ const PersonalInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-
-
-            </main>
+                
+                </main>
 
             <div>
                 <HelpButton pdfUrl={UserManual} />

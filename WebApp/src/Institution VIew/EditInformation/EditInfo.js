@@ -7,12 +7,12 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Auth, Storage, API } from 'aws-amplify'
 import { ErrorModal } from '../../ErrorModal';
-import { listAdmins, lecturersByInstitutionId } from '../../graphql/queries';
-import { updateAdmin, updateInstitution } from '../../graphql/mutations';
-import { useLocation } from 'react-router-dom';
+import { SuccessModal } from '../../SuccessModal';
+import { updateInstitution } from '../../graphql/mutations';
 import '../Navigation/Navigation.css';
 import HelpButton from '../../HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";
+import { useAdmin } from '../../ContextProviders/AdminContext';
 
 const EditInfoPage = () => {
     const [expanded, setExpanded] = useState(false);
@@ -25,11 +25,10 @@ const EditInfoPage = () => {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [folderNameS3, setFolderNameS3] = useState("");
     const [message, setMessage] = useState("");
-    const state = useLocation();
-    const [admin, setAdmin] = useState(state.state)
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [successMessage,setSuccessMessage] = useState("");
     const [domain, setDomain] = useState("");
+ 
+    const {admin,setAdmin} = useAdmin();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -38,8 +37,12 @@ const EditInfoPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            Auth.changePassword(user, oldPassword, newPassword)
-            setError("Password changed successfully")
+            if(newPassword===confirmPassword){
+                Auth.changePassword(user, oldPassword, newPassword);
+                setSuccessMessage("Password changed successfully");
+            }else{
+               setError("New password does not match confirm password");
+            }
         } catch (error) {
             setError("Password change failed")
         }
@@ -48,68 +51,20 @@ const EditInfoPage = () => {
         setConfirmPassword("")
     };
 
-    const fetchAdminInfo = async () => {
-
+    const fecthUser = async()=>{
         let userInfo = await Auth.currentAuthenticatedUser()
         let username = userInfo?.attributes?.name;
         const words = username.split(/\s+/);
         username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
         setUser(userInfo);
         setFolderNameS3(username);
-        if (state.state === null || state.state === undefined) {
-            try {
-                let dom = userInfo.attributes.email.split('@')[1]
-                let email = userInfo.attributes.email
-                let adminData = await API.graphql({
-                    query: listAdmins,
-                    variables: {
-                        filter: {
-                            email: {
-                                eq: email
-                            }
-                        }
-                    },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
-                });
-
-
-                adminData = adminData.data.listAdmins.items[0];
-                setAdmin(adminData);
-            } catch (error) {
-                setError("Could not fetch your Institutions information");
-            }
-        }
-    };
+    }
 
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
     };
 
-    const handleAdminEdit = async (event) => {
-        event.preventDefault();
-        try {
-
-            let update = {
-                id: admin.id,
-                firstname: firstName,
-                lastname: lastName,
-            };
-            let newAdmin = await API.graphql({
-                query: updateAdmin,
-                variables: { input: update },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
-            });
-            let i = admin.institution.logoUrl;
-            newAdmin.data.updateAdmin.institution.logoUrl = i;
-            setAdmin(newAdmin);
-            setFirstName("");
-            setLastName("");
-            setError("Updated successfully");
-        } catch (error) {
-            setError("Could not update Admin");
-        }
-    }
 
     const handleAddDomain = async (event) => {
         event.preventDefault()
@@ -165,10 +120,10 @@ const EditInfoPage = () => {
             let newAdmin = admin;
             newAdmin.institution = update.data.updateInstitution;
             setAdmin(newAdmin);
-            setError("Domains updated successfully");
+            setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
-            setError("Something went wrong");
+            setSuccessMessage("Something went wrong");
         }
     }
 
@@ -178,7 +133,7 @@ const EditInfoPage = () => {
             try {
 
                 const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;
-                let a = await Storage.put(fileKey, selectedFile, {
+                let path = await Storage.put(fileKey, selectedFile, {
                     contentType: "image/png",
                     progressCallback: ({ loaded, total }) => {
                         const progress = Math.round((loaded / total) * 100);
@@ -196,9 +151,14 @@ const EditInfoPage = () => {
                     variables: { input: inst },
                     authMode: "AMAZON_COGNITO_USER_POOLS"
                 });
-                update.data.updateInstitution.logoUrl = null;
+          
                 let newAdmin = admin;
                 newAdmin.institution = update.data.updateInstitution;
+                try{
+                    newAdmin.institution.logoUrl= await Storage.get(newAdmin.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                }catch(error){
+
+                }
                 setAdmin(newAdmin);
                 setMessage("File successfully uploaded: " + selectedFile.name);
             } catch (error) {
@@ -213,12 +173,14 @@ const EditInfoPage = () => {
     }
 
     useEffect(() => {
-        fetchAdminInfo()
+        //fetchAdminInfo()
+        fecthUser();
     }, []);
 
     return (
-        <div style={{ display: 'inline-flex' }}>
+        <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
+             {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
             <div>
                 <HelpButton pdfUrl={UserManual} />
             </div>
@@ -228,7 +190,7 @@ const EditInfoPage = () => {
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '1200px', marginTop: '30px', marginLeft: "25%" }}>
+            <main style={{ width: '1200px', marginTop: "0%", marginLeft: "25%" }}>
                 <h1 className="moduleHead">Edit University Information</h1>
                 <table className="table table-sm">
                     <tbody>
@@ -252,7 +214,7 @@ const EditInfoPage = () => {
                 </table>
 
                 <div>
-                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }} >
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel1bh-content"
@@ -316,7 +278,7 @@ const EditInfoPage = () => {
                     </Accordion>
                 </div>
                 <div>
-                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} data-testid={'paccordion2'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
+                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} data-testid={'paccordion2'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel2bh-content"
@@ -393,7 +355,7 @@ const EditInfoPage = () => {
                     </Accordion>
                 </div>
                 <div>
-                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
+                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel1bh-content"
@@ -466,68 +428,6 @@ const EditInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-                <div>
-                    <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" }}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
-                            aria-controls="panel1bh-content"
-                            id="panel1bh-header"
-                            style={{ "width": "100%" }}
-                            data-testid={'paccordionDrop'}>
-                            <Typography
-                                sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }}>
-                                Edit Admin Information
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <div className="card shadow">
-                                <div className="card-body">
-                                    <form onSubmit={handleAdminEdit}>
-                                        <div className="form-row">
-                                            {/* First name */}
-                                            <div className="form-group col-6">
-                                                <label htmlFor="name">First Name</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="admin-name"
-                                                    placeholder={admin !== null ? admin.firstname : " "}
-                                                    data-testid="adminfirstName"
-                                                    required
-                                                    value={firstName}
-                                                    onChange={(e) => setFirstName(e.target.value)}
-                                                />
-                                            </div>
-
-                                            {/* Last name */}
-                                            <div className="form-group col-6">
-                                                <label htmlFor="lastname">Last Name</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="lastname"
-                                                    placeholder={admin !== null ? admin.lastname : " "}
-                                                    data-testid="adminlastName"
-                                                    required
-                                                    value={lastName}
-                                                    onChange={(e) => setLastName(e.target.value)}
-                                                />
-                                            </div>
-                                        </div>
-                                        <button
-                                            type="submit"
-                                            className="btn btn-danger w-100"
-                                            data-testid="editButton"
-                                        >
-                                            Edit
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </AccordionDetails>
-                    </Accordion>
-                </div>
-
             </main>
 
         </div>

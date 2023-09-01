@@ -45,7 +45,7 @@ function HomePage() {
         <Card sx={{ padding: 5, borderRadius: '10px', transition: 'opacity 1s ease-in-out 0.2s' }}>
           <Box
             sx={{
-              maxWidth: 2000,
+              maxWidth: 850,
               backgroundColor: "transparent", // Set the background color to transparent
               borderRadius: '20px',
               '& .MuiCard-root': {

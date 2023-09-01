@@ -16,6 +16,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import UserManual from "./HelpFiles/Announcements.pdf";
 import HelpButton from '../HelpButton';
+import { useAnnouncement } from '../ContextProviders/AnnouncementContext';
+import { useLecturer } from '../ContextProviders/LecturerContext';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
@@ -73,10 +75,13 @@ export default function RecentAnnouncement() {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const state = useLocation();
-  const [lecturer, setLecturer] = useState(state.state);
-  const [announcements, setAnnouncements] = useState([]);
+  //const [lecturer, setLecturer] = useState(state.state);
+  //const [announcements, setAnnouncements] = useState([]);
   const [error, setError] = useState("");
-  const [nextToken, setNextToken] = useState("");
+  //const [nextToken, setNextToken] = useState("");
+
+  const{lecturer,setLecturer} =useLecturer();
+  const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -101,12 +106,12 @@ export default function RecentAnnouncement() {
     try {
       let del = await API.graphql({
         query: deleteAnnouncement,
-        variables: { input: { id: announcements[key].id } },
+        variables: { input: { id: announcement[key].id } },
         authMode: "AMAZON_COGNITO_USER_POOLS",
       })
-      const rows = [...announcements]
+      const rows = [...announcement]
       rows.splice(key, 1)
-      setAnnouncements(rows)
+      setAnnouncement(rows)
     } catch (e) {
       setError("Something went wrong. Please try again later")
     }
@@ -121,26 +126,25 @@ export default function RecentAnnouncement() {
     try {
       let lec = lecturer;
       //Lecturers information was not passed successfuly so fecth it again
-      if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
-        let user = await Auth.currentAuthenticatedUser();
-        let lecturer_email = user.attributes.email
-        lec = await API.graphql({
-          query: listLecturers,
-          variables: {
-            filter: {
-              email: {
-                eq: lecturer_email
-              }
-            }
-          },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
-        });
-        lec = lec.data.listLecturers.items[0];
-        await setLecturer(lec);
-      }
+      // if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
+      //   let user = await Auth.currentAuthenticatedUser();
+      //   let lecturer_email = user.attributes.email
+      //   lec = await API.graphql({
+      //     query: listLecturers,
+      //     variables: {
+      //       filter: {
+      //         email: {
+      //           eq: lecturer_email
+      //         }
+      //       }
+      //     },
+      //     authMode: "AMAZON_COGNITO_USER_POOLS",
+      //   });
+      //   lec = lec.data.listLecturers.items[0];
+      //   await setLecturer(lec);
+      // }
 
-      if (announcements.length === 0) {
-
+      if (announcement.length === 0) {
         //Build a filter based on courses
         let courses = lec.courses.items;
         let year = new Date().getFullYear();
@@ -163,7 +167,7 @@ export default function RecentAnnouncement() {
           authMode: "AMAZON_COGNITO_USER_POOLS"
         });
 
-        setAnnouncements(announcementList.data.announcementsByDate.items);
+        setAnnouncement(announcementList.data.announcementsByDate.items);
         setNextToken(announcementList.data.announcementsByDate.nextToken);
       }
     } catch (error) {
@@ -211,10 +215,10 @@ export default function RecentAnnouncement() {
 
       let list = announcementList.data.announcementsByDate.items;
       for (let i = 0; i < list.length; i++) {
-        announcements.push(list[i]);
+        announcement.push(list[i]);
       }
       setNextToken(announcementList.data.announcementsByDate.nextToken);
-      setAnnouncements(announcements);
+      setAnnouncement(announcement);
     } catch (error) {
       setError("Your request could not be processed at this time");
     }
@@ -226,20 +230,20 @@ export default function RecentAnnouncement() {
 
 
   return (
-    <div style={{ display: 'inline-flex' }}>
+    <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
 
         {/* Navigation bar content */}
         <LecturerNavigation props={lecturer}
-          list={{ announcements: { data: { announcementsByDate: { items: announcements, nextToken: nextToken } } } }} />
+          list={{ announcements: { data: { announcementsByDate: { items: announcement, nextToken: nextToken } } } }} />
 
       </nav>
 
 
       <main style={{ width: '900px', marginTop: '30px' }}>
         <h1 className="moduleHead">Recent Announcements</h1>
-        {announcements.length === 0 ? (
+        {announcement.length === 0 ? (
           // Display "Fetching announcements..." when announcements are being fetched
           <p style={
             {
@@ -253,7 +257,7 @@ export default function RecentAnnouncement() {
           }>Fetching announcements...</p>
 
         ) : (
-          announcements.map((val, key) => {
+          announcement.map((val, key) => {
             return (
               <div className="card" data-testid="card1" key={key}>
                 <div className="card-header">
