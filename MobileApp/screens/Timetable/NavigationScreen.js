@@ -85,7 +85,28 @@ const NavigationScreen = () => {
         requestLocationPermission().then();
     }, []);
 
+    //Below defines styling for the location textinput for the users current location
+    //Green border will be for location gathered
+    // Red border will be for location not gathered and display different text
+    const greenStyle = {
+        ...styles.input,
+        borderWidth: 2,
+        borderColor: '#70da63',
+        color: 'black',
+        fontWeight: 'bold',
+        borderRadius: 4,
+        width: '80%',
+    };
 
+    const redStyle = {
+        ...styles.input,
+        borderWidth: 2,
+        borderColor: '#b92323', 
+        color: 'black',
+        fontWeight: 'bold',
+        borderRadius: 4,
+        width: '80%',
+    };
 
     return (
         <View style={styles.container}>
