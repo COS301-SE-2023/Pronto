@@ -57,6 +57,7 @@ const NavigationScreen = () => {
     }
 
     //Request access to the users location data
+    //this function will be called from the useEffect hook to run when it is mounted
     const requestLocationPermission = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status === 'granted') {
@@ -67,6 +68,17 @@ const NavigationScreen = () => {
             Alert.alert("Location permission not granted");
         }
     }
+
+    // Function that will be called to gather the users location
+    // NOTE: the function is called only AFTER the user has granted permission and this WILL NOT change.
+    const getUserLocation = async () => {
+        try {
+            const location = await Location.getCurrentPositionAsync({});
+            setOrigin(location.coords) ; // set the origin to the user's current location
+        } catch (error) {
+            console.error("Error getting user's location:", error);
+        }
+    };
 
 
 
