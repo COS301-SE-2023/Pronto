@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import StepByStepInstructions from '../../components/StepByStepInstructions';
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_API_KEY } from "@env";
+import * as Location from 'expo-location';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -53,6 +54,18 @@ const NavigationScreen = () => {
         setDistance(result.distance.toFixed(2) + "km");
         setTravelTime(result.duration.toFixed(2) + " mins");
 
+    }
+
+    //Request access to the users location data
+    const requestLocationPermission = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status === 'granted') {
+            await getUserLocation() ;
+        }
+        else {
+            // In future this else statement will return the user to the home page
+            Alert.alert("Location permission not granted");
+        }
     }
 
 
