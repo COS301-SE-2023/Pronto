@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert } from 'react-native';
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert, TextInput} from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StepByStepInstructions from '../../components/StepByStepInstructions';
@@ -101,7 +101,7 @@ const NavigationScreen = () => {
     const redStyle = {
         ...styles.input,
         borderWidth: 2,
-        borderColor: '#b92323', 
+        borderColor: '#b92323',
         color: 'black',
         fontWeight: 'bold',
         borderRadius: 4,
@@ -133,20 +133,12 @@ const NavigationScreen = () => {
                 {/* Input for the origin with icon */}
                 <View style={styles.inputContainer}>
                     <Icon name="location-on" size={20} color="#e32f45" style={styles.inputIcon} />
-                    <GooglePlacesAutocomplete
-                        styles={styles.input}
-                        placeholder="Your location"
-                        query={{
-                            key: GOOGLE_API_KEY,
-                            language: 'en',
-                        }}
-                        fetchDetails={true}
-                        onPress={(data, details = null) => {
-                            setOrigin({
-                                latitude: details.geometry.location.lat,
-                                longitude: details.geometry.location.lng,
-                            });
-                        }}
+                    {/*if the origin has been set, the input is filled*/}
+                    <TextInput
+                        style={origin ? greenStyle : redStyle} // Apply green style if origin is set, red style otherwise
+                        placeholder="Origin"
+                        value={origin ? "Your Location" : "Getting Location..."}
+                        editable={false}
                     />
                 </View>
 
