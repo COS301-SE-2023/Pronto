@@ -30,6 +30,7 @@ const EditTimetable = ({ onSearch }) => {
   const [activities, setActivities] = useState([])
   const [student, setStudent] = useState(null)
   const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
+  const [isSaving, setIsSaving] = useState(false);
 
   const toggleModal = (module) => {
     if (module) {
@@ -43,13 +44,15 @@ const EditTimetable = ({ onSearch }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-
   const addToModules = (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [module, ...prevModules]);
+    } else {
+      Alert.alert("Module Already Added", "This module is already added to your selection.");
     }
     setInput("");
   };
+
 
   const [input, setInput] = useState("");
 
@@ -192,6 +195,7 @@ const EditTimetable = ({ onSearch }) => {
     let error = "There appear to be network issues.Please try again later"
     try {
       //Create enrollment if it doesnt exist
+      setIsSaving(true);
       let activityIds = []
 
 
@@ -274,8 +278,10 @@ const EditTimetable = ({ onSearch }) => {
         setStudent(s)
         setTimetable(update.data.updateTimetable)
       }
+      setIsSaving(false);
       toggleModal(null)
     } catch (e) {
+      setIsSaving(false);
       Alert.alert(error)
     }
   }
@@ -291,38 +297,55 @@ const EditTimetable = ({ onSearch }) => {
   }
   const oneModule = ({ item }) => {
     const handleDelete = async () => {
+      Alert.alert(
+        "Confirm Deletion",
+        "Are you sure you want to remove this module?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            style: "destructive",
+            onPress: async () => {
+              let s = student;
+              let del;
+              let act = activities.filter(
+                (activity) => activity.courseId !== item.id
+              );
+              let error = "Failed to remove course. Please try again later";
 
-      let s = student
-      let del
-      let act = activities.filter((activity) => activity.courseId !== item.id)
-      let error = "Failed to remove course. Please try again later"
+              try {
+                for (let i = 0; i < student.enrollments.items.length; i++) {
+                  if (student.enrollments.items[i].courseId === item.id) {
+                    del = await API.graphql({
+                      query: deleteEnrollment,
+                      variables: { input: { id: student.enrollments.items[i].id } },
+                      authMode: "AMAZON_COGNITO_USER_POOLS",
+                    });
 
-      try {
-        for (let i = 0; i < student.enrollments.items.length; i++) {
-          if (student.enrollments.items[i].courseId === item.id) {
+                    student.enrollments.items.splice(i, 1);
 
-            del = await API.graphql({
-              query: deleteEnrollment,
-              variables: { input: { id: student.enrollments.items[i].id } },
-              authMode: "AMAZON_COGNITO_USER_POOLS",
-            })
-
-            student.enrollments.items.splice[i, 1]
-
-            break
-          }
-        }
-        await handleSave()
-        setStudent(student)
-        setSelectedModules((prevModules) =>
-          prevModules.filter((module) => module.id !== item.id)
-        );
-        setActivities(act)
-        setSelectedModule(null)
-      } catch (e) {
-        Alert.alert(error)
-      }
+                    break;
+                  }
+                }
+                await handleSave();
+                setStudent(student);
+                setSelectedModules((prevModules) =>
+                  prevModules.filter((module) => module.id !== item.id)
+                );
+                setActivities(act);
+                setSelectedModule(null);
+              } catch (e) {
+                Alert.alert(error);
+              }
+            },
+          },
+        ]
+      );
     };
+
 
     return (
       <View style={{ margin: 20 }}>
@@ -549,14 +572,22 @@ const EditTimetable = ({ onSearch }) => {
             mode="contained"
             style={{
               backgroundColor: "#e32f45",
-              marginVertical: 10,
-              marginHorizontal: 20,
+              width: "70%",
+              margin: "5%",
+              textAlign: "center",
+              color: "white",
             }}
+
             outlined={true}
+            disabled={isSaving}
             onPress={() => handleSave()}
             testID="save-button"
           >
-            Save
+            {isSaving ? (
+              <Text style={{ color: "white" }}>Saving...</Text> // Set white color for "Saving..." text
+            ) : (
+              "Save"
+            )}
           </Button>
 
 
