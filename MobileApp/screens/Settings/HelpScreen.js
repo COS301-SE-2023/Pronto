@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Image, Dimensions, StyleSheet, Text } from 'react-native';
+import { View, Image, Dimensions, StyleSheet, Text, TouchableOpacity, Modal } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -19,13 +19,27 @@ const HelpScreen = () => {
 
   const carouselRef = useRef(null);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item, index }) => {
     return (
-      <View style={styles.carouselItem}>
-        <Image source={item} style={styles.image} />
-      </View>
+      <TouchableOpacity onPress={() => handleImagePress(index)}>
+        <View style={styles.carouselItem}>
+          <Image source={item} style={styles.image} />
+        </View>
+      </TouchableOpacity>
     );
+  };
+
+  const handleImagePress = (index) => {
+    setSelectedImageIndex(index);
+    setModalVisible(true);
+  };
+
+  const closeImageModal = () => {
+    setModalVisible(false);
+    setSelectedImageIndex(null);
   };
 
   const goToPreviousSlide = () => {
@@ -77,6 +91,20 @@ const HelpScreen = () => {
           onPress={goToNextSlide}
         />
       </View>
+      <Modal visible={modalVisible} transparent={true}>
+        <View style={styles.modalContainer}>
+          <Image source={manualImages[selectedImageIndex]} style={styles.modalImage} />
+          <Icon.Button
+            name="close"
+            size={40}
+            backgroundColor="transparent"
+            underlayColor="transparent"
+            color="#fff"
+            onPress={closeImageModal}
+            style={styles.closeButton}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -122,6 +150,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 100,
     marginBottom: 50,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  modalImage: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    resizeMode: 'contain',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
   },
 });
 
