@@ -280,8 +280,6 @@ const ScheduleTable = ({ navigation }) => {
       base64: false,
     };
 
-    console.log(activities);
-
     const file = await printToFileAsync(pdfOptions);
 
     // Rename the file to 'ProntoTimetable.pdf'
@@ -374,25 +372,46 @@ const ScheduleTable = ({ navigation }) => {
   const html = `
   <html>
     <head>
-      <style>
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-        th, td {
-          border: 1px solid #ddd;
-          padding: 8px;
-          text-align: center;
-        }
+    table {
+      width: 80%;
+      margin: 0 auto; /* Center the table horizontally */
+      border-collapse: collapse;
+      overflow: hidden; /* Hide overflowing content inside rounded edges */
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
+      transform: translateY(5px); /* Adjust the table's vertical position */
+      font-family: 'Roboto', sans-serif; 
+    }
 
-        th {
-          background-color: #f2f2f2;
-        }
-      </style>
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eb6d7c;
+      color: black;
+    }
+
+    h1 {
+      text-align: center; /* Center the heading horizontally */
+    }
+
+    /* Define CSS styles for odd and even rows */
+    tr:nth-child(odd) {
+      background-color: #fceaec; /* Light gray shade for odd rows */
+    }
+
+    tr:nth-child(even) {
+      background-color: #ffffff; /* White background for even rows */
+    }
+  </style>
     </head>
     <body>
-      <h1>Pronto Offline Timetable</h1>
+      <h1 style = "font-family: 'Roboto', sans-serif;" >Pronto Offline Timetable</h1>
       <table>
         ${generateTimetableRows(activities)}
       </table>
