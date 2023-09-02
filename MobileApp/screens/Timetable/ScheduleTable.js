@@ -296,16 +296,80 @@ const ScheduleTable = ({ navigation }) => {
   };
 
   const generateTimetableRows = (modules) => {
-    return modules.map((module) => {
-      return `
+    const daysOfWeek = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+
+    // Create a dictionary to store lecture data by day and time
+    const timetableData = {};
+
+    // Populate the timetableData dictionary with lecture data
+    modules.forEach((module) => {
+      const { day, start, end, course } = module;
+      const dayIndex = daysOfWeek.indexOf(day);
+
+      if (!timetableData[start]) {
+        timetableData[start] = {};
+      }
+
+      if (!timetableData[start][dayIndex]) {
+        timetableData[start][dayIndex] = [];
+      }
+
+      timetableData[start][dayIndex].push({
+        courseCode: course.coursecode,
+        start,
+        end,
+      });
+    });
+
+    let tableHTML = `
       <tr>
-        <td>${module.course.coursecode}</td>
-        <td>${module.day}</td>
-        <td>${module.start}-${module.end}</td>
-      </tr>
+        <th></th>
     `;
-    }).join('');
+
+    daysOfWeek.forEach((day) => {
+      tableHTML += `<th>${day}</th>`;
+    });
+
+    tableHTML += `</tr>`;
+
+    const sortedTimes = Object.keys(timetableData).sort();
+    sortedTimes.forEach((timeslot) => {
+      tableHTML += `
+        <tr>
+          <td>${timeslot}</td>
+      `;
+
+      daysOfWeek.forEach((_, dayIndex) => {
+        if (timetableData[timeslot][dayIndex]) {
+          const lectures = timetableData[timeslot][dayIndex];
+          let cellContent = '';
+
+          lectures.forEach((lecture) => {
+            const { courseCode, start, end } = lecture;
+            cellContent += `<div>${courseCode}<br>${start}-${end}</div>`;
+          });
+
+          tableHTML += `<td>${cellContent}</td>`;
+        } else {
+          tableHTML += `<td></td>`;
+        }
+      });
+
+      tableHTML += `</tr>`;
+    });
+
+    return tableHTML;
   };
+
+
 
   const html = `
   <html>
@@ -330,17 +394,11 @@ const ScheduleTable = ({ navigation }) => {
     <body>
       <h1>Pronto Offline Timetable</h1>
       <table>
-        <tr>
-          <th>Module</th>
-          <th>Day</th>
-          <th>Time</th>
-        </tr>
         ${generateTimetableRows(activities)}
       </table>
     </body>
   </html>
 `;
-
 
 
 
