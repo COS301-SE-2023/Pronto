@@ -93,19 +93,26 @@ const NavigationScreen = () => {
         borderWidth: 2,
         borderColor: '#70da63',
         color: 'black',
-        fontWeight: 'bold',
         borderRadius: 4,
         width: '80%',
+        justifyContent: 'center',
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 'bold',
     };
+
 
     const redStyle = {
         ...styles.input,
         borderWidth: 2,
         borderColor: '#b92323',
         color: 'black',
-        fontWeight: 'bold',
         borderRadius: 4,
         width: '80%',
+        justifyContent: 'center',
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 'bold',
     };
 
     return (
