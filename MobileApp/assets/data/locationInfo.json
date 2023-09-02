@@ -1,0 +1,22 @@
+[
+  {
+    "key": "unique-key-1",
+    "name": "Thuto",
+    "value": "Thuto's precise location information"
+  },
+  {
+    "key": "unique-key-2",
+    "name": "AE du Toit",
+    "value": "AE du Toit's precise location information"
+  },
+  {
+    "key": "unique-key-3",
+    "name": "Piazza",
+    "value": "Piazza's precise location information"
+  },
+  {
+    "key": "unique-key-4",
+    "name": "SIT",
+    "value": "SIT's precise location information"
+  }
+]
