@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions, Alert } from "react-native";
+import { View, TouchableOpacity, Text, Dimensions, Alert, Button, TextInput, StyleSheet } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
-import { listStudents,listInstitutions } from "../../graphql/queries"
+import { listStudents, listInstitutions } from "../../graphql/queries"
 import { createStudent } from "../../graphql/mutations";
+import { printToFileAsync } from 'expo-print';
+import { shareAsync } from 'expo-sharing';
 
-const ScheduleTable = ({navigation}) => {
+
+const ScheduleTable = ({ navigation }) => {
 
 
   const [activities, setActivities] = useState([])
   const [schedule, setSchedule] = useState(null)
+
+
+
   var scheduleArray = {}
+
+
 
   //function to take in a day, and give all dates of the year that a day occurs
   const getDatesForDayOfWeek = (dayOfWeek) => {
@@ -57,7 +65,7 @@ const ScheduleTable = ({navigation}) => {
     try {
       let user = await Auth.currentAuthenticatedUser()
       let studentEmail = user.attributes.email;
-      
+
       let act = []
 
       let stu = await API.graphql({
@@ -71,21 +79,21 @@ const ScheduleTable = ({navigation}) => {
         },
         authMode: "AMAZON_COGNITO_USER_POOLS"
       })
-      
 
-       let found=false
-        for(let i=0;i<stu.data.listStudents.items.length;i++){
-           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
-              stu=stu.data.listStudents.items[i]
-              found=true
-              break
-           }
+
+      let found = false
+      for (let i = 0; i < stu.data.listStudents.items.length; i++) {
+        if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
+          stu = stu.data.listStudents.items[i]
+          found = true
+          break
         }
+      }
       // //Student does not exist so create them
-      if (found===false) {
+      if (found === false) {
         let domain = studentEmail.split("@")[1]
 
-      //   //Find Institution via domain
+        //   //Find Institution via domain
         let institution = await API.graphql({
           query: listInstitutions,
           variables: {
@@ -125,11 +133,11 @@ const ScheduleTable = ({navigation}) => {
 
       //Student  found
       else {
-        
-         let c=[]
-              for(let i=0;i<stu.enrollments.items.length;i++){
-                  c.push(stu.enrollments.items[i].course)
-              }
+
+        let c = []
+        for (let i = 0; i < stu.enrollments.items.length; i++) {
+          c.push(stu.enrollments.items[i].course)
+        }
         if (stu.timetable !== null) {
           for (let i = 0; i < stu.timetable.activityId.length; i++) {
             for (let j = 0; j < c.length; j++) {
@@ -162,30 +170,38 @@ const ScheduleTable = ({navigation}) => {
           }
 
           act = act.filter((value, index, self) =>
-                index === self.findIndex((t) => (
-                 t.id === value.id 
+            index === self.findIndex((t) => (
+              t.id === value.id
             )))
-           if(changed===true){
+          if (changed === true) {
             setActivities(act)
             createScheduleArray(act)
-           }
           }
-        
-        }    
-    
+        }
+
+      }
+
     } catch (e) {
       Alert.alert(error)
     }
   }
 
   useEffect(() => {
+    if (activities.length > 0) {
+      generatePdf();
+    }
+  }, [activities]);
+
+  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchActivities()
     });
+
+
     return unsubscribe
   }, [navigation])
 
-  
+
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
     for (const moduleKey in modules) {
@@ -263,8 +279,76 @@ const ScheduleTable = ({navigation}) => {
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
 
+
+  //functions to generate pdf of timetable
+  let generatePdf = async () => {
+    const pdfHtml = generatePdfHtml(activities);
+
+    const file = await printToFileAsync({
+      html: pdfHtml,
+      base64: false,
+    });
+
+    await shareAsync(file.uri);
+  };
+
+
+  const generateTimetableRows = (modules) => {
+    return modules.map((module) => {
+      return `
+        <tr>
+          <td>${module.code}</td>
+          <td>${module.day}</td>
+          <td>${module.time}</td>
+        </tr>
+      `;
+    }).join('');
+  };
+
+
+  const generatePdfHtml = (modules) => {
+    return `
+      <html>
+        <head>
+          <style>
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+  
+            th, td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: center;
+            }
+  
+            th {
+              background-color: #f2f2f2;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Timetable</h1>
+          <table>
+            <tr>
+              <th>Module</th>
+              <th>Day</th>
+              <th>Time</th>
+            </tr>
+            ${generateTimetableRows(modules)}
+          </table>
+        </body>
+      </html>
+    `;
+  };
+
   return (
     <View style={{ height: windowHeight, width: windowWidth }}>
+      <View style={styles.container}>
+
+        <Button title="Generate PDF" onPress={generatePdf} />
+
+      </View>
       <Agenda
         items={schedule}
         selected={year + "-" + month + "-" + date}
@@ -294,3 +378,17 @@ const ScheduleTable = ({navigation}) => {
 };
 
 export default ScheduleTable;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textInput: {
+    alignSelf: "stretch",
+    padding: 8,
+    margin: 8
+  }
+});
