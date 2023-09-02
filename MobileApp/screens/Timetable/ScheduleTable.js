@@ -280,6 +280,8 @@ const ScheduleTable = ({ navigation }) => {
       base64: false,
     };
 
+    console.log(activities);
+
     const file = await printToFileAsync(pdfOptions);
 
     // Rename the file to 'ProntoTimetable.pdf'
@@ -294,38 +296,16 @@ const ScheduleTable = ({ navigation }) => {
   };
 
   const generateTimetableRows = (modules) => {
-    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const timesOfDay = ["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM"];
-
-    let html = '';
-
-    // Create the table header row with days of the week
-    html += '<tr><th></th>';
-    for (const day of daysOfWeek) {
-      html += `<th>${day}</th>`;
-    }
-    html += '</tr>';
-
-    // Create the table rows with times of the day, modules, and venues
-    for (const time of timesOfDay) {
-      html += '<tr>';
-      html += `<td>${time}</td>`;
-
-      for (const day of daysOfWeek) {
-        const module = modules.find((m) => m.day === day && m.time === time);
-        if (module) {
-          html += `<td>${module.code}<br>${module.venue}</td>`;
-        } else {
-          html += '<td></td>';
-        }
-      }
-
-      html += '</tr>';
-    }
-
-    return html;
+    return modules.map((module) => {
+      return `
+      <tr>
+        <td>${module.course.coursecode}</td>
+        <td>${module.day}</td>
+        <td>${module.start}-${module.end}</td>
+      </tr>
+    `;
+    }).join('');
   };
-
 
   const html = `
   <html>
@@ -335,36 +315,42 @@ const ScheduleTable = ({ navigation }) => {
           width: 100%;
           border-collapse: collapse;
         }
-  
+
         th, td {
           border: 1px solid #ddd;
           padding: 8px;
           text-align: center;
         }
-  
+
         th {
           background-color: #f2f2f2;
         }
       </style>
     </head>
     <body>
-      <h1>Timetable</h1>
+      <h1>Pronto Offline Timetable</h1>
       <table>
+        <tr>
+          <th>Module</th>
+          <th>Day</th>
+          <th>Time</th>
+        </tr>
         ${generateTimetableRows(activities)}
       </table>
     </body>
   </html>
-  `;
+`;
+
+
 
 
 
   return (
     <View style={{ height: windowHeight, width: windowWidth }}>
-      <View style={styles.container}>
 
-        <Button title="Generate PDF" onPress={generatePdf} />
+      <Button title="Generate PDF" onPress={generatePdf} />
 
-      </View>
+
       <Agenda
         items={schedule}
         selected={year + "-" + month + "-" + date}
