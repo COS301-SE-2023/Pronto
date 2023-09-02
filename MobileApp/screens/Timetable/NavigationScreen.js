@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert, TextInput} from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StepByStepInstructions from '../../components/StepByStepInstructions';
 import MapViewDirections from "react-native-maps-directions";
@@ -154,21 +153,7 @@ const NavigationScreen = () => {
                 {/* Input for the destination with icon */}
                 <View style={styles.inputContainer}>
                     <Icon name="location-on" size={20} color="#e32f45" style={styles.inputIcon} />
-                    <GooglePlacesAutocomplete
-                        styles={styles.input}
-                        placeholder="Destination"
-                        query={{
-                            key: GOOGLE_API_KEY,
-                            language: 'en',
-                        }}
-                        fetchDetails={true}
-                        onPress={(data, details = null) => {
-                            setDestination({
-                                latitude: details.geometry.location.lat,
-                                longitude: details.geometry.location.lng,
-                            });
-                        }}
-                    />
+
                 </View>
 
                 <TouchableOpacity
