@@ -309,7 +309,7 @@ const ScheduleTable = ({ navigation }) => {
 
     // Populate the timetableData dictionary with lecture data
     modules.forEach((module) => {
-      const { day, start, end, course } = module;
+      const { day, start, end, course, venue } = module; // Include 'venue' here
       const dayIndex = daysOfWeek.indexOf(day);
 
       if (!timetableData[start]) {
@@ -324,6 +324,7 @@ const ScheduleTable = ({ navigation }) => {
         courseCode: course.coursecode,
         start,
         end,
+        venue, // Include 'venue' here
       });
     });
 
@@ -351,8 +352,8 @@ const ScheduleTable = ({ navigation }) => {
           let cellContent = '';
 
           lectures.forEach((lecture) => {
-            const { courseCode, start, end } = lecture;
-            cellContent += `<div>${courseCode}<br>${start}-${end}</div>`;
+            const { courseCode, start, end, venue } = lecture;
+            cellContent += `<div>${courseCode}<br>${start}-${end}<br>(${venue})</div>`; // Include 'venue' here
           });
 
           tableHTML += `<td>${cellContent}</td>`;
@@ -366,6 +367,7 @@ const ScheduleTable = ({ navigation }) => {
 
     return tableHTML;
   };
+
 
 
 
@@ -411,13 +413,14 @@ const ScheduleTable = ({ navigation }) => {
   </style>
     </head>
     <body>
-      <h1 style = "font-family: 'Roboto', sans-serif;" >Pronto Offline Timetable</h1>
+      <h1 style="font-family: 'Roboto', sans-serif;">Pronto Offline Timetable</h1>
       <table>
         ${generateTimetableRows(activities)}
       </table>
     </body>
   </html>
 `;
+
 
 
 
