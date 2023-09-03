@@ -60,6 +60,7 @@ const NotificationList = ({ navigation }) => {
       };
 
       if(announcement.length===0){
+        console.log("No announcements");
         setLoading(true);
         let courses=[];
         for(let i=0;i<stu.enrollments.items.length;i++){
@@ -277,10 +278,6 @@ const NotificationList = ({ navigation }) => {
           { nextToken !==null ? 
               <Button 
                 title="Load More"
-                style={{
-                  marginRight:"auto",
-                  marginLeft:"auto"
-                }}
                 onPress={loadMore} 
                   >  
                 </Button> 
@@ -289,7 +286,6 @@ const NotificationList = ({ navigation }) => {
             }
         </Text>
      
-
               </ScrollView>
             )}
           </View>

@@ -224,6 +224,7 @@ export const listStudents=`query ListStudents(
       lastname
       email
       owner
+      preference
       studentTimetableId
       timetable { 
         id

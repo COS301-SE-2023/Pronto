@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Auth,API } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
+import { updateStudentInfo } from "../../graphql/mutations";
 
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -38,22 +39,56 @@ const NotificationPreferences = () => {
     try {
       // Replace "currentUser" with the method that retrieves the authenticated user from Cognito
       // For example, if you are using AWS Amplify, you can use Auth.currentAuthenticatedUser()
-      let email=""
-      if(student===null){
-        const currentUser = await Auth.currentAuthenticatedUser();
-        //const email = currentUser.attributes.email; // Assuming that "email" is the attribute name for the email in Cognito
-        email=currentUser.attributes.email;
-      }
-      else{ 
-        email=student.email;
-      }
-      return email;
+      // let email=""
+      // if(student===null){
+      //   const currentUser = await Auth.currentAuthenticatedUser();
+      //   //const email = currentUser.attributes.email; // Assuming that "email" is the attribute name for the email in Cognito
+      //   email=currentUser.attributes.email;
+      // }
+      // else{ 
+      //   email=student.email;
+      // }
+      return student.email;
     } catch (error) {
       console.error("Error fetching user email:", error);
       return null;
     }
   };
 
+  const fetchStudent =async()=>{
+    try{
+      if(student===null){
+        let user =await Auth.currentAuthenticatedUser()
+        let studentEmail=user.attributes.email;
+        let stu = await API.graphql({
+            query: listStudents,
+            variables: {
+              filter: {
+                email: {
+                  eq: studentEmail
+                }
+              }
+            }
+          })
+      
+        let found = false
+        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
+          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
+            stu = stu.data.listStudents.items[i]
+            found = true
+            break
+          };
+        };
+        
+        if(found===false){
+          throw Error();
+        }
+        updateStudent(student);
+      }
+    }catch(e){
+      console.log(e)
+    }
+  }
   const handleOptionSelect = async (option) => {
     setSelectedOption(option);
     if (option === "sms") {
@@ -69,15 +104,31 @@ const NotificationPreferences = () => {
     }
   };
 
-  const handleSavePreferences = () => {
-    Alert.alert(
-      "Preferences Updated",
-      `Preference successfully updated to ${selectedOption}`
-    );
+  const handleSavePreferences = async() => {
+    
+    try{
 
+      let update=await API.graphql({
+        query:updateStudentInfo,
+        variables:{input :{id:student.id,preference:selectedOption}}
+      }) 
+     
+      student.preference=selectedOption;
+      updateStudent(student);
+      Alert.alert(
+        "Preferences Updated",
+        `Preference successfully updated to ${selectedOption}`
+      );
+    }catch(e){
+      Alert.alert("Failed to update preference");
+    }
 
     setShowSaveButton(false);
   };
+
+   useEffect(() => {
+    fetchStudent();
+  }, [])
 
   const closeModalAndDeselectOption = () => {
     setModalVisible(false);
@@ -165,7 +216,7 @@ const NotificationPreferences = () => {
       <View style={styles.content}>
         <Text style={styles.title}>Notification Preferences</Text>
         <Text style={{ marginBottom: 20, textAlign: "center" }}>
-          This is how you will receive notifications from your lecturer.Your notification preference is currently set to {student === null ? "" : student.preference===undefined?  "push" : student.preference===null?  " push" : student.preference  }
+          This is how you will receive notifications from your lecturer. Your notification preference is currently set to <Text style={styles.optionText}>{student === null ? "" : student.preference===undefined?  "push" : student.preference===null?  " push" : student.preference  }</Text> 
         </Text>
         <ImageBackground
           resizeMode="contain"

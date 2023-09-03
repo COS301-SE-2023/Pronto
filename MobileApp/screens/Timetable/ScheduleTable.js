@@ -3,9 +3,9 @@ import { View, TouchableOpacity, Text, Dimensions, Alert } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
-import { listStudents, listInstitutions } from "../../graphql/queries"
+import { listStudents } from "../../graphql/queries"
 import { useStudent } from "../../ContextProviders/StudentContext";
-import { createStudent } from "../../graphql/mutations";
+
 
 const ScheduleTable = ({ navigation }) => {
 
@@ -57,8 +57,9 @@ const ScheduleTable = ({ navigation }) => {
 
   const fetchActivities = async () => {
     try {
-      console.log(student);
+      //console.log(student);
       if(student===null){
+        console.log("fetch")
         let user = await Auth.currentAuthenticatedUser()
         let studentEmail = user.attributes.email;
 
