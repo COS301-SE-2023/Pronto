@@ -18,7 +18,9 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
 import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext"
 import {StudentProvider} from "./ContextProviders/StudentContext";
+import { listStudents } from "./graphql/queries";
 
+import {API} from "aws-amplify"
 import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
@@ -31,12 +33,32 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-
+  const {student,updateStudent} = useStudent();
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
+
+      const email=authUser.attributes.email;
+      let studentInfo = await API.graphql({
+        query: listStudents,
+        variables: {
+          filter: {
+            email: {
+              eq: email
+            }
+          }
+        }
+      });
+      
+      for (let i = 0; i < studentInfo.data.listStudents.items.length; i++) {
+        if (studentInfo.data.listStudents.items[i].owner === authUser.attributes.sub) {
+          studentInfo = studentInfo.data.listStudents.items[i]
+          break;
+        }
+      }
+      await updateStudent(studentInfo);
       setUser(authUser);
     } catch (e) {
       setUser(null);
