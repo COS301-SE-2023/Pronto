@@ -10,7 +10,7 @@
     "test:watch": "jest  --watch",
     "test:watch:silent": "jest --watch --silent",
     "test:unit": "jest unit",
-    "test:unit:silent":"jest unit --silent",
+    "test:unit:silent": "jest unit --silent",
     "test:unit:watch": "jest --watch unit",
     "test:unit:watch:silent": "jest --watch --silent unit"
   },

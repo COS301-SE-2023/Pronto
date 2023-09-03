@@ -1,14 +1,16 @@
-const adminEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/admin.event.json");
-const lecturerEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/lecturers.event.json");
-const studentsEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/students.event.json");
-const preAuth = require("../../../../function/pronto5f713f59PreSignup/src/index");
+const adminEvent = require("../../../../amplify/backend/function/pronto5f713f59PreSignup/src/events/admin.event.json");
+const lecturerEvent = require("../../../../amplify/backend/function/pronto5f713f59PreSignup/src/events/lecturers.event.json");
+const studentsEvent = require("../../../../amplify/backend/function/pronto5f713f59PreSignup/src/events/students.event.json");
+const preAuth = require("../../../../amplify/backend/function/pronto5f713f59PreSignup/src/index");
 
 jest.mock(
-  "../../../../function/pronto5f713f59PreSignup/src/assertInstitutionInfo",
+  "../../../../amplify/backend/function/pronto5f713f59PreSignup/src/assertInstitutionInfo",
   () => ({
     isLectureEmailPartOfInstitution: jest.fn(() => Promise.resolve(false)),
     isAdminAllocated: jest.fn(() => Promise.resolve(true)),
-    isStudentEmailDomainPartOfInstitution: jest.fn(() => Promise.resolve(false)),
+    isStudentEmailDomainPartOfInstitution: jest.fn(() =>
+      Promise.resolve(false)
+    ),
   })
 );
 describe("Input Validation and Error handling", () => {

@@ -1,16 +1,12 @@
-const addToGroup = require("../../../../function/pronto5f713f59PostAuthentication/src/add-to-group");
-const adminEvent = require("../../../../function/pronto5f713f59PostAuthentication/src/events/admin.event.json");
-const lecturerEvent = require("../../../../function/pronto5f713f59PostAuthentication/src/events/lecturers.event.json");
-const studentsEvent = require("../../../../function/pronto5f713f59PostAuthentication/src/events/students.event.json");
+const addToGroup = require("../../../../amplify/backend/function/pronto5f713f59PostAuthentication/src/add-to-group");
+const adminEvent = require("../../../../amplify/backend/function/pronto5f713f59PostAuthentication/src/events/admin.event.json");
+const lecturerEvent = require("../../../../amplify/backend/function/pronto5f713f59PostAuthentication/src/events/lecturers.event.json");
+const studentsEvent = require("../../../../amplify/backend/function/pronto5f713f59PostAuthentication/src/events/students.event.json");
 
 jest.mock("@aws-sdk/client-cognito-identity-provider", () => {
   return {
     CognitoIdentityProviderClient: class {
       send() {
-        return Promise.resolve({});
-      }
-
-      promise() {
         return Promise.resolve({});
       }
     },
@@ -100,11 +96,6 @@ describe("add to group", () => {
   test(`Should add student to group`, async () => {
     expect(await addToGroup.handler(studentsEvent)).toMatchObject(
       studentsEvent
-    );
-  });
-  test(`Should add lecturer to group`, async () => {
-    expect(await addToGroup.handler(lecturerEvent)).toMatchObject(
-      lecturerEvent
     );
   });
   test(`Should add lecturer to group`, async () => {
