@@ -8,9 +8,13 @@ import { createStudent } from "../../graphql/mutations";
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 
 const ScheduleTable = ({ navigation }) => {
+
+
 
 
   const [activities, setActivities] = useState([])
@@ -274,6 +278,8 @@ const ScheduleTable = ({ navigation }) => {
 
 
   //functions for generating pdf
+
+
   const generatePdf = async () => {
     const pdfOptions = {
       html: html,
@@ -424,11 +430,15 @@ const ScheduleTable = ({ navigation }) => {
 
 
 
-
   return (
-    <View style={{ height: windowHeight, width: windowWidth }}>
 
-      <Button title="Generate PDF" onPress={generatePdf} />
+
+
+    <View style={{ height: windowHeight, width: windowWidth }}>
+      <TouchableOpacity onPress={generatePdf}>
+        <Icon name="download" size={24} color="grey" />
+      </TouchableOpacity>
+
 
 
       <Agenda
@@ -455,6 +465,8 @@ const ScheduleTable = ({ navigation }) => {
           //         //  textSectionTitleColor: "#e32f45",
         }}
       />
+
+
     </View>
   );
 };
