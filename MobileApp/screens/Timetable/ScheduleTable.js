@@ -14,15 +14,21 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ScheduleTable = ({ navigation }) => {
 
-
-
-
   const [activities, setActivities] = useState([])
   const [schedule, setSchedule] = useState(null)
 
   var scheduleArray = {}
 
-
+  useEffect(() => {
+    // Customize the header of the page using navigation options
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={generatePdf}>
+          <Icon name="download" size={24} color="grey" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [activities]);
 
   //function to take in a day, and give all dates of the year that a day occurs
   const getDatesForDayOfWeek = (dayOfWeek) => {
@@ -431,16 +437,7 @@ const ScheduleTable = ({ navigation }) => {
 
 
   return (
-
-
-
     <View style={{ height: windowHeight, width: windowWidth }}>
-      <TouchableOpacity onPress={generatePdf}>
-        <Icon name="download" size={24} color="grey" />
-      </TouchableOpacity>
-
-
-
       <Agenda
         items={schedule}
         selected={year + "-" + month + "-" + date}
@@ -465,8 +462,6 @@ const ScheduleTable = ({ navigation }) => {
           //         //  textSectionTitleColor: "#e32f45",
         }}
       />
-
-
     </View>
   );
 };
