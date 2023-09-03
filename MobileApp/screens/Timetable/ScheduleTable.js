@@ -16,19 +16,21 @@ const ScheduleTable = ({ navigation }) => {
 
   const [activities, setActivities] = useState([])
   const [schedule, setSchedule] = useState(null)
+  const [timetableLoaded, setTimetableLoaded] = useState(false);
 
   var scheduleArray = {}
 
   useEffect(() => {
-    // Customize the header of the page using navigation options
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={generatePdf}>
-          <Icon name="download" size={24} color="grey" />
-        </TouchableOpacity>
+        timetableLoaded && (
+          <TouchableOpacity onPress={generatePdf}>
+            <Icon name="download" size={24} color="grey" />
+          </TouchableOpacity>
+        )
       ),
     });
-  }, [activities]);
+  }, [activities, timetableLoaded]);
 
   //function to take in a day, and give all dates of the year that a day occurs
   const getDatesForDayOfWeek = (dayOfWeek) => {
@@ -228,6 +230,7 @@ const ScheduleTable = ({ navigation }) => {
     }
 
     setSchedule(scheduleArray)
+    setTimetableLoaded(true);
   }
 
   const renderItem = (module) => {
