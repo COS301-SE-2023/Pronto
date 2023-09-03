@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions, Alert, Button, TextInput, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Text, Dimensions, Alert, Button, TextInput, StyleSheet, Image } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
@@ -8,7 +8,7 @@ import { createStudent } from "../../graphql/mutations";
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import downloadIcon from '../../assets/icons/downloadicon.png';
 
 
 
@@ -24,8 +24,8 @@ const ScheduleTable = ({ navigation }) => {
     navigation.setOptions({
       headerRight: () => (
         timetableLoaded && (
-          <TouchableOpacity onPress={generatePdf}>
-            <Icon name="download" size={24} color="grey" />
+          <TouchableOpacity onPress={generatePdf} style={styles.downloadIcon}>
+            <Image source={downloadIcon} style={[styles.iconImage, { tintColor: '#e32f45' }]} />
           </TouchableOpacity>
         )
       ),
@@ -482,5 +482,10 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     padding: 8,
     margin: 8
-  }
+  },
+  iconImage: {
+    width: 24, // Adjust the width and height to fit your design
+    height: 24,
+    marginRight: 30,
+  },
 });
