@@ -16,6 +16,8 @@ import HelpScreen from "./screens/Settings/HelpScreen";
 import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
+import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext"
+import {StudentProvider} from "./ContextProviders/StudentContext";
 
 import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
@@ -83,6 +85,8 @@ export default function App() {
     );
   }
   return (
+    <StudentProvider>
+      <AnnouncementProvider>
     <NavigationContainer>
       <Stack.Navigator>
         {user ? (
@@ -174,5 +178,7 @@ export default function App() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+    </AnnouncementProvider>
+    </StudentProvider>
   );
 }
