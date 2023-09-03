@@ -1,20 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Auth } from "aws-amplify";
+import { useStudent } from "../../ContextProviders/StudentContext";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const {student,updateStudent}=useStudent();
   useEffect(() => {
     fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
-      const userInfo = await Auth.currentUserInfo();
-      setUser(userInfo);
-      setIsLoading(false);
+      if(student===null){
+        setIsLoading(true);
+        const userInfo = await Auth.currentUserInfo();
+        //setUser(userInfo);
+        let studentEmail = userInfo.attributes.email; 
+        let stu = await API.graphql({
+          query: listStudents,
+          variables: {
+            filter: {
+              email: {
+                eq: studentEmail
+              }
+            }
+          }
+        })
+
+        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
+          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
+            stu = stu.data.listStudents.items[i];
+            found = true;
+            break;
+          }
+        }
+        updateStudent(stu);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.log("Error fetching user data:", error);
     }
@@ -41,12 +65,18 @@ const ProfilePage = () => {
 
       <View style={styles.infoContainer}>
         <Text style={styles.label}>Name:</Text>
-        <Text style={styles.text}>{user?.attributes?.name}</Text>
+        <Text style={styles.text}>{student?.firstname}</Text>
 
         <Text style={styles.label}>Surname:</Text>
-        <Text style={styles.text}>{user?.attributes?.family_name}</Text>
+        <Text style={styles.text}>{student?.lastname}</Text>
 
         <Text style={styles.label}>Email:</Text>
+        <Text style={styles.text}>{student?.email}</Text>
+
+        <Text style={styles.label}>Institution:</Text>
+        <Text style={styles.text}>{student?.instituion?.name}</Text>
+
+        <Text style={styles.label}>Phone number:</Text>
         <Text style={styles.text}>{user?.attributes?.email}</Text>
       </View>
     </View>

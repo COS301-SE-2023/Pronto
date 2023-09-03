@@ -148,7 +148,7 @@ const NotificationList = ({ navigation }) => {
   }, [navigation])
 
   return (
-    <View>
+    <View style={{height:"100%"}}>
       <List.Section title="Announcements" style={{ margin: 10 }}>
         <List.Accordion
           title="Reminders"
@@ -172,37 +172,12 @@ const NotificationList = ({ navigation }) => {
             >
               <Card.Content>
                 <Text>
-                  {val.course.coursecode} {": "} {val.start}
+                  {val.course.coursecode} {": "} {val.title}
                 </Text>
               </Card.Content>
             </Card>
           ))}
 
-          {/* <Card
-            style={{
-              margin: 10,
-              backgroundColor: "white",
-            }}
-            onPress={showFullMessage}
-          >
-            <Card.Content>
-              <Text>
-                COS 301: Lecture venue changed from North Hall to IT 2-27
-              </Text>
-            </Card.Content>
-          </Card> */}
-          {/* 
-          <Card
-            style={{
-              margin: 10,
-              backgroundColor: "white",
-            }}
-            onPress={showFullMessage}
-          >
-            <Card.Content>
-              <Text>COS 332: Change in lecture time</Text>
-            </Card.Content>
-          </Card> */}
         </List.Accordion>
 
         <List.Accordion
@@ -232,17 +207,7 @@ const NotificationList = ({ navigation }) => {
               </Card.Content>
             </Card>
           ))}
-          {/* <Card
-            style={{
-              margin: 10,
-              backgroundColor: "white",
-            }}
-            onPress={showFullMessage}
-          >
-            <Card.Content>
-              <Text>COS216: Assignment due soon</Text>
-            </Card.Content>
-          </Card> */}
+       
         </List.Accordion>
 
         <List.Accordion
@@ -255,17 +220,6 @@ const NotificationList = ({ navigation }) => {
           onPress={handlePress3}
           style={{ backgroundColor: "white" }}
         >
-          {/* <Card
-            style={{
-              margin: 10,
-              backgroundColor: "white",
-            }}
-            onPress={showFullMessage}
-          >
-            <Card.Content>
-              <Text>IMY310: Remeber your pens for the semester test</Text>
-            </Card.Content>
-          </Card> */}
         </List.Accordion>
       </List.Section>
 
@@ -319,15 +273,25 @@ const NotificationList = ({ navigation }) => {
                     </Card.Content>
                   </Card>
                 ))}
-                 <Text>
-          { nextToken !==null ? <Button title="Load More" onPress={loadMore}></Button> :  " "}
+        <Text>
+          { nextToken !==null ? 
+              <Button 
+                title="Load More"
+                style={{
+                  marginRight:"auto",
+                  marginLeft:"auto"
+                }}
+                onPress={loadMore} 
+                  >  
+                </Button> 
+              :  
+              " "
+            }
         </Text>
      
 
               </ScrollView>
             )}
-            {/* <button onClick={loadMore}> </button> */}
-            
           </View>
        
         </List.Section>
