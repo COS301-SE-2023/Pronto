@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, View, StyleSheet, Text ,Button} from "react-native";
+import { Alert, View, StyleSheet, Text ,Button,RefreshControl} from "react-native";
 import { List, Card, Avatar, Modal } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -149,7 +149,10 @@ const NotificationList = ({ navigation }) => {
   }, [navigation])
 
   return (
-    <View style={{height:"100%"}}>
+    <View 
+      style={{height:"100%"}}
+      refr
+    >
       <List.Section title="Announcements" style={{ margin: 10 }}>
         <List.Accordion
           title="Reminders"
@@ -226,6 +229,7 @@ const NotificationList = ({ navigation }) => {
 
       <Card.Content>
         <List.Section title="Recent Announcements">
+          {/* <ScrollView> */}
           <View>
             {loading ? (
               <Text
@@ -274,7 +278,10 @@ const NotificationList = ({ navigation }) => {
                     </Card.Content>
                   </Card>
                 ))}
-        <Text>
+        <Text
+          style={{
+            marginBottom:"20%"
+          }}>
           { nextToken !==null ? 
               <Button 
                 title="Load More"
@@ -289,7 +296,7 @@ const NotificationList = ({ navigation }) => {
               </ScrollView>
             )}
           </View>
-       
+          {/* </ScrollView> */}
         </List.Section>
       </Card.Content>
     </View >

@@ -16,8 +16,8 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { searchCourses, listStudents, listInstitutions } from "../../graphql/queries"
-import { createEnrollment, createStudent, deleteEnrollment, updateStudent, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { searchCourses, listStudents } from "../../graphql/queries"
+import { createEnrollment, deleteEnrollment, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 const EditTimetable = ({ onSearch }) => {
