@@ -81,12 +81,6 @@ const SettingsComponent = ({ settingsOptions }) => {
           <TouchableOpacity
             style={{
               position: "absolute",
-              shadowColor: '#000',
-
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.2,
-              shadowRadius: 2,
-              elevation: 3,
               borderRadius: 25, // Half of the width/height for a circular shape
               justifyContent: "center",
               alignItems: "center",

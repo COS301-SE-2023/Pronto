@@ -11,7 +11,6 @@ import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
 
 
-
 const ScheduleTable = ({ navigation }) => {
 
   const [activities, setActivities] = useState([])
@@ -209,13 +208,14 @@ const ScheduleTable = ({ navigation }) => {
 
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
+
     for (const moduleKey in modules) {
       const dates = getDatesForDayOfWeek(modules[moduleKey].day);
       dates.forEach((date) => {
         if (!scheduleArray[date]) {
           scheduleArray[date] = [];
         }
-        let t = modules[moduleKey].start + "-" + modules[moduleKey].end
+        let t = modules[moduleKey].start + "-" + modules[moduleKey].end;
         scheduleArray[date].push({
           id: modules[moduleKey].id,
           code: modules[moduleKey].course.coursecode,
@@ -225,18 +225,25 @@ const ScheduleTable = ({ navigation }) => {
           day: modules[moduleKey].day,
           height: 50,
         });
-
       });
     }
-
+    
     setSchedule(scheduleArray)
     setTimetableLoaded(true);
   }
 
   const renderItem = (module) => {
+    const cardStyle = module.isClash
+      ? { backgroundColor: "white", borderColor: "#e32f45", borderWidth: 1, borderStyle: "dashed" } // Apply clash styling
+      : { backgroundColor: "white" }; // Default styling
+
+    const textStyle = module.isClash
+      ? { fontStyle: "italic" } // Apply italic style for clashes
+      : {}; // Default style
+
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
-        <Card style={{ backgroundColor: "white" }}>
+        <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}>
           <Card.Content>
             <View
               style={{
@@ -245,15 +252,17 @@ const ScheduleTable = ({ navigation }) => {
                 alignItems: "center",
               }}
             >
-              <Text>{module.code}</Text>
-              <Text>{module.venue}</Text>
-              <Text>{module.time}</Text>
+              <Text style={textStyle}>{module.code}</Text>
+              <Text style={textStyle}>{module.venue}</Text>
+              <Text style={textStyle}>{module.time}</Text>
             </View>
           </Card.Content>
         </Card>
       </TouchableOpacity>
     );
   };
+
+
 
   const renderEmptyDate = () => {
     return (
