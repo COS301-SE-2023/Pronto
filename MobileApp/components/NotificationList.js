@@ -3,22 +3,23 @@ import { Alert, View, StyleSheet, Text ,Button} from "react-native";
 import { List, Card, Avatar, Modal } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { listStudents, listInstitutions, createStudent,announcementsByDate, listAnnouncements } from "../graphql/queries";
+import { listStudents,announcementsByDate, listAnnouncements } from "../graphql/queries";
 import { Auth, API } from "aws-amplify"
+import { useStudent } from "../ContextProviders/StudentContext";
+import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
 
 const NotificationList = ({ navigation }) => {
   const [expanded1, setExpanded1] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
   const [expanded3, setExpanded3] = useState(true);
-  const [student, setStudent] = useState(null)
-  const [announcements, setAnnouncements] = useState([])
-  const [reminders, setReminders] = useState([])
-  const [dueDates, setDueDates] = useState([])
+  const {student,updateStudent} =useStudent();
+  const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
+ 
   const handlePress1 = () => setExpanded1(!expanded1);
   const handlePress2 = () => setExpanded2(!expanded2);
   const handlePress3 = () => setExpanded3(!expanded3);
-  const [loading, setLoading] = useState(true);
-  const [nextToken,setNextToken]=useState(null)
+  const [loading, setLoading] = useState(false);
+  
   const showFullMessage = (key) => {
     Alert.alert(key.body);
   };
@@ -26,39 +27,46 @@ const NotificationList = ({ navigation }) => {
   const fetchAnnouncements = async () => {
     let error = "There appear to be network issues. Please try again later"
     try {
-      setLoading(true);
-      let user = await Auth.currentAuthenticatedUser()
-      let studentEmail = user.attributes.email;
+      let stu=student;
+      if(student===null){
+        console.log("Student is null");
+        setLoading(true);
+        let user = await Auth.currentAuthenticatedUser()
+        let studentEmail = user.attributes.email;
 
-      let stu = await API.graphql({
-        query: listStudents,
-        variables: {
-          filter: {
-            email: {
-              eq: studentEmail
+        let stu = await API.graphql({
+          query: listStudents,
+          variables: {
+            filter: {
+              email: {
+                eq: studentEmail
+              }
             }
           }
-        },
-      })
-
-      let found = false
-      for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-        if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-          stu = stu.data.listStudents.items[i]
-          found = true
-          break
+        })
+      
+        let found = false
+        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
+          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
+            stu = stu.data.listStudents.items[i]
+            found = true
+            break
+          };
+        };
+        
+        if(found===false){
+          throw Error();
         }
-      }
+      };
 
-    
-         setStudent(stu)
-         let courses=[];
-         
-         for(let i=0;i<stu.enrollments.items.length;i++){
+      if(announcement.length===0){
+        setLoading(true);
+        let courses=[];
+        for(let i=0;i<stu.enrollments.items.length;i++){
           courses.push(stu.enrollments.items[i].courseId);
-         }
+        }
          
-          let filter=`{"filter" : { "or" : [`;
+        let filter=`{"filter" : { "or" : [`;
         for(let i=0;i<courses.length;i++){
           if(i===courses.length-1){
             filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
@@ -68,22 +76,23 @@ const NotificationList = ({ navigation }) => {
           }
         }
      
-          filter+=`] },"limit":"1" ,"sortDirection":"DESC"}`;
+        filter+=`] },"limit":"1" ,"sortDirection":"DESC"}`;
         
         let variables = JSON.parse(filter)
-        //Fecth annnouncements and order them by date
-          let announcementList=await API.graphql({
+    
+        let announcementList=await API.graphql({
             query:listAnnouncements,
             variables:variables
           })
           ;
         
-          setAnnouncements(announcementList.data.listAnnouncements.items);
-          setNextToken(announcementList.data.listAnnouncements.nextToken);
-
-        setLoading(false);
-
+        setAnnouncement(announcementList.data.listAnnouncements.items);
+        setNextToken(announcementList.data.listAnnouncements.nextToken);
+        //setLoading(false);
+      }
+      setLoading(false);
     } catch (er) {
+      console.log(er);
       Alert.alert(error)
       setLoading(false);
     }
@@ -97,42 +106,38 @@ const NotificationList = ({ navigation }) => {
       let year=new Date().getFullYear();
       let courses=[];
         
-         for(let i=0;i<stu.enrollments.items.length;i++){
-          courses.push(stu.enrollments.items[i].courseId);
-         }
-          let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
-          }
-          else{
-            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-          }
+      for(let i=0;i<stu.enrollments.items.length;i++){
+        courses.push(stu.enrollments.items[i].courseId);
+      }
+      
+      let filter=`{"filter" : { "or" : [`;
+      for(let i=0;i<courses.length;i++){
+        if(i===courses.length-1){
+          filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
         }
+        else{
+          filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
+        }
+      }
         
-        filter+=`] },"limit":"1","sortDirection":"DESC","nextToken":"${nextToken}"}`;
-        
-        let variables = JSON.parse(filter)
-       
-
-        //Fecth annnouncements and order them by date
-          let announcementList=await API.graphql({
+      filter+=`] },"limit":"1","sortDirection":"DESC","nextToken":"${nextToken}"}`;  
+      let variables = JSON.parse(filter)
+         
+      let announcementList=await API.graphql({
             query:listAnnouncements,
             variables:variables
-          })
-          ;
+          });
         
-          let a=announcementList.data.listAnnouncements.items;
-          for(let i=0;i<a.length;i++){
-            announcements.push(a[i]);
-          }
-          setNextToken(announcementList.data.listAnnouncements.nextToken);
-          setAnnouncements(announcements)
-
-    }catch(error){
+      let a=announcementList.data.listAnnouncements.items;
+      for(let i=0;i<a.length;i++){
+        announcement.push(a[i]);
+      }
+      setNextToken(announcementList.data.listAnnouncements.nextToken);
+      setAnnouncements(announcement)
+    }catch(e){
+      console.log(e)
       Alert.alert(error);
     }
-
   }
 
   useEffect(() => {
@@ -155,7 +160,7 @@ const NotificationList = ({ navigation }) => {
           onPress={handlePress1}
           style={{ backgroundColor: "white" }}
         >
-          {announcements.filter(item=>item.type==="Reminder").map((val, key) => (
+          {announcement.filter(item=>item.type==="Reminder").map((val, key) => (
             <Card
               key={key}
               style={{
@@ -210,7 +215,7 @@ const NotificationList = ({ navigation }) => {
           onPress={handlePress2}
           style={{ backgroundColor: "white" }}
         >
-          {announcements.filter(item=>item.type==="Due Date").map((val, key) => (
+          {announcement.filter(item=>item.type==="Due Date").map((val, key) => (
             <Card
               key={key}
               style={{
@@ -276,7 +281,7 @@ const NotificationList = ({ navigation }) => {
                   textAlign: "center"
                 }}
               >Loading announcements...</Text>
-            ) : announcements.length === 0 ? (
+            ) : announcement.length === 0 ? (
               <Text
                 style={{
                   fontSize: 30,
@@ -287,7 +292,7 @@ const NotificationList = ({ navigation }) => {
               >No recent announcements</Text>
             ) : (
               < ScrollView style={{ height: "70%" }}>
-                {announcements.map((val, key) => (
+                {announcement.map((val, key) => (
                   <Card
                     key={key}
                     style={{

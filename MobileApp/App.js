@@ -18,6 +18,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
 import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext"
 import {StudentProvider} from "./ContextProviders/StudentContext";
+import {useStudent} from "./ContextProviders/StudentContext"
 import { listStudents } from "./graphql/queries";
 
 import {API} from "aws-amplify"
@@ -33,32 +34,35 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-  const {student,updateStudent} = useStudent();
+  //const {student,updateStudent} = useStudent();
+  console.log(useStudent)
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
 
-      const email=authUser.attributes.email;
-      let studentInfo = await API.graphql({
-        query: listStudents,
-        variables: {
-          filter: {
-            email: {
-              eq: email
-            }
-          }
-        }
-      });
+      // const email=authUser.attributes.email;
+      // let studentInfo = await API.graphql({
+      //   query: listStudents,
+      //   variables: {
+      //     filter: {
+      //       email: {
+      //         eq: email
+      //       }
+      //     }
+      //   }
+      // });
       
-      for (let i = 0; i < studentInfo.data.listStudents.items.length; i++) {
-        if (studentInfo.data.listStudents.items[i].owner === authUser.attributes.sub) {
-          studentInfo = studentInfo.data.listStudents.items[i]
-          break;
-        }
-      }
-      await updateStudent(studentInfo);
+      // for (let i = 0; i < studentInfo.data.listStudents.items.length; i++) {
+      //   if (studentInfo.data.listStudents.items[i].owner === authUser.attributes.sub) {
+      //     studentInfo = studentInfo.data.listStudents.items[i]
+      //     break;
+      //   }
+      // }
+      // updateStudent(studentInfo).then(()=>{
+      //   setUser(authUser);
+      // });
       setUser(authUser);
     } catch (e) {
       setUser(null);
