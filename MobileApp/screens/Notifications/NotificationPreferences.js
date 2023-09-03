@@ -14,7 +14,8 @@ import {
   Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Auth } from "aws-amplify";
+import { Auth,API } from "aws-amplify";
+import { useStudent } from "../../ContextProviders/StudentContext";
 
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -30,13 +31,22 @@ const NotificationPreferences = () => {
     useState(false);
   const [enteredEmailVerificationCode, setEnteredEmailVerificationCode] =
     useState("");
+  
+  const{student,updateStudent}=useStudent(); 
 
   const fetchUserEmail = async () => {
     try {
       // Replace "currentUser" with the method that retrieves the authenticated user from Cognito
       // For example, if you are using AWS Amplify, you can use Auth.currentAuthenticatedUser()
-      const currentUser = await Auth.currentAuthenticatedUser();
-      const email = currentUser.attributes.email; // Assuming that "email" is the attribute name for the email in Cognito
+      let email=""
+      if(student===null){
+        const currentUser = await Auth.currentAuthenticatedUser();
+        //const email = currentUser.attributes.email; // Assuming that "email" is the attribute name for the email in Cognito
+        email=currentUser.attributes.email;
+      }
+      else{ 
+        email=student.email;
+      }
       return email;
     } catch (error) {
       console.error("Error fetching user email:", error);
@@ -64,6 +74,8 @@ const NotificationPreferences = () => {
       "Preferences Updated",
       `Preference successfully updated to ${selectedOption}`
     );
+
+
     setShowSaveButton(false);
   };
 
@@ -153,7 +165,7 @@ const NotificationPreferences = () => {
       <View style={styles.content}>
         <Text style={styles.title}>Notification Preferences</Text>
         <Text style={{ marginBottom: 20, textAlign: "center" }}>
-          This is how you will receive notifications from your lecturer
+          This is how you will receive notifications from your lecturer.Your notification preference is currently set to {student === null ? "" : student.preference===undefined?  "push" : student.preference===null?  " push" : student.preference  }
         </Text>
         <ImageBackground
           resizeMode="contain"
