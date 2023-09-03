@@ -107,11 +107,11 @@ const ScheduleTable = ({ navigation }) => {
                         return 1;
                     })
 
-        updateStudent(stu).then(()=>{
-          setActivities(act);
-          createScheduleArray(act);
-          setActivities(act);
-        });
+        updateStudent(stu)
+        setActivities(act);
+        createScheduleArray(act);
+        setActivities(act);
+      
       }
       else{
         console.log("Not fetching");

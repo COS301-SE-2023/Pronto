@@ -28,13 +28,16 @@ const ProfilePage = () => {
             }
           }
         })
-
+        let found=false;
         for (let i = 0; i < stu.data.listStudents.items.length; i++) {
           if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
             stu = stu.data.listStudents.items[i];
             found = true;
             break;
           }
+        }
+        if(found===false){
+          throw Error();
         }
         updateStudent(stu);
         setIsLoading(false);
@@ -74,10 +77,10 @@ const ProfilePage = () => {
         <Text style={styles.text}>{student?.email}</Text>
 
         <Text style={styles.label}>Institution:</Text>
-        <Text style={styles.text}>{student?.instituion?.name}</Text>
+        <Text style={styles.text}>{student?.institution?.name}</Text>
 
         <Text style={styles.label}>Phone number:</Text>
-        <Text style={styles.text}>{user?.attributes?.email}</Text>
+        <Text style={styles.text}></Text>
       </View>
     </View>
   );
