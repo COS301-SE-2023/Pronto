@@ -24,7 +24,7 @@ const SettingsComponent = ({ settingsOptions }) => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <View style={{ height: "100%" }}>
+    <View style={{height:"100%"}}>
       <ScrollView>
         {settingsOptions.map(({ title, subTitle, onPress }) => (
           <TouchableOpacity key={title} testID="option" onPress={onPress}>
@@ -69,7 +69,7 @@ const SettingsComponent = ({ settingsOptions }) => {
             style={{
               backgroundColor: "#e32f45",
               marginVertical: 20,
-              marginHorizontal: 20,
+              marginHorizontal: 20
             }}
             outlined={true}
             onPress={onLogoutPressed}
@@ -92,7 +92,7 @@ const SettingsComponent = ({ settingsOptions }) => {
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ color: "black", marginRight: 5, fontWeight: "400" }}>Need help</Text>
-              <Icon name="help-circle-outline" size={50} color="#e32f45" />
+              <Icon name="help-circle-outline" size={50} color="#e32f45" style={{marginBottom:"20%"}}/>
             </View>
 
           </TouchableOpacity>

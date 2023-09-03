@@ -19,13 +19,15 @@ const NotificationList = ({ navigation }) => {
   const handlePress2 = () => setExpanded2(!expanded2);
   const handlePress3 = () => setExpanded3(!expanded3);
   const [loading, setLoading] = useState(false);
-  
+  const [refresh,setRefresh] =useState(false);
+  const error = "There appear to be network issues. Please try again later";
+  let limit=4;
   const showFullMessage = (key) => {
     Alert.alert(key.body);
   };
 
   const fetchAnnouncements = async () => {
-    let error = "There appear to be network issues. Please try again later"
+   
     try {
       let stu=student;
       if(student===null){
@@ -77,7 +79,7 @@ const NotificationList = ({ navigation }) => {
           }
         }
      
-        filter+=`] },"limit":"1" ,"sortDirection":"DESC"}`;
+        filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
         
         let variables = JSON.parse(filter)
     
@@ -99,6 +101,44 @@ const NotificationList = ({ navigation }) => {
     }
   }
 
+  const onRefresh = async()=>{
+      try{
+        setLoading(true);
+        let stu=student;
+        let courses=[];
+        for(let i=0;i<stu.enrollments.items.length;i++){
+          courses.push(stu.enrollments.items[i].courseId);
+        }
+         
+        let filter=`{"filter" : { "or" : [`;
+        for(let i=0;i<courses.length;i++){
+          if(i===courses.length-1){
+            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+          }
+          else{
+            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
+          }
+        }
+     
+        filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
+        
+        let variables = JSON.parse(filter)
+    
+        let announcementList=await API.graphql({
+            query:listAnnouncements,
+            variables:variables
+          })
+          ;
+       console.log(announcement); 
+        setAnnouncement(announcementList.data.listAnnouncements.items);
+        setNextToken(announcementList.data.listAnnouncements.nextToken);
+        setLoading(false);
+      }catch(e){
+        console.log(e);
+        Alert.alert(error)
+      }
+
+  }
 
   const loadMore =async()=>{
     try{
@@ -121,7 +161,7 @@ const NotificationList = ({ navigation }) => {
         }
       }
         
-      filter+=`] },"limit":"1","sortDirection":"DESC","nextToken":"${nextToken}"}`;  
+      filter+=`] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;  
       let variables = JSON.parse(filter)
          
       let announcementList=await API.graphql({
@@ -133,20 +173,25 @@ const NotificationList = ({ navigation }) => {
       for(let i=0;i<a.length;i++){
         announcement.push(a[i]);
       }
+      console.log(announcement);
       setNextToken(announcementList.data.listAnnouncements.nextToken);
-      setAnnouncements(announcement)
+      setAnnouncement(announcement)
     }catch(e){
       console.log(e)
       Alert.alert(error);
     }
   }
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      fetchAnnouncements()
-    });
-    return unsubscribe
-  }, [navigation])
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     fetchAnnouncements()
+  //   });
+  //   return unsubscribe
+  // }, [navigation])
+
+  useEffect(()=>{
+    fetchAnnouncements();
+  },[])
 
   return (
     <View 
@@ -194,7 +239,7 @@ const NotificationList = ({ navigation }) => {
           onPress={handlePress2}
           style={{ backgroundColor: "white" }}
         >
-          {announcement.filter(item=>item.type==="Due Date").map((val, key) => (
+          {announcement.filter(item=>item.type==="Due Assignment").map((val, key) => (
             <Card
               key={key}
               style={{
@@ -213,20 +258,8 @@ const NotificationList = ({ navigation }) => {
           ))}
        
         </List.Accordion>
-
-        <List.Accordion
-          title="Unread"
-          titleStyle={{ color: "black" }}
-          left={(props) => (
-            <List.Icon {...props} icon="inbox" color="#e32f45" />
-          )}
-          expanded={expanded3}
-          onPress={handlePress3}
-          style={{ backgroundColor: "white" }}
-        >
-        </List.Accordion>
-      </List.Section>
-
+      </List.Section> 
+       
       <Card.Content>
         <List.Section title="Recent Announcements">
           {/* <ScrollView> */}
@@ -250,7 +283,15 @@ const NotificationList = ({ navigation }) => {
                 }}
               >No recent announcements</Text>
             ) : (
-              < ScrollView style={{ height: "70%" }}>
+              < ScrollView 
+                style={{ height: "70%" }}
+                 refreshControl={
+                    <RefreshControl
+                      refreshing={loading}
+                      onRefresh={onRefresh}
+                  />
+                 } 
+                >
                 {announcement.map((val, key) => (
                   <Card
                     key={key}
@@ -280,7 +321,9 @@ const NotificationList = ({ navigation }) => {
                 ))}
         <Text
           style={{
-            marginBottom:"20%"
+            marginBottom:"20%",
+            marginLeft:"auto",
+            marginRight:"auto"
           }}>
           { nextToken !==null ? 
               <Button 
@@ -295,9 +338,12 @@ const NotificationList = ({ navigation }) => {
      
               </ScrollView>
             )}
+            <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text>
           </View>
           {/* </ScrollView> */}
+          
         </List.Section>
+       
       </Card.Content>
     </View >
   );
