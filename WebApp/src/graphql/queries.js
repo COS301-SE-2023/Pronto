@@ -18,6 +18,7 @@ export const listLecturers=`query ListLecturers(
       courses { 
         items{ 
           id 
+          lecturerId
           coursecode
           activity{ 
             items{

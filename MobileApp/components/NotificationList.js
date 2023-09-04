@@ -352,7 +352,7 @@ const NotificationList = ({ navigation }) => {
                 ))}
         <Text
           style={{
-            marginBottom:"10%",
+            marginBottom:"2%",
             marginLeft:"auto",
             marginRight:"auto"
           }}

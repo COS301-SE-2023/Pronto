@@ -36,7 +36,7 @@ const DeleteAccountPage = () => {
                     }
                   }
                 },
-                authMode: "API_KEY"
+                authMode: "AMAZON_COGNITO_USER_POOLS"
               })
               //stu=stu.data.listStudents.items[0]
               let found = false
