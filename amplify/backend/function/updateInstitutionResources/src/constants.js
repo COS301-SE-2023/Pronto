@@ -14,7 +14,7 @@ const DATASTREAM_ACTIONS = Object.freeze({
   MODULE_CODES_UPDATED: 2,
 });
 
-const CAMPAIN_NAME_SUFFIX = Object.freeze({
+const CAMPAIGN_NAME_SUFFIX = Object.freeze({
   EMAIL: ":email:notifications:Campaign",
   SMS: ":sms:notifications:Campaign",
   PUSH_NOTIFICATIONS: ":push:notifications:Campaign",
@@ -23,5 +23,5 @@ const CAMPAIN_NAME_SUFFIX = Object.freeze({
 module.exports = {
   DYNAMODB_CONSTANTS,
   DATASTREAM_ACTIONS,
-  CAMPAIN_NAME_SUFFIX,
+  CAMPAIGN_NAME_SUFFIX,
 };

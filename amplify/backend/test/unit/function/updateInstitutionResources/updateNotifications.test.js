@@ -1,23 +1,24 @@
 const {
-  createCampainNames,
+  createCampaignNames,
 } = require("../../../../function/updateInstitutionResources/src/updateNotifications");
 const {
-  CAMPAIN_NAME_SUFFIX,
+  CAMPAIGN_NAME_SUFFIX,
 } = require("../../../../function/updateInstitutionResources/src/constants");
 
 describe("Testing helper functions", () => {
-  test("testing createCampainNames", () => {
+  test("testing createCampaignNames", () => {
     const institutionName = "University OF Pretoria";
     formattedInstitutionName = institutionName
       .toLowerCase()
       .replaceAll(" ", "+");
 
-    const expectedcampainNames = {
-      emailCampainName: formattedInstitutionName + CAMPAIN_NAME_SUFFIX.EMAIL,
-      smsCampainName: formattedInstitutionName + CAMPAIN_NAME_SUFFIX.SMS,
-      pushCampainName:
-        formattedInstitutionName + CAMPAIN_NAME_SUFFIX.PUSH_NOTIFICATIONS,
+    const expectedCampaignNames = {
+      emailCampaignName: formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.EMAIL,
+      smsCampaignName: formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.SMS,
+      pushCampaignName:
+        formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.PUSH_NOTIFICATIONS,
     };
-    expect(createCampainNames(institutionName)).toEqual(expectedcampainNames);
+    const actualCampaignNames = createCampaignNames(institutionName);
+    expect(actualCampaignNames).toEqual(expectedCampaignNames);
   });
 });

@@ -1,34 +1,44 @@
 const {
   getAndSetInstitutionDetails,
 } = require("../../pronto5f713f59PreSignup/src/assertInstitutionInfo");
-const { DATASTREAM_ACTIONS, CAMPAIN_NAME_SUFFIX } = require("./constants");
+const { DATASTREAM_ACTIONS, CAMPAIGN_NAME_SUFFIX } = require("./constants");
 
 /*on inst creation:
-    build campain name
-    create campain, if does not exist
-    store campains
+    build campaign name
+    create campaign, if does not exist
+    store campaigns
 */
 
 /*on module codes update
     create module segment
     update compain
 */
-const createCampainNames = (institutionName) => {
+const createCampaignNames = (institutionName) => {
   formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
-  emailCampainName = formattedInstitutionName + CAMPAIN_NAME_SUFFIX.EMAIL;
-  smsCampainName = formattedInstitutionName + CAMPAIN_NAME_SUFFIX.SMS;
-  pushCampainName =
-    formattedInstitutionName + CAMPAIN_NAME_SUFFIX.PUSH_NOTIFICATIONS;
+  emailCampaignName = formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.EMAIL;
+  smsCampaignName = formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.SMS;
+  pushCampaignName =
+    formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.PUSH_NOTIFICATIONS;
   return {
-    emailCampainName,
-    smsCampainName,
-    pushCampainName,
+    emailCampaignName,
+    smsCampaignName,
+    pushCampaignName,
   };
 };
 
-const createPinpointCampain = async (institutionName) => {
-  const campainNames = createCampainNames(institutionName);
-  const createCampaignCommandInput = {
+const createPinpointCampaign = async (institutionName) => {
+  const campaignNames = createCampaignNames(institutionName);
+  const createEmailCampaignCommandInput = {
+    ApplicationId: process.env.PINPOINT_APP_ID,
+    WriteCampaignRequest: {},
+  };
+  const createSmsCampaignCommandInput = {
+    ApplicationId: process.env.PINPOINT_APP_ID,
+    WriteCampaignRequest: {
+      Description: `${institutionName} SMS Notifications Campaign`,
+    },
+  };
+  const createPushCampaignCommandInput = {
     ApplicationId: process.env.PINPOINT_APP_ID,
     WriteCampaignRequest: {},
   };
@@ -48,4 +58,4 @@ const updateNotifications = async (UpdateOption) => {
   }
 };
 
-module.exports = { createCampainNames };
+module.exports = { createCampaignNames };
