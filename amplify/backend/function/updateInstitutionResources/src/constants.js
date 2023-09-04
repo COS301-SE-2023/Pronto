@@ -30,11 +30,29 @@ const PINPOINT_SEGMENT_DIMENSIONS = Object.freeze({
       RecencyType: "ACTIVE",
     },
   },
-  DEMOGRAPHIC: {
+  EMAIL_DEMOGRAPHIC: {
     Channel: {
-      Values: ["SMS", "EMAIL", "PUSH", "IN_APP"],
+      Values: ["EMAIL"],
       DimensionType: "INCLUSIVE",
     },
+  },
+  PUSH_DEMOGRAPHIC: {
+    Channel: {
+      Values: ["PUSH"],
+      DimensionType: "INCLUSIVE",
+    },
+  },
+  SMS_DEMOGRAPHIC: {
+    Channel: {
+      Values: ["SMS"],
+      DimensionType: "INCLUSIVE",
+    },
+  },
+  SEGMENT_GROUPS: {
+    STUDENT_GROUP: {
+      TYPE: "ANY",
+    },
+    INCLUDE: "ANY",
   },
 });
 
