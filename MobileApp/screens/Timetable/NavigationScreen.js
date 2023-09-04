@@ -7,7 +7,7 @@ import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_API_KEY } from "@env";
 import * as Location from 'expo-location';
 import locationInfo from "../../assets/data/locationInfo.json";
-import {SelectList} from "react-native-dropdown-select-list";
+import { SelectList } from "react-native-dropdown-select-list";
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -85,15 +85,12 @@ const NavigationScreen = () => {
     // Red border will be for location not gathered and display different text
     const greenStyle = {
         ...styles.input,
-        borderWidth: 2,
-        borderColor: '#70da63',
-        color: 'black',
-        borderRadius: 4,
+        borderWidth: 0,
+        color: 'grey',
         width: '80%',
         justifyContent: 'center',
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '400',
     };
 
     const redStyle = {
@@ -116,7 +113,7 @@ const NavigationScreen = () => {
         setRoute(false);
         const selectedItem = locationInfo.find(item => item.name === itemValue);
         if (selectedItem) {
-            const dest ={
+            const dest = {
                 latitude: -25.7530,
                 longitude: 28.2315,
             }
@@ -154,7 +151,7 @@ const NavigationScreen = () => {
                     <TextInput
                         style={origin ? greenStyle : redStyle} // Apply green style if origin is set, red style otherwise
                         placeholder="Origin"
-                        value={origin ? "Your Location" : "Getting Location..."}
+                        value={origin ? "Your  Location" : "Getting Location..."}
                         editable={false}
                     />
                 </View>
@@ -166,11 +163,11 @@ const NavigationScreen = () => {
                     <Icon name="location-on" size={20} color="#e32f45" style={styles.inputIcon} />
                     {/* Dropdown menu here */}
                     <SelectList
-                        data={locationInfo.map(item => item.name )}
+                        data={locationInfo.map(item => item.name)}
                         label="Locations"
                         save={"value"}
                         search={true}
-                        style={{width:'80%' , overflowY: 'auto' }}
+                        style={{ width: '80%', overflowY: 'auto' }}
                         setSelected={setDestinationLocation}
 
 
@@ -191,7 +188,7 @@ const NavigationScreen = () => {
                 </TouchableOpacity>
                 {travelTime && distance && (
                     <View style={styles.infoContainer}>
-                        <Text style={styles.infoText}><Text style={{color: "#e32f45"}}>Distance: </Text> {distance} <Text style={{color: "#e32f45"}}>Travel Time:</Text> {travelTime}</Text>
+                        <Text style={styles.infoText}><Text style={{ color: "#e32f45" }}>Distance: </Text> {distance} <Text style={{ color: "#e32f45" }}>Travel Time:</Text> {travelTime}</Text>
 
                     </View>
                 )}
@@ -278,7 +275,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 8,
+
 
     },
 
