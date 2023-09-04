@@ -20,8 +20,28 @@ const CAMPAIGN_NAME_SUFFIX = Object.freeze({
   PUSH_NOTIFICATIONS: ":push:notifications:Campaign",
 });
 
+const SEGMENT_NAME_SUFFIX = ":notifications:segment";
+
+const PINPOINT_SEGMENT_DIMENSIONS = Object.freeze({
+  ATTRIBUTES: { ATTRIBUTE_TYPE: "INCLUSIVE" },
+  BEHAVIOUR: {
+    Recency: {
+      Duration: "DAY_30",
+      RecencyType: "ACTIVE",
+    },
+  },
+  DEMOGRAPHIC: {
+    Channel: {
+      Values: ["SMS", "EMAIL", "PUSH", "IN_APP"],
+      DimensionType: "INCLUSIVE",
+    },
+  },
+});
+
 module.exports = {
   DYNAMODB_CONSTANTS,
   DATASTREAM_ACTIONS,
   CAMPAIGN_NAME_SUFFIX,
+  SEGMENT_NAME_SUFFIX,
+  PINPOINT_SEGMENT_DIMENSIONS,
 };
