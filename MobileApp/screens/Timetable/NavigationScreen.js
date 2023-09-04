@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert, TextInput} from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StepByStepInstructions from '../../components/StepByStepInstructions';
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_API_KEY } from "@env";
 import * as Location from 'expo-location';
+import locationInfo from "../../assets/data/locationInfo.json";
+import {SelectList} from "react-native-dropdown-select-list";
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -28,13 +30,9 @@ const NavigationScreen = () => {
     const [travelTime, setTravelTime] = useState("");
     const [instructions, setInstructions] = useState([]);
 
-
-
-
-
-    // this function will handle the data from the MapViewDirections component
+    // Function to handle the data from the MapViewDirections component
     function handleOnReady(result) {
-        // extract the step-by-step instructions from the result object
+        // Extract the step-by-step instructions from the result object
         const steps = result.legs[0].steps.map((step, index) => {
             // Remove the destination part from the last instruction
             const isLastStep = index === result.legs[0].steps.length - 1;
@@ -49,31 +47,29 @@ const NavigationScreen = () => {
         });
 
         setInstructions(steps);
-        //round the distance to 2 decimal places
+        // Round the distance to 2 decimal places
         setDistance(result.distance.toFixed(2) + "km");
-        setTravelTime(result.duration.toFixed(2) + " mins");
-
+        setTravelTime(result.duration.toFixed(0) + " mins");
     }
 
-    //Request access to the users location data
-    //this function will be called from the useEffect hook to run when it is mounted
+    // Request access to the user's location data
+    // This function will be called from the useEffect hook to run when it is mounted
     const requestLocationPermission = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status === 'granted') {
-            await getUserLocation() ;
-        }
-        else {
-            // In future this else statement will return the user to the home page
+            await getUserLocation();
+        } else {
+            // In the future, this else statement will return the user to the home page
             Alert.alert("Location permission not granted");
         }
     }
 
-    // Function that will be called to gather the users location
+    // Function that will be called to gather the user's location
     // NOTE: the function is called only AFTER the user has granted permission and this WILL NOT change.
     const getUserLocation = async () => {
         try {
             const location = await Location.getCurrentPositionAsync({});
-            setOrigin(location.coords) ; // set the origin to the user's current location
+            setOrigin(location.coords); // Set the origin to the user's current location
         } catch (error) {
             console.error("Error getting user's location:", error);
         }
@@ -84,8 +80,8 @@ const NavigationScreen = () => {
         requestLocationPermission().then();
     }, []);
 
-    //Below defines styling for the location textinput for the users current location
-    //Green border will be for location gathered
+    // Below defines styling for the location text input for the user's current location
+    // Green border will be for location gathered
     // Red border will be for location not gathered and display different text
     const greenStyle = {
         ...styles.input,
@@ -100,7 +96,6 @@ const NavigationScreen = () => {
         fontWeight: 'bold',
     };
 
-
     const redStyle = {
         ...styles.input,
         borderWidth: 2,
@@ -113,6 +108,22 @@ const NavigationScreen = () => {
         fontSize: 18,
         fontWeight: 'bold',
     };
+
+    // Function to set the destination location, it is called when the user clicks the SelectedList component
+    //We then traverse the locations and look for the selected location details
+    const setDestinationLocation = (itemValue) => {
+        setDestination(null);
+        setRoute(false);
+        const selectedItem = locationInfo.find(item => item.name === itemValue);
+        if (selectedItem) {
+            const dest ={
+                latitude: -25.7530,
+                longitude: 28.2315,
+            }
+            setDestination(dest);
+            console.log(dest);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -127,7 +138,7 @@ const NavigationScreen = () => {
                     <MapViewDirections
                         origin={origin}
                         destination={destination}
-                        apikey={GOOGLE_API_KEY}
+                        apikey={''}
                         strokeColor={'#395cda'}
                         strokeWidth={4}
                         mode={"WALKING"}
@@ -139,7 +150,7 @@ const NavigationScreen = () => {
                 {/* Input for the origin with icon */}
                 <View style={styles.inputContainer}>
                     <Icon name="location-on" size={20} color="#e32f45" style={styles.inputIcon} />
-                    {/*if the origin has been set, the input is filled*/}
+                    {/* If the origin has been set, the input is filled */}
                     <TextInput
                         style={origin ? greenStyle : redStyle} // Apply green style if origin is set, red style otherwise
                         placeholder="Origin"
@@ -151,8 +162,21 @@ const NavigationScreen = () => {
                 <View style={styles.line} />
 
                 {/* Input for the destination with icon */}
-                <View style={styles.inputContainer}>
+                <View style={styles.inputContainer} >
                     <Icon name="location-on" size={20} color="#e32f45" style={styles.inputIcon} />
+                    {/* Dropdown menu here */}
+                    <SelectList
+                        data={locationInfo.map(item => item.name )}
+                        label="Locations"
+                        save={"value"}
+                        search={true}
+                        style={{width:'80%' , overflowY: 'auto' }}
+                        setSelected={setDestinationLocation}
+
+
+                    />
+
+
 
                 </View>
 
@@ -160,14 +184,15 @@ const NavigationScreen = () => {
                     style={styles.button}
                     onPress={() => {
                         setRoute(true);
+                        getUserLocation().then();
                     }}
                 >
                     <Text style={[styles.buttonText, { color: 'white', fontWeight: 600 }]}>Get Directions</Text>
                 </TouchableOpacity>
                 {travelTime && distance && (
                     <View style={styles.infoContainer}>
-                        <Text style={styles.infoText}>Distance: {distance}</Text>
-                        <Text style={styles.infoText}>{travelTime}</Text>
+                        <Text style={styles.infoText}><Text style={{color: "#e32f45"}}>Distance: </Text> {distance} <Text style={{color: "#e32f45"}}>Travel Time:</Text> {travelTime}</Text>
+
                     </View>
                 )}
             </View>
@@ -179,7 +204,6 @@ const NavigationScreen = () => {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -236,6 +260,8 @@ const styles = StyleSheet.create({
     infoContainer: {
         marginTop: 16,
         alignItems: 'center',
+        justifyContent: 'center',
+
     },
     infoText: {
         textAlign: 'center',
@@ -253,14 +279,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 8,
+
     },
 
     // New style for the icon
     inputIcon: {
         marginHorizontal: 8,
-
     },
 });
 
-
 export default NavigationScreen;
+
