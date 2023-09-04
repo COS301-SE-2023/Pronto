@@ -3,18 +3,19 @@ import { View, TouchableOpacity, Text, Dimensions, Alert, Button, TextInput, Sty
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
-import { listStudents, listInstitutions } from "../../graphql/queries"
-import { createStudent } from "../../graphql/mutations";
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
+import { listStudents } from "../../graphql/queries"
+import { useStudent } from "../../ContextProviders/StudentContext";
+
 
 
 const ScheduleTable = ({ navigation }) => {
-
-  const [activities, setActivities] = useState([])
-  const [schedule, setSchedule] = useState(null)
+  const [activities, setActivities] = useState([]);
+  const [schedule, setSchedule] = useState(null);
+  const { student, updateStudent } = useStudent();
   const [timetableLoaded, setTimetableLoaded] = useState(false);
 
   var scheduleArray = {}
@@ -73,126 +74,85 @@ const ScheduleTable = ({ navigation }) => {
 
   const fetchActivities = async () => {
     try {
-      let user = await Auth.currentAuthenticatedUser()
-      let studentEmail = user.attributes.email;
+      if (student === null) {
+        let user = await Auth.currentAuthenticatedUser()
+        let studentEmail = user.attributes.email;
 
-      let act = []
-
-      let stu = await API.graphql({
-        query: listStudents,
-        variables: {
-          filter: {
-            email: {
-              eq: studentEmail
-            }
-          }
-        },
-        authMode: "AMAZON_COGNITO_USER_POOLS"
-      })
-
-
-      let found = false
-      for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-        if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-          stu = stu.data.listStudents.items[i]
-          found = true
-          break
-        }
-      }
-      // //Student does not exist so create them
-      if (found === false) {
-        let domain = studentEmail.split("@")[1]
-
-        //   //Find Institution via domain
-        let institution = await API.graphql({
-          query: listInstitutions,
+        let stu = await API.graphql({
+          query: listStudents,
           variables: {
             filter: {
-              domains: {
-                contains: domain
+              email: {
+                eq: studentEmail
               }
             }
           },
-          authMode: "AMAZON_COGNTIO_USER_POOLS",
         })
 
-        //Institution not found
-        if (institution.data.listInstitutions.items.length === 0) {
-          error = "Could not determine institution"
-          throw Error()
+        let found = false
+        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
+          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
+            stu = stu.data.listStudents.items[i]
+            found = true
+            break
+          }
+        }
+        if (found === false) {
+          throw Error();
         }
 
-        institution = institution.data.listInstitutions.items[0]
-
-        //Create student
-        let newStudent = {
-          institutionId: institution.id,
-          firstname: user.attributes.name,
-          lastname: user.attributes.family_name,
-          userRole: "Student",
-          email: studentEmail
+        let act = [];
+        let courses = [];
+        for (let i = 0; i < stu.enrollments.items.length; i++) {
+          courses.push(stu.enrollments.items[i].course)
         }
 
-        let create = await API.graphql({
-          query: createStudent,
-          variables: { input: newStudent },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
+        for (let i = 0; i < stu.timetable.activityId.length; i++) {
+          for (let j = 0; j < courses.length; j++) {
+            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+            if (index !== undefined) {
+              act.push(index)
+              break;
+            }
+          }
+        }
+        act = act.sort((a, b) => {
+          if (a.start <= b.start)
+            return -1;
+          else
+            return 1;
         })
-        stu = create.data.createStudent
+
+        updateStudent(stu)
+        setActivities(act);
+        createScheduleArray(act);
+        setActivities(act);
+
       }
-
-      //Student  found
       else {
 
-        let c = []
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          c.push(stu.enrollments.items[i].course)
-        }
-        if (stu.timetable !== null) {
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < c.length; j++) {
-              let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-              if (index !== undefined) {
-                act.push(index)
-                break;
-              }
+        let changed = false
+        let act = student.timetable.activities;
+        if (act.length === activities.length) {
+          for (let i = 0; i < act.length; i++) {
+            if (act[i].id !== activities[i].id) {
+              changed = true
+              break
             }
           }
-          act = act.sort((a, b) => {
-            if (a.start <= b.start)
-              return -1
-            else
-              return 1
-          })
-
-          let changed = false
-          if (act.length === activities.length) {
-            for (let i = 0; i < act.length; i++) {
-              if (act[i].id !== activities[i].id) {
-                changed = true
-                break
-              }
-            }
-
-          }
-          else {
-            changed = true
-          }
-
-          act = act.filter((value, index, self) =>
-            index === self.findIndex((t) => (
-              t.id === value.id
-            )))
-          if (changed === true) {
-            setActivities(act)
-            createScheduleArray(act)
-          }
+        }
+        else {
+          changed = true
         }
 
+        if (changed === true) {
+          setActivities(act)
+          createScheduleArray(act)
+        }
       }
-
     } catch (e) {
       Alert.alert(error)
+
     }
   }
 
@@ -227,7 +187,7 @@ const ScheduleTable = ({ navigation }) => {
         });
       });
     }
-    
+
     setSchedule(scheduleArray)
     setTimetableLoaded(true);
   }

@@ -7,15 +7,16 @@ import { ErrorModal } from '../../ErrorModal'
 import { Link } from "react-router-dom";
 import UserManual from "../HelpFiles/EditModuleInfo.pdf";
 import HelpButton from '../../HelpButton';
-
+import { useLecturer } from "../../ContextProviders/LecturerContext";
 
 const Modules = () => {
 
   const [courses, setCourses] = useState([])
-  const [lecturer, setLecturer] = useState('')
+  //const [lecturer, setLecturer] = useState('')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(false); // Add loading state
 
+  const {lecturer,setLecturer} =useLecturer();
 
   const fetchCourses = async () => {
     try {
@@ -74,9 +75,9 @@ const Modules = () => {
   }
 
 
-  useEffect(() => {
-    fetchCourses();
-  }, [])
+  // useEffect(() => {
+  //   fetchCourses();
+  // }, [])
 
   return (
     <div style={{ display: 'inline-flex' }}>
@@ -100,7 +101,7 @@ const Modules = () => {
             }
           }>Fetching your courses...</p>
         ) : (
-          courses.map((val, key) => (
+          lecturer?.courses?.items?.map((val, key) => (
             <Link to={'/lecturer/edit-module'} state={val} key={val.coursecode}>
               <button className="content-button" key={val.coursecode}>
                 {val.coursecode}

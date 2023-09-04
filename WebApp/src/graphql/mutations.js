@@ -278,5 +278,6 @@ export const updateActivity=`mutation UpdateActivity(
     activityname
     createdAt
     updatedAt
+    coordinates
   }
 }`

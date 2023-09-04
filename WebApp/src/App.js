@@ -26,6 +26,11 @@ import { RequireAdminAuth } from "./RouteAuthComponents/RequireAdminAuth";
 import NotFound from "./Error pages/NotFound";
 import HomePage from "./HomePage";
 
+import {LecturerProvider} from "./ContextProviders/LecturerContext";
+import {AdminProvider} from "./ContextProviders/AdminContext";
+import {LecturerListProvider} from "./ContextProviders/LecturerListContext";
+import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext";
+
 import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -167,9 +172,17 @@ function App(){
   }, []);
 
   return (
+    <LecturerProvider>
+      <AnnouncementProvider>
+      <AdminProvider>
+        <LecturerListProvider>
     <Authenticator.Provider>
       <MyRoutes />
     </Authenticator.Provider>
+    </LecturerListProvider>
+    </AdminProvider>
+    </AnnouncementProvider>
+    </LecturerProvider>
   );
 }
 export default App;
