@@ -1,5 +1,7 @@
-import { getAndSetInstitutionDetails } from "../../pronto5f713f59PreSignup/src/assertInstitutionInfo";
-import { DATASTREAM_ACTIONS, CAMPAIN_NAME_SUFFIX } from "./constants";
+const {
+  getAndSetInstitutionDetails,
+} = require("../../pronto5f713f59PreSignup/src/assertInstitutionInfo");
+const { DATASTREAM_ACTIONS, CAMPAIN_NAME_SUFFIX } = require("./constants");
 
 /*on inst creation:
     build campain name
@@ -12,9 +14,9 @@ import { DATASTREAM_ACTIONS, CAMPAIN_NAME_SUFFIX } from "./constants";
     update compain
 */
 const createCampainNames = (institutionName) => {
-  formattedInstitutionName = institutionName.replaceAll(" ", "+");
+  formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
   emailCampainName = formattedInstitutionName + CAMPAIN_NAME_SUFFIX.EMAIL;
-  smsCampainName = formattedInstitutionName + CAMPAIN_NAME_SUFFIX.EMAIL;
+  smsCampainName = formattedInstitutionName + CAMPAIN_NAME_SUFFIX.SMS;
   pushCampainName =
     formattedInstitutionName + CAMPAIN_NAME_SUFFIX.PUSH_NOTIFICATIONS;
   return {
@@ -45,3 +47,5 @@ const updateNotifications = async (UpdateOption) => {
       break;
   }
 };
+
+module.exports = { createCampainNames };

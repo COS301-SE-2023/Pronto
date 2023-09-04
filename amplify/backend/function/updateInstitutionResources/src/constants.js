@@ -19,6 +19,7 @@ const CAMPAIN_NAME_SUFFIX = Object.freeze({
   SMS: ":sms:notifications:Campaign",
   PUSH_NOTIFICATIONS: ":push:notifications:Campaign",
 });
+
 module.exports = {
   DYNAMODB_CONSTANTS,
   DATASTREAM_ACTIONS,
