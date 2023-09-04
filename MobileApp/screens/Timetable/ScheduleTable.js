@@ -1,17 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions, Alert } from "react-native";
+import { View, TouchableOpacity, Text, Dimensions, Alert, Button, TextInput, StyleSheet, Image } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
 import { listStudents, listInstitutions } from "../../graphql/queries"
 import { createStudent } from "../../graphql/mutations";
+import { printToFileAsync } from 'expo-print';
+import { shareAsync } from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
+import downloadIcon from '../../assets/icons/downloadicon.png';
+
 
 const ScheduleTable = ({ navigation }) => {
 
-
   const [activities, setActivities] = useState([])
   const [schedule, setSchedule] = useState(null)
+  const [timetableLoaded, setTimetableLoaded] = useState(false);
+
   var scheduleArray = {}
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        timetableLoaded && (
+          <TouchableOpacity onPress={generatePdf} style={styles.downloadIcon}>
+            <Image source={downloadIcon} style={[styles.iconImage, { tintColor: '#e32f45' }]} />
+          </TouchableOpacity>
+        )
+      ),
+    });
+  }, [activities, timetableLoaded]);
 
   //function to take in a day, and give all dates of the year that a day occurs
   const getDatesForDayOfWeek = (dayOfWeek) => {
@@ -182,6 +200,8 @@ const ScheduleTable = ({ navigation }) => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchActivities()
     });
+
+
     return unsubscribe
   }, [navigation])
 
@@ -207,52 +227,10 @@ const ScheduleTable = ({ navigation }) => {
         });
       });
     }
-
-    // Identify and mark clashes
-    Object.keys(scheduleArray).forEach((date) => {
-      const modulesOnDate = scheduleArray[date];
-
-      const timeSlots = {}; // Store modules by time slot
-      const clashes = {}; // Store clashes by time slot
-
-      modulesOnDate.forEach((module) => {
-        const timeSlot = module.time;
-
-        if (!timeSlots[timeSlot]) {
-          timeSlots[timeSlot] = [];
-        }
-
-        timeSlots[timeSlot].push(module);
-      });
-
-      Object.keys(timeSlots).forEach((timeSlot) => {
-        const modulesInSlot = timeSlots[timeSlot];
-
-        if (modulesInSlot.length > 1) {
-          modulesInSlot.forEach((module) => {
-            if (!clashes[timeSlot]) {
-              clashes[timeSlot] = [];
-            }
-            clashes[timeSlot].push(module.id);
-          });
-        }
-      });
-
-      // Mark clashes within the scheduleArray
-      scheduleArray[date].forEach((module) => {
-        const timeSlot = module.time;
-
-        if (clashes[timeSlot] && clashes[timeSlot].includes(module.id)) {
-          module.isClash = true;
-        } else {
-          module.isClash = false;
-        }
-      });
-    });
-
-    setSchedule(scheduleArray);
-  };
-
+    
+    setSchedule(scheduleArray)
+    setTimetableLoaded(true);
+  }
 
   const renderItem = (module) => {
     const cardStyle = module.isClash
@@ -316,6 +294,160 @@ const ScheduleTable = ({ navigation }) => {
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
 
+
+  //functions for generating pdf
+
+
+  const generatePdf = async () => {
+    const pdfOptions = {
+      html: html,
+      base64: false,
+    };
+
+    const file = await printToFileAsync(pdfOptions);
+
+    // Rename the file to 'ProntoTimetable.pdf'
+    const renamedFileUri = `${FileSystem.cacheDirectory}ProntoTimetable.pdf`;
+
+    await FileSystem.moveAsync({
+      from: file.uri,
+      to: renamedFileUri,
+    });
+
+    await shareAsync(renamedFileUri);
+  };
+
+  const generateTimetableRows = (modules) => {
+    const daysOfWeek = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+
+    // Create a dictionary to store lecture data by day and time
+    const timetableData = {};
+
+    // Populate the timetableData dictionary with lecture data
+    modules.forEach((module) => {
+      const { day, start, end, course, venue } = module; // Include 'venue' here
+      const dayIndex = daysOfWeek.indexOf(day);
+
+      if (!timetableData[start]) {
+        timetableData[start] = {};
+      }
+
+      if (!timetableData[start][dayIndex]) {
+        timetableData[start][dayIndex] = [];
+      }
+
+      timetableData[start][dayIndex].push({
+        courseCode: course.coursecode,
+        start,
+        end,
+        venue, // Include 'venue' here
+      });
+    });
+
+    let tableHTML = `
+      <tr>
+        <th></th>
+    `;
+
+    daysOfWeek.forEach((day) => {
+      tableHTML += `<th>${day}</th>`;
+    });
+
+    tableHTML += `</tr>`;
+
+    const sortedTimes = Object.keys(timetableData).sort();
+    sortedTimes.forEach((timeslot) => {
+      tableHTML += `
+        <tr>
+          <td>${timeslot}</td>
+      `;
+
+      daysOfWeek.forEach((_, dayIndex) => {
+        if (timetableData[timeslot][dayIndex]) {
+          const lectures = timetableData[timeslot][dayIndex];
+          let cellContent = '';
+
+          lectures.forEach((lecture) => {
+            const { courseCode, start, end, venue } = lecture;
+            cellContent += `<div>${courseCode}<br>${start}-${end}<br>(${venue})</div>`; // Include 'venue' here
+          });
+
+          tableHTML += `<td>${cellContent}</td>`;
+        } else {
+          tableHTML += `<td></td>`;
+        }
+      });
+
+      tableHTML += `</tr>`;
+    });
+
+    return tableHTML;
+  };
+
+
+
+
+  const html = `
+  <html>
+    <head>
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+    table {
+      width: 80%;
+      margin: 0 auto; /* Center the table horizontally */
+      border-collapse: collapse;
+      overflow: hidden; /* Hide overflowing content inside rounded edges */
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
+      transform: translateY(5px); /* Adjust the table's vertical position */
+      font-family: 'Roboto', sans-serif; 
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eb6d7c;
+      color: black;
+    }
+
+    h1 {
+      text-align: center; /* Center the heading horizontally */
+    }
+
+    /* Define CSS styles for odd and even rows */
+    tr:nth-child(odd) {
+      background-color: #fceaec; /* Light gray shade for odd rows */
+    }
+
+    tr:nth-child(even) {
+      background-color: #ffffff; /* White background for even rows */
+    }
+  </style>
+    </head>
+    <body>
+      <h1 style="font-family: 'Roboto', sans-serif;">Pronto Offline Timetable</h1>
+      <table>
+        ${generateTimetableRows(activities)}
+      </table>
+    </body>
+  </html>
+`;
+
+
+
+
   return (
     <View style={{ height: windowHeight, width: windowWidth }}>
       <Agenda
@@ -347,3 +479,22 @@ const ScheduleTable = ({ navigation }) => {
 };
 
 export default ScheduleTable;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textInput: {
+    alignSelf: "stretch",
+    padding: 8,
+    margin: 8
+  },
+  iconImage: {
+    width: 24, // Adjust the width and height to fit your design
+    height: 24,
+    marginRight: 30,
+  },
+});
