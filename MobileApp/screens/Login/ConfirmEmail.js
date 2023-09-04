@@ -75,13 +75,13 @@ const ConfirmEmail = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity style={styles.signInButton} onPress={onVerifyPressed}>
+        <TouchableOpacity style={styles.signInButton} onPress={onVerifyPressed} testID="verify-button">
           <Text style={styles.signInButtonText}>
             {loading ? "Verifying..." : "Verify Account"}
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.resendButton} onPress={onResendPressed}>
+        <TouchableOpacity style={styles.resendButton} onPress={onResendPressed} testID="reset-button">
           <Text style={styles.resendButtonText}>
             {" "}
             {loadingResend ? "Resending..." : "Resend Code"}
