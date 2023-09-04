@@ -7,7 +7,7 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { listStudents,listInstitutions,createStudent } from "../../graphql/queries"
+import { listStudents, listInstitutions, createStudent } from "../../graphql/queries"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 
@@ -97,76 +97,76 @@ const ScheduleTable = ({ navigation }) => {
             break
           }
         }
-      if (found === false) {
-        let domain = studentEmail.split("@")[1]
+        if (found === false) {
+          let domain = studentEmail.split("@")[1]
 
-         //Find Institution via domain
-        let institution = await API.graphql({
-          query: listInstitutions,
-          variables: {
-            filter: {
-              domains: {
-                contains: domain
+          //Find Institution via domain
+          let institution = await API.graphql({
+            query: listInstitutions,
+            variables: {
+              filter: {
+                domains: {
+                  contains: domain
+                }
+              }
+            }
+          })
+
+          //Institution not found
+          if (institution.data.listInstitutions.items.length === 0) {
+            error = "Could not determine institution"
+            throw Error()
+          }
+
+          institution = institution.data.listInstitutions.items[0]
+
+          //Create student
+          let newStudent = {
+            institutionId: institution.id,
+            firstname: user.attributes.name,
+            lastname: user.attributes.family_name,
+            userRole: "Student",
+            email: studentEmail
+          }
+
+          let create = await API.graphql({
+            query: createStudent,
+            variables: { input: newStudent }
+          })
+          stu = create.data.createStudent;
+          updateStudent(stu)
+        }
+
+        else {
+
+          let act = [];
+          let courses = [];
+          for (let i = 0; i < stu.enrollments.items.length; i++) {
+            courses.push(stu.enrollments.items[i].course)
+          }
+
+          for (let i = 0; i < stu.timetable.activityId.length; i++) {
+            for (let j = 0; j < courses.length; j++) {
+              let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+              if (index !== undefined) {
+                act.push(index)
+                break;
               }
             }
           }
-        })
+          act = act.sort((a, b) => {
+            if (a.start <= b.start)
+              return -1;
+            else
+              return 1;
+          })
 
-        //Institution not found
-        if (institution.data.listInstitutions.items.length === 0) {
-          error = "Could not determine institution"
-          throw Error()
+          updateStudent(stu);
+          setActivities(act);
+          createScheduleArray(act);
+          setActivities(act);
         }
-
-        institution = institution.data.listInstitutions.items[0]
-
-        //Create student
-        let newStudent = {
-          institutionId: institution.id,
-          firstname: user.attributes.name,
-          lastname: user.attributes.family_name,
-          userRole: "Student",
-          email: studentEmail
-        }
-
-        let create = await API.graphql({
-          query: createStudent,
-          variables: { input: newStudent }
-        })
-        stu = create.data.createStudent;
-        updateStudent(stu)
-      }
-
-      else{
-
-      let act = [];
-      let courses = [];
-      for (let i = 0; i < stu.enrollments.items.length; i++) {
-          courses.push(stu.enrollments.items[i].course)
-      }
-
-        for (let i = 0; i < stu.timetable.activityId.length; i++) {
-          for (let j = 0; j < courses.length; j++) {
-            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-            if (index !== undefined) {
-              act.push(index)
-              break;
-            }
-          }
-        }
-        act = act.sort((a, b) => {
-          if (a.start <= b.start)
-            return -1;
-          else
-            return 1;
-        })
-
-        updateStudent(stu);
-        setActivities(act);
-        createScheduleArray(act);
-        setActivities(act);
-      }
-    }else{
+      } else {
         let changed = false
         let act = student.timetable.activities;
         if (act.length === activities.length) {
@@ -225,9 +225,51 @@ const ScheduleTable = ({ navigation }) => {
       });
     }
 
-    setSchedule(scheduleArray)
-    setTimetableLoaded(true);
-  }
+    // Identify and mark clashes
+    Object.keys(scheduleArray).forEach((date) => {
+      const modulesOnDate = scheduleArray[date];
+
+      const timeSlots = {}; // Store modules by time slot
+      const clashes = {}; // Store clashes by time slot
+
+      modulesOnDate.forEach((module) => {
+        const timeSlot = module.time;
+
+        if (!timeSlots[timeSlot]) {
+          timeSlots[timeSlot] = [];
+        }
+
+        timeSlots[timeSlot].push(module);
+      });
+
+      Object.keys(timeSlots).forEach((timeSlot) => {
+        const modulesInSlot = timeSlots[timeSlot];
+
+        if (modulesInSlot.length > 1) {
+          modulesInSlot.forEach((module) => {
+            if (!clashes[timeSlot]) {
+              clashes[timeSlot] = [];
+            }
+            clashes[timeSlot].push(module.id);
+          });
+        }
+      });
+
+      // Mark clashes within the scheduleArray
+      scheduleArray[date].forEach((module) => {
+        const timeSlot = module.time;
+
+        if (clashes[timeSlot] && clashes[timeSlot].includes(module.id)) {
+          module.isClash = true;
+        } else {
+          module.isClash = false;
+        }
+      });
+    });
+
+    setSchedule(scheduleArray);
+  };
+
 
   const renderItem = (module) => {
     const cardStyle = module.isClash
