@@ -260,7 +260,7 @@ const NotificationPreferences = () => {
         >
           <Text style={styles.optionText}>Push Notifications</Text>
         </TouchableOpacity>
-
+{/* 
         {showSaveButton ? (
 
           <TouchableOpacity
@@ -295,6 +295,8 @@ const NotificationPreferences = () => {
           >
             <Text style={styles.optionText}>Push Notifications</Text>
           </TouchableOpacity>
+          
+          ) } */}
 
           {showSaveButton ? (
               <TouchableOpacity

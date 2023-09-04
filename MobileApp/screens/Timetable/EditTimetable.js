@@ -17,7 +17,7 @@ import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
 import { searchCourses, listStudents } from "../../graphql/queries"
-import { createEnrollment, deleteEnrollment, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { createEnrollment,createStudent,listInstitution,deleteEnrollment, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 const EditTimetable = ({ onSearch }) => {
@@ -29,7 +29,7 @@ const EditTimetable = ({ onSearch }) => {
   const [practicals, setPracticals] = useState(["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"])
  // const [timetable, setTimetable] = useState(null)
   const [activities, setActivities] = useState([])
-  //const [student, setStudent] = useState(null)
+
   const{student,updateStudent} = useStudent();
   const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
   const [isSaving, setIsSaving] = useState(false);
@@ -84,6 +84,8 @@ const EditTimetable = ({ onSearch }) => {
   const fetchCourses = async () => {
     let error = "There appear to be network issues.Please try again later"
     try {
+
+      
       if(student===null){
         setIsLoading(true); // Set loading state to true during API call
         let user = await Auth.currentAuthenticatedUser()
@@ -109,9 +111,47 @@ const EditTimetable = ({ onSearch }) => {
           }
         }
 
-        if(found===false){
-          throw Error();
+     if(found===false){
+          let domain = studentEmail.split("@")[1]
+
+      //   //Find Institution via domain
+        let institution = await API.graphql({
+          query: listInstitutions,
+          variables: {
+            filter: {
+              domains: {
+                contains: domain
+              }
+            }
+          },
+         
+        })
+
+        //Institution not found
+        if (institution.data.listInstitutions.items.length === 0) {
+          error = "Could not determine institution"
+          throw Error()
         }
+
+        institution = institution.data.listInstitutions.items[0]
+
+        //Create student
+        let newStudent = {
+          institutionId: institution.id,
+          firstname: user.attributes.name,
+          lastname: user.attributes.family_name,
+          userRole: "Student",
+          email: studentEmail
+        }
+
+        let create = await API.graphql({
+          query: createStudent,
+          variables: { input: newStudent },
+        })
+        stu = create.data.createStudent
+      
+        updateStudent(stu);
+     }else{
 
         let c = [];
         for (let i = 0; i < stu.enrollments.items.length; i++) {
@@ -132,8 +172,8 @@ const EditTimetable = ({ onSearch }) => {
         }
         updateStudent(stu)
         setIsLoading(false); // Set loading state to false after courses are fetched
-      }else{
-        
+      }
+    }else{
         let c=[]
         for (let i = 0; i < student.enrollments.items.length; i++) {
           c.push(student.enrollments.items[i].course);
@@ -143,8 +183,7 @@ const EditTimetable = ({ onSearch }) => {
       }
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
-      Alert.alert(error)
-      
+      Alert.alert(error)   
 
     }
   }
@@ -160,7 +199,6 @@ const EditTimetable = ({ onSearch }) => {
       //Create enrollment if it doesnt exist
       setIsSaving(true);
       let activityIds = []
-
 
       for (let i = 0; i < activities.length; i++) {
         if (activities[i] != undefined) {
@@ -179,9 +217,10 @@ const EditTimetable = ({ onSearch }) => {
           query: createEnrollment,
           variables: { input: enroll }
         })
+        console.log(newEnrollment);
         let s = student;
         student.enrollments.items.push(newEnrollment.data.createEnrollment);
-        updateStudent(student);
+       // updateStudent(student);
       }
       if (student.timetable === null) {
         let newTimetable = {
@@ -197,9 +236,6 @@ const EditTimetable = ({ onSearch }) => {
         let s = student
         s.timetable = create.data.createTimetable
         s.timetableId = s.timetable.id
-
-        //setStudent(s)
-        //setTimetable(timetable)
         updateStudent(s);
       }
       else {
@@ -217,19 +253,21 @@ const EditTimetable = ({ onSearch }) => {
           variables: { input: newTimetable }
         })
         let s = student
-        s.timetable = update.data.updateTimetable
-        //setStudent(s)
-        //setTimetable(update.data.updateTimetable)
+        s.timetable = update.data.updateTimetable;
+       //console.log(update.data.updateTimetable);       
         updateStudent(s);
       }
       setIsSaving(false);
       toggleModal(null)
     } catch (e) {
-      setIsSaving(false);
+      console.log("From save");
+      //console.log(e);
+      //setIsSaving(false);
       Alert.alert(error);
       
     }
   }
+
   const addActivity = (activity) => {
     let rows = [...activities]
     for (let i = 0; i < activities.length; i++) {
@@ -240,6 +278,8 @@ const EditTimetable = ({ onSearch }) => {
     rows.push(activity)
     setActivities(rows)
   }
+
+
   const oneModule = ({ item }) => {
     const handleDelete = async () => {
       Alert.alert(
@@ -259,6 +299,7 @@ const EditTimetable = ({ onSearch }) => {
               let act = activities.filter(
                 (activity) => activity.courseId !== item.id
               );
+              //console.log(act);
               let error = "Failed to remove course. Please try again later";
 
               try {
@@ -275,14 +316,15 @@ const EditTimetable = ({ onSearch }) => {
                   }
                 }
                 await handleSave();
-                setStudent(student);
+                updateStudent(student);
                 setSelectedModules((prevModules) =>
                   prevModules.filter((module) => module.id !== item.id)
                 );
                 setActivities(act);
                 setSelectedModule(null);
               } catch (e) {
-               
+                console.log("From delete")
+              // console.log(e);
                 Alert.alert(error);
               }
             },
@@ -303,7 +345,7 @@ const EditTimetable = ({ onSearch }) => {
             }}
           >
             <Card.Title
-              title={item.coursecode}
+              title={item?.coursecode}
               titleStyle={{
                 fontSize: 20,
                 fontWeight: "bold",
@@ -444,7 +486,7 @@ const EditTimetable = ({ onSearch }) => {
           <ScrollView contentContainerStyle={styles.modalContent}>
             {selectedModule && (
               <View key={selectedModule.id}>
-                <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
+                <Text style={styles.moduleCode}>{selectedModule?.coursecode}</Text>
                 {/* <Text style={styles.moduleName}>{selectedModule.name}</Text>
                 
                 {/* Display lectures */}

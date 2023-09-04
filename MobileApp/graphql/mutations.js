@@ -34,18 +34,6 @@ export const updateTimetable=`mutation UpdateTimetable(
     id
     studentId
     activityId
-    student {
-      institutionId
-      id
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      studentTimetableId
-      owner
-    }
     activities {
       nextToken
     }
