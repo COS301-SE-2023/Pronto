@@ -2,7 +2,10 @@
   {
     "key": "unique-key-1",
     "name": "Thuto",
-    "value": "Thuto's precise location information"
+    "value": {
+        "latitude": -26.189948,
+        "longitude": 28.031616
+    }
   },
   {
     "key": "unique-key-2",
@@ -19,4 +22,28 @@
     "name": "SIT",
     "value": "SIT's precise location information"
   }
+,
+  {
+    "key": "unique-key-4",
+    "name": "SIT",
+    "value": "SIT's precise location information"
+  },
+  {
+    "key": "unique-key-4",
+    "name": "SIT",
+    "value": "SIT's precise location information"
+  },
+  {
+    "key": "unique-key-4",
+    "name": "SIT",
+    "value": "SIT's precise location information"
+  },
+  {
+    "key": "unique-key-4",
+    "name": "SIT",
+    "value": "SIT's precise location information"
+  }
+
+
+
 ]
