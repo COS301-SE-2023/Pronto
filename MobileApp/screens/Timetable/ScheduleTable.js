@@ -57,7 +57,8 @@ const ScheduleTable = ({ navigation }) => {
   const fetchActivities = async () => {
     try {
       if(student===null){
-        console.log("fetch")
+        console.log(student);
+        console.log("fetch");
         let user = await Auth.currentAuthenticatedUser()
         let studentEmail = user.attributes.email;
 

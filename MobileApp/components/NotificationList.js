@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Alert, View, StyleSheet, Text ,Button,RefreshControl} from "react-native";
-import { List, Card, Avatar, Modal } from "react-native-paper";
+import { Alert, View, StyleSheet, Text ,RefreshControl} from "react-native";
+import { List, Card, Avatar, Modal,Button } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { listStudents,announcementsByDate, listAnnouncements } from "../graphql/queries";
@@ -11,15 +11,12 @@ import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
 const NotificationList = ({ navigation }) => {
   const [expanded1, setExpanded1] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
-  const [expanded3, setExpanded3] = useState(true);
   const {student,updateStudent} =useStudent();
   const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
  
   const handlePress1 = () => setExpanded1(!expanded1);
   const handlePress2 = () => setExpanded2(!expanded2);
-  const handlePress3 = () => setExpanded3(!expanded3);
   const [loading, setLoading] = useState(false);
-  const [refresh,setRefresh] =useState(false);
   const error = "There appear to be network issues. Please try again later";
   let limit=4;
   const showFullMessage = (key) => {
@@ -47,18 +44,20 @@ const NotificationList = ({ navigation }) => {
           }
         })
       
-        let found = false
+        let found = false;
         for (let i = 0; i < stu.data.listStudents.items.length; i++) {
           if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i]
-            found = true
-            break
+            stu = stu.data.listStudents.items[i];
+            found = true;
+            break;
           };
         };
-        
+                
         if(found===false){
           throw Error();
         }
+        updateStudent(stu);
+
       };
 
       if(announcement.length===0){
@@ -91,7 +90,6 @@ const NotificationList = ({ navigation }) => {
         
         setAnnouncement(announcementList.data.listAnnouncements.items);
         setNextToken(announcementList.data.listAnnouncements.nextToken);
-        //setLoading(false);
       }
       setLoading(false);
     } catch (er) {
@@ -129,7 +127,6 @@ const NotificationList = ({ navigation }) => {
             variables:variables
           })
           ;
-       console.log(announcement); 
         setAnnouncement(announcementList.data.listAnnouncements.items);
         setNextToken(announcementList.data.listAnnouncements.nextToken);
         setLoading(false);
@@ -180,7 +177,6 @@ const NotificationList = ({ navigation }) => {
       Alert.alert(error);
     }
   }
-
 
   useEffect(()=>{
     fetchAnnouncements();
@@ -317,17 +313,46 @@ const NotificationList = ({ navigation }) => {
             marginBottom:"20%",
             marginLeft:"auto",
             marginRight:"auto"
-          }}>
+          }}
+          >
           { nextToken !==null ? 
               <Button 
-                title="Load More"
                 onPress={loadMore} 
-                  >  
+                mode="contained"
+                outlined={true}
+                testID="load-more-button"
+                style={{
+                  backgroundColor: "#e32f45",
+                  marginRight:"auto",
+                  marginLeft:"auto",
+                  marginBottom:"10%",
+                  color:"white"
+                }}
+              > 
+                  Load More 
                 </Button> 
               :  
               " "
             }
         </Text>
+        {/* <View>
+          <Button
+            title="Logut"
+            icon="logout"
+            mode="contained"
+            style={{
+              backgroundColor: "#e32f45",
+              marginVertical: 20,
+              marginHorizontal: 20,
+              marginBottom:"50%"
+            }}
+            outlined={true}
+            onPress={onRefresh}
+            testID="logout-button"
+          >
+            Logout
+          </Button>
+        </View> */}
      
               </ScrollView>
             )}
