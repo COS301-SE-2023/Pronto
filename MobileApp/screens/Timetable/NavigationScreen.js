@@ -91,19 +91,18 @@ const NavigationScreen = () => {
         justifyContent: 'center',
         fontSize: 16,
         fontWeight: '400',
+        paddingLeft: 19,
+
     };
 
     const redStyle = {
         ...styles.input,
-        borderWidth: 2,
-        borderColor: '#b92323',
-        color: 'black',
-        borderRadius: 4,
+        borderWidth: 0,
+        color: '#e32f45',
         width: '80%',
         justifyContent: 'center',
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '400',
     };
 
     // Function to set the destination location, it is called when the user clicks the SelectedList component
@@ -159,22 +158,31 @@ const NavigationScreen = () => {
                 <View style={styles.line} />
 
                 {/* Input for the destination with icon */}
-                <View style={styles.inputContainer} >
+
+                <View style={styles.inputContainer}>
+                    {/* Icon */}
                     <Icon name="location-on" size={20} color="#e32f45" style={styles.inputIcon} />
-                    {/* Dropdown menu here */}
+
+                    {/* Select List */}
                     <SelectList
                         data={locationInfo.map(item => item.name)}
                         label="Locations"
                         save={"value"}
                         search={true}
-                        style={{ width: '80%', overflowY: 'auto' }}
+                        inputStyles={{
+                            color: 'grey', fontSize: 16
+                        }}
+                        boxStyles={{ borderWidth: 0, marginBottom: 8, width: 300 }}
+                        dropdownTextStyles={{
+                            fontSize: 16, color: 'grey'
+                        }}
+                        dropdownStyles={{
+                            width: 300, marginBottom: 10, borderWidth: 0
+                        }}
                         setSelected={setDestinationLocation}
-
+                        defaultOption={{ key: '1', value: 'Select Venue' }}
 
                     />
-
-
-
                 </View>
 
                 <TouchableOpacity
@@ -247,7 +255,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#e32f45',
         paddingVertical: 12,
-        borderRadius: 4,
+        borderRadius: 20,
     },
     buttonText: {
         textAlign: 'center',
@@ -273,16 +281,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-
-
+        flexDirection: 'row', // Display icon and Select List side by side
+        alignItems: 'center', // Vertically align them to the center
     },
-
-    // New style for the icon
     inputIcon: {
-        marginHorizontal: 8,
+        marginRight: 8, // Adjust the margin to separate the icon from the Select List
     },
+
 });
 
 export default NavigationScreen;
