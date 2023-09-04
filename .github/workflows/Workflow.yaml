@@ -25,7 +25,7 @@
          - run: npm run build --if-present
          - run: npm test -- --coverage
          - name: Upload coverage to Codecov
-                  uses: codecov/codecov-action@v2
-                  with:
-                    token: ${{ secrets.CODECOV_TOKEN }} # You need to set CODECOV_TOKEN as a secret in your repository
-                    flags: --branch=Pipeline-Set-Up
+           uses: codecov/codecov-action@v2
+           with:
+              token: ${{ secrets.CODECOV_TOKEN }} # You need to set CODECOV_TOKEN as a secret in your repository
+              flags: --branch=Pipeline-Set-Up
