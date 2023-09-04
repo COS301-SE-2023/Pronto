@@ -29,7 +29,7 @@ const PasswordCriteriaMessage = ({ criteria }) => {
         >
           - At least 8 characters{" "}
           {length && (
-            <Ionicons name="checkmark-circle" size={16} color="green" />
+            <Ionicons name="checkmark-circle" size={16} color="green" testID="length-icon"/>
           )}
         </Text>
         <Text
@@ -40,7 +40,7 @@ const PasswordCriteriaMessage = ({ criteria }) => {
         >
           - At least one uppercase letter{" "}
           {uppercase && (
-            <Ionicons name="checkmark-circle" size={16} color="green" />
+            <Ionicons name="checkmark-circle" size={16} color="green" testID='uppercase-icon' />
           )}
         </Text>
         <Text

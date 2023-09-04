@@ -68,5 +68,11 @@
 #           npm start &
 #           sleep 30
 
-#       - name: Run Cypress tests
-#         run: npx cypress run
+      - name: Run Cypress tests
+        run: npx cypress run
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+

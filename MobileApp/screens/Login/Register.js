@@ -219,6 +219,7 @@ const Register = ({ navigation }) => {
 
         <View style={styles.inputContainer}>
           <TextInput
+              testID='email-input'
             placeholder="Email"
             autoCapitalize="none"
             placeholderTextColor={"#666666"}
@@ -239,7 +240,7 @@ const Register = ({ navigation }) => {
 
           {isTypingEmail && !emailIsValid && (
             <View style={styles.iconContainer}>
-              <MaterialIcons name="cancel" size={24} color="red" />
+              <MaterialIcons name="cancel" size={24} color="red"  testID='email-error-icon'/>
             </View>
           )}
         </View>
@@ -322,7 +323,7 @@ const Register = ({ navigation }) => {
           )}
         </View>
 
-        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed}>
+        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} testID='sign-up-button'>
           <Text style={styles.signUpButtonText}>
             {" "}
             {loading ? "Signing up..." : "Sign up"}

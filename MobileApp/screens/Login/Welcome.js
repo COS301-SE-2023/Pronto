@@ -18,6 +18,7 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ImageBackground
+        testID="image-background"
         style={{
           height: height / 2.5,
         }}
