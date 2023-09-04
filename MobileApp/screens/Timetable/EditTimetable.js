@@ -16,8 +16,8 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { searchCourses, listStudents } from "../../graphql/queries"
-import { createEnrollment,createStudent,listInstitution,deleteEnrollment, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { searchCourses, listStudents ,listInstitutions} from "../../graphql/queries"
+import { createEnrollment,createStudent,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 const EditTimetable = ({ onSearch }) => {
@@ -84,14 +84,13 @@ const EditTimetable = ({ onSearch }) => {
   const fetchCourses = async () => {
     let error = "There appear to be network issues.Please try again later"
     try {
-
-      
+      let stu=student
       if(student===null){
         setIsLoading(true); // Set loading state to true during API call
         let user = await Auth.currentAuthenticatedUser()
         let studentEmail = user.attributes.email;
         let act = []
-        let stu = await API.graphql({
+         stu = await API.graphql({
           query: listStudents,
           variables: {
             filter: {
@@ -151,14 +150,13 @@ const EditTimetable = ({ onSearch }) => {
         stu = create.data.createStudent
       
         updateStudent(stu);
-     }else{
-
+     }else if(stu.enrollments!==undefined){
         let c = [];
         for (let i = 0; i < stu.enrollments.items.length; i++) {
           c.push(stu.enrollments.items[i].course);
         }
         setSelectedModules(c)
-        if (stu.timetable !== null) {
+        if (stu.timetable !== null && stu.timetable.activityId!==undefined) {
           for (let i = 0; i < stu.timetable.activityId.length; i++) {
             for (let j = 0; j < c.length; j++) {
               let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
@@ -168,11 +166,16 @@ const EditTimetable = ({ onSearch }) => {
               }
             }
           }
+          if(stu.enrollments===undefined){
+            stu.enrollments={
+              items:[]
+            }
+          }
           setActivities(act)
         }
         updateStudent(stu)
         setIsLoading(false); // Set loading state to false after courses are fetched
-      }
+     }
     }else{
         let c=[]
         for (let i = 0; i < student.enrollments.items.length; i++) {
@@ -181,9 +184,12 @@ const EditTimetable = ({ onSearch }) => {
         setSelectedModules(c);
         setActivities(student.timetable.activities);
       }
+      // console.log(stu);
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
-      Alert.alert(error)   
+      Alert.alert(error);
+      console.log("From edit");  
+      console.log(e); 
 
     }
   }
@@ -217,12 +223,13 @@ const EditTimetable = ({ onSearch }) => {
           query: createEnrollment,
           variables: { input: enroll }
         })
-        console.log(newEnrollment);
+        // console.log(newEnrollment);
         let s = student;
         student.enrollments.items.push(newEnrollment.data.createEnrollment);
-       // updateStudent(student);
+        updateStudent(student);
       }
-      if (student.timetable === null) {
+      if (student.studentTimetableId === null) {
+        // console.log("New timetable");
         let newTimetable = {
           studentId: student.id,
           activityId: activityIds,
@@ -232,10 +239,15 @@ const EditTimetable = ({ onSearch }) => {
           query: createTimetable,
           variables: { input: newTimetable },
         })
+        let a=await API.graphql({
+          query:updateStudentInfo,
+          variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id}}
+        })
 
         let s = student
         s.timetable = create.data.createTimetable
-        s.timetableId = s.timetable.id
+        s.studentTimetableId = s.timetable.id
+        console.log(s);
         updateStudent(s);
       }
       else {
@@ -252,6 +264,7 @@ const EditTimetable = ({ onSearch }) => {
           query: updateTimetable,
           variables: { input: newTimetable }
         })
+        
         let s = student
         s.timetable = update.data.updateTimetable;
        //console.log(update.data.updateTimetable);       
@@ -261,7 +274,7 @@ const EditTimetable = ({ onSearch }) => {
       toggleModal(null)
     } catch (e) {
       console.log("From save");
-      //console.log(e);
+      console.log(e);
       //setIsSaving(false);
       Alert.alert(error);
       
@@ -324,7 +337,7 @@ const EditTimetable = ({ onSearch }) => {
                 setSelectedModule(null);
               } catch (e) {
                 console.log("From delete")
-              // console.log(e);
+              console.log(e);
                 Alert.alert(error);
               }
             },

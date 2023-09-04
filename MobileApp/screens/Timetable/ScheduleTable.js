@@ -7,7 +7,8 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { listStudents, listInstitutions, createStudent } from "../../graphql/queries"
+import { listStudents, listInstitutions} from "../../graphql/queries"
+import {  createStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 
@@ -74,11 +75,13 @@ const ScheduleTable = ({ navigation }) => {
 
   const fetchActivities = async () => {
     try {
+      let stu=student;
       if (student === null) {
+        console.log("Student is null");
         let user = await Auth.currentAuthenticatedUser()
         let studentEmail = user.attributes.email;
 
-        let stu = await API.graphql({
+        stu = await API.graphql({
           query: listStudents,
           variables: {
             filter: {
@@ -97,9 +100,10 @@ const ScheduleTable = ({ navigation }) => {
             break
           }
         }
-        if (found === false) {
-          let domain = studentEmail.split("@")[1]
+      if (found === false) {
+        let domain = studentEmail.split("@")[1]
 
+        console.log(domain)
           //Find Institution via domain
           let institution = await API.graphql({
             query: listInstitutions,
@@ -112,11 +116,11 @@ const ScheduleTable = ({ navigation }) => {
             }
           })
 
-          //Institution not found
-          if (institution.data.listInstitutions.items.length === 0) {
-            error = "Could not determine institution"
-            throw Error()
-          }
+        //Institution not found
+        if (institution.data.listInstitutions.items.length === 0) {
+          error = "Could not determine institution"
+          throw Error()
+        }
 
           institution = institution.data.listInstitutions.items[0]
 
@@ -137,21 +141,22 @@ const ScheduleTable = ({ navigation }) => {
           updateStudent(stu)
         }
 
-        else {
-
+      else{
+       if(stu.studentTimetableId!==null){
+          
           let act = [];
           let courses = [];
           for (let i = 0; i < stu.enrollments.items.length; i++) {
             courses.push(stu.enrollments.items[i].course)
           }
 
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < courses.length; j++) {
+          for(let i = 0; i < stu.timetable.activityId.length; i++) {
+            for(let j = 0; j < courses.length; j++) {
               let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-              if (index !== undefined) {
+              if(index !== undefined) {
                 act.push(index)
                 break;
-              }
+              } 
             }
           }
           act = act.sort((a, b) => {
@@ -160,13 +165,20 @@ const ScheduleTable = ({ navigation }) => {
             else
               return 1;
           })
-
-          updateStudent(stu);
           setActivities(act);
-          createScheduleArray(act);
-          setActivities(act);
+          createScheduleArray(act)
         }
-      } else {
+        updateStudent(stu);
+        //setActivities(act);
+        //createScheduleArray(act);
+        //setActivities(act);
+      }
+    }else{
+      console.log("Not null");
+      console.log(student.timetable.activities);
+      
+      if(student.timetable!==null && student.timetable.activities!==undefined){
+
         let changed = false
         let act = student.timetable.activities;
         if (act.length === activities.length) {
@@ -186,9 +198,12 @@ const ScheduleTable = ({ navigation }) => {
           createScheduleArray(act);
         }
       }
-
+    }
+    console.log(student);
+    //}
     } catch (e) {
       Alert.alert(error);
+      console.log("from schedule")
       console.log(e);
     }
   }

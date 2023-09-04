@@ -11,7 +11,10 @@ export const StudentProvider = ({ children }) => {
   
   const updateStudent = (newStudent) => {
     try{
-      if(newStudent.timetable==-null){
+      if(newStudent===null){
+        setStudent(null);
+      }
+      else if(newStudent!==null && newStudent.studentTimetableId===null){
         newStudent.timetable={
           activities:[],
           activityId:[]
