@@ -107,9 +107,9 @@ const createPinpointCampaignCommandInput = async (
         StartTime: "IMMEDIATE",
       },
       TemplateConfiguration: {
-        EmailTemplate: { Name: EmailTemplateName },
-        PushTemplate: { Name: PushTemplateName },
-        SMSTemplate: { Name: SMSTemplateName },
+        EmailTemplate: { Name: process.env.EMAIL_TEMPLATE_NAME },
+        PushTemplate: { Name: process.env.PUSH_TEMPLATE_NAME },
+        SMSTemplate: { Name: process.env.SMS_TEMPLATE_NAME },
       },
     },
   };
