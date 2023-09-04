@@ -212,4 +212,11 @@ type Announcement
       sortKeyFields: ["createdAt"]
     )
   createdAt: String!
+  announcementStatus: AnnouncementStatus
+}
+
+type AnnouncementStatus @model(){
+  sms: String
+  email: String
+  push: String
 }
