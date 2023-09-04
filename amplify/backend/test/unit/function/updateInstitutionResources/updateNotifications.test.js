@@ -43,23 +43,69 @@ describe("Testing helper functions", () => {
     const expectedSegmentCommandInput = {
       WriteSegmentRequest: {
         Name: createModuleSegmentName(institutionName, moduleCode),
-        Dimensions: {
-          Attributes: {
-            Values: moduleCode,
-            AttributeType: "INCLUSIVE",
-          },
-          Behavior: {
-            Recency: {
-              Duration: "DAY_30",
-              RecencyType: "ACTIVE",
+        SegmentGroups: {
+          Groups: [
+            {
+              Dimensions: [
+                {
+                  Attributes: {
+                    Values: [moduleCode],
+                    AttributeType: "INCLUSIVE",
+                  },
+                  Behavior: {
+                    Recency: {
+                      Duration: "DAY_30",
+                      RecencyType: "ACTIVE",
+                    },
+                  },
+                  Demographic: {
+                    Channel: {
+                      Values: ["EMAIL"],
+                      DimensionType: "INCLUSIVE",
+                    },
+                  },
+                },
+                {
+                  Attributes: {
+                    Values: [moduleCode],
+                    AttributeType: "INCLUSIVE",
+                  },
+                  Behavior: {
+                    Recency: {
+                      Duration: "DAY_30",
+                      RecencyType: "ACTIVE",
+                    },
+                  },
+                  Demographic: {
+                    Channel: {
+                      Values: ["SMS"],
+                      DimensionType: "INCLUSIVE",
+                    },
+                  },
+                },
+                {
+                  Attributes: {
+                    Values: [moduleCode],
+                    AttributeType: "INCLUSIVE",
+                  },
+                  Behavior: {
+                    Recency: {
+                      Duration: "DAY_30",
+                      RecencyType: "ACTIVE",
+                    },
+                  },
+                  Demographic: {
+                    Channel: {
+                      Values: ["PUSH"],
+                      DimensionType: "INCLUSIVE",
+                    },
+                  },
+                },
+              ],
+              Type: "ANY",
             },
-          },
-          Demographic: {
-            Channel: {
-              Values: ["SMS", "EMAIL", "PUSH", "IN_APP"],
-              DimensionType: "INCLUSIVE",
-            },
-          },
+          ],
+          Include: "ANY",
         },
       },
     };
