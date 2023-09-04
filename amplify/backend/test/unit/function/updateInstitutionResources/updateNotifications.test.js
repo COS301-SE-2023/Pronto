@@ -8,10 +8,6 @@ const institutionName = "University OF Pretoria";
 const moduleCode = "COS301";
 
 describe("Testing helper functions", () => {
-  beforeAll(() => {
-    process.env.ApplicationId = "PINPOINT_APP_ID";
-    process.env.PINPOINT_APP_ID = "PINPOINT_APP_ID";
-  });
   test("testing createCampaignNames", () => {
     formattedInstitutionName = institutionName
       .toLowerCase()
@@ -45,7 +41,6 @@ describe("Testing helper functions", () => {
   });
   test("testing createModuleSegmentCommandInput", () => {
     const expectedSegmentCommandInput = {
-      ApplicationId: process.env.ApplicationId,
       WriteSegmentRequest: {
         Name: createModuleSegmentName(institutionName, moduleCode),
         Dimensions: {
