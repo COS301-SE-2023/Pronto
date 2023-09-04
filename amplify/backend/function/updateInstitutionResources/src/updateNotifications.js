@@ -9,6 +9,7 @@ const {
 } = require("./constants");
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
+
 /*on inst creation:
     build campaign name
     create campaign, if does not exist
@@ -32,17 +33,44 @@ const createModuleSegmentCommandInput = (institutionName, moduleCode) => {
     institutionName,
     moduleCode
   );
-  const segmentDimensions = {
+  const emailSegmentGroupDimensions = {
     Attributes: {
-      Values: moduleCode,
+      Values: [moduleCode],
       AttributeType: PINPOINT_SEGMENT_DIMENSIONS.ATTRIBUTES.ATTRIBUTE_TYPE,
     },
     Behavior: PINPOINT_SEGMENT_DIMENSIONS.BEHAVIOUR,
-    Demographic: PINPOINT_SEGMENT_DIMENSIONS.DEMOGRAPHIC,
+    Demographic: PINPOINT_SEGMENT_DIMENSIONS.EMAIL_DEMOGRAPHIC,
+  };
+  const smsSegmentGroupDimensions = {
+    Attributes: {
+      Values: [moduleCode],
+      AttributeType: PINPOINT_SEGMENT_DIMENSIONS.ATTRIBUTES.ATTRIBUTE_TYPE,
+    },
+    Behavior: PINPOINT_SEGMENT_DIMENSIONS.BEHAVIOUR,
+    Demographic: PINPOINT_SEGMENT_DIMENSIONS.SMS_DEMOGRAPHIC,
+  };
+  const pushSegmentGroupDimensions = {
+    Attributes: {
+      Values: [moduleCode],
+      AttributeType: PINPOINT_SEGMENT_DIMENSIONS.ATTRIBUTES.ATTRIBUTE_TYPE,
+    },
+    Behavior: PINPOINT_SEGMENT_DIMENSIONS.BEHAVIOUR,
+    Demographic: PINPOINT_SEGMENT_DIMENSIONS.PUSH_DEMOGRAPHIC,
+  };
+  const studentsSegmentGroup = {
+    Dimensions: [
+      emailSegmentGroupDimensions,
+      smsSegmentGroupDimensions,
+      pushSegmentGroupDimensions,
+    ],
+    Type: PINPOINT_SEGMENT_DIMENSIONS.SEGMENT_GROUPS.STUDENT_GROUP.TYPE,
   };
   const writeSegmentRequest = {
     Name: moduleSegmentName,
-    Dimensions: segmentDimensions,
+    SegmentGroups: {
+      Groups: [studentsSegmentGroup],
+      Include: PINPOINT_SEGMENT_DIMENSIONS.SEGMENT_GROUPS.INCLUDE,
+    },
   };
   const createSegmentCommandInput = {
     ApplicationId: PINPOINT_APP_ID,
@@ -64,31 +92,28 @@ const createCampaignNames = (institutionName) => {
   };
 };
 
-const createPinpointCampaign = async (institutionName) => {
+const createPinpointCampaignCommandInput = async (
+  institutionName,
+  SegmentId
+) => {
   const campaignNames = createCampaignNames(institutionName);
-  const createEmailCampaignCommandInput = {
+  const createCampaignCommandInput = {
     ApplicationId: PINPOINT_APP_ID,
     WriteCampaignRequest: {
       Name: campaignNames.emailCampaignName,
-      Description: `${institutionName} EMAIL Notifications Campaign`,
+      SegmentId: SegmentId,
+      Description: `${institutionName} Notifications Campaign`,
+      Schedule: {
+        StartTime: "IMMEDIATE",
+      },
+      TemplateConfiguration: {
+        EmailTemplate: { Name: EmailTemplateName },
+        PushTemplate: { Name: PushTemplateName },
+        SMSTemplate: { Name: SMSTemplateName },
+      },
     },
   };
-
-  const createSmsCampaignCommandInput = {
-    ApplicationId: PINPOINT_APP_ID,
-    WriteCampaignRequest: {
-      Name: campaignNames.smsCampaignName,
-      Description: `${institutionName} SMS Notifications Campaign`,
-    },
-  };
-
-  const createPushCampaignCommandInput = {
-    ApplicationId: PINPOINT_APP_ID,
-    WriteCampaignRequest: {
-      Name: campaignNames.pushCampaignName,
-      Description: `${institutionName} PUSH Notifications Campaign`,
-    },
-  };
+  return createCampaignCommandInput;
 };
 
 const updateNotifications = async (UpdateOption) => {
@@ -106,7 +131,8 @@ const updateNotifications = async (UpdateOption) => {
 };
 
 module.exports = {
-  createCampaignNames,
   createModuleSegmentName,
   createModuleSegmentCommandInput,
+  createCampaignNames,
+  createPinpointCampaignCommandInput,
 };
