@@ -16,7 +16,12 @@ import HelpScreen from "./screens/Settings/HelpScreen";
 import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
+import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext"
+import {StudentProvider} from "./ContextProviders/StudentContext";
+import {useStudent} from "./ContextProviders/StudentContext"
+import { listStudents } from "./graphql/queries";
 
+import {API} from "aws-amplify"
 import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
@@ -29,12 +34,35 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-
+  //const {student,updateStudent} = useStudent();
+  console.log(useStudent)
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
+
+      // const email=authUser.attributes.email;
+      // let studentInfo = await API.graphql({
+      //   query: listStudents,
+      //   variables: {
+      //     filter: {
+      //       email: {
+      //         eq: email
+      //       }
+      //     }
+      //   }
+      // });
+      
+      // for (let i = 0; i < studentInfo.data.listStudents.items.length; i++) {
+      //   if (studentInfo.data.listStudents.items[i].owner === authUser.attributes.sub) {
+      //     studentInfo = studentInfo.data.listStudents.items[i]
+      //     break;
+      //   }
+      // }
+      // updateStudent(studentInfo).then(()=>{
+      //   setUser(authUser);
+      // });
       setUser(authUser);
     } catch (e) {
       setUser(null);
@@ -83,6 +111,8 @@ export default function App() {
     );
   }
   return (
+    <StudentProvider>
+      <AnnouncementProvider>
     <NavigationContainer>
       <Stack.Navigator>
         {user ? (
@@ -174,5 +204,7 @@ export default function App() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+    </AnnouncementProvider>
+    </StudentProvider>
   );
 }

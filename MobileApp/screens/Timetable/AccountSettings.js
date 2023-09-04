@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View,ScrollView } from "react-native";
 import SettingsComponent from "../../components/SettingsComponent";
 import { useNavigation } from "@react-navigation/native";
 
