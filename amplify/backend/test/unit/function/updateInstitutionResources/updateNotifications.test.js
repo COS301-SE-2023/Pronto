@@ -1,12 +1,17 @@
 const {
   createCampaignNames,
   createModuleSegmentName,
+  createModuleSegmentCommandInput,
 } = require("../../../../function/updateInstitutionResources/src/updateNotifications");
 
 const institutionName = "University OF Pretoria";
 const moduleCode = "COS301";
 
 describe("Testing helper functions", () => {
+  beforeAll(() => {
+    process.env.ApplicationId = "PINPOINT_APP_ID";
+    process.env.PINPOINT_APP_ID = "PINPOINT_APP_ID";
+  });
   test("testing createCampaignNames", () => {
     formattedInstitutionName = institutionName
       .toLowerCase()
@@ -19,8 +24,8 @@ describe("Testing helper functions", () => {
       pushCampaignName:
         formattedInstitutionName + ":push:notifications:Campaign",
     };
-    const actualCampaignNames = createCampaignNames(institutionName);
-    expect(actualCampaignNames).toEqual(expectedCampaignNames);
+    const receivedCampaignNames = createCampaignNames(institutionName);
+    expect(receivedCampaignNames).toEqual(expectedCampaignNames);
   });
   test("testing createModuleSegmentName", () => {
     const formattedInstitutionName = institutionName
@@ -32,10 +37,41 @@ describe("Testing helper functions", () => {
       ":" +
       formattedModuleCode +
       ":notifications:segment";
-    const actualModuleSegmentName = createModuleSegmentName(
+    const receivedModuleSegmentName = createModuleSegmentName(
       institutionName,
       moduleCode
     );
-    expect(expectedModuleSegmentName).toEqual(actualModuleSegmentName);
+    expect(receivedModuleSegmentName).toEqual(expectedModuleSegmentName);
+  });
+  test("testing createModuleSegmentCommandInput", () => {
+    const expectedSegmentCommandInput = {
+      ApplicationId: process.env.ApplicationId,
+      WriteSegmentRequest: {
+        Name: createModuleSegmentName(institutionName, moduleCode),
+        Dimensions: {
+          Attributes: {
+            Values: moduleCode,
+            AttributeType: "INCLUSIVE",
+          },
+          Behavior: {
+            Recency: {
+              Duration: "DAY_30",
+              RecencyType: "ACTIVE",
+            },
+          },
+          Demographic: {
+            Channel: {
+              Values: ["SMS", "EMAIL", "PUSH", "IN_APP"],
+              DimensionType: "INCLUSIVE",
+            },
+          },
+        },
+      },
+    };
+    const receivedSegmentCommandInput = createModuleSegmentCommandInput(
+      institutionName,
+      moduleCode
+    );
+    expect(receivedSegmentCommandInput).toEqual(expectedSegmentCommandInput);
   });
 });
