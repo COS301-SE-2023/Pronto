@@ -173,7 +173,6 @@ const NotificationList = ({ navigation }) => {
       for(let i=0;i<a.length;i++){
         announcement.push(a[i]);
       }
-      console.log(announcement);
       setNextToken(announcementList.data.listAnnouncements.nextToken);
       setAnnouncement(announcement)
     }catch(e){
@@ -182,12 +181,6 @@ const NotificationList = ({ navigation }) => {
     }
   }
 
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     fetchAnnouncements()
-  //   });
-  //   return unsubscribe
-  // }, [navigation])
 
   useEffect(()=>{
     fetchAnnouncements();
@@ -310,7 +303,7 @@ const NotificationList = ({ navigation }) => {
                         left={(props) => (
                           <Avatar.Icon
                             {...props}
-                            icon="brain"
+                            icon={val.type==="Reminder"? "brain" : "clock"}
                             color="#e32f45"
                             style={{ backgroundColor: "white" }}
                           />

@@ -9,7 +9,6 @@ import { useStudent } from "../../ContextProviders/StudentContext";
 
 const ScheduleTable = ({ navigation }) => {
 
-
   const [activities, setActivities] = useState([]);
   const [schedule, setSchedule] = useState(null);
   const {student,updateStudent} =useStudent();
@@ -57,7 +56,6 @@ const ScheduleTable = ({ navigation }) => {
 
   const fetchActivities = async () => {
     try {
-      //console.log(student);
       if(student===null){
         console.log("fetch")
         let user = await Auth.currentAuthenticatedUser()
