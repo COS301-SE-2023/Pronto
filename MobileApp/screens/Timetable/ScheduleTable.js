@@ -57,8 +57,6 @@ const ScheduleTable = ({ navigation }) => {
   const fetchActivities = async () => {
     try {
       if(student===null){
-        console.log(student);
-        console.log("fetch");
         let user = await Auth.currentAuthenticatedUser()
         let studentEmail = user.attributes.email;
 
@@ -114,7 +112,7 @@ const ScheduleTable = ({ navigation }) => {
       
       }
       else{
-        console.log("Not fetching");
+        
           let changed = false
           let act=student.timetable.activities;
           if (act.length === activities.length) {
@@ -136,7 +134,7 @@ const ScheduleTable = ({ navigation }) => {
         }
     } catch (e) {
       Alert.alert(error)
-      console.log(e);
+     
     }
   }
 

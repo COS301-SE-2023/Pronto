@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Alert, View, StyleSheet, Text ,RefreshControl} from "react-native";
-import { List, Card, Avatar, Modal,Button } from "react-native-paper";
+import { Alert, View, StyleSheet,Modal, Text ,RefreshControl,IconButton,Pressable} from "react-native";
+import { List, Card, Avatar,Button,Portal,PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { listStudents,announcementsByDate, listAnnouncements } from "../graphql/queries";
 import { Auth, API } from "aws-amplify"
 import { useStudent } from "../ContextProviders/StudentContext";
 import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const NotificationList = ({ navigation }) => {
+  const [visible, setVisible] = useState(false);
+
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = {backgroundColor: 'white', padding: 20};
+
   const [expanded1, setExpanded1] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
   const {student,updateStudent} =useStudent();
+  const [selectedAnnouncement,setSelectedAnnouncement]=useState(null);
+  const [isModalVisible,setIsModalVisible]=useState(false);
   const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
+
  
   const handlePress1 = () => setExpanded1(!expanded1);
   const handlePress2 = () => setExpanded2(!expanded2);
@@ -20,7 +30,9 @@ const NotificationList = ({ navigation }) => {
   const error = "There appear to be network issues. Please try again later";
   let limit=4;
   const showFullMessage = (key) => {
-    Alert.alert(key.body);
+    setSelectedAnnouncement(key);
+    //setIsModalVisible(true);
+    //Alert.alert(key.body);
   };
 
   const fetchAnnouncements = async () => {
@@ -28,7 +40,7 @@ const NotificationList = ({ navigation }) => {
     try {
       let stu=student;
       if(student===null){
-        console.log("Student is null");
+        
         setLoading(true);
         let user = await Auth.currentAuthenticatedUser()
         let studentEmail = user.attributes.email;
@@ -61,7 +73,7 @@ const NotificationList = ({ navigation }) => {
       };
 
       if(announcement.length===0){
-        console.log("No announcements");
+       
         setLoading(true);
         let courses=[];
         for(let i=0;i<stu.enrollments.items.length;i++){
@@ -93,7 +105,7 @@ const NotificationList = ({ navigation }) => {
       }
       setLoading(false);
     } catch (er) {
-      console.log(er);
+      
       Alert.alert(error)
       setLoading(false);
     }
@@ -131,7 +143,7 @@ const NotificationList = ({ navigation }) => {
         setNextToken(announcementList.data.listAnnouncements.nextToken);
         setLoading(false);
       }catch(e){
-        console.log(e);
+        
         Alert.alert(error)
       }
 
@@ -173,7 +185,7 @@ const NotificationList = ({ navigation }) => {
       setNextToken(announcementList.data.listAnnouncements.nextToken);
       setAnnouncement(announcement)
     }catch(e){
-      console.log(e)
+     
       Alert.alert(error);
     }
   }
@@ -183,10 +195,41 @@ const NotificationList = ({ navigation }) => {
   },[])
 
   return (
-    <View 
-      style={{height:"100%"}}
-      refr
-    >
+    <View >
+
+   { selectedAnnouncement && 
+      <Modal
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+      
+          setSelectedAnnouncement(null)
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.headerStyle}>{selectedAnnouncement.title}</Text>
+            <Text style={styles.subheaderStyle}>{selectedAnnouncement.course.coursecode}</Text>
+            <Text style={styles.textStyle}>{selectedAnnouncement.body}</Text>
+         <Button
+            icon="thumb-up"
+            mode="contained"
+            style={{
+              backgroundColor: "#e32f45",
+              width: "70%",
+              margin: "5%",
+              textAlign: "center",
+              color: "white",
+            }}
+
+            outlined={true}
+            onPress={() => setSelectedAnnouncement(null)}
+          >
+            Ok
+            </Button>
+          </View>
+        </View>
+      </Modal>
+      }
       <List.Section title="Announcements" style={{ margin: 10 }}>
         <List.Accordion
           title="Reminders"
@@ -251,7 +294,6 @@ const NotificationList = ({ navigation }) => {
        
       <Card.Content>
         <List.Section title="Recent Announcements">
-          {/* <ScrollView> */}
           <View>
             {loading ? (
               <Text
@@ -310,7 +352,7 @@ const NotificationList = ({ navigation }) => {
                 ))}
         <Text
           style={{
-            marginBottom:"20%",
+            marginBottom:"10%",
             marginLeft:"auto",
             marginRight:"auto"
           }}
@@ -319,13 +361,13 @@ const NotificationList = ({ navigation }) => {
               <Button 
                 onPress={loadMore} 
                 mode="contained"
+                icon="arrow-down"
                 outlined={true}
                 testID="load-more-button"
                 style={{
                   backgroundColor: "#e32f45",
                   marginRight:"auto",
                   marginLeft:"auto",
-                  marginBottom:"10%",
                   color:"white"
                 }}
               > 
@@ -335,36 +377,72 @@ const NotificationList = ({ navigation }) => {
               " "
             }
         </Text>
-        {/* <View>
-          <Button
-            title="Logut"
-            icon="logout"
-            mode="contained"
-            style={{
-              backgroundColor: "#e32f45",
-              marginVertical: 20,
-              marginHorizontal: 20,
-              marginBottom:"50%"
-            }}
-            outlined={true}
-            onPress={onRefresh}
-            testID="logout-button"
-          >
-            Logout
-          </Button>
-        </View> */}
-     
-              </ScrollView>
+        <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text>
+        </ScrollView>
+              
             )}
-            <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text>
+            
           </View>
-          {/* </ScrollView> */}
           
         </List.Section>
        
       </Card.Content>
-    </View >
+      </View>
   );
 };
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    marginVertical: 200,
+    marginHorizontal: 10,
+    borderRadius: 50,
+    backgroundColor: "white",
+    elevation: 5,
+    shadowColor: "black",
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 4,
+  },
+  modalView: {
+    alignItems: "center",
+    marginTop: 50,
+    marginBottom: 100,
+    width: "80%",
+    height:"50%",
+    paddingBottom: "0%"
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    fontSize: 15,
+    textAlign: "center",
+    marginBottom: "5%",
+ },
+  headerStyle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: "2.5%",
+  },
+
+  subheaderStyle: {
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: "5%",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+});
 
 export default NotificationList;

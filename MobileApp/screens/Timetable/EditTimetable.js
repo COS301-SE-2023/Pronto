@@ -27,7 +27,7 @@ const EditTimetable = ({ onSearch }) => {
   const [lectures, setLectures] = useState(["L01", "L02", "L03", "L04", "L05", "L06", "L07", "L08", "L09"])
   const [tutorials, setTutorials] = useState(["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"])
   const [practicals, setPracticals] = useState(["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"])
-  const [timetable, setTimetable] = useState(null)
+ // const [timetable, setTimetable] = useState(null)
   const [activities, setActivities] = useState([])
   //const [student, setStudent] = useState(null)
   const{student,updateStudent} = useStudent();
@@ -133,7 +133,7 @@ const EditTimetable = ({ onSearch }) => {
         updateStudent(stu)
         setIsLoading(false); // Set loading state to false after courses are fetched
       }else{
-        console.log("No course fetch");
+        
         let c=[]
         for (let i = 0; i < student.enrollments.items.length; i++) {
           c.push(student.enrollments.items[i].course);
@@ -144,7 +144,7 @@ const EditTimetable = ({ onSearch }) => {
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
       Alert.alert(error)
-      console.log(e);
+      
 
     }
   }
@@ -227,7 +227,7 @@ const EditTimetable = ({ onSearch }) => {
     } catch (e) {
       setIsSaving(false);
       Alert.alert(error);
-      console.log(e);
+      
     }
   }
   const addActivity = (activity) => {
@@ -282,7 +282,7 @@ const EditTimetable = ({ onSearch }) => {
                 setActivities(act);
                 setSelectedModule(null);
               } catch (e) {
-                console.log(e);
+               
                 Alert.alert(error);
               }
             },
