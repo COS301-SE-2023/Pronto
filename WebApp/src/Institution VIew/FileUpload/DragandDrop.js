@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Amplify, Storage, Auth } from "aws-amplify";
 import FileUpload from '../../images/FileUpload.png';
+import HelpButton from '../../HelpButton';
+import UserManual from "../HelpFiles/StudentFiles.pdf";
 
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -110,17 +112,8 @@ function DropzoneComponent() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        marginLeft: "10%", // Adjust this value to shift content to the right
-      }}
-    >
-      <h6 style={{ marginBottom: "5px" }}>These files represent essential resources and materials that students enrolled in the university will be able to access directly from the mobile app.</h6>
+    <div>
+      <h6 style={{ marginBottom: "10px" }}>These files represent essential resources and materials that students enrolled in the university will be able to access directly from the mobile app.</h6>
       <img src={FileUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="FileUpload" />
       <div
         className="dropzone text-center"
@@ -130,10 +123,14 @@ function DropzoneComponent() {
         style={{
           height: "100px",
           width: "100%",
-          border: "1px dashed",
+          backgroundColor: "#f7f7f7",
+          border: "1px solid #ddd",
+          borderRadius: "50px",
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", /* Increased shadow intensity */
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
+          cursor: "pointer",
         }}
       >
         {selectedFile ? (
@@ -181,6 +178,10 @@ function DropzoneComponent() {
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />
+
+      <div>
+        <HelpButton pdfUrl={UserManual} />
+      </div>
     </div>
   );
 }

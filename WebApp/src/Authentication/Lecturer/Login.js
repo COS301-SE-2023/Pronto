@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import { Auth } from "aws-amplify";
+import { Auth,API,Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { listLecturers } from "../../graphql/queries";
+import { useLecturer } from "../../ContextProviders/LecturerContext";
 
 function Login() {
   //sign in states
@@ -19,6 +21,8 @@ function Login() {
   const [surname, setSurname] = React.useState("");
   const [signUpPassword, setSignUpPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  const {lecturer,setLecturer} =useLecturer();
 
   //university info
   const universityInfo = [
@@ -48,6 +52,35 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
 
+
+  const fetchLecturer = async()=>{
+    try{
+     let  lec = await API.graphql({
+          query: listLecturers,
+          variables: {
+            filter: {
+              email: {
+                eq: email
+              }
+            }
+          },
+        });
+    
+
+        if(lec.data.listLecturers.items.length>0){
+          lec=lec.data.listLecturers.items[0];
+          if(lec.institution.logo!==null){
+            lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+           
+          }
+           setLecturer(lec);
+      
+        }
+      }catch(error){
+        console.log(error);
+      }
+
+  }
   const onSignInPressed = async (event) => {
     if (loading) {
       return;
@@ -67,7 +100,8 @@ function Login() {
       await Auth.signIn(email, password, { role: "Lecturer" });
       setsignInError("");
       //navigate to lecturer home page
-      navigate("/lecture-homepage");
+       fetchLecturer().then(()=>navigate("/lecturer/dashboard"));
+      //  navigate("/lecturer/dashboard");
     } catch (e) {
       setsignInError(e.message);
     }
@@ -135,7 +169,7 @@ function Login() {
           institutionId: institutionId,
         },
       });
-      navigate("/lecturer-confirm-email", { state: { email: email } });
+      navigate("/lecturer/confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message.split("Error: ")[1]);
       console.log(e);
@@ -365,7 +399,7 @@ function Login() {
           <Button type="submit" onClick={onSignInPressed}>
             {loading ? "Signing in..." : "Sign in"}
           </Button>
-          <Anchor type="text/html" href="/lecturer-forgot-password">
+          <Anchor type="text/html" href="/lecturer/forgot-password">
             Forgot your password?
           </Anchor>
           {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
@@ -384,7 +418,7 @@ function Login() {
             </GhostButton>
           </LeftOverlayPanel>
 
-          <RightOverlayPanel class="rightOverlay" signin={signIn}>
+          <RightOverlayPanel className="rightOverlay" signin={signIn}>
             <Title>No Account?</Title>
             <Paragraph>Click here to verify a lecturer account</Paragraph>
             <GhostButton type="button" onClick={() => toggle(false)}>

@@ -1,31 +1,40 @@
 import React, { useEffect } from "react";
-import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
-import LectureHomePage from "./LectureView/Edit Module/LectureHomePage";
+
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
+
 import InstitutionLogin from "./Authentication/Institution/Login";
 import InstitutionForgotPassword from "./Authentication/Institution/ForgotPassword";
-import InstitutionHomePage from "./Institution VIew/InstitutionHomePage";
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
+
 import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
 import EditUniversityInfo from "./Institution VIew/EditInformation/EditInfo";
 import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
+import InstitutionDashboard from "./Institution VIew/Dashboard/Dashboard";
+
+import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
+import Modules from "./LectureView/Edit Module/Modules";
 import RecentAnnouncement from "./LectureView/RecentAnnouncement";
 import PersonalInformation from "./LectureView/Personal-info";
-import NotFound from "./NotFound";
-import Dashboard from "./Institution VIew/Dashboard/Dashboard";
 import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
-import { RequireLecturerAuth } from "./RequireLecturerAuth";
-import { RequireAdminAuth } from "./RequireAdminAuth";
+
+import { RequireLecturerAuth } from "./RouteAuthComponents/RequireLecturerAuth";
+import { RequireAdminAuth } from "./RouteAuthComponents/RequireAdminAuth";
+import NotFound from "./Error pages/NotFound";
 import HomePage from "./HomePage";
+
+import {LecturerProvider} from "./ContextProviders/LecturerContext";
+import {AdminProvider} from "./ContextProviders/AdminContext";
+import {LecturerListProvider} from "./ContextProviders/LecturerListContext";
+import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext";
+
 import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import config from "./aws-exports";
-
 
 Auth.configure(config);
 Amplify.configure(config);
@@ -38,46 +47,43 @@ function MyRoutes()
     <Route path="/" element={<HomePage />} />
 
     {/*Lecturer login/register pages*/}
-    <Route path="/lecturer-login" element={<LecturerLogin />} />
+    <Route path="/lecturer/login" element={<LecturerLogin />} />
     <Route
-      path="/lecturer-confirm-email"
+      path="/lecturer/confirm-email"
       element={<LecturerConfirmEmail />}
     />
     <Route
-      path="/lecturer-forgot-password"
+      path="/lecturer/forgot-password"
       element={<LecturerForgotPassword />}
     />
 
     {/*Institution login/register pages*/}
-    <Route path="/institution-login" element={<InstitutionLogin />} />
+    <Route path="/institution/login" element={<InstitutionLogin />} />
     <Route
-      path="/institution-confirm-email"
+      path="/institution/confirm-email"
       element={<InstitutionConfirmEmail />}
     />
     <Route
-      path="/institution-successful-apply"
+      path="/institution/successful-apply"
       element={<InstitutionSuccessfulApply />}
     />
     <Route
-      path="/institution-forgot-password"
+      path="/institution/forgot-password"
       element={<InstitutionForgotPassword />}
     />
 
-    {/*Invalid page*/}
-    <Route path="/404" element={<NotFound />} />
-    <Route path="*" element={<Navigate to="/404" />} />
 
     {/*Protected admin routing*/}
     <Route
-      path="/dashboard"
+      path="/institution/dashboard"
       element={
         <RequireAdminAuth>
-          <Dashboard />
+          <InstitutionDashboard />
         </RequireAdminAuth>
       }
     />
     <Route
-      path="/add-lecturer"
+      path="/institution/add-lecturer"
       element={
         <RequireAdminAuth>
           <AddLecturer />
@@ -85,15 +91,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/institution-homepage"
-      element={
-        <RequireAdminAuth>
-          <InstitutionHomePage />
-        </RequireAdminAuth>
-      }
-    />
-    <Route
-      path="/upload-schedule"
+      path="/institution/upload-schedule"
       element={
         <RequireAdminAuth>
           <FileUploadPage />
@@ -101,7 +99,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/upload-student-files"
+      path="/institution/upload-student-files"
       element={
         <RequireAdminAuth>
           <StudentFileUploadPage />
@@ -109,7 +107,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="/edit-university-info"
+      path="/institution/edit-info"
       element={
         <RequireAdminAuth>
           <EditUniversityInfo />
@@ -119,15 +117,7 @@ function MyRoutes()
 
     {/*Protected lecturer routing*/}
     <Route
-      path="/lecture-homepage"
-      element={
-        <RequireLecturerAuth>
-          <LectureHomePage />
-        </RequireLecturerAuth>
-      }
-    />
-    <Route
-      path="/lecturer-dashboard"
+      path="/lecturer/dashboard"
       element={
         <RequireLecturerAuth>
           <DashboardLecturer />
@@ -135,7 +125,15 @@ function MyRoutes()
       }
     />
     <Route
-      path="edit-module"
+      path="/lecturer/modules"
+      element={
+        <RequireLecturerAuth>
+          <Modules />
+        </RequireLecturerAuth>
+      }
+    />
+    <Route
+      path="/lecturer/edit-module"
       element={
         <RequireLecturerAuth>
           <EditModuleInfo />
@@ -143,7 +141,7 @@ function MyRoutes()
       }
     />
     <Route
-      path="recent-announcement"
+      path="/lecturer/announcement"
       element={
         <RequireLecturerAuth>
           <RecentAnnouncement />
@@ -151,13 +149,17 @@ function MyRoutes()
       }
     />
     <Route
-      path="personal-info"
+      path="/lecturer/personal-info"
       element={
         <RequireLecturerAuth>
           <PersonalInformation />
         </RequireLecturerAuth>
       }
     />
+
+    {/*Invalid page*/}
+    <Route path="*" element={<Navigate to="/404" />} />
+    <Route path="/404" element={<NotFound />} />
 
     </Routes>
     </BrowserRouter>
@@ -170,9 +172,17 @@ function App(){
   }, []);
 
   return (
+    <LecturerProvider>
+      <AnnouncementProvider>
+      <AdminProvider>
+        <LecturerListProvider>
     <Authenticator.Provider>
       <MyRoutes />
     </Authenticator.Provider>
+    </LecturerListProvider>
+    </AdminProvider>
+    </AnnouncementProvider>
+    </LecturerProvider>
   );
 }
 export default App;

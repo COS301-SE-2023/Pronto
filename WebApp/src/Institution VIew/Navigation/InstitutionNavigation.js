@@ -1,81 +1,148 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import "./Navigation.css";
-import logo from "../../images/logo.jpg";
-import { Auth } from "aws-amplify";
-import { useNavigate } from "react-router-dom";
+import logo from "../../images/university_logo.svg";
+import { Auth, Storage, API } from "aws-amplify";
+import { listAdmins, listInstitutions, lecturersByInstitutionId } from "../../graphql/queries";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useAdmin } from "../../ContextProviders/AdminContext";
 
-export default function InstitutionNavigation() {
-  const navigate = useNavigate();
-  const onSignOut = async (event) => {
-    event.preventDefault();
-    try {
-      await Auth.signOut();
-      //navigate to homepage
-      navigate("/");
-    } catch (e) {
-      console.log(e.message);
+export default function InstitutionNavigation({ props }) {
+    const navigate = useNavigate();
+    const state = useLocation();
+    //const[institution,setInstitution]=useState(state.state)
+    //const [admin, setAdmin] = useState(state.state);
+    const {admin,setAdmin} =useAdmin();
+
+//    console.log(admin);
+    const onSignOut = async (event) => {
+        event.preventDefault();
+        try {
+            await Auth.signOut();
+            //navigate to homepage
+            navigate("/");
+        } catch (e) {
+            console.log(e.message);
+        }
+    };
+
+
+    const fetchAdmin =async()=>{
+
+         try{
+              if(admin===null || admin===undefined){
+                let user=await Auth.currentAuthenticatedUser();
+                let adminEmail=user.attributes.email
+                let adminData = await API.graphql({
+                    query: listAdmins,
+                    variables: {
+                        filter: {
+                            email: {
+                                eq: adminEmail
+                            }
+                        },
+                    },
+                });
+                if(adminData.data.listAdmins.items.length>0){
+                    adminData = adminData.data.listAdmins.items[0];
+                    if(adminData.institution.logo!==null){
+                        adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                    }
+                setAdmin(adminData);
+                }
+          }
+
+    }catch(error){
+    
     }
-  };
+    }
+
+
+    useEffect(() => {
+       
+        fetchAdmin()
+    }, []);
 
     return (
         <div className={'grid'}>
             <nav className="vertical-navbar col-4 p-4" >
                 <div className="top">
+
                     <img
-                        src={logo}
+                        src={admin !== undefined ? admin !== null ? admin.institution.logoUrl : " " : "  "}
                         alt="Logo"
-                        className="logo offset-2 img-fluid mr-1"
-                        width={"175px"}
-                        height={"155px"}
+                        className="logo offset-2 img-fluid mr-4.5"
+                        style={{ width: "155px", height: "155px" }}
                         data-testid={'UniversityImage'}
                     />
+
+                    <div className="institution-name" style={{ paddingTop: '5%' }}>
+                        <b>
+                            {admin && admin.institution && admin.institution.name}
+                        </b>
+                    </div>
                 </div>
-                <div className="nav-links-container">
-                    <ul className="navbar-nav">
 
-                        <li className="nav-item text-center" data-testid={'Dashboard'}>
-                            <a href="/dashboard" className="nav-link" data-testid={'dashboardLink'}>
-                                <b>Dashboard</b>
-                            </a>
-                        </li>
-                        <li className="nav-item text-center" data-testid={'UploadSchedule'}>
-                            <a href="/upload-schedule" className="nav-link" data-testid={'UploadScheduleLink'}>
-                                <b>Upload Schedule</b>
-                            </a>
-                        </li>
-                        <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
-                            <a href="/upload-student-files" className="nav-link p-2" data-testid={'UploadStudentFilesLink'}>
-                                <b>Upload Student Files</b>
+                <ul className="navbar-nav">
+                    <li className="nav-item text-center" data-testid={'Dashboard'}>
+                        <Link
+                            to={'/institution/dashboard'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Dashboard</b>
+                        </Link>
+                    </li>
+                    <li className="nav-item text-center" data-testid={'UploadSchedule'}>
+                        <Link
+                            to={'/institution/upload-schedule'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Upload Schedule</b>
+                        </Link>
+                    </li>
+                    <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
+                        <Link
+                            to={'/institution/upload-student-files'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Upload Student Files</b>
+                        </Link>
+                    </li>
+                    <li className="nav-item text-center" data-testid={'AddLecturer'}>
+                        <Link
+                            to={'/institution/add-lecturer'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Add/Remove Lecturer</b>
+                        </Link>
+                    </li>
+                    <li className="nav-item text-center">
+                        <Link
+                            to={'/institution/edit-info'}
+                            state={admin}
+                            className="nav-link"
+                        >
+                            <b>Edit University Info</b>
+                        </Link>
+                    </li>
+                </ul>
 
-                            </a>
-                        </li>
-                        <li className="nav-item text-center" data-testid={'AddLecturer'}>
-                            <a href="/add-lecturer" className="nav-link" data-testid={'AddLecturerLink'}>
-                                <b>Add/Remove Lecturer</b>
-                            </a>
-                        </li>
-                        <li className="nav-item text-center" data-testid={'EditUniversityInfo'}>
-                            <a href="/edit-university-info" className="nav-link" data-testid={'EditUniversityInfoLink'}>
-                                <b>Edit University Info</b>
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
                 <div className="logoutbtn">
                     <button
                         className="btn btn-danger btn-lg btn-block"
                         style={{ borderRadius: "25px" }}
-                        data-testid="LogoutButton"
+                        data-testid={"LogoutButton"}
                         onClick={onSignOut}
                     >
                         Log Out
                     </button>
                 </div>
-            </nav>
+            </nav >
 
-
-        </div>
+        </div >
 
     );
 }

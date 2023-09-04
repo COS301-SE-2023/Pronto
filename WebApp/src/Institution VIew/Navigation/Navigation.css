@@ -15,6 +15,7 @@
     justify-content: space-between;
     padding: 20px;
     margin: 1%;
+    max-height: fit-content;
 }
 
 /* Center the links vertically */
@@ -27,6 +28,7 @@
     align-items: center;
     flex-grow: 1; /* Allow content to expand and center vertically */
     justify-content: center; /* Center the content vertically */
+    max-height: fit-content;
 }
 
 .nav-item {
@@ -58,7 +60,7 @@
 .logo {
     display: block;
     margin: 0 auto;
-    max-width: 150px; /* Set a max width */
+   
     border-radius: 50%; /* Circular shape */
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
@@ -66,8 +68,17 @@
 /* Centered text style for top */
 .top {
     text-align: center;
-    margin-top: 40px;
-    margin-bottom: 30px; /* Adjust the space at the bottom */
+    margin-top: 0px;
+        margin-bottom: 10px;
+        /* Adjust the space at the bottom */
+}
+.institution-name {
+    margin-top: 0%;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+    width: calc(12vw);
+    padding: 2px;
 }
 
 /* Updated logout button styling */
@@ -78,6 +89,7 @@
     border: none; /* Remove any border */
     width: 100%;
     margin: 0 auto; /* Horizontally center the button within its container */
+    max-height: fit-content;
 }
 
 /* Media query for smaller screens (e.g., 13 inch) */
@@ -101,3 +113,7 @@
     padding: 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
   }
+
+.grid {
+    height: 80vh;
+}

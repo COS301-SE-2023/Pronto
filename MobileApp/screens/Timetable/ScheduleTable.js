@@ -1,17 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions, Alert } from "react-native";
+import { View, TouchableOpacity, Text, Dimensions, Alert, Button, TextInput, StyleSheet, Image } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
-import { listStudents,listInstitutions } from "../../graphql/queries"
-import { createStudent } from "../../graphql/mutations";
+import { printToFileAsync } from 'expo-print';
+import { shareAsync } from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
+import downloadIcon from '../../assets/icons/downloadicon.png';
+import { listStudents } from "../../graphql/queries"
+import { useStudent } from "../../ContextProviders/StudentContext";
 
-const ScheduleTable = ({navigation}) => {
 
-  // const[student,setStudent]=useState(null)
-  const [activities, setActivities] = useState([])
-  const [schedule, setSchedule] = useState(null)
+
+const ScheduleTable = ({ navigation }) => {
+  const [activities, setActivities] = useState([]);
+  const [schedule, setSchedule] = useState(null);
+  const { student, updateStudent } = useStudent();
+  const [timetableLoaded, setTimetableLoaded] = useState(false);
+
   var scheduleArray = {}
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        timetableLoaded && (
+          <TouchableOpacity onPress={generatePdf} style={styles.downloadIcon}>
+            <Image source={downloadIcon} style={[styles.iconImage, { tintColor: '#e32f45' }]} />
+          </TouchableOpacity>
+        )
+      ),
+    });
+  }, [activities, timetableLoaded]);
 
   //function to take in a day, and give all dates of the year that a day occurs
   const getDatesForDayOfWeek = (dayOfWeek) => {
@@ -55,148 +74,108 @@ const ScheduleTable = ({navigation}) => {
 
   const fetchActivities = async () => {
     try {
-      let user = await Auth.currentAuthenticatedUser()
-      let studentEmail = user.attributes.email;
-      
-      let act = []
+      if (student === null) {
+        let user = await Auth.currentAuthenticatedUser()
+        let studentEmail = user.attributes.email;
 
-      let stu = await API.graphql({
-        query: listStudents,
-        variables: {
-          filter: {
-            email: {
-              eq: studentEmail
-            }
-          }
-        },
-        authMode: "API_KEY"
-      })
-      
-
-       let found=false
-        for(let i=0;i<stu.data.listStudents.items.length;i++){
-           if(stu.data.listStudents.items[i].owner===user.attributes.sub){
-              stu=stu.data.listStudents.items[i]
-              found=true
-              break
-           }
-        }
-      // //Student does not exist so create them
-      if (found===false) {
-        let domain = studentEmail.split("@")[1]
-
-      //   //Find Institution via domain
-        let institution = await API.graphql({
-          query: listInstitutions,
+        let stu = await API.graphql({
+          query: listStudents,
           variables: {
             filter: {
-              domains: {
-                contains: domain
+              email: {
+                eq: studentEmail
               }
             }
           },
-          authMode: "API_KEY",
         })
 
-        //Institution not found
-        if (institution.data.listInstitutions.items.length === 0) {
-          error = "Could not determine institution"
-          throw Error()
+        let found = false
+        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
+          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
+            stu = stu.data.listStudents.items[i]
+            found = true
+            break
+          }
+        }
+        if (found === false) {
+          throw Error();
         }
 
-        institution = institution.data.listInstitutions.items[0]
-
-        //Create student
-        let newStudent = {
-          institutionId: institution.id,
-          firstname: user.attributes.name,
-          lastname: user.attributes.family_name,
-          userRole: "Student",
-          email: studentEmail
+        let act = [];
+        let courses = [];
+        for (let i = 0; i < stu.enrollments.items.length; i++) {
+          courses.push(stu.enrollments.items[i].course)
         }
 
-        let create = await API.graphql({
-          query: createStudent,
-          variables: { input: newStudent },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
+        for (let i = 0; i < stu.timetable.activityId.length; i++) {
+          for (let j = 0; j < courses.length; j++) {
+            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+            if (index !== undefined) {
+              act.push(index)
+              break;
+            }
+          }
+        }
+        act = act.sort((a, b) => {
+          if (a.start <= b.start)
+            return -1;
+          else
+            return 1;
         })
-        stu = create.data.createStudent
+
+        updateStudent(stu)
+        setActivities(act);
+        createScheduleArray(act);
+        setActivities(act);
+
       }
-
-      //Student  found
       else {
-        //stu = stu.data.listStudents.items[0]
-         let c=[]
-              for(let i=0;i<stu.enrollments.items.length;i++){
-                  c.push(stu.enrollments.items[i].course)
-              }
-        if (stu.timetable !== null) {
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < c.length; j++) {
-              let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-              if (index !== undefined) {
-                act.push(index)
-                break;
-              }
+
+        let changed = false
+        let act = student.timetable.activities;
+        if (act.length === activities.length) {
+          for (let i = 0; i < act.length; i++) {
+            if (act[i].id !== activities[i].id) {
+              changed = true
+              break
             }
           }
-          act = act.sort((a, b) => {
-            if (a.start <= b.start)
-              return -1
-            else
-              return 1
-          })
+        }
+        else {
+          changed = true
+        }
 
-          let changed = false
-          if (act.length === activities.length) {
-            for (let i = 0; i < act.length; i++) {
-              if (act[i].id !== activities[i].id) {
-                changed = true
-                break
-              }
-            }
-
-          }
-          else {
-            changed = true
-          }
-
-          act = act.filter((value, index, self) =>
-                index === self.findIndex((t) => (
-                 t.id === value.id 
-            )))
-           if(changed===true){
-            setActivities(act)
-            createScheduleArray(act)
-           }
-          }
-        
-        // }
-        }    
-    
+        if (changed === true) {
+          setActivities(act)
+          createScheduleArray(act)
+        }
+      }
     } catch (e) {
       Alert.alert(error)
+
     }
   }
 
-  //fetchActivities()
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchActivities()
     });
+
+
     return unsubscribe
   }, [navigation])
 
-  
+
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
+
     for (const moduleKey in modules) {
       const dates = getDatesForDayOfWeek(modules[moduleKey].day);
       dates.forEach((date) => {
         if (!scheduleArray[date]) {
           scheduleArray[date] = [];
         }
-        let t = modules[moduleKey].start + "-" + modules[moduleKey].end
+        let t = modules[moduleKey].start + "-" + modules[moduleKey].end;
         scheduleArray[date].push({
           id: modules[moduleKey].id,
           code: modules[moduleKey].course.coursecode,
@@ -206,17 +185,25 @@ const ScheduleTable = ({navigation}) => {
           day: modules[moduleKey].day,
           height: 50,
         });
-
       });
     }
 
     setSchedule(scheduleArray)
+    setTimetableLoaded(true);
   }
 
   const renderItem = (module) => {
+    const cardStyle = module.isClash
+      ? { backgroundColor: "white", borderColor: "#e32f45", borderWidth: 1, borderStyle: "dashed" } // Apply clash styling
+      : { backgroundColor: "white" }; // Default styling
+
+    const textStyle = module.isClash
+      ? { fontStyle: "italic" } // Apply italic style for clashes
+      : {}; // Default style
+
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
-        <Card style={{ backgroundColor: "white" }}>
+        <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}>
           <Card.Content>
             <View
               style={{
@@ -225,15 +212,17 @@ const ScheduleTable = ({navigation}) => {
                 alignItems: "center",
               }}
             >
-              <Text>{module.code}</Text>
-              <Text>{module.venue}</Text>
-              <Text>{module.time}</Text>
+              <Text style={textStyle}>{module.code}</Text>
+              <Text style={textStyle}>{module.venue}</Text>
+              <Text style={textStyle}>{module.time}</Text>
             </View>
           </Card.Content>
         </Card>
       </TouchableOpacity>
     );
   };
+
+
 
   const renderEmptyDate = () => {
     return (
@@ -264,6 +253,160 @@ const ScheduleTable = ({navigation}) => {
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
+
+
+  //functions for generating pdf
+
+
+  const generatePdf = async () => {
+    const pdfOptions = {
+      html: html,
+      base64: false,
+    };
+
+    const file = await printToFileAsync(pdfOptions);
+
+    // Rename the file to 'ProntoTimetable.pdf'
+    const renamedFileUri = `${FileSystem.cacheDirectory}ProntoTimetable.pdf`;
+
+    await FileSystem.moveAsync({
+      from: file.uri,
+      to: renamedFileUri,
+    });
+
+    await shareAsync(renamedFileUri);
+  };
+
+  const generateTimetableRows = (modules) => {
+    const daysOfWeek = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+
+    // Create a dictionary to store lecture data by day and time
+    const timetableData = {};
+
+    // Populate the timetableData dictionary with lecture data
+    modules.forEach((module) => {
+      const { day, start, end, course, venue } = module; // Include 'venue' here
+      const dayIndex = daysOfWeek.indexOf(day);
+
+      if (!timetableData[start]) {
+        timetableData[start] = {};
+      }
+
+      if (!timetableData[start][dayIndex]) {
+        timetableData[start][dayIndex] = [];
+      }
+
+      timetableData[start][dayIndex].push({
+        courseCode: course.coursecode,
+        start,
+        end,
+        venue, // Include 'venue' here
+      });
+    });
+
+    let tableHTML = `
+      <tr>
+        <th></th>
+    `;
+
+    daysOfWeek.forEach((day) => {
+      tableHTML += `<th>${day}</th>`;
+    });
+
+    tableHTML += `</tr>`;
+
+    const sortedTimes = Object.keys(timetableData).sort();
+    sortedTimes.forEach((timeslot) => {
+      tableHTML += `
+        <tr>
+          <td>${timeslot}</td>
+      `;
+
+      daysOfWeek.forEach((_, dayIndex) => {
+        if (timetableData[timeslot][dayIndex]) {
+          const lectures = timetableData[timeslot][dayIndex];
+          let cellContent = '';
+
+          lectures.forEach((lecture) => {
+            const { courseCode, start, end, venue } = lecture;
+            cellContent += `<div>${courseCode}<br>${start}-${end}<br>(${venue})</div>`; // Include 'venue' here
+          });
+
+          tableHTML += `<td>${cellContent}</td>`;
+        } else {
+          tableHTML += `<td></td>`;
+        }
+      });
+
+      tableHTML += `</tr>`;
+    });
+
+    return tableHTML;
+  };
+
+
+
+
+  const html = `
+  <html>
+    <head>
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto');
+
+    table {
+      width: 80%;
+      margin: 0 auto; /* Center the table horizontally */
+      border-collapse: collapse;
+      overflow: hidden; /* Hide overflowing content inside rounded edges */
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
+      transform: translateY(5px); /* Adjust the table's vertical position */
+      font-family: 'Roboto', sans-serif; 
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eb6d7c;
+      color: black;
+    }
+
+    h1 {
+      text-align: center; /* Center the heading horizontally */
+    }
+
+    /* Define CSS styles for odd and even rows */
+    tr:nth-child(odd) {
+      background-color: #fceaec; /* Light gray shade for odd rows */
+    }
+
+    tr:nth-child(even) {
+      background-color: #ffffff; /* White background for even rows */
+    }
+  </style>
+    </head>
+    <body>
+      <h1 style="font-family: 'Roboto', sans-serif;">Pronto Offline Timetable</h1>
+      <table>
+        ${generateTimetableRows(activities)}
+      </table>
+    </body>
+  </html>
+`;
+
+
+
 
   return (
     <View style={{ height: windowHeight, width: windowWidth }}>
@@ -296,3 +439,22 @@ const ScheduleTable = ({navigation}) => {
 };
 
 export default ScheduleTable;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textInput: {
+    alignSelf: "stretch",
+    padding: 8,
+    margin: 8
+  },
+  iconImage: {
+    width: 24, // Adjust the width and height to fit your design
+    height: 24,
+    marginRight: 30,
+  },
+});

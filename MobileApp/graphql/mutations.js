@@ -101,7 +101,7 @@ export const deleteEnrollment=`mutation DeleteEnrollment(
   }
 }`
 
-export const updateStudent=`mutation UpdateStudent(
+export const updateStudentInfo=`mutation UpdateStudent(
   $input: UpdateStudentInput!
   $condition: ModelStudentConditionInput
 ) {

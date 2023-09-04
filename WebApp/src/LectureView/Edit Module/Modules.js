@@ -5,13 +5,18 @@ import { listCourses, listLecturers, getLecturer } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { Link } from "react-router-dom";
-const LectureHomePage = () => {
+import UserManual from "../HelpFiles/EditModuleInfo.pdf";
+import HelpButton from '../../HelpButton';
+import { useLecturer } from "../../ContextProviders/LecturerContext";
+
+const Modules = () => {
 
   const [courses, setCourses] = useState([])
-  const [lecturer, setLecturer] = useState('')
+  //const [lecturer, setLecturer] = useState('')
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(false); // Add loading state
 
+  const {lecturer,setLecturer} =useLecturer();
 
   const fetchCourses = async () => {
     try {
@@ -30,7 +35,7 @@ const LectureHomePage = () => {
               }
             }
           },
-          authMode: "API_KEY",
+          authMode: "AMAZON_COGNITO_USER_POOLS",
         })
         if (lec.data.listLecturers.items.length > 0) {
           await setLecturer(lec.data.listLecturers.items[0])
@@ -43,7 +48,7 @@ const LectureHomePage = () => {
                 }
               }
             },
-            authMode: "API_KEY",
+            authMode: "AMAZON_COGNITO_USER_POOLS",
           })
 
 
@@ -55,13 +60,13 @@ const LectureHomePage = () => {
     } catch (error) {
       let e = error.errors[0].message
       if (e.search("Not Authorized") !== -1) {
-        setError("You are not authorized to perform this action.Please log out and log in")
+        setError("You are not authorized to perform this action. Please log out and log in")
       }
       else if (e.search("Network") !== -1) {
         setError("Request failed due to network issues")
       }
       else {
-        setError("Something went wrong.Please try again later")
+        setError("Something went wrong. Please try again later")
       }
     }
     finally {
@@ -70,9 +75,9 @@ const LectureHomePage = () => {
   }
 
 
-  useEffect(() => {
-    fetchCourses();
-  }, [])
+  // useEffect(() => {
+  //   fetchCourses();
+  // }, [])
 
   return (
     <div style={{ display: 'inline-flex' }}>
@@ -96,8 +101,8 @@ const LectureHomePage = () => {
             }
           }>Fetching your courses...</p>
         ) : (
-          courses.map((val, key) => (
-            <Link to={'/edit-module'} state={val} key={val.coursecode}>
+          lecturer?.courses?.items?.map((val, key) => (
+            <Link to={'/lecturer/edit-module'} state={val} key={val.coursecode}>
               <button className="content-button" key={val.coursecode}>
                 {val.coursecode}
               </button>
@@ -105,8 +110,12 @@ const LectureHomePage = () => {
           ))
         )}
       </main>
+
+      <div>
+        <HelpButton pdfUrl={UserManual} />
+      </div>
     </div>
   );
 };
 
-export default LectureHomePage;
+export default Modules;

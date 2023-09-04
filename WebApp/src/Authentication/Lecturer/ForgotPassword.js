@@ -129,7 +129,7 @@ function ForgotPassword() {
   };
 
   const handleResetPassword = () => {
-    navigate("/lecturer-login");
+    navigate("/lecturer/login");
   };
 
   return (

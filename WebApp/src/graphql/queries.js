@@ -8,14 +8,25 @@ export const listLecturers=`query ListLecturers(
     items {
       id
       institutionId
+      institution{
+        logo
+        name
+      }
       firstname
       lastname
-      userRole
       email
       courses { 
         items{ 
           id 
           coursecode
+          activity{ 
+            items{
+              id
+              activityname
+              venue
+              coordinates
+            }
+          }
         }
       }
       createdAt
@@ -44,7 +55,6 @@ export const getInstitution=`query GetInstitution($id: ID!) {
       institutionId
       firstname
       lastname
-      userRole
       email
       createdAt
       updatedAt
@@ -74,6 +84,7 @@ export const listInstitutions=`query ListInstitutions(
   listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      logo
       name
       location
       pageUrl
@@ -82,6 +93,7 @@ export const listInstitutions=`query ListInstitutions(
       closingTime
       minimumDuration
       domains
+      lectureremails
       admin { 
         id
         firstname
@@ -93,6 +105,7 @@ export const listInstitutions=`query ListInstitutions(
            id
            lecturerId
            coursecode
+           coursename
         }
       }
       lecturer{ 
@@ -105,6 +118,7 @@ export const listInstitutions=`query ListInstitutions(
             items{ 
               id 
               coursecode
+              coursename
             }
           }
         }
@@ -121,7 +135,6 @@ export const getAdmin=`query GetAdmin($id: ID!) {
     institutionId
     firstname
     lastname
-    userRole
     email
     institution {
       id
@@ -164,8 +177,13 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
       institutionId
       firstname
       lastname
-      userRole
       email
+      courses{
+        items{
+          id
+          coursename
+        }
+      }
       createdAt
       updatedAt
       owner
@@ -186,6 +204,7 @@ export const listCourses=`query ListCourses(
       institutionId
       lecturerId
       coursecode
+      coursename
       semester
       createdAt
       updatedAt
@@ -205,11 +224,24 @@ export const listAdmins=`query ListAdmins(
       institutionId
       firstname
       lastname
-      userRole
       email
       createdAt
       updatedAt
       owner
+      institution{
+        id
+        name
+        logo
+        domains
+        lectureremails
+        courses{
+          items{
+            id
+            coursecode
+          }
+        }
+        owner
+      }
     }
     nextToken
   }
@@ -225,9 +257,20 @@ export const listAnnouncements=`query ListAnnouncements(
       id
       description
       start
+      course{
+        coursecode
+      }
+      body
+      title
       end
       date
       venue
+      title
+      body
+      type
+      course{
+        coursecode
+      }
       createdAt
       updatedAt
     }
@@ -241,7 +284,6 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     institutionId
     firstname
     lastname
-    userRole
     email
     institution {
       id
@@ -267,3 +309,84 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     owner
   }
 }`
+
+export const searchLecturers=`query SearchLecturers(
+  $filter: SearchableLecturerFilterInput
+  $sort: [SearchableLecturerSortInput]
+  $limit: Int
+  $nextToken: String
+  $from: Int
+  $aggregates: [SearchableLecturerAggregationInput]
+) {
+  searchLecturers(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+    aggregates: $aggregates
+  ) {
+    items {
+      id
+      institutionId
+      firstname
+      lastname
+      email
+      courses{
+        items{
+          id
+          coursecode
+        }
+      }
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
+`
+
+export const announcementsByDate=`query AnnouncementsByDate ( 
+        $year: String!,  
+        $createdAt: ModelStringKeyConditionInput, 
+        $sortDirection: ModelSortDirection, 
+        $filter: ModelAnnouncementFilterInput, 
+        $limit: Int, 
+        $nextToken: String
+      ){
+          announcementsByDate( 
+            year:$year,  
+            createdAt: $createdAt, 
+            sortDirection: $sortDirection, 
+            filter: $filter, 
+            limit: $limit, 
+            nextToken: $nextToken
+            ){ 
+              items{ 
+                id
+                title
+                body
+                date
+                createdAt
+                course{
+                  coursecode   
+                }
+                type
+              }
+              nextToken
+            }
+}`
+           

@@ -19,17 +19,17 @@ function HomePage() {
   }, []);
 
   return (
-    <div class="hero">
+    <div className="hero">
 
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
-      <div class="cube"></div>
+      <div className="cube"></div>
+      <div className="cube"></div>
+      <div className="cube"></div>
+      <div className="cube"></div>
+      <div className="cube"></div>
+      <div className="cube"></div>
+      <div className="cube"></div>
+      <div className="cube"></div>
+      <div className="cube"></div>
 
       <Grid
         container
@@ -45,7 +45,7 @@ function HomePage() {
         <Card sx={{ padding: 5, borderRadius: '10px', transition: 'opacity 1s ease-in-out 0.2s' }}>
           <Box
             sx={{
-              maxWidth: 2000,
+              maxWidth: 850,
               backgroundColor: "transparent", // Set the background color to transparent
               borderRadius: '20px',
               '& .MuiCard-root': {
@@ -100,7 +100,7 @@ function HomePage() {
                         size="large"
                         color="error"
                         variant="contained"
-                        href="/institution-login"
+                        href="/institution/login"
                       >
                         Continue as institution &#8594;
                       </Button>
@@ -131,7 +131,7 @@ function HomePage() {
                         sx={{ borderRadius: '20px', backgroundColor: "#e32f45", marginBottom: 5 }}
                         size="large"
                         color="error"
-                        variant="contained" href="/lecturer-login">
+                        variant="contained" href="/lecturer/login">
                         Continue as lecturer &#8594;
                       </Button>
                     </CardActions>

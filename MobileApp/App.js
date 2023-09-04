@@ -12,10 +12,16 @@ import ConfirmEmail from "./screens/Login/ConfirmEmail";
 import PrivacyPolicyScreen from "./screens/Settings/PrivacyPolicy";
 import ProfilePage from "./screens/Settings/Profile";
 import AboutScreen from "./screens/Settings/About";
+import HelpScreen from "./screens/Settings/HelpScreen";
 import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, View, Text } from "react-native";
+import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
+import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext"
+import {StudentProvider} from "./ContextProviders/StudentContext";
+import {useStudent} from "./ContextProviders/StudentContext"
+import { listStudents } from "./graphql/queries";
 
+import {API} from "aws-amplify"
 import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
@@ -28,12 +34,35 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-
+  //const {student,updateStudent} = useStudent();
+  console.log(useStudent)
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
+
+      // const email=authUser.attributes.email;
+      // let studentInfo = await API.graphql({
+      //   query: listStudents,
+      //   variables: {
+      //     filter: {
+      //       email: {
+      //         eq: email
+      //       }
+      //     }
+      //   }
+      // });
+      
+      // for (let i = 0; i < studentInfo.data.listStudents.items.length; i++) {
+      //   if (studentInfo.data.listStudents.items[i].owner === authUser.attributes.sub) {
+      //     studentInfo = studentInfo.data.listStudents.items[i]
+      //     break;
+      //   }
+      // }
+      // updateStudent(studentInfo).then(()=>{
+      //   setUser(authUser);
+      // });
       setUser(authUser);
     } catch (e) {
       setUser(null);
@@ -63,22 +92,27 @@ export default function App() {
           alignItems: "center",
         }}
       >
-        <Text
-          style={{
-            color: "#e32f45",
-            fontSize: 24,
-            fontWeight: 200,
-            marginBottom: 20,
-            textAlign: "center",
-          }}
-        >
-          Loading...
-        </Text>
-        <ActivityIndicator color={"#e32f45"} size={"large"} />
+
+        <ImageBackground
+          resizeMode="contain"
+
+          source={require("./assets/splash.gif")}
+          style={{ width: 403, height: 508, alignSelf: "center" }}
+        />
+
+        <View style={{ display: "flex", flexDirection: "row" }}>
+          <ActivityIndicator color={"#e32f45"} size={"small"} />
+          <Text style={{ color: "#e32f45" }}> Checking account details...</Text>
+
+        </View>
+
+
       </View>
     );
   }
   return (
+    <StudentProvider>
+      <AnnouncementProvider>
     <NavigationContainer>
       <Stack.Navigator>
         {user ? (
@@ -126,6 +160,13 @@ export default function App() {
               component={AboutScreen}
               options={{ headerShown: true }}
             />
+
+
+            <Stack.Screen
+              name="Help"
+              component={HelpScreen}
+              options={{ headerShown: true }}
+            />
           </>
         ) : (
           <>
@@ -163,5 +204,7 @@ export default function App() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+    </AnnouncementProvider>
+    </StudentProvider>
   );
 }
