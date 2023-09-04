@@ -268,6 +268,7 @@ const ScheduleTable = ({ navigation }) => {
     });
 
     setSchedule(scheduleArray);
+    setTimetableLoaded(true);
   };
 
 
