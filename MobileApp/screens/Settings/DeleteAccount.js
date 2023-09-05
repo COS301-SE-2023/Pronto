@@ -10,8 +10,10 @@ import {
 import { Auth, API } from "aws-amplify";
 import { listStudents } from "../../graphql/queries"
 import { deleteStudent } from "../../graphql/mutations";
+import { useStudent } from "../../ContextProviders/StudentContext";
 const DeleteAccountPage = () => {
   const handleDeleteAccount = async () => {
+  const {student,updateStudent}=useStudent();
     Alert.alert(
       "Confirmation",
       "Are you sure you want to delete your account?",
@@ -25,6 +27,7 @@ const DeleteAccountPage = () => {
           onPress: async () => {
             try {
 
+              if(student===null){
               let user = await Auth.currentAuthenticatedUser()
               let studentEmail = user.attributes.email;
               let stu = await API.graphql({
@@ -46,14 +49,16 @@ const DeleteAccountPage = () => {
                   found = true
                   break
                 }
+                }
               }
-              if (found) {
+              if (found===true || student!==null) {
 
                 let del = await API.graphql({
                   query: deleteStudent,
                   variables: { input: { id: stu.id } },
                   authMode: "AMAZON_COGNITO_USER_POOLS"
                 })
+                updateStudent(null)
               }
               await Auth.currentAuthenticatedUser().then((user) => {
                 return Auth.deleteUser(user);

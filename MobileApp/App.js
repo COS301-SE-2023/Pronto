@@ -34,8 +34,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-  //const {student,updateStudent} = useStudent();
-  console.log(useStudent)
+ 
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
