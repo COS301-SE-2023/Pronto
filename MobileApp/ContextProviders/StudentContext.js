@@ -9,10 +9,10 @@ export const useStudent = () => {
 export const StudentProvider = ({ children }) => {
   const [student, setStudent] = useState(null);
   
-  const updateStudent = (newStudent) => {
+  const updateStudent = async(newStudent) => {
     try{
       if(newStudent===null){
-        setStudent(null);
+        await setStudent(null);
       }
       else if(newStudent!==null && newStudent.studentTimetableId===null){
         newStudent.timetable={
@@ -49,12 +49,13 @@ export const StudentProvider = ({ children }) => {
                     })
         newStudent.timetable.activities=activities;              
     }
-    setStudent(newStudent);
+    await setStudent(newStudent);
+    return newStudent;
   }
     catch(error){
       console.log("From update");
       console.log(error);
-       setStudent(newStudent);
+      await setStudent(newStudent);
     }
   };
 

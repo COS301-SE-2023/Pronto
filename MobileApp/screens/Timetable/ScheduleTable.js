@@ -7,7 +7,8 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { listStudents, listInstitutions} from "../../graphql/queries"
+import { listStudents,getStudent, listInstitutions} from "../../graphql/queries"
+
 import {  createStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 
@@ -50,8 +51,9 @@ const ScheduleTable = ({ navigation }) => {
     let month = date.getMonth()
 
 
+    let limit=month+2;
     // Loop through each month of the year
-    for (month; month < month+2; month++) {
+    for (month; month < limit; month++) {
       // Create a new date object for the first day of the month
       const firstDayOfMonth = new Date(year, month, 1);
 
@@ -76,109 +78,54 @@ const ScheduleTable = ({ navigation }) => {
   const fetchActivities = async () => {
     try {
       let stu=student;
+     
       if (student === null) {
         console.log("Student is null");
-        let user = await Auth.currentAuthenticatedUser()
-        let studentEmail = user.attributes.email;
+        const user = await Auth.currentAuthenticatedUser();
+        // let studentEmail = user.attributes.email;
 
-        stu = await API.graphql({
-          query: listStudents,
-          variables: {
-            filter: {
-              email: {
-                eq: studentEmail
-              }
-            }
-          },
+        // stu = await API.graphql({
+        //   query: listStudents,
+        //   variables: {
+        //     filter: {
+        //       email: {
+        //         eq: studentEmail
+        //       }
+        //     }
+        //   },
+        // })
+
+        stu=await API.graphql({
+          query:getStudent,
+          variables:{id:user.attributes.sub}
         })
-
-        let found = false
-        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i]
-            found = true
-            break
-          }
-        }
-      if (found === false) {
-        let domain = studentEmail.split("@")[1]
-
-        console.log(domain)
-          //Find Institution via domain
-          let institution = await API.graphql({
-            query: listInstitutions,
-            variables: {
-              filter: {
-                domains: {
-                  contains: domain
-                }
-              }
-            }
-          })
-
-        //Institution not found
-        if (institution.data.listInstitutions.items.length === 0) {
-          error = "Could not determine institution"
+        
+        stu=stu.data.getStudent;
+        console.log(stu);
+        if(stu===null){
           throw Error()
         }
-
-          institution = institution.data.listInstitutions.items[0]
-
-          //Create student
-          let newStudent = {
-            institutionId: institution.id,
-            firstname: user.attributes.name,
-            lastname: user.attributes.family_name,
-            userRole: "Student",
-            email: studentEmail
-          }
-
-          let create = await API.graphql({
-            query: createStudent,
-            variables: { input: newStudent }
-          })
-          stu = create.data.createStudent;
-          updateStudent(stu)
-        }
-
-      else{
-       if(stu.studentTimetableId!==null){
-          
-          let act = [];
-          let courses = [];
-          for (let i = 0; i < stu.enrollments.items.length; i++) {
-            courses.push(stu.enrollments.items[i].course)
-          }
-
-          for(let i = 0; i < stu.timetable.activityId.length; i++) {
-            for(let j = 0; j < courses.length; j++) {
-              let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-              if(index !== undefined) {
-                act.push(index)
-                break;
-              } 
-            }
-          }
-          act = act.sort((a, b) => {
-            if (a.start <= b.start)
-              return -1;
-            else
-              return 1;
-          })
-          setActivities(act);
-          createScheduleArray(act)
-        }
-        updateStudent(stu);
-        //setActivities(act);
-        //createScheduleArray(act);
-        //setActivities(act);
-      }
-    }else{
+        // let found = false
+        // for (let i = 0; i < stu.data.listStudents.items.length; i++) {
+        //   if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
+        //     stu = stu.data.listStudents.items[i]
+        //     found = true
+        //     break
+        //   }
+        // }
+        // if(found===false){
+        //    throw Error()
+        // }
+        let s=await updateStudent(stu)
+        console.log(s);
+        setActivities(s.timetable.activities);
+        createScheduleArray(s.timetable.activities);
+        console.log("sheduleArray")
+    }
+    else{
       console.log("Not null");
-      console.log(student.timetable.activities);
-      
+      //console.log(student.timetable.activities); 
       if(student.timetable!==null && student.timetable.activities!==undefined){
-
         let changed = false
         let act = student.timetable.activities;
         if (act.length === activities.length) {
@@ -193,14 +140,13 @@ const ScheduleTable = ({ navigation }) => {
           changed = true;
         }
 
+        console.log(changed);
         if (changed === true) {
           setActivities(act);
           createScheduleArray(act);
         }
       }
     }
-    console.log(student);
-    //}
     } catch (e) {
       Alert.alert(error);
       console.log("from schedule")

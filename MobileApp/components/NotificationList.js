@@ -3,7 +3,7 @@ import { Alert, View, StyleSheet,Modal, Text ,RefreshControl,IconButton,Pressabl
 import { List, Card, Avatar,Button,Portal,PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { listStudents,announcementsByDate, listAnnouncements } from "../graphql/queries";
+import { listStudents,getStudent,announcementsByDate, listAnnouncements } from "../graphql/queries";
 import { Auth, API } from "aws-amplify"
 import { useStudent } from "../ContextProviders/StudentContext";
 import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
@@ -37,30 +37,17 @@ const NotificationList = ({ navigation }) => {
       if(student===null){
         
         setLoading(true);
-        let user = await Auth.currentAuthenticatedUser()
+        const user = await Auth.currentAuthenticatedUser()
         let studentEmail = user.attributes.email;
 
         let stu = await API.graphql({
-          query: listStudents,
-          variables: {
-            filter: {
-              email: {
-                eq: studentEmail
-              }
-            }
-          }
+          query: getStudent,
+          variables: {id:user.attributes.sub}
         })
       
-        let found = false;
-        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i];
-            found = true;
-            break;
-          };
-        };
+        stu=stu.data.getStudent;
                 
-        if(found===false){
+        if(stu===null || stu===undefined){
           throw Error();
         }
         updateStudent(stu);

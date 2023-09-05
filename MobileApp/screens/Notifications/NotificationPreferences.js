@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Auth,API } from "aws-amplify";
+import { getStudent } from "../../graphql/queries";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { updateStudentInfo } from "../../graphql/mutations";
 
@@ -59,29 +60,15 @@ const NotificationPreferences = () => {
   const fetchStudent =async()=>{
     try{
       if(student===null){
-        let user =await Auth.currentAuthenticatedUser()
+        const user =await Auth.currentAuthenticatedUser()
         let studentEmail=user.attributes.email;
         let stu = await API.graphql({
-            query: listStudents,
-            variables: {
-              filter: {
-                email: {
-                  eq: studentEmail
-                }
-              }
-            }
+            query: getStudent,
+            variables: {id:user.attributes.sub}
           })
-      
-        let found = false
-        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i]
-            found = true
-            break
-          };
-        };
-        
-        if(found===false){
+     
+        stu=stu.data.getStudent;
+        if(stu===null){
           throw Error();
         }
         updateStudent(student);

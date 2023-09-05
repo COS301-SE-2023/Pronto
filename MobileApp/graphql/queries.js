@@ -383,3 +383,66 @@ export const announcementsByDate=`query AnnouncementsByDate (
               nextToken
             }
 }`;
+
+export const getStudent=`query GetStudent($id: ID!) {
+  getStudent(id: $id) {
+      institutionId
+      institution{
+        name
+      }
+      id
+      firstname
+      lastname
+      email
+      owner
+      preference
+      studentTimetableId
+      timetable { 
+        id
+        activities{ 
+           items { 
+              id
+              courseId
+              activityname
+              day
+              start
+              end
+              venue
+              group
+              course{
+                coursecode
+              }
+            }
+          }
+        activityId  
+        }
+      enrollments { 
+        items{
+          id
+          courseId
+          owner
+          course{ 
+            id
+            coursecode
+            activity{
+              items{
+                courseId
+                activityname
+                coordinates
+                id
+                day
+                start
+                frequency
+                end
+                venue 
+                group
+                course{
+                  coursecode
+                }
+              }
+            }
+          }
+        }
+      }  
+    }
+}`

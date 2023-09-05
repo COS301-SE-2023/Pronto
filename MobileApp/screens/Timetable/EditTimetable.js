@@ -16,7 +16,7 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { searchCourses, listStudents ,listInstitutions} from "../../graphql/queries"
+import { searchCourses, listStudents ,getStudent,listInstitutions} from "../../graphql/queries"
 import { createEnrollment,createStudent,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
@@ -85,72 +85,21 @@ const EditTimetable = ({ onSearch }) => {
     let error = "There appear to be network issues.Please try again later"
     try {
       let stu=student
+      console.log(stu)
       if(student===null){
         setIsLoading(true); // Set loading state to true during API call
-        let user = await Auth.currentAuthenticatedUser()
+        const user = await Auth.currentAuthenticatedUser();
         let studentEmail = user.attributes.email;
         let act = []
-         stu = await API.graphql({
-          query: listStudents,
-          variables: {
-            filter: {
-              email: {
-                eq: studentEmail
-              }
-            }
-          }
-        })
-
-        let found = false
-        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i];
-            found = true;
-            break;
-          }
-        }
-
-     if(found===false){
-          let domain = studentEmail.split("@")[1]
-
-      //   //Find Institution via domain
-        let institution = await API.graphql({
-          query: listInstitutions,
-          variables: {
-            filter: {
-              domains: {
-                contains: domain
-              }
-            }
-          },
-         
-        })
-
-        //Institution not found
-        if (institution.data.listInstitutions.items.length === 0) {
-          error = "Could not determine institution"
-          throw Error()
-        }
-
-        institution = institution.data.listInstitutions.items[0]
-
-        //Create student
-        let newStudent = {
-          institutionId: institution.id,
-          firstname: user.attributes.name,
-          lastname: user.attributes.family_name,
-          userRole: "Student",
-          email: studentEmail
-        }
-
-        let create = await API.graphql({
-          query: createStudent,
-          variables: { input: newStudent },
-        })
-        stu = create.data.createStudent
+        stu=await API.graphql({
+          query:getStudent,
+          variables:{id:user.attributes.sub}
+        }) 
+        stu=stu.data.getStudent;
+       if(stu===null){
+        throw Error()
+       }
       
-        updateStudent(stu);
-     }else if(stu.enrollments!==undefined){
         let c = [];
         for (let i = 0; i < stu.enrollments.items.length; i++) {
           c.push(stu.enrollments.items[i].course);
@@ -173,9 +122,8 @@ const EditTimetable = ({ onSearch }) => {
           }
           setActivities(act)
         }
-        updateStudent(stu)
+        await updateStudent(stu)
         setIsLoading(false); // Set loading state to false after courses are fetched
-     }
     }else{
         let c=[]
         for (let i = 0; i < student.enrollments.items.length; i++) {
@@ -184,7 +132,6 @@ const EditTimetable = ({ onSearch }) => {
         setSelectedModules(c);
         setActivities(student.timetable.activities);
       }
-      // console.log(stu);
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
       Alert.alert(error);
@@ -223,13 +170,11 @@ const EditTimetable = ({ onSearch }) => {
           query: createEnrollment,
           variables: { input: enroll }
         })
-        // console.log(newEnrollment);
         let s = student;
         student.enrollments.items.push(newEnrollment.data.createEnrollment);
-        updateStudent(student);
+        s= await updateStudent(student);
       }
       if (student.studentTimetableId === null) {
-        // console.log("New timetable");
         let newTimetable = {
           studentId: student.id,
           activityId: activityIds,
@@ -245,10 +190,13 @@ const EditTimetable = ({ onSearch }) => {
         })
 
         let s = student
-        s.timetable = create.data.createTimetable
-        s.studentTimetableId = s.timetable.id
+        s.timetable = create.data.createTimetable;
+        s.studentTimetableId = s.timetable.id;
+        student.timetable=create.data.createTimetable;
+        student.studentTimetableId=create.data.createTimetable.id;
         console.log(s);
-        updateStudent(s);
+        s=await updateStudent(student);
+       student.timetable.activities=s.timetable.activities;
       }
       else {
 
@@ -267,15 +215,16 @@ const EditTimetable = ({ onSearch }) => {
         
         let s = student
         s.timetable = update.data.updateTimetable;
-       //console.log(update.data.updateTimetable);       
-        updateStudent(s);
+        student.timetable=update.data.updateTimetable;
+       s= await updateStudent(student);
+       student.timetable.activities=s.timetable.activities;
       }
       setIsSaving(false);
       toggleModal(null)
     } catch (e) {
       console.log("From save");
       console.log(e);
-      //setIsSaving(false);
+      setIsSaving(false);
       Alert.alert(error);
       
     }
@@ -324,12 +273,12 @@ const EditTimetable = ({ onSearch }) => {
                     });
 
                     student.enrollments.items.splice(i, 1);
-                    updateStudent(student);
+                //    await updateStudent(student);
                     break;
                   }
                 }
                 await handleSave();
-                updateStudent(student);
+                //updateStudent(student);
                 setSelectedModules((prevModules) =>
                   prevModules.filter((module) => module.id !== item.id)
                 );
@@ -337,7 +286,7 @@ const EditTimetable = ({ onSearch }) => {
                 setSelectedModule(null);
               } catch (e) {
                 console.log("From delete")
-              console.log(e);
+                console.log(e);
                 Alert.alert(error);
               }
             },

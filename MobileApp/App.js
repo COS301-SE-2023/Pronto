@@ -17,11 +17,9 @@ import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
 import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext"
-import {StudentProvider} from "./ContextProviders/StudentContext";
-import {useStudent} from "./ContextProviders/StudentContext"
-import { listStudents,listInstitutions } from "./graphql/queries";
+import {StudentProvider,useStudent} from "./ContextProviders/StudentContext";
+import { getStudent,listInstitutions } from "./graphql/queries";
 import {createStudent} from "./graphql/mutations";
-
 import {API} from "aws-amplify"
 import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
@@ -35,36 +33,23 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
- // const {student,updateStudent}=useStudent();
 
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-      //updateStudent(null);
       const email=authUser.attributes.email;
       let studentInfo = await API.graphql({
-        query: listStudents,
-        variables: {
-          filter: {
-            email: {
-              eq: email
-            }
-          }
-        }
+        query: getStudent,
+        variables: {id:authUser.attributes.sub}
       });
+      console.log("From app")
+      studentInfo=studentInfo.data.getStudent
+      console.log(studentInfo);
       
-      let found=false;
-      for (let i = 0; i < studentInfo.data.listStudents.items.length; i++) {
-        if (studentInfo.data.listStudents.items[i].owner === authUser.attributes.sub) {
-          studentInfo = studentInfo.data.listStudents.items[i]
-          found=true;
-          break;
-          
-        }
-      }
-      if(found===false){
+      if(studentInfo===null){
+        console.log("Creating new student")
         try{
           let domain = email.split("@")[1]
           let institution = await API.graphql({
@@ -78,30 +63,28 @@ export default function App() {
             }
           })
 
+          
           institution = institution.data.listInstitutions.items[0]
-
+          console.log(institution)
           //Create student
           let newStudent = {
+            id:authUser.attributes.sub,
             institutionId: institution.id,
-            firstname: user.attributes.name,
-            lastname: user.attributes.family_name,
+            firstname: authUser.attributes.name,
+            lastname: authUser.attributes.family_name,
             userRole: "Student",
-            email: studentEmail
+            email: email
           }
-
           let create = await API.graphql({
             query: createStudent,
             variables: { input: newStudent }
-          }
-        )
+          })
+        console.log(create);
         }catch(error){
+          console.log(error)
           console.log("Error fetching student info");
         }
       }
-
-      // updateStudent(studentInfo).then(()=>{
-      //   setUser(authUser);
-      // });
       setUser(authUser);
     } catch (e) {
       setUser(null);
@@ -124,6 +107,7 @@ export default function App() {
 
   if (user === undefined) {
     return (
+      <StudentProvider>
       <View
         style={{
           flex: 1,
@@ -147,6 +131,7 @@ export default function App() {
 
 
       </View>
+      </StudentProvider>
     );
   }
   return (

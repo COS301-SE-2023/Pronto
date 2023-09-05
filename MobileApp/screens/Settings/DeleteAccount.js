@@ -8,12 +8,13 @@ import {
   ImageBackground,
 } from "react-native";
 import { Auth, API } from "aws-amplify";
-import { listStudents } from "../../graphql/queries"
+import { listStudents ,getStudent} from "../../graphql/queries"
 import { deleteStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 const DeleteAccountPage = () => {
-  const handleDeleteAccount = async () => {
   const {student,updateStudent}=useStudent();
+  const handleDeleteAccount = async () => {
+  
     Alert.alert(
       "Confirmation",
       "Are you sure you want to delete your account?",
@@ -27,47 +28,34 @@ const DeleteAccountPage = () => {
           onPress: async () => {
             try {
 
+              let stu=student 
+              console.log(student);
               if(student===null){
-              let user = await Auth.currentAuthenticatedUser()
-              let studentEmail = user.attributes.email;
-              let stu = await API.graphql({
-                query: listStudents,
-                variables: {
-                  filter: {
-                    email: {
-                      eq: studentEmail
-                    }
-                  }
-                },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
-              })
-              //stu=stu.data.listStudents.items[0]
-              let found = false
-              for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-                if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-                  stu = stu.data.listStudents.items[i]
-                  found = true
-                  break
-                }
-                }
-              }
-              if (found===true || student!==null) {
-
-                let del = await API.graphql({
-                  query: deleteStudent,
-                  variables: { input: { id: stu.id } },
-                  authMode: "AMAZON_COGNITO_USER_POOLS"
+                const user = await Auth.currentAuthenticatedUser()
+                let studentEmail = user.attributes.email;
+                let stu = await API.graphql({
+                  query: getStudent,
+                  variables: {id:user.attributes.sub},
                 })
+                stu=stu.data.getStudent
+              }
+
+              if(stu!==null){
+                  let del = await API.graphql({
+                    query: deleteStudent,
+                    variables: { input: { id: stu.id } }
+                  })
                 updateStudent(null)
               }
-              await Auth.currentAuthenticatedUser().then((user) => {
-                return Auth.deleteUser(user);
-              });
+                await Auth.currentAuthenticatedUser().then((user) => {
+                  return Auth.deleteUser(user);
+                });
 
               Alert.alert(
                 "Account Deleted",
                 "Your account has been successfully deleted."
               );
+              //}
             } catch (error) {
 
               Alert.alert("Error", "An error occurred while deleting your account. Please try again later."
