@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import { View, Text, StyleSheet, ImageBackground ,ScrollView } from "react-native";
 import { Auth } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
 
@@ -100,8 +100,11 @@ const styles = StyleSheet.create({
   infoContainer: {
     borderWidth: 2,
     borderColor: "#e32f45",
-    padding: 50,
-    marginBottom: 20,
+    paddingLeft: 50,
+    paddingRight: 50,
+    paddingTop:20,
+    paddingBottom:20,
+    marginBottom: 0,
     textAlign: "center",
     borderRadius: 20,
   },
