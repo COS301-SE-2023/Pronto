@@ -10,11 +10,6 @@ import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const NotificationList = ({ navigation }) => {
-  const [visible, setVisible] = useState(false);
-
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
-  const containerStyle = {backgroundColor: 'white', padding: 20};
 
   const [expanded1, setExpanded1] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
@@ -352,7 +347,7 @@ const NotificationList = ({ navigation }) => {
                 ))}
         <Text
           style={{
-            marginBottom:"2%",
+            marginBottom:"0%",
             marginLeft:"auto",
             marginRight:"auto"
           }}
