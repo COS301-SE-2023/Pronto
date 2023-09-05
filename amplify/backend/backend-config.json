@@ -152,6 +152,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "updateCourseResources": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "updateInstitutionResources": {
       "build": true,
       "providerPlugin": "awscloudformation",
