@@ -56,3 +56,20 @@ const createModuleSegmentCommandInput = (institutionName, moduleCode) => {
   };
   return createSegmentCommandInput;
 };
+
+const updateCourseResources = async (UpdateOption) => {
+  switch (UpdateOption) {
+    case DATASTREAM_ACTIONS.COURSE_CREATED:
+      //create lecturer segement group for module
+      //create student segment group
+      //create segment, add groups
+      //get institution campain
+      //add segement
+      //WRITE segmentIDs WRITE to institutionDB, on COURSETABLE
+      //Update notifications status on course table
+      break;
+    default:
+      break;
+  }
+};
+module.exports = { createModuleSegmentName, createModuleSegmentCommandInput };
