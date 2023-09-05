@@ -51,7 +51,7 @@ const ScheduleTable = ({ navigation }) => {
 
 
     // Loop through each month of the year
-    for (month; month < 12; month++) {
+    for (month; month < month+2; month++) {
       // Create a new date object for the first day of the month
       const firstDayOfMonth = new Date(year, month, 1);
 
