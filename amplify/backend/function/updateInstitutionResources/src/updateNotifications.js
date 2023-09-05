@@ -16,29 +16,17 @@ const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
     update compain
 */
 
-const createCampaignNames = (institutionName) => {
+const createCampaignName = (institutionName) => {
   formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
-  emailCampaignName = formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.EMAIL;
-  smsCampaignName = formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.SMS;
-  pushCampaignName =
-    formattedInstitutionName + CAMPAIGN_NAME_SUFFIX.PUSH_NOTIFICATIONS;
-  return {
-    emailCampaignName,
-    smsCampaignName,
-    pushCampaignName,
-  };
+  return formattedInstitutionName + CAMPAIGN_NAME_SUFFIX;
 };
 
-const createPinpointCampaignCommandInput = async (
-  institutionName,
-  SegmentId
-) => {
-  const campaignNames = createCampaignNames(institutionName);
+const createPinpointCampaignCommandInput = async (institutionName) => {
+  const campaignNames = createCampaignName(institutionName);
   const createCampaignCommandInput = {
     ApplicationId: PINPOINT_APP_ID,
     WriteCampaignRequest: {
       Name: campaignNames.emailCampaignName,
-      SegmentId: SegmentId,
       Description: `${institutionName} Notifications Campaign`,
       Schedule: {
         StartTime: "IMMEDIATE",
@@ -53,29 +41,20 @@ const createPinpointCampaignCommandInput = async (
   return createCampaignCommandInput;
 };
 
-const updateNotifications = async (UpdateOption) => {
+const updateOptionsHandler = async (UpdateOption) => {
   switch (UpdateOption) {
     case DATASTREAM_ACTIONS.INSTITUDE_CREATED:
       //CREATE campain
-      //READ segmentIDs and campainID WRITE to institutionDB
+      //write campainID to institutionDB
       //Update notifications status on institution table -> send test email?
       break;
-    case DATASTREAM_ACTIONS.INSTITUDE_UPDATED:
-      break;
-    case DATASTREAM_ACTIONS.MODULE_CODES_UPDATED:
-      //get SegmentID
-      //create lecturer segement group for module
-      //UPDATE with student segement groups for module
-      //WRITE segmentIDs WRITE to institutionDB, on COURSETABLE
-      //Update notifications status on course table
-      break;
-
     default:
       break;
   }
 };
 
 module.exports = {
-  createCampaignNames,
+  createCampaignNames: createCampaignName,
   createPinpointCampaignCommandInput,
+  updateOptionsHandler,
 };
