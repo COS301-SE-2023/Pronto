@@ -85,7 +85,7 @@ const EditTimetable = ({ onSearch }) => {
     let error = "There appear to be network issues.Please try again later"
     try {
       let stu=student
-      console.log(stu)
+      
       if(student===null){
         setIsLoading(true); // Set loading state to true during API call
         const user = await Auth.currentAuthenticatedUser();
@@ -194,7 +194,7 @@ const EditTimetable = ({ onSearch }) => {
         s.studentTimetableId = s.timetable.id;
         student.timetable=create.data.createTimetable;
         student.studentTimetableId=create.data.createTimetable.id;
-        console.log(s);
+       
         s=await updateStudent(student);
        student.timetable.activities=s.timetable.activities;
       }

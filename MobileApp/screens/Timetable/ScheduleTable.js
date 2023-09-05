@@ -101,7 +101,7 @@ const ScheduleTable = ({ navigation }) => {
         })
         
         stu=stu.data.getStudent;
-        console.log(stu);
+       
         if(stu===null){
           throw Error()
         }
@@ -117,7 +117,7 @@ const ScheduleTable = ({ navigation }) => {
         //    throw Error()
         // }
         let s=await updateStudent(stu)
-        console.log(s);
+        
         setActivities(s.timetable.activities);
         createScheduleArray(s.timetable.activities);
         console.log("sheduleArray")
@@ -140,7 +140,7 @@ const ScheduleTable = ({ navigation }) => {
           changed = true;
         }
 
-        console.log(changed);
+        
         if (changed === true) {
           setActivities(act);
           createScheduleArray(act);
