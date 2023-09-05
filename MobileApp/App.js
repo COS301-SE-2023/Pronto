@@ -19,7 +19,8 @@ import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
 import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext"
 import {StudentProvider} from "./ContextProviders/StudentContext";
 import {useStudent} from "./ContextProviders/StudentContext"
-import { listStudents } from "./graphql/queries";
+import { listStudents,listInstitutions } from "./graphql/queries";
+import {createStudent} from "./graphql/mutations";
 
 import {API} from "aws-amplify"
 import { Amplify } from "aws-amplify";
@@ -34,31 +35,70 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
- 
+ // const {student,updateStudent}=useStudent();
+
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-
-      // const email=authUser.attributes.email;
-      // let studentInfo = await API.graphql({
-      //   query: listStudents,
-      //   variables: {
-      //     filter: {
-      //       email: {
-      //         eq: email
-      //       }
-      //     }
-      //   }
-      // });
+      //updateStudent(null);
+      const email=authUser.attributes.email;
+      let studentInfo = await API.graphql({
+        query: listStudents,
+        variables: {
+          filter: {
+            email: {
+              eq: email
+            }
+          }
+        }
+      });
       
-      // for (let i = 0; i < studentInfo.data.listStudents.items.length; i++) {
-      //   if (studentInfo.data.listStudents.items[i].owner === authUser.attributes.sub) {
-      //     studentInfo = studentInfo.data.listStudents.items[i]
-      //     break;
-      //   }
-      // }
+      let found=false;
+      for (let i = 0; i < studentInfo.data.listStudents.items.length; i++) {
+        if (studentInfo.data.listStudents.items[i].owner === authUser.attributes.sub) {
+          studentInfo = studentInfo.data.listStudents.items[i]
+          found=true;
+          break;
+          
+        }
+      }
+      if(found===false){
+        try{
+          let domain = email.split("@")[1]
+          let institution = await API.graphql({
+            query: listInstitutions,
+            variables: {
+              filter: {
+                domains: {
+                  contains: domain
+                }
+              }
+            }
+          })
+
+          institution = institution.data.listInstitutions.items[0]
+
+          //Create student
+          let newStudent = {
+            institutionId: institution.id,
+            firstname: user.attributes.name,
+            lastname: user.attributes.family_name,
+            userRole: "Student",
+            email: studentEmail
+          }
+
+          let create = await API.graphql({
+            query: createStudent,
+            variables: { input: newStudent }
+          }
+        )
+        }catch(error){
+          console.log("Error fetching student info");
+        }
+      }
+
       // updateStudent(studentInfo).then(()=>{
       //   setUser(authUser);
       // });
