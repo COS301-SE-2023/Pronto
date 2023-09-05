@@ -21,12 +21,12 @@ const createCampaignName = (institutionName) => {
   return formattedInstitutionName + CAMPAIGN_NAME_SUFFIX;
 };
 
-const createPinpointCampaignCommandInput = async (institutionName) => {
-  const campaignNames = createCampaignName(institutionName);
+const createPinpointCampaignCommandInput = (institutionName) => {
+  const campaignName = createCampaignName(institutionName);
   const createCampaignCommandInput = {
     ApplicationId: PINPOINT_APP_ID,
     WriteCampaignRequest: {
-      Name: campaignNames.emailCampaignName,
+      Name: campaignName,
       Description: `${institutionName} Notifications Campaign`,
       Schedule: {
         StartTime: "IMMEDIATE",
@@ -41,7 +41,7 @@ const createPinpointCampaignCommandInput = async (institutionName) => {
   return createCampaignCommandInput;
 };
 
-const updateOptionsHandler = async (UpdateOption) => {
+const updateInstitudeResources = async (UpdateOption) => {
   switch (UpdateOption) {
     case DATASTREAM_ACTIONS.INSTITUDE_CREATED:
       //CREATE campain
@@ -54,7 +54,7 @@ const updateOptionsHandler = async (UpdateOption) => {
 };
 
 module.exports = {
-  createCampaignNames: createCampaignName,
+  createCampaignName,
   createPinpointCampaignCommandInput,
-  updateOptionsHandler,
+  updateInstitudeResources,
 };

@@ -1,27 +1,27 @@
 const {
-  createCampaignNames,
+  createCampaignName,
   createPinpointCampaignCommandInput,
 } = require("../../../../function/updateInstitutionResources/src/updateNotifications");
 
 const institutionName = "University OF Pretoria";
 
 describe("Testing helper functions", () => {
-  test("testing createCampaignNames", () => {
+  test("testing createCampaignName", () => {
     formattedInstitutionName = institutionName
       .toLowerCase()
       .replaceAll(" ", "+");
 
     const expectedCampaignName =
       formattedInstitutionName + ":notifications:campaign";
-    const receivedCampaignName = createCampaignNames(institutionName);
+    const receivedCampaignName = createCampaignName(institutionName);
     expect(receivedCampaignName).toEqual(expectedCampaignName);
   });
 
   test("testing createPinpointCampaignCommandInput", () => {
-    const campaignNames = createCampaignNames(institutionName);
+    const campaignName = createCampaignName(institutionName);
     const expectedCampaignCommandInput = {
       WriteCampaignRequest: {
-        Name: campaignNames.emailCampaignName,
+        Name: campaignName,
         Description: `${institutionName} Notifications Campaign`,
         Schedule: {
           StartTime: "IMMEDIATE",
@@ -33,5 +33,9 @@ describe("Testing helper functions", () => {
         },
       },
     };
+    console.table(expectedCampaignCommandInput);
+    const receivedCampaignCommandInput =
+      createPinpointCampaignCommandInput(institutionName);
+    expect(receivedCampaignCommandInput).toEqual(expectedCampaignCommandInput);
   });
 });
