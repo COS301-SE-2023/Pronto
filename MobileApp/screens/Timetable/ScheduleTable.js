@@ -80,7 +80,7 @@ const ScheduleTable = ({ navigation }) => {
       let stu=student;
      
       if (student === null) {
-        console.log("Student is null");
+        
         const user = await Auth.currentAuthenticatedUser();
         // let studentEmail = user.attributes.email;
 
@@ -120,10 +120,10 @@ const ScheduleTable = ({ navigation }) => {
         
         setActivities(s.timetable.activities);
         createScheduleArray(s.timetable.activities);
-        console.log("sheduleArray")
+        
     }
     else{
-      console.log("Not null");
+     
       //console.log(student.timetable.activities); 
       if(student.timetable!==null && student.timetable.activities!==undefined){
         let changed = false
