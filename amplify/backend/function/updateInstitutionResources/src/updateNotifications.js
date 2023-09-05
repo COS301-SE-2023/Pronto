@@ -5,17 +5,6 @@ const { DATASTREAM_ACTIONS, CAMPAIGN_NAME_SUFFIX } = require("./constants");
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
 
-/*on inst creation:
-    build campaign name
-    create campaign, if does not exist
-    store campaigns
-*/
-
-/*on module codes update
-    create module segment
-    update compain
-*/
-
 const createCampaignName = (institutionName) => {
   formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
   return formattedInstitutionName + CAMPAIGN_NAME_SUFFIX;

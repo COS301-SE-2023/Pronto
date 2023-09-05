@@ -1,7 +1,7 @@
 const {
   createModuleSegmentName,
   createModuleSegmentCommandInput,
-} = require("../../../../function/updateCourseResources/src/helpers/createModuleSegment");
+} = require("../../../../../function/updateCourseResources/src/helpers/createModuleSegment");
 
 const institutionName = "University OF Pretoria";
 const moduleCode = "COS301";

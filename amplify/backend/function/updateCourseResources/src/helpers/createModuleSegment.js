@@ -1,3 +1,10 @@
+const {
+  SEGMENT_NAME_SUFFIX,
+  PINPOINT_SEGMENT_DIMENSIONS,
+} = require("./constants");
+
+const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
+
 const createModuleSegmentName = (institutionName, moduleCode) => {
   formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
   formattedModuleCode = moduleCode.toLowerCase().replaceAll(" ", "+");
