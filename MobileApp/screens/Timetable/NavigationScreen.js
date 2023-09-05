@@ -71,7 +71,8 @@ const NavigationScreen = () => {
             const location = await Location.getCurrentPositionAsync({});
             setOrigin(location.coords); // Set the origin to the user's current location
         } catch (error) {
-            console.error("Error getting user's location:", error);
+            Alert.alert("Please give access to your location to get directions")
+
         }
     };
 
@@ -117,7 +118,7 @@ const NavigationScreen = () => {
                 longitude: 28.2315,
             }
             setDestination(dest);
-            console.log(dest);
+
         }
     }
 
@@ -134,7 +135,7 @@ const NavigationScreen = () => {
                     <MapViewDirections
                         origin={origin}
                         destination={destination}
-                        apikey={''}
+                        apikey={process.env.GOOGLE_API_KEY}
                         strokeColor={'#395cda'}
                         strokeWidth={4}
                         mode={"WALKING"}
@@ -169,6 +170,8 @@ const NavigationScreen = () => {
                         label="Locations"
                         save={"value"}
                         search={true}
+                        searchPlaceholder='Search for venue'
+                        notFoundText='Venue not found'
                         inputStyles={{
                             color: 'grey', fontSize: 16
                         }}
@@ -196,10 +199,15 @@ const NavigationScreen = () => {
                 </TouchableOpacity>
                 {travelTime && distance && (
                     <View style={styles.infoContainer}>
-                        <Text style={styles.infoText}><Text style={{ color: "#e32f45" }}>Distance: </Text> {distance} <Text style={{ color: "#e32f45" }}>Travel Time:</Text> {travelTime}</Text>
-
+                        <Text style={styles.infoText}>
+                            <Text style={{ color: "#e32f45" }}>Distance: </Text> {distance}
+                        </Text>
+                        <Text style={styles.infoText}>
+                            <Text style={{ color: "#e32f45" }}>Travel Time: </Text> {travelTime}
+                        </Text>
                     </View>
                 )}
+
             </View>
             {instructions.length > 0 && (
                 <View style={styles.instructionsContainer}>
@@ -266,7 +274,6 @@ const styles = StyleSheet.create({
         marginTop: 16,
         alignItems: 'center',
         justifyContent: 'center',
-
     },
     infoText: {
         textAlign: 'center',
