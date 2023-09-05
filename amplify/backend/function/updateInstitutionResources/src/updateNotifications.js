@@ -119,14 +119,20 @@ const createPinpointCampaignCommandInput = async (
 const updateNotifications = async (UpdateOption) => {
   switch (UpdateOption) {
     case DATASTREAM_ACTIONS.INSTITUDE_CREATED:
+      //CREATE campain
+      //READ segmentIDs and campainID WRITE to institutionDB
+      //Update notifications status on institution table -> send test email?
       break;
     case DATASTREAM_ACTIONS.INSTITUDE_UPDATED:
       break;
     case DATASTREAM_ACTIONS.MODULE_CODES_UPDATED:
-      //create segments, return segmentID
-      //use segmentID to create campain
-      //store segmentIDs and campainID on institutionDB
+      //get SegmentID
+      //create lecturer segement group for module
+      //UPDATE with student segement groups for module
+      //WRITE segmentIDs WRITE to institutionDB, on COURSETABLE
+      //Update notifications status on course table
       break;
+
     default:
       break;
   }
