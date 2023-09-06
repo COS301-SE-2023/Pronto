@@ -132,7 +132,6 @@ const NavigationScreen = () => {
             setDestination(dest);
 
             // Zoom the map to the selected destination
-            console.log(selectedItem.latitude);
             const newRegion = {
                 ...currentRegion,
                 latitude: selectedItem.value.latitude,
@@ -160,12 +159,13 @@ const NavigationScreen = () => {
                     <MapViewDirections
                         origin={origin}
                         destination={destination}
-                        apikey={process.env.GOOGLE_API_KEY}
-                        strokeColor={'#395cda'}
+                        apikey={GOOGLE_API_KEY} // Use the imported GOOGLE_API_KEY directly
+                        strokeColor="#e32f45" // Set the route color to #e32f45
                         strokeWidth={4}
-                        mode={"WALKING"}
+                        mode="WALKING"
                         onReady={handleOnReady}
                     />
+
                 )}
             </MapView>
             <View style={styles.searchContainer}>
@@ -216,12 +216,25 @@ const NavigationScreen = () => {
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        setRoute(true);
-                        getUserLocation().then();
+                        if (origin && destination) {
+                            // Calculate the new region that encompasses both origin and destination
+                            const coordinates = [origin, destination];
+                            mapViewRef.current.fitToCoordinates(coordinates, {
+                                edgePadding: { top: 330, bottom: 300 }, // Adjust padding as needed
+                                animated: true, // Set to true for a smooth animation
+                            });
+
+                            // Set route to true and trigger the route calculation
+                            setRoute(true);
+                        } else {
+                            // Handle case where origin or destination is not set
+                            Alert.alert("Origin and destination must be set.");
+                        }
                     }}
                 >
                     <Text style={[styles.buttonText, { color: 'white', fontWeight: 600 }]}>Get Directions</Text>
                 </TouchableOpacity>
+
                 {travelTime && distance && (
                     <View style={styles.infoContainer}>
                         <Text style={styles.infoText}>
