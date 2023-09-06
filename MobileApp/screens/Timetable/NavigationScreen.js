@@ -116,23 +116,33 @@ const NavigationScreen = () => {
         justifyContent: 'center',
         fontSize: 16,
         fontWeight: '400',
+        paddingLeft: 19,
     };
 
     // Function to set the destination location, it is called when the user clicks the SelectedList component
     //We then traverse the locations and look for the selected location details
     const setDestinationLocation = (itemValue) => {
-        setDestination(null);
         setRoute(false);
         const selectedItem = locationInfo.find(item => item.name === itemValue);
         if (selectedItem) {
             const dest = {
-                latitude: -25.7530,
-                longitude: 28.2315,
+                latitude: selectedItem.value.latitude, // Use the latitude from the selected venue
+                longitude: selectedItem.value.longitude, // Use the longitude from the selected venue
             }
             setDestination(dest);
 
+            // Zoom the map to the selected destination
+            console.log(selectedItem.latitude);
+            const newRegion = {
+                ...currentRegion,
+                latitude: selectedItem.value.latitude,
+                longitude: selectedItem.value.longitude,
+            };
+            setCurrentRegion(newRegion);
+            mapViewRef.current.animateToRegion(newRegion, 1000);
         }
     }
+
 
     return (
         <View style={styles.container}>
