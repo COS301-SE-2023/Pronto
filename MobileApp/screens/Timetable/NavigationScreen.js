@@ -99,7 +99,7 @@ const NavigationScreen = () => {
     const greenStyle = {
         ...styles.input,
         borderWidth: 0,
-        color: 'grey',
+        color: 'green',
         width: '80%',
         justifyContent: 'center',
         fontSize: 16,
