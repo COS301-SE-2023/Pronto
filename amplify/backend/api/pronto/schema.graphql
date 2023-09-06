@@ -30,6 +30,7 @@ type Institution
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
   students: [Student] @hasMany(indexName: "byStudent", fields: ["id"])
   lecturer: [Lecturer] @hasMany(indexName: "byLecturer", fields: ["id"])
+  notificationsCampaignId: String
 }
 
 type Admin
