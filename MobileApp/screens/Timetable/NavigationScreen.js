@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert, TextInput } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert, TextInput, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StepByStepInstructions from '../../components/StepByStepInstructions';
 import MapViewDirections from "react-native-maps-directions";
@@ -29,6 +29,9 @@ const NavigationScreen = () => {
     const [distance, setDistance] = useState("");
     const [travelTime, setTravelTime] = useState("");
     const [instructions, setInstructions] = useState([]);
+    const [currentRegion, setCurrentRegion] = useState(initialRegion);
+    const mapViewRef = useRef(null);
+
 
     // Function to handle the data from the MapViewDirections component
     function handleOnReady(result) {
@@ -70,11 +73,20 @@ const NavigationScreen = () => {
         try {
             const location = await Location.getCurrentPositionAsync({});
             setOrigin(location.coords); // Set the origin to the user's current location
+            // Update the currentRegion state with the user's location
+            const newRegion = {
+                ...currentRegion,
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+            };
+            setCurrentRegion(newRegion);
+            // Use animateToRegion to zoom to the user's location
+            mapViewRef.current.animateToRegion(newRegion, 1000); // You may adjust the duration (1000 ms) as needed
         } catch (error) {
-            Alert.alert("Please give access to your location to get directions")
-
+            Alert.alert("Please give access to your location to get directions");
         }
     };
+
 
     // useEffect hook to run the requestLocationPermission function when the component is mounted
     useEffect(() => {
@@ -127,8 +139,11 @@ const NavigationScreen = () => {
             <MapView
                 style={styles.mapStyle}
                 provider={PROVIDER_GOOGLE}
-                initialRegion={initialRegion}
+                initialRegion={currentRegion}
+                ref={mapViewRef} // Set the ref to mapViewRef
             >
+
+
                 {origin && <Marker coordinate={origin} title="Origin" />}
                 {destination && <Marker coordinate={destination} title="Destination" />}
                 {route && origin && destination && (
