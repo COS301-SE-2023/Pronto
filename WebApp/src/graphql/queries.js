@@ -451,17 +451,20 @@ export const searchLecturerByCourses=`query SearchCourses(
     aggregates: $aggregates
   ) {
     items {
-      id
-      lecturerId
       lecturer { 
         id
         firstname
         lastname
-        instituionId
+        institutionId
+        courses{
+          items{
+            coursecode
+            id
+            lecturerId
+            institutionId
+          }
+        }
       }
-      institutionId
-      coursecode
-
     }
     nextToken
     total

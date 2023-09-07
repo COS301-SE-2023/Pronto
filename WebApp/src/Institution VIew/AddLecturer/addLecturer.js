@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../graphql/mutations";
-import { lecturersByInstitutionId, searchLecturers, listAdmins } from "../../graphql/queries";
+import { lecturersByInstitutionId, searchLecturers, listAdmins,searchLecturerByCourses } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
@@ -316,7 +316,35 @@ const AddLecturer = () => {
         try {
             if (searchIcon === false) {
                 if(searchValue!==""){
-                    if(filterAttribute!=="default" && filterAttribute!==""){
+                    if(filterAttribute==="course"){
+                        let lecturers = await API.graphql({
+                            query:searchLecturerByCourses,
+                            variables:{
+                                filter: {
+                                    and: [
+                                        { coursecode: { matchPhrasePrefix: searchValue } },
+                                        { institutionId : {eq: admin.institutionId}},
+                                        { lecturerId : {eq:null} }
+                                    ]
+                                },
+                                limit:limit
+                            } 
+                        })
+                        console.log(lecturers);
+                        let token=lecturers.data.searchCourses.nextToken;
+                        lecturers=lecturers.data.searchCourses.items;
+                        lecturers.filter((c)=>c!==null && c.institutionId===admin.institutionId);
+                        lecturers = lecturers.filter((value, index, self) =>
+                                    index === self.findIndex((t) => (
+                                t.id === value.id 
+                            ))
+                        )
+                        console.log(lecturers);    
+                        setLecturerList(lecturers);
+                        setNextToken(token);
+                        setSearchIcon(!searchIcon);
+                    }
+                    else if(filterAttribute!=="default" && filterAttribute!==""){
                         
                         let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
                         let variables= JSON.parse(filter);
@@ -500,7 +528,7 @@ const AddLecturer = () => {
                             <option value="firstname" >First Name</option>
                             <option value="lastname" >Last Name</option>
                             <option value="email" >Email</option>
-                            <option value="course">Course</option>
+                            {/* <option>Course Code</option> */}
                         </select>
                     </div>
                 </div>
@@ -543,7 +571,7 @@ const AddLecturer = () => {
                                                     courseData={courses}
                                                     setModal={setIsModalOpened}
                                                     setCourses={setCourses}
-                                                    selectedCourses={val.courses.items}
+                                                    selectedCourses={val?.courses?.items}
                                                     offeredCourses={offeredCourses}
                                                     setSelectedCourses={setSelectedCourses}
                                                     setOfferedCourses={setOfferedCourses}
