@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import { useState } from "react";
+import {API} from "aws-amplify"
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { searchCourses } from "../../graphql/queries";
 
 const style = {
   position: 'absolute',
@@ -17,7 +19,9 @@ const style = {
 export default function AddModal(module) {
 
   const [open, setOpen] = useState(false);
+  const [searchValue,setSearchValue]=useState("");
   const [offeredCourses, setOfferedCourses] = useState([]);
+  const [courses,setCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([])
   const [removed, setRemoved] = useState([])
   const [selected, setSelected] = useState()
@@ -36,7 +40,25 @@ export default function AddModal(module) {
       setSelectedCourses(module.selectedCourses)
 
     } catch (e) {
-      alert("No courses found")
+      //alert("No courses found")
+      console.log(e)
+    }
+  }
+
+  const handleSearch = async()=>{ 
+    try{
+        let search=await API.graphql({
+          query:searchCourses,
+          variables: {
+            filter: {
+              coursecode: {
+                matchPhrasePrefix: searchValue
+              }
+            }}
+        })
+        setCourses(search.data.searchCourses.items);
+    }catch(error){
+      console.log(error);
     }
   }
 
