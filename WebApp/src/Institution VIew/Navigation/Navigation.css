@@ -117,3 +117,34 @@
 .grid {
     height: 80vh;
 }
+/* Add CSS styles for the SearchableDropdown component */
+.searchable-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+input[type="text"] {
+    width: 200px;
+    padding: 8px;
+}
+
+.dropdown-list {
+    position: absolute;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: white;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-list li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-list li:hover {
+    background-color: #f2f2f2;
+}

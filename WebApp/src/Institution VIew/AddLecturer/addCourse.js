@@ -1,7 +1,9 @@
 import { useState } from "react";
 import {API} from "aws-amplify"
 import Box from "@mui/material/Box";
+import Select from 'react-select'
 import Modal from "@mui/material/Modal";
+import SearchableDropdown from "./searchableDropdown";
 import { searchCourses } from "../../graphql/queries";
 
 const style = {
@@ -22,9 +24,16 @@ export default function AddModal(module) {
   const [searchValue,setSearchValue]=useState("");
   const [offeredCourses, setOfferedCourses] = useState([]);
   const [courses,setCourses] = useState([]);
-  const [selectedCourses, setSelectedCourses] = useState([])
-  const [removed, setRemoved] = useState([])
-  const [selected, setSelected] = useState()
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [removed, setRemoved] = useState([]);
+  const [selected, setSelected] = useState();
+  const options = ['Apple', 'Banana', 'Cherry', 'Date', 'Grape', 'Lemon', 'Orange'];
+
+  // const [options,setOptions] = useState([
+  //   { value: 'chocolate', label: 'Chocolate' },
+  //   { value: 'strawberry', label: 'Strawberry' },
+  //   { value: 'vanilla', label: 'Vanilla' }
+  // ])
 
   const handleOpen = async () => {
     setOpen(true)
@@ -45,18 +54,30 @@ export default function AddModal(module) {
     }
   }
 
-  const handleSearch = async()=>{ 
+  const handleSearch = async(event)=>{ 
+   // event.preventDefault()
     try{
-        let search=await API.graphql({
-          query:searchCourses,
-          variables: {
-            filter: {
-              coursecode: {
-                matchPhrasePrefix: searchValue
-              }
-            }}
-        })
-        setCourses(search.data.searchCourses.items);
+        // let search=await API.graphql({
+        //   query:searchCourses,
+        //   variables: {
+        //     filter: {
+        //       and:[
+        //         {  
+        //           coursecode: {
+        //             matchPhrasePrefix: searchValue
+        //          } 
+        //         },
+        //         {
+        //           lecturerId : { 
+        //             eq : null
+        //           }
+        //         } 
+        //       ]
+        //     }
+        //   }
+        // })
+        //setCourses(search.data.searchCourses.items);
+        console.log(event);
     }catch(error){
       console.log(error);
     }
@@ -105,7 +126,6 @@ export default function AddModal(module) {
     offeredCourses.splice(index, 1)
     setOfferedCourses(offeredCourses)
 
-    //event.target.reset()
   }
 
   const handleRemove = async (index) => {
@@ -171,7 +191,7 @@ export default function AddModal(module) {
                 )}
               </tbody>
             </table>
-            <form onSubmit={(e) => handleAdd(e)}>
+            {/* <form onSubmit={(e) => handleAdd(e)}>
               <div className="form-row">
                 <div className="form-group col-6">
                   <select
@@ -179,7 +199,7 @@ export default function AddModal(module) {
                     //value={selected}
                     className="custom-select">
                     <option key="{}"> </option>
-                    {offeredCourses.map((val, key) => {
+                    {courses.map((val, key) => {
                       return (
                         <option key={val.coursecode}
                           value={key}>{val.coursecode}</option>
@@ -190,11 +210,19 @@ export default function AddModal(module) {
                     }
                   </select>
                 </div>
+                
                 <button type="submit"
                   className="btn btn-danger"
                   data-testid="addButton">Add</button>
               </div>
-            </form>
+            </form> */}
+            {/* <div> */}
+               <SearchableDropdown 
+                courses={courses}
+                selectedCourses={selectedCourses}
+                setSelectedCourses={setSelectedCourses} 
+                />
+            {/* </div> */}
             <button
               onClick={handleClose}
               type="submit"
@@ -207,11 +235,7 @@ export default function AddModal(module) {
         </Modal>
 
       </div>
-
-
     </div>
-
-
 
   );
 }

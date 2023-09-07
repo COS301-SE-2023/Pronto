@@ -408,19 +408,9 @@ export const searchCourses=`query SearchCourses(
   ) {
     items {
       id
+      lecturerId
       institutionId
       coursecode
-      activity { 
-        items { 
-          id
-          activityname
-          day
-          start
-          end 
-          venue
-          courseId
-        }
-      }
     }
     nextToken
     total
