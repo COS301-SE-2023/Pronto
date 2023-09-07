@@ -14,12 +14,15 @@ import { useStudent } from "../../ContextProviders/StudentContext";
 
 
 
-const ScheduleTable = ({ navigation }) => {
+const ScheduleTable = ({ navigation,route }) => {
   const [activities, setActivities] = useState([]);
   const [schedule, setSchedule] = useState(null);
   const { student, updateStudent } = useStudent();
   const [timetableLoaded, setTimetableLoaded] = useState(false);
-
+  const param=route.params;
+  //console.log("From schedule")
+  //console.log(navigation) 
+  //console.log(route)
   var scheduleArray = {}
 
   useEffect(() => {
@@ -154,14 +157,14 @@ const ScheduleTable = ({ navigation }) => {
     }
   }
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      fetchActivities()
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     fetchActivities()
+  //   });
 
 
-    return unsubscribe
-  }, [navigation])
+  //   return unsubscribe
+  // }, [navigation])
 
 
   const createScheduleArray = async (modules) => {

@@ -22,13 +22,17 @@ const screenOptions = {
   },
 };
 
-const Tabs = () => {
+const Tabs = ({route}) => {
+  const student= route.params;
+  //console.log("From tabs");
+  //console.log(route);
   return (
-    <Tab.Navigator {...{ screenOptions }}>
+    <Tab.Navigator {...{ screenOptions }} backBehavior="history">
       <Tab.Screen
         name="Timetable"
         testID="tabs"
         component={ScheduleTable}
+        initialParams={student}
         options={{
           tabBarIcon: ({ focused }) => (
             <View

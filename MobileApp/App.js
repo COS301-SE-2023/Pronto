@@ -33,7 +33,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-
+  const [student,setStudent]=useState("")
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
@@ -47,7 +47,7 @@ export default function App() {
       console.log("From app")
       studentInfo=studentInfo.data.getStudent
       console.log(studentInfo);
-      
+      setStudent(studentInfo);
       if(studentInfo===null){
         console.log("Creating new student")
         try{
@@ -72,6 +72,7 @@ export default function App() {
             institutionId: institution.id,
             firstname: authUser.attributes.name,
             lastname: authUser.attributes.family_name,
+            preference:"push",
             userRole: "Student",
             email: email
           }
@@ -79,7 +80,8 @@ export default function App() {
             query: createStudent,
             variables: { input: newStudent }
           })
-        console.log(create);
+         console.log(create);
+         setStudent(create.data.createStudent)
         }catch(error){
           console.log(error)
           console.log("Error fetching student info");
@@ -144,6 +146,7 @@ export default function App() {
             <Stack.Screen
               name="Tabs"
               component={Tabs}
+              initialParams={student}
               options={{ headerShown: false }}
             />
             <Stack.Screen
