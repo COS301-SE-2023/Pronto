@@ -26,7 +26,7 @@ const AddLecturer = () => {
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
     
-    let limit = 2;
+    let limit = 10;
 
     const{admin,setAdmin} = useAdmin();
     const{lecturerList, setLecturerList, nextToken,setNextToken }=useLecturerList()
@@ -47,15 +47,13 @@ const AddLecturer = () => {
                 let mutation = await API.graphql({
                     query: createLecturer,
                     variables: { input: lecturer },
-                    authMode: 'AMAZON_COGNITO_USER_POOLS',
                 });
 
                 lecturer = mutation.data.createLecturer
                 lecturer.courses = {
                     items: []
                 };
-                //lecturers.push(mutation.data.createLecturer)
-
+        
                 let emails;
                 if (admin.institution.lectureremails === null) {
                     emails = [];
@@ -74,7 +72,6 @@ const AddLecturer = () => {
                 let u = await API.graphql({
                     query: updateInstitution,
                     variables: { input: update },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
                 });
                 u = u.data.updateInstitution
                 u.logoUrl = logoUrl;
@@ -93,18 +90,12 @@ const AddLecturer = () => {
             } catch (error) {
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message
-                    if (e.search("Unathorized") !== -1) {
-                        setError("You are not authorized to perform this action.Please log out and log in");
-                    }
-                    else if (e.search("Network") !== -1) {
+                    if (e.search("Network") !== -1) {
                         setError("Request failed due to network issues");
-                    }
-                    else {
-                        setError("Something went wrong.Please try again later");
                     }
                 }
                 else {
-                    setError("Your request could not be processed");
+                    setError("Something went wrong.Please try again later");
                 }
             }
             setFirstName("");
@@ -129,25 +120,18 @@ const AddLecturer = () => {
                 let update = await API.graphql({
                     query: updateCourse,
                     variables: { input: updatedCourseData },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
                 });
                 lecturer.courses.splice(i, 1);
 
             } catch (error) {
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message;
-                    if (e.search("Unathorized") !== -1) {
-                        setError("You are not authorized to perform this action. Please log out and log in");
-                    }
-                    else if (e.search("Network") !== -1) {
+                    if (e.search("Network") !== -1) {
                         setError("Request failed due to network issues");
-                    }
-                    else {
-                        setError("Something went wrong. Please try again later");
                     }
                 }
                 else {
-                    setError("Your request could not be processed");
+                    setError("Something went wrong. Please try again later");
                 }
             }
         }
@@ -174,8 +158,7 @@ const AddLecturer = () => {
 
                 let update = await API.graphql({
                     query: updateCourse,
-                    variables: { input: updatedCourseData },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
+                    variables: { input: updatedCourseData }
                 });
                 lecturer.courses.items.push(update.data.updateCourse);
             }
@@ -183,18 +166,12 @@ const AddLecturer = () => {
         } catch (error) {
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
-                if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action. Please log out and log in");
-                }
-                else if (e.search("Network") !== -1) {
+                if(e.search("Network") !== -1) {
                     setError("Request failed due to network issues");
-                }
-                else {
-                    setError("Something went wrong. Please try again later");
                 }
             }
             else {
-                setError("Your request could not be processed");
+                setError("Something went wrong. Please try again later");
             }
         }
     }
@@ -207,7 +184,6 @@ const AddLecturer = () => {
             let removeMutation = await API.graphql({
                 query: deleteLecturer,
                 variables: { input: lec },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
             });
             let courseList = lecturer.courses;
             if (courseList !== undefined) {
@@ -225,7 +201,6 @@ const AddLecturer = () => {
             let u = await API.graphql({
                 query: updateInstitution,
                 variables: { input: update },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
             });
             let a = admin;
             a.institution = u.data.updateInstitution;
@@ -238,18 +213,12 @@ const AddLecturer = () => {
         catch (error) {
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
-                if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action. Please log out and log in");
-                }
-                else if (e.search("Network") !== -1) {
+               if (e.search("Network") !== -1) {
                     setError("Request failed due to network issues");
-                }
-                else {
-                    setError("Something went wrong. Please try again later");
                 }
             }
             else {
-                setError("Your request could not be processed");
+                setError("Something went wrong. Please try again later");
             }
         }
     }
@@ -257,98 +226,41 @@ const AddLecturer = () => {
     const loadMore = async () => {
         try {
 
-            let nextSet = [];
-            if (searchIcon === false) {
-                nextSet = await API.graphql({
-                    query: lecturersByInstitutionId,
-                    variables: {
-                        institutionId: admin.institutionId,
-                        limit: limit,
-                        nextToken: nextToken
-                    },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
-                });
-                let list = nextSet.data.lecturersByInstitutionId.items;
-                for (let i = 0; i < list.length; i++) {
-                    lecturerList.push(list[i]);
+            if(searchIcon===true){
+                let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}","nextToken":"${nextToken}"}`;
+                
+                let variables= JSON.parse(filter);
+                        
+                let lecturers = await API.graphql({
+                            query:searchLecturers,
+                            variables:variables
+                        })
+                lecturers=lecturers.data.searchLecturers;
+                for(let i=0;i<lecturers.items.length;i++){
+                    lecturerList.push(lecturers.items[i]);
                 }
-                setNextToken(nextSet.data.lecturersByInstitutionId.nextToken);
                 setLecturerList(lecturerList);
+                setNextToken(lecturers.nextToken);
             }
-            else {
-                if (filterAttribute === "firstname") {
-                    let nextSet = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { firstname: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit,
-                            nextToken: nextToken
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    });
-                    setNextToken(nextSet.data.searchLecturers.nextToken);
-                    let list = nextSet.data.searchLecturers.items;
-                    for (let i = 0; i < list.length; i++) {
-                        lecturerList.push(list[i]);
+            else{ 
+                let lecturers=await API.graphql({
+                    query:lecturersByInstitutionId,
+                    variables:{
+                        institutionId:admin.institutionId,
+                        limit:limit,
+                        nextToken:nextToken
                     }
-                    setLecturerList(lecturerList);
+                });
+                lecturers=lecturers.data.lecturersByInstitutionId;
+                  for(let i=0;i<lecturers.items.length;i++){
+                    lecturerList.push(lecturers.items[i]);
                 }
-                else if (filterAttribute === "lastname") {
-                    let nextSet = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { lastname: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit,
-                            nextToken: nextToken
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    })
-
-
-                    let list = nextSet.data.searchLecturers.items;
-                    for (let i = 0; i < list.length; i++) {
-                        lecturerList.push(list[i]);
-                    }
-
-                    setNextToken(nextSet.data.searchLecturers.nextToken);
-                    setLecturerList(lecturerList);
-                }
-                else if (filterAttribute === "email") {
-                    let nextSet = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { email: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit,
-                            nextToken: nextToken
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    })
-
-                    let list = nextSet.data.searchLecturers.items;
-                    for (let i = 0; i < list.length; i++) {
-                        lecturerList.push(list[i]);
-                    }
-                    setNextToken(nextSet.data.searchLecturers.nextToken);
-                    setLecturerList(lecturerList);
-                }
+                setLecturerList(lecturerList);
+                setNextToken(lecturers.nextToken);
             }
 
         } catch (error) {
+            //console.log(error);
             setError("Something went wrong. Try again later");
         }
     }
@@ -356,7 +268,7 @@ const AddLecturer = () => {
     const fetchLecturers = async () => {
         try {
             
-            if(lecturerList.length<2){
+            if(lecturerList.length<10){
             let lecturers = await API.graphql({
                     query: lecturersByInstitutionId,
                     variables: {
@@ -374,7 +286,6 @@ const AddLecturer = () => {
             setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
             setOfferedCourses(offeredCourses);
             setLecturerList(lecturers.data.lecturersByInstitutionId.items);
-           // }
         }
              
         }
@@ -382,18 +293,12 @@ const AddLecturer = () => {
             console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
-                if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action. Please log out and log in");
-                }
-                else if (e.search("Network") !== -1) {
+                if (e.search("Network") !== -1) {
                     setError("Request failed due to network issues");
-                }
-                else {
-                    setError("Something went wrong. Please try again later");
                 }
             }
             else {
-                setError("Your request could not be processed");
+                setError("Something went wrong. Please try again later");
             }
         }
     }
@@ -403,6 +308,7 @@ const AddLecturer = () => {
             if (searchIcon === false) {
                 if(searchValue!==""){
                     if(filterAttribute!=="default" && filterAttribute!==""){
+                        
                         let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
                         let variables= JSON.parse(filter);
                         console.log(variables);
@@ -431,91 +337,21 @@ const AddLecturer = () => {
                 setNextToken(lecturers.nextToken);
                 setSearchIcon(!searchIcon)
             }  
-            //     if (filterAttribute === "firstname") {
-            //         let search = await API.graphql({
-            //             query: searchLecturers,
-            //             variables: {
-            //                 filter: {
-            //                     and: [
-            //                         { firstname: { matchPhrasePrefix: searchValue } },
-            //                         { institutionId: { eq: admin.institutionId } }
-            //                     ]
-            //                 },
-            //                 limit: limit
-            //             },
-            //             authMode: "AMAZON_COGNITO_USER_POOLS"
-            //         });
-            //         setNextToken(search.data.searchLecturers.nextToken);
-            //         setLecturerList(search.data.searchLecturers.items);
-            //     }
-            //     else if (filterAttribute === "lastname") {
-            //         let search = await API.graphql({
-            //             query: searchLecturers,
-            //             variables: {
-            //                 filter: {
-            //                     and: [
-            //                         { lastname: { matchPhrasePrefix: searchValue } },
-            //                         { institutionId: { eq: admin.institutionId } }
-            //                     ]
-            //                 },
-            //                 limit: limit
-            //             },
-            //             authMode: "AMAZON_COGNITO_USER_POOLS"
-            //         });
-            //         setNextToken(search.data.searchLecturers.nextToken);
-            //         setLecturerList(search.data.searchLecturers.items);
-            //     }
-            //     else if (filterAttribute === "email") {
-            //         let search = await API.graphql({
-            //             query: searchLecturers,
-            //             variables: {
-            //                 filter: {
-            //                     and: [
-            //                         { email: { matchPhrasePrefix: searchValue } },
-            //                         { institutionId: { eq: admin.institutionId } }
-            //                     ]
-            //                 },
-            //                 limit: limit
-            //             },
-            //             authMode: "AMAZON_COGNITO_USER_POOLS"
-            //         });
-
-            //         setNextToken(search.data.searchLecturers.nextToken);
-            //         setLecturerList(search.data.searchLecturers.items);
-            //     }
-            //     setSearchIcon(!searchIcon);
-            // }
-            // else {
-            //     let lecturers = await API.graphql({
-            //         query: lecturersByInstitutionId,
-            //         variables: {
-            //             institutionId: admin.institutionId,
-            //             limit: limit
-            //         },
-            //         authMode: "AMAZON_COGNITO_USER_POOLS"
-            //     });
-            //     setLecturerList(lecturers.data.lecturersByInstitutionId.items);
-            //     setSearchIcon(!searchIcon);
-            // }
+            
         } catch (error) {
             console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
-                if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action. Please log out and log in");
-                }
-                else if (e.search("Network") !== -1) {
+                if(e.search("Network") !== -1) {
                     setError("Request failed due to network issues");
                 }
-                else {
-                    setError("Something went wrong. Please try again later");
+            else {
+                    setError("Something went wrong. Please try again later");        
                 }
             }
-            else {
-                setError("Your request could not be processed");
-            }
-        }
+       }
     }
+
     useEffect(() => {
         fetchLecturers();
     }, [])

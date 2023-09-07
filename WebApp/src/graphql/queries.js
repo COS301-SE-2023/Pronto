@@ -389,4 +389,55 @@ export const announcementsByDate=`query AnnouncementsByDate (
               nextToken
             }
 }`
-           
+
+export const searchCourses=`query SearchCourses(
+  $filter: SearchableCourseFilterInput
+  $sort: [SearchableCourseSortInput]
+  $limit: Int
+  $nextToken: String
+  $from: Int
+  $aggregates: [SearchableCourseAggregationInput]
+) {
+  searchCourses(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+    aggregates: $aggregates
+  ) {
+    items {
+      id
+      institutionId
+      coursecode
+      activity { 
+        items { 
+          id
+          activityname
+          day
+          start
+          end 
+          venue
+          courseId
+        }
+      }
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
+`
