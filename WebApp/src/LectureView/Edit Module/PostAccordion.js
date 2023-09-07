@@ -5,8 +5,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import GoogleMapReact from 'google-map-react';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -31,7 +29,8 @@ export default function PostAccordion(course) {
   const [activity, setActivity] = useState("");
   const [successMessage,setSuccessMessage]=useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
-
+  
+  let act="";
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -54,18 +53,16 @@ export default function PostAccordion(course) {
   const handleAddVenue = async(event)=>{
     event.preventDefault();
     try{
-      if(activity===""){
-        setError("Pick an activity to update");
-      }
-      else{
-        let update=await API.graphql({
-          query:updateActivity,
-          variables:{input:{id:activity.id,coordinates:selectedLocation}}
-        })
+        // let update=await API.graphql({
+        //   query:updateActivity,
+        //   variables:{input:{id:activity.id,coordinates:selectedLocation}}
+        // })
         setSuccessMessage("Venue updated successfully");
-        setSelectedLocation("")
-      }
+        setSelectedLocation("");
+        console.log(activity);
+     // }
     }catch(e){
+      setError("Something went wrong.Please try again later");
       console.log(e);
     }
   }
@@ -102,8 +99,10 @@ export default function PostAccordion(course) {
       
       if (event < course.course.activity.items.length && event > 0 && event !== "") {
         setActivity(course.course.activity.items[event]);
-       
+        //act=course.course.activity.items[event]
       }
+      
+      console.log(activity);
     } catch (error) {
       setError("Something went wrong. Please try again later");
     }
@@ -113,7 +112,6 @@ export default function PostAccordion(course) {
   const handleSubmit = async (event, type) => {
     try {
       event.preventDefault()
-      let d = new Date().getFullYear()
       let announcement = {
         courseId: course.course.id,
         body: body,
@@ -126,21 +124,20 @@ export default function PostAccordion(course) {
       let mutation = await API.graphql({
         query: createAnnouncement,
         variables: { input: announcement },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
       });
 
       setSuccessMessage("Announcement posted succesfully");
     } catch (error) {
+      if(error.errors!==undefined){
       let e = error.errors[0].message;
-      if (e.search("Not Authorized") !== -1) {
-        setError("You are not authorized to perform this action. Please log out and log in");
-      }
-      else if (e.search("Network") !== -1) {
+      
+      if (e.search("Network") !== -1) {
         setError("Request failed due to network issues");
       }
-      else {
-        setError("Something went wrong. Please try again later");
-      }
+    } 
+    else {
+      setError("Something went wrong. Please try again later");
+    }
     }
     setTitle("");
     setBody("");
@@ -299,14 +296,15 @@ export default function PostAccordion(course) {
         </AccordionSummary>
         <AccordionDetails>
           <select
-            onClick={(e) => handleSelectActivity(e.target.value)}
+            onClick={(e) =>setActivity(course.course.activity.items[e.target.value])}
             className="custom-select"
+            defaultValue={"Select Activity"}
             >
             <option selected disabled>Select Activity</option>
             {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
               return (
                 <option key={key}
-                  value={key}>{val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "")}</option>
+                  value={key}>{val.day+" "+val.start+"-"+val.end+" "+val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "")}</option>
               )
             }
             )
@@ -372,38 +370,7 @@ export default function PostAccordion(course) {
         </AccordionDetails>
       </Accordion>
 
-      {/* <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-        data-testid={"accordion4"}
-        style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
-          aria-controls="panel4bh-content"
-          id="panel4bh-header"
-          data-testid={"accordionDrop4"}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              flexShrink: 0,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Remove lecture venue
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div className="venue">
-            IT 4-4
-            <IconButton aria-label="delete" size="large" className="delete-btn">
-              <DeleteIcon style={{ color: "#e32f45" }} />
-            </IconButton>
-          </div>
-        </AccordionDetails>
-      </Accordion> */}
+       
     </div>
   );
 }

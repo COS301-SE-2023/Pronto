@@ -23,6 +23,9 @@ export const listLecturers=`query ListLecturers(
             items{
               id
               activityname
+              day
+              start
+              end
               venue
               coordinates
             }
