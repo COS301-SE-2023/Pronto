@@ -294,14 +294,7 @@ const AddLecturer = () => {
                             },     
                      });
 
-                //let courses = admin.institution.courses.items;
-                // for (let i = 0; i < courses.length; i++) {
-                //     if (courses[i].lecturerId === null) {
-                //         offeredCourses.push(courses[i]);
-                //     }   
-                // }
                 setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
-                //setOfferedCourses(offeredCourses);
                 setLecturerList(lecturers.data.lecturersByInstitutionId.items);
             }
         }
@@ -491,7 +484,6 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
                             <div className="input-group-append">
                                {searchIcon===false? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{"color":"#e32f45"}}/>}
@@ -508,6 +500,7 @@ const AddLecturer = () => {
                             <option value="firstname" >First Name</option>
                             <option value="lastname" >Last Name</option>
                             <option value="email" >Email</option>
+                            <option value="course">Course</option>
                         </select>
                     </div>
                 </div>

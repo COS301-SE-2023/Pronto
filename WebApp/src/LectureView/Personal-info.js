@@ -23,8 +23,7 @@ const PersonalInfoPage = () => {
    
     const [user,setUser]=useState();
     const [successMessage,setSuccessMessage] =useState("");
-    const [firstName,setFirstName]=useState();
-    const [lastName,setLastName]=useState();
+ 
 
     const {lecturer,setLecturer} = useLecturer();
 
@@ -81,10 +80,10 @@ const PersonalInfoPage = () => {
 
     // }
 
-    useEffect(() => {
-      //  fetchLecturer()
-      //fetchUser();
-    }, [])
+    // useEffect(() => {
+    //   //  fetchLecturer()
+    //   //fetchUser();
+    // }, [])
 
     return (
 

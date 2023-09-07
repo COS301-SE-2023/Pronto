@@ -76,14 +76,12 @@ function Login() {
       setsignInError("");
       //navigate to lecturer home page
       await fetchAdmin().then(()=>navigate("/institution/dashboard"))
-      //navigate("/institution/dashboard");
     } catch (e) {
       setsignInError(e.message);
     }
     setLoading(false);
   };
 
- 
 
   //function for sign up
   const onSignUpPressed = async (event) => {

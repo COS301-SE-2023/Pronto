@@ -434,3 +434,51 @@ export const searchCourses=`query SearchCourses(
   }
 }
 `
+export const searchLecturerByCourses=`query SearchCourses(
+  $filter: SearchableCourseFilterInput
+  $sort: [SearchableCourseSortInput]
+  $limit: Int
+  $nextToken: String
+  $from: Int
+  $aggregates: [SearchableCourseAggregationInput]
+) {
+  searchCourses(
+    filter: $filter
+    sort: $sort
+    limit: $limit
+    nextToken: $nextToken
+    from: $from
+    aggregates: $aggregates
+  ) {
+    items {
+      id
+      lecturerId
+      lecturer { 
+        id
+        firstname
+        lastname
+        instituionId
+      }
+      institutionId
+      coursecode
+
+    }
+    nextToken
+    total
+    aggregateItems {
+      name
+      result {
+        ... on SearchableAggregateScalarResult {
+          value
+        }
+        ... on SearchableAggregateBucketResult {
+          buckets {
+            key
+            doc_count
+          }
+        }
+      }
+    }
+  }
+}
+`
