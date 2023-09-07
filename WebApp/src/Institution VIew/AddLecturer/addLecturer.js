@@ -2,11 +2,11 @@ import { React, useState, useEffect } from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins } from "../../graphql/queries";
-import { useLocation } from 'react-router-dom';
 import { API, Auth } from 'aws-amplify';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import ClearIcon from '@mui/icons-material/Clear';
 import HelpButton from '../../HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
 import { useAdmin } from "../../ContextProviders/AdminContext";
@@ -20,15 +20,12 @@ const AddLecturer = () => {
     const [courses, setCourses] = useState([]);
     const [filterAttribute, setFilterAttribute] = useState("");
     const [searchValue, setSearchValue] = useState("");
-    //const [lecturers, setLecturers] = useState([]);
     const [isModalOpened, setIsModalOpened] = useState(false);
     const [searchIcon, setSearchIcon] = useState(false);
     const [offeredCourses, setOfferedCourses] = useState([]);
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
-    const state = useLocation();
-    //const [admin, setAdmin] = useState(state.state);
-   // const [nextToken, setNextToken] = useState("");
+    
     let limit = 2;
 
     const{admin,setAdmin} = useAdmin();
@@ -404,77 +401,104 @@ const AddLecturer = () => {
     const handleSearch = async () => {
         try {
             if (searchIcon === false) {
-                // let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] }}`;
-                // let variables= JSON.parse(filter);
-                // console.log(variables);
-
-                if (filterAttribute === "firstname") {
-                    let search = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { firstname: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    });
-                    setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturerList(search.data.searchLecturers.items);
+                if(searchValue!==""){
+                    if(filterAttribute!=="default" && filterAttribute!==""){
+                        let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
+                        let variables= JSON.parse(filter);
+                        console.log(variables);
+                        
+                        let lecturers = await API.graphql({
+                            query:searchLecturers,
+                            variables:variables
+                        })
+                        lecturers=lecturers.data.searchLecturers;
+                        setLecturerList(lecturers.items);
+                        setNextToken(lecturers.nextToken);
+                        setSearchIcon(!searchIcon);
+                    }
                 }
-                else if (filterAttribute === "lastname") {
-                    let search = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { lastname: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    });
-                    setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturerList(search.data.searchLecturers.items);
-                }
-                else if (filterAttribute === "email") {
-                    let search = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { email: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    });
-
-                    setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturerList(search.data.searchLecturers.items);
-                }
-                setSearchIcon(!searchIcon);
-            }
-            else {
-                let lecturers = await API.graphql({
-                    query: lecturersByInstitutionId,
-                    variables: {
-                        institutionId: admin.institutionId,
-                        limit: limit
-                    },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
+            }   
+            else{ 
+                let lecturers=await API.graphql({
+                    query:lecturersByInstitutionId,
+                    variables:{ 
+                        institutionId :admin.institutionId,
+                        limit:limit
+                    }
                 });
-                setLecturerList(lecturers.data.lecturersByInstitutionId.items);
-                setSearchIcon(!searchIcon);
-            }
+                lecturers=lecturers.data.lecturersByInstitutionId;
+                setLecturerList(lecturers.items);
+                setNextToken(lecturers.nextToken);
+                setSearchIcon(!searchIcon)
+            }  
+            //     if (filterAttribute === "firstname") {
+            //         let search = await API.graphql({
+            //             query: searchLecturers,
+            //             variables: {
+            //                 filter: {
+            //                     and: [
+            //                         { firstname: { matchPhrasePrefix: searchValue } },
+            //                         { institutionId: { eq: admin.institutionId } }
+            //                     ]
+            //                 },
+            //                 limit: limit
+            //             },
+            //             authMode: "AMAZON_COGNITO_USER_POOLS"
+            //         });
+            //         setNextToken(search.data.searchLecturers.nextToken);
+            //         setLecturerList(search.data.searchLecturers.items);
+            //     }
+            //     else if (filterAttribute === "lastname") {
+            //         let search = await API.graphql({
+            //             query: searchLecturers,
+            //             variables: {
+            //                 filter: {
+            //                     and: [
+            //                         { lastname: { matchPhrasePrefix: searchValue } },
+            //                         { institutionId: { eq: admin.institutionId } }
+            //                     ]
+            //                 },
+            //                 limit: limit
+            //             },
+            //             authMode: "AMAZON_COGNITO_USER_POOLS"
+            //         });
+            //         setNextToken(search.data.searchLecturers.nextToken);
+            //         setLecturerList(search.data.searchLecturers.items);
+            //     }
+            //     else if (filterAttribute === "email") {
+            //         let search = await API.graphql({
+            //             query: searchLecturers,
+            //             variables: {
+            //                 filter: {
+            //                     and: [
+            //                         { email: { matchPhrasePrefix: searchValue } },
+            //                         { institutionId: { eq: admin.institutionId } }
+            //                     ]
+            //                 },
+            //                 limit: limit
+            //             },
+            //             authMode: "AMAZON_COGNITO_USER_POOLS"
+            //         });
+
+            //         setNextToken(search.data.searchLecturers.nextToken);
+            //         setLecturerList(search.data.searchLecturers.items);
+            //     }
+            //     setSearchIcon(!searchIcon);
+            // }
+            // else {
+            //     let lecturers = await API.graphql({
+            //         query: lecturersByInstitutionId,
+            //         variables: {
+            //             institutionId: admin.institutionId,
+            //             limit: limit
+            //         },
+            //         authMode: "AMAZON_COGNITO_USER_POOLS"
+            //     });
+            //     setLecturerList(lecturers.data.lecturersByInstitutionId.items);
+            //     setSearchIcon(!searchIcon);
+            // }
         } catch (error) {
+            console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Unathorized") !== -1) {
@@ -615,10 +639,10 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
+                            //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
                             <div className="input-group-append">
-                                <SearchSharpIcon style={{ "color": "#e32f45" }} />
+                               {searchIcon===false? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{"color":"#e32f45"}}/>}
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}
@@ -628,7 +652,7 @@ const AddLecturer = () => {
                             id="inputGroupSelect01"
                             data-testid="filterSelect"
                         >
-                            <option value={'default'}>Filter by</option>
+                            <option value="default">Filter by</option>
                             <option value="firstname" >First Name</option>
                             <option value="lastname" >Last Name</option>
                             <option value="email" >Email</option>
@@ -704,8 +728,6 @@ const AddLecturer = () => {
                     </div>
                 </div>
             </main>
-
-
 
         </div>
     );
