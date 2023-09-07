@@ -1,5 +1,4 @@
-
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,7 +13,7 @@ import {
   Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Auth,API } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { updateStudentInfo } from "../../graphql/mutations";
 
@@ -24,17 +23,16 @@ const NotificationPreferences = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalVisible, setModalVisible] = useState(false); // State to control modal visibility
   const [isVerificationModalVisible, setVerificationModalVisible] =
-      useState(false); // State to control the verification modal visibility
+    useState(false); // State to control the verification modal visibility
   const [enteredVerificationCode, setEnteredVerificationCode] = useState("");
   const [email, setEmail] = useState(null);
   const [isEmailModalVisible, setEmailModalVisible] = useState(false);
   const [isEmailVerificationModalVisible, setEmailVerificationModalVisible] =
-      useState(false);
+    useState(false);
   const [enteredEmailVerificationCode, setEnteredEmailVerificationCode] =
     useState("");
-  
-  const{student,updateStudent}=useStudent(); 
 
+  const { student, updateStudent } = useStudent();
 
   const fetchUserEmail = async () => {
     try {
@@ -56,22 +54,22 @@ const NotificationPreferences = () => {
     }
   };
 
-  const fetchStudent =async()=>{
-    try{
-      if(student===null){
-        let user =await Auth.currentAuthenticatedUser()
-        let studentEmail=user.attributes.email;
+  const fetchStudent = async () => {
+    try {
+      if (student === null) {
+        let user = await Auth.currentAuthenticatedUser()
+        let studentEmail = user.attributes.email;
         let stu = await API.graphql({
-            query: listStudents,
-            variables: {
-              filter: {
-                email: {
-                  eq: studentEmail
-                }
+          query: listStudents,
+          variables: {
+            filter: {
+              email: {
+                eq: studentEmail
               }
             }
-          })
-      
+          }
+        })
+
         let found = false
         for (let i = 0; i < stu.data.listStudents.items.length; i++) {
           if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
@@ -80,13 +78,13 @@ const NotificationPreferences = () => {
             break
           };
         };
-        
-        if(found===false){
+
+        if (found === false) {
           throw Error();
         }
         updateStudent(student);
       }
-    }catch(e){
+    } catch (e) {
       console.log(e)
     }
   }
@@ -105,29 +103,29 @@ const NotificationPreferences = () => {
     }
   };
 
-  const handleSavePreferences = async() => {
-    
-    try{
+  const handleSavePreferences = async () => {
 
-      let update=await API.graphql({
-        query:updateStudentInfo,
-        variables:{input :{id:student.id,preference:selectedOption}}
-      }) 
-     
-      student.preference=selectedOption;
+    try {
+
+      let update = await API.graphql({
+        query: updateStudentInfo,
+        variables: { input: { id: student.id, preference: selectedOption } }
+      })
+
+      student.preference = selectedOption;
       updateStudent(student);
       Alert.alert(
         "Preferences Updated",
         `Preference successfully updated to ${selectedOption}`
       );
-    }catch(e){
+    } catch (e) {
       Alert.alert("Failed to update preference");
     }
 
     setShowSaveButton(false);
   };
 
-   useEffect(() => {
+  useEffect(() => {
     fetchStudent();
   }, [])
 
@@ -161,8 +159,8 @@ const NotificationPreferences = () => {
     if (!saPhoneNumberRegex.test(number)) {
       // Display an error message for invalid phone numbers
       Alert.alert(
-          "Invalid Phone Number",
-          "Please enter a valid South African phone number."
+        "Invalid Phone Number",
+        "Please enter a valid South African phone number."
       );
       return;
     }
@@ -188,8 +186,8 @@ const NotificationPreferences = () => {
     // For example, show a success message or navigate to the next step in the app
     // For this example, let's show an alert:
     Alert.alert(
-        "Email Verification Successful",
-        "Your email has been verified successfully."
+      "Email Verification Successful",
+      "Your email has been verified successfully."
     );
 
     // Close the email verification modal and show the Save button
@@ -204,8 +202,8 @@ const NotificationPreferences = () => {
     // For example, show a success message or navigate to the next step in the app
     // For this example, let's show an alert:
     Alert.alert(
-        "Verification Successful",
-        "Your phone number has been verified successfully."
+      "Verification Successful",
+      "Your phone number has been verified successfully."
     );
 
     setVerificationModalVisible(false);
@@ -213,12 +211,11 @@ const NotificationPreferences = () => {
   };
 
   return (
-
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Notification Preferences</Text>
         <Text style={{ marginBottom: 20, textAlign: "center" }}>
-          This is how you will receive notifications from your lecturer. Your notification preference is currently set to <Text style={styles.optionText}>{student === null ? "" : student.preference===undefined?  "push" : student.preference===null?  " push" : student.preference  }</Text> 
+          This is how you will receive notifications from your lecturer. Your notification preference is currently set to <Text style={styles.optionText}>{student === null ? "" : student.preference === undefined ? "push" : student.preference === null ? " push" : student.preference}</Text>
         </Text>
         <ImageBackground
           resizeMode="contain"
@@ -262,237 +259,201 @@ const NotificationPreferences = () => {
         </TouchableOpacity>
 
         {showSaveButton ? (
-
           <TouchableOpacity
-              testID='email-option'
-              style={[
-                styles.option,
-                selectedOption === "email" && styles.selectedOption,
-              ]}
-              onPress={() => handleOptionSelect("email")}
+            style={styles.saveButton}
+            onPress={handleSavePreferences}
           >
-            <Text style={styles.optionText}>Email</Text>
+            <View style={styles.saveButtonContent}>
+              <Text style={styles.saveButtonText}>Save</Text>
+              <Icon
+                name="check"
+                size={20}
+                color="#fff"
+                style={styles.checkIcon}
+              />
+            </View>
           </TouchableOpacity>
-
-          <TouchableOpacity
-              testID="sms-option"
-              style={[
-                styles.option,
-                selectedOption === "sms" && styles.selectedOption,
-              ]}
-              onPress={() => handleOptionSelect("sms")}
-          >
-            <Text style={styles.optionText}>SMS</Text>
+        ) : (
+          <TouchableOpacity style={styles.disabledSaveButton} disabled>
+            <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
+        )}
 
-          <TouchableOpacity
-              testID="push-option"
-              style={[
-                styles.option,
-                selectedOption === "push" && styles.selectedOption,
-              ]}
-              onPress={() => handleOptionSelect("push")}
-          >
-            <Text style={styles.optionText}>Push Notifications</Text>
-          </TouchableOpacity>
+        {/* Modal for entering phone number */}
+        <Modal visible={isModalVisible} transparent animationType="fade">
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeModalIcon}
+                  onPress={closeModalAndDeselectOption}
+                >
+                  <Icon name="close" size={24} color="gray" />
+                </TouchableOpacity>
+                <Text style={styles.modalTitle}>Enter Your Phone Number</Text>
 
-          {showSaveButton ? (
-              <TouchableOpacity
-                  style={styles.saveButton}
-                  onPress={handleSavePreferences}
-              >
-                <View style={styles.saveButtonContent}>
-                  <Text style={styles.saveButtonText}>Save</Text>
-                  <Icon
-                      name="check"
-                      size={20}
-                      color="#fff"
-                      style={styles.checkIcon}
+                {/* South African flag and number format */}
+                <View style={styles.phoneNumberInputContainer}>
+                  <Image
+                    source={require("../../assets/icons/SouthAfricaFlag.png")}
+                    style={styles.flagIcon}
                   />
-                </View>
-              </TouchableOpacity>
-          ) : (
-              <TouchableOpacity style={styles.disabledSaveButton} disabled>
-                <Text style={styles.saveButtonText}>Save</Text>
-              </TouchableOpacity>
-          )}
-
-          {/* Modal for entering phone number */}
-          <Modal visible={isModalVisible} transparent animationType="fade">
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-              <View style={styles.modalBackground}>
-                <View style={styles.modalContent}>
-                  <TouchableOpacity
-                      style={styles.closeModalIcon}
-                      onPress={closeModalAndDeselectOption}
-                  >
-                    <Icon name="close" size={24} color="gray" />
-                  </TouchableOpacity>
-                  <Text style={styles.modalTitle}>Enter Your Phone Number</Text>
-
-                  {/* South African flag and number format */}
-                  <View style={styles.phoneNumberInputContainer}>
-                    <Image
-                        source={require("../../assets/icons/SouthAfricaFlag.png")}
-                        style={styles.flagIcon}
-                    />
-                    <Text style={styles.phoneNumberPrefix}>+27</Text>
-                    <TextInput
-                        style={styles.modalInput}
-                        placeholder="Phone Number"
-                        value={phoneNumber}
-                        onChangeText={setPhoneNumber}
-                        keyboardType="phone-pad"
-                    />
-                  </View>
-
-                  <TouchableOpacity
-                      style={styles.modalNextButton}
-                      onPress={() => savePhoneNumber(phoneNumber)}
-                  >
-                    <Text style={styles.saveButtonText}>Next</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                      style={styles.modalCancelButton}
-                      onPress={closeModalAndDeselectOption} // Call the close function when canceling from the modal
-                  >
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-
-          <Modal
-              visible={isVerificationModalVisible}
-              transparent
-              animationType="fade"
-          >
-            <TouchableWithoutFeedback
-                onPress={() => setVerificationModalVisible(false)}
-            >
-              <View style={styles.modalBackground}>
-                <View style={styles.modalContent}>
-                  <TouchableOpacity
-                      style={styles.closeModalIcon}
-                      onPress={() => {
-                        setSelectedOption(null);
-                        setShowSaveButton(false);
-                        setVerificationModalVisible(false);
-                      }}
-                  >
-                    <Icon name="close" size={24} color="gray" />
-                  </TouchableOpacity>
-                  <Text style={styles.modalTitle}>Enter Verification Code</Text>
-
+                  <Text style={styles.phoneNumberPrefix}>+27</Text>
                   <TextInput
-                      style={styles.verificationInput}
-                      placeholder="Verification Code"
-                      keyboardType="numeric"
-                      value={enteredVerificationCode}
-                      onChangeText={setEnteredVerificationCode}
+                    style={styles.modalInput}
+                    placeholder="Phone Number"
+                    value={phoneNumber}
+                    onChangeText={setPhoneNumber}
+                    keyboardType="phone-pad"
                   />
+                </View>
 
-                  <TouchableOpacity
-                      style={styles.modalNextButton}
-                      onPress={() =>
-                          handleVerificationCode(enteredVerificationCode)
-                      }
-                  >
-                    <Text style={styles.saveButtonText}>Verify</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                      style={styles.modalCancelButton}
-                      onPress={() => {
-                        setSelectedOption(null);
-                        setShowSaveButton(false);
-                        setVerificationModalVisible(false);
-                      }}
-                  >
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={styles.modalNextButton}
+                  onPress={() => savePhoneNumber(phoneNumber)}
+                >
+                  <Text style={styles.saveButtonText}>Next</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalCancelButton}
+                  onPress={closeModalAndDeselectOption} // Call the close function when canceling from the modal
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
               </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-          <Modal visible={isEmailModalVisible} transparent animationType="fade">
-            <TouchableWithoutFeedback onPress={closeEmailModalAndClearOption}>
-              <View style={styles.modalBackground}>
-                <View style={styles.modalContent}>
-                  <TouchableOpacity
-                      style={styles.closeModalIcon}
-                      onPress={closeEmailModalAndClearOption}
-                  >
-                    <Icon name="close" size={24} color="gray" />
-                  </TouchableOpacity>
-                  <Text style={styles.modalTitle}>Your Current Email</Text>
-                  <Text style={styles.currentEmailText}>
-                    {email
-                        ? `Your current email is set to: ${email}`
-                        : "Email not available"}
-                  </Text>
-                  <TouchableOpacity
-                      style={styles.modalNextButton}
-                      onPress={handleEmailConfirm}
-                  >
-                    <Text style={styles.saveButtonText}>Next</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-          <Modal
-              visible={isEmailVerificationModalVisible}
-              transparent
-              animationType="fade"
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+
+        <Modal
+          visible={isVerificationModalVisible}
+          transparent
+          animationType="fade"
+        >
+          <TouchableWithoutFeedback
+            onPress={() => setVerificationModalVisible(false)}
           >
-            <TouchableWithoutFeedback
-                onPress={() => setEmailVerificationModalVisible(false)}
-            >
-              <View style={styles.modalBackground}>
-                <View style={styles.modalContent}>
-                  <TouchableOpacity
-                      style={styles.closeModalIcon}
-                      onPress={() => {
-                        setSelectedOption(null);
-                        setShowSaveButton(false);
-                        setEmailVerificationModalVisible(false);
-                      }}
-                  >
-                    <Icon name="close" size={24} color="gray" />
-                  </TouchableOpacity>
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeModalIcon}
+                  onPress={() => {
+                    setSelectedOption(null);
+                    setShowSaveButton(false);
+                    setVerificationModalVisible(false);
+                  }}
+                >
+                  <Icon name="close" size={24} color="gray" />
+                </TouchableOpacity>
+                <Text style={styles.modalTitle}>Enter Verification Code</Text>
 
-                  <Text style={styles.modalTitle}>Enter Verification Code</Text>
+                <TextInput
+                  style={styles.verificationInput}
+                  placeholder="Verification Code"
+                  keyboardType="numeric"
+                  value={enteredVerificationCode}
+                  onChangeText={setEnteredVerificationCode}
+                />
 
-                  <TextInput
-                      testID='verification-code'
-                      style={styles.verificationInput}
-                      placeholder="Verification Code"
-                      keyboardType="numeric"
-                      value={enteredEmailVerificationCode}
-                      onChangeText={setEnteredEmailVerificationCode}
-                  />
-
-                  <TouchableOpacity
-                      style={styles.modalNextButton}
-                      onPress={() =>
-                          handleEmailVerificationCode(enteredEmailVerificationCode)
-                      }
-                  >
-                    <Text style={styles.saveButtonText}>Verify</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                      style={styles.modalCancelButton}
-                      onPress={handleCancelEmailVerification}
-                  >
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={styles.modalNextButton}
+                  onPress={() =>
+                    handleVerificationCode(enteredVerificationCode)
+                  }
+                >
+                  <Text style={styles.saveButtonText}>Verify</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalCancelButton}
+                  onPress={() => {
+                    setSelectedOption(null);
+                    setShowSaveButton(false);
+                    setVerificationModalVisible(false);
+                  }}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
               </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-        </View>
-      </SafeAreaView>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+        <Modal visible={isEmailModalVisible} transparent animationType="fade">
+          <TouchableWithoutFeedback onPress={closeEmailModalAndClearOption}>
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeModalIcon}
+                  onPress={closeEmailModalAndClearOption}
+                >
+                  <Icon name="close" size={24} color="gray" />
+                </TouchableOpacity>
+                <Text style={styles.modalTitle}>Your Current Email</Text>
+                <Text style={styles.currentEmailText}>
+                  {email
+                    ? `Your current email is set to: ${email}`
+                    : "Email not available"}
+                </Text>
+                <TouchableOpacity
+                  style={styles.modalNextButton}
+                  onPress={handleEmailConfirm}
+                >
+                  <Text style={styles.saveButtonText}>Next</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+        <Modal
+          visible={isEmailVerificationModalVisible}
+          transparent
+          animationType="fade"
+        >
+          <TouchableWithoutFeedback
+            onPress={() => setEmailVerificationModalVisible(false)}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeModalIcon}
+                  onPress={() => {
+                    setSelectedOption(null);
+                    setShowSaveButton(false);
+                    setEmailVerificationModalVisible(false);
+                  }}
+                >
+                  <Icon name="close" size={24} color="gray" />
+                </TouchableOpacity>
+
+                <Text style={styles.modalTitle}>Enter Verification Code</Text>
+
+                <TextInput
+                  style={styles.verificationInput}
+                  placeholder="Verification Code"
+                  keyboardType="numeric"
+                  value={enteredEmailVerificationCode}
+                  onChangeText={setEnteredEmailVerificationCode}
+                />
+
+                <TouchableOpacity
+                  style={styles.modalNextButton}
+                  onPress={() =>
+                    handleEmailVerificationCode(enteredEmailVerificationCode)
+                  }
+                >
+                  <Text style={styles.saveButtonText}>Verify</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalCancelButton}
+                  onPress={handleCancelEmailVerification}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </View>
+    </SafeAreaView>
   );
 };
 
