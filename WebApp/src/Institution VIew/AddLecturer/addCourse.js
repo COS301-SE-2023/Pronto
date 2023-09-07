@@ -35,11 +35,7 @@ export default function AddModal(module) {
       for (let i = 0; i < module.selectedCourses.length; i++) {
         selectedCourses.push(module.selectedCourses[i]);
       }
-      //setOfferedCourses(offeredCourses);
       setSelectedCourses(selectedCourses);
-
-      
-     // console.log(module.selectedCourses);
     } catch (e) {
       //alert("No courses found")
       console.log(e)

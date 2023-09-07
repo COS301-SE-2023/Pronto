@@ -82,7 +82,7 @@ const AddLecturer = () => {
 
                 //Add lecturer to courses
                 await addCourses(lecturer, selectedCourses)
-                if (lecturerList.length <= 3) {
+                if (lecturerList.length <= 10) {
                     lecturerList.push(lecturer);
                     setLecturerList(lecturerList);
                 }
