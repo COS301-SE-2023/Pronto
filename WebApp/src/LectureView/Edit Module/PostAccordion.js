@@ -53,13 +53,13 @@ export default function PostAccordion(course) {
   const handleAddVenue = async(event)=>{
     event.preventDefault();
     try{
-        // let update=await API.graphql({
-        //   query:updateActivity,
-        //   variables:{input:{id:activity.id,coordinates:selectedLocation}}
-        // })
+        let update=await API.graphql({
+          query:updateActivity,
+          variables:{input:{id:activity.id,coordinates:selectedLocation}}
+        })
         setSuccessMessage("Venue updated successfully");
-        setSelectedLocation("");
-        console.log(activity);
+        //setSelectedLocation("");
+       // console.log(activity);
      // }
     }catch(e){
       setError("Something went wrong.Please try again later");
@@ -91,21 +91,6 @@ export default function PostAccordion(course) {
   if (!isLoaded) {
     return <div>Loading</div>;
 
-  }
-
-
-  const handleSelectActivity = async (event) => {
-    try {
-      
-      if (event < course.course.activity.items.length && event > 0 && event !== "") {
-        setActivity(course.course.activity.items[event]);
-        //act=course.course.activity.items[event]
-      }
-      
-      console.log(activity);
-    } catch (error) {
-      setError("Something went wrong. Please try again later");
-    }
   }
 
 

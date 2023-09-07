@@ -47,9 +47,12 @@ function Login() {
                   }
             setAdmin(adminData);
           }
+          else{
+             throw Error("Could not find your records.");
+          }
 
     }catch(error){
-
+          throw Error("Could not find your records.");
     }
   }
 
@@ -72,7 +75,7 @@ function Login() {
       await Auth.signIn(email, password, { role: "Admin" });
       setsignInError("");
       //navigate to lecturer home page
-      fetchAdmin().then(()=>navigate("/institution/dashboard"))
+      await fetchAdmin().then(()=>navigate("/institution/dashboard"))
       //navigate("/institution/dashboard");
     } catch (e) {
       setsignInError(e.message);

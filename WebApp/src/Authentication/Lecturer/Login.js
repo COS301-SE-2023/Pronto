@@ -76,8 +76,11 @@ function Login() {
            setLecturer(lec);
       
         }
+        else{ 
+          throw Error("Could not find your records. Please contact your Institution's Admin since they may have deleted your information");
+        }
       }catch(error){
-        console.log(error);
+         throw Error("Could not find your records. Please contact your Institution's Admin since they may have deleted your information");
       }
 
   }
@@ -100,8 +103,8 @@ function Login() {
       await Auth.signIn(email, password, { role: "Lecturer" });
       setsignInError("");
       //navigate to lecturer home page
-       fetchLecturer().then(()=>navigate("/lecturer/dashboard"));
-      //  navigate("/lecturer/dashboard");
+      
+      await fetchLecturer().then(()=>navigate("/lecturer/dashboard"));
     } catch (e) {
       setsignInError(e.message);
     }
