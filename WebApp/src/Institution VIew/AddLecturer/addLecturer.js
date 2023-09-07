@@ -36,7 +36,7 @@ const AddLecturer = () => {
         if (!isModalOpened) {
 
             let lecturer = {
-                institutionId: admin.institution.id,
+                institutionId: admin.institutionId,
                 firstname: firstName,
                 lastname: lastName,
                 userRole: "Lecturer",
@@ -267,27 +267,43 @@ const AddLecturer = () => {
 
     const fetchLecturers = async () => {
         try {
-            
+            let adminInfo=admin;
             if(lecturerList.length<10){
-            let lecturers = await API.graphql({
-                    query: lecturersByInstitutionId,
-                    variables: {
-                        institutionId: admin.institutionId,
-                        limit: limit
-                },     
-            });
-
-            let courses = admin.institution.courses.items;
-            for (let i = 0; i < courses.length; i++) {
-                if (courses[i].lecturerId === null) {
-                    offeredCourses.push(courses[i]);
+                if(adminInfo===null){
+                    let user=await Auth.currentAuthenticatedUser();
+                    let adminEmail=user.attributes.email;
+                    adminInfo =await API.graphql({
+                        query:listAdmins,
+                        variables:{
+                            filter :{ 
+                                email:{
+                                    eq:adminEmail
+                                }
+                            }
+                        }
+                    })
+                    adminInfo=adminInfo.data.listAdmins.items[0];
+                   setAdmin(adminInfo);
                 }
+                console.log(adminInfo);
+                let lecturers = await API.graphql({
+                        query: lecturersByInstitutionId,
+                        variables: {
+                            institutionId: adminInfo.institutionId,
+                            limit: limit
+                            },     
+                     });
+
+                //let courses = admin.institution.courses.items;
+                // for (let i = 0; i < courses.length; i++) {
+                //     if (courses[i].lecturerId === null) {
+                //         offeredCourses.push(courses[i]);
+                //     }   
+                // }
+                setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
+                //setOfferedCourses(offeredCourses);
+                setLecturerList(lecturers.data.lecturersByInstitutionId.items);
             }
-            setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
-            setOfferedCourses(offeredCourses);
-            setLecturerList(lecturers.data.lecturersByInstitutionId.items);
-        }
-             
         }
         catch (error) {
             console.log(error);

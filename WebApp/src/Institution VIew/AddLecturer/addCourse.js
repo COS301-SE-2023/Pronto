@@ -2,6 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SearchableDropdown from "./searchableDropdown";
+import { selectClasses } from "@mui/material";
 
 const style = {
   position: 'absolute',
@@ -20,7 +21,7 @@ export default function AddModal(module) {
   const [open, setOpen] = useState(false);
   const [offeredCourses, setOfferedCourses] = useState([]);
   const [courses,setCourses] = useState([]);
-  const [selectedCourses, setSelectedCourses] = useState(module.selectedCourses);
+  const [selectedCourses, setSelectedCourses] = useState([]);
   const [removed, setRemoved] = useState([]);
   const [selected, setSelected] = useState();
   
@@ -28,16 +29,16 @@ export default function AddModal(module) {
   const handleOpen = async () => {
     setOpen(true)
     module.setModal(true)
+    //console.log(module.selectedCourses)
     let courses = []
     try {
-      for (let i = 0; i < module.courseData.length; i++) {
-        if (module.courseData[i].lecturerId === null) {
-          offeredCourses.push(module.courseData[i])
-        }
+      for (let i = 0; i < module.selectedCourses.length; i++) {
+        selectedCourses.push(module.selectedCourses[i]);
       }
-      setOfferedCourses(offeredCourses)
-      setSelectedCourses(module.selectedCourses)
+      //setOfferedCourses(offeredCourses);
+      setSelectedCourses(selectedCourses);
 
+      
      // console.log(module.selectedCourses);
     } catch (e) {
       //alert("No courses found")

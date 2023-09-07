@@ -181,7 +181,7 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
       courses{
         items{
           id
-          coursename
+          coursecode
         }
       }
       createdAt
