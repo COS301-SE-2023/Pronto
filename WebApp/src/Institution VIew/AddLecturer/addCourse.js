@@ -1,10 +1,7 @@
 import { useState } from "react";
-import {API} from "aws-amplify"
 import Box from "@mui/material/Box";
-import Select from 'react-select'
 import Modal from "@mui/material/Modal";
 import SearchableDropdown from "./searchableDropdown";
-import { searchCourses } from "../../graphql/queries";
 
 const style = {
   position: 'absolute',
@@ -21,19 +18,12 @@ const style = {
 export default function AddModal(module) {
 
   const [open, setOpen] = useState(false);
-  const [searchValue,setSearchValue]=useState("");
   const [offeredCourses, setOfferedCourses] = useState([]);
   const [courses,setCourses] = useState([]);
-  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [selectedCourses, setSelectedCourses] = useState(module.selectedCourses);
   const [removed, setRemoved] = useState([]);
   const [selected, setSelected] = useState();
-  const options = ['Apple', 'Banana', 'Cherry', 'Date', 'Grape', 'Lemon', 'Orange'];
-
-  // const [options,setOptions] = useState([
-  //   { value: 'chocolate', label: 'Chocolate' },
-  //   { value: 'strawberry', label: 'Strawberry' },
-  //   { value: 'vanilla', label: 'Vanilla' }
-  // ])
+  
 
   const handleOpen = async () => {
     setOpen(true)
@@ -48,40 +38,13 @@ export default function AddModal(module) {
       setOfferedCourses(offeredCourses)
       setSelectedCourses(module.selectedCourses)
 
+     // console.log(module.selectedCourses);
     } catch (e) {
       //alert("No courses found")
       console.log(e)
     }
   }
 
-  const handleSearch = async(event)=>{ 
-   // event.preventDefault()
-    try{
-        // let search=await API.graphql({
-        //   query:searchCourses,
-        //   variables: {
-        //     filter: {
-        //       and:[
-        //         {  
-        //           coursecode: {
-        //             matchPhrasePrefix: searchValue
-        //          } 
-        //         },
-        //         {
-        //           lecturerId : { 
-        //             eq : null
-        //           }
-        //         } 
-        //       ]
-        //     }
-        //   }
-        // })
-        //setCourses(search.data.searchCourses.items);
-        console.log(event);
-    }catch(error){
-      console.log(error);
-    }
-  }
 
   const handleClose = async () => {
     setOpen(false)
@@ -112,20 +75,23 @@ export default function AddModal(module) {
   }
 
   const handleAdd = async (event) => {
-    event.preventDefault()
-    let index = -1
-    if (selected !== null || selected !== undefined) {
-      for (let i = 0; i < offeredCourses.length; i++) {
-        if (offeredCourses[i].id === selected.id) {
-          index = i
+    
+    console.log(event);
+    let added=false;
+      for (let i = 0; i < selectedCourses.length; i++) {
+        if (selectedCourses[i].id === event.id) {
+          added=true;
           break;
         }
       }
+      
+    if(!added){
+   
+      selectedCourses.push(event);
+      setSelectedCourses(selectedCourses);
+      setOfferedCourses([]);
     }
-    setSelectedCourses([...selectedCourses, selected])
-    offeredCourses.splice(index, 1)
-    setOfferedCourses(offeredCourses)
-
+    console.log(selectedCourses);
   }
 
   const handleRemove = async (index) => {
@@ -171,10 +137,7 @@ export default function AddModal(module) {
                   return (
                     <tr key={key}>
                       <td>
-                        {val.coursecode}
-                      </td>
-                      <td>
-                        {val.coursename}
+                        {val?.coursecode}
                       </td>
                       <td>
                         <button onClick={(e) => handleRemove(key)}
@@ -191,36 +154,11 @@ export default function AddModal(module) {
                 )}
               </tbody>
             </table>
-            {/* <form onSubmit={(e) => handleAdd(e)}>
-              <div className="form-row">
-                <div className="form-group col-6">
-                  <select
-                    onChange={(e) => handleSelect(e.target.value)}
-                    //value={selected}
-                    className="custom-select">
-                    <option key="{}"> </option>
-                    {courses.map((val, key) => {
-                      return (
-                        <option key={val.coursecode}
-                          value={key}>{val.coursecode}</option>
-                      )
-
-                    })
-
-                    }
-                  </select>
-                </div>
-                
-                <button type="submit"
-                  className="btn btn-danger"
-                  data-testid="addButton">Add</button>
-              </div>
-            </form> */}
-            {/* <div> */}
                <SearchableDropdown 
                 courses={courses}
                 selectedCourses={selectedCourses}
                 setSelectedCourses={setSelectedCourses} 
+                handleAdd={handleAdd}
                 />
             {/* </div> */}
             <button

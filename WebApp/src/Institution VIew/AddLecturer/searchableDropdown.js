@@ -10,10 +10,12 @@ export default function SearchableDropdown(props){
    const {admin,setAdmin}=useAdmin();
    const [searchTerm,setSearchTerm] =useState("");
    const [isOpen,setIsOpen] = useState(true);
-   const {selectedCourses} =props.selectedCourses;
-   const {setSelectedCourses} =props.setSelectedCourses;
+   const selectedCourses =props.selectedCourses;
+   const setSelectedCourses =props.setSelectedCourses;
    const [course,setCourse]=useState("");
 
+//    console.log(props.selectedCourses);
+//    console.log(selectedCourses);
    const handleInputChange = async(event) => {
     
     setSearchTerm(event.target.value);
@@ -45,29 +47,32 @@ export default function SearchableDropdown(props){
     setSearchTerm(course.coursecode);
     setIsOpen(false);
     setCourse(course);    
-    console.log(course);
   };
 
   const handleAdd = ()=>{
-    let added=false
-    for(let i=0;i<selectedCourses.length;i++){
-        if(selectedCourses[i].coursecode===course.coursecode){
-            added=true;
-            break;
-        }
-    }
-    if(!added){
-        selectedCourses.push(course);
-        setSelectedCourses(selectedCourses);
-        setCourse("");
-        setSearchTerm("");
-        setIsOpen(true);
-    }
+    // let added=false
+    // for(let i=0;i<props.selectedCourses.length;i++){
+    //     if(props.selectedCourses[i].coursecode===course.coursecode){
+    //         added=true;
+    //         break;
+    //     }
+    // }
+    // if(!added){
+    //     props.selectedCourses.push(course);
+    //     props.setSelectedCourses(selectedCourses);
+    //     setCourse("");
+    //     setSearchTerm("");
+    //     setIsOpen(true);
+    // }
+    props.handleAdd(course);
+    setCourse("");
+    setSearchTerm("");
+    setIsOpen(true)
   } 
 
     return (
-      <div>
-         <div>  
+      <div className="searchable-dropdown"> 
+         {/* <div>   */}
         <input
           type="text"
           placeholder="Type in Course Code..."
@@ -76,15 +81,17 @@ export default function SearchableDropdown(props){
           onClick={toggleDropdown}
         />
         {isOpen && (
-          <ul >
-            {courses.filter((c)=>c.lecturerId===null && c.institutionId===admin.institutionId).map((val, index) => (
+          <ul className="dropdown-list">
+            {courses
+            //.filter((c)=>c.lecturerId===null && c.institutionId===admin.institutionId)
+            .map((val, index) => (
                 <li key={index} onClick={() => handleSelectCourse(val)}>
                   {val?.coursecode}
                 </li>
               ))}
           </ul>
         )}
-        </div> 
+        {/* </div>  */}
         <button 
             onClick={(e)=>handleAdd(e)}
             type="submit"
