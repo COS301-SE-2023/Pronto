@@ -1,32 +1,36 @@
 const {
-  createModuleSegmentName,
-  createModuleSegmentCommandInput,
-} = require("../../../../../function/updateCourseResources/src/helpers/createModuleSegment");
+  createCourseCodeSegmentName,
+  createCourseCodeSegmentCommandInput,
+} = require("../../../../../function/updateCourseResources/src/helpers/updateCourseResources");
 
 const institutionName = "University OF Pretoria";
 const moduleCode = "COS301";
 
 describe("Testing helper functions", () => {
-  test("testing createModuleSegmentName", () => {
+  test("testing createCourseCodeSegmentName", () => {
     const formattedInstitutionName = institutionName
       .toLowerCase()
       .replaceAll(" ", "+");
-    const formattedModuleCode = moduleCode.toLowerCase().replaceAll(" ", "+");
-    const expectedModuleSegmentName =
+    const formattedCourseCodeCode = moduleCode
+      .toLowerCase()
+      .replaceAll(" ", "+");
+    const expectedCourseCodeSegmentName =
       formattedInstitutionName +
       ":" +
-      formattedModuleCode +
+      formattedCourseCodeCode +
       ":notifications:segment";
-    const receivedModuleSegmentName = createModuleSegmentName(
+    const receivedCourseCodeSegmentName = createCourseCodeSegmentName(
       institutionName,
       moduleCode
     );
-    expect(receivedModuleSegmentName).toEqual(expectedModuleSegmentName);
+    expect(receivedCourseCodeSegmentName).toEqual(
+      expectedCourseCodeSegmentName
+    );
   });
-  test("testing createModuleSegmentCommandInput", () => {
+  test("testing createCourseCodeSegmentCommandInput", () => {
     const expectedSegmentCommandInput = {
       WriteSegmentRequest: {
-        Name: createModuleSegmentName(institutionName, moduleCode),
+        Name: createCourseCodeSegmentName(institutionName, moduleCode),
         SegmentGroups: {
           Groups: [
             {
@@ -93,7 +97,7 @@ describe("Testing helper functions", () => {
         },
       },
     };
-    const receivedSegmentCommandInput = createModuleSegmentCommandInput(
+    const receivedSegmentCommandInput = createCourseCodeSegmentCommandInput(
       institutionName,
       moduleCode
     );

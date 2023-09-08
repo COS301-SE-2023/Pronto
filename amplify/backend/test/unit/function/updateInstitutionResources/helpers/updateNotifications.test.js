@@ -1,7 +1,7 @@
 const {
   createCampaignName,
   createPinpointCampaignCommandInput,
-} = require("../../../../function/updateInstitutionResources/src/updateNotifications");
+} = require("../../../../../function/updateInstitutionResources/src/helpers/updateInstitudeResources");
 
 const institutionName = "University OF Pretoria";
 

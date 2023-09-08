@@ -6,22 +6,25 @@ const {
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
 
-const createModuleSegmentName = (institutionName, moduleCode) => {
+const createCourseCodeSegmentName = (institutionName, courseCode) => {
   formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
-  formattedModuleCode = moduleCode.toLowerCase().replaceAll(" ", "+");
+  formattedCourseCodeCode = courseCode.toLowerCase().replaceAll(" ", "+");
   return (
-    formattedInstitutionName + ":" + formattedModuleCode + SEGMENT_NAME_SUFFIX
+    formattedInstitutionName +
+    ":" +
+    formattedCourseCodeCode +
+    SEGMENT_NAME_SUFFIX
   );
 };
 
-const createModuleSegmentCommandInput = (institutionName, moduleCode) => {
-  const moduleSegmentName = createModuleSegmentName(
+const createCourseCodeSegmentCommandInput = (institutionName, courseCode) => {
+  const moduleSegmentName = createCourseCodeSegmentName(
     institutionName,
-    moduleCode
+    courseCode
   );
   const emailSegmentGroupDimensions = {
     Attributes: {
-      Values: [moduleCode],
+      Values: [courseCode],
       AttributeType: PINPOINT_SEGMENT_DIMENSIONS.ATTRIBUTES.ATTRIBUTE_TYPE,
     },
     Behavior: PINPOINT_SEGMENT_DIMENSIONS.BEHAVIOUR,
@@ -29,7 +32,7 @@ const createModuleSegmentCommandInput = (institutionName, moduleCode) => {
   };
   const smsSegmentGroupDimensions = {
     Attributes: {
-      Values: [moduleCode],
+      Values: [courseCode],
       AttributeType: PINPOINT_SEGMENT_DIMENSIONS.ATTRIBUTES.ATTRIBUTE_TYPE,
     },
     Behavior: PINPOINT_SEGMENT_DIMENSIONS.BEHAVIOUR,
@@ -37,7 +40,7 @@ const createModuleSegmentCommandInput = (institutionName, moduleCode) => {
   };
   const pushSegmentGroupDimensions = {
     Attributes: {
-      Values: [moduleCode],
+      Values: [courseCode],
       AttributeType: PINPOINT_SEGMENT_DIMENSIONS.ATTRIBUTES.ATTRIBUTE_TYPE,
     },
     Behavior: PINPOINT_SEGMENT_DIMENSIONS.BEHAVIOUR,
@@ -68,13 +71,13 @@ const createModuleSegmentCommandInput = (institutionName, moduleCode) => {
 const updateCourseResources = async (UpdateOption) => {
   switch (UpdateOption) {
     case DATASTREAM_EVENT_NAMES.COURSE_CREATED:
-      //create lecturer segement group for module
       //create student segment group
       //create segment, add groups
       //get institution campain
       //add segement
       //WRITE segmentIDs WRITE to institutionDB, on COURSETABLE
       //Update notifications status on course table
+      const createSegmentCommandInput = createSegmentCommandInput();
       break;
     case DATASTREAM_EVENT_NAMES.COURSE_UPDATED:
       try {
@@ -88,4 +91,7 @@ const updateCourseResources = async (UpdateOption) => {
       throw new Error();
   }
 };
-module.exports = { createModuleSegmentName, createModuleSegmentCommandInput };
+module.exports = {
+  createCourseCodeSegmentName,
+  createCourseCodeSegmentCommandInput,
+};
