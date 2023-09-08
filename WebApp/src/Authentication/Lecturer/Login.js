@@ -54,6 +54,7 @@ function Login() {
 
 
   const fetchLecturer = async()=>{
+    let fetchError="Could not find your records.If you are a Lecturer please contact your Institution's   Admin since they may have deleted your information. If you are an Admin please return to the homepage and click 'Continue as Admin'. If you are a Student please use the mobile app."; 
     try{
      let  lec = await API.graphql({
           query: listLecturers,
@@ -69,18 +70,23 @@ function Login() {
 
         if(lec.data.listLecturers.items.length>0){
           lec=lec.data.listLecturers.items[0];
-          if(lec.institution.logo!==null){
-            lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
-           
+          try{
+            if(lec.institution.logo!==null){
+              lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+              
+            }
+          }catch(error){
+
           }
            setLecturer(lec);
       
         }
         else{ 
-          throw Error("Could not find your records. Please contact your Institution's Admin since they may have deleted your information");
+          throw Error(fetchError);
         }
       }catch(error){
-         throw Error("Could not find your records. Please contact your Institution's Admin since they may have deleted your information");
+        await Auth.signOut() 
+        throw Error(fetchError);
       }
 
   }

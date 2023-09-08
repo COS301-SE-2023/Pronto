@@ -28,6 +28,7 @@ function Login() {
   const {admin,setAdmin} =useAdmin();
 
    const fetchAdmin = async()=>{ 
+    let fetchError="Could not find your records.If you are a Lecturer return to the homepage and click 'Continue as Lecturer'. If you are a Student please use the mobile app"
     try{
        
         let adminData = await API.graphql({
@@ -48,11 +49,12 @@ function Login() {
             setAdmin(adminData);
           }
           else{
-             throw Error("Could not find your records.");
+             throw Error(fetchError);
           }
 
     }catch(error){
-          throw Error("Could not find your records.");
+      await Auth.signOut();    
+      throw Error(fetchError);
     }
   }
 
