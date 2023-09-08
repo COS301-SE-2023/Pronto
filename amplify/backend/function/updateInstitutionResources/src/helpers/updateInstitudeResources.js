@@ -108,7 +108,8 @@ const updateInstitudeResourceStatus = async (status) => {
 
 const createAndHandlePinpointCampaignRequest = async (
   institutionName,
-  institutionId
+  institutionId,
+  pinpointClient
 ) => {
   const campaignCommandInput =
     createPinpointCampaignCommandInput(institutionName);
@@ -148,7 +149,8 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
       try {
         await createAndHandlePinpointCampaignRequest(
           updateRequest.institutionName,
-          institutionId
+          institutionId,
+          pinpointClient
         );
       } catch (sendAndHandleCreatePinpointCampaignError) {
         console.debug(`FAILED TO SEND or HANDLE CREATE PINPOINT REQUEST\n
@@ -164,7 +166,7 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
       } catch (error) {}
       break;
     default:
-      throw new Error();
+      throw new Error(`UNKOWN DATA STREAM EVENT`);
   }
 };
 
