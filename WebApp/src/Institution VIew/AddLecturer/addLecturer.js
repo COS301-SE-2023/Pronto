@@ -44,47 +44,53 @@ const AddLecturer = () => {
             };
 
             try {
-                let mutation = await API.graphql({
-                    query: createLecturer,
-                    variables: { input: lecturer },
-                });
+    
+                if(admin.institution.lectureremails.filter((e)=>e===email).length===0){
+                    let mutation = await API.graphql({
+                        query: createLecturer,
+                        variables: { input: lecturer },
+                    });
 
-                lecturer = mutation.data.createLecturer
-                lecturer.courses = {
-                    items: []
-                };
+                    lecturer = mutation.data.createLecturer
+                    lecturer.courses = {
+                        items: []
+                    };
         
-                let emails;
-                if (admin.institution.lectureremails === null) {
-                    emails = [];
-                    emails.push(email);
+                    let emails;
+                    if (admin.institution.lectureremails === null) {
+                        emails = [];
+                        emails.push(email);
+                    }
+                    else {
+                        emails = admin.institution.lectureremails;
+                        emails.push(email);
+                    }
+                    let logoUrl = admin.institution.logoUrl;
+                    let update = {
+                        id: admin.institutionId,
+                        lectureremails: emails
+                    };
+
+                    let u = await API.graphql({
+                        query: updateInstitution,
+                        variables: { input: update },
+                    });
+                    u = u.data.updateInstitution
+                    u.logoUrl = logoUrl;
+                    let ad = admin;
+                    ad.institution = u;
+
+                    setAdmin(ad);
+
+                    //Add lecturer to courses
+                    await addCourses(lecturer, selectedCourses)
+                    if (lecturerList.length <= 10) {
+                        lecturerList.push(lecturer);
+                        setLecturerList(lecturerList);
+                    }
                 }
-                else {
-                    emails = admin.institution.lectureremails;
-                    emails.push(email);
-                }
-                let logoUrl = admin.institution.logoUrl;
-                let update = {
-                    id: admin.institutionId,
-                    lectureremails: emails
-                };
-
-                let u = await API.graphql({
-                    query: updateInstitution,
-                    variables: { input: update },
-                });
-                u = u.data.updateInstitution
-                u.logoUrl = logoUrl;
-                let ad = admin;
-                ad.institution = u;
-
-                setAdmin(ad);
-
-                //Add lecturer to courses
-                await addCourses(lecturer, selectedCourses)
-                if (lecturerList.length <= 10) {
-                    lecturerList.push(lecturer);
-                    setLecturerList(lecturerList);
+                else{ 
+                    setError("A lecturer with this email already exists");
                 }
 
             } catch (error) {
@@ -162,6 +168,7 @@ const AddLecturer = () => {
                 });
                 lecturer.courses.items.push(update.data.updateCourse);
             }
+        
             setLecturerList(lecturerList);
         } catch (error) {
             if (error.errors !== undefined) {
@@ -191,11 +198,12 @@ const AddLecturer = () => {
                 setOfferedCourses([...offeredCourses, courseList]);
 
             }
-            let newEmails = admin.institution.lecturerEmails.filter(item => item !== removeMutation.data.deleteLecturer.email);
+            console.log(admin.institution.lectureremails);
+            let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
 
             let update = {
                 id: admin.institutionId,
-                lecturerEmails: newEmails
+                lectureremails: newEmails
             };
 
             let u = await API.graphql({
@@ -241,7 +249,6 @@ const AddLecturer = () => {
                         lecturerList.push(lecturers.items[i]);
                     }
                     setLecturerList(lecturerList);
-                    //setNextToken(lecturers.nextToken);
                     if(lecturers.items.length<limit){
                         setNextToken(null);
                     }
@@ -278,7 +285,6 @@ const AddLecturer = () => {
                         else{
                             setNextToken(token);
                         }
-                        //let l=[];
                         for(let i=0;i<lecturers.length;i++){
                             lecturerList.push(lecturers[i].lecturer);
                         }
@@ -300,7 +306,6 @@ const AddLecturer = () => {
                     lecturerList.push(lecturers.items[i]);
                 }
                 setLecturerList(lecturerList);
-               // setNextToken(lecturers.nextToken);
                if(lecturers.items.length<limit){
                     setNextToken(null);
                 }
@@ -310,7 +315,6 @@ const AddLecturer = () => {
             }
 
         } catch (error) {
-            //console.log(error);
             setError("Something went wrong. Try again later");
         }
     }
@@ -318,7 +322,7 @@ const AddLecturer = () => {
     const fetchLecturers = async () => {
         try {
             let adminInfo=admin;
-            if(lecturerList.length<10){
+            if(lecturerList.length<limit){
                 if(adminInfo===null){
                     let user=await Auth.currentAuthenticatedUser();
                     let adminEmail=user.attributes.email;
@@ -355,7 +359,6 @@ const AddLecturer = () => {
             }
         }
         catch (error) {
-            console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {

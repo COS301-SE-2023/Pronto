@@ -32,9 +32,6 @@ export const listLecturers=`query ListLecturers(
           }
         }
       }
-      createdAt
-      updatedAt
-      owner
     }
     nextToken
   }
@@ -44,14 +41,7 @@ export const getInstitution=`query GetInstitution($id: ID!) {
   getInstitution(id: $id) {
     id
     name
-    location
-    pageUrl
-    campusMapUrl
-    openingTime
-    closingTime
-    minimumDuration
     lectureremails
-    coursecodes
     domains
     admin {
       id
@@ -89,12 +79,6 @@ export const listInstitutions=`query ListInstitutions(
       id
       logo
       name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
       domains
       lectureremails
       admin { 
@@ -187,9 +171,6 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
           coursecode
         }
       }
-      createdAt
-      updatedAt
-      owner
     }
     nextToken
   }
@@ -228,9 +209,6 @@ export const listAdmins=`query ListAdmins(
       firstname
       lastname
       email
-      createdAt
-      updatedAt
-      owner
       institution{
         id
         name
@@ -243,7 +221,6 @@ export const listAdmins=`query ListAdmins(
             coursecode
           }
         }
-        owner
       }
     }
     nextToken
@@ -258,24 +235,18 @@ export const listAnnouncements=`query ListAnnouncements(
   listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      description
-      start
       course{
         coursecode
       }
       body
       title
-      end
       date
       venue
       title
-      body
       type
       course{
         coursecode
       }
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -343,21 +314,6 @@ export const searchLecturers=`query SearchLecturers(
       }
     }
     nextToken
-    total
-    aggregateItems {
-      name
-      result {
-        ... on SearchableAggregateScalarResult {
-          value
-        }
-        ... on SearchableAggregateBucketResult {
-          buckets {
-            key
-            doc_count
-          }
-        }
-      }
-    }
   }
 }
 `
@@ -416,7 +372,6 @@ export const searchCourses=`query SearchCourses(
       coursecode
     }
     nextToken
-    total
     aggregateItems {
       name
       result {
