@@ -31,7 +31,6 @@ const createPinpointCampaignCommandInput = (institutionName) => {
 };
 
 const putCampainIdOnInstitution = async (institutionId, campaignId) => {
-  const UpdateInstitutionInput = {};
   const updateInstitutionMutation = /* GraphQL */ `
     mutation updateInstitution($input: UpdateInstitutionInput) {
       updateInstitution(input: $input) {
@@ -43,6 +42,7 @@ const putCampainIdOnInstitution = async (institutionId, campaignId) => {
     input: {
       id: institutionId,
       notificationsCampaignId: campaignId,
+      resourcesStatus: "CREATED",
     },
   };
   const options = {
@@ -69,10 +69,46 @@ const putCampainIdOnInstitution = async (institutionId, campaignId) => {
   }
 };
 
+const updateInstitudeResourceStatus = async (status) => {
+  const updateInstitutionMutation = /* GraphQL */ `
+    mutation updateInstitution($input: UpdateInstitutionInput) {
+      updateInstitution(input: $input) {
+        name
+      }
+    }
+  `;
+  const variables = {
+    input: {
+      resourcesStatus: status,
+    },
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "x-api-key": GRAPHQL_API_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ updateInstitutionMutation, variables }),
+  };
+
+  const request = new Request(GRAPHQL_ENDPOINT, options);
+  let body;
+  let response;
+  try {
+    response = await fetch(request);
+    body = await response.json();
+    console.debug(`graphQL Resonse: ${body}`);
+    if (body.data) return true;
+    throw new Error("API ERROR: Empty Respoonse");
+  } catch (putCampainIdOnInstitutionError) {
+    console.debug(putCampainIdOnInstitution);
+    throw new Error("API ERROR: Failed to update Institude Resource status");
+  }
+};
+
 const updateInstitudeResources = async (updateRequest, pinpointClient) => {
   switch (updateRequest.UpdateOption) {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_CREATED:
-      //CREATE campain
       const campaignCommandInput =
         createPinpointCampaignCommandInput(institutionName);
       const createCampaignCommand = new CreateCampaignCommand(
@@ -82,14 +118,31 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
         const createCampainResponse = await pinpointClient.send(
           createCampaignCommand
         );
-        //write campainID to institutionDB
         console.debug(`CREATE Campain Response: ${createCampainResponse}`);
-        const isPutCampainIdSuccess = await putCampainIdOnInstitution(
-          updateRequest.institutionId,
-          createCampainResponse.id
+        if (updateRequest.institutionId) {
+          const isPutCampainIdSuccess = await putCampainIdOnInstitution(
+            updateRequest.institutionId,
+            createCampainResponse.id
+          );
+          if (!isPutCampainIdSuccess)
+            updateInstitudeResourceStatus("CREATION FAILED");
+        }
+      } catch (createInstitutionResourcesError) {
+        console.debug(
+          `FAILED TO CREATE INSTITUTION RESOURCES FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
+          REASON: ${createInstitutionResourcesError}
+          `
         );
-        //Update notifications status on institution table -> send test email?
-      } catch (error) {}
+        try {
+          updateInstitudeResourceStatus("CREATION FAILED");
+        } catch (updateInstitudeResourceStatusError) {
+          console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
+          REASON: ${updateInstitudeResourceStatusError}`);
+          throw new Error(
+            "FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS"
+          );
+        }
+      }
       break;
     case DATASTREAM_EVENT_NAMES.INSTITUDE_UPDATED:
       try {
