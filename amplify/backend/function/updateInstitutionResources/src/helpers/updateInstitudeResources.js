@@ -1,4 +1,7 @@
-const { CreateCampaignCommand } = require("@aws-sdk/client-pinpoint");
+const {
+  CreateCampaignCommand,
+  UpdateCampaignCommand,
+} = require("@aws-sdk/client-pinpoint");
 const { DATASTREAM_EVENT_NAMES, CAMPAIGN_NAME_SUFFIX } = require("./constants");
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
@@ -28,6 +31,18 @@ const createPinpointCampaignCommandInput = (institutionName) => {
     },
   };
   return createCampaignCommandInput;
+};
+
+const updatePinpointCampaignCommandInput = (institutionName, CampaignId) => {
+  const campaignName = createCampaignName(institutionName);
+  const updateCampaignCommandInput = {
+    CampaignId: CampaignId,
+    Name: campaignName,
+    WriteCampaignRequest: {
+      Description: `${institutionName} Notifications Campaign`,
+    },
+  };
+  return updateCampaignCommandInput;
 };
 
 const putCampainIdOnInstitution = async (institutionId, campaignId) => {
@@ -106,7 +121,7 @@ const updateInstitudeResourceStatus = async (status) => {
   }
 };
 
-const createAndHandlePinpointCampaignRequest = async (
+const createAndHandlePinpointCampaign = async (
   institutionName,
   institutionId,
   pinpointClient
@@ -119,7 +134,7 @@ const createAndHandlePinpointCampaignRequest = async (
       createCampaignCommand
     );
     console.debug(`CREATE Campain Response: ${createCampainResponse}`);
-    if (institutionId) {
+    if (createCampainResponse.id) {
       const isPutCampainIdSuccess = await putCampainIdOnInstitution(
         institutionId,
         createCampainResponse.id
@@ -137,29 +152,70 @@ const createAndHandlePinpointCampaignRequest = async (
       await updateInstitudeResourceStatus("CREATION FAILED");
     } catch (updateInstitudeResourceStatusError) {
       console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
-          REASON: ${updateInstitudeResourceStatusError}`);
+            REASON: ${updateInstitudeResourceStatusError}`);
       throw new Error("FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS");
     }
+  }
+};
+
+const UpdateInstitutionCamapaign = async (
+  institutionName,
+  campaignId,
+  pinpointClient
+) => {
+  const updateCampaignCommandInput = updatePinpointCampaignCommandInput(
+    institutionName,
+    campaignName,
+    campaignId
+  );
+  try {
+    const updateCampaignCommand = new UpdateCampaignCommand(
+      updateCampaignCommandInput
+    );
+    const updateCampainResponse = pinpointClient.send(updateCampaignCommand);
+    console.debug(`UPDATE Campain Response: ${createCampainResponse}`);
+    if (updateCampainResponse.id == campaignId) {
+      await updateInstitudeResourceStatus("CREATION FAILED");
+    }
+  } catch (UpdateInstitutionCamapaignError) {
+    console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
+            REASON: ${updateInstitudeResourceStatusError}`);
+    throw new Error("FAILED TO UPDATE CAMPAIN NAME, CHECK LOGS");
   }
 };
 
 const updateInstitudeResources = async (updateRequest, pinpointClient) => {
   switch (updateRequest.UpdateOption) {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_CREATED:
+      console.debug("INSTITUDE CREATED");
       try {
-        await createAndHandlePinpointCampaignRequest(
+        await createAndHandlePinpointCampaign(
           updateRequest.institutionName,
           institutionId,
           pinpointClient
         );
+        return true;
       } catch (sendAndHandleCreatePinpointCampaignError) {
-        console.debug(`FAILED TO SEND or HANDLE CREATE PINPOINT REQUEST\n
+        console.debug(`FAILED TO SEND or HANDLE CREATE PINPOINT REQUEST
         REASON: ${sendAndHandleCreatePinpointCampaignError}`);
+        return false;
       }
-      break;
     case DATASTREAM_EVENT_NAMES.INSTITUDE_UPDATED:
-      try {
-      } catch (error) {}
+      console.debug("INSTITUDE UPDATED");
+      const newImage = updateRequest.record.dynamodb.NewImage;
+      const oldImage = updateRequest.record.dynamodb.OldImage;
+      const newInstutudeName = newImage["name"];
+      const oldInstiudeName = oldImage["name"];
+      const campainId = newImage["notificationsCampaignId"];
+      if (newInstutudeName != oldInstiudeName)
+        try {
+          await UpdateInstitutionCamapaign(newInstutudeName, campainId);
+          return true;
+        } catch (UpdateInstitutionCamapaignError) {
+          console.debug(`FAILED TO SEND or HANDLE UPDATE PINPOINT REQUEST
+          REASON: ${UpdateInstitutionCamapaignError}`);
+          return false;
+        }
       break;
     case DATASTREAM_EVENT_NAMES.INSTITUDE_DELETED:
       try {
