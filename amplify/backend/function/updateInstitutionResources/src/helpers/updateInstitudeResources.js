@@ -106,42 +106,53 @@ const updateInstitudeResourceStatus = async (status) => {
   }
 };
 
+const createAndHandlePinpointCampaignRequest = async (
+  institutionName,
+  institutionId
+) => {
+  const campaignCommandInput =
+    createPinpointCampaignCommandInput(institutionName);
+  const createCampaignCommand = new CreateCampaignCommand(campaignCommandInput);
+  try {
+    const createCampainResponse = await pinpointClient.send(
+      createCampaignCommand
+    );
+    console.debug(`CREATE Campain Response: ${createCampainResponse}`);
+    if (institutionId) {
+      const isPutCampainIdSuccess = await putCampainIdOnInstitution(
+        institutionId,
+        createCampainResponse.id
+      );
+      if (!isPutCampainIdSuccess)
+        await updateInstitudeResourceStatus("CREATION FAILED");
+    }
+  } catch (createInstitutionResourcesError) {
+    console.debug(
+      `FAILED TO CREATE INSTITUTION RESOURCES FOR INSTUTION WITH ID ${institutionId}\n
+          REASON: ${createInstitutionResourcesError}
+          `
+    );
+    try {
+      await updateInstitudeResourceStatus("CREATION FAILED");
+    } catch (updateInstitudeResourceStatusError) {
+      console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
+          REASON: ${updateInstitudeResourceStatusError}`);
+      throw new Error("FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS");
+    }
+  }
+};
+
 const updateInstitudeResources = async (updateRequest, pinpointClient) => {
   switch (updateRequest.UpdateOption) {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_CREATED:
-      const campaignCommandInput =
-        createPinpointCampaignCommandInput(institutionName);
-      const createCampaignCommand = new CreateCampaignCommand(
-        campaignCommandInput
-      );
       try {
-        const createCampainResponse = await pinpointClient.send(
-          createCampaignCommand
+        await createAndHandlePinpointCampaignRequest(
+          updateRequest.institutionName,
+          institutionId
         );
-        console.debug(`CREATE Campain Response: ${createCampainResponse}`);
-        if (updateRequest.institutionId) {
-          const isPutCampainIdSuccess = await putCampainIdOnInstitution(
-            updateRequest.institutionId,
-            createCampainResponse.id
-          );
-          if (!isPutCampainIdSuccess)
-            updateInstitudeResourceStatus("CREATION FAILED");
-        }
-      } catch (createInstitutionResourcesError) {
-        console.debug(
-          `FAILED TO CREATE INSTITUTION RESOURCES FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
-          REASON: ${createInstitutionResourcesError}
-          `
-        );
-        try {
-          updateInstitudeResourceStatus("CREATION FAILED");
-        } catch (updateInstitudeResourceStatusError) {
-          console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
-          REASON: ${updateInstitudeResourceStatusError}`);
-          throw new Error(
-            "FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS"
-          );
-        }
+      } catch (sendAndHandleCreatePinpointCampaignError) {
+        console.debug(`FAILED TO SEND or HANDLE CREATE PINPOINT REQUEST\n
+        REASON: ${sendAndHandleCreatePinpointCampaignError}`);
       }
       break;
     case DATASTREAM_EVENT_NAMES.INSTITUDE_UPDATED:
