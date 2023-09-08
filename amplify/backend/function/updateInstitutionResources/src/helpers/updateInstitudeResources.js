@@ -83,6 +83,11 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
           createCampaignCommand
         );
         //write campainID to institutionDB
+        console.debug(`CREATE Campain Response: ${createCampainResponse}`);
+        const isPutCampainIdSuccess = await putCampainIdOnInstitution(
+          updateRequest.institutionId,
+          createCampainResponse.id
+        );
         //Update notifications status on institution table -> send test email?
       } catch (error) {}
       break;
