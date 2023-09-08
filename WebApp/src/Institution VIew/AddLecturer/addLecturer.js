@@ -226,21 +226,65 @@ const AddLecturer = () => {
     const loadMore = async () => {
         try {
 
-            if(searchIcon===true){
-                let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}","nextToken":"${nextToken}"}`;
+            if(searchIcon===true ){
+                if(filterAttribute!=="Course Code"){
+                    let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}","nextToken":"${nextToken}"}`;
                 
-                let variables= JSON.parse(filter);
+                    let variables= JSON.parse(filter);
                         
-                let lecturers = await API.graphql({
+                    let lecturers = await API.graphql({
                             query:searchLecturers,
                             variables:variables
                         })
-                lecturers=lecturers.data.searchLecturers;
-                for(let i=0;i<lecturers.items.length;i++){
-                    lecturerList.push(lecturers.items[i]);
+                    lecturers=lecturers.data.searchLecturers;
+                    for(let i=0;i<lecturers.items.length;i++){
+                        lecturerList.push(lecturers.items[i]);
+                    }
+                    setLecturerList(lecturerList);
+                    //setNextToken(lecturers.nextToken);
+                    if(lecturers.items.length<limit){
+                        setNextToken(null);
+                    }
+                    else{
+                        setNextToken(lecturers.nextToken);
+                    }
                 }
-                setLecturerList(lecturerList);
-                setNextToken(lecturers.nextToken);
+                else{
+                     if(filterAttribute==="Course Code"){
+                        let lecturers = await API.graphql({
+                            query:searchLecturerByCourses,
+                            variables:{
+                                filter: {
+                                    and: [
+                                        { coursecode: { matchPhrasePrefix: searchValue } },
+                                        { institutionId : {eq: admin.institutionId}},
+                                        { lecturerId : {eq:null} }
+                                    ]
+                                },
+                                limit:limit
+                            } 
+                        })
+                        let token=lecturers.data.searchCourses.nextToken;
+                        lecturers=lecturers.data.searchCourses.items;
+                        lecturers.filter((c)=>c!==null && c.institutionId===admin.institutionId);
+                        lecturers = lecturers.filter((value, index, self) =>
+                                    index === self.findIndex((t) => (
+                                t.id === value.id 
+                            ))
+                        )
+                        if(lecturers.length<limit){
+                             setNextToken(null);
+                        }
+                        else{
+                            setNextToken(token);
+                        }
+                        //let l=[];
+                        for(let i=0;i<lecturers.length;i++){
+                            lecturerList.push(lecturers[i].lecturer);
+                        }
+                        setLecturerList(lecturerList);
+                    }
+                }
             }
             else{ 
                 let lecturers=await API.graphql({
@@ -256,7 +300,13 @@ const AddLecturer = () => {
                     lecturerList.push(lecturers.items[i]);
                 }
                 setLecturerList(lecturerList);
-                setNextToken(lecturers.nextToken);
+               // setNextToken(lecturers.nextToken);
+               if(lecturers.items.length<limit){
+                    setNextToken(null);
+                }
+                else{
+                    setNextToken(lecturers.nextToken);
+                }
             }
 
         } catch (error) {
@@ -283,9 +333,8 @@ const AddLecturer = () => {
                         }
                     })
                     adminInfo=adminInfo.data.listAdmins.items[0];
-                   setAdmin(adminInfo);
+                    setAdmin(adminInfo);
                 }
-                console.log(adminInfo);
                 let lecturers = await API.graphql({
                         query: lecturersByInstitutionId,
                         variables: {
@@ -294,8 +343,15 @@ const AddLecturer = () => {
                             },     
                      });
 
-                setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
-                setLecturerList(lecturers.data.lecturersByInstitutionId.items);
+                lecturers=lecturers.data.lecturersByInstitutionId;     
+                //setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
+                setLecturerList(lecturers.items);
+                if(lecturers.items.length<limit){
+                    setNextToken(null);
+                }
+                else{
+                    setNextToken(lecturers.nextToken);
+                }
             }
         }
         catch (error) {
@@ -316,7 +372,7 @@ const AddLecturer = () => {
         try {
             if (searchIcon === false) {
                 if(searchValue!==""){
-                    if(filterAttribute==="course"){
+                    if(filterAttribute==="Course Code"){
                         let lecturers = await API.graphql({
                             query:searchLecturerByCourses,
                             variables:{
@@ -330,7 +386,6 @@ const AddLecturer = () => {
                                 limit:limit
                             } 
                         })
-                        console.log(lecturers);
                         let token=lecturers.data.searchCourses.nextToken;
                         lecturers=lecturers.data.searchCourses.items;
                         lecturers.filter((c)=>c!==null && c.institutionId===admin.institutionId);
@@ -339,9 +394,17 @@ const AddLecturer = () => {
                                 t.id === value.id 
                             ))
                         )
-                        console.log(lecturers);    
-                        setLecturerList(lecturers);
-                        setNextToken(token);
+                        if(lecturers.length<limit){
+                             setNextToken(null);
+                        }
+                        else{
+                            setNextToken(token);
+                        }
+                        let l=[];
+                        for(let i=0;i<lecturers.length;i++){
+                            l.push(lecturers[i].lecturer);
+                        }
+                        setLecturerList(l);
                         setSearchIcon(!searchIcon);
                     }
                     else if(filterAttribute!=="default" && filterAttribute!==""){
@@ -356,7 +419,12 @@ const AddLecturer = () => {
                         })
                         lecturers=lecturers.data.searchLecturers;
                         setLecturerList(lecturers.items);
-                        setNextToken(lecturers.nextToken);
+                        if(lecturers.items.length<limit){
+                             setNextToken(null);
+                        }
+                        else{
+                            setNextToken(lecturers.nextToken);
+                        }
                         setSearchIcon(!searchIcon);
                     }
                 }
@@ -371,7 +439,12 @@ const AddLecturer = () => {
                 });
                 lecturers=lecturers.data.lecturersByInstitutionId;
                 setLecturerList(lecturers.items);
-                setNextToken(lecturers.nextToken);
+                if(lecturers.items.length<limit){
+                    setNextToken(null);
+                }
+                else{
+                    setNextToken(lecturers.nextToken);
+                }
                 setSearchIcon(!searchIcon)
             }  
             
@@ -524,11 +597,11 @@ const AddLecturer = () => {
                             id="inputGroupSelect01"
                             data-testid="filterSelect"
                         >
-                            <option value="default">Filter by</option>
+                            <option selected disabled>Filter by</option>
                             <option value="firstname" >First Name</option>
                             <option value="lastname" >Last Name</option>
                             <option value="email" >Email</option>
-                            {/* <option>Course Code</option> */}
+                            <option value="Course Code">Course Code</option>
                         </select>
                     </div>
                 </div>
@@ -597,7 +670,7 @@ const AddLecturer = () => {
                             <div style={{ paddingLeft: "42.5%", paddingRight: "42.5%" }}>
                                 {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>}
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
             </main>
