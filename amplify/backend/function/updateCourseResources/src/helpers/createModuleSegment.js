@@ -1,6 +1,7 @@
 const {
   SEGMENT_NAME_SUFFIX,
   PINPOINT_SEGMENT_DIMENSIONS,
+  DATASTREAM_EVENT_NAMES,
 } = require("./constants");
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
@@ -66,7 +67,7 @@ const createModuleSegmentCommandInput = (institutionName, moduleCode) => {
 
 const updateCourseResources = async (UpdateOption) => {
   switch (UpdateOption) {
-    case DATASTREAM_ACTIONS.COURSE_CREATED:
+    case DATASTREAM_EVENT_NAMES.COURSE_CREATED:
       //create lecturer segement group for module
       //create student segment group
       //create segment, add groups
@@ -75,8 +76,16 @@ const updateCourseResources = async (UpdateOption) => {
       //WRITE segmentIDs WRITE to institutionDB, on COURSETABLE
       //Update notifications status on course table
       break;
-    default:
+    case DATASTREAM_EVENT_NAMES.COURSE_UPDATED:
+      try {
+      } catch (error) {}
       break;
+    case DATASTREAM_EVENT_NAMES.COURSE_DELETED:
+      try {
+      } catch (error) {}
+      break;
+    default:
+      throw new Error();
   }
 };
 module.exports = { createModuleSegmentName, createModuleSegmentCommandInput };
