@@ -85,7 +85,7 @@ function Login() {
           throw Error(fetchError);
         }
       }catch(error){
-        await Auth.signOut() 
+        await Auth.signOut(); 
         throw Error(fetchError);
       }
 

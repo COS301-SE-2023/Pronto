@@ -7,7 +7,8 @@
     background-color: #f7f7f7;
     border: 1px solid #ddd;
     border-radius: 20px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); /* Increased shadow intensity */
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+        /* Increased shadow intensity */
     transition: width 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -26,8 +27,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex-grow: 1; /* Allow content to expand and center vertically */
-    justify-content: center; /* Center the content vertically */
+    flex-grow: 1;
+        /* Allow content to expand and center vertically */
+        justify-content: center;
+        /* Center the content vertically */
     max-height: fit-content;
 }
 
@@ -44,11 +47,14 @@
 
 /* Container for navbar links */
 .nav-links-container {
-    flex-grow: 1; /* Allow content to expand and center vertically */
+    flex-grow: 1;
+        /* Allow content to expand and center vertically */
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center the content vertically */
-    margin-bottom: 20px; /* Add margin at the bottom */
+    justify-content: center;
+        /* Center the content vertically */
+        margin-bottom: 20px;
+        /* Add margin at the bottom */
 }
 
 .nav-link:hover {
@@ -60,8 +66,9 @@
 .logo {
     display: block;
     margin: 0 auto;
-   
-    border-radius: 50%; /* Circular shape */
+
+    border-radius: 50%;
+        /* Circular shape */
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -69,9 +76,10 @@
 .top {
     text-align: center;
     margin-top: 0px;
-        margin-bottom: 10px;
+    margin-bottom: 10px;
         /* Adjust the space at the bottom */
 }
+
 .institution-name {
     margin-top: 0%;
     justify-content: center;
@@ -84,47 +92,56 @@
 /* Updated logout button styling */
 .logoutbtn {
     text-align: center;
-    padding: 15px 0; /* Reduced padding for the logout button */
-    background-color: transparent; /* Set the background to transparent */
-    border: none; /* Remove any border */
+    padding: 15px 0;
+        /* Reduced padding for the logout button */
+        background-color: transparent;
+        /* Set the background to transparent */
+        border: none;
+        /* Remove any border */
     width: 100%;
-    margin: 0 auto; /* Horizontally center the button within its container */
+    margin: 0 auto;
+        /* Horizontally center the button within its container */
     max-height: fit-content;
 }
 
 /* Media query for smaller screens (e.g., 13 inch) */
 @media (max-width: 768px) {
     .vertical-navbar {
-        width: 100%; /* Full width on smaller screens */
+        width: 100%;
+            /* Full width on smaller screens */
     }
 
     .logoutbtn {
-        position: static; /* Static position on smaller screens */
+        position: static;
+            /* Static position on smaller screens */
     }
 }
 
 .button-no-border {
     border: none;
     outline: none;
-    background-color: transparent; /* Optional: You can set the background color if needed */
+    background-color: transparent;
+        /* Optional: You can set the background color if needed */
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-  }
+}
 
 .grid {
     height: 80vh;
 }
+
 /* Add CSS styles for the SearchableDropdown component */
 .searchable-dropdown {
     position: relative;
     display: inline-block;
+    width: "60%"
 }
 
-input[type="text"] {
-    width: 200px;
+.search-input {
+    width: 400px;
     padding: 8px;
 }
 

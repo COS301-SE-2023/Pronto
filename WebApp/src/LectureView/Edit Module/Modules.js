@@ -75,6 +75,7 @@ const Modules = () => {
           lecturer?.courses?.items?.length===0 ? 
         
           (
+          <div>  
           <p style={
             {
               color: "#e32f45",
@@ -85,6 +86,19 @@ const Modules = () => {
               justifyContent: "center"
             }
           }>You have no courses</p>
+          {/* <br/>
+          <p style={ 
+            {
+              color: "#e32f45",
+              opacity: 0.9,
+              fontWeight: "50",
+              fontSize: "25px",
+              display: "flex",
+              justifyContent: "center"
+
+            }
+          }>Contact your institution's admin</p> */}
+          </div>
           )
           :
           (

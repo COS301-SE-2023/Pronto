@@ -24,15 +24,18 @@ export default function SearchableDropdown(props){
                     query:searchCourses,
                    variables:{ 
                            filter: {
-                                and: [
-                                    { coursecode: { matchPhrasePrefix: event.target.value } },
-                                    { institutionId : {eq: admin.institutionId}},
-                                    { lecturerId : {eq:null} }
-                                ]
-                            }
+                                // and: [
+                                    
+                                //{
+                                   coursecode: { matchPhrasePrefix: event.target.value } },
+                                    // { institutionId : {eq: admin.institutionId}},
+                                    // { lecturerId : {eq:null} }
+                                //]
+                            //}
                         }
                 })
-        setCourses(courseList.data.searchCourses.items);
+       setCourse(courseList.data.searchCourses.items.filter((c)=>c.institutionId===admin.institutionId && c.lecturerId===null));
+        // setCourses(courseList.data.searchCourses.items);
     }catch(error){
         console.log(error)
     }
@@ -71,11 +74,17 @@ export default function SearchableDropdown(props){
   } 
 
     return (
-      <div className="searchable-dropdown"> 
-         {/* <div>   */}
+      <div 
+      className="form-row"
+    
+      > 
+        <div 
+          className="form-group col-6"
+        > 
         <input
           type="text"
           placeholder="Type in Course Code..."
+          className="form-control"
           value={searchTerm}
           onChange={handleInputChange}
           onClick={toggleDropdown}
@@ -91,7 +100,8 @@ export default function SearchableDropdown(props){
               ))}
           </ul>
         )}
-        {/* </div>  */}
+        </div>
+       <div className="form-group col-6">
         <button 
             onClick={(e)=>handleAdd(e)}
             type="submit"
@@ -99,7 +109,7 @@ export default function SearchableDropdown(props){
             >
             Add
         </button>
-         
+        </div>
       </div>
     );
   }

@@ -11,8 +11,11 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '80%',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
+  //border: '2px solid #000',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: '20px',
+  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
   p: 4,
 };
 
