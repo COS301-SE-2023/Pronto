@@ -26,7 +26,7 @@ const AddLecturer = () => {
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
     
-    let limit = 10;
+    let limit = 7;
 
     const{admin,setAdmin} = useAdmin();
     const{lecturerList, setLecturerList, nextToken,setNextToken }=useLecturerList()
@@ -344,7 +344,7 @@ const AddLecturer = () => {
                      });
 
                 lecturers=lecturers.data.lecturersByInstitutionId;     
-                //setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
+              
                 setLecturerList(lecturers.items);
                 if(lecturers.items.length<limit){
                     setNextToken(null);
@@ -480,7 +480,7 @@ const AddLecturer = () => {
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '900px', marginTop: '10%' }}>
+            <main style={{ width: '900px', marginTop: '10%' ,maxHeight:"100%"}}>
                 {/* Input forms content */}
                 <h1 className="text-center">Add a lecturer</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to add lecturers to your institution and assign them to their courses. This will allow lecturers to sign up for an account.</h6>
@@ -607,7 +607,7 @@ const AddLecturer = () => {
                 </div>
                 <div
                     className="card shadow w-100"
-                    style={{ width: '500px' ,maxHeight:"100vh"}}
+                    style={{ width: '500px'}}
                 >
                     <div className="card-body">
                         <table

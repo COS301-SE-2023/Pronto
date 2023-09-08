@@ -53,13 +53,13 @@ export default function PostAccordion(course) {
   const handleAddVenue = async(event)=>{
     event.preventDefault();
     try{
-        let update=await API.graphql({
-          query:updateActivity,
-          variables:{input:{id:activity.id,coordinates:selectedLocation}}
-        })
-        setSuccessMessage("Venue updated successfully");
+        // let update=await API.graphql({
+        //   query:updateActivity,
+        //   variables:{input:{id:activity.id,coordinates:selectedLocation}}
+        // })
+        //setSuccessMessage("Venue updated successfully");
         //setSelectedLocation("");
-       // console.log(activity);
+       console.log(activity);
      // }
     }catch(e){
       setError("Something went wrong.Please try again later");
