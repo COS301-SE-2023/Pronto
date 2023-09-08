@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins,searchLecturerByCourses } from "../../graphql/queries";
@@ -44,8 +44,8 @@ const AddLecturer = () => {
             };
 
             try {
-    
-                if(admin.institution.lectureremails.filter((e)=>e===email).length===0){
+                let unique=admin.institution.lectureremails.filter((e)=>e===email)
+                if(unique.length===0){
                     let mutation = await API.graphql({
                         query: createLecturer,
                         variables: { input: lecturer },
