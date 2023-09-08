@@ -2,6 +2,8 @@ const { CreateCampaignCommand } = require("@aws-sdk/client-pinpoint");
 const { DATASTREAM_EVENT_NAMES, CAMPAIGN_NAME_SUFFIX } = require("./constants");
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
+const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINT;
+const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEY;
 
 const createCampaignName = (institutionName) => {
   formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
@@ -29,18 +31,19 @@ const createPinpointCampaignCommandInput = (institutionName) => {
 };
 
 const putCampainIdOnInstitution = async (institutionId, campaignId) => {
+  const UpdateInstitutionInput = {};
   const updateInstitutionMutation = /* GraphQL */ `
-    query updateInstitution($input: UpdateInstitutionInput!) {
-      getInstitution(id: $input) {
+    mutation updateInstitution($input: UpdateInstitutionInput) {
+      updateInstitution(input: $input) {
         name
-        adminId
-        domains
-        lectureremails
       }
     }
   `;
   const variables = {
-    input: institution.id,
+    input: {
+      id: institutionId,
+      notificationsCampaignId: campaignId,
+    },
   };
   const options = {
     method: "POST",
@@ -54,18 +57,22 @@ const putCampainIdOnInstitution = async (institutionId, campaignId) => {
   const request = new Request(GRAPHQL_ENDPOINT, options);
   let body;
   let response;
-
   try {
     response = await fetch(request);
-  } catch (getEmailsQueryError) {}
+    body = await response.json();
+    console.debug(`graphQL Resonse: ${body}`);
+    if (body.data) return true;
+    throw new Error("API ERROR: Empty Respoonse");
+  } catch (putCampainIdOnInstitutionError) {
+    console.debug(putCampainIdOnInstitution);
+    throw new Error("API ERROR: Failed to put campainId on Institude Table");
+  }
 };
 
-const updateInstitudeResources = async (UpdateOption, pinpointClient) => {
-  switch (UpdateOption) {
+const updateInstitudeResources = async (updateRequest, pinpointClient) => {
+  switch (updateRequest.UpdateOption) {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_CREATED:
       //CREATE campain
-      //write campainID to institutionDB
-      //Update notifications status on institution table -> send test email?
       const campaignCommandInput =
         createPinpointCampaignCommandInput(institutionName);
       const createCampaignCommand = new CreateCampaignCommand(
@@ -75,6 +82,8 @@ const updateInstitudeResources = async (UpdateOption, pinpointClient) => {
         const createCampainResponse = await pinpointClient.send(
           createCampaignCommand
         );
+        //write campainID to institutionDB
+        //Update notifications status on institution table -> send test email?
       } catch (error) {}
       break;
     case DATASTREAM_EVENT_NAMES.INSTITUDE_UPDATED:
