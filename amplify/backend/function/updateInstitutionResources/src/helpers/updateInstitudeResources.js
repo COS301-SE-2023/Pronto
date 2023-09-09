@@ -100,6 +100,7 @@ const setAndGetPinpointUpdateCampaignCommandInput = (
 
 const updateCamapaignOperation = async (
   institutionName,
+  institutionId,
   campaignId,
   pinpointClient
 ) => {
@@ -124,9 +125,11 @@ const updateCamapaignOperation = async (
       return true;
     }
   } catch (updateCamapaignOperationError) {
-    console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE OR RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
-            REASON: ${updateInstitudeResourceStatusError}`);
-    throw new Error("FAILED TO UPDATE CAMPAIN NAME, CHECK LOGS");
+    console.debug(`FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR RESOURCE STATUS FOR INSTUTION WITH ID ${institutionId}\n
+            REASON: ${updateCamapaignOperationError}`);
+    throw new Error(
+      "FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS"
+    );
   }
 };
 
