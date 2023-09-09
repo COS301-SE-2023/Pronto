@@ -6,8 +6,8 @@ const {
 const { DATASTREAM_EVENT_NAMES, CAMPAIGN_NAME_SUFFIX } = require("./constants");
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
-const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINT;
-const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEY;
+const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
+const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEYOUTPUT;
 
 const createCampaignName = (institutionName) => {
   formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
@@ -198,12 +198,13 @@ const updateInstitudeResourceStatus = async (status) => {
   const request = new Request(GRAPHQL_ENDPOINT, options);
   try {
     const response = await fetch(request);
-    const body = await response.json();
-    console.debug(`graphQL Resonse: ${body}`);
-    if (body.data) return true;
+    const responseObject = await response.json();
+    const body = responseObject.body;
+    console.debug(`graphQL Resonse body: ${body}`);
+    if (body.data) return body.data.updateInstitution != undefined;
     throw new Error("API ERROR: Empty Respoonse");
   } catch (putCampainIdOnInstitutionError) {
-    console.debug(putCampainIdOnInstitution);
+    console.debug(putCampainIdOnInstitutionError);
     throw new Error("API ERROR: Failed to update Institude Resource status");
   }
 };
