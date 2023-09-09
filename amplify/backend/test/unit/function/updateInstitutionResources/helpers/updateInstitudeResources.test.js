@@ -125,7 +125,33 @@ describe("testing createCampainOperation", () => {
     );
     expect(received).toEqual(expected);
   });
-  test("create Campaign request failed", () => {});
+  test("create Campaign request failed", async () => {
+    global.Request = jest.fn((input, options) => null);
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ok: true,
+            body: { data: { updateInstitution: { name: institutionName } } },
+          }),
+      })
+    );
+    const createCampaignCommandFailureResponse = {
+      $metadata: {
+        httpStatusCode: 400,
+      },
+    };
+    mockPinpointClient.send.mockResolvedValue(
+      createCampaignCommandFailureResponse
+    );
+    const expected = false;
+    const received = await createCampainOperation(
+      institutionName,
+      institutionId,
+      mockPinpointClient
+    );
+    expect(received).toEqual(expected);
+  });
   test("should throw: FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS", () => {});
 });
 describe("testing updateCamapaignOperation", () => {
