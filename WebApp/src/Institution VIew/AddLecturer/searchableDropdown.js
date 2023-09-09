@@ -34,7 +34,7 @@ export default function SearchableDropdown(props){
               }
               )
      
-     // console.log(courseList);
+      console.log(courseList);
          setCourses(courseList.data.searchCourses.items);
     }catch(error){
       

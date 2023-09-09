@@ -237,7 +237,7 @@ const AddLecturer = () => {
         try {
 
             if(searchIcon===true ){
-                if(filterAttribute!=="Course Code"){
+                if(filterAttribute!=="coursecode"){
                     let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}","nextToken":"${nextToken}"}`;
                 
                     let variables= JSON.parse(filter);
@@ -259,16 +259,14 @@ const AddLecturer = () => {
                     }
                 }
                 else{
-                     if(filterAttribute==="Course Code"){
+                     if(filterAttribute==="course code"){
                         let lecturers = await API.graphql({
                             query:searchLecturerByCourses,
                             variables:{
                                 filter: {
-                                    and: [
-                                        { coursecode: { matchPhrasePrefix: searchValue } },
-                                        { institutionId : {eq: admin.institutionId}},
-                                        { lecturerId : {eq:null} }
-                                    ]
+                                         coursecode: { matchPhrasePrefix: searchValue } ,
+                                         institutionId : {eq: admin.institutionId},
+                                         lecturerId : {eq:null} 
                                 },
                                 limit:limit
                             } 
@@ -377,20 +375,18 @@ const AddLecturer = () => {
         try {
             if (searchIcon === false) {
                 if(searchValue!==""){
-                    if(filterAttribute==="Course Code"){
+                    if(filterAttribute==="coursecode"){
                         let lecturers = await API.graphql({
                             query:searchLecturerByCourses,
                             variables:{
                                 filter: {
-                                    and: [
-                                        { coursecode: { matchPhrasePrefix: searchValue } },
-                                        { institutionId : {eq: admin.institutionId}},
-                                        { lecturerId : {eq:null} }
-                                    ]
+                                         coursecode: { matchPhrasePrefix: searchValue },
+                                         institutionId : {eq: admin.institutionId},
                                 },
                                 limit:limit
                             } 
                         })
+                        console.log(lecturers.data.searchCourses);
                         let token=lecturers.data.searchCourses.nextToken;
                         lecturers=lecturers.data.searchCourses.items;
                         lecturers.filter((c)=>c!==null && c.institutionId===admin.institutionId);
@@ -603,11 +599,11 @@ const AddLecturer = () => {
                             id="inputGroupSelect01"
                             data-testid="filterSelect"
                         >
-                            <option selected disabled>Filter by</option>
+                            <option value="default">Filter by</option>
                             <option value="firstname" >First Name</option>
                             <option value="lastname" >Last Name</option>
                             <option value="email" >Email</option>
-                            <option value="Course Code">Course Code</option>
+                            <option value="coursecode">Course Code</option>
                         </select>
                     </div>
                 </div>
