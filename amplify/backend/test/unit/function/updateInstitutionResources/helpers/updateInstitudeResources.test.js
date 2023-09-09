@@ -87,6 +87,19 @@ describe("testing createCampainOperation", () => {
   test("create Campaign request failed", () => {});
 });
 describe("testing updateCamapaignOperation", () => {
+  const successfulResponse = {
+    ResponseMetadata: {
+      httpStatusCode: 200,
+    },
+  };
+  const unsuccessfulResponse = {
+    ResponseMetadata: {
+      httpStatusCode: 404,
+    },
+  };
+  const mockPinpointClient = {
+    send: jest.fn(),
+  };
   test("update Campaign request successful", () => {});
   test("update Campaign request failed", () => {});
 });
@@ -104,7 +117,7 @@ describe("testing deleteCampaignOperation", () => {
   const mockPinpointClient = {
     send: jest.fn(),
   };
-  test("delete Campaign request successful", async () => {
+  test("should delete Campaign request successfully", async () => {
     mockPinpointClient.send.mockResolvedValue(successfulResponse);
     const expected = true;
     const received = await deleteCampaignOperation(
@@ -114,7 +127,7 @@ describe("testing deleteCampaignOperation", () => {
     );
     expect(received).toEqual(expected);
   });
-  test("delete Campaign request failed", async () => {
+  test("should fail to delete Campaign", async () => {
     mockPinpointClient.send.mockResolvedValue(unsuccessfulResponse);
     const expected = false;
     const received = await deleteCampaignOperation(
