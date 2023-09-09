@@ -110,17 +110,17 @@ const updateCamapaignOperation = async (
     const updateCampaignCommand = new UpdateCampaignCommand(
       updateCampaignCommandInput
     );
-    const updateAdmChannelCommandOutput = pinpointClient.send(
+    const updateAdmChannelCommandOutput = await pinpointClient.send(
       updateCampaignCommand
     );
     console.debug(`UPDATE Campain Response: ${updateAdmChannelCommandOutput}`);
-    const responseMetadata =
-      updateAdmChannelCommandOutput.ResponseMetadata.httpStatusCode;
+    const responseMetadata = updateAdmChannelCommandOutput.ResponseMetadata;
     const statusCode = responseMetadata.httpStatusCode;
     if (statusCode !== 200) {
       console.debug(`campaign NOT UPDATED, please check logs for more info`);
       return false;
     } else if (statusCode === 200) {
+      console.debug(`campaign UPDATED`);
       await updateInstitudeResourceStatus("UPDATE COMPLETE");
       return true;
     }
