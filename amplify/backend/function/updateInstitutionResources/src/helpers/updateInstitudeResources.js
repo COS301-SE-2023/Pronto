@@ -15,7 +15,7 @@ const createCampaignName = (institutionName) => {
 };
 
 /* create campain*/
-const createPinpointCampaignCommandInput = (institutionName) => {
+const setAndGetPinpointCampaignCommandInput = (institutionName) => {
   const campaignName = createCampaignName(institutionName);
   const createCampaignCommandInput = {
     ApplicationId: PINPOINT_APP_ID,
@@ -41,7 +41,7 @@ const createCampainOperation = async (
   pinpointClient
 ) => {
   const campaignCommandInput =
-    createPinpointCampaignCommandInput(institutionName);
+    setAndGetPinpointCampaignCommandInput(institutionName);
   const createCampaignCommand = new CreateCampaignCommand(campaignCommandInput);
   try {
     const createCampainResponse = await pinpointClient.send(
@@ -73,7 +73,10 @@ const createCampainOperation = async (
 };
 
 /*update campain*/
-const updatePinpointCampaignCommandInput = (institutionName, CampaignId) => {
+const setAndGetPinpointUpdateCampaignCommandInput = (
+  institutionName,
+  CampaignId
+) => {
   const campaignName = createCampaignName(institutionName);
   const updateCampaignCommandInput = {
     CampaignId: CampaignId,
@@ -85,16 +88,17 @@ const updatePinpointCampaignCommandInput = (institutionName, CampaignId) => {
   return updateCampaignCommandInput;
 };
 
-const UpdateCamapaignOperation = async (
+const updateCamapaignOperation = async (
   institutionName,
   campaignId,
   pinpointClient
 ) => {
-  const updateCampaignCommandInput = updatePinpointCampaignCommandInput(
-    institutionName,
-    campaignName,
-    campaignId
-  );
+  const updateCampaignCommandInput =
+    setAndGetPinpointUpdateCampaignCommandInput(
+      institutionName,
+      campaignName,
+      campaignId
+    );
   try {
     const updateCampaignCommand = new UpdateCampaignCommand(
       updateCampaignCommandInput
@@ -104,7 +108,7 @@ const UpdateCamapaignOperation = async (
     if (updateCampainResponse.id == campaignId) {
       await updateInstitudeResourceStatus("CREATION FAILED");
     }
-  } catch (UpdateCamapaignOperationError) {
+  } catch (updateCamapaignOperationError) {
     console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
             REASON: ${updateInstitudeResourceStatusError}`);
     throw new Error("FAILED TO UPDATE CAMPAIN NAME, CHECK LOGS");
@@ -189,7 +193,7 @@ const updateInstitudeResourceStatus = async (status) => {
 };
 
 /* Delete Institude campain when institude is deleted */
-const createDeletePinpointCampaignCommandInput = (campaignId) => {
+const setAndGetPinpointDeleteCampaignCommandInput = (campaignId) => {
   const deleteCampaignCommandInput = {
     ApplicationId: PINPOINT_APP_ID,
     CampaignId: campaignId,
@@ -203,7 +207,7 @@ const deleteCampaignOperation = async (
   pinpointClient
 ) => {
   const deleteCampaignCommandInput =
-    createDeletePinpointCampaignCommandInput(campaignId);
+    setAndGetPinpointDeleteCampaignCommandInput(campaignId);
   const deleteCampainCommand = new DeleteCampaignCommand(
     deleteCampaignCommandInput
   );
@@ -257,11 +261,11 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
       const campainId = newImage["notificationsCampaignId"];
       if (newInstutudeName != oldInstiudeName)
         try {
-          await UpdateCamapaignOperation(newInstutudeName, campainId);
+          await updateCamapaignOperation(newInstutudeName, campainId);
           return true;
-        } catch (UpdateCamapaignOperationError) {
+        } catch (updateCamapaignOperationError) {
           console.debug(`FAILED TO SEND or HANDLE UPDATE PINPOINT REQUEST
-          REASON: ${UpdateCamapaignOperationError}`);
+          REASON: ${updateCamapaignOperationError}`);
           return false;
         }
       break;
@@ -285,11 +289,11 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
 
 module.exports = {
   createCampaignName,
-  createPinpointCampaignCommandInput,
+  setAndGetPinpointCampaignCommandInput,
   createCampainOperation,
   updateInstitudeResources,
-  updatePinpointCampaignCommandInput,
-  UpdateCamapaignOperation,
-  createDeletePinpointCampaignCommandInput,
+  setAndGetPinpointUpdateCampaignCommandInput,
+  updateCamapaignOperation,
+  setAndGetPinpointDeleteCampaignCommandInput,
   deleteCampaignOperation,
 };
