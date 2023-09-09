@@ -1,12 +1,26 @@
 const {
   createCampaignName,
-  createPinpointCampaignCommandInput,
-  updatePinpointCampaignCommandInput,
-  createDeletePinpointCampaignCommandInput,
+  setAndGetPinpointCampaignCommandInput,
+  setAndGetPinpointUpdateCampaignCommandInput,
+  setAndGetPinpointDeleteCampaignCommandInput,
+  createCampainOperation,
+  updateCamapaignOperation,
+  deleteCampaignOperation,
 } = require("../../../../../function/updateInstitutionResources/src/helpers/updateInstitudeResources");
+const { PinpointClient } = require("@aws-sdk/client-pinpoint");
+jest.mock("@aws-sdk/client-pinpoint", () => {
+  return {
+    PinpointClient: class {
+      send() {
+        return Promise.resolve({});
+      }
+    },
+  };
+});
 
 const institutionName = "University OF Pretoria";
-
+const institutionId = "INSITUTION-ID";
+const campaignId = "CAMPAIGN-ID";
 describe("Testing helper functions command inputs", () => {
   test("testing createCampaignName", () => {
     formattedInstitutionName = institutionName
@@ -19,7 +33,7 @@ describe("Testing helper functions command inputs", () => {
     expect(receivedCampaignName).toEqual(expectedCampaignName);
   });
 
-  test("testing createPinpointCampaignCommandInput", () => {
+  test("testing setAndGetPinpointCampaignCommandInput", () => {
     const campaignName = createCampaignName(institutionName);
     const expectedCampaignCommandInput = {
       WriteCampaignRequest: {
@@ -36,10 +50,10 @@ describe("Testing helper functions command inputs", () => {
       },
     };
     const receivedCampaignCommandInput =
-      createPinpointCampaignCommandInput(institutionName);
+      setAndGetPinpointCampaignCommandInput(institutionName);
     expect(receivedCampaignCommandInput).toEqual(expectedCampaignCommandInput);
   });
-  test("testing updatePinpointCampaignCommandInput", () => {
+  test("testing setAndGetPinpointUpdateCampaignCommandInput", () => {
     const campaignId = "CAMPAIGN-ID";
     const campaignName = createCampaignName(institutionName);
     const expectedUpdateCampaignCommandInput = {
@@ -50,20 +64,64 @@ describe("Testing helper functions command inputs", () => {
       },
     };
     const receivedUpdateCampaignCommandInput =
-      updatePinpointCampaignCommandInput(institutionName, campaignId);
+      setAndGetPinpointUpdateCampaignCommandInput(institutionName, campaignId);
     expect(receivedUpdateCampaignCommandInput).toEqual(
       expectedUpdateCampaignCommandInput
     );
   });
-  test("testing createDeletePinpointCampaignCommandInput", () => {
+  test("testing setAndGetPinpointDeleteCampaignCommandInput", () => {
     const campaignId = "CAMPAIGN-ID";
     const expectedDeleteCampaignCommandInput = {
       CampaignId: campaignId,
     };
     const receivedDeleteCampaignCommandInput =
-      createDeletePinpointCampaignCommandInput(campaignId);
+      setAndGetPinpointDeleteCampaignCommandInput(campaignId);
     expect(receivedDeleteCampaignCommandInput).toEqual(
       expectedDeleteCampaignCommandInput
     );
+  });
+});
+
+describe("testing createCampainOperation", () => {
+  test("create Campaign request successful", () => {});
+  test("create Campaign request failed", () => {});
+});
+describe("testing updateCamapaignOperation", () => {
+  test("update Campaign request successful", () => {});
+  test("update Campaign request failed", () => {});
+});
+describe("testing deleteCampaignOperation", () => {
+  const successfulResponse = {
+    ResponseMetadata: {
+      httpStatusCode: 200,
+    },
+  };
+  const unsuccessfulResponse = {
+    ResponseMetadata: {
+      httpStatusCode: 404,
+    },
+  };
+  const mockPinpointClient = {
+    send: jest.fn(),
+  };
+  test("delete Campaign request successful", async () => {
+    mockPinpointClient.send.mockResolvedValue(successfulResponse);
+    const expected = true;
+    const received = await deleteCampaignOperation(
+      institutionId,
+      campaignId,
+      mockPinpointClient
+    );
+    expect(received).toEqual(expected);
+  });
+  test("delete Campaign request failed", async () => {
+    mockPinpointClient.send.mockResolvedValue(unsuccessfulResponse);
+    const expected = false;
+    const received = await deleteCampaignOperation(
+      institutionId,
+      campaignId,
+      mockPinpointClient
+    );
+    expect(expected).toEqual(received);
   });
 });
