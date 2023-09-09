@@ -66,17 +66,16 @@ const createCampainOperation = async (
       return false;
     }
   } catch (createInstitutionResourcesError) {
-    console.debug(
-      `FAILED TO CREATE INSTITUTION RESOURCES FOR INSTUTION WITH ID ${institutionId}\n
-          ERROR: ${createInstitutionResourcesError}
-          `
-    );
+    console.debug(`ERROR SENDING CREATE CAMPAIGN COMMAND FOR INSTUTION WITH ID ${institutionId}\n
+            INFO: ${createInstitutionResourcesError}`);
     try {
       await updateInstitudeResourceStatus("CREATION FAILED");
     } catch (updateInstitudeResourceStatusError) {
-      console.debug(`ERROR SENDING CREATE CAMPAIGN COMMAND OR RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
+      console.debug(`ERROR UPDATE NOTIFICATION STATUS FOR INSTUTION WITH ID ${institutionId}\n
             INFO: ${updateInstitudeResourceStatusError}`);
-      throw new Error("FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS");
+      throw new Error(
+        "FAILED TO UPDATE INSTITUDE NOTIFICATION STATUS, CHECK LOGS"
+      );
     }
   }
 };
@@ -162,7 +161,6 @@ const putCampainIdOnInstitution = async (institutionId, campaignId) => {
     const responseObject = await response.json();
     const body = responseObject.body;
     console.debug(`graphQL Resonse body: ${body}`);
-    console.table(body);
     if (body.data) return !body.data.updateInstitution;
     throw new Error("API ERROR: Empty Respoonse");
   } catch (putCampainIdOnInstitutionError) {
