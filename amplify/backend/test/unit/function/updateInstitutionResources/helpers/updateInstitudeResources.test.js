@@ -196,7 +196,14 @@ describe("testing updateCamapaignOperation", () => {
     );
     expect(received).toEqual(expected);
   });
-  test("should throw: FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS", () => {});
+  test("should throw: FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS", async () => {
+    mockPinpointClient.send.mockRejectedValue(unsuccessfulResponse);
+    await expect(
+      updateCamapaignOperation(institutionId, campaignId, mockPinpointClient)
+    ).rejects.toThrow(
+      /FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS/
+    );
+  });
 });
 describe("testing deleteCampaignOperation", () => {
   test("should delete Campaign request successfully", async () => {
