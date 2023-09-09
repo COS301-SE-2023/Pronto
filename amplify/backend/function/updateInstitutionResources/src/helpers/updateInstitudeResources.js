@@ -44,14 +44,19 @@ const createCampainOperation = async (
     setAndGetPinpointCampaignCommandInput(institutionName);
   const createCampaignCommand = new CreateCampaignCommand(campaignCommandInput);
   try {
-    const createCampainResponse = await pinpointClient.send(
+    const createCampaignCommandOutput = await pinpointClient.send(
       createCampaignCommand
     );
-    console.debug(`CREATE Campain Response: ${createCampainResponse}`);
-    if (createCampainResponse.id) {
+    console.debug(`CREATE Campain Response: ${createCampaignCommandOutput}`);
+    const responseMetadata =
+      createCampaignCommandOutput.ResponseMetadata.httpStatusCode;
+    const statusCode = responseMetadata.httpStatusCode;
+    const campaignResponse = createCampaignCommandOutput.CampaignResponse;
+    if (statusCode === 200) {
+      console.debug(`CAMPAIGN CREATED. CAMPAIGN ID: ${campaignResponse.id}`);
       const isPutCampainIdSuccess = await putCampainIdOnInstitution(
         institutionId,
-        createCampainResponse.id
+        campaignResponse.id
       );
       if (!isPutCampainIdSuccess)
         await updateInstitudeResourceStatus("CREATION FAILED");
