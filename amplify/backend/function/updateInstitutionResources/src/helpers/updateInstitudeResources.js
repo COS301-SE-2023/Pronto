@@ -291,4 +291,6 @@ module.exports = {
   updateInstitudeResources,
   updatePinpointCampaignCommandInput,
   UpdateInstitutionCamapaign,
+  createDeletePinpointCampaignCommandInput,
+  deleteAndHandlePinpointCampaign,
 };
