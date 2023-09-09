@@ -48,12 +48,11 @@ const createCampainOperation = async (
       createCampaignCommand
     );
     console.debug(`CREATE Campain Response: ${createCampaignCommandOutput}`);
-    const responseMetadata =
-      createCampaignCommandOutput.ResponseMetadata.httpStatusCode;
+    const responseMetadata = createCampaignCommandOutput.$metadata;
     const statusCode = responseMetadata.httpStatusCode;
     const campaignResponse = createCampaignCommandOutput.CampaignResponse;
     if (statusCode === 200) {
-      console.debug(`CAMPAIGN CREATED. CAMPAIGN ID: ${campaignResponse.id}`);
+      console.debug(`CAMPAIGN CREATED. CAMPAIGN ID: ${campaignResponse.Id}`);
       const isPutCampainIdSuccess = await putCampainIdOnInstitution(
         institutionId,
         campaignResponse.id
@@ -114,7 +113,7 @@ const updateCamapaignOperation = async (
       updateCampaignCommand
     );
     console.debug(`UPDATE Campain Response: ${updateAdmChannelCommandOutput}`);
-    const responseMetadata = updateAdmChannelCommandOutput.ResponseMetadata;
+    const responseMetadata = updateAdmChannelCommandOutput.$metadata;
     const statusCode = responseMetadata.httpStatusCode;
     if (statusCode !== 200) {
       console.debug(`campaign NOT UPDATED, please check logs for more info`);
@@ -163,7 +162,8 @@ const putCampainIdOnInstitution = async (institutionId, campaignId) => {
     const responseObject = await response.json();
     const body = responseObject.body;
     console.debug(`graphQL Resonse body: ${body}`);
-    if (body.data) return body.data.updateInstitution != undefined;
+    console.table(body);
+    if (body.data) return !body.data.updateInstitution;
     throw new Error("API ERROR: Empty Respoonse");
   } catch (putCampainIdOnInstitutionError) {
     console.debug(putCampainIdOnInstitution);
@@ -200,7 +200,7 @@ const updateInstitudeResourceStatus = async (status) => {
     const responseObject = await response.json();
     const body = responseObject.body;
     console.debug(`graphQL Resonse body: ${body}`);
-    if (body.data) return body.data.updateInstitution != undefined;
+    if (body.data) return !body.data.updateInstitution;
     throw new Error("API ERROR: Empty Respoonse");
   } catch (putCampainIdOnInstitutionError) {
     console.debug(putCampainIdOnInstitutionError);
@@ -232,7 +232,7 @@ const deleteCampaignOperation = async (
       deleteCampainCommand
     );
     console.debug(`DELETE Campain Response: ${deleteCampaignCommandOutput}`);
-    const responseMetadata = deleteCampaignCommandOutput.ResponseMetadata;
+    const responseMetadata = deleteCampaignCommandOutput.$metadata;
     const statusCode = responseMetadata.httpStatusCode;
     if (statusCode !== 200) {
       console.debug(`campaign NOT DELETED, please check logs for more info`);
