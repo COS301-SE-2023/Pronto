@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import UserManual from "../HelpFiles/EditModuleInfo.pdf";
 import HelpButton from '../../HelpButton';
 import { useLecturer } from "../../ContextProviders/LecturerContext";
+import moduleImage from "./Courses.png";
 
 const Modules = () => {
 
@@ -16,7 +17,7 @@ const Modules = () => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false); // Add loading state
 
-  const {lecturer,setLecturer} =useLecturer();
+  const { lecturer, setLecturer } = useLecturer();
 
   const fetchCourses = async () => {
     try {
@@ -83,12 +84,21 @@ const Modules = () => {
     <div style={{ display: 'inline-flex' }}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }}>
-        {/* Navigation bar content */}
+
         <LecturerNavigation />
       </nav>
 
       <main style={{ width: '900px', marginTop: '30px' }}>
+
+
         <h1 className="moduleHead">Courses</h1>
+        {/* Add your explanatory image and text here */}
+        <div style={{ textAlign: 'center' }}>
+          <p>This page allows you to manage your registered modules. Click on a module to post reminders, due dates or update lecture venues.</p>
+          <img src={moduleImage} alt="ModulesImage" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+
+        </div>
+
         {loading ? (
           <p style={
             {
