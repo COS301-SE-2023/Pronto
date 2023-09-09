@@ -58,8 +58,13 @@ const createCampainOperation = async (
         institutionId,
         campaignResponse.id
       );
-      if (!isPutCampainIdSuccess)
+      if (!isPutCampainIdSuccess) {
         await updateInstitudeResourceStatus("CREATION FAILED");
+        return true;
+      }
+    } else {
+      console.debug(`CAMPAIGN NOT CREATED, please check logs for more info`);
+      return false;
     }
   } catch (createInstitutionResourcesError) {
     console.debug(
@@ -108,13 +113,22 @@ const updateCamapaignOperation = async (
     const updateCampaignCommand = new UpdateCampaignCommand(
       updateCampaignCommandInput
     );
-    const updateCampainResponse = pinpointClient.send(updateCampaignCommand);
-    console.debug(`UPDATE Campain Response: ${createCampainResponse}`);
-    if (updateCampainResponse.id == campaignId) {
-      await updateInstitudeResourceStatus("CREATION FAILED");
+    const updateAdmChannelCommandOutput = pinpointClient.send(
+      updateCampaignCommand
+    );
+    console.debug(`UPDATE Campain Response: ${updateAdmChannelCommandOutput}`);
+    const responseMetadata =
+      updateAdmChannelCommandOutput.ResponseMetadata.httpStatusCode;
+    const statusCode = responseMetadata.httpStatusCode;
+    if (statusCode !== 200) {
+      console.debug(`campaign NOT UPDATED, please check logs for more info`);
+      return false;
+    } else if (statusCode === 200) {
+      await updateInstitudeResourceStatus("UPDATE COMPLETE");
+      return true;
     }
   } catch (updateCamapaignOperationError) {
-    console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
+    console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE OR RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
             REASON: ${updateInstitudeResourceStatusError}`);
     throw new Error("FAILED TO UPDATE CAMPAIN NAME, CHECK LOGS");
   }
@@ -225,13 +239,13 @@ const deleteCampaignOperation = async (
       deleteCampaignCommandOutput.ResponseMetadata.httpStatusCode;
     const statusCode = responseMetadata.httpStatusCode;
     if (statusCode !== 200) {
-      console.debug(`campaign DELETED
-    institution id:${institutionId}
-    campain id:${campaignId}`);
-      return true;
-    } else {
       console.debug(`campaign NOT DELETED, please check logs for more info`);
       return false;
+    } else if (statusCode === 200) {
+      console.debug(`campaign DELETED
+        institution id:${institutionId}
+        campain id:${campaignId}`);
+      return true;
     }
   } catch (deleteCampaignCommandError) {
     console.debug(
@@ -247,12 +261,12 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_CREATED:
       console.debug("INSTITUDE CREATED");
       try {
-        await createCampainOperation(
+        const isCampainCreated = await createCampainOperation(
           updateRequest.institutionName,
           institutionId,
           pinpointClient
         );
-        return true;
+        return isCampainCreated;
       } catch (sendAndHandleCreatePinpointCampaignError) {
         console.debug(`FAILED TO SEND or HANDLE CREATE PINPOINT REQUEST
         REASON: ${sendAndHandleCreatePinpointCampaignError}`);
@@ -266,8 +280,11 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
       const campainId = newImage["notificationsCampaignId"];
       if (newInstutudeName != oldInstiudeName)
         try {
-          await updateCamapaignOperation(newInstutudeName, campainId);
-          return true;
+          const isCampaignUpdated = await updateCamapaignOperation(
+            newInstutudeName,
+            campainId
+          );
+          return isCampaignUpdated;
         } catch (updateCamapaignOperationError) {
           console.debug(`FAILED TO SEND or HANDLE UPDATE PINPOINT REQUEST
           REASON: ${updateCamapaignOperationError}`);
