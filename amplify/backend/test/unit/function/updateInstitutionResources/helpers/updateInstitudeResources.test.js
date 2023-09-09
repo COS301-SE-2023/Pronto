@@ -7,7 +7,6 @@ const {
   updateCamapaignOperation,
   deleteCampaignOperation,
 } = require("../../../../../function/updateInstitutionResources/src/helpers/updateInstitudeResources");
-const { PinpointClient } = require("@aws-sdk/client-pinpoint");
 jest.mock("@aws-sdk/client-pinpoint", () => {
   return {
     PinpointClient: class {
@@ -220,5 +219,10 @@ describe("testing deleteCampaignOperation", () => {
     );
     expect(expected).toEqual(received);
   });
-  test("should throw: FAILED TO DELETE CAMPAIN, CHECK LOGS", () => {});
+  test("should throw: FAILED TO DELETE CAMPAIN, CHECK LOGS", async () => {
+    mockPinpointClient.send.mockRejectedValue(unsuccessfulResponse);
+    await expect(
+      deleteCampaignOperation(institutionId, campaignId, mockPinpointClient)
+    ).rejects.toThrow(/FAILED TO DELETE CAMPAIN, CHECK LOGS/);
+  });
 });
