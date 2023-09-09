@@ -60,9 +60,9 @@
 .logo {
     display: block;
     margin: 0 auto;
-   
     border-radius: 50%; /* Circular shape */
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    object-fit: cover; /* Prevent stretching and cover the container */
 }
 
 /* Centered text style for top */

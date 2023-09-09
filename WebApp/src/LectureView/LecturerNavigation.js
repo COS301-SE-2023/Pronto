@@ -85,7 +85,6 @@ export default function LecturerNavigation(lecturerData) {
             style={{ width: "155px", height: "155px" }}
             data-testid={'UniversityImage'}
           />
-
           <div className="lecturer-name" style={{ paddingTop: '5%' }}>
             <b>
               {user}

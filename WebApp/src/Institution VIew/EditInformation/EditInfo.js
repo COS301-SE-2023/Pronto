@@ -25,10 +25,10 @@ const EditInfoPage = () => {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [folderNameS3, setFolderNameS3] = useState("");
     const [message, setMessage] = useState("");
-    const [successMessage,setSuccessMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const [domain, setDomain] = useState("");
- 
-    const {admin,setAdmin} = useAdmin();
+
+    const { admin, setAdmin } = useAdmin();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -37,11 +37,11 @@ const EditInfoPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            if(newPassword===confirmPassword){
+            if (newPassword === confirmPassword) {
                 Auth.changePassword(user, oldPassword, newPassword);
                 setSuccessMessage("Password changed successfully");
-            }else{
-               setError("New password does not match confirm password");
+            } else {
+                setError("New password does not match confirm password");
             }
         } catch (error) {
             setError("Password change failed")
@@ -51,7 +51,7 @@ const EditInfoPage = () => {
         setConfirmPassword("")
     };
 
-    const fecthUser = async()=>{
+    const fecthUser = async () => {
         let userInfo = await Auth.currentAuthenticatedUser()
         let username = userInfo?.attributes?.name;
         const words = username.split(/\s+/);
@@ -151,12 +151,12 @@ const EditInfoPage = () => {
                     variables: { input: inst },
                     authMode: "AMAZON_COGNITO_USER_POOLS"
                 });
-          
+
                 let newAdmin = admin;
                 newAdmin.institution = update.data.updateInstitution;
-                try{
-                    newAdmin.institution.logoUrl= await Storage.get(newAdmin.institution.logo, { validateObjectExistence: true, expires: 3600 });
-                }catch(error){
+                try {
+                    newAdmin.institution.logoUrl = await Storage.get(newAdmin.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                } catch (error) {
 
                 }
                 setAdmin(newAdmin);
@@ -178,9 +178,9 @@ const EditInfoPage = () => {
     }, []);
 
     return (
-        <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
+        <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
-             {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
+            {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
             <div>
                 <HelpButton pdfUrl={UserManual} />
             </div>
@@ -299,11 +299,16 @@ const EditInfoPage = () => {
                                     onDragOver={handleDragOver}
                                     onDragEnter={handleDragEnter}
                                     style={{
-                                        height: "100px",
-                                        border: "1px dashed",
+                                        height: "80px",
+                                        width: "100%",
+                                        backgroundColor: "#f7f7f7",
+                                        border: "1px dashed #ddd",
+                                        borderRadius: "20px",
+
                                         justifyContent: "center",
                                         alignItems: "center",
                                         display: "flex",
+                                        cursor: "pointer",
                                     }}>
                                     {selectedFile ? (
                                         <div>
