@@ -3,6 +3,7 @@ import React, { Component,useState } from "react";
 import { searchCourses } from "../../graphql/queries";
 import {API} from "aws-amplify";
 import { useAdmin } from "../../ContextProviders/AdminContext";
+import { devNull } from "os";
 
 export default function SearchableDropdown(props){
 
@@ -23,18 +24,18 @@ export default function SearchableDropdown(props){
                     query:searchCourses,
                    variables:{ 
                            filter: {
-                                // and: [
-                                    
-                                //{
-                                   coursecode: { matchPhrasePrefix: event.target.value } },
-                                    // { institutionId : {eq: admin.institutionId}},
-                                    // { lecturerId : {eq:null} }
-                                //]
-                            //}
-                        }
-                })
-       setCourse(courseList.data.searchCourses.items.filter((c)=>c.institutionId===admin.institutionId && c.lecturerId===null));
-        // setCourses(courseList.data.searchCourses.items);
+                                   
+                                   coursecode: {matchPhrasePrefix:event.target.value},
+                                   instituionId: {eq :admin.instituionId},
+                                   lecturerId:{eq:null}
+                                
+                            }
+                }
+              }
+              )
+     
+     // console.log(courseList);
+         setCourses(courseList.data.searchCourses.items);
     }catch(error){
       
     }
