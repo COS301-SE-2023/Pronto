@@ -1,6 +1,7 @@
 const {
   createCampaignName,
   createPinpointCampaignCommandInput,
+  updatePinpointCampaignCommandInput,
 } = require("../../../../../function/updateInstitutionResources/src/helpers/updateInstitudeResources");
 
 const institutionName = "University OF Pretoria";
@@ -33,9 +34,24 @@ describe("Testing helper functions", () => {
         },
       },
     };
-    console.table(expectedCampaignCommandInput);
     const receivedCampaignCommandInput =
       createPinpointCampaignCommandInput(institutionName);
     expect(receivedCampaignCommandInput).toEqual(expectedCampaignCommandInput);
+  });
+  test("testing updatePinpointCampaignCommandInput", () => {
+    const campaignId = "CAMPAIGN-ID";
+    const campaignName = createCampaignName(institutionName);
+    const expectedUpdateCampaignCommandInput = {
+      CampaignId: campaignId,
+      Name: campaignName,
+      WriteCampaignRequest: {
+        Description: `${institutionName} Notifications Campaign`,
+      },
+    };
+    const receivedUpdateCampaignCommandInput =
+      updatePinpointCampaignCommandInput(institutionName, campaignId);
+    expect(receivedUpdateCampaignCommandInput).toEqual(
+      expectedUpdateCampaignCommandInput
+    );
   });
 });
