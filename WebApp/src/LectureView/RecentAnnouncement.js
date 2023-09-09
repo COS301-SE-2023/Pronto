@@ -243,7 +243,7 @@ export default function RecentAnnouncement() {
 
 
       <main style={{ width: '900px', marginTop: '30px' }}>
-        <h1 className="moduleHead">Recent Announcements</h1>
+        <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Recent Announcements</h1>
         <div style={{ textAlign: 'center' }}>
           <p>This page allows you view the announcents you've made to students on the mobile app. You can delete or sort these announcements.</p>
           <img src={recentAnnouncementImage} alt="ModulesImage" style={{ maxWidth: '100%', maxHeight: '200px' }} />

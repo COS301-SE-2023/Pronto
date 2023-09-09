@@ -91,7 +91,7 @@ const Modules = () => {
       <main style={{ width: '900px', marginTop: '30px' }}>
 
 
-        <h1 className="moduleHead">Courses</h1>
+        <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Courses</h1>
         {/* Add your explanatory image and text here */}
         <div style={{ textAlign: 'center' }}>
           <p>This page allows you to manage your registered modules. Click on a module to post reminders, due dates or update lecture venues.</p>
