@@ -2,11 +2,12 @@ const {
   createCampaignName,
   createPinpointCampaignCommandInput,
   updatePinpointCampaignCommandInput,
+  createDeletePinpointCampaignCommandInput,
 } = require("../../../../../function/updateInstitutionResources/src/helpers/updateInstitudeResources");
 
 const institutionName = "University OF Pretoria";
 
-describe("Testing helper functions", () => {
+describe("Testing helper functions command inputs", () => {
   test("testing createCampaignName", () => {
     formattedInstitutionName = institutionName
       .toLowerCase()
@@ -52,6 +53,17 @@ describe("Testing helper functions", () => {
       updatePinpointCampaignCommandInput(institutionName, campaignId);
     expect(receivedUpdateCampaignCommandInput).toEqual(
       expectedUpdateCampaignCommandInput
+    );
+  });
+  test("testing createDeletePinpointCampaignCommandInput", () => {
+    const campaignId = "CAMPAIGN-ID";
+    const expectedDeleteCampaignCommandInput = {
+      CampaignId: campaignId,
+    };
+    const receivedDeleteCampaignCommandInput =
+      createDeletePinpointCampaignCommandInput(campaignId);
+    expect(receivedDeleteCampaignCommandInput).toEqual(
+      expectedDeleteCampaignCommandInput
     );
   });
 });
