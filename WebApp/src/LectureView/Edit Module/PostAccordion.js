@@ -63,10 +63,9 @@ export default function PostAccordion(course) {
         })
         setSuccessMessage("Venue updated successfully");
       }
-     // console.log(activity);
+   
     }catch(e){
       setError("Something went wrong.Please try again later");
-      console.log(e);
     }
   }
 

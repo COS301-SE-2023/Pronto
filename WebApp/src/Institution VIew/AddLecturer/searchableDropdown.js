@@ -14,8 +14,7 @@ export default function SearchableDropdown(props){
    const setSelectedCourses =props.setSelectedCourses;
    const [course,setCourse]=useState("");
 
-//    console.log(props.selectedCourses);
-//    console.log(selectedCourses);
+
    const handleInputChange = async(event) => {
     
     setSearchTerm(event.target.value);
@@ -37,7 +36,7 @@ export default function SearchableDropdown(props){
        setCourse(courseList.data.searchCourses.items.filter((c)=>c.institutionId===admin.institutionId && c.lecturerId===null));
         // setCourses(courseList.data.searchCourses.items);
     }catch(error){
-        console.log(error)
+      
     }
 
   };

@@ -198,7 +198,7 @@ const AddLecturer = () => {
                 setOfferedCourses([...offeredCourses, courseList]);
 
             }
-            console.log(admin.institution.lectureremails);
+           
             let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
 
             let update = {
@@ -414,7 +414,7 @@ const AddLecturer = () => {
                         
                         let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
                         let variables= JSON.parse(filter);
-                        console.log(variables);
+                        
                         
                         let lecturers = await API.graphql({
                             query:searchLecturers,
@@ -452,7 +452,7 @@ const AddLecturer = () => {
             }  
             
         } catch (error) {
-            console.log(error);
+           
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if(e.search("Network") !== -1) {

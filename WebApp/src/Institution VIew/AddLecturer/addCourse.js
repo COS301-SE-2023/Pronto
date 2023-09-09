@@ -2,7 +2,6 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import SearchableDropdown from "./searchableDropdown";
-import { selectClasses } from "@mui/material";
 
 const style = {
   position: 'absolute',
@@ -11,7 +10,6 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '80%',
   bgcolor: 'background.paper',
-  //border: '2px solid #000',
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: '20px',
@@ -32,7 +30,7 @@ export default function AddModal(module) {
   const handleOpen = async () => {
     setOpen(true)
     module.setModal(true)
-    //console.log(module.selectedCourses)
+    
     let courses = []
     try {
       for (let i = 0; i < module.selectedCourses.length; i++) {
@@ -41,7 +39,6 @@ export default function AddModal(module) {
       setSelectedCourses(selectedCourses);
     } catch (e) {
       //alert("No courses found")
-      console.log(e)
     }
   }
 
@@ -76,7 +73,6 @@ export default function AddModal(module) {
 
   const handleAdd = async (event) => {
     
-    console.log(event);
     let added=false;
       for (let i = 0; i < selectedCourses.length; i++) {
         if (selectedCourses[i].id === event.id) {
@@ -85,13 +81,13 @@ export default function AddModal(module) {
         }
       }
       
-    if(!added){
+    if(!added && event.id!==undefined){
    
       selectedCourses.push(event);
       setSelectedCourses(selectedCourses);
       setOfferedCourses([]);
     }
-    console.log(selectedCourses);
+   
   }
 
   const handleRemove = async (index) => {
