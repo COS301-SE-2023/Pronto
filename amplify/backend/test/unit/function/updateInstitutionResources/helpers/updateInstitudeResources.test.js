@@ -21,6 +21,20 @@ jest.mock("@aws-sdk/client-pinpoint", () => {
 const institutionName = "University OF Pretoria";
 const institutionId = "INSITUTION-ID";
 const campaignId = "CAMPAIGN-ID";
+
+const successfulResponse = {
+  ResponseMetadata: {
+    httpStatusCode: 200,
+  },
+};
+const unsuccessfulResponse = {
+  ResponseMetadata: {
+    httpStatusCode: 404,
+  },
+};
+const mockPinpointClient = {
+  send: jest.fn(),
+};
 describe("Testing helper functions command inputs", () => {
   test("testing createCampaignName", () => {
     formattedInstitutionName = institutionName
@@ -85,21 +99,9 @@ describe("Testing helper functions command inputs", () => {
 describe("testing createCampainOperation", () => {
   test("create Campaign request successful", () => {});
   test("create Campaign request failed", () => {});
+  test("should throw: FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS", () => {});
 });
 describe("testing updateCamapaignOperation", () => {
-  const successfulResponse = {
-    ResponseMetadata: {
-      httpStatusCode: 200,
-    },
-  };
-  const unsuccessfulResponse = {
-    ResponseMetadata: {
-      httpStatusCode: 404,
-    },
-  };
-  const mockPinpointClient = {
-    send: jest.fn(),
-  };
   test("should update Campaign request successfully", async () => {
     global.Request = jest.fn((input, options) => null);
     global.fetch = jest.fn(() =>
@@ -142,21 +144,9 @@ describe("testing updateCamapaignOperation", () => {
     );
     expect(received).toEqual(expected);
   });
+  test("should throw: FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS", () => {});
 });
 describe("testing deleteCampaignOperation", () => {
-  const successfulResponse = {
-    ResponseMetadata: {
-      httpStatusCode: 200,
-    },
-  };
-  const unsuccessfulResponse = {
-    ResponseMetadata: {
-      httpStatusCode: 404,
-    },
-  };
-  const mockPinpointClient = {
-    send: jest.fn(),
-  };
   test("should delete Campaign request successfully", async () => {
     mockPinpointClient.send.mockResolvedValue(successfulResponse);
     const expected = true;
@@ -177,4 +167,5 @@ describe("testing deleteCampaignOperation", () => {
     );
     expect(expected).toEqual(received);
   });
+  test("should throw: FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS", () => {});
 });
