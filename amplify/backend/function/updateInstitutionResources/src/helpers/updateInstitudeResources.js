@@ -68,14 +68,14 @@ const createCampainOperation = async (
   } catch (createInstitutionResourcesError) {
     console.debug(
       `FAILED TO CREATE INSTITUTION RESOURCES FOR INSTUTION WITH ID ${institutionId}\n
-          REASON: ${createInstitutionResourcesError}
+          ERROR: ${createInstitutionResourcesError}
           `
     );
     try {
       await updateInstitudeResourceStatus("CREATION FAILED");
     } catch (updateInstitudeResourceStatusError) {
-      console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
-            REASON: ${updateInstitudeResourceStatusError}`);
+      console.debug(`ERROR SENDING CREATE CAMPAIGN COMMAND OR RESOURCE STATUS FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
+            INFO: ${updateInstitudeResourceStatusError}`);
       throw new Error("FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS");
     }
   }
@@ -124,8 +124,8 @@ const updateCamapaignOperation = async (
       return true;
     }
   } catch (updateCamapaignOperationError) {
-    console.debug(`FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR RESOURCE STATUS FOR INSTUTION WITH ID ${institutionId}\n
-            REASON: ${updateCamapaignOperationError}`);
+    console.debug(`ERROR SENDING UPDATE CAMPAIGN COMMAND OR RESOURCE STATUS FOR INSTUTION WITH ID ${institutionId}\n
+            INFO: ${updateCamapaignOperationError}`);
     throw new Error(
       "FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS"
     );
@@ -265,7 +265,7 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
         return isCampainCreated;
       } catch (sendAndHandleCreatePinpointCampaignError) {
         console.debug(`FAILED TO SEND or HANDLE CREATE PINPOINT REQUEST
-        REASON: ${sendAndHandleCreatePinpointCampaignError}`);
+        ERROR: ${sendAndHandleCreatePinpointCampaignError}`);
         return false;
       }
     case DATASTREAM_EVENT_NAMES.INSTITUDE_UPDATED:
@@ -283,7 +283,7 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
           return isCampaignUpdated;
         } catch (updateCamapaignOperationError) {
           console.debug(`FAILED TO SEND or HANDLE UPDATE PINPOINT REQUEST
-          REASON: ${updateCamapaignOperationError}`);
+          ERROR: ${updateCamapaignOperationError}`);
           return false;
         }
       break;
@@ -297,7 +297,7 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
         return isCampaignDeleted;
       } catch (deleteCampaignOperationError) {
         console.debug(`FAILED TO SEND or HANDLE DELETE PINPOINT REQUEST
-          REASON: ${deleteCampaignOperationError}`);
+          ERROR: ${deleteCampaignOperationError}`);
         return false;
       }
     default:
