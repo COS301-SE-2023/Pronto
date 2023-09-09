@@ -121,7 +121,27 @@ describe("testing updateCamapaignOperation", () => {
     );
     expect(received).toEqual(expected);
   });
-  test("should fail to update Campaign", () => {});
+  test("should fail to update Campaign", async () => {
+    global.Request = jest.fn((input, options) => null);
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ok: true,
+            body: { data: { updateInstitution: { name: institutionName } } },
+          }),
+      })
+    );
+    mockPinpointClient.send.mockResolvedValue(unsuccessfulResponse);
+    const expected = false;
+    const received = await updateCamapaignOperation(
+      institutionName,
+      institutionId,
+      campaignId,
+      mockPinpointClient
+    );
+    expect(received).toEqual(expected);
+  });
 });
 describe("testing deleteCampaignOperation", () => {
   const successfulResponse = {
