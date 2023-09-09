@@ -35,19 +35,7 @@ const createPinpointCampaignCommandInput = (institutionName) => {
   return createCampaignCommandInput;
 };
 
-const updatePinpointCampaignCommandInput = (institutionName, CampaignId) => {
-  const campaignName = createCampaignName(institutionName);
-  const updateCampaignCommandInput = {
-    CampaignId: CampaignId,
-    Name: campaignName,
-    WriteCampaignRequest: {
-      Description: `${institutionName} Notifications Campaign`,
-    },
-  };
-  return updateCampaignCommandInput;
-};
-
-const createAndHandlePinpointCampaign = async (
+const createCampainOperation = async (
   institutionName,
   institutionId,
   pinpointClient
@@ -85,7 +73,19 @@ const createAndHandlePinpointCampaign = async (
 };
 
 /*update campain*/
-const UpdateInstitutionCamapaign = async (
+const updatePinpointCampaignCommandInput = (institutionName, CampaignId) => {
+  const campaignName = createCampaignName(institutionName);
+  const updateCampaignCommandInput = {
+    CampaignId: CampaignId,
+    Name: campaignName,
+    WriteCampaignRequest: {
+      Description: `${institutionName} Notifications Campaign`,
+    },
+  };
+  return updateCampaignCommandInput;
+};
+
+const UpdateCamapaignOperation = async (
   institutionName,
   campaignId,
   pinpointClient
@@ -104,7 +104,7 @@ const UpdateInstitutionCamapaign = async (
     if (updateCampainResponse.id == campaignId) {
       await updateInstitudeResourceStatus("CREATION FAILED");
     }
-  } catch (UpdateInstitutionCamapaignError) {
+  } catch (UpdateCamapaignOperationError) {
     console.debug(`FAILED TO UPDATE INSTITUDE RESOURCE FOR INSTUTION WITH ID ${updateRequest.institutionId}\n
             REASON: ${updateInstitudeResourceStatusError}`);
     throw new Error("FAILED TO UPDATE CAMPAIN NAME, CHECK LOGS");
@@ -197,7 +197,7 @@ const createDeletePinpointCampaignCommandInput = (campaignId) => {
   return deleteCampaignCommandInput;
 };
 
-const deleteAndHandlePinpointCampaign = async (
+const deleteCampaignOperation = async (
   institutionId,
   campaignId,
   pinpointClient
@@ -238,7 +238,7 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_CREATED:
       console.debug("INSTITUDE CREATED");
       try {
-        await createAndHandlePinpointCampaign(
+        await createCampainOperation(
           updateRequest.institutionName,
           institutionId,
           pinpointClient
@@ -251,32 +251,31 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
       }
     case DATASTREAM_EVENT_NAMES.INSTITUDE_UPDATED:
       console.debug("INSTITUDE UPDATED");
-      const newImage = updateRequest.record.dynamodb.NewImage;
-      const oldImage = updateRequest.record.dynamodb.OldImage;
-      const newInstutudeName = newImage["name"];
+      const { newImage, oldImage } = updateRequest.record.dynamodb;
       const oldInstiudeName = oldImage["name"];
+      const newInstutudeName = updateRequest.institutionName;
       const campainId = newImage["notificationsCampaignId"];
       if (newInstutudeName != oldInstiudeName)
         try {
-          await UpdateInstitutionCamapaign(newInstutudeName, campainId);
+          await UpdateCamapaignOperation(newInstutudeName, campainId);
           return true;
-        } catch (UpdateInstitutionCamapaignError) {
+        } catch (UpdateCamapaignOperationError) {
           console.debug(`FAILED TO SEND or HANDLE UPDATE PINPOINT REQUEST
-          REASON: ${UpdateInstitutionCamapaignError}`);
+          REASON: ${UpdateCamapaignOperationError}`);
           return false;
         }
       break;
     case DATASTREAM_EVENT_NAMES.INSTITUDE_DELETED:
       console.debug("INSITUDE UPDATED");
       try {
-        const isCampaignDeleted = await deleteAndHandlePinpointCampaign(
+        const isCampaignDeleted = await deleteCampaignOperation(
           institutionId,
           campainId
         );
         return isCampaignDeleted;
-      } catch (deleteAndHandlePinpointCampaignError) {
+      } catch (deleteCampaignOperationError) {
         console.debug(`FAILED TO SEND or HANDLE DELETE PINPOINT REQUEST
-          REASON: ${deleteAndHandlePinpointCampaignError}`);
+          REASON: ${deleteCampaignOperationError}`);
         return false;
       }
     default:
@@ -287,10 +286,10 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
 module.exports = {
   createCampaignName,
   createPinpointCampaignCommandInput,
-  createAndHandlePinpointCampaign,
+  createCampainOperation,
   updateInstitudeResources,
   updatePinpointCampaignCommandInput,
-  UpdateInstitutionCamapaign,
+  UpdateCamapaignOperation,
   createDeletePinpointCampaignCommandInput,
-  deleteAndHandlePinpointCampaign,
+  deleteCampaignOperation,
 };
