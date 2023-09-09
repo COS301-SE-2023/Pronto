@@ -25,6 +25,7 @@ const AddLecturer = () => {
     const [offeredCourses, setOfferedCourses] = useState([]);
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
+    const [adding,setAdding] = useState("Add")
     
     let limit = 7;
 
@@ -34,7 +35,7 @@ const AddLecturer = () => {
     const handleAdd = async (event) => {
         event.preventDefault()
         if (!isModalOpened) {
-
+            setAdding("Adding...")
             let lecturer = {
                 institutionId: admin.institutionId,
                 firstname: firstName,
@@ -104,6 +105,7 @@ const AddLecturer = () => {
                     setError("Something went wrong.Please try again later");
                 }
             }
+            setAdding("Add")
             setFirstName("");
             setLastName("");
             setEmail("");
@@ -563,7 +565,7 @@ const AddLecturer = () => {
                                 className="btn btn-danger w-100"
                                 data-testid="submitButton"
                             >
-                                Add
+                                {adding}
                             </button>
                         </form>
                     </div>
@@ -593,6 +595,7 @@ const AddLecturer = () => {
                                {searchIcon===false? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{"color":"#e32f45"}}/>}
                             </div>
                         </button>
+
                         {/* a dropdown filter for the search */}
                         <select onChange={(e) => setFilterAttribute(e.target.value)}
                             value={filterAttribute}
