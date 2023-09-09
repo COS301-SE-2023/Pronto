@@ -196,11 +196,9 @@ const updateInstitudeResourceStatus = async (status) => {
   };
 
   const request = new Request(GRAPHQL_ENDPOINT, options);
-  let body;
-  let response;
   try {
-    response = await fetch(request);
-    body = await response.json();
+    const response = await fetch(request);
+    const body = await response.json();
     console.debug(`graphQL Resonse: ${body}`);
     if (body.data) return true;
     throw new Error("API ERROR: Empty Respoonse");
