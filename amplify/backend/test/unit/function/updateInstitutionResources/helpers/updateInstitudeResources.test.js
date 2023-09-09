@@ -96,6 +96,9 @@ describe("Testing helper functions command inputs", () => {
 });
 
 describe("testing createCampainOperation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   test("create Campaign request successful", async () => {
     global.Request = jest.fn((input, options) => null);
     global.fetch = jest.fn(() =>
@@ -151,9 +154,21 @@ describe("testing createCampainOperation", () => {
     );
     expect(received).toEqual(expected);
   });
-  test("should throw: FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS", () => {});
+  test("should throw: FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS", async () => {
+    global.Request = jest.fn((input, options) => null);
+    global.fetch = jest.fn(() => Promise.reject({}));
+    mockPinpointClient.send.mockRejectedValue({ error: "value resolving" });
+    await expect(
+      createCampainOperation(institutionName, "testingID", mockPinpointClient)
+    ).rejects.toThrow(
+      /FAILED TO UPDATE INSTITUDE NOTIFICATION STATUS, CHECK LOGS/
+    );
+  });
 });
 describe("testing updateCamapaignOperation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   test("should update Campaign request successfully", async () => {
     global.Request = jest.fn((input, options) => null);
     global.fetch = jest.fn(() =>
@@ -206,6 +221,9 @@ describe("testing updateCamapaignOperation", () => {
   });
 });
 describe("testing deleteCampaignOperation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   test("should delete Campaign request successfully", async () => {
     mockPinpointClient.send.mockResolvedValue(successfulResponse);
     const expected = true;
