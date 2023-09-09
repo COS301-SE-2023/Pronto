@@ -23,12 +23,12 @@ const institutionId = "INSITUTION-ID";
 const campaignId = "CAMPAIGN-ID";
 
 const successfulResponse = {
-  ResponseMetadata: {
+  $metadata: {
     httpStatusCode: 200,
   },
 };
 const unsuccessfulResponse = {
-  ResponseMetadata: {
+  $metadata: {
     httpStatusCode: 404,
   },
 };
@@ -97,9 +97,36 @@ describe("Testing helper functions command inputs", () => {
 });
 
 describe("testing createCampainOperation", () => {
-  test("create Campaign request successful", () => {});
+  test("create Campaign request successful", async () => {
+    global.Request = jest.fn((input, options) => null);
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ok: true,
+            body: { data: { updateInstitution: { name: institutionName } } },
+          }),
+      })
+    );
+    const createCampaignCommandSuccessfulResponse = {
+      $metadata: {
+        httpStatusCode: 200,
+      },
+      CampaignResponse: { Id: "NEW-CAMPAIGN-ID" },
+    };
+    mockPinpointClient.send.mockResolvedValue(
+      createCampaignCommandSuccessfulResponse
+    );
+    const expected = true;
+    const received = await createCampainOperation(
+      institutionName,
+      institutionId,
+      mockPinpointClient
+    );
+    expect(received).toEqual(expected);
+  });
   test("create Campaign request failed", () => {});
-  test("should throw: FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS", () => {});
+  test("should throw: FAILED TO UPDATE INSTITUDE RESOURCE STATUS, CHECK LOGS", () => {});
 });
 describe("testing updateCamapaignOperation", () => {
   test("should update Campaign request successfully", async () => {
@@ -167,5 +194,5 @@ describe("testing deleteCampaignOperation", () => {
     );
     expect(expected).toEqual(received);
   });
-  test("should throw: FAILED TO UPDATE INSTITUDE NOTIFICATIONS CAMPAIN OR NOTIFICATIONS CAMPAIN STATUS, CHECK LOGS", () => {});
+  test("should throw: FAILED TO DELETE CAMPAIN, CHECK LOGS", () => {});
 });
