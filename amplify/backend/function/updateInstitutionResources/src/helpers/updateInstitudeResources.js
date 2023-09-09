@@ -104,11 +104,7 @@ const updateCamapaignOperation = async (
   pinpointClient
 ) => {
   const updateCampaignCommandInput =
-    setAndGetPinpointUpdateCampaignCommandInput(
-      institutionName,
-      campaignName,
-      campaignId
-    );
+    setAndGetPinpointUpdateCampaignCommandInput(institutionName, campaignId);
   try {
     const updateCampaignCommand = new UpdateCampaignCommand(
       updateCampaignCommandInput
@@ -235,8 +231,7 @@ const deleteCampaignOperation = async (
       deleteCampainCommand
     );
     console.debug(`DELETE Campain Response: ${deleteCampaignCommandOutput}`);
-    const responseMetadata =
-      deleteCampaignCommandOutput.ResponseMetadata.httpStatusCode;
+    const responseMetadata = deleteCampaignCommandOutput.ResponseMetadata;
     const statusCode = responseMetadata.httpStatusCode;
     if (statusCode !== 200) {
       console.debug(`campaign NOT DELETED, please check logs for more info`);
