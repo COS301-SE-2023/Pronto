@@ -226,9 +226,9 @@ const deleteAndHandlePinpointCampaign = async (
     }
   } catch (deleteCampaignCommandError) {
     console.debug(
-      `ERROR SENDING DELETE CAMPIAIN COMMAND:\n INFO:  ${deleteCampaignCommandError}`
+      `ERROR SENDING DELETE CAMPIAIN COMMAND:\n= INFO:  ${deleteCampaignCommandError}`
     );
-    throw new Error("FAILED TO DELETE CAMPAIN, CHECK LOGqS");
+    throw new Error("FAILED TO DELETE CAMPAIN, CHECK LOGS");
   }
 };
 
@@ -269,8 +269,16 @@ const updateInstitudeResources = async (updateRequest, pinpointClient) => {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_DELETED:
       console.debug("INSITUDE UPDATED");
       try {
-      } catch (error) {}
-      break;
+        const isCampaignDeleted = await deleteAndHandlePinpointCampaign(
+          institutionId,
+          campainId
+        );
+        return isCampaignDeleted;
+      } catch (deleteAndHandlePinpointCampaignError) {
+        console.debug(`FAILED TO SEND or HANDLE DELETE PINPOINT REQUEST
+          REASON: ${deleteAndHandlePinpointCampaignError}`);
+        return false;
+      }
     default:
       throw new Error(`UNKOWN DATA STREAM EVENT`);
   }
