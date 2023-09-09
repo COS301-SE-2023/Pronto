@@ -158,13 +158,12 @@ const putCampainIdOnInstitution = async (institutionId, campaignId) => {
   };
 
   const request = new Request(GRAPHQL_ENDPOINT, options);
-  let body;
-  let response;
   try {
-    response = await fetch(request);
-    body = await response.json();
-    console.debug(`graphQL Resonse: ${body}`);
-    if (body.data) return true;
+    const response = await fetch(request);
+    const responseObject = await response.json();
+    const body = responseObject.body;
+    console.debug(`graphQL Resonse body: ${body}`);
+    if (body.data) return body.data.updateInstitution != undefined;
     throw new Error("API ERROR: Empty Respoonse");
   } catch (putCampainIdOnInstitutionError) {
     console.debug(putCampainIdOnInstitution);
