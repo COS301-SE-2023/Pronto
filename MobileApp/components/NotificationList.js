@@ -83,7 +83,12 @@ const NotificationList = ({ navigation }) => {
           ;
         
         setAnnouncement(announcementList.data.listAnnouncements.items);
-        setNextToken(announcementList.data.listAnnouncements.nextToken);
+        if(announcementList.data.listAnnouncements.items.length<limit){
+          setNextToken(null)
+        }
+        else{
+          setNextToken(announcementList.data.listAnnouncements.nextToken);
+        }
       }
       setLoading(false);
     } catch (er) {
@@ -122,7 +127,12 @@ const NotificationList = ({ navigation }) => {
           })
           ;
         setAnnouncement(announcementList.data.listAnnouncements.items);
-        setNextToken(announcementList.data.listAnnouncements.nextToken);
+        if(announcementList.data.listAnnouncements.items.length<limit){
+          setNextToken(null);
+        }
+        else{
+          setNextToken(announcementList.data.listAnnouncements.nextToken);
+        }
         setLoading(false);
       }catch(e){
         
@@ -164,7 +174,12 @@ const NotificationList = ({ navigation }) => {
       for(let i=0;i<a.length;i++){
         announcement.push(a[i]);
       }
-      setNextToken(announcementList.data.listAnnouncements.nextToken);
+      if(announcementList.data.listAnnouncements.items.length<limit){
+        setNextToken(null);
+      }
+      else{
+        setNextToken(announcementList.data.listAnnouncements.nextToken);
+      }
       setAnnouncement(announcement)
     }catch(e){
      

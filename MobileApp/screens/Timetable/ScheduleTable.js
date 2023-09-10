@@ -19,10 +19,7 @@ const ScheduleTable = ({ navigation,route }) => {
   const [schedule, setSchedule] = useState(null);
   const { student, updateStudent } = useStudent();
   const [timetableLoaded, setTimetableLoaded] = useState(false);
-  const param=route.params;
-  //console.log("From schedule")
-  //console.log(navigation) 
-  //console.log(route)
+  let param=route.params;
   var scheduleArray = {}
 
   useEffect(() => {
@@ -38,7 +35,7 @@ const ScheduleTable = ({ navigation,route }) => {
   }, [activities, timetableLoaded]);
 
   //function to take in a day, and give all dates of the year that a day occurs
-  const getDatesForDayOfWeek = (dayOfWeek) => {
+   const getDatesForDayOfWeek = (dayOfWeek) => {
     const date = new Date();
     const year = date.getFullYear();
     const dayIndex = [
@@ -52,9 +49,8 @@ const ScheduleTable = ({ navigation,route }) => {
     ].indexOf(dayOfWeek);
     const results = [];
     let month = date.getMonth()
+    let limit =month+2;
 
-
-    let limit=month+2;
     // Loop through each month of the year
     for (month; month < limit; month++) {
       // Create a new date object for the first day of the month
@@ -76,78 +72,124 @@ const ScheduleTable = ({ navigation,route }) => {
     return results;
   }
 
+
   let error = "There appear to be network issues.Please try again later";
 
   const fetchActivities = async () => {
     try {
       let stu=student;
      
+    
       if (student === null) {
-        
-        const user = await Auth.currentAuthenticatedUser();
-        // let studentEmail = user.attributes.email;
-
-        // stu = await API.graphql({
-        //   query: listStudents,
-        //   variables: {
-        //     filter: {
-        //       email: {
-        //         eq: studentEmail
-        //       }
-        //     }
-        //   },
-        // })
-
-        stu=await API.graphql({
-          query:getStudent,
-          variables:{id:user.attributes.sub}
-        })
+        if(param===null){
+          //console.log("null");
+          const user = await Auth.currentAuthenticatedUser();
+          stu=await API.graphql({
+            query:getStudent,
+            variables:{id:user.attributes.sub}
+          })
         
         stu=stu.data.getStudent;
-       
-        if(stu===null){
-          throw Error()
+        //console.log(stu);
         }
-        // let found = false
-        // for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-        //   if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-        //     stu = stu.data.listStudents.items[i]
-        //     found = true
-        //     break
-        //   }
-        // }
-        // if(found===false){
-        //    throw Error()
-        // }
-        let s=await updateStudent(stu)
+        else{
+          stu=param;
+          updateStudent(stu);
+          param=null;
+          
+        }
         
-        setActivities(s.timetable.activities);
-        createScheduleArray(s.timetable.activities);
-        
-    }
-    else{
-     
-      //console.log(student.timetable.activities); 
-      if(student.timetable!==null && student.timetable.activities!==undefined){
-        let changed = false
-        let act = student.timetable.activities;
-        if (act.length === activities.length) {
-          for (let i = 0; i < act.length; i++) {
-            if (act[i].id !== activities[i].id) {
-              changed = true;
-              break;
+        if(stu.studentTimetableId!==null){
+          let act=[];
+          let courses=[];
+          for (let i = 0; i < stu.enrollments.items.length; i++) {
+            courses.push(stu.enrollments.items[i].course)
+          }
+
+          for (let i = 0; i < stu.timetable.activityId.length; i++) {
+            for (let j = 0; j < courses.length; j++) {
+              try{
+                let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+                if (index !== undefined) {
+                  act.push(index)
+                  break;
+                }
+              }catch(e){
+
+              }
+
             }
           }
-        }
-        else {
-          changed = true;
-        }
+          act = act.sort((a, b) => {
+                      if (a.start <= b.start)
+                        return -1;
+                      else
+                        return 1;
+                    })
+        stu.timetable.activities=act;
+        updateStudent(stu);
+        setActivities(act);
+        createScheduleArray(act);
+      }
+      else{
+          updateStudent(stu);
+      }         
+  //      console.log(s.timetable.activities);  
+    }
+    else{
+      if(student.timetable!==null && student.timetable.activities!==undefined){
+        let changed = false
+        //let act = student.timetable.activities;
+        let act=[];
+       /// console.log(act);
+        //console.log(student.timetable.activityId);
+        // if (act.length === activities.length) {
+        //   for (let i = 0; i < act.length; i++) {
+        //     if (act[i].id !== activities[i].id) {
+        //       changed = true;
+        //       break;
+        //     }
+        //   }
+        // }
+        // else {
+        //   changed = true;
+        // }
+          act=[];
+          let courses=[];
+          for (let i = 0; i < student.enrollments.items.length; i++) {
+            courses.push(student.enrollments.items[i].course)
+          }
+          //console.log(courses);
+
+          for (let i = 0; i < student.timetable.activityId.length; i++) {
+            for (let j = 0; j < courses.length; j++) {
+              try{
+                let index = courses[j].activity.items.find(item => item.id === student.timetable.activityId[i])
+                if (index !== undefined) {
+                  act.push(index)
+                  break;
+                }
+              }catch(e){
+
+              }
+
+            }
+          }
+          act = act.sort((a, b) => {
+                      if (a.start <= b.start)
+                        return -1;
+                      else
+                        return 1;
+                    })
 
         
-        if (changed === true) {
-          setActivities(act);
-          createScheduleArray(act);
-        }
+        //if (changed === true) {
+        //console.log(act)
+        setActivities(act);
+        createScheduleArray(act);
+       // console.log(act);
+        //}
+        //console.log(changed)
       }
     }
     } catch (e) {
@@ -157,14 +199,14 @@ const ScheduleTable = ({ navigation,route }) => {
     }
   }
 
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     fetchActivities()
-  //   });
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchActivities()
+    });
 
 
-  //   return unsubscribe
-  // }, [navigation])
+    return unsubscribe
+  }, [navigation])
 
 
   const createScheduleArray = async (modules) => {
@@ -231,8 +273,10 @@ const ScheduleTable = ({ navigation,route }) => {
       });
     });
 
+    
     setSchedule(scheduleArray);
-    setTimetableLoaded(true);
+    setTimetableLoaded(true)
+    console.log("Schedule created");
   };
 
 

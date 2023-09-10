@@ -237,7 +237,6 @@ export const listStudents=`query ListStudents(
               start
               end
               venue
-              group
               course{
                 coursecode
               }
@@ -261,10 +260,8 @@ export const listStudents=`query ListStudents(
                 id
                 day
                 start
-                frequency
                 end
                 venue 
-                group
                 course{
                   coursecode
                 }
@@ -394,7 +391,6 @@ export const getStudent=`query GetStudent($id: ID!) {
       firstname
       lastname
       email
-      owner
       preference
       studentTimetableId
       timetable { 
@@ -408,7 +404,6 @@ export const getStudent=`query GetStudent($id: ID!) {
               start
               end
               venue
-              group
               course{
                 coursecode
               }
@@ -420,7 +415,6 @@ export const getStudent=`query GetStudent($id: ID!) {
         items{
           id
           courseId
-          owner
           course{ 
             id
             coursecode
@@ -432,10 +426,8 @@ export const getStudent=`query GetStudent($id: ID!) {
                 id
                 day
                 start
-                frequency
                 end
                 venue 
-                group
                 course{
                   coursecode
                 }

@@ -39,17 +39,18 @@ export default function App() {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-      const email=authUser.attributes.email;
-      let studentInfo = await API.graphql({
-        query: getStudent,
-        variables: {id:authUser.attributes.sub}
-      });
-      console.log("From app")
-      studentInfo=studentInfo.data.getStudent
-      console.log(studentInfo);
-      setStudent(studentInfo);
-      if(studentInfo===null){
-        console.log("Creating new student")
+      if(student==="" || student===null) {
+        const email=authUser.attributes.email;
+        let studentInfo = await API.graphql({
+          query: getStudent,
+          variables: {id:authUser.attributes.sub}
+        });
+        console.log("From app")
+        studentInfo=studentInfo.data.getStudent
+        setStudent(studentInfo);
+        
+        if(studentInfo===null){
+          console.log("Creating new student")
         try{
           let domain = email.split("@")[1]
           let institution = await API.graphql({
@@ -80,13 +81,15 @@ export default function App() {
             query: createStudent,
             variables: { input: newStudent }
           })
-         console.log(create);
-         setStudent(create.data.createStudent)
+           console.log(create);
+          setStudent(create.data.createStudent);
+        
         }catch(error){
           console.log(error)
           console.log("Error fetching student info");
         }
       }
+    }
       setUser(authUser);
     } catch (e) {
       setUser(null);
