@@ -3,30 +3,33 @@ const {
   updateCamapaignOperation,
   deleteCampaignOperation,
 } = require("./notificationsCampaign");
+const { DATASTREAM_EVENT_NAMES } = require("./constants");
 
 /* Handle different data streams */
-const updateInstitudeResources = async (updateRequest, pinpointClient) => {
-  switch (updateRequest.UpdateOption) {
+const updateInstitudeResources = async (updateRequest) => {
+  const { NewImage, OldImage } = updateRequest.record.dynamodb;
+  const pinpointClient = updateRequest.pinpointClient;
+
+  switch (updateRequest.eventName) {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_CREATED:
       console.debug("INSTITUDE CREATED");
       try {
         const isCampainCreated = await createCampainOperation(
-          updateRequest.institutionName,
-          institutionId,
+          NewImage.name,
+          NewImage.id,
           pinpointClient
         );
         return isCampainCreated;
       } catch (sendAndHandleCreatePinpointCampaignError) {
         console.debug(`FAILED TO SEND or HANDLE CREATE PINPOINT REQUEST
-        ERROR: ${sendAndHandleCreatePinpointCampaignError}`);
+            ERROR: ${sendAndHandleCreatePinpointCampaignError}`);
         return false;
       }
     case DATASTREAM_EVENT_NAMES.INSTITUDE_UPDATED:
       console.debug("INSTITUDE UPDATED");
-      const { newImage, oldImage } = updateRequest.record.dynamodb;
-      const oldInstiudeName = oldImage["name"];
+      const oldInstiudeName = OldImage["name"];
       const newInstutudeName = updateRequest.institutionName;
-      const campainId = newImage["notificationsCampaignId"];
+      const campainId = NewImage["notificationsCampaignId"];
       if (newInstutudeName != oldInstiudeName)
         try {
           const isCampaignUpdated = await updateCamapaignOperation(
