@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
-import { listCourses, listLecturers, getLecturer } from "../../graphql/queries";
+import { listCourses, listLecturers } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { Link } from "react-router-dom";
@@ -9,7 +9,6 @@ import UserManual from "../HelpFiles/EditModuleInfo.pdf";
 import HelpButton from '../../HelpButton';
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 import moduleImage from "./Courses.png";
-import { colors } from "@mui/material";
 
 const Modules = () => {
 
@@ -115,7 +114,7 @@ const Modules = () => {
           lecturer?.courses?.items?.map((val, key) => (
             <Link to={'/lecturer/edit-module'} state={val} key={val.coursecode}>
               <button className="content-button" key={val.coursecode}>
-                {val.coursecode} <span style={{ float: "right", paddingRight: 50, color: "#e32f45" }}>&#x2192;</span>
+                {val.coursecode} <span style={{ float: "right", marginRight: 50, color: "#e32f45" }}>&#x2192;</span>
               </button>
             </Link>
           ))

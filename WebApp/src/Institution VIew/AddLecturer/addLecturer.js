@@ -28,11 +28,11 @@ const AddLecturer = () => {
     const [error, setError] = useState("");
     const state = useLocation();
     //const [admin, setAdmin] = useState(state.state);
-   // const [nextToken, setNextToken] = useState("");
+    // const [nextToken, setNextToken] = useState("");
     let limit = 2;
 
-    const{admin,setAdmin} = useAdmin();
-    const{lecturerList, setLecturerList, nextToken,setNextToken }=useLecturerList()
+    const { admin, setAdmin } = useAdmin();
+    const { lecturerList, setLecturerList, nextToken, setNextToken } = useLecturerList()
 
     const handleAdd = async (event) => {
         event.preventDefault()
@@ -358,28 +358,28 @@ const AddLecturer = () => {
 
     const fetchLecturers = async () => {
         try {
-            
-            if(lecturerList.length<2){
-            let lecturers = await API.graphql({
+
+            if (lecturerList.length < 2) {
+                let lecturers = await API.graphql({
                     query: lecturersByInstitutionId,
                     variables: {
                         institutionId: admin.institutionId,
                         limit: limit
-                },     
-            });
+                    },
+                });
 
-            let courses = admin.institution.courses.items;
-            for (let i = 0; i < courses.length; i++) {
-                if (courses[i].lecturerId === null) {
-                    offeredCourses.push(courses[i]);
+                let courses = admin.institution.courses.items;
+                for (let i = 0; i < courses.length; i++) {
+                    if (courses[i].lecturerId === null) {
+                        offeredCourses.push(courses[i]);
+                    }
                 }
+                setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
+                setOfferedCourses(offeredCourses);
+                setLecturerList(lecturers.data.lecturersByInstitutionId.items);
+                // }
             }
-            setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
-            setOfferedCourses(offeredCourses);
-            setLecturerList(lecturers.data.lecturersByInstitutionId.items);
-           // }
-        }
-             
+
         }
         catch (error) {
             console.log(error);
@@ -498,7 +498,7 @@ const AddLecturer = () => {
 
     return (
 
-        <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
+        <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
             <div>
                 <HelpButton pdfUrl={UserManual} />
             </div>
@@ -512,7 +512,7 @@ const AddLecturer = () => {
 
             <main style={{ width: '900px', marginTop: '10%' }}>
                 {/* Input forms content */}
-                <h1 className="text-center">Add a lecturer</h1>
+                <h1 className="text-center" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Add a lecturer</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to add lecturers to your institution and assign them to their courses. This will allow lecturers to sign up for an account.</h6>
                 <div className="card shadow">
                     <div className="card-body">
@@ -597,7 +597,7 @@ const AddLecturer = () => {
                 </div>
 
                 {/* Display content */}
-                <h1 className="text-center">Lecturers</h1>
+                <h1 className="text-center" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Lecturers</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to search, edit, view and delete lecturers from your institution. Note that removing a lecturer prevents them from creating an account.</h6>
                 {/* Search bar with search material ui icon and border radius of 20px */}
                 <div className="input-group mb-3 p-1">
@@ -637,7 +637,7 @@ const AddLecturer = () => {
                 </div>
                 <div
                     className="card shadow w-100"
-                    style={{ width: '500px' ,maxHeight:"100vh"}}
+                    style={{ width: '500px', maxHeight: "100vh" }}
                 >
                     <div className="card-body">
                         <table

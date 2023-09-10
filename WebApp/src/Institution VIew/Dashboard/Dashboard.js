@@ -8,6 +8,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import HelpButton from '../../HelpButton';
 import UserManual from "../HelpFiles/InstitutionInstructions.pdf";
 import { useNavigate } from 'react-router-dom';
+import ScheduleUploadImage from "./ScheduleUploadImage.png";
+import AddRemoveLecturerImage from "./AddRemoveLecturerImage.png";
+import StudenFileUploadImage from "./StudentFileUploadImage.png";
+import EditUniInfoImage from "./EditUniInfoImage.png";
 
 const Dashboard = () => {
     const navigate = useNavigate()
@@ -21,43 +25,60 @@ const Dashboard = () => {
             <RightContainer>
 
                 <div className={"grid"} style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" }}>
-                    <h1>Dashboard</h1>
+                    <h1 style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Dashboard</h1>
                     <div className={"row ml-3"} style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
-                                <DriveFolderUploadIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => {
-                                    //window.location.href = "/institution/upload-schedule"; }} 
-                                    navigate("/institution/upload-schedule")
-                                }} />
-                                <span style={{ fontSize: "40px" }}>Upload Schedule</span>
+                                <img
+                                    src={ScheduleUploadImage}
+                                    alt="Upload Schedule"
+                                    style={{ width: "250px", height: "250px", cursor: "pointer" }}
+                                    onClick={() => {
+                                        navigate("/institution/upload-schedule");
+                                    }}
+                                />
+                                <span style={{ fontSize: "40px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)", marginBottom: 20 }}>Upload Schedule</span>
                             </HoverableIcon>
                         </div>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
-                                <CloudUploadIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => {
-                                    //window.location.href = "/institution/upload-student-files"; 
-                                    navigate("/institution/upload-student-files");
-                                }} />
-                                <span style={{ fontSize: "40px" }}>Upload File</span>
+                                <img
+                                    src={StudenFileUploadImage}
+                                    alt="Upload Student Files"
+                                    style={{ width: "250px", height: "250px", cursor: "pointer" }}
+                                    onClick={() => {
+                                        navigate("/institution/upload-student-files");
+                                    }}
+                                />
+                                <span style={{ fontSize: "40px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)", marginBottom: 20 }}>Upload File</span>
                             </HoverableIcon>
                         </div>
                     </div>
                     <div className={"row ml-3"} style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
-                                <SchoolIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => {
-                                    //window.location.href = "/institution/add-lecturer";
-                                    navigate("/institution/add-lecturer");
-                                }} />
-                                <span style={{ fontSize: "40px" }}>Add/Remove Lecturer</span>
+                                <img
+                                    src={AddRemoveLecturerImage}
+                                    alt="Add/Remove Lecturer"
+                                    style={{ width: "250px", height: "250px", cursor: "pointer" }}
+                                    onClick={() => {
+                                        navigate("/institution/add-lecturer");
+                                    }}
+                                />
+                                <span style={{ fontSize: "40px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)", marginBottom: 20 }}>Add/Remove Lecturer</span>
                             </HoverableIcon>
                         </div>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                             <HoverableIcon>
-                                <EditIcon style={{ fontSize: "200px", cursor: "pointer" }} onClick={() => { //window.location.href = "/institution/edit-info";
-                                    navigate("/institution/edit-info");
-                                }} />
-                                <span style={{ fontSize: "40px" }}>Edit University Info</span>
+                                <img
+                                    src={EditUniInfoImage}
+                                    alt="Edit Information"
+                                    style={{ width: "250px", height: "250px", cursor: "pointer" }}
+                                    onClick={() => {
+                                        navigate("/institution/edit-info");
+                                    }}
+                                />
+                                <span style={{ fontSize: "40px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)", marginBottom: 20 }}>Edit University Info</span>
                             </HoverableIcon>
                         </div>
                     </div>
