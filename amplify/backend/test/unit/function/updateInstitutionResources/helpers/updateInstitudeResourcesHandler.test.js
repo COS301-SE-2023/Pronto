@@ -1,6 +1,6 @@
 const {
   updateInstitudeResources,
-} = require("../../../../../function/updateInstitutionResources/src/helpers/updateInstitutionResources");
+} = require("../../../../../function/updateInstitutionResources/src/helpers/updateInstitudeResourcesHandler");
 
 const institutionName = "University OF Pretoria";
 const institutionId = "INSITUTION-ID";
