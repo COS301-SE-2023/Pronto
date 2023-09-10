@@ -45,12 +45,12 @@ export default function App() {
           query: getStudent,
           variables: {id:authUser.attributes.sub}
         });
-        console.log("From app")
-        studentInfo=studentInfo.data.getStudent
+      
+        studentInfo=studentInfo.data.getStudent;
         setStudent(studentInfo);
         
         if(studentInfo===null){
-          console.log("Creating new student")
+          
         try{
           let domain = email.split("@")[1]
           let institution = await API.graphql({
@@ -66,7 +66,7 @@ export default function App() {
 
           
           institution = institution.data.listInstitutions.items[0]
-          console.log(institution)
+
           //Create student
           let newStudent = {
             id:authUser.attributes.sub,
@@ -81,7 +81,7 @@ export default function App() {
             query: createStudent,
             variables: { input: newStudent }
           })
-           console.log(create);
+           
           setStudent(create.data.createStudent);
         
         }catch(error){

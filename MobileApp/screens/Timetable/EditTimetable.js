@@ -116,7 +116,7 @@ const EditTimetable = ({ navigation }) => {
               items:[]
             }
           }
-            await updateStudent(stu);
+             updateStudent(stu);
             setActivities(s.timetable.activities);
         }
         
@@ -169,7 +169,7 @@ const EditTimetable = ({ navigation }) => {
       
         student.enrollments.items.push(newEnrollment.data.createEnrollment);
        
-        await updateStudent(student);
+       updateStudent(student);
         
       }
       
@@ -195,7 +195,7 @@ const EditTimetable = ({ navigation }) => {
         student.timetable=create.data.createTimetable;
         student.studentTimetableId=create.data.createTimetable.id;
         student.timetable.activities=activities;
-        await updateStudent(student);
+         updateStudent(student);
         
       }
 
@@ -217,7 +217,7 @@ const EditTimetable = ({ navigation }) => {
         s.timetable = update.data.updateTimetable;
         student.timetable=update.data.updateTimetable;
         student.timetable.activities=activities;
-        await updateStudent(student);
+        updateStudent(student);
         // s= await updateStudent(student);
         // student.timetable.activities=s.timetable.activities;
       }
@@ -243,7 +243,7 @@ const EditTimetable = ({ navigation }) => {
     rows.push(activity)
     
     student.timetable.activities=rows;
-    await updateStudent(student);
+    updateStudent(student);
     //let s=await updateStudent(student);
    // student.timetable.activities=s.timetable.activities;
     setActivities(rows);
@@ -456,7 +456,7 @@ const EditTimetable = ({ navigation }) => {
             {selectedModule && (
               <View key={selectedModule.id}>
                 <Text style={styles.moduleCode}>{selectedModule?.coursecode}</Text>
-                {/* <Text style={styles.moduleName}>{selectedModule.name}</Text>
+                
                 
                 {/* Display lectures */}
                 {lectures.map((lecture, i) => (
@@ -476,6 +476,7 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===lecture)[0]}
                   />
                 ))}
 
@@ -497,12 +498,13 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===tutorial)[0]}
                   />
                 ))}
 
                 {/*Display practicals*/}
                 {practicals.map((practical, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname == practical).length > 0 &&
+                  selectedModule.activity.items.filter(item => item.activityname === practical).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Practical"}
@@ -518,6 +520,7 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===practical)[0]}
                   />
                 ))}
               </View>

@@ -82,7 +82,6 @@ const ScheduleTable = ({ navigation,route }) => {
     
       if (student === null) {
         if(param===null){
-          //console.log("null");
           const user = await Auth.currentAuthenticatedUser();
           stu=await API.graphql({
             query:getStudent,
@@ -127,39 +126,27 @@ const ScheduleTable = ({ navigation,route }) => {
                         return 1;
                     })
         stu.timetable.activities=act;
-        updateStudent(stu);
+        await updateStudent(stu);
         setActivities(act);
         createScheduleArray(act);
       }
       else{
-          updateStudent(stu);
+          await updateStudent(stu);
       }         
   //      console.log(s.timetable.activities);  
     }
     else{
       if(student.timetable!==null && student.timetable.activities!==undefined){
         let changed = false
-        //let act = student.timetable.activities;
+        
         let act=[];
-       /// console.log(act);
-        //console.log(student.timetable.activityId);
-        // if (act.length === activities.length) {
-        //   for (let i = 0; i < act.length; i++) {
-        //     if (act[i].id !== activities[i].id) {
-        //       changed = true;
-        //       break;
-        //     }
-        //   }
-        // }
-        // else {
-        //   changed = true;
-        // }
+       
+        
           act=[];
           let courses=[];
           for (let i = 0; i < student.enrollments.items.length; i++) {
             courses.push(student.enrollments.items[i].course)
           }
-          //console.log(courses);
 
           for (let i = 0; i < student.timetable.activityId.length; i++) {
             for (let j = 0; j < courses.length; j++) {
@@ -181,15 +168,24 @@ const ScheduleTable = ({ navigation,route }) => {
                       else
                         return 1;
                     })
+          if (act.length === activities.length) {
+          for (let i = 0; i < act.length; i++) {
+            if (act[i].id !== activities[i].id) {
+              changed = true;
+              break;
+            }
+          }
+        }
+        else {
+          changed = true;
+        }          
 
         
-        //if (changed === true) {
-        //console.log(act)
+        //if (changed === true){
         setActivities(act);
         createScheduleArray(act);
-       // console.log(act);
         //}
-        //console.log(changed)
+   
       }
     }
     } catch (e) {
@@ -275,8 +271,7 @@ const ScheduleTable = ({ navigation,route }) => {
 
     
     setSchedule(scheduleArray);
-    setTimetableLoaded(true)
-    console.log("Schedule created");
+    setTimetableLoaded(true);
   };
 
 
