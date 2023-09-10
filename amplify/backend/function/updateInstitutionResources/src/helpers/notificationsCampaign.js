@@ -3,7 +3,7 @@ const {
   UpdateCampaignCommand,
   DeleteCampaignCommand,
 } = require("@aws-sdk/client-pinpoint");
-const { DATASTREAM_EVENT_NAMES, CAMPAIGN_NAME_SUFFIX } = require("./constants");
+const { CAMPAIGN_NAME_SUFFIX } = require("./constants");
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
 const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
@@ -243,7 +243,7 @@ const deleteCampaignOperation = async (
     }
   } catch (deleteCampaignCommandError) {
     console.debug(
-      `ERROR SENDING DELETE CAMPIAIN COMMAND:\n= INFO:  ${deleteCampaignCommandError}`
+      `ERROR SENDING DELETE CAMPIAIN COMMAND:\n INFO:  ${deleteCampaignCommandError}`
     );
     throw new Error("FAILED TO DELETE CAMPAIN, CHECK LOGS");
   }
