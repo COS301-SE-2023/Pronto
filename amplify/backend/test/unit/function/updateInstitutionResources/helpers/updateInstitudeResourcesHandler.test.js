@@ -106,6 +106,38 @@ describe("testing successful updateInstitudeResourcesHandler operations", () => 
 
 describe("testing failed updateInstitudeResourcesHandler operations", () => {
   test("fails to campain", async () => {});
-  test("fails to update campain", async () => {});
-  test("fails to delete campain", async () => {});
+  test("fails to update campain", async () => {
+    mockPinpointClient.send.mockRejectedValue(successfulResponse);
+    const deleteCampaignRequest = {
+      record: {
+        dynamodb: {
+          OldImage: { name: "NEW NAME", id: institutionId },
+        },
+        eventName: "REMOVE",
+      },
+      pinpointClient: mockPinpointClient,
+    };
+    const expectedIsCampainDeleted = false;
+    const receivedIsCampainDeleted = await updateInstitudeResourcesHandler(
+      deleteCampaignRequest
+    );
+    expect(receivedIsCampainDeleted).toEqual(expectedIsCampainDeleted);
+  });
+  test("fails to delete campain", async () => {
+    mockPinpointClient.send.mockRejectedValue({});
+    const deleteCampaignRequest = {
+      record: {
+        dynamodb: {
+          OldImage: { name: "NEW NAME", id: institutionId },
+        },
+        eventName: "REMOVE",
+      },
+      pinpointClient: mockPinpointClient,
+    };
+    const expectedIsCampainDeleted = false;
+    const receivedIsCampainDeleted = await updateInstitudeResourcesHandler(
+      deleteCampaignRequest
+    );
+    expect(receivedIsCampainDeleted).toEqual(expectedIsCampainDeleted);
+  });
 });
