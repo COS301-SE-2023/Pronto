@@ -129,9 +129,10 @@ const AddLecturer = () => {
                     query: updateCourse,
                     variables: { input: updatedCourseData },
                 });
-                lecturer.courses.splice(i, 1);
+                lecturer.courses.items.splice(i, 1);
 
             } catch (error) {
+              
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message;
                     if (e.search("Network") !== -1) {
@@ -139,9 +140,11 @@ const AddLecturer = () => {
                     }
                 }
                 else {
+                    
                     setError("Something went wrong. Please try again later");
                 }
             }
+
         }
     }
 
@@ -242,6 +245,7 @@ const AddLecturer = () => {
                 
                     let variables= JSON.parse(filter);
                         
+                  
                     let lecturers = await API.graphql({
                             query:searchLecturers,
                             variables:variables
@@ -259,14 +263,14 @@ const AddLecturer = () => {
                     }
                 }
                 else{
-                     if(filterAttribute==="course code"){
+                     if(filterAttribute==="coursecode"){
                         let lecturers = await API.graphql({
                             query:searchLecturerByCourses,
                             variables:{
                                 filter: {
                                          coursecode: { matchPhrasePrefix: searchValue } ,
                                          institutionId : {eq: admin.institutionId},
-                                         lecturerId : {eq:null} 
+                                        
                                 },
                                 limit:limit
                             } 
@@ -322,7 +326,7 @@ const AddLecturer = () => {
     const fetchLecturers = async () => {
         try {
             let adminInfo=admin;
-            if(lecturerList.length<limit){
+            if(lecturerList.length<4){
                 if(adminInfo===null){
                     let user=await Auth.currentAuthenticatedUser();
                     let adminEmail=user.attributes.email;
@@ -386,7 +390,7 @@ const AddLecturer = () => {
                                 limit:limit
                             } 
                         })
-                        console.log(lecturers.data.searchCourses);
+
                         let token=lecturers.data.searchCourses.nextToken;
                         lecturers=lecturers.data.searchCourses.items;
                         lecturers.filter((c)=>c!==null && c.institutionId===admin.institutionId);
@@ -481,7 +485,7 @@ const AddLecturer = () => {
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '900px', marginTop: '10%' ,maxHeight:"100%"}}>
+            <main style={{ width: '900px', marginTop: '10%' }}>
                 {/* Input forms content */}
                 <h1 className="text-center">Add a lecturer</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to add lecturers to your institution and assign them to their courses. This will allow lecturers to sign up for an account.</h6>
@@ -586,12 +590,12 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
+                            //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
                             <div className="input-group-append">
-                               {searchIcon===false? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{"color":"#e32f45"}}/>}
+                              {searchIcon===false ?   <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{"color":"#e32f45"}}/>}
                             </div>
                         </button>
-
                         {/* a dropdown filter for the search */}
                         <select onChange={(e) => setFilterAttribute(e.target.value)}
                             value={filterAttribute}
@@ -609,7 +613,7 @@ const AddLecturer = () => {
                 </div>
                 <div
                     className="card shadow w-100"
-                    style={{ width: '500px'}}
+                    style={{ width: '500px' ,maxHeight:"100vh"}}
                 >
                     <div className="card-body">
                         <table
@@ -646,7 +650,7 @@ const AddLecturer = () => {
                                                     courseData={courses}
                                                     setModal={setIsModalOpened}
                                                     setCourses={setCourses}
-                                                    selectedCourses={val?.courses?.items}
+                                                    selectedCourses={val.courses.items}
                                                     offeredCourses={offeredCourses}
                                                     setSelectedCourses={setSelectedCourses}
                                                     setOfferedCourses={setOfferedCourses}
@@ -672,10 +676,12 @@ const AddLecturer = () => {
                             <div style={{ paddingLeft: "42.5%", paddingRight: "42.5%" }}>
                                 {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>}
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </main>
+
+
 
         </div>
     );

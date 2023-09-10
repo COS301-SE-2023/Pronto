@@ -53,7 +53,7 @@ export default function PostAccordion(course) {
   const handleAddVenue = async(event)=>{
     event.preventDefault();
     try{
-      if(selectedLocation==="" || activity===""){
+      if( activity==="" || activity===undefined || selectedLocation===""){
          setError("Please pick an activity and location");
       }
       else{
@@ -62,6 +62,7 @@ export default function PostAccordion(course) {
           variables:{input:{id:activity.id,coordinates:selectedLocation}}
         })
         setSuccessMessage("Venue updated successfully");
+        //console.log(activity);
       }
    
     }catch(e){
@@ -285,9 +286,9 @@ export default function PostAccordion(course) {
           <select
             onClick={(e) =>setActivity(course.course.activity.items[e.target.value])}
             className="custom-select"
-            defaultValue={"Select Activity"}
+            defaultValue=""
             >
-            <option selected disabled>Select Activity</option>
+            <option value = "">Select Activity</option>
             {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
               return (
                 <option key={key}

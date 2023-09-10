@@ -24,20 +24,27 @@ export default function SearchableDropdown(props){
                     query:searchCourses,
                    variables:{ 
                            filter: {
-                                   
-                                   coursecode: {matchPhrasePrefix:event.target.value},
-                                   instituionId: {eq :admin.instituionId},
-                                   lecturerId:{eq:null}
-                                
-                            }
+                              and:[
+                                   { 
+                                    coursecode : {matchPhrasePrefix:event.target.value},
+                                     
+                                   },
+                                   {
+                                    institutionId:{eq:admin.institutionId}
+                                   },
+                                   {
+                                     lecturerId: {eq:null}
+                                   }
+                              ]
+                           }
                 }
               }
               )
-     
-      console.log(courseList);
-         setCourses(courseList.data.searchCourses.items);
+         setCourses(courseList.data.searchCourses.items.filter((c)=>c.lecturerId===null));
+         setIsOpen(true);
+       ;
     }catch(error){
-      
+     
     }
 
   };
@@ -70,7 +77,8 @@ export default function SearchableDropdown(props){
     props.handleAdd(course);
     setCourse("");
     setSearchTerm("");
-    setIsOpen(true)
+    setCourses([]);
+    setIsOpen(false);
   } 
 
     return (
