@@ -70,6 +70,7 @@ const createCampainOperation = async (
             INFO: ${createInstitutionResourcesError}`);
     try {
       await updateInstitudeResourceStatus("CREATION FAILED");
+      return false;
     } catch (updateInstitudeResourceStatusError) {
       console.debug(`ERROR UPDATE NOTIFICATION STATUS FOR INSTUTION WITH ID ${institutionId}\n
             INFO: ${updateInstitudeResourceStatusError}`);
