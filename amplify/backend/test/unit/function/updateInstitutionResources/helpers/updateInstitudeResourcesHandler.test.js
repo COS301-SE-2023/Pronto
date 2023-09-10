@@ -1,5 +1,5 @@
 const {
-  updateInstitudeResources,
+  updateInstitudeResourcesHandler,
 } = require("../../../../../function/updateInstitutionResources/src/helpers/updateInstitudeResourcesHandler");
 
 const institutionName = "University OF Pretoria";
@@ -8,7 +8,20 @@ const campaignId = "CAMPAIGN-ID";
 const mockPinpointClient = {
   send: jest.fn(),
 };
-describe("testing successful updateInstitudeResources operations", () => {
+const successfulResponse = {
+  $metadata: {
+    httpStatusCode: 200,
+  },
+};
+const unsuccessfulResponse = {
+  $metadata: {
+    httpStatusCode: 404,
+  },
+};
+describe("testing successful updateInstitudeResourcesHandler operations", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   test("creates campain", async () => {
     global.Request = jest.fn((input, options) => null);
     global.fetch = jest.fn(() =>
@@ -30,7 +43,6 @@ describe("testing successful updateInstitudeResources operations", () => {
       createCampaignCommandSuccessfulResponse
     );
     const createCampaignRequest = {
-      eventName: "INSERT",
       record: {
         dynamodb: {
           NewImage: { name: institutionName, id: institutionId },
@@ -40,16 +52,44 @@ describe("testing successful updateInstitudeResources operations", () => {
       pinpointClient: mockPinpointClient,
     };
     const expectedIsCampainCreated = true;
-    const receivedIsCampainCreated = await updateInstitudeResources(
+    const receivedIsCampainCreated = await updateInstitudeResourcesHandler(
       createCampaignRequest
     );
     expect(receivedIsCampainCreated).toEqual(expectedIsCampainCreated);
   });
-  test("updates campain", async () => {});
+  test("updates campain", async () => {
+    global.Request = jest.fn((input, options) => null);
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ok: true,
+            body: { data: { updateInstitution: { name: institutionName } } },
+          }),
+      })
+    );
+    mockPinpointClient.send.mockResolvedValue(successfulResponse);
+    const updateCampaignRequest = {
+      eventName: "INSERT",
+      record: {
+        dynamodb: {
+          NewImage: { name: institutionName, id: institutionId },
+          OldImage: { name: "NEW NAME", id: institutionId },
+        },
+        eventName: "MODIFY",
+      },
+      pinpointClient: mockPinpointClient,
+    };
+    const expectedIsCampainUpdated = true;
+    const receivedIsCampainUpdated = await updateInstitudeResourcesHandler(
+      updateCampaignRequest
+    );
+    expect(receivedIsCampainUpdated).toEqual(expectedIsCampainUpdated);
+  });
   test("deletes campain", async () => {});
 });
 
-describe("testing failed updateInstitudeResources operations", () => {
+describe("testing failed updateInstitudeResourcesHandler operations", () => {
   test("fails to campain", async () => {});
   test("fails to update campain", async () => {});
   test("fails to delete campain", async () => {});
