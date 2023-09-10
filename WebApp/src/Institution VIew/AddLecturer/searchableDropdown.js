@@ -1,9 +1,8 @@
 // SearchableDropdown.js
-import React, { Component,useState } from "react";
+import {useState } from "react";
 import { searchCourses } from "../../graphql/queries";
 import {API} from "aws-amplify";
 import { useAdmin } from "../../ContextProviders/AdminContext";
-import { devNull } from "os";
 
 export default function SearchableDropdown(props){
 
@@ -40,7 +39,15 @@ export default function SearchableDropdown(props){
                 }
               }
               )
-         setCourses(courseList.data.searchCourses.items.filter((c)=>c.lecturerId===null));
+         let c=[];
+         courseList=courseList.data.searchCourses.items.filter((a)=>a.lecturerId===null)     
+         for(let i=0;i<courseList.length;i++){
+          if(props.selectedCourses.filter((a)=>a.id!==courseList[i].id)){
+            c.push(courseList[i]);
+          }
+         }
+         setCourses(c);
+         //setCourses(courseList.data.searchCourses.items.filter((c)=>c.lecturerId===null));
          setIsOpen(true);
        ;
     }catch(error){
@@ -60,20 +67,7 @@ export default function SearchableDropdown(props){
   };
 
   const handleAdd = ()=>{
-    // let added=false
-    // for(let i=0;i<props.selectedCourses.length;i++){
-    //     if(props.selectedCourses[i].coursecode===course.coursecode){
-    //         added=true;
-    //         break;
-    //     }
-    // }
-    // if(!added){
-    //     props.selectedCourses.push(course);
-    //     props.setSelectedCourses(selectedCourses);
-    //     setCourse("");
-    //     setSearchTerm("");
-    //     setIsOpen(true);
-    // }
+    
     props.handleAdd(course);
     setCourse("");
     setSearchTerm("");
