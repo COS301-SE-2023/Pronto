@@ -105,9 +105,35 @@ describe("testing successful updateInstitudeResourcesHandler operations", () => 
 });
 
 describe("testing failed updateInstitudeResourcesHandler operations", () => {
-  test("fails to campain", async () => {});
+  test("fails to create campain", async () => {
+    global.Request = jest.fn((input, options) => null);
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () =>
+          Promise.resolve({
+            ok: true,
+            body: { data: { updateInstitution: { name: institutionName } } },
+          }),
+      })
+    );
+    mockPinpointClient.send.mockRejectedValue(unsuccessfulResponse);
+    const createCampaignRequest = {
+      record: {
+        dynamodb: {
+          NewImage: { name: institutionName, id: institutionId },
+        },
+        eventName: "INSERT",
+      },
+      pinpointClient: mockPinpointClient,
+    };
+    const expectedIsCampainCreated = false;
+    const receivedIsCampainCreated = await updateInstitudeResourcesHandler(
+      createCampaignRequest
+    );
+    expect(receivedIsCampainCreated).toEqual(expectedIsCampainCreated);
+  });
   test("fails to update campain", async () => {
-    mockPinpointClient.send.mockRejectedValue(successfulResponse);
+    mockPinpointClient.send.mockRejectedValue({});
     const deleteCampaignRequest = {
       record: {
         dynamodb: {
