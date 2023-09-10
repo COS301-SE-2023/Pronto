@@ -9,6 +9,8 @@ const { DATASTREAM_EVENT_NAMES } = require("./constants");
 const updateInstitudeResourcesHandler = async (updateRequest) => {
   const { NewImage, OldImage } = updateRequest.record.dynamodb;
   const pinpointClient = updateRequest.pinpointClient;
+  const campainId =
+    OldImage != null ? OldImage["notificationsCampaignId"] : null;
 
   switch (updateRequest.record.eventName) {
     case DATASTREAM_EVENT_NAMES.INSTITUDE_CREATED:
@@ -29,7 +31,6 @@ const updateInstitudeResourcesHandler = async (updateRequest) => {
       console.debug("INSTITUDE UPDATED");
       const oldInstiudeName = OldImage["name"];
       const newInstutudeName = NewImage["name"];
-      const campainId = NewImage["notificationsCampaignId"];
       if (newInstutudeName != oldInstiudeName)
         try {
           const isCampaignUpdated = await updateCamapaignOperation(
@@ -49,8 +50,9 @@ const updateInstitudeResourcesHandler = async (updateRequest) => {
       console.debug("INSITUDE UPDATED");
       try {
         const isCampaignDeleted = await deleteCampaignOperation(
-          institutionId,
-          campainId
+          OldImage.id,
+          campainId,
+          pinpointClient
         );
         return isCampaignDeleted;
       } catch (deleteCampaignOperationError) {
