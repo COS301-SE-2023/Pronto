@@ -13,6 +13,9 @@ const institutionId = "INSITUTION-ID";
 const campaignId = "CAMPAIGN-ID";
 const courseCode = "COS301";
 const segmentId = "SEGMENT-ID";
+const mockPinpointClient = {
+  send: jest.fn(),
+};
 describe("Testing Notification service helper functions", () => {
   test("testing createCourseSegmentName", () => {
     const formattedInstitutionName = institutionName
@@ -129,5 +132,29 @@ describe("Testing Notification service helper functions", () => {
     const receivedSegmentCommandInput =
       setAndGetDeleteSegmentCommandInput(segmentId);
     expect(receivedSegmentCommandInput).toEqual(expectedSegmentCommandInput);
+  });
+});
+
+describe("testing failed operations", () => {
+  test("should fail to create segment", async () => {
+    mockPinpointClient.send.mockRejectedValue({
+      createCourseSegmentOperationError: "should fail to create segment",
+    });
+    const expectedCreateOperationResponse = {
+      noitificationStatus: "CREATION FAILED",
+    };
+    const receivedCreateOperationResponse = await createCourseSegmentOperation(
+      institutionId,
+      courseCode,
+      mockPinpointClient
+    );
+    expect(receivedCreateOperationResponse).toEqual(
+      expectedCreateOperationResponse
+    );
+  });
+});
+describe("testing successful operations", () => {
+  test("should create segment", () => {
+    mockPinpointClient.send.mockRejectedValue({});
   });
 });
