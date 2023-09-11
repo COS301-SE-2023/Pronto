@@ -30,7 +30,6 @@ type Institution
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
   students: [Student] @hasMany(indexName: "byStudent", fields: ["id"])
   lecturer: [Lecturer] @hasMany(indexName: "byLecturer", fields: ["id"])
-  notificationsCampaignId: String
 }
 
 type Admin
@@ -135,6 +134,8 @@ type Course
     @hasMany(indexName: "byAnnouncement", fields: ["id"])
   lecturer: Lecturer @belongsTo(fields: ["lecturerId"])
   institution: Institution! @belongsTo(fields: ["institutionId"])
+  notificationsSegmentId: String
+  courseNotifications: NotificationsSegment @function(name:"configureCourseNotifications-${env}")
 }
 
 type Timetable
@@ -214,10 +215,17 @@ type Announcement
     )
   createdAt: String!
   announcementStatus: AnnouncementStatus
+  announcementCampaign: AnnouncementCampaign @function(name:"sendAnnouncementCampaign-${env}")
 }
 
-type AnnouncementStatus @model(){
-  sms: String
-  email: String
-  push: String
+type NotificationsSegment 
+  @model(){
+  notificationsSegmentId:ID
+  noitificationStatus:String
+}
+
+type AnnouncementCampaign 
+  @model(){
+  CampaignId: ID,
+  Status: String
 }
