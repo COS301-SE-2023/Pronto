@@ -128,5 +128,21 @@ describe("testing notificationService Handler with invalid inputs", () => {
     );
     expect(receivedResponse).toEqual(expectedResponse);
   });
-  test("should return:UNKNOWN COURSE MUTATION TYPE", async () => {});
+  test("should return:UNKNOWN COURSE MUTATION TYPE", async () => {
+    const eventWithInvalidField = {
+      typeName: "mutation",
+      fieldName: "INVALID-MUTATION-FIELD-NAME",
+      arguments: {
+        institutionId: institutionId,
+        coursecode: courseCode,
+        coursename: "coursename",
+        notificationsSegmentId: segmentId,
+      },
+    };
+    const expectedResponse = "UNKNOWN COURSE MUTATION TYPE";
+    const receivedResponse = await updateCourseResource.handler(
+      eventWithInvalidField
+    );
+    expect(receivedResponse).toEqual(expectedResponse);
+  });
 });
