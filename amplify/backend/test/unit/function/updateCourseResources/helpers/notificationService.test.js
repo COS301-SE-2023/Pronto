@@ -222,33 +222,33 @@ describe("testing successful Notification service operations", () => {
     );
   });
   test("should update segment", async () => {
-    const expectedCreateSegementResponse = {
+    const expectedUpdateSegementResponse = {
       notificationsSegmentId: segmentId,
       noitificationStatus: "UPDATE COMPLETE",
     };
-    const receivedCreateSegementResponse = await updateCourseSegemntOperation(
+    const receivedUpdateSegementResponse = await updateCourseSegemntOperation(
       institutionId,
       courseCode,
       segmentId,
       mockPinpointClient
     );
-    expect(receivedCreateSegementResponse).toEqual(
-      expectedCreateSegementResponse
+    expect(receivedUpdateSegementResponse).toEqual(
+      expectedUpdateSegementResponse
     );
   });
   test("should delete segment", async () => {
-    const expectedCreateSegementResponse = {
+    const expectedDeleteSegementResponse = {
       notificationsSegmentId: segmentId,
       noitificationStatus: "DELETION COMPLETE",
     };
-    const receivedCreateSegementResponse = await deleteCourseSegemntOperation(
+    const receivedDeleteSegementResponse = await deleteCourseSegemntOperation(
       institutionId,
       courseCode,
       segmentId,
       mockPinpointClient
     );
-    expect(receivedCreateSegementResponse).toEqual(
-      expectedCreateSegementResponse
+    expect(receivedDeleteSegementResponse).toEqual(
+      expectedDeleteSegementResponse
     );
   });
 });
