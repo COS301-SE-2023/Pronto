@@ -26,10 +26,7 @@ const createCourseSegmentName = (institutionId, courseCode) => {
 };
 
 const setAndGetCreateSegmentCommandInput = (institutionId, courseCode) => {
-  const moduleSegmentName = createCourseCodeSegmentName(
-    institutionId,
-    courseCode
-  );
+  const moduleSegmentName = createCourseSegmentName(institutionId, courseCode);
   const emailSegmentGroupDimensions = {
     Attributes: {
       Values: [courseCode],
@@ -205,6 +202,7 @@ module.exports = {
   createCourseSegmentName,
   setAndGetCreateSegmentCommandInput,
   createCourseSegmentOperation,
+  setAndGetUpdatePinpointSegmentCommandInput,
   updateCourseSegemntOperation,
   setAndGetDeleteSegmentCommandInput,
   deleteCourseSegemntOperation,
