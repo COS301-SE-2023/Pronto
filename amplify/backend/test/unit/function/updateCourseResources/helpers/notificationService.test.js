@@ -136,6 +136,9 @@ describe("Testing Notification service helper functions", () => {
 });
 
 describe("testing failed operations", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   test("should fail to create segment", async () => {
     mockPinpointClient.send.mockRejectedValue({
       createCourseSegmentOperationError: "should fail to create segment",
