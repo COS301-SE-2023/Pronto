@@ -1,35 +1,48 @@
 const updateCourseResource = require("../../../../function/updateCourseResources/src/index");
 
-const mockPinpointClient = {
-  send: jest.fn(),
-};
-const successfulResponse = {
-  $metadata: {
-    httpStatusCode: 200,
-  },
-};
-const unsuccessfulResponse = {
-  $metadata: {
-    httpStatusCode: 404,
-  },
-};
 const institutionName = "University OF Pretoria";
 const institutionId = "INSITUTION-ID";
 const campaignId = "CAMPAIGN-ID";
 const courseCode = "COS301";
 const segmentId = "SEGMENT-ID";
 
+const unsuccessfulResponse = {
+  $metadata: {
+    httpStatusCode: 404,
+  },
+};
+const successfulResponse = {
+  $metadata: {
+    httpStatusCode: 200,
+  },
+  SegmentResponse: { Id: "SEGMENT-ID" },
+};
+jest.mock("@aws-sdk/client-pinpoint", () => {
+  return {
+    PinpointClient: class {
+      send() {
+        return Promise.resolve(successfulResponse);
+      }
+
+      promise() {
+        return Promise.resolve({});
+      }
+    },
+    CreateSegmentCommand: class {},
+    UpdateSegmentCommand: class {},
+    DeleteSegmentCommand: class {},
+  };
+});
+
 describe("testing updateCourseResource Handler with valid inputs", () => {
-  mockPinpointClient.send.mockResolvedValue(successfulResponse);
   const validEvent = {
     typeName: "mutation",
-    fieldName: "",
+    fieldName: "createCourse",
     arguments: {
-      institutionId: "institutionId",
-      coursecode: "coursecode",
+      institutionId: institutionId,
+      coursecode: courseCode,
       coursename: "coursename",
-      notificationsSegmentId: "notificationsSegmentId",
-      pinpointClient: mockPinpointClient,
+      notificationsSegmentId: segmentId,
     },
   };
   beforeAll(() => {
@@ -45,7 +58,7 @@ describe("testing updateCourseResource Handler with valid inputs", () => {
       validEvent
     );
     expect(receivedCreateSegementResponse).toEqual(
-      receivedCreateSegementResponse
+      expectedCreateSegementResponse
     );
   });
   test("should update campaign", async () => {});
