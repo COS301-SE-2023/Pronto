@@ -2,7 +2,6 @@ const updateCourseResource = require("../../../../function/updateCourseResources
 
 const institutionName = "University OF Pretoria";
 const institutionId = "INSITUTION-ID";
-const campaignId = "CAMPAIGN-ID";
 const courseCode = "COS301";
 const segmentId = "SEGMENT-ID";
 
@@ -35,34 +34,56 @@ jest.mock("@aws-sdk/client-pinpoint", () => {
 });
 
 describe("testing updateCourseResource Handler with valid inputs", () => {
-  const validEvent = {
-    typeName: "mutation",
-    fieldName: "createCourse",
-    arguments: {
-      institutionId: institutionId,
-      coursecode: courseCode,
-      coursename: "coursename",
-      notificationsSegmentId: segmentId,
-    },
-  };
   beforeAll(() => {
     jest.clearAllMocks();
   });
-  test("should create campaign", async () => {
+  test("should create segment", async () => {
+    const validCreateCourseEvent = {
+      typeName: "mutation",
+      fieldName: "createCourse",
+      arguments: {
+        institutionId: institutionId,
+        coursecode: courseCode,
+        coursename: "coursename",
+        notificationsSegmentId: segmentId,
+      },
+    };
     const expectedCreateSegementResponse = {
       notificationsSegmentId: segmentId,
       noitificationStatus: "AWATING ENROLLMENT",
       delay: 300,
     };
     const receivedCreateSegementResponse = await updateCourseResource.handler(
-      validEvent
+      validCreateCourseEvent
     );
+    console.table(receivedCreateSegementResponse);
     expect(receivedCreateSegementResponse).toEqual(
       expectedCreateSegementResponse
     );
   });
-  test("should update campaign", async () => {});
-  test("should delete campaign", async () => {});
+  test("should update segment", async () => {
+    const validUpdateCourseEvent = {
+      typeName: "mutation",
+      fieldName: "updateCourse",
+      arguments: {
+        institutionId: institutionId,
+        coursecode: courseCode,
+        coursename: "coursename",
+        notificationsSegmentId: segmentId,
+      },
+    };
+    const expectedUpdateSegementResponse = {
+      notificationsSegmentId: segmentId,
+      noitificationStatus: "UPDATE COMPLETE",
+    };
+    const receivedUpdateSegementResponse = await updateCourseResource.handler(
+      validUpdateCourseEvent
+    );
+    expect(receivedUpdateSegementResponse).toEqual(
+      expectedUpdateSegementResponse
+    );
+  });
+  test("should delete segment", async () => {});
 });
 describe("testing notificationService Handler with invalid inputs", () => {
   const graphQlObject = "UNKNOWN";
