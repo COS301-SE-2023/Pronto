@@ -1,17 +1,24 @@
 const {
-  createCourseCodeSegmentName,
-  createCourseCodeSegmentCommandInput,
-} = require("../../../../../function/updateCourseResources/src/helpers/updateCourseResources");
+  createCourseSegmentName,
+  setAndGetCreateSegmentCommandInput,
+  createCourseSegmentOperation,
+  setAndGetUpdateSegmentCommandInput,
+  updateCourseSegemntOperation,
+  setAndGetDeleteSegmentCommandInput,
+  deleteCourseSegemntOperation,
+} = require("../../../../../function/updateCourseResources/src/helpers/notificationService");
 
 const institutionName = "University OF Pretoria";
-const moduleCode = "COS301";
-
-describe("Testing helper functions", () => {
-  test("testing createCourseCodeSegmentName", () => {
+const institutionId = "INSITUTION-ID";
+const campaignId = "CAMPAIGN-ID";
+const courseCode = "COS301";
+const segmentId = "SEGMENT-ID";
+describe("Testing Notification service helper functions", () => {
+  test("testing createCourseSegmentName", () => {
     const formattedInstitutionName = institutionName
       .toLowerCase()
       .replaceAll(" ", "+");
-    const formattedCourseCodeCode = moduleCode
+    const formattedCourseCodeCode = courseCode
       .toLowerCase()
       .replaceAll(" ", "+");
     const expectedCourseCodeSegmentName =
@@ -19,25 +26,25 @@ describe("Testing helper functions", () => {
       ":" +
       formattedCourseCodeCode +
       ":notifications:segment";
-    const receivedCourseCodeSegmentName = createCourseCodeSegmentName(
+    const receivedCourseCodeSegmentName = createCourseSegmentName(
       institutionName,
-      moduleCode
+      courseCode
     );
     expect(receivedCourseCodeSegmentName).toEqual(
       expectedCourseCodeSegmentName
     );
   });
-  test("testing createCourseCodeSegmentCommandInput", () => {
+  test("testing setAndGetCreateSegmentCommandInput", () => {
     const expectedSegmentCommandInput = {
       WriteSegmentRequest: {
-        Name: createCourseCodeSegmentName(institutionName, moduleCode),
+        Name: createCourseSegmentName(institutionName, courseCode),
         SegmentGroups: {
           Groups: [
             {
               Dimensions: [
                 {
                   Attributes: {
-                    Values: [moduleCode],
+                    Values: [courseCode],
                     AttributeType: "INCLUSIVE",
                   },
                   Behavior: {
@@ -55,7 +62,7 @@ describe("Testing helper functions", () => {
                 },
                 {
                   Attributes: {
-                    Values: [moduleCode],
+                    Values: [courseCode],
                     AttributeType: "INCLUSIVE",
                   },
                   Behavior: {
@@ -73,7 +80,7 @@ describe("Testing helper functions", () => {
                 },
                 {
                   Attributes: {
-                    Values: [moduleCode],
+                    Values: [courseCode],
                     AttributeType: "INCLUSIVE",
                   },
                   Behavior: {
@@ -97,10 +104,30 @@ describe("Testing helper functions", () => {
         },
       },
     };
-    const receivedSegmentCommandInput = createCourseCodeSegmentCommandInput(
+    const receivedSegmentCommandInput = setAndGetCreateSegmentCommandInput(
       institutionName,
-      moduleCode
+      courseCode
     );
+    expect(receivedSegmentCommandInput).toEqual(expectedSegmentCommandInput);
+  });
+  test("testing setAndGetUpdateSegmentCommandInput", () => {
+    const expectedSegmentCommandInput = {
+      SegmentId: segmentId,
+      ...setAndGetCreateSegmentCommandInput(institutionId, courseCode),
+    };
+    const receivedSegmentCommandInput = setAndGetUpdateSegmentCommandInput(
+      institutionId,
+      courseCode,
+      segmentId
+    );
+    expect(receivedSegmentCommandInput).toEqual(expectedSegmentCommandInput);
+  });
+  test("testing setAndGetDeleteSegmentCommandInput", () => {
+    const expectedSegmentCommandInput = {
+      SegmentId: segmentId,
+    };
+    const receivedSegmentCommandInput =
+      setAndGetDeleteSegmentCommandInput(segmentId);
     expect(receivedSegmentCommandInput).toEqual(expectedSegmentCommandInput);
   });
 });
