@@ -200,6 +200,7 @@ const deleteCourseSegemntOperation = async (segmentId, pinpointClient) => {
     };
   }
 };
+
 module.exports = {
   createCourseSegmentName,
   setAndGetCreateSegmentCommandInput,
