@@ -16,6 +16,17 @@ const segmentId = "SEGMENT-ID";
 const mockPinpointClient = {
   send: jest.fn(),
 };
+const successfulResponse = {
+  $metadata: {
+    httpStatusCode: 200,
+  },
+  SegmentResponse: { Id: segmentId },
+};
+const unsuccessfulResponse = {
+  $metadata: {
+    httpStatusCode: 404,
+  },
+};
 describe("Testing Notification service helper functions", () => {
   test("testing createCourseSegmentName", () => {
     const formattedInstitutionName = institutionName
@@ -135,7 +146,7 @@ describe("Testing Notification service helper functions", () => {
   });
 });
 
-describe("testing failed operations", () => {
+describe("testing failed Notification service operations", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -190,8 +201,54 @@ describe("testing failed operations", () => {
     );
   });
 });
-describe("testing successful operations", () => {
-  test("should create segment", () => {
-    mockPinpointClient.send.mockRejectedValue({});
+describe("testing successful Notification service operations", () => {
+  beforeAll(() => {
+    jest.clearAllMocks();
+    mockPinpointClient.send.mockResolvedValue(successfulResponse);
+  });
+  test("should create segment", async () => {
+    const expectedCreateSegementResponse = {
+      notificationsSegmentId: segmentId,
+      noitificationStatus: "AWATING ENROLLMENT",
+      delay: 300,
+    };
+    const receivedCreateSegementResponse = await createCourseSegmentOperation(
+      institutionId,
+      courseCode,
+      mockPinpointClient
+    );
+    expect(receivedCreateSegementResponse).toEqual(
+      expectedCreateSegementResponse
+    );
+  });
+  test("should update segment", async () => {
+    const expectedCreateSegementResponse = {
+      notificationsSegmentId: segmentId,
+      noitificationStatus: "UPDATE COMPLETE",
+    };
+    const receivedCreateSegementResponse = await updateCourseSegemntOperation(
+      institutionId,
+      courseCode,
+      segmentId,
+      mockPinpointClient
+    );
+    expect(receivedCreateSegementResponse).toEqual(
+      expectedCreateSegementResponse
+    );
+  });
+  test("should delete segment", async () => {
+    const expectedCreateSegementResponse = {
+      notificationsSegmentId: segmentId,
+      noitificationStatus: "DELETION COMPLETE",
+    };
+    const receivedCreateSegementResponse = await deleteCourseSegemntOperation(
+      institutionId,
+      courseCode,
+      segmentId,
+      mockPinpointClient
+    );
+    expect(receivedCreateSegementResponse).toEqual(
+      expectedCreateSegementResponse
+    );
   });
 });
