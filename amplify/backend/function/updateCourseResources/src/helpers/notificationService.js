@@ -102,7 +102,7 @@ const createCourseSegmentOperation = async (
       };
     }
   } catch (createCourseSegmentOperationError) {
-    console.debug(`ERROR SENDING CREATE SEGEMENT COMMAND or FETCHING INSTITUDE INFO FOR INSTITUDE WITH ID ${institutionId},COURSE ${courseCode} \n
+    console.debug(`ERROR SENDING CREATE SEGEMENT COMMAND FOR INSTITUDE WITH ID ${institutionId}, COURSE ${courseCode} \n
             INFO: ${createCourseSegmentOperationError}`);
     return {
       noitificationStatus: "CREATION FAILED",
@@ -110,7 +110,7 @@ const createCourseSegmentOperation = async (
   }
 };
 
-const setAndGetUpdatePinpointSegmentCommandInput = (
+const setAndGetUpdateSegmentCommandInput = (
   institutionId,
   courseCode,
   SegmentId
@@ -128,7 +128,7 @@ const updateCourseSegemntOperation = async (
   segmentId,
   pinpointClient
 ) => {
-  const updateSegementCommandInput = setAndGetUpdatePinpointSegmentCommandInput(
+  const updateSegementCommandInput = setAndGetUpdateSegmentCommandInput(
     institutionId,
     courseCode,
     segmentId
@@ -168,7 +168,12 @@ const setAndGetDeleteSegmentCommandInput = (SegmentId) => {
   return updateSegmentCommandInput;
 };
 
-const deleteCourseSegemntOperation = async (segmentId, pinpointClient) => {
+const deleteCourseSegemntOperation = async (
+  institutionId,
+  courseCode,
+  segmentId,
+  pinpointClient
+) => {
   const deleteSegmentCommandInput =
     setAndGetDeleteSegmentCommandInput(segmentId);
   const deleteSegmentCommand = new DeleteSegmentCommand(
@@ -186,7 +191,7 @@ const deleteCourseSegemntOperation = async (segmentId, pinpointClient) => {
       console.debug(`SEGEMENT DELETED. SEGEMENT ID: ${segmentResponse.Id}`);
       return {
         notificationsSegmentId: segmentResponse.Id,
-        noitificationStatus: "DELETED COMPLETE",
+        noitificationStatus: "DELETION COMPLETE",
       };
     }
   } catch (updateCourseSegmentOperationError) {
@@ -202,7 +207,7 @@ module.exports = {
   createCourseSegmentName,
   setAndGetCreateSegmentCommandInput,
   createCourseSegmentOperation,
-  setAndGetUpdatePinpointSegmentCommandInput,
+  setAndGetUpdateSegmentCommandInput,
   updateCourseSegemntOperation,
   setAndGetDeleteSegmentCommandInput,
   deleteCourseSegemntOperation,
