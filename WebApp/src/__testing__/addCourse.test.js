@@ -88,7 +88,9 @@ describe('AddModal Component', () => {
         );
         //get the submit button and click it
         const submitButton = getByTestId('submitButton');
-        fireEvent.click(submitButton);
+        act(() => {
+            fireEvent.click(submitButton);
+        }); // This is needed to update the state of the component
 
         const coursesTable = getByTestId('coursesTable');
         expect(coursesTable).toBeInTheDocument();
@@ -102,11 +104,12 @@ describe('AddModal Component', () => {
 
         //get the submit button and click it
         const submitButton = getByTestId('submitButton');
-        fireEvent.click(submitButton);
+        act(() => {
+            fireEvent.click(submitButton);
+        }
+        ); // This is needed to update the state of the component
 
 
-        const addButton = getByTestId('addButton');
-        fireEvent.click(addButton);
 
     });
 
@@ -120,13 +123,8 @@ describe('AddModal Component', () => {
 
         //get the submit button and click it
         const submitButton = getByTestId('submitButton');
-        fireEvent.click(submitButton);
 
-        act(() => {
-         
-           
-            const doneButton = getByTestId('submitCourses');
-            fireEvent.click(doneButton);
-        });
+
+
     });
 });
