@@ -160,16 +160,33 @@ describe("testing failed operations", () => {
     mockPinpointClient.send.mockRejectedValue({
       createCourseSegmentOperationError: "should fail to update segment",
     });
-    const expectedCreateOperationResponse = {
+    const expectedUpdateOperationResponse = {
       noitificationStatus: "UPDATE FAILED",
     };
-    const receivedCreateOperationResponse = await updateCourseSegemntOperation(
+    const receivedUpdateOperationResponse = await updateCourseSegemntOperation(
       institutionId,
       courseCode,
       mockPinpointClient
     );
-    expect(receivedCreateOperationResponse).toEqual(
-      expectedCreateOperationResponse
+    expect(receivedUpdateOperationResponse).toEqual(
+      expectedUpdateOperationResponse
+    );
+  });
+  test("should fail to delete segment", async () => {
+    mockPinpointClient.send.mockRejectedValue({
+      createCourseSegmentOperationError: "should fail to delete segment",
+    });
+    const expectedDeleteOperationResponse = {
+      noitificationStatus: "DELETE FAILED",
+    };
+    const receivedDeleteOperationResponse = await deleteCourseSegemntOperation(
+      institutionId,
+      courseCode,
+      segmentId,
+      mockPinpointClient
+    );
+    expect(receivedDeleteOperationResponse).toEqual(
+      expectedDeleteOperationResponse
     );
   });
 });
