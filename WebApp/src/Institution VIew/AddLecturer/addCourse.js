@@ -109,7 +109,7 @@ export default function AddModal(module) {
                     onClose={handleClose}
                     aria-labelledby="modal-modal-title"
                     aria-describedby="modal-modal-description"
-                    data-testid="modal"
+                    data-testid="modal" // Added data-testid here
                 >
                     <Box sx={style}>
                         <table
