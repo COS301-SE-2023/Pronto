@@ -56,7 +56,6 @@ describe("testing updateCourseResource Handler with valid inputs", () => {
     const receivedCreateSegementResponse = await updateCourseResource.handler(
       validCreateCourseEvent
     );
-    console.table(receivedCreateSegementResponse);
     expect(receivedCreateSegementResponse).toEqual(
       expectedCreateSegementResponse
     );
@@ -111,6 +110,23 @@ describe("testing notificationService Handler with invalid inputs", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+  test(`should return: FUNCTION NOT MENT TO BE CALLED USING THE ${graphQlObject} OBJECT TYPE`, async () => {
+    const eventWithInvalidType = {
+      typeName: "INVALID-TYPE",
+      fieldName: "deleteCourse",
+      arguments: {
+        institutionId: institutionId,
+        coursecode: courseCode,
+        coursename: "coursename",
+        notificationsSegmentId: segmentId,
+      },
+    };
+    const expectedResponse =
+      "FUNCTION NOT MENT TO BE CALLED USING THE INVALID-TYPE OBJECT TYPE";
+    const receivedResponse = await updateCourseResource.handler(
+      eventWithInvalidType
+    );
+    expect(receivedResponse).toEqual(expectedResponse);
+  });
   test("should return:UNKNOWN COURSE MUTATION TYPE", async () => {});
-  test(`should return: FUNCTION NOT MENT TO BE CALLED USING THE ${graphQlObject} OBJECT TYPE`, async () => {});
 });
