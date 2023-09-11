@@ -197,7 +197,7 @@ const AddLecturer = () => {
                 query: deleteLecturer,
                 variables: { input: lec },
             });
-            let courseList = lecturer.courses;
+            let courseList = lecturer.courses.items;
             if (courseList !== undefined) {
                 await removeCourses(courseList, lecturer);
                 setOfferedCourses([...offeredCourses, courseList]);
