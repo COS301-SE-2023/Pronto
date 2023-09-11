@@ -15,7 +15,7 @@ const createCampaignName = (institutionName) => {
 };
 
 /* create campain*/
-const setAndGetPinpointCampaignCommandInput = (institutionName) => {
+const setAndGetPinpointCreateCampaignCommandInput = (institutionName) => {
   const campaignName = createCampaignName(institutionName);
   const createCampaignCommandInput = {
     ApplicationId: PINPOINT_APP_ID,
@@ -41,7 +41,7 @@ const createCampainOperation = async (
   pinpointClient
 ) => {
   const campaignCommandInput =
-    setAndGetPinpointCampaignCommandInput(institutionName);
+    setAndGetPinpointCreateCampaignCommandInput(institutionName);
   const createCampaignCommand = new CreateCampaignCommand(campaignCommandInput);
   try {
     const createCampaignCommandOutput = await pinpointClient.send(
@@ -65,7 +65,7 @@ const createCampainOperation = async (
       console.debug(`CAMPAIGN NOT CREATED, please check logs for more info`);
       return false;
     }
-  } catch (createInstitutionResourcesError) {
+  } catch (createNotificationCampaignError) {
     console.debug(`ERROR SENDING CREATE CAMPAIGN COMMAND FOR INSTUTION WITH ID ${institutionId}\n
             INFO: ${createInstitutionResourcesError}`);
     try {
@@ -252,7 +252,7 @@ const deleteCampaignOperation = async (
 
 module.exports = {
   createCampaignName,
-  setAndGetPinpointCampaignCommandInput,
+  setAndGetPinpointCreateCampaignCommandInput,
   createCampainOperation,
   setAndGetPinpointUpdateCampaignCommandInput,
   updateCamapaignOperation,
