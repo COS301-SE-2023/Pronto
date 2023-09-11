@@ -2,9 +2,9 @@ name: Build Mobile App
 
 on:
   push:
-    branches: [Pipeline-Set-Up]
+    branches: [main, dev, frontend, Pipeline-Set-Up]
   pull_request:
-    branches: [Pipeline-Set-Up]
+    branches: [main, dev, frontend, Pipeline-Set-Up]
 
 jobs:
   build-mobile:
@@ -30,3 +30,21 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }} # You need to set CODECOV_TOKEN as a secret in your repository
           flags: --branch=Pipeline-Set-Up
           directory: ./MobileApp
+
+  build-web:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    defaults:
+      run:
+        working-directory: "./WebApp"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version}}
+      - run: |
+          npm install
+          npm test
