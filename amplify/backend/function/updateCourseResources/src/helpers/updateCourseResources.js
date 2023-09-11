@@ -1,14 +1,21 @@
 const {
   SEGMENT_NAME_SUFFIX,
   PINPOINT_SEGMENT_DIMENSIONS,
-  DATASTREAM_EVENT_NAMES,
 } = require("./constants");
-const { CreateSegmentCommand } = require("@aws-sdk/client-pinpoint");
+const {
+  CreateSegmentCommand,
+  UpdateSegmentCommand,
+  DeleteSegmentCommand,
+} = require("@aws-sdk/client-pinpoint");
+const institution = {
+  details: null,
+  id: null,
+};
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
 
-const createCourseSegmentName = (institutionName, courseCode) => {
-  formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
+const createCourseSegmentName = (institutionId, courseCode) => {
+  formattedInstitutionName = institutionId.toLowerCase().replaceAll(" ", "+");
   formattedCourseCodeCode = courseCode.toLowerCase().replaceAll(" ", "+");
   return (
     formattedInstitutionName +
@@ -18,12 +25,9 @@ const createCourseSegmentName = (institutionName, courseCode) => {
   );
 };
 
-const setAndGetCreatePinpointSegmentCommandInput = (
-  institutionName,
-  courseCode
-) => {
+const setAndGetCreateSegmentCommandInput = (institutionId, courseCode) => {
   const moduleSegmentName = createCourseCodeSegmentName(
-    institutionName,
+    institutionId,
     courseCode
   );
   const emailSegmentGroupDimensions = {
@@ -73,12 +77,12 @@ const setAndGetCreatePinpointSegmentCommandInput = (
 };
 
 const createCourseSegmentOperation = async (
-  institutionName,
+  institutionId,
   courseCode,
   pinpointClient
 ) => {
-  const createSegementCommandInput = setAndGetCreatePinpointSegmentCommandInput(
-    institutionName,
+  const createSegementCommandInput = setAndGetCreateSegmentCommandInput(
+    institutionId,
     courseCode
   );
   const createSegmentCommand = new CreateSegmentCommand(
@@ -94,58 +98,113 @@ const createCourseSegmentOperation = async (
     const SegmentResponse = createSegementCommandOutput.SegmentResponse;
     if (statusCode === 200) {
       console.debug(`SEGEMENT CREATED. SEGEMENT ID: ${SegmentResponse.Id}`);
-      return true;
+      return {
+        notificationsSegmentId: SegmentResponse.Id,
+        noitificationStatus: "AWATING ENROLLMENT",
+        delay: 300,
+      };
     }
-  } catch (createCourseSegmentError) {
-    console.debug(`ERROR SENDING CREATE SEGEMENT COMMAND FOR ${institutionName} ${courseCode} COURSE\n
-            INFO: ${createCourseSegmentError}`);
-    return false;
+  } catch (createCourseSegmentOperationError) {
+    console.debug(`ERROR SENDING CREATE SEGEMENT COMMAND or FETCHING INSTITUDE INFO FOR INSTITUDE WITH ID ${institutionId},COURSE ${courseCode} \n
+            INFO: ${createCourseSegmentOperationError}`);
+    return {
+      noitificationStatus: "CREATION FAILED",
+    };
   }
 };
 
-const setAndGetUpdatePinpointSegmentCommandInput = () => {};
-const updateCourseSegmentOperation = () => {};
+const setAndGetUpdatePinpointSegmentCommandInput = (
+  institutionId,
+  courseCode,
+  SegmentId
+) => {
+  const updateSegmentCommandInput = {
+    SegmentId: SegmentId,
+    ...setAndGetCreateSegmentCommandInput(institutionId, courseCode),
+  };
+  return updateSegmentCommandInput;
+};
 
-const setAndGetDeletePinpointSegmentCommandInput = () => {};
-const deleteCourseSegmentOperation = () => {};
+const updateCourseSegemntOperation = async (
+  institutionId,
+  courseCode,
+  segmentId,
+  pinpointClient
+) => {
+  const updateSegementCommandInput = setAndGetUpdatePinpointSegmentCommandInput(
+    institutionId,
+    courseCode,
+    segmentId
+  );
+  const updateSegmentCommand = new UpdateSegmentCommand(
+    updateSegementCommandInput
+  );
+  try {
+    const updateSegmentCommandOutput = await pinpointClient.send(
+      updateSegmentCommand
+    );
+    console.debug(`CREATE Segment Response: ${updateSegmentCommandOutput}`);
+    const responseMetadata = updateSegmentCommandOutput.$metadata;
+    const statusCode = responseMetadata.httpStatusCode;
+    const segmentResponse = updateSegmentCommandOutput.SegmentResponse;
+    if (statusCode === 200) {
+      console.debug(`SEGEMENT UPDATED. SEGEMENT ID: ${segmentResponse.Id}`);
+      return {
+        notificationsSegmentId: segmentResponse.Id,
+        noitificationStatus: "UPDATE COMPLETE",
+      };
+    }
+  } catch (updateCourseSegmentOperationError) {
+    console.debug(`ERROR SENDING UPDATE SEGEMENT COMMAND FOR INSTITUDE WITH ID ${institutionId},COURSE ${courseCode} \n
+            INFO: ${updateCourseSegmentOperationError}`);
+    return {
+      noitificationStatus: "UPDATE FAILED",
+    };
+  }
+};
 
-const updateCourseResources = async (updateRequest) => {
-  switch (updateRequest.UpdateOption) {
-    case DATASTREAM_EVENT_NAMES.COURSE_CREATED:
-      console.debug("COURSE CREATED");
-      //create student segment group
-      //create segment, add groups
-      //get institution campain
-      //add segement
-      //WRITE segmentIDs WRITE to institutionDB, on COURSETABLE
-      //Update notifications status on course table
-      const createSegmentCommandInput =
-        setAndGetCreatePinpointSegmentCommandInput(
-          updateRequest.institutionName,
-          updateRequest.courseCode
-        );
-      try {
-        const createSegmentResponse = await updateRequest.pinpointClient.send(
-          createSegmentCommandInput
-        );
-      } catch (error) {}
-      break;
-    case DATASTREAM_EVENT_NAMES.COURSE_UPDATED:
-      try {
-      } catch (error) {}
-      break;
-    case DATASTREAM_EVENT_NAMES.COURSE_DELETED:
-      try {
-      } catch (error) {}
-      break;
-    default:
-      throw new Error();
+const setAndGetDeleteSegmentCommandInput = (SegmentId) => {
+  const updateSegmentCommandInput = {
+    SegmentId: SegmentId,
+    ApplicationId: PINPOINT_APP_ID,
+  };
+  return updateSegmentCommandInput;
+};
+
+const deleteCourseSegemntOperation = async (segmentId, pinpointClient) => {
+  const deleteSegmentCommandInput =
+    setAndGetDeleteSegmentCommandInput(segmentId);
+  const deleteSegmentCommand = new DeleteSegmentCommand(
+    deleteSegmentCommandInput
+  );
+  try {
+    const deleteSegmentCommandOutput = await pinpointClient.send(
+      deleteSegmentCommand
+    );
+    console.debug(`DELETE Segment Response: ${deleteSegmentCommandOutput}`);
+    const responseMetadata = deleteSegmentCommandOutput.$metadata;
+    const statusCode = responseMetadata.httpStatusCode;
+    const segmentResponse = deleteSegmentCommandOutput.SegmentResponse;
+    if (statusCode === 200) {
+      console.debug(`SEGEMENT DELETED. SEGEMENT ID: ${segmentResponse.Id}`);
+      return {
+        notificationsSegmentId: segmentResponse.Id,
+        noitificationStatus: "DELETED COMPLETE",
+      };
+    }
+  } catch (updateCourseSegmentOperationError) {
+    console.debug(`ERROR SENDING DELETED SEGEMENT COMMAND FOR INSTITUDE WITH ID ${institutionId},COURSE ${courseCode} \n
+            INFO: ${updateCourseSegmentOperationError}`);
+    return {
+      noitificationStatus: "DELETE FAILED",
+    };
   }
 };
 module.exports = {
   createCourseSegmentName,
-  setAndGetCreatePinpointSegmentCommandInput,
+  setAndGetCreateSegmentCommandInput,
   createCourseSegmentOperation,
-  updateCourseSegmentOperation,
-  deleteCourseSegmentOperation,
+  updateCourseSegemntOperation,
+  setAndGetDeleteSegmentCommandInput,
+  deleteCourseSegemntOperation,
 };
