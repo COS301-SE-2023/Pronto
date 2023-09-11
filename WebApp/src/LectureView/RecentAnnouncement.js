@@ -71,20 +71,14 @@ const StyledMenu = styled((props) => (
 
 export default function RecentAnnouncement() {
 
-//  const [anchorEl, setAnchorEl] = useState(null);
+
   const [loading,setLoading] = useState(false);
   const [error, setError] = useState("");
   
   const{lecturer,setLecturer} =useLecturer();
   const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
 
-  // const open = Boolean(anchorEl);
-  // const handleClick = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
+ 
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [deleteConfirmationIndex, setDeleteConfirmationIndex] = useState(null);

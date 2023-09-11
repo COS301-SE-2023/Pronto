@@ -23,12 +23,12 @@ export default function LecturerNavigation(lecturerData) {
     }
   };
 
-  const userSet = async () => {
-    let u = await Auth.currentAuthenticatedUser();
-    u = u.attributes.name + " " + u.attributes.family_name;
-    setUser(u);
+  // const userSet = async () => {
+  //   let u = await Auth.currentAuthenticatedUser();
+  //   u = u.attributes.name + " " + u.attributes.family_name;
+  //   setUser(u);
    
-  };
+  // };
 
   const fetchLecturer = async () => {
     let u = await Auth.currentAuthenticatedUser();
@@ -69,7 +69,7 @@ export default function LecturerNavigation(lecturerData) {
   }
 
   useEffect(() => {
-    userSet();
+    //userSet();
     fetchLecturer();
   });
 
@@ -87,7 +87,7 @@ export default function LecturerNavigation(lecturerData) {
 
           <div className="lecturer-name" style={{ paddingTop: '5%' }}>
             <b>
-              {user}
+              {lecturer && (lecturer.firstname+" "+lecturer.lastname)}
             </b>
           </div>
         </div>

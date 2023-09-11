@@ -30,7 +30,6 @@ export default function PostAccordion(course) {
   const [successMessage,setSuccessMessage]=useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   
-  let act="";
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -286,10 +285,10 @@ export default function PostAccordion(course) {
           <select
             onClick={(e) =>setActivity(course.course.activity.items[e.target.value])}
             className="custom-select"
-            defaultValue=""
+            placeholder="Select Activity"
             >
-            <option value = "">Select Activity</option>
-            {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
+             <option selected disabled>Select Activity</option>          
+                {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
               return (
                 <option key={key}
                   value={key}>{val.day+" "+val.start+"-"+val.end+" "+val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "")}</option>
