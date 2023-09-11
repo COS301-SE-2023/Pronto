@@ -83,7 +83,28 @@ describe("testing updateCourseResource Handler with valid inputs", () => {
       expectedUpdateSegementResponse
     );
   });
-  test("should delete segment", async () => {});
+  test("should delete segment", async () => {
+    const validDeleteCourseEvent = {
+      typeName: "mutation",
+      fieldName: "deleteCourse",
+      arguments: {
+        institutionId: institutionId,
+        coursecode: courseCode,
+        coursename: "coursename",
+        notificationsSegmentId: segmentId,
+      },
+    };
+    const expectedDeleteSegementResponse = {
+      notificationsSegmentId: segmentId,
+      noitificationStatus: "DELETION COMPLETE",
+    };
+    const receivedDeleteSegementResponse = await updateCourseResource.handler(
+      validDeleteCourseEvent
+    );
+    expect(receivedDeleteSegementResponse).toEqual(
+      expectedDeleteSegementResponse
+    );
+  });
 });
 describe("testing notificationService Handler with invalid inputs", () => {
   const graphQlObject = "UNKNOWN";
