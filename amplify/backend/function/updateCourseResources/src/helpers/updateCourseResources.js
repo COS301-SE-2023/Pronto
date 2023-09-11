@@ -3,10 +3,11 @@ const {
   PINPOINT_SEGMENT_DIMENSIONS,
   DATASTREAM_EVENT_NAMES,
 } = require("./constants");
+const { CreateSegmentCommand } = require("@aws-sdk/client-pinpoint");
 
 const PINPOINT_APP_ID = process.env.PINPOINT_APP_ID;
 
-const createCourseCodeSegmentName = (institutionName, courseCode) => {
+const createCourseSegmentName = (institutionName, courseCode) => {
   formattedInstitutionName = institutionName.toLowerCase().replaceAll(" ", "+");
   formattedCourseCodeCode = courseCode.toLowerCase().replaceAll(" ", "+");
   return (
@@ -17,7 +18,10 @@ const createCourseCodeSegmentName = (institutionName, courseCode) => {
   );
 };
 
-const createCourseCodeSegmentCommandInput = (institutionName, courseCode) => {
+const setAndGetCreatePinpointSegmentCommandInput = (
+  institutionName,
+  courseCode
+) => {
   const moduleSegmentName = createCourseCodeSegmentName(
     institutionName,
     courseCode
@@ -68,16 +72,63 @@ const createCourseCodeSegmentCommandInput = (institutionName, courseCode) => {
   return createSegmentCommandInput;
 };
 
-const updateCourseResources = async (UpdateOption) => {
-  switch (UpdateOption) {
+const createCourseSegmentOperation = async (
+  institutionName,
+  courseCode,
+  pinpointClient
+) => {
+  const createSegementCommandInput = setAndGetCreatePinpointSegmentCommandInput(
+    institutionName,
+    courseCode
+  );
+  const createSegmentCommand = new CreateSegmentCommand(
+    createSegementCommandInput
+  );
+  try {
+    const createSegementCommandOutput = await pinpointClient.send(
+      createSegmentCommand
+    );
+    console.debug(`CREATE Segment Response: ${createSegementCommandOutput}`);
+    const responseMetadata = createSegementCommandOutput.$metadata;
+    const statusCode = responseMetadata.httpStatusCode;
+    const SegmentResponse = createSegementCommandOutput.SegmentResponse;
+    if (statusCode === 200) {
+      console.debug(`SEGEMENT CREATED. SEGEMENT ID: ${SegmentResponse.Id}`);
+      return true;
+    }
+  } catch (createCourseSegmentError) {
+    console.debug(`ERROR SENDING CREATE SEGEMENT COMMAND FOR ${institutionName} ${courseCode} COURSE\n
+            INFO: ${createCourseSegmentError}`);
+    return false;
+  }
+};
+
+const setAndGetUpdatePinpointSegmentCommandInput = () => {};
+const updateCourseSegmentOperation = () => {};
+
+const setAndGetDeletePinpointSegmentCommandInput = () => {};
+const deleteCourseSegmentOperation = () => {};
+
+const updateCourseResources = async (updateRequest) => {
+  switch (updateRequest.UpdateOption) {
     case DATASTREAM_EVENT_NAMES.COURSE_CREATED:
+      console.debug("COURSE CREATED");
       //create student segment group
       //create segment, add groups
       //get institution campain
       //add segement
       //WRITE segmentIDs WRITE to institutionDB, on COURSETABLE
       //Update notifications status on course table
-      const createSegmentCommandInput = createSegmentCommandInput();
+      const createSegmentCommandInput =
+        setAndGetCreatePinpointSegmentCommandInput(
+          updateRequest.institutionName,
+          updateRequest.courseCode
+        );
+      try {
+        const createSegmentResponse = await updateRequest.pinpointClient.send(
+          createSegmentCommandInput
+        );
+      } catch (error) {}
       break;
     case DATASTREAM_EVENT_NAMES.COURSE_UPDATED:
       try {
@@ -92,6 +143,9 @@ const updateCourseResources = async (UpdateOption) => {
   }
 };
 module.exports = {
-  createCourseCodeSegmentName,
-  createCourseCodeSegmentCommandInput,
+  createCourseSegmentName,
+  setAndGetCreatePinpointSegmentCommandInput,
+  createCourseSegmentOperation,
+  updateCourseSegmentOperation,
+  deleteCourseSegmentOperation,
 };
