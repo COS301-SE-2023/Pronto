@@ -33,12 +33,6 @@ const PINPOINT_SEGMENT_DIMENSIONS = Object.freeze({
   },
 });
 
-const DATASTREAM_EVENT_NAMES = Object.freeze({
-  COURSE_CREATED: "INSERT",
-  COURSE_UPDATED: "MODIFY",
-  COURSE_DELETED: "REMOVE",
-});
-
 const PINPOINT_CONSTANTS = Object.freeze({
   CampaignStatus: {
     COMPLETED: "COMPLETED",
