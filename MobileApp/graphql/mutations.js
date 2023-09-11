@@ -9,8 +9,7 @@ export const createTimetable=`mutation CreateTimetable(
     activities {
       nextToken
     }
-    createdAt
-    updatedAt
+   
   }
 }`
 

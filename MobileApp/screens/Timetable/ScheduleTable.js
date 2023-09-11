@@ -49,26 +49,31 @@ const ScheduleTable = ({ navigation,route }) => {
     ].indexOf(dayOfWeek);
     const results = [];
     let month = date.getMonth()
-    let limit =month+2;
-
+    
+    
     // Loop through each month of the year
-    for (month; month < limit; month++) {
+    //for (month; month < limit; month++) {
       // Create a new date object for the first day of the month
+      
       const firstDayOfMonth = new Date(year, month, 1);
 
       // Find the first occurrence of the specified day of the week
       const diff = dayIndex - firstDayOfMonth.getDay();
       let dayOfMonth = diff >= 0 ? diff + 1 : diff + 8;
-
-      // Loop through the rest of the month, adding dates for the specified day of the week
-      while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
-        const dateString = `${year}-${(month + 1)
+      
+      while(dayOfMonth<date.getDate()){
+        dayOfMonth+=7;
+      }
+      //while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
+      for(let i=0;i<4;i++){  
+      const dateString = `${year}-${(month + 1)
           .toString()
           .padStart(2, "0")}-${dayOfMonth.toString().padStart(2, "0")}`;
+        //if(dayOfMonth>=date.getDate())
         results.push(dateString);
         dayOfMonth += 7;
       }
-    }
+    //}
     return results;
   }
 
@@ -181,10 +186,10 @@ const ScheduleTable = ({ navigation,route }) => {
         }          
 
         
-        //if (changed === true){
-        setActivities(act);
-        createScheduleArray(act);
-        //}
+        if (changed === true){
+          setActivities(act);
+          createScheduleArray(act);
+        }
    
       }
     }
