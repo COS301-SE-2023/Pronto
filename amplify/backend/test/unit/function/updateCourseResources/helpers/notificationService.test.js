@@ -155,6 +155,23 @@ describe("testing failed operations", () => {
       expectedCreateOperationResponse
     );
   });
+
+  test("should fail to update segment", async () => {
+    mockPinpointClient.send.mockRejectedValue({
+      createCourseSegmentOperationError: "should fail to update segment",
+    });
+    const expectedCreateOperationResponse = {
+      noitificationStatus: "UPDATE FAILED",
+    };
+    const receivedCreateOperationResponse = await updateCourseSegemntOperation(
+      institutionId,
+      courseCode,
+      mockPinpointClient
+    );
+    expect(receivedCreateOperationResponse).toEqual(
+      expectedCreateOperationResponse
+    );
+  });
 });
 describe("testing successful operations", () => {
   test("should create segment", () => {
