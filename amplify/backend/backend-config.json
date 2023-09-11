@@ -142,17 +142,17 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "configureCourseNotifications": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "pronto5f713f59PostAuthentication": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "pronto5f713f59PreSignup": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "updateCourseResources": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
