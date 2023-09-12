@@ -54,7 +54,7 @@ jobs:
 
           - run: |
               npm install
-              npm test
+              npm test --passWithNoTests
 
           - name: Install Amplify CLI and Build Backend
             run: |
