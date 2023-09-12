@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
-import { listCourses, listLecturers, getLecturer } from "../../graphql/queries";
+import { listCourses, listLecturers } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal'
 import { Link } from "react-router-dom";
 import UserManual from "../HelpFiles/EditModuleInfo.pdf";
 import HelpButton from '../../HelpButton';
 import { useLecturer } from "../../ContextProviders/LecturerContext";
+import moduleImage from "./Courses.png";
 
 const Modules = () => {
 
@@ -16,7 +17,7 @@ const Modules = () => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false); // Add loading state
 
-  const {lecturer,setLecturer} =useLecturer();
+  const { lecturer, setLecturer } = useLecturer();
 
   const fetchCourses = async () => {
     try {
@@ -83,12 +84,21 @@ const Modules = () => {
     <div style={{ display: 'inline-flex' }}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }}>
-        {/* Navigation bar content */}
+
         <LecturerNavigation />
       </nav>
 
       <main style={{ width: '900px', marginTop: '30px' }}>
-        <h1 className="moduleHead">Courses</h1>
+
+
+        <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Courses</h1>
+        {/* Add your explanatory image and text here */}
+        <div style={{ textAlign: 'center' }}>
+          <p>This page allows you to manage your registered modules. Click on a module to post reminders, due dates or update lecture venues.</p>
+          <img src={moduleImage} alt="ModulesImage" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+
+        </div>
+
         {loading ? (
           <p style={
             {
@@ -104,7 +114,7 @@ const Modules = () => {
           lecturer?.courses?.items?.map((val, key) => (
             <Link to={'/lecturer/edit-module'} state={val} key={val.coursecode}>
               <button className="content-button" key={val.coursecode}>
-                {val.coursecode}
+                {val.coursecode} <span style={{ float: "right", marginRight: 50, color: "#e32f45" }}>&#x2192;</span>
               </button>
             </Link>
           ))

@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import "../Institution VIew/Navigation/Navigation.css";
 import logo from "../images/university_logo.svg";
 import { Auth, API, Storage } from "aws-amplify";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { listLecturers } from "../graphql/queries";
 import { useLecturer } from "../ContextProviders/LecturerContext";
 
 export default function LecturerNavigation(lecturerData) {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   //const [lecturer, setLecturer] = useState(lecturerData.props);
 
   const { lecturer, setLecturer } = useLecturer();
@@ -27,7 +28,7 @@ export default function LecturerNavigation(lecturerData) {
     let u = await Auth.currentAuthenticatedUser();
     u = u.attributes.name + " " + u.attributes.family_name;
     setUser(u);
-   
+
   };
 
   const fetchLecturer = async () => {
@@ -62,7 +63,7 @@ export default function LecturerNavigation(lecturerData) {
           setLecturer(lec);
         }
 
-    }
+      }
     } catch (error) {
 
     }
@@ -84,7 +85,6 @@ export default function LecturerNavigation(lecturerData) {
             style={{ width: "155px", height: "155px" }}
             data-testid={'UniversityImage'}
           />
-
           <div className="lecturer-name" style={{ paddingTop: '5%' }}>
             <b>
               {user}
@@ -93,21 +93,21 @@ export default function LecturerNavigation(lecturerData) {
         </div>
 
         <ul className="navbar-nav">
-          <li className="nav-item text-center" data-testid={"LecturerDashboard"}>
+          <li data-testid={"LecturerDashboard"}>
             <Link
               to={'/lecturer/dashboard'}
               //state={lecturer}
-              className="nav-link"
+              className={`nav-link text-center ${location.pathname === '/lecturer/dashboard' ? 'active' : ''}`}
             >
               <b>Dashboard</b>
             </Link>
           </li>
 
-          <li className="nav-item text-center" data-testid={"EditModuleInfo"}>
+          <li data-testid={"EditModuleInfo"}>
             <Link
               to={'/lecturer/modules'}
               //state={lecturer}
-              className="nav-link"
+              className={`nav-link text-center ${location.pathname === '/lecturer/modules' ? 'active' : ''}`}
             >
               <b>Edit Module Information</b>
             </Link>
@@ -115,25 +115,25 @@ export default function LecturerNavigation(lecturerData) {
 
           </li>
           <li
-            className="nav-item text-center"
+
             data-testid={"RecentAnnouncements"}
           >
 
             <Link
               to={'/lecturer/announcement'}
               //state={lecturer}
-              className="nav-link"
+              className={`nav-link text-center ${location.pathname === '/lecturer/announcement' ? 'active' : ''}`}
             >
               <b>Recent Announcements</b>
             </Link>
 
           </li>
-          <li className="nav-item text-center" data-testid={"EditPersonalInfo"}>
+          <li data-testid={"EditPersonalInfo"}>
 
             <Link
               to={'/lecturer/personal-info'}
               //state={lecturer}
-              className="nav-link"
+              className={`nav-link text-center ${location.pathname === '/lecturer/personal-info' ? 'active' : ''}`}
             >
               <b>Edit Personal Information</b>
             </Link>

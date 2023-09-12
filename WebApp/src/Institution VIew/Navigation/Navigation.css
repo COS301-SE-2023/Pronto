@@ -31,15 +31,15 @@
     max-height: fit-content;
 }
 
-.nav-item {
-    margin: 10px 0;
-}
+
 
 .nav-link {
     color: #555;
+
     text-decoration: none;
     font-size: 1.2rem;
     transition: color 0.3s;
+    margin: 10px 0;
 }
 
 /* Container for navbar links */
@@ -60,9 +60,9 @@
 .logo {
     display: block;
     margin: 0 auto;
-   
     border-radius: 50%; /* Circular shape */
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    object-fit: cover; /* Prevent stretching and cover the container */
 }
 
 /* Centered text style for top */
@@ -110,10 +110,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 20px;.vertical-navbar .active {
+        color: #e32f45;
+        border-bottom: 2px solid #e32f45;
+    }    
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
   }
 
 .grid {
     height: 80vh;
+}
+
+.active {
+    color: #e32f45;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow to the text */
 }

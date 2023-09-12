@@ -18,6 +18,7 @@ import UserManual from "./HelpFiles/Announcements.pdf";
 import HelpButton from '../HelpButton';
 import { useAnnouncement } from '../ContextProviders/AnnouncementContext';
 import { useLecturer } from '../ContextProviders/LecturerContext';
+import recentAnnouncementImage from "./recentAnnouncementImage.png"
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
@@ -80,8 +81,8 @@ export default function RecentAnnouncement() {
   const [error, setError] = useState("");
   //const [nextToken, setNextToken] = useState("");
 
-  const{lecturer,setLecturer} =useLecturer();
-  const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
+  const { lecturer, setLecturer } = useLecturer();
+  const { announcement, setAnnouncement, nextToken, setNextToken } = useAnnouncement();
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -230,7 +231,7 @@ export default function RecentAnnouncement() {
 
 
   return (
-    <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
+    <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
 
@@ -242,7 +243,12 @@ export default function RecentAnnouncement() {
 
 
       <main style={{ width: '900px', marginTop: '30px' }}>
-        <h1 className="moduleHead">Recent Announcements</h1>
+        <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Recent Announcements</h1>
+        <div style={{ textAlign: 'center' }}>
+          <p>This page allows you view the announcents you've made to students on the mobile app. You can delete or sort these announcements.</p>
+          <img src={recentAnnouncementImage} alt="ModulesImage" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+
+        </div>
         {announcement.length === 0 ? (
           // Display "Fetching announcements..." when announcements are being fetched
           <p style={
