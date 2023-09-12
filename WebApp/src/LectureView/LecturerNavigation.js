@@ -104,7 +104,7 @@ export default function LecturerNavigation(lecturerData) {
           <li data-testid={"EditModuleInfo"}>
             <Link
               to={'/lecturer/modules'}
-              className={`nav-link text-center ${location.pathname === '/lecturer/modules'  ? 'active' : ''}`}
+              className={`nav-link text-center ${location.pathname === '/lecturer/edit-module'  ? 'active' : location.pathname==='/lecturer/modules' ? 'active' : '' }`}
             >
               <b>Edit Module Information</b>
             </Link>
