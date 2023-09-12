@@ -1,7 +1,9 @@
 name: Build Amplify
 on:
   pull_request:
-    branches: [ backend,main,dev,integration ]    
+    branches: [ backend,main,dev,integration ]
+  push: 
+    branches: [feature/notifications]      
   workflow_dispatch: {}  
 jobs:
   build:
@@ -32,14 +34,14 @@ jobs:
           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
           aws configure set default.region us-east-1
 
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          version: ${{ matrix.node_version }}
-      - name: Remove File
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: amplify
+      # - name: Use Node.js ${{ matrix.node_version }}
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     version: ${{ matrix.node_version }}
+      # - name: Remove File
+      #   uses: JesseTG/rm@v1.0.3
+      #   with:
+      #     path: amplify
 
       - name: Install Amplify CLI & Building Project
         env:
@@ -47,5 +49,5 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
         run: |    
           npm install -g @aws-amplify/cli 
-          bash scripts/initialise-amplify.sh
+          amplify api gql-compile
           amplify build
