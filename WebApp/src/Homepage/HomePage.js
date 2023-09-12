@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import "./homepage_style.css"
+import './homepage_style.css';
+import ProntoLogo from "../Authentication/Institution/ProntoLogo.svg";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function HomePage() {
   const words = ["Universities", "Lecturers", "Students"];
@@ -7,14 +9,24 @@ function HomePage() {
   const [currentWord, setCurrentWord] = useState('');
   const [letterIndex, setLetterIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
+  const [isNavbarFixed, setIsNavbarFixed] = useState(false);
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  // Function to determine if a navbar link should be styled as active
+  const isNavLinkActive = (linkPath) => {
+    return currentPath === linkPath ? 'active' : '';
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setLetterIndex(0); // Reset letterIndex for the next word
-      setCurrentWord(''); // Reset currentWord
-      setShowCursor(true); // Show cursor when changing words
+      setLetterIndex(0);
+      setCurrentWord('');
+      setShowCursor(true);
       setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-    }, 2000); // Change the word every 2 seconds
+    }, 2000);
 
     return () => {
       clearInterval(interval);
@@ -26,25 +38,72 @@ function HomePage() {
       const timeout = setTimeout(() => {
         setCurrentWord((prevWord) => prevWord + words[wordIndex][letterIndex]);
         setLetterIndex((prevIndex) => prevIndex + 1);
-      }, 100); // Delay between each letter appearing
+      }, 100);
 
       return () => {
         clearTimeout(timeout);
       };
     } else {
-      // Hide the cursor when the word is fully typed
       setShowCursor(false);
     }
   }, [wordIndex, letterIndex]);
 
+  useEffect(() => {
+    function handleScroll() {
+      if (window.scrollY > 0) {
+        setIsNavbarFixed(true);
+      } else {
+        setIsNavbarFixed(false);
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleAboutClick = () => {
+    // Scroll to the About section smoothly
+    document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Handle button click events
+  const handleInstitutionClick = () => {
+    // Add your logic for the "Continue as an Institution" button here
+    navigate("/institution/login");
+  };
+
+  const handleLecturerClick = () => {
+    // Add your logic for the "Continue as a Lecturer" button here
+    navigate("/lecturer/login");
+  };
+
   return (
-    <div className='wrapper'>
-      <div className="cols cols0">
-        <span className='topline'>The future of education</span>
-        <h1>
-          For <span className='multiText'>{currentWord}</span>
-          {showCursor && <span className='cursor'>|</span>} {/* Show blinking cursor */}
-        </h1>
+    <div>
+      <nav className={`navbar ${isNavbarFixed ? 'navbar-fixed' : ''}`}>
+        <ul className="navbar">
+          <li><img src={ProntoLogo} alt="Pronto Logo" className='logoStyle' /></li>
+          <li ><a className={isNavLinkActive('/')} href="/">Home</a></li>
+          <li><a className={isNavLinkActive('/about')} href="#">About</a></li>
+          <li><a className={isNavLinkActive('/help')} href="#">Help</a></li>
+          <li><a className={isNavLinkActive('/download')} href="#">Download</a></li>
+        </ul>
+      </nav>
+
+      <div className='wrapper'>
+        <div className="cols cols0">
+          <span className='topline'>The future of education</span>
+          <h1 class="heading">
+            For <span className='multiText'>{currentWord}</span>
+            {showCursor && <span className='cursor'>|</span>}
+          </h1>
+        </div>
+        <div className="buttons">
+          <button class="button" onClick={handleInstitutionClick}>Continue as an Institution &#x2192;</button>
+          <button class="button" onClick={handleLecturerClick}>Continue as a Lecturer &#x2192;</button>
+        </div>
       </div>
     </div>
   );

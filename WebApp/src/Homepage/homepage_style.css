@@ -6,16 +6,20 @@
     color: #3d535f;
 }
 
-.topline::after{
-    position: absolute;
-    content: '';
-    height: 4px;
-    width: 45px;
-    bottom: 10px;
-    background-color: #e32f45;
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-h1{
+.cols {
+  text-align: center;
+}
+
+
+.heading{
     display: block;
     font-size: 7em;
     font-weight: 900;
@@ -26,3 +30,89 @@ h1{
     color: #e32f45;
     text-transform: capitalize;
 }
+
+/* homepage_style.css */
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100; /* Ensure it's above other content */
+  }
+
+  /* homepage_style.css */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    display: flex; /* Use flexbox */
+    justify-content: space-between; /* Space links evenly */
+    padding: 30px 100px; /* Add padding for spacing */
+  }
+  
+  .navbar li {
+    list-style: none; /* Remove bullet points */
+  }
+  
+  .navbar a {
+    text-decoration: none;
+    color: #000; /* Set link color */
+    margin: 0 10px; /* Add margin for spacing between links */
+  }
+  
+  .navbar a:hover {
+    text-decoration: none; /* Remove the default underline */
+    background-color: #e32f45; /* Background color on hover */
+    border-radius: 50px; /* Make it pill-shaped */
+    padding: 10px 20px; /* Add padding for spacing */
+    color: #fff; /* Set text color on hover */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.navbar a.active {
+    background-color: #e32f45;
+    border-radius: 50px;
+    padding: 10px 20px;
+    color: #fff;
+}
+
+  .logoStyle{
+    width: 35%;
+    height: 35%;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem; /* Adjust the margin as needed */
+  }
+  
+  .button {
+    font-size: 1.2rem;
+    background-color: #e32f45; /* Adjust the color as needed */
+    color: #fff; /* Adjust the text color as needed */
+    border: none;
+    border-radius: 40px;
+    padding: 10px 20px; /* Adjust padding here (top/bottom and left/right) */
+    margin: 0 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add box-shadow */
+  }
+  
+  .button:hover {
+    background-color: transparent; /* Adjust the hover color as needed */
+    color: #3d535f;
+    border: 1px solid #e32f45;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .active {
+    background-color: #e32f45; /* Background color on hover */
+    border-radius: 50px; /* Make it pill-shaped */
+    padding: 10px 20px; /* Add padding for spacing */
+    color: #fff; /* Set text color on hover */
+  }
