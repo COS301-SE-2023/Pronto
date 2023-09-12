@@ -36,7 +36,7 @@ jobs:
           directory: ./MobileApp
 
 
-    build-backend:
+  build-backend:
         runs-on: ubuntu-latest
         strategy:
           matrix:
@@ -63,7 +63,7 @@ jobs:
               amplify init --appId ${{ secrets.APP_ID }} 
               amplify build
 
-    build-web:
+  build-web:
       runs-on: ubuntu-latest
       strategy:
         matrix:
