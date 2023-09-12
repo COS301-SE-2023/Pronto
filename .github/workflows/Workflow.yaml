@@ -53,7 +53,7 @@ jobs:
               node-version: ${{ matrix.node-version }}
 
           - run: |
-              npm ci
+              npm install
               npm test
 
           - name: Install Amplify CLI and Build Backend
