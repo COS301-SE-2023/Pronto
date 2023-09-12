@@ -371,39 +371,7 @@ export default function PostAccordion(course) {
           </form>
         </AccordionDetails>
       </Accordion>
-
-      {/* <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-        data-testid={"accordion4"}
-        style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
-          aria-controls="panel4bh-content"
-          id="panel4bh-header"
-          data-testid={"accordionDrop4"}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              flexShrink: 0,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Remove lecture venue
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div className="venue">
-            IT 4-4
-            <IconButton aria-label="delete" size="large" className="delete-btn">
-              <DeleteIcon style={{ color: "#e32f45" }} />
-            </IconButton>
-          </div>
-        </AccordionDetails>
-      </Accordion> */}
+       <br/>
     </div>
   );
 }
