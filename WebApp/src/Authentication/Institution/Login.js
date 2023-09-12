@@ -28,6 +28,7 @@ function Login() {
   const {admin,setAdmin} =useAdmin();
 
    const fetchAdmin = async()=>{ 
+    let fetchError="Could not find your records.If you are a Lecturer return to the homepage and click 'Continue as Lecturer'. If you are a Student please use the mobile app"
     try{
        
         let adminData = await API.graphql({
@@ -47,9 +48,13 @@ function Login() {
                   }
             setAdmin(adminData);
           }
+          else{
+             throw Error(fetchError);
+          }
 
     }catch(error){
-
+      await Auth.signOut();    
+      throw Error(fetchError);
     }
   }
 
@@ -72,15 +77,13 @@ function Login() {
       await Auth.signIn(email, password, { role: "Admin" });
       setsignInError("");
       //navigate to lecturer home page
-      fetchAdmin().then(()=>navigate("/institution/dashboard"))
-      //navigate("/institution/dashboard");
+      await fetchAdmin().then(()=>navigate("/institution/dashboard"))
     } catch (e) {
       setsignInError(e.message);
     }
     setLoading(false);
   };
 
- 
 
   //function for sign up
   const onSignUpPressed = async (event) => {

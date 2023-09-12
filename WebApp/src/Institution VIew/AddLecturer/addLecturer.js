@@ -1,12 +1,12 @@
-import { React, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../graphql/mutations";
-import { lecturersByInstitutionId, searchLecturers, listAdmins } from "../../graphql/queries";
-import { useLocation } from 'react-router-dom';
+import { lecturersByInstitutionId, searchLecturers, listAdmins,searchLecturerByCourses } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import ClearIcon from '@mui/icons-material/Clear';
 import HelpButton from '../../HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
 import { useAdmin } from "../../ContextProviders/AdminContext";
@@ -20,16 +20,14 @@ const AddLecturer = () => {
     const [courses, setCourses] = useState([]);
     const [filterAttribute, setFilterAttribute] = useState("");
     const [searchValue, setSearchValue] = useState("");
-    //const [lecturers, setLecturers] = useState([]);
     const [isModalOpened, setIsModalOpened] = useState(false);
     const [searchIcon, setSearchIcon] = useState(false);
     const [offeredCourses, setOfferedCourses] = useState([]);
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
-    const state = useLocation();
-    //const [admin, setAdmin] = useState(state.state);
-   // const [nextToken, setNextToken] = useState("");
-    let limit = 2;
+    const [adding,setAdding] = useState("Add")
+    
+    let limit = 7;
 
     const{admin,setAdmin} = useAdmin();
     const{lecturerList, setLecturerList, nextToken,setNextToken }=useLecturerList()
@@ -37,9 +35,9 @@ const AddLecturer = () => {
     const handleAdd = async (event) => {
         event.preventDefault()
         if (!isModalOpened) {
-
+            setAdding("Adding...")
             let lecturer = {
-                institutionId: admin.institution.id,
+                institutionId: admin.institutionId,
                 firstname: firstName,
                 lastname: lastName,
                 userRole: "Lecturer",
@@ -47,69 +45,67 @@ const AddLecturer = () => {
             };
 
             try {
-                let mutation = await API.graphql({
-                    query: createLecturer,
-                    variables: { input: lecturer },
-                    authMode: 'AMAZON_COGNITO_USER_POOLS',
-                });
+                let unique=admin.institution.lectureremails.filter((e)=>e===email)
+                if(unique.length===0){
+                    let mutation = await API.graphql({
+                        query: createLecturer,
+                        variables: { input: lecturer },
+                    });
 
-                lecturer = mutation.data.createLecturer
-                lecturer.courses = {
-                    items: []
-                };
-                //lecturers.push(mutation.data.createLecturer)
+                    lecturer = mutation.data.createLecturer
+                    lecturer.courses = {
+                        items: []
+                    };
+        
+                    let emails;
+                    if (admin.institution.lectureremails === null) {
+                        emails = [];
+                        emails.push(email);
+                    }
+                    else {
+                        emails = admin.institution.lectureremails;
+                        emails.push(email);
+                    }
+                    let logoUrl = admin.institution.logoUrl;
+                    let update = {
+                        id: admin.institutionId,
+                        lectureremails: emails
+                    };
 
-                let emails;
-                if (admin.institution.lectureremails === null) {
-                    emails = [];
-                    emails.push(email);
+                    let u = await API.graphql({
+                        query: updateInstitution,
+                        variables: { input: update },
+                    });
+                    u = u.data.updateInstitution
+                    u.logoUrl = logoUrl;
+                    let ad = admin;
+                    ad.institution = u;
+
+                    setAdmin(ad);
+
+                    //Add lecturer to courses
+                    await addCourses(lecturer, selectedCourses)
+                    if (lecturerList.length <= 10) {
+                        lecturerList.push(lecturer);
+                        setLecturerList(lecturerList);
+                    }
                 }
-                else {
-                    emails = admin.institution.lectureremails;
-                    emails.push(email);
-                }
-                let logoUrl = admin.institution.logoUrl;
-                let update = {
-                    id: admin.institutionId,
-                    lectureremails: emails
-                };
-
-                let u = await API.graphql({
-                    query: updateInstitution,
-                    variables: { input: update },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
-                });
-                u = u.data.updateInstitution
-                u.logoUrl = logoUrl;
-                let ad = admin;
-                ad.institution = u;
-
-                setAdmin(ad);
-
-                //Add lecturer to courses
-                await addCourses(lecturer, selectedCourses)
-                if (lecturerList.length <= 3) {
-                    lecturerList.push(lecturer);
-                    setLecturerList(lecturerList);
+                else{ 
+                    setError("A lecturer with this email already exists");
                 }
 
             } catch (error) {
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message
-                    if (e.search("Unathorized") !== -1) {
-                        setError("You are not authorized to perform this action.Please log out and log in");
-                    }
-                    else if (e.search("Network") !== -1) {
+                    if (e.search("Network") !== -1) {
                         setError("Request failed due to network issues");
-                    }
-                    else {
-                        setError("Something went wrong.Please try again later");
                     }
                 }
                 else {
-                    setError("Your request could not be processed");
+                    setError("Something went wrong.Please try again later");
                 }
             }
+            setAdding("Add")
             setFirstName("");
             setLastName("");
             setEmail("");
@@ -132,27 +128,23 @@ const AddLecturer = () => {
                 let update = await API.graphql({
                     query: updateCourse,
                     variables: { input: updatedCourseData },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
                 });
-                lecturer.courses.splice(i, 1);
+                lecturer.courses.items.splice(i, 1);
 
             } catch (error) {
+              
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message;
-                    if (e.search("Unathorized") !== -1) {
-                        setError("You are not authorized to perform this action. Please log out and log in");
-                    }
-                    else if (e.search("Network") !== -1) {
+                    if (e.search("Network") !== -1) {
                         setError("Request failed due to network issues");
-                    }
-                    else {
-                        setError("Something went wrong. Please try again later");
                     }
                 }
                 else {
-                    setError("Your request could not be processed");
+                    
+                    setError("Something went wrong. Please try again later");
                 }
             }
+
         }
     }
 
@@ -177,27 +169,21 @@ const AddLecturer = () => {
 
                 let update = await API.graphql({
                     query: updateCourse,
-                    variables: { input: updatedCourseData },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
+                    variables: { input: updatedCourseData }
                 });
                 lecturer.courses.items.push(update.data.updateCourse);
             }
+        
             setLecturerList(lecturerList);
         } catch (error) {
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
-                if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action. Please log out and log in");
-                }
-                else if (e.search("Network") !== -1) {
+                if(e.search("Network") !== -1) {
                     setError("Request failed due to network issues");
-                }
-                else {
-                    setError("Something went wrong. Please try again later");
                 }
             }
             else {
-                setError("Your request could not be processed");
+                setError("Something went wrong. Please try again later");
             }
         }
     }
@@ -210,25 +196,24 @@ const AddLecturer = () => {
             let removeMutation = await API.graphql({
                 query: deleteLecturer,
                 variables: { input: lec },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
             });
-            let courseList = lecturer.courses;
+            let courseList = lecturer.courses.items;
             if (courseList !== undefined) {
                 await removeCourses(courseList, lecturer);
                 setOfferedCourses([...offeredCourses, courseList]);
 
             }
-            let newEmails = admin.institution.lecturerEmails.filter(item => item !== removeMutation.data.deleteLecturer.email);
+           
+            let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
 
             let update = {
                 id: admin.institutionId,
-                lecturerEmails: newEmails
+                lectureremails: newEmails
             };
 
             let u = await API.graphql({
                 query: updateInstitution,
                 variables: { input: update },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
             });
             let a = admin;
             a.institution = u.data.updateInstitution;
@@ -241,18 +226,12 @@ const AddLecturer = () => {
         catch (error) {
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
-                if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action. Please log out and log in");
-                }
-                else if (e.search("Network") !== -1) {
+               if (e.search("Network") !== -1) {
                     setError("Request failed due to network issues");
-                }
-                else {
-                    setError("Something went wrong. Please try again later");
                 }
             }
             else {
-                setError("Your request could not be processed");
+                setError("Something went wrong. Please try again later");
             }
         }
     }
@@ -260,94 +239,82 @@ const AddLecturer = () => {
     const loadMore = async () => {
         try {
 
-            let nextSet = [];
-            if (searchIcon === false) {
-                nextSet = await API.graphql({
-                    query: lecturersByInstitutionId,
-                    variables: {
-                        institutionId: admin.institutionId,
-                        limit: limit,
-                        nextToken: nextToken
-                    },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
-                });
-                let list = nextSet.data.lecturersByInstitutionId.items;
-                for (let i = 0; i < list.length; i++) {
-                    lecturerList.push(list[i]);
+            if(searchIcon===true ){
+                if(filterAttribute!=="coursecode"){
+                    let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}","nextToken":"${nextToken}"}`;
+                
+                    let variables= JSON.parse(filter);
+                        
+                  
+                    let lecturers = await API.graphql({
+                            query:searchLecturers,
+                            variables:variables
+                        })
+                    lecturers=lecturers.data.searchLecturers;
+                    for(let i=0;i<lecturers.items.length;i++){
+                        lecturerList.push(lecturers.items[i]);
+                    }
+                    setLecturerList(lecturerList);
+                    if(lecturers.items.length<limit){
+                        setNextToken(null);
+                    }
+                    else{
+                        setNextToken(lecturers.nextToken);
+                    }
                 }
-                setNextToken(nextSet.data.lecturersByInstitutionId.nextToken);
-                setLecturerList(lecturerList);
+                else{
+                     if(filterAttribute==="coursecode"){
+                        let lecturers = await API.graphql({
+                            query:searchLecturerByCourses,
+                            variables:{
+                                filter: {
+                                         coursecode: { matchPhrasePrefix: searchValue } ,
+                                         institutionId : {eq: admin.institutionId},
+                                        
+                                },
+                                limit:limit
+                            } 
+                        })
+                        let token=lecturers.data.searchCourses.nextToken;
+                        lecturers=lecturers.data.searchCourses.items;
+                        lecturers.filter((c)=>c!==null && c.institutionId===admin.institutionId);
+                        lecturers = lecturers.filter((value, index, self) =>
+                                    index === self.findIndex((t) => (
+                                t.id === value.id 
+                            ))
+                        )
+                        if(lecturers.length<limit){
+                             setNextToken(null);
+                        }
+                        else{
+                            setNextToken(token);
+                        }
+                        for(let i=0;i<lecturers.length;i++){
+                            lecturerList.push(lecturers[i].lecturer);
+                        }
+                        setLecturerList(lecturerList);
+                    }
+                }
             }
-            else {
-                if (filterAttribute === "firstname") {
-                    let nextSet = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { firstname: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit,
-                            nextToken: nextToken
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    });
-                    setNextToken(nextSet.data.searchLecturers.nextToken);
-                    let list = nextSet.data.searchLecturers.items;
-                    for (let i = 0; i < list.length; i++) {
-                        lecturerList.push(list[i]);
+            else{ 
+                let lecturers=await API.graphql({
+                    query:lecturersByInstitutionId,
+                    variables:{
+                        institutionId:admin.institutionId,
+                        limit:limit,
+                        nextToken:nextToken
                     }
-                    setLecturerList(lecturerList);
+                });
+                lecturers=lecturers.data.lecturersByInstitutionId;
+                  for(let i=0;i<lecturers.items.length;i++){
+                    lecturerList.push(lecturers.items[i]);
                 }
-                else if (filterAttribute === "lastname") {
-                    let nextSet = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { lastname: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit,
-                            nextToken: nextToken
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    })
-
-
-                    let list = nextSet.data.searchLecturers.items;
-                    for (let i = 0; i < list.length; i++) {
-                        lecturerList.push(list[i]);
-                    }
-
-                    setNextToken(nextSet.data.searchLecturers.nextToken);
-                    setLecturerList(lecturerList);
+                setLecturerList(lecturerList);
+               if(lecturers.items.length<limit){
+                    setNextToken(null);
                 }
-                else if (filterAttribute === "email") {
-                    let nextSet = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { email: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit,
-                            nextToken: nextToken
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    })
-
-                    let list = nextSet.data.searchLecturers.items;
-                    for (let i = 0; i < list.length; i++) {
-                        lecturerList.push(list[i]);
-                    }
-                    setNextToken(nextSet.data.searchLecturers.nextToken);
-                    setLecturerList(lecturerList);
+                else{
+                    setNextToken(lecturers.nextToken);
                 }
             }
 
@@ -358,45 +325,52 @@ const AddLecturer = () => {
 
     const fetchLecturers = async () => {
         try {
-            
-            if(lecturerList.length<2){
-            let lecturers = await API.graphql({
-                    query: lecturersByInstitutionId,
-                    variables: {
-                        institutionId: admin.institutionId,
-                        limit: limit
-                },     
-            });
+            let adminInfo=admin;
+            if(lecturerList.length<4){
+                if(adminInfo===null){
+                    let user=await Auth.currentAuthenticatedUser();
+                    let adminEmail=user.attributes.email;
+                    adminInfo =await API.graphql({
+                        query:listAdmins,
+                        variables:{
+                            filter :{ 
+                                email:{
+                                    eq:adminEmail
+                                }
+                            }
+                        }
+                    })
+                    adminInfo=adminInfo.data.listAdmins.items[0];
+                    setAdmin(adminInfo);
+                }
+                let lecturers = await API.graphql({
+                        query: lecturersByInstitutionId,
+                        variables: {
+                            institutionId: adminInfo.institutionId,
+                            limit: limit
+                            },     
+                     });
 
-            let courses = admin.institution.courses.items;
-            for (let i = 0; i < courses.length; i++) {
-                if (courses[i].lecturerId === null) {
-                    offeredCourses.push(courses[i]);
+                lecturers=lecturers.data.lecturersByInstitutionId;     
+              
+                setLecturerList(lecturers.items);
+                if(lecturers.items.length<limit){
+                    setNextToken(null);
+                }
+                else{
+                    setNextToken(lecturers.nextToken);
                 }
             }
-            setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
-            setOfferedCourses(offeredCourses);
-            setLecturerList(lecturers.data.lecturersByInstitutionId.items);
-           // }
-        }
-             
         }
         catch (error) {
-            console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
-                if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action. Please log out and log in");
-                }
-                else if (e.search("Network") !== -1) {
+                if (e.search("Network") !== -1) {
                     setError("Request failed due to network issues");
-                }
-                else {
-                    setError("Something went wrong. Please try again later");
                 }
             }
             else {
-                setError("Your request could not be processed");
+                setError("Something went wrong. Please try again later");
             }
         }
     }
@@ -404,94 +378,95 @@ const AddLecturer = () => {
     const handleSearch = async () => {
         try {
             if (searchIcon === false) {
-                // let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] }}`;
-                // let variables= JSON.parse(filter);
-                // console.log(variables);
+                if(searchValue!==""){
+                    if(filterAttribute==="coursecode"){
+                        let lecturers = await API.graphql({
+                            query:searchLecturerByCourses,
+                            variables:{
+                                filter: {
+                                         coursecode: { matchPhrasePrefix: searchValue },
+                                         institutionId : {eq: admin.institutionId},
+                                },
+                                limit:limit
+                            } 
+                        })
 
-                if (filterAttribute === "firstname") {
-                    let search = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { firstname: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    });
-                    setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturerList(search.data.searchLecturers.items);
+                        let token=lecturers.data.searchCourses.nextToken;
+                        lecturers=lecturers.data.searchCourses.items;
+                        lecturers.filter((c)=>c!==null && c.institutionId===admin.institutionId);
+                        lecturers = lecturers.filter((value, index, self) =>
+                                    index === self.findIndex((t) => (
+                                t.id === value.id 
+                            ))
+                        )
+                        if(lecturers.length<limit){
+                             setNextToken(null);
+                        }
+                        else{
+                            setNextToken(token);
+                        }
+                        let l=[];
+                        for(let i=0;i<lecturers.length;i++){
+                            l.push(lecturers[i].lecturer);
+                        }
+                        setLecturerList(l);
+                        setSearchIcon(!searchIcon);
+                    }
+                    else if(filterAttribute!=="default" && filterAttribute!==""){
+                        
+                        let filter=`{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
+                        let variables= JSON.parse(filter);
+                        
+                        
+                        let lecturers = await API.graphql({
+                            query:searchLecturers,
+                            variables:variables
+                        })
+                        lecturers=lecturers.data.searchLecturers;
+                        setLecturerList(lecturers.items);
+                        if(lecturers.items.length<limit){
+                             setNextToken(null);
+                        }
+                        else{
+                            setNextToken(lecturers.nextToken);
+                        }
+                        setSearchIcon(!searchIcon);
+                    }
                 }
-                else if (filterAttribute === "lastname") {
-                    let search = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { lastname: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    });
-                    setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturerList(search.data.searchLecturers.items);
-                }
-                else if (filterAttribute === "email") {
-                    let search = await API.graphql({
-                        query: searchLecturers,
-                        variables: {
-                            filter: {
-                                and: [
-                                    { email: { matchPhrasePrefix: searchValue } },
-                                    { institutionId: { eq: admin.institutionId } }
-                                ]
-                            },
-                            limit: limit
-                        },
-                        authMode: "AMAZON_COGNITO_USER_POOLS"
-                    });
-
-                    setNextToken(search.data.searchLecturers.nextToken);
-                    setLecturerList(search.data.searchLecturers.items);
-                }
-                setSearchIcon(!searchIcon);
-            }
-            else {
-                let lecturers = await API.graphql({
-                    query: lecturersByInstitutionId,
-                    variables: {
-                        institutionId: admin.institutionId,
-                        limit: limit
-                    },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
+            }   
+            else{ 
+                let lecturers=await API.graphql({
+                    query:lecturersByInstitutionId,
+                    variables:{ 
+                        institutionId :admin.institutionId,
+                        limit:limit
+                    }
                 });
-                setLecturerList(lecturers.data.lecturersByInstitutionId.items);
-                setSearchIcon(!searchIcon);
-            }
+                lecturers=lecturers.data.lecturersByInstitutionId;
+                setLecturerList(lecturers.items);
+                if(lecturers.items.length<limit){
+                    setNextToken(null);
+                }
+                else{
+                    setNextToken(lecturers.nextToken);
+                }
+                setSearchIcon(!searchIcon)
+            }  
+            
         } catch (error) {
+           
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
-                if (e.search("Unathorized") !== -1) {
-                    setError("You are not authorized to perform this action. Please log out and log in");
-                }
-                else if (e.search("Network") !== -1) {
+                if(e.search("Network") !== -1) {
                     setError("Request failed due to network issues");
                 }
-                else {
-                    setError("Something went wrong. Please try again later");
+            else {
+                    setError("Something went wrong. Please try again later");        
                 }
             }
-            else {
-                setError("Your request could not be processed");
-            }
-        }
+       }
     }
+
     useEffect(() => {
         fetchLecturers();
     }, [])
@@ -590,7 +565,7 @@ const AddLecturer = () => {
                                 className="btn btn-danger w-100"
                                 data-testid="submitButton"
                             >
-                                Add
+                                {adding}
                             </button>
                         </form>
                     </div>
@@ -615,10 +590,10 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
+                            //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
                             <div className="input-group-append">
-                                <SearchSharpIcon style={{ "color": "#e32f45" }} />
+                              {searchIcon===false ?   <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{"color":"#e32f45"}}/>}
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}
@@ -628,10 +603,11 @@ const AddLecturer = () => {
                             id="inputGroupSelect01"
                             data-testid="filterSelect"
                         >
-                            <option value={'default'}>Filter by</option>
+                            <option value="default">Filter by</option>
                             <option value="firstname" >First Name</option>
                             <option value="lastname" >Last Name</option>
                             <option value="email" >Email</option>
+                            <option value="coursecode">Course Code</option>
                         </select>
                     </div>
                 </div>

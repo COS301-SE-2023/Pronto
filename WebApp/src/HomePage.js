@@ -7,10 +7,11 @@ import { Button, CardActions, Card } from '@mui/material';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import ProntoSvg from './Authentication/Institution/ProntoLogo.svg';
+import {Link,useNavigate} from 'react-router-dom';
 
 function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
-
+  const navigate=useNavigate();
 
 
   useEffect(() => {
@@ -95,15 +96,15 @@ function HomePage() {
                     <CardActions style={{ justifyContent: 'center' }}>
                       {/* Add the custom styles to the Button component */}
                       <Button
-                        className="custom-button" // Add the custom class name here
-                        sx={{ borderRadius: '20px', backgroundColor: "#e32f45", marginBottom: 5 }}
-                        size="large"
-                        color="error"
-                        variant="contained"
-                        href="/institution/login"
-                      >
-                        Continue as institution &#8594;
-                      </Button>
+                          className="custom-button" // Add the custom class name here
+                          sx={{ borderRadius: '20px', backgroundColor: "#e32f45", marginBottom: 5 }}
+                          size="large"
+                          color="error"
+                          variant="contained"
+                          onClick={((e)=>navigate("/institution/login"))}
+                        >
+                          Continue as institution &#8594;
+                        </Button>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -131,7 +132,10 @@ function HomePage() {
                         sx={{ borderRadius: '20px', backgroundColor: "#e32f45", marginBottom: 5 }}
                         size="large"
                         color="error"
-                        variant="contained" href="/lecturer/login">
+                        variant="contained" 
+                        //href="/lecturer/login"
+                        onClick={(e)=>navigate("/lecturer/login")}
+                        >
                         Continue as lecturer &#8594;
                       </Button>
                     </CardActions>

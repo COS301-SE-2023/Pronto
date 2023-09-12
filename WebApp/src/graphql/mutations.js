@@ -7,7 +7,6 @@ export const createLecturer=`mutation CreateLecturer(
     institutionId
     firstname
     lastname
-    userRole
     email
     courses {
       items{
@@ -15,9 +14,6 @@ export const createLecturer=`mutation CreateLecturer(
         coursecode
       }
     }
-    createdAt
-    updatedAt
-    owner
   }
 }`
 
@@ -80,13 +76,12 @@ export const createAnnouncement=`mutation CreateAnnouncement(
   createAnnouncement(input: $input, condition: $condition) {
     id
     courseId
-    description
-    start
-    end
+    title
+    body
+    course{
+      coursecode
+    }
     date
-    venue
-    createdAt
-    updatedAt
   }
 }
 `

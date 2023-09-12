@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -73,25 +72,13 @@ const StyledMenu = styled((props) => (
 export default function RecentAnnouncement() {
 
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const state = useLocation();
-  //const [lecturer, setLecturer] = useState(state.state);
-  //const [announcements, setAnnouncements] = useState([]);
+  const [loading,setLoading] = useState(false);
   const [error, setError] = useState("");
-  //const [nextToken, setNextToken] = useState("");
-
+  
   const{lecturer,setLecturer} =useLecturer();
   const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
 
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-
+ 
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [deleteConfirmationIndex, setDeleteConfirmationIndex] = useState(null);
@@ -107,7 +94,6 @@ export default function RecentAnnouncement() {
       let del = await API.graphql({
         query: deleteAnnouncement,
         variables: { input: { id: announcement[key].id } },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
       })
       const rows = [...announcement]
       rows.splice(key, 1)
@@ -121,64 +107,66 @@ export default function RecentAnnouncement() {
   }
 
 
-  let limit = 2;
+  let limit = 5;
   const fetchAnnouncements = async () => {
     try {
       let lec = lecturer;
       //Lecturers information was not passed successfuly so fecth it again
-      // if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
-      //   let user = await Auth.currentAuthenticatedUser();
-      //   let lecturer_email = user.attributes.email
-      //   lec = await API.graphql({
-      //     query: listLecturers,
-      //     variables: {
-      //       filter: {
-      //         email: {
-      //           eq: lecturer_email
-      //         }
-      //       }
-      //     },
-      //     authMode: "AMAZON_COGNITO_USER_POOLS",
-      //   });
-      //   lec = lec.data.listLecturers.items[0];
-      //   await setLecturer(lec);
-      // }
-
-      if (announcement.length === 0) {
-        //Build a filter based on courses
-        let courses = lec.courses.items;
-        let year = new Date().getFullYear();
-        let filter = `{"filter" : { "or" : [`;
-        for (let i = 0; i < courses.length; i++) {
-          if (i === courses.length - 1) {
-            filter += `{"courseId":{"eq":"${courses[i].id}" } }`;
-          }
-          else {
-            filter += `{"courseId":{"eq":"${courses[i].id}" } },`;
-          }
-        }
-        filter += `] },"limit":"${limit}" ,"year":"${year}","sortDirection":"DESC"}`;
-        let variables = JSON.parse(filter);
-
-        //Fecth annnouncements and order them by date
-        let announcementList = await API.graphql({
-          query: announcementsByDate,
-          variables: variables,
-          authMode: "AMAZON_COGNITO_USER_POOLS"
+      if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
+        let user = await Auth.currentAuthenticatedUser();
+        let lecturer_email = user.attributes.email
+        lec = await API.graphql({
+          query: listLecturers,
+          variables: {
+            filter: {
+              email: {
+                eq: lecturer_email
+              }
+            }
+          },
         });
+        lec = lec.data.listLecturers.items[0];
+        await setLecturer(lec);
+      }
 
-        setAnnouncement(announcementList.data.announcementsByDate.items);
-        setNextToken(announcementList.data.announcementsByDate.nextToken);
+      if(lec.courses.items.length>0){
+        if (announcement.length === 0) {
+          setLoading(true);
+          //Build a filter based on courses
+          let courses = lec.courses.items;
+          let year = new Date().getFullYear();
+          let filter = `{"filter" : { "or" : [`;
+          for (let i = 0; i < courses.length; i++) {
+            if (i === courses.length - 1) {
+              filter += `{"courseId":{"eq":"${courses[i].id}" } }`;
+            }
+            else {
+              filter += `{"courseId":{"eq":"${courses[i].id}" } },`;
+            }
+          }
+          filter += `] },"limit":"${limit}" ,"year":"${year}","sortDirection":"DESC"}`;
+          let variables = JSON.parse(filter);
+
+          //Fecth annnouncements and order them by date
+          let announcementList = await API.graphql({
+            query: announcementsByDate,
+            variables: variables,
+          });
+          announcementList=announcementList.data.announcementsByDate;
+          setAnnouncement(announcementList.items);
+          if(announcementList.items.length<limit){
+            setNextToken(null);
+          }
+          else{
+            setNextToken(announcementList.nextToken);
+          }
+      }
+        setLoading(false);
       }
     } catch (error) {
-
       if (error.errors !== undefined) {
-
         let e = error.errors[0].message
-        if (e.search("Not Authorized") !== -1) {
-          setError("You are not authorized to perform this action.Please log out and log in");
-        }
-        else if (e.search("Network") !== -1) {
+        if(e.search("Network") !== -1) {
           setError("Request failed due to network issues");
         }
         else {
@@ -210,14 +198,18 @@ export default function RecentAnnouncement() {
       let announcementList = await API.graphql({
         query: announcementsByDate,
         variables: variables,
-        authMode: "AMAZON_COGNITO_USER_POOLS"
       });
 
       let list = announcementList.data.announcementsByDate.items;
       for (let i = 0; i < list.length; i++) {
         announcement.push(list[i]);
       }
-      setNextToken(announcementList.data.announcementsByDate.nextToken);
+      if(announcementList.data.announcementsByDate.items.length<limit){
+        setNextToken(null);
+      }
+      else{
+        setNextToken(announcementList.data.announcementsByDate.nextToken);
+      }
       setAnnouncement(announcement);
     } catch (error) {
       setError("Your request could not be processed at this time");
@@ -235,15 +227,13 @@ export default function RecentAnnouncement() {
       <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
 
         {/* Navigation bar content */}
-        <LecturerNavigation props={lecturer}
-          list={{ announcements: { data: { announcementsByDate: { items: announcement, nextToken: nextToken } } } }} />
+        <LecturerNavigation  />
 
       </nav>
 
-
       <main style={{ width: '900px', marginTop: '30px' }}>
         <h1 className="moduleHead">Recent Announcements</h1>
-        {announcement.length === 0 ? (
+        {loading === true ? (
           // Display "Fetching announcements..." when announcements are being fetched
           <p style={
             {
@@ -256,8 +246,23 @@ export default function RecentAnnouncement() {
             }
           }>Fetching announcements...</p>
 
-        ) : (
-          announcement.map((val, key) => {
+        ) : (  
+            announcement.length===0 ? (
+              <p style={
+              {
+                color: "#e32f45",
+                opacity: 0.9,
+                fontWeight: "50",
+                fontSize: "50px",
+                display: "flex",
+                justifyContent: "center"
+                }
+              }>No Annoucements Posted</p>
+                        
+            )
+
+            :
+          ( announcement.map((val, key) => {
             return (
               <div className="card" data-testid="card1" key={key}>
                 <div className="card-header">
@@ -270,17 +275,12 @@ export default function RecentAnnouncement() {
 
                   <Button
                     id="demo-customized-button"
-                    ///aria-controls={open ? 'demo-customized-menu' : undefined}
                     aria-haspopup="true"
-                    //aria-expanded={open ? 'true' : undefined}
                     variant="contained"
                     disableElevation
                     onClick={(e) => handleDelete(e.target.value)}
                     value={key}
-                  // endIcon={<KeyboardArrowDownIcon />}
                   >
-                    {/* Options */}
-                    {/* <DeleteIcon /> */}
                     Delete
                   </Button>
 
@@ -288,8 +288,9 @@ export default function RecentAnnouncement() {
               </div>
 
             );
-          })
+          })) 
         )}
+
         <div>
           <div style={{ paddingLeft: "42.5%", paddingRight: "42.5%" }}>
             {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>}
