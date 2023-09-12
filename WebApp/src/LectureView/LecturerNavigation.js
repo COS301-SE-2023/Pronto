@@ -10,10 +10,8 @@ export default function LecturerNavigation(lecturerData) {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  //const [lecturer, setLecturer] = useState(lecturerData.props);
-
-  console.log(location.pathname)
   const { lecturer, setLecturer } = useLecturer();
+  
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -106,7 +104,7 @@ export default function LecturerNavigation(lecturerData) {
           <li data-testid={"EditModuleInfo"}>
             <Link
               to={'/lecturer/modules'}
-              className={`nav-link text-center ${location.pathname === '/lecturer/modules' || '/lecturer/edit-module' ? 'active' : ''}`}
+              className={`nav-link text-center ${location.pathname === '/lecturer/modules'  ? 'active' : ''}`}
             >
               <b>Edit Module Information</b>
             </Link>

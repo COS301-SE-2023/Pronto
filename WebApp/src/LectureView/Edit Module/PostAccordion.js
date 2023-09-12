@@ -149,9 +149,10 @@ export default function PostAccordion(course) {
 
   return (
 
-    <div style={{maxHeight:"100vh"}}>
+    <div>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
+     
       <div>
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
         <AccordionSummary
@@ -375,6 +376,7 @@ export default function PostAccordion(course) {
         </AccordionDetails>
       </Accordion>
       </div>
+      
     </div>
   );
 }
