@@ -72,12 +72,14 @@ function Login() {
       await Auth.signIn(email, password, { role: "Admin" });
       setsignInError("");
       //navigate to lecturer home page
-      fetchAdmin().then(()=>navigate("/institution/dashboard"))
+      
+      fetchAdmin().then(()=>{setLoading(false)}).then(()=>navigate("/institution/dashboard"))
       //navigate("/institution/dashboard");
     } catch (e) {
+      setLoading(false);
       setsignInError(e.message);
     }
-    setLoading(false);
+    //setLoading(false);
   };
 
  
