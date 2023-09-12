@@ -130,7 +130,7 @@ const PersonalInfoPage = () => {
                     </tbody>
                 </table>
 
-                <div style={{marginBottom:"2vh"}}>
+                <div>
                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}

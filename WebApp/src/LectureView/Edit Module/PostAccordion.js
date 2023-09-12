@@ -149,9 +149,10 @@ export default function PostAccordion(course) {
 
   return (
 
-    <div style={{maxHeight:'100vh'}}>
+    <div style={{maxHeight:"100vh"}}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
+      <div>
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
@@ -216,7 +217,8 @@ export default function PostAccordion(course) {
           </form>
         </AccordionDetails>
       </Accordion>
-
+      </div>
+      <div>
       <Accordion
         expanded={expanded === "panel2"}
         onChange={handleChange("panel2")}
@@ -288,7 +290,8 @@ export default function PostAccordion(course) {
         </AccordionDetails>
       </Accordion>
 
-
+      </div>
+      <div>
       <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
@@ -371,7 +374,7 @@ export default function PostAccordion(course) {
           </form>
         </AccordionDetails>
       </Accordion>
-       <br/>
+      </div>
     </div>
   );
 }

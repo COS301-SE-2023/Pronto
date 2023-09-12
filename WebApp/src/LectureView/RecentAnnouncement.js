@@ -301,8 +301,8 @@ export default function RecentAnnouncement() {
             {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>}
           </div>
         </div>
-
-
+        <br/>
+      
       </main >
       <StyledDialog
         open={deleteConfirmationOpen}

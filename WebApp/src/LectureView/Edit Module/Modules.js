@@ -119,6 +119,7 @@ const Modules = () => {
             </Link>
           ))
         )}
+        <br/>
       </main>
 
       <div>
