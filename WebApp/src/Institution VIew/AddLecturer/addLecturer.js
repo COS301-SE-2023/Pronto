@@ -20,7 +20,6 @@ const AddLecturer = () => {
     const [courses, setCourses] = useState([]);
     const [filterAttribute, setFilterAttribute] = useState("");
     const [searchValue, setSearchValue] = useState("");
-    //const [lecturers, setLecturers] = useState([]);
     const [isModalOpened, setIsModalOpened] = useState(false);
     const [searchIcon, setSearchIcon] = useState(false);
     const [offeredCourses, setOfferedCourses] = useState([]);
@@ -703,9 +702,8 @@ const AddLecturer = () => {
                         </div>
                     </div>
                 </div>
+                <br/>
             </main>
-
-
 
         </div>
     );
