@@ -43,7 +43,7 @@ jobs:
             node-version: [ 18.x ]
         defaults:
           run:
-            working-directory: "amplify/backend"
+            working-directory: "./amplify/backend"
 
         steps:
           - uses: actions/checkout@v3
