@@ -8,12 +8,13 @@ import NotificationPreferences from "../screens/Notifications/NotificationPrefer
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
+import { useStudent } from "../ContextProviders/StudentContext";
 
 const SettingsComponent = ({ settingsOptions }) => {
   const navigation = useNavigation();
-
+  const {student,updateStudent} =useStudent();
   const onLogoutPressed = () => {
+    updateStudent(null);
     Auth.signOut();
   };
 

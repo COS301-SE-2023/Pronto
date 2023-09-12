@@ -237,7 +237,6 @@ export const listStudents=`query ListStudents(
               start
               end
               venue
-              group
               course{
                 coursecode
               }
@@ -261,10 +260,8 @@ export const listStudents=`query ListStudents(
                 id
                 day
                 start
-                frequency
                 end
                 venue 
-                group
                 course{
                   coursecode
                 }
@@ -383,3 +380,61 @@ export const announcementsByDate=`query AnnouncementsByDate (
               nextToken
             }
 }`;
+
+export const getStudent=`query GetStudent($id: ID!) {
+  getStudent(id: $id) {
+      institutionId
+      institution{
+        name
+      }
+      id
+      firstname
+      lastname
+      email
+      preference
+      studentTimetableId
+      timetable { 
+        id
+        activities{ 
+           items { 
+              id
+              courseId
+              activityname
+              day
+              start
+              end
+              venue
+              course{
+                coursecode
+              }
+            }
+          }
+        activityId  
+        }
+      enrollments { 
+        items{
+          id
+          courseId
+          course{ 
+            id
+            coursecode
+            activity{
+              items{
+                courseId
+                activityname
+                coordinates
+                id
+                day
+                start
+                end
+                venue 
+                course{
+                  coursecode
+                }
+              }
+            }
+          }
+        }
+      }  
+    }
+}`

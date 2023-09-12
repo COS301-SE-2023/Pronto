@@ -6,23 +6,10 @@ export const createTimetable=`mutation CreateTimetable(
     id
     studentId
     activityId
-    student {
-      institutionId
-      id
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      studentTimetableId
-      owner
-    }
     activities {
       nextToken
     }
-    createdAt
-    updatedAt
+   
   }
 }`
 
@@ -34,18 +21,6 @@ export const updateTimetable=`mutation UpdateTimetable(
     id
     studentId
     activityId
-    student {
-      institutionId
-      id
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      studentTimetableId
-      owner
-    }
     activities {
       nextToken
     }
@@ -86,7 +61,27 @@ export const createEnrollment=`mutation CreateEnrollment(
     id
     studentId
     courseId
-    owner
+    id
+    courseId
+    course{ 
+      id
+      coursecode
+      activity{
+        items{
+          courseId
+          activityname
+          coordinates
+          id
+          day
+          start
+          end
+          venue
+          course {
+            coursecode
+          } 
+        }
+      }
+    }
   }
 }
 `

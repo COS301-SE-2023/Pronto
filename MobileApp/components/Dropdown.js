@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-const DropdownComponent = ({ activity, activityNumber, moduleContent,addActivity }) => {
+const DropdownComponent = ({ activity, activityNumber, moduleContent,addActivity,currentActivity }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -29,7 +29,8 @@ const DropdownComponent = ({ activity, activityNumber, moduleContent,addActivity
         maxHeight={220}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? "Select time" : "..."}
+        //placeholder={!isFocus ? "Select time" : "..."}
+        placeholder={currentActivity!==undefined ? `${currentActivity.day} : ${currentActivity.start} : ${currentActivity.end} (${currentActivity.venue})` : "..."}
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
