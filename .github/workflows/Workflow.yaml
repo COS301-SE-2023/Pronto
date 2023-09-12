@@ -1,4 +1,4 @@
-name: Build Mobile App
+name: Build Mobile App with Amplify Backend
 
 on:
   push:
@@ -15,36 +15,69 @@ jobs:
     defaults:
       run:
         working-directory: ./MobileApp
+
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
       - run: npm install
       - run: npm run build --if-present
       - run: npm test -- --coverage
+
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }} # You need to set CODECOV_TOKEN as a secret in your repository
+          token: ${{ secrets.CODECOV_TOKEN }}
           flags: --branch=Pipeline-Set-Up
           directory: ./MobileApp
 
-  build-web:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
-    defaults:
-      run:
-        working-directory: ./WebApp
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{matrix.node-version}}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version}}
-      - run: |
-          npm install
-          npm test
+
+    build-backend:
+        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            node-version: [ 18.x ]
+        defaults:
+          run:
+            working-directory: "amplify/backend"
+
+        steps:
+          - uses: actions/checkout@v3
+          - name: Use Node.js ${{ matrix.node-version }}
+            uses: actions/setup-node@v3
+            with:
+              node-version: ${{ matrix.node-version }}
+
+          - run: |
+              npm ci
+              npm test
+
+          - name: Install Amplify CLI and Build Backend
+            run: |
+              npm install -g @aws-amplify/cli
+              amplify configure
+              amplify init --appId ${{ secrets.APP_ID }} 
+              amplify build
+
+    build-web:
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          node-version: [ 18.x ]
+      defaults:
+        run:
+          working-directory: ./WebApp
+      steps:
+        - uses: actions/checkout@v3
+        - name: Use Node.js ${{matrix.node-version}}
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.node-version}}
+        - run: |
+            npm install
+            npm test
+
