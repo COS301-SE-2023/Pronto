@@ -149,10 +149,20 @@ const NavigationScreen = ({navigation}) => {
 
 
     // useEffect hook to run the requestLocationPermission function when the component is mounted
+    // useEffect(() => {
+    //     requestLocationPermission().then();
+    //     fetchLocations();
+    // }, []);
+
     useEffect(() => {
-        requestLocationPermission().then();
+    const unsubscribe = navigation.addListener('focus', () => {
+        requestLocationPermission();
         fetchLocations();
-    }, []);
+    });
+
+
+    return unsubscribe
+  }, [navigation])
 
     // Below defines styling for the location text input for the user's current location
     // Green border will be for location gathered
