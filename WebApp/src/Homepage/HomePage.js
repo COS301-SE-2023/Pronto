@@ -86,7 +86,7 @@ function HomePage() {
         <ul className="navbar">
           <li><img src={ProntoLogo} alt="Pronto Logo" className='logoStyle' /></li>
           <li ><a className={isNavLinkActive('/')} href="/">Home</a></li>
-          <li><a className={isNavLinkActive('/about')} href="#">About</a></li>
+          <li><a className={isNavLinkActive('/features')} href="#">Features</a></li>
           <li><a className={isNavLinkActive('/help')} href="#">Help</a></li>
           <li><a className={isNavLinkActive('/download')} href="#">Download</a></li>
         </ul>
@@ -101,11 +101,12 @@ function HomePage() {
           </h1>
         </div>
         <div className="buttons">
-          <button class="button" onClick={handleInstitutionClick}>Continue as an Institution &#x2192;</button>
-          <button class="button" onClick={handleLecturerClick}>Continue as a Lecturer &#x2192;</button>
+          <button class="button" onClick={handleInstitutionClick}>Continue as Institution &#x2192;</button>
+          <button class="button" onClick={handleLecturerClick}>Continue as Lecturer &#x2192;</button>
         </div>
       </div>
     </div>
+
   );
 }
 
