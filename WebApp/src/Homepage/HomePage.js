@@ -6,6 +6,7 @@ import Features from './Features';
 import Navbar from "./Navbar";
 import MainText from './MainText';
 import About from './About';
+import Download from './Download';
 
 function HomePage() {
   const words = ["Universities", "Lecturers", "Students"];
@@ -61,6 +62,7 @@ function HomePage() {
       <MainText />
       <Features />
       <About />
+      <Download />
     </div>
   );
 }
