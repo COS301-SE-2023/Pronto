@@ -222,7 +222,7 @@ const NavigationScreen = ({navigation}) => {
                     <MapViewDirections
                         origin={origin}
                         destination={destination}
-                        apikey={''}
+                        apikey={GOOGLE_API_KEY}
                         strokeColor={'#395cda'}
                         strokeWidth={4}
                         mode={"WALKING"}
