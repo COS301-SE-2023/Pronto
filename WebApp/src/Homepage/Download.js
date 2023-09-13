@@ -6,6 +6,7 @@ import IOSQR from "../images/IOSQR.png";
 function Download() {
     return (
         <div className='download-container'>
+            <h1 className='feature-heading'>Download</h1>
             <div className="download-image-container">
                 <img className="download-image" src={DownloadImage} alt="AboutImage" />
             </div>
@@ -17,6 +18,7 @@ function Download() {
                 <img className="qr_code" src={IOSQR} alt="IOS QR CODE" />
                 <p>Step 3: Enjoy using the benfits of Pronto to make your life easier!</p>
             </div>
+
         </div>
     );
 }

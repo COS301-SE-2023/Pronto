@@ -131,14 +131,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     text-align: center;
 }
 
 .feature-container {
   display: flex;
   justify-content: space-between;
+  text-align: center;
   margin-top: 20px;
+  position: absolute;
+  top: 95%; /* Adjust the top value as needed */
+  left: 0;
+  align-items: center;
 }
 
 .feature-box {
@@ -178,7 +183,7 @@
 .feature-heading{
   color: #3d535f;
   font-weight: 400;
-  
+  padding: 40px;
 }
 
 .feature-description
@@ -191,10 +196,12 @@
   width: 100%;
   height: 80%;
   position: absolute;
-  top: 170%; /* Adjust the top value as needed */
+  top: 150%; /* Adjust the top value as needed */
   left: 0;
   display: flex;
+  justify-content: space-between;
   align-items: center; /* Vertically center the content */
+  text-align: center;
 }
 
 .about-image {
@@ -208,30 +215,44 @@
   color: #3d535f;
   width: 500px;
   height: 300px;
+  margin-right: 100px;
+
 }
+
+.about-paragraph-container
+{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  
+}
+
 
 .download-container{
   width: 100%;
   height: 80%;
   position: absolute;
   left: 0;
-  top: 270%; /* Adjust the top value as needed */
+  top: 220%; /* Adjust the top value as needed */
   display: flex;
   align-items: center; /* Vertically center the content */
-
+  justify-content: space-between;
 }
 
 .heading-app
 {
   display: block;
-  font-size: 3em;
+  font-size: 2em;
   font-weight: 600;
   color: #3d535f;
 }
 
 .instructions-container
 {
-  width: 100%;
+  width: 50%;
+  margin-right: 50px;
 }
 
 .download-image

@@ -37,9 +37,11 @@ function Features() {
     }
 
     return (
-        
+
         <div className='features'>
+
             <div className='feature-container'>
+                <h1 className='feature-heading'>Features</h1>
                 {featuresInColumns.map((column, columnIndex) => (
                     <div className='feature-column' key={columnIndex}>
                         {column.map((feature, index) => (
@@ -51,6 +53,7 @@ function Features() {
                         ))}
                     </div>
                 ))}
+
             </div>
         </div>
     );
