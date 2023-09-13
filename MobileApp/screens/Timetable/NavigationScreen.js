@@ -8,6 +8,7 @@ import { GOOGLE_API_KEY } from "@env";
 import * as Location from 'expo-location';
 import locationInfo from "../../assets/data/locationInfo.json";
 import {SelectList} from "react-native-dropdown-select-list";
+import { useStudent } from '../../ContextProviders/StudentContext';
 import { getStudent } from '../../graphql/queries';
 import {API,Auth} from "aws-amplify";
 
@@ -32,7 +33,9 @@ const NavigationScreen = ({navigation}) => {
     const [travelTime, setTravelTime] = useState("");
     const [instructions, setInstructions] = useState([]);
     const [coordinates,setCoordinates] =useState([]);
+    const [status,setStatus] =useState("");
 
+    const {student,updateStudent} = useStudent(); 
     // Function to handle the data from the MapViewDirections component
     function handleOnReady(result) {
         // Extract the step-by-step instructions from the result object
@@ -64,7 +67,7 @@ const NavigationScreen = ({navigation}) => {
         } else {
             // In the future, this else statement will return the user to the home page
             Alert.alert("Location permission not granted");
-            navigation.navigate('/ScheduleTable')
+            navigation.navigate('ScheduleTable')
         }
     }
 
@@ -156,7 +159,7 @@ const NavigationScreen = ({navigation}) => {
 
     useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-        requestLocationPermission();
+        requestLocationPermission().then();
         fetchLocations();
     });
 
