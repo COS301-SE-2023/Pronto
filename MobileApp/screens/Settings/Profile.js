@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import { View, Text, StyleSheet, ImageBackground ,ScrollView } from "react-native";
 import { Auth } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
+import { getStudent } from "../../graphql/queries";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -15,28 +16,16 @@ const ProfilePage = () => {
     try {
       if(student===null){
         setIsLoading(true);
-        const userInfo = await Auth.currentUserInfo();
+        const userInfo = await Auth.currentAuthenticatedUser();
         //setUser(userInfo);
         let studentEmail = userInfo.attributes.email; 
         let stu = await API.graphql({
-          query: listStudents,
-          variables: {
-            filter: {
-              email: {
-                eq: studentEmail
-              }
-            }
-          }
+          query: getStudent,
+          variables: {id:userInfo.attributes.sub }
+          
         })
-        let found=false;
-        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i];
-            found = true;
-            break;
-          }
-        }
-        if(found===false){
+        stu=stu.data.getStudent;
+        if(stu===undefined || stu === null){
           throw Error();
         }
         updateStudent(stu);
@@ -100,8 +89,11 @@ const styles = StyleSheet.create({
   infoContainer: {
     borderWidth: 2,
     borderColor: "#e32f45",
-    padding: 50,
-    marginBottom: 20,
+    paddingLeft: 50,
+    paddingRight: 50,
+    paddingTop:20,
+    paddingBottom:20,
+    marginBottom: 0,
     textAlign: "center",
     borderRadius: 20,
   },

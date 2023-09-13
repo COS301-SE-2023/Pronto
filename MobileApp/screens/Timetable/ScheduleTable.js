@@ -7,17 +7,19 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { listStudents } from "../../graphql/queries"
+import { listStudents,getStudent, listInstitutions} from "../../graphql/queries"
+
+import {  createStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 
 
-const ScheduleTable = ({ navigation }) => {
+const ScheduleTable = ({ navigation,route }) => {
   const [activities, setActivities] = useState([]);
   const [schedule, setSchedule] = useState(null);
   const { student, updateStudent } = useStudent();
   const [timetableLoaded, setTimetableLoaded] = useState(false);
-
+  let param=route.params;
   var scheduleArray = {}
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const ScheduleTable = ({ navigation }) => {
   }, [activities, timetableLoaded]);
 
   //function to take in a day, and give all dates of the year that a day occurs
-  const getDatesForDayOfWeek = (dayOfWeek) => {
+   const getDatesForDayOfWeek = (dayOfWeek) => {
     const date = new Date();
     const year = date.getFullYear();
     const dayIndex = [
@@ -47,112 +49,154 @@ const ScheduleTable = ({ navigation }) => {
     ].indexOf(dayOfWeek);
     const results = [];
     let month = date.getMonth()
-
-
+    
+    
     // Loop through each month of the year
-    for (month; month < 12; month++) {
+    //for (month; month < limit; month++) {
       // Create a new date object for the first day of the month
+      
       const firstDayOfMonth = new Date(year, month, 1);
 
       // Find the first occurrence of the specified day of the week
       const diff = dayIndex - firstDayOfMonth.getDay();
       let dayOfMonth = diff >= 0 ? diff + 1 : diff + 8;
-
-      // Loop through the rest of the month, adding dates for the specified day of the week
-      while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
-        const dateString = `${year}-${(month + 1)
+      
+      while(dayOfMonth<date.getDate()){
+        dayOfMonth+=7;
+      }
+      //while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
+      for(let i=0;i<4;i++){  
+      const dateString = `${year}-${(month + 1)
           .toString()
           .padStart(2, "0")}-${dayOfMonth.toString().padStart(2, "0")}`;
+        //if(dayOfMonth>=date.getDate())
         results.push(dateString);
         dayOfMonth += 7;
       }
-    }
+    //}
     return results;
   }
+
 
   let error = "There appear to be network issues.Please try again later";
 
   const fetchActivities = async () => {
     try {
+      let stu=student;
+     
+    
       if (student === null) {
-        let user = await Auth.currentAuthenticatedUser()
-        let studentEmail = user.attributes.email;
-
-        let stu = await API.graphql({
-          query: listStudents,
-          variables: {
-            filter: {
-              email: {
-                eq: studentEmail
-              }
-            }
-          },
-        })
-
-        let found = false
-        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i]
-            found = true
-            break
+        if(param===null){
+          const user = await Auth.currentAuthenticatedUser();
+          stu=await API.graphql({
+            query:getStudent,
+            variables:{id:user.attributes.sub}
+          })
+        
+        stu=stu.data.getStudent;
+        //console.log(stu);
+        }
+        else{
+          stu=param;
+          updateStudent(stu);
+          param=null;
+          
+        }
+        
+        if(stu.studentTimetableId!==null){
+          let act=[];
+          let courses=[];
+          for (let i = 0; i < stu.enrollments.items.length; i++) {
+            courses.push(stu.enrollments.items[i].course)
           }
-        }
-        if (found === false) {
-          throw Error();
-        }
 
-        let act = [];
-        let courses = [];
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          courses.push(stu.enrollments.items[i].course)
-        }
+          for (let i = 0; i < stu.timetable.activityId.length; i++) {
+            for (let j = 0; j < courses.length; j++) {
+              try{
+                let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+                if (index !== undefined) {
+                  act.push(index)
+                  break;
+                }
+              }catch(e){
 
-        for (let i = 0; i < stu.timetable.activityId.length; i++) {
-          for (let j = 0; j < courses.length; j++) {
-            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-            if (index !== undefined) {
-              act.push(index)
+              }
+
+            }
+          }
+          act = act.sort((a, b) => {
+                      if (a.start <= b.start)
+                        return -1;
+                      else
+                        return 1;
+                    })
+        stu.timetable.activities=act;
+        await updateStudent(stu);
+        setActivities(act);
+        createScheduleArray(act);
+      }
+      else{
+          await updateStudent(stu);
+      }         
+  //      console.log(s.timetable.activities);  
+    }
+    else{
+      if(student.timetable!==null && student.timetable.activities!==undefined){
+        let changed = false
+        
+        let act=[];
+       
+        
+          act=[];
+          let courses=[];
+          for (let i = 0; i < student.enrollments.items.length; i++) {
+            courses.push(student.enrollments.items[i].course)
+          }
+
+          for (let i = 0; i < student.timetable.activityId.length; i++) {
+            for (let j = 0; j < courses.length; j++) {
+              try{
+                let index = courses[j].activity.items.find(item => item.id === student.timetable.activityId[i])
+                if (index !== undefined) {
+                  act.push(index)
+                  break;
+                }
+              }catch(e){
+
+              }
+
+            }
+          }
+          act = act.sort((a, b) => {
+                      if (a.start <= b.start)
+                        return -1;
+                      else
+                        return 1;
+                    })
+          if (act.length === activities.length) {
+          for (let i = 0; i < act.length; i++) {
+            if (act[i].id !== activities[i].id) {
+              changed = true;
               break;
             }
           }
         }
-        act = act.sort((a, b) => {
-          if (a.start <= b.start)
-            return -1;
-          else
-            return 1;
-        })
-
-        updateStudent(stu)
-        setActivities(act);
-        createScheduleArray(act);
-        setActivities(act);
-
-      }
-      else {
-
-        let changed = false
-        let act = student.timetable.activities;
-        if (act.length === activities.length) {
-          for (let i = 0; i < act.length; i++) {
-            if (act[i].id !== activities[i].id) {
-              changed = true
-              break
-            }
-          }
-        }
         else {
-          changed = true
-        }
+          changed = true;
+        }          
 
-        if (changed === true) {
-          setActivities(act)
-          createScheduleArray(act)
+        
+        if (changed === true){
+          setActivities(act);
+          createScheduleArray(act);
         }
+   
       }
+    }
     } catch (e) {
-      Alert.alert(error)
-
+      Alert.alert(error);
+      console.log("from schedule")
+      console.log(e);
     }
   }
 
@@ -188,9 +232,53 @@ const ScheduleTable = ({ navigation }) => {
       });
     }
 
-    setSchedule(scheduleArray)
+    // Identify and mark clashes
+    Object.keys(scheduleArray).forEach((date) => {
+      const modulesOnDate = scheduleArray[date];
+
+      const timeSlots = {}; // Store modules by time slot
+      const clashes = {}; // Store clashes by time slot
+
+      modulesOnDate.forEach((module) => {
+        const timeSlot = module.time;
+
+        if (!timeSlots[timeSlot]) {
+          timeSlots[timeSlot] = [];
+        }
+
+        timeSlots[timeSlot].push(module);
+      });
+
+      Object.keys(timeSlots).forEach((timeSlot) => {
+        const modulesInSlot = timeSlots[timeSlot];
+
+        if (modulesInSlot.length > 1) {
+          modulesInSlot.forEach((module) => {
+            if (!clashes[timeSlot]) {
+              clashes[timeSlot] = [];
+            }
+            clashes[timeSlot].push(module.id);
+          });
+        }
+      });
+
+      // Mark clashes within the scheduleArray
+      scheduleArray[date].forEach((module) => {
+        const timeSlot = module.time;
+
+        if (clashes[timeSlot] && clashes[timeSlot].includes(module.id)) {
+          module.isClash = true;
+        } else {
+          module.isClash = false;
+        }
+      });
+    });
+
+    
+    setSchedule(scheduleArray);
     setTimetableLoaded(true);
-  }
+  };
+
 
   const renderItem = (module) => {
     const cardStyle = module.isClash

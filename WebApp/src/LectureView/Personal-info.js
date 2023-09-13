@@ -22,8 +22,10 @@ const PersonalInfoPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
 
+
     const [user, setUser] = useState();
     const [successMessage, setSuccessMessage] = useState("");
+
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
 
@@ -82,14 +84,15 @@ const PersonalInfoPage = () => {
 
     // }
 
-    useEffect(() => {
-        //  fetchLecturer()
-        //fetchUser();
-    }, [])
+
+    // useEffect(() => {
+    //   //  fetchLecturer()
+    //   //fetchUser();
+    // }, [])
 
     return (
 
-        <div style={{ display: 'inline-flex',maxHeight:"100vh" }}>
+        <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
             <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
@@ -193,7 +196,7 @@ const PersonalInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-                 <br/>
+                <br />
             </main>
 
             <div>

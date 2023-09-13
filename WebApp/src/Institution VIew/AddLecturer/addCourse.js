@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import { useState } from "react";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import SearchableDropdown from "./searchableDropdown";
 
 const style = {
   position: 'absolute',
@@ -9,8 +10,10 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '80%',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: '20px',
+  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
   p: 4,
 };
 
@@ -18,27 +21,27 @@ export default function AddModal(module) {
 
   const [open, setOpen] = useState(false);
   const [offeredCourses, setOfferedCourses] = useState([]);
-  const [selectedCourses, setSelectedCourses] = useState([])
-  const [removed, setRemoved] = useState([])
-  const [selected, setSelected] = useState()
+  const [courses,setCourses] = useState([]);
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [removed, setRemoved] = useState([]);
+  const [selected, setSelected] = useState();
+  
 
   const handleOpen = async () => {
     setOpen(true)
     module.setModal(true)
+    
     let courses = []
     try {
-      for (let i = 0; i < module.courseData.length; i++) {
-        if (module.courseData[i].lecturerId === null) {
-          offeredCourses.push(module.courseData[i])
-        }
+      for (let i = 0; i < module.selectedCourses.length; i++) {
+        selectedCourses.push(module.selectedCourses[i]);
       }
-      setOfferedCourses(offeredCourses)
-      setSelectedCourses(module.selectedCourses)
-
+      setSelectedCourses(selectedCourses);
     } catch (e) {
-      alert("No courses found")
+      //alert("No courses found")
     }
   }
+
 
   const handleClose = async () => {
     setOpen(false)
@@ -69,21 +72,22 @@ export default function AddModal(module) {
   }
 
   const handleAdd = async (event) => {
-    event.preventDefault()
-    let index = -1
-    if (selected !== null || selected !== undefined) {
-      for (let i = 0; i < offeredCourses.length; i++) {
-        if (offeredCourses[i].id === selected.id) {
-          index = i
+    
+    let added=false;
+      for (let i = 0; i < selectedCourses.length; i++) {
+        if (selectedCourses[i].id === event.id) {
+          added=true;
           break;
         }
       }
+      
+    if(!added && event.id!==undefined){
+   
+      selectedCourses.push(event);
+      setSelectedCourses(selectedCourses);
+      setOfferedCourses([]);
     }
-    setSelectedCourses([...selectedCourses, selected])
-    offeredCourses.splice(index, 1)
-    setOfferedCourses(offeredCourses)
-
-    //event.target.reset()
+   
   }
 
   const handleRemove = async (index) => {
@@ -129,10 +133,7 @@ export default function AddModal(module) {
                   return (
                     <tr key={key}>
                       <td>
-                        {val.coursecode}
-                      </td>
-                      <td>
-                        {val.coursename}
+                        {val?.coursecode}
                       </td>
                       <td>
                         <button onClick={(e) => handleRemove(key)}
@@ -149,30 +150,13 @@ export default function AddModal(module) {
                 )}
               </tbody>
             </table>
-            <form onSubmit={(e) => handleAdd(e)}>
-              <div className="form-row">
-                <div className="form-group col-6">
-                  <select
-                    onChange={(e) => handleSelect(e.target.value)}
-                    //value={selected}
-                    className="custom-select">
-                    <option key="{}"> </option>
-                    {offeredCourses.map((val, key) => {
-                      return (
-                        <option key={val.coursecode}
-                          value={key}>{val.coursecode}</option>
-                      )
-
-                    })
-
-                    }
-                  </select>
-                </div>
-                <button type="submit"
-                  className="btn btn-danger"
-                  data-testid="addButton">Add</button>
-              </div>
-            </form>
+               <SearchableDropdown 
+                courses={courses}
+                selectedCourses={selectedCourses}
+                setSelectedCourses={setSelectedCourses} 
+                handleAdd={handleAdd}
+                />
+            {/* </div> */}
             <button
               onClick={handleClose}
               type="submit"
@@ -185,11 +169,7 @@ export default function AddModal(module) {
         </Modal>
 
       </div>
-
-
     </div>
-
-
 
   );
 }
