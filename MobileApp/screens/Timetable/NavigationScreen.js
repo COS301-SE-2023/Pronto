@@ -128,18 +128,22 @@ const NavigationScreen = ({navigation}) => {
                 stu.timetable.activities=act;
                 await updateStudent(stu);
                 let loc=[];
+                let locationNames= new Map();
                 for(let i=0;i<act.length;i++){
                     if(act[i].coordinates!==null){
                         let location=act[i].coordinates.split(';');
-                        let locationInfo={ 
-                            key:i,
-                            name:location[0],
-                            value:{
-                                latitude:location[1],
-                                longitude:location[2]
+                        if(locationNames.get(location[0])===undefined){
+                            let locationInfo={ 
+                                key:i,
+                                name:location[0],
+                                value:{
+                                    latitude:location[1],
+                                    longitude:location[2]
+                                }
                             }
+                        loc.push(locationInfo);
+                        locationNames.set(location[0],"1");
                     }
-                    loc.push(locationInfo);
                 }
             }
             setCoordinates(loc);
