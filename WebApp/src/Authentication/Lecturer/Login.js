@@ -66,7 +66,6 @@ function Login() {
           },
         });
     
-
         if(lec.data.listLecturers.items.length>0){
           lec=lec.data.listLecturers.items[0];
           if(lec.institution.logo!==null){
@@ -101,11 +100,12 @@ function Login() {
       setsignInError("");
       //navigate to lecturer home page
        fetchLecturer().then(()=>navigate("/lecturer/dashboard"));
-      //  navigate("/lecturer/dashboard");
+      
     } catch (e) {
+      setLoading(false);
       setsignInError(e.message);
     }
-    setLoading(false);
+    //setLoading(false);
   };
 
   const onSignUpPressed = async (event) => {

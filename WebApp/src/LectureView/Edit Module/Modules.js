@@ -81,7 +81,7 @@ const Modules = () => {
   // }, [])
 
   return (
-    <div style={{ display: 'inline-flex' }}>
+    <div style={{ display: 'inline-flex' ,maxHeight:'100vh'}}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }}>
 
@@ -119,6 +119,7 @@ const Modules = () => {
             </Link>
           ))
         )}
+        <br/>
       </main>
 
       <div>

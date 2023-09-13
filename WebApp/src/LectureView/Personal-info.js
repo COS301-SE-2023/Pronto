@@ -89,7 +89,7 @@ const PersonalInfoPage = () => {
 
     return (
 
-        <div style={{ display: 'inline-flex' }}>
+        <div style={{ display: 'inline-flex',maxHeight:"100vh" }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
             <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
@@ -193,7 +193,7 @@ const PersonalInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-
+                 <br/>
             </main>
 
             <div>

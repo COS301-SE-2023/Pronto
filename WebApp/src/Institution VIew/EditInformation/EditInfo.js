@@ -433,8 +433,8 @@ const EditInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
+                <br/>
             </main>
-
         </div >
 
     );
