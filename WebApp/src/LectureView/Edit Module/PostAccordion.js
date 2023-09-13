@@ -29,7 +29,7 @@ export default function PostAccordion(course) {
   const [activity, setActivity] = useState("");
   const [successMessage,setSuccessMessage]=useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
-  
+  const [latLng,setLatLng] = useState("");  
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -56,9 +56,11 @@ export default function PostAccordion(course) {
          setError("Please pick an activity and location");
       }
       else{
+        let latlng=await geocodeByAddress(selectedLocation);
+        let coordinate=selectedLocation+";"+latLng.lat+";"+latlng.lng;
         let update=await API.graphql({
           query:updateActivity,
-          variables:{input:{id:activity.id,coordinates:selectedLocation}}
+          variables:{input:{id:activity.id,coordinates:coordinate}}
         })
         setSuccessMessage("Venue updated successfully");
         //console.log(activity);
@@ -72,9 +74,11 @@ export default function PostAccordion(course) {
   const handleSelect = async (location, event) => {
       
     try {
-      //event.preventDefault();
-      setSelectedLocation(location);
-      console.log('Selected location:', location);
+      const results = await geocodeByAddress(location);
+      const latLngValue = await getLatLng(results[0]); // Here is the coordinates
+      setLatLng(results[0]);
+      //Add code to add to database
+      console.log(results);
     } catch (error) {
 
     }
