@@ -70,15 +70,13 @@ export default function PostAccordion(course) {
   }
 
   const handleSelect = async (location, event) => {
-      
     try {
-      //event.preventDefault();
-      setSelectedLocation(location);
-      console.log('Selected location:', location);
+      const results = await geocodeByAddress(location);
+      const latLng = await getLatLng(results[0]); // Here is the coordinates
+     //Add code to add to database
     } catch (error) {
-
+      console.error("Error fetching coordinates:", error);
     }
-    // Add your custom logic here to handle adding the value to the database
 
   };
 
@@ -305,6 +303,7 @@ export default function PostAccordion(course) {
                   value={selectedLocation}
                   onChange={setSelectedLocation}
                   onSelect={handleSelect}
+
                 >
                   {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                     <div>
