@@ -8,6 +8,8 @@ import { GOOGLE_API_KEY } from "@env";
 import * as Location from 'expo-location';
 import locationInfo from "../../assets/data/locationInfo.json";
 import {SelectList} from "react-native-dropdown-select-list";
+import { getStudent } from '../../graphql/queries';
+import {API,Auth} from "aws-amplify";
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -75,70 +77,69 @@ const NavigationScreen = () => {
             console.error("Error getting user's location:", error);
         }
     };
-    const fetchActivities = async () => {
-    try {
-      let stu=student;
-     
-      if (student === null) {
-          const user = await Auth.currentAuthenticatedUser();
-          stu=await API.graphql({
-            query:getStudent,
-            variables:{id:user.attributes.sub}
-          })
+    const fetchLocations = async () => {
+        try {
+            let stu=student; 
+            if (student === null) {
+                const user = await Auth.currentAuthenticatedUser();
+                stu=await API.graphql({
+                     query:getStudent,
+                    variables:{id:user.attributes.sub}
+                    })
         
-        stu=stu.data.getStudent;
-        if(stu===null || undefined){
-            throw Error();
-        }
-        await updateStudent(stu);
-    }
-        
-    if(stu.studentTimetableId!==null){
-        let act=[];
-        let courses=[];
-          for (let i = 0; i < stu.enrollments.items.length; i++) {
-            courses.push(stu.enrollments.items[i].course)
-          }
-
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < courses.length; j++) {
-              try{
-                let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-                if (index !== undefined) {
-                  act.push(index)
-                  break;
+                stu=stu.data.getStudent;
+                if(stu===null || undefined){
+                    throw Error();
                 }
-              }catch(e){
-
-              }
-
+                await updateStudent(stu);
             }
-          }
-          act = act.sort((a, b) => {
+        
+            if(stu.studentTimetableId!==null){
+                let act=[];
+                let courses=[];
+                for (let i = 0; i < stu.enrollments.items.length; i++) {
+                    courses.push(stu.enrollments.items[i].course)
+                }
+
+                for (let i = 0; i < stu.timetable.activityId.length; i++) {
+                    for (let j = 0; j < courses.length; j++) {
+                        try{
+                            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+                            if (index !== undefined) {
+                                act.push(index)
+                                break;
+                            }
+                        }catch(e){
+
+                        }
+
+                    }
+                }
+                act = act.sort((a, b) => {
                       if (a.start <= b.start)
                         return -1;
                       else
                         return 1;
                     })
-        stu.timetable.activities=act;
-        await updateStudent(stu);
-        let loc=[];
-        for(let i=0;i<act.length;i++){
-            if(act[i].coordinates!==null){
-                let location=act[i].coordinates.split(';');
-                let locationInfo={ 
-                    key:i,
-                    name:location[0],
-                    value:{
-                        latitude:location[1],
-                        longitude:location[2]
+                stu.timetable.activities=act;
+                await updateStudent(stu);
+                let loc=[];
+                for(let i=0;i<act.length;i++){
+                    if(act[i].coordinates!==null){
+                        let location=act[i].coordinates.split(';');
+                        let locationInfo={ 
+                            key:i,
+                            name:location[0],
+                            value:{
+                                latitude:location[1],
+                                longitude:location[2]
+                            }
                     }
+                    loc.push(locationInfo);
                 }
-                loc.push(locationInfo);
             }
+            setCoordinates(loc);
         }
-        setCoordinates(loc);
-      }
 
     } catch (e) {
       Alert.alert(error);
@@ -149,6 +150,7 @@ const NavigationScreen = () => {
     // useEffect hook to run the requestLocationPermission function when the component is mounted
     useEffect(() => {
         requestLocationPermission().then();
+        fetchLocations();
     }, []);
 
     // Below defines styling for the location text input for the user's current location
