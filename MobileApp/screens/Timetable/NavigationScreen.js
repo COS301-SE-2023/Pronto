@@ -23,7 +23,7 @@ const initialRegion = {
     longitudeDelta: LONGITUDE_DELTA,
 };
 
-const NavigationScreen = () => {
+const NavigationScreen = ({navigation}) => {
 
     const [origin, setOrigin] = useState(null);
     const [destination, setDestination] = useState(null);
@@ -64,6 +64,7 @@ const NavigationScreen = () => {
         } else {
             // In the future, this else statement will return the user to the home page
             Alert.alert("Location permission not granted");
+            navigation.navigate('/ScheduleTable')
         }
     }
 
@@ -245,12 +246,7 @@ const NavigationScreen = () => {
                         search={true}
                         style={{width:'80%' , overflowY: 'auto' }}
                         setSelected={setDestinationLocation}
-
-
                     />
-
-
-
                 </View>
 
                 <TouchableOpacity
