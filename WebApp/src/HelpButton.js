@@ -37,7 +37,7 @@ const HelpButton = ({ pdfUrl }) => {
 
     return (
         <div>
-            <div className="help-icon" onClick={togglePDF}>
+            <div className="help-icon" onClick={togglePDF} >
                 ?
             </div>
             {showPDF && (

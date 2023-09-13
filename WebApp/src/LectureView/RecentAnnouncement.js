@@ -17,6 +17,7 @@ import UserManual from "./HelpFiles/Announcements.pdf";
 import HelpButton from '../HelpButton';
 import { useAnnouncement } from '../ContextProviders/AnnouncementContext';
 import { useLecturer } from '../ContextProviders/LecturerContext';
+import recentAnnouncementImage from "./recentAnnouncementImage.png"
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
@@ -72,13 +73,14 @@ const StyledMenu = styled((props) => (
 export default function RecentAnnouncement() {
 
 
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
-  const{lecturer,setLecturer} =useLecturer();
-  const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
 
- 
+
+  const { lecturer, setLecturer } = useLecturer();
+  const { announcement, setAnnouncement, nextToken, setNextToken } = useAnnouncement();
+
+
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [deleteConfirmationIndex, setDeleteConfirmationIndex] = useState(null);
@@ -129,7 +131,7 @@ export default function RecentAnnouncement() {
         await setLecturer(lec);
       }
 
-      if(lec.courses.items.length>0){
+      if (lec.courses.items.length > 0) {
         if (announcement.length === 0) {
           setLoading(true);
           //Build a filter based on courses
@@ -152,21 +154,21 @@ export default function RecentAnnouncement() {
             query: announcementsByDate,
             variables: variables,
           });
-          announcementList=announcementList.data.announcementsByDate;
+          announcementList = announcementList.data.announcementsByDate;
           setAnnouncement(announcementList.items);
-          if(announcementList.items.length<limit){
+          if (announcementList.items.length < limit) {
             setNextToken(null);
           }
-          else{
+          else {
             setNextToken(announcementList.nextToken);
           }
-      }
+        }
         setLoading(false);
       }
     } catch (error) {
       if (error.errors !== undefined) {
         let e = error.errors[0].message
-        if(e.search("Network") !== -1) {
+        if (e.search("Network") !== -1) {
           setError("Request failed due to network issues");
         }
         else {
@@ -204,10 +206,10 @@ export default function RecentAnnouncement() {
       for (let i = 0; i < list.length; i++) {
         announcement.push(list[i]);
       }
-      if(announcementList.data.announcementsByDate.items.length<limit){
+      if (announcementList.data.announcementsByDate.items.length < limit) {
         setNextToken(null);
       }
-      else{
+      else {
         setNextToken(announcementList.data.announcementsByDate.nextToken);
       }
       setAnnouncement(announcement);
@@ -222,18 +224,26 @@ export default function RecentAnnouncement() {
 
 
   return (
-    <div style={{ display: 'inline-flex' ,maxHeight:"100vh"}}>
+    <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
 
         {/* Navigation bar content */}
-        <LecturerNavigation  />
+        <LecturerNavigation />
 
       </nav>
 
       <main style={{ width: '900px', marginTop: '30px' }}>
-        <h1 className="moduleHead">Recent Announcements</h1>
+
+
+        <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Recent Announcements</h1>
+        <div style={{ textAlign: 'center' }}>
+          <p>This page allows you view the announcents you've made to students on the mobile app. You can delete or sort these announcements.</p>
+          <img src={recentAnnouncementImage} alt="ModulesImage" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+        </div>
+
         {loading === true ? (
+
           // Display "Fetching announcements..." when announcements are being fetched
           <p style={
             {
@@ -246,9 +256,9 @@ export default function RecentAnnouncement() {
             }
           }>Fetching announcements...</p>
 
-        ) : (  
-            announcement.length===0 ? (
-              <p style={
+        ) : (
+          announcement.length === 0 ? (
+            <p style={
               {
                 color: "#e32f45",
                 opacity: 0.9,
@@ -256,39 +266,39 @@ export default function RecentAnnouncement() {
                 fontSize: "50px",
                 display: "flex",
                 justifyContent: "center"
-                }
-              }>No Annoucements Posted</p>
-                        
-            )
+              }
+            }>No Annoucements Posted</p>
+
+          )
 
             :
-          ( announcement.map((val, key) => {
-            return (
-              <div className="card" data-testid="card1" key={key}>
-                <div className="card-header">
-                  <div className="subjectCode">{val.course.coursecode}</div>
-                  <div className="postDate">{val.date}</div>
+            (announcement.map((val, key) => {
+              return (
+                <div className="card" data-testid="card1" key={key}>
+                  <div className="card-header">
+                    <div className="subjectCode">{val.course.coursecode}</div>
+                    <div className="postDate">{val.date}</div>
+                  </div>
+                  <div className="card-body">
+                    <h5 className="card-title">{val.title}</h5>
+                    <p className="card-text">{val.body}</p>
+
+                    <Button
+                      id="demo-customized-button"
+                      aria-haspopup="true"
+                      variant="contained"
+                      disableElevation
+                      onClick={(e) => handleDelete(e.target.value)}
+                      value={key}
+                    >
+                      Delete
+                    </Button>
+
+                  </div>
                 </div>
-                <div className="card-body">
-                  <h5 className="card-title">{val.title}</h5>
-                  <p className="card-text">{val.body}</p>
 
-                  <Button
-                    id="demo-customized-button"
-                    aria-haspopup="true"
-                    variant="contained"
-                    disableElevation
-                    onClick={(e) => handleDelete(e.target.value)}
-                    value={key}
-                  >
-                    Delete
-                  </Button>
-
-                </div>
-              </div>
-
-            );
-          })) 
+              );
+            }))
         )}
 
         <div>
@@ -296,7 +306,7 @@ export default function RecentAnnouncement() {
             {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>}
           </div>
         </div>
-
+        <br />
 
       </main >
       <StyledDialog
