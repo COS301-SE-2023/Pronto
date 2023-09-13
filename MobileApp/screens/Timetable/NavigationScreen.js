@@ -29,6 +29,7 @@ const NavigationScreen = () => {
     const [distance, setDistance] = useState("");
     const [travelTime, setTravelTime] = useState("");
     const [instructions, setInstructions] = useState([]);
+    const [coordinates,setCoordinates] =useState([]);
 
     // Function to handle the data from the MapViewDirections component
     function handleOnReady(result) {
@@ -74,6 +75,76 @@ const NavigationScreen = () => {
             console.error("Error getting user's location:", error);
         }
     };
+    const fetchActivities = async () => {
+    try {
+      let stu=student;
+     
+      if (student === null) {
+          const user = await Auth.currentAuthenticatedUser();
+          stu=await API.graphql({
+            query:getStudent,
+            variables:{id:user.attributes.sub}
+          })
+        
+        stu=stu.data.getStudent;
+        if(stu===null || undefined){
+            throw Error();
+        }
+        await updateStudent(stu);
+    }
+        
+    if(stu.studentTimetableId!==null){
+        let act=[];
+        let courses=[];
+          for (let i = 0; i < stu.enrollments.items.length; i++) {
+            courses.push(stu.enrollments.items[i].course)
+          }
+
+          for (let i = 0; i < stu.timetable.activityId.length; i++) {
+            for (let j = 0; j < courses.length; j++) {
+              try{
+                let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+                if (index !== undefined) {
+                  act.push(index)
+                  break;
+                }
+              }catch(e){
+
+              }
+
+            }
+          }
+          act = act.sort((a, b) => {
+                      if (a.start <= b.start)
+                        return -1;
+                      else
+                        return 1;
+                    })
+        stu.timetable.activities=act;
+        await updateStudent(stu);
+        let loc=[];
+        for(let i=0;i<act.length;i++){
+            if(act[i].coordinates!==null){
+                let location=act[i].coordinates.split(';');
+                let locationInfo={ 
+                    key:i,
+                    name:location[0],
+                    value:{
+                        latitude:location[1],
+                        longitude:location[2]
+                    }
+                }
+                loc.push(locationInfo);
+            }
+        }
+        setCoordinates(loc);
+      }
+
+    } catch (e) {
+      Alert.alert(error);
+    }
+  }
+
 
     // useEffect hook to run the requestLocationPermission function when the component is mounted
     useEffect(() => {
