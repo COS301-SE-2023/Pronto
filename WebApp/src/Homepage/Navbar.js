@@ -11,8 +11,9 @@ function Navbar() {
     const currentPath = location.pathname;
 
     const isNavLinkActive = (linkPath) => {
-        return currentPath === linkPath ? 'active' : '';
+        return currentPath === linkPath ? 'activeHomepage' : '';
     };
+
 
     useEffect(() => {
         function handleScroll() {
@@ -30,12 +31,12 @@ function Navbar() {
         };
     }, []);
     return (
-        <nav className={`navbar ${isNavbarFixed ? 'navbar-fixed' : ''}`}>
-            <ul className="navbar">
+        <nav className={`navbarHompeage ${isNavbarFixed ? 'navbar-fixed' : ''}`}>
+            <ul className="navbarHompeage">
                 <li><img src={ProntoLogo} alt="Pronto Logo" className='logoStyle' /></li>
                 <li ><a className={isNavLinkActive('/')} href="/">Home</a></li>
                 <li><a className={isNavLinkActive('/features')} href="#">Features</a></li>
-                <li><a className={isNavLinkActive('/help')} href="#">Help</a></li>
+                <li><a className={isNavLinkActive('/help')} href="#">About</a></li>
                 <li><a className={isNavLinkActive('/download')} href="#">Download</a></li>
             </ul>
         </nav>

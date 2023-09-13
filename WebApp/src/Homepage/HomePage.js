@@ -5,23 +5,35 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Features from './Features';
 import Navbar from "./Navbar";
 import MainText from './MainText';
-
+import About from './About';
 
 function HomePage() {
   const words = ["Universities", "Lecturers", "Students"];
   const [wordIndex, setWordIndex] = useState(0);
   const [letterIndex, setLetterIndex] = useState(0);
+  const [scrollingUp, setScrollingUp] = useState(true); // Track scroll direction
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY === 0) {
+        // User scrolled to the top of the page
+        setScrollingUp(true);
+      } else {
+        // User scrolled down
+        setScrollingUp(false);
+      }
+    };
 
+    window.addEventListener('scroll', handleScroll);
 
-
-
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setLetterIndex(0);
-
-
       setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
     }, 2000);
 
@@ -31,9 +43,8 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (letterIndex < words[wordIndex].length) {
+    if (letterIndex < words[wordIndex].length && scrollingUp) {
       const timeout = setTimeout(() => {
-
         setLetterIndex((prevIndex) => prevIndex + 1);
       }, 100);
 
@@ -41,18 +52,17 @@ function HomePage() {
         clearTimeout(timeout);
       };
     }
-  }, [wordIndex, letterIndex]);
-
-
+  }, [wordIndex, letterIndex, scrollingUp]);
 
   return (
     <div>
-      <Navbar />
+      {/* Use conditional rendering to show/hide the Navbar */}
+      {scrollingUp && <Navbar />}
       <MainText />
       <Features />
+      <About />
     </div>
   );
-};
-
+}
 
 export default HomePage;

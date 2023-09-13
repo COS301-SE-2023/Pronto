@@ -19,22 +19,7 @@ const featureData = [
         title: 'Feature 3',
         description: 'Description for Feature 3',
         imageUrl: Feature3,
-    },
-    {
-        title: 'Feature 4',
-        description: 'Description for Feature 4',
-        imageUrl: Feature1,
-    },
-    {
-        title: 'Feature 5',
-        description: 'Description for Feature 5',
-        imageUrl: Feature2,
-    },
-    {
-        title: 'Feature 6',
-        description: 'Description for Feature 6',
-        imageUrl: Feature3,
-    },
+    }
 ];
 
 function Features() {
@@ -52,16 +37,16 @@ function Features() {
     }
 
     return (
+        
         <div className='features'>
-            <h1 className='heading-secondary'>Features</h1>
             <div className='feature-container'>
                 {featuresInColumns.map((column, columnIndex) => (
                     <div className='feature-column' key={columnIndex}>
                         {column.map((feature, index) => (
                             <div className='feature-box' key={index}>
-                                <h2>{feature.title}</h2>
                                 <img src={feature.imageUrl} alt={feature.title} />
-                                <p>{feature.description}</p>
+                                <h2 className='feature-heading'>{feature.title}</h2>
+                                <p className='feature-description'>{feature.description}</p>
                             </div>
                         ))}
                     </div>
