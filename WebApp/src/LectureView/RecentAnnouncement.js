@@ -7,7 +7,7 @@ import "./LectureHome.css";
 import { API, Auth } from 'aws-amplify';
 import { listLecturers, announcementsByDate } from '../graphql/queries';
 import { deleteAnnouncement } from '../graphql/mutations';
-import { ErrorModal } from '../ErrorModal';
+import { ErrorModal } from '../Error pages/ErrorModal';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';

@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../Institution VIew/Navigation/Navigation.css';
 import { Auth, API } from 'aws-amplify'
-import { ErrorModal } from '../ErrorModal';
-import { SuccessModal } from "../SuccessModal"
+import { ErrorModal } from "../Error pages/ErrorModal";
+import { SuccessModal } from "../Error pages/SuccessModal"
 import { listLecturers } from '../graphql/queries';
 import UserManual from "./HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../HelpButton';

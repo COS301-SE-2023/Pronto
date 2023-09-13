@@ -4,7 +4,7 @@ import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from 
 import { lecturersByInstitutionId, searchLecturers, listAdmins,searchLecturerByCourses } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
 import AddModal from './addCourse';
-import { ErrorModal } from "../../ErrorModal";
+import { ErrorModal } from "../../Error pages/ErrorModal";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import ClearIcon from '@mui/icons-material/Clear';
 import HelpButton from '../../HelpButton';
