@@ -13,26 +13,5 @@
   "triggerEventPath": "PostConfirmation.event.json",
   "roleName": "pronto5f713f59PostConfirmation",
   "skipEdit": true,
-  "environmentVariableList": [
-    {
-      "cloudFormationParameterName": "studentsGroupName",
-      "environmentVariableName": "StudentsGroupName"
-    },
-    {
-      "cloudFormationParameterName": "lecturersGroupName",
-      "environmentVariableName": "LecturersGroupName"
-    },
-    {
-      "cloudFormationParameterName": "adminGroupName",
-      "environmentVariableName": "AdminGroupName"
-    },
-    {
-      "cloudFormationParameterName": "appClientId",
-      "environmentVariableName": "AppClientId"
-    },
-    {
-      "cloudFormationParameterName": "appClientIdWeb",
-      "environmentVariableName": "AppClientIdWeb"
-    }
-  ]
+  "environmentVariableList": []
 }

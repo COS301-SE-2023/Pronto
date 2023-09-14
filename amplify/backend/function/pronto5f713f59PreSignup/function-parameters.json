@@ -13,22 +13,5 @@
   "triggerEventPath": "PreSignup.event.json",
   "roleName": "pronto5f713f59PreSignup",
   "skipEdit": true,
-  "environmentVariableList": [
-    {
-      "cloudFormationParameterName": "apiApiProntoGraphqlapikey",
-      "environmentVariableName": "API_API_PRONTO_GRAPHQLAPIKEY"
-    },
-    {
-      "cloudFormationParameterName": "apiApiProntoGraphqlapiendpoint",
-      "environmentVariableName": "API_API_PRONTO_GRAPHQLAPIENDPOINT"
-    },
-    {
-      "cloudFormationParameterName": "appClientId",
-      "environmentVariableName": "AppClientId"
-    },
-    {
-      "cloudFormationParameterName": "appClientIdWeb",
-      "environmentVariableName": "AppClientIdWeb"
-    }
-  ]
+  "environmentVariableList": []
 }

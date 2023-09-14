@@ -6,28 +6,6 @@
     }
   },
   "api": {
-    "AdminQueries": {
-      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "pronto5f713f59"
-        },
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "AdminQueries7f7a03b0"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "pronto": {
       "dependsOn": [
         {
@@ -128,20 +106,6 @@
     }
   },
   "function": {
-    "AdminQueries7f7a03b0": {
-      "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "pronto5f713f59"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "pronto5f713f59PostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -154,55 +118,7 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_AdminQueries7f7a03b0_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries7f7a03b0"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueries7f7a03b0_group": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries7f7a03b0"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueries7f7a03b0_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries7f7a03b0"
-        }
-      ]
-    },
     "AMPLIFY_function_pronto5f713f59PostConfirmation_GROUP": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostConfirmation_adminGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostConfirmation_appClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostConfirmation_appClientIdWeb": {
       "usedBy": [
         {
           "category": "function",
@@ -218,59 +134,11 @@
         }
       ]
     },
-    "AMPLIFY_function_pronto5f713f59PostConfirmation_lecturersGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostConfirmation"
-        }
-      ]
-    },
     "AMPLIFY_function_pronto5f713f59PostConfirmation_s3Key": {
       "usedBy": [
         {
           "category": "function",
           "resourceName": "pronto5f713f59PostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostConfirmation_studentsGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_apiApiProntoGraphqlapiendpoint": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_apiApiProntoGraphqlapikey": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_appClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_appClientIdWeb": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
         }
       ]
     },
