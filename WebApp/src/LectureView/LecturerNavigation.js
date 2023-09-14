@@ -10,9 +10,8 @@ export default function LecturerNavigation(lecturerData) {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  //const [lecturer, setLecturer] = useState(lecturerData.props);
-
   const { lecturer, setLecturer } = useLecturer();
+
   const onSignOut = async (event) => {
     event.preventDefault();
     try {
@@ -24,12 +23,13 @@ export default function LecturerNavigation(lecturerData) {
     }
   };
 
-  const userSet = async () => {
-    let u = await Auth.currentAuthenticatedUser();
-    u = u.attributes.name + " " + u.attributes.family_name;
-    setUser(u);
 
-  };
+  // const userSet = async () => {
+  //   let u = await Auth.currentAuthenticatedUser();
+  //   u = u.attributes.name + " " + u.attributes.family_name;
+  //   setUser(u);
+
+  // };
 
   const fetchLecturer = async () => {
     let u = await Auth.currentAuthenticatedUser();
@@ -70,7 +70,7 @@ export default function LecturerNavigation(lecturerData) {
   }
 
   useEffect(() => {
-    userSet();
+    //userSet();
     fetchLecturer();
   });
 
@@ -87,7 +87,7 @@ export default function LecturerNavigation(lecturerData) {
           />
           <div className="lecturer-name" style={{ paddingTop: '5%' }}>
             <b>
-              {user}
+              {lecturer && (lecturer.firstname + " " + lecturer.lastname)}
             </b>
           </div>
         </div>
@@ -96,7 +96,6 @@ export default function LecturerNavigation(lecturerData) {
           <li data-testid={"LecturerDashboard"}>
             <Link
               to={'/lecturer/dashboard'}
-              //state={lecturer}
               className={`nav-link text-center ${location.pathname === '/lecturer/dashboard' ? 'active' : ''}`}
             >
               <b>Dashboard</b>
@@ -106,12 +105,10 @@ export default function LecturerNavigation(lecturerData) {
           <li data-testid={"EditModuleInfo"}>
             <Link
               to={'/lecturer/modules'}
-              //state={lecturer}
-              className={`nav-link text-center ${location.pathname === '/lecturer/modules' ? 'active' : ''}`}
+              className={`nav-link text-center ${location.pathname === '/lecturer/edit-module' ? 'active' : location.pathname === '/lecturer/modules' ? 'active' : ''}`}
             >
               <b>Edit Module Information</b>
             </Link>
-
 
           </li>
           <li
@@ -121,7 +118,6 @@ export default function LecturerNavigation(lecturerData) {
 
             <Link
               to={'/lecturer/announcement'}
-              //state={lecturer}
               className={`nav-link text-center ${location.pathname === '/lecturer/announcement' ? 'active' : ''}`}
             >
               <b>Recent Announcements</b>
@@ -132,7 +128,6 @@ export default function LecturerNavigation(lecturerData) {
 
             <Link
               to={'/lecturer/personal-info'}
-              //state={lecturer}
               className={`nav-link text-center ${location.pathname === '/lecturer/personal-info' ? 'active' : ''}`}
             >
               <b>Edit Personal Information</b>

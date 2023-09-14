@@ -5,8 +5,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import GoogleMapReact from 'google-map-react';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -18,7 +16,7 @@ import styled from "styled-components";
 import { createAnnouncement, updateActivity } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal';
-import {SuccessModal} from "../../SuccessModal";
+import { SuccessModal } from "../../SuccessModal";
 import { useJsApiLoader } from "@react-google-maps/api";
 
 export default function PostAccordion(course) {
@@ -29,7 +27,7 @@ export default function PostAccordion(course) {
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
   const [activity, setActivity] = useState("");
-  const [successMessage,setSuccessMessage]=useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
 
 
@@ -51,35 +49,34 @@ export default function PostAccordion(course) {
     zoom: 16
   };
 
-  const handleAddVenue = async(event)=>{
+  const handleAddVenue = async (event) => {
     event.preventDefault();
-    try{
-      if(activity===""){
-        setError("Pick an activity to update");
+    try {
+      if (activity === "" || activity === undefined || selectedLocation === "") {
+        setError("Please pick an activity and location");
       }
-      else{
-        let update=await API.graphql({
-          query:updateActivity,
-          variables:{input:{id:activity.id,coordinates:selectedLocation}}
+      else {
+        let update = await API.graphql({
+          query: updateActivity,
+          variables: { input: { id: activity.id, coordinates: selectedLocation } }
         })
         setSuccessMessage("Venue updated successfully");
-        setSelectedLocation("")
+        //console.log(activity);
       }
-    }catch(e){
-      console.log(e);
+
+    } catch (e) {
+      setError("Something went wrong.Please try again later");
     }
   }
 
   const handleSelect = async (location, event) => {
-      
     try {
-      //event.preventDefault();
-      setSelectedLocation(location);
-      console.log('Selected location:', location);
+      const results = await geocodeByAddress(location);
+      const latLng = await getLatLng(results[0]); // Here is the coordinates
+      //Add code to add to database
     } catch (error) {
-
+      console.error("Error fetching coordinates:", error);
     }
-    // Add your custom logic here to handle adding the value to the database
 
   };
 
@@ -97,23 +94,9 @@ export default function PostAccordion(course) {
   }
 
 
-  const handleSelectActivity = async (event) => {
-    try {
-      
-      if (event < course.course.activity.items.length && event > 0 && event !== "") {
-        setActivity(course.course.activity.items[event]);
-       
-      }
-    } catch (error) {
-      setError("Something went wrong. Please try again later");
-    }
-  }
-
-
   const handleSubmit = async (event, type) => {
     try {
       event.preventDefault()
-      let d = new Date().getFullYear()
       let announcement = {
         courseId: course.course.id,
         body: body,
@@ -126,17 +109,16 @@ export default function PostAccordion(course) {
       let mutation = await API.graphql({
         query: createAnnouncement,
         variables: { input: announcement },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
       });
 
       setSuccessMessage("Announcement posted succesfully");
     } catch (error) {
-      let e = error.errors[0].message;
-      if (e.search("Not Authorized") !== -1) {
-        setError("You are not authorized to perform this action. Please log out and log in");
-      }
-      else if (e.search("Network") !== -1) {
-        setError("Request failed due to network issues");
+      if (error.errors !== undefined) {
+        let e = error.errors[0].message;
+
+        if (e.search("Network") !== -1) {
+          setError("Request failed due to network issues");
+        }
       }
       else {
         setError("Something went wrong. Please try again later");
@@ -151,259 +133,236 @@ export default function PostAccordion(course) {
 
     <div>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
-      {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-          style={{ width: "100%" }}
-          data-testid={"accordionDrop1"}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              flexShrink: 0,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
+      {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
+
+      <div>
+        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+            style={{ width: "100%" }}
+            data-testid={"accordionDrop1"}
           >
-            Post reminder
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <form onSubmit={(e) => handleSubmit(e, "Reminder")}>
-            <div className="form-group row">
-              <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
-              <div className="col-sm-10">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title-col-2"
-                  data-testid="title2"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}></input>
-              </div>
-            </div>
-            <div className="form-group row">
-              <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Body: </label>
-              <div className='col-sm-10'>
-                <textarea
-                  type="text"
-                  className="form-control"
-                  id="body"
-                  data-testid="body2"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}></textarea>
-              </div>
-            </div>
-
-            <div className="form-group row">
-              <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
-              <div className="col-sm-10">
-                <input
-                  type="date"
-                  className="form-control"
-                  id="date-col-2"
-                  data-testid="date2"
-                  required
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}></input>
-              </div>
-            </div>
-            <button className="post-button">Post</button>
-          </form>
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion
-        expanded={expanded === "panel2"}
-        onChange={handleChange("panel2")}
-        data-testid={"accordion2"}
-        style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
-          aria-controls="panel2bh-content"
-          id="panel2bh-header"
-          data-testid={"accordionDrop2"}
-        >
-          <Typography
-            sx={{
-              width: "100%",
-              flexShrink: 0,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
-          >
-            Post due assignment
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <form onSubmit={(e) => handleSubmit(e, "Due Assignment")}>
-            <div className="form-group row">
-              <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
-              <div className="col-sm-10">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title-col"
-                  data-testid="title2"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="form-group row">
-              <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Information: </label>
-              <div className='col-sm-10'>
-                <textarea
-                  type="text"
-                  className="form-control"
-                  id="information-col"
-                  data-testid="body2"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                ></textarea>
-              </div>
-            </div>
-            <div className="form-group row">
-              <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
-              <div className="col-sm-10">
-                <input
-                  type="date"
-                  className="form-control"
-                  id="date-col"
-                  data-testid="date2"
-                  required
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
-              </div>
-            </div>
-            <button className="post-button">Post</button>
-          </form>
-        </AccordionDetails>
-      </Accordion>
-
-
-      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
-          aria-controls="panel3bh-content"
-          id="panel3bh-header"
-        >
-          <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >Update lecture venue</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <select
-            onClick={(e) => handleSelectActivity(e.target.value)}
-            className="custom-select"
+            <Typography
+              sx={{
+                width: "100%",
+                flexShrink: 0,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
             >
-            <option selected disabled>Select Activity</option>
-            {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
-              return (
-                <option key={key}
-                  value={key}>{val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "")}</option>
-              )
-            }
-            )
-            }
-          </select>
-          <form style={{paddingTop:'15px'}} onSubmit={(e)=>{handleAddVenue(e)}}>
-            <div className="form-group row">
-              <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
-              <div className="col-sm-10">
-                <PlacesAutocomplete
-                  value={selectedLocation}
-                  onChange={setSelectedLocation}
-                  onSelect={handleSelect}
-                >
-                  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                    <div>
-                      <input
-                        {...getInputProps({
-                          placeholder: 'Search Places...',
-                          className: 'location-search-input form-control',
-                        })}
-                      />
-                      <MapSuggestionsContainer>
-                        {loading && <div>Loading...</div>}
-                        {suggestions.map((suggestion, index) => {
-                          const style = {
-                            backgroundColor: suggestion.active ? '#e32f45' : '#fff',
-                            cursor: 'pointer',
-                            padding: '5px',
-                          };
-                          return (
-                            <div key={index} {...getSuggestionItemProps(suggestion, { style })}>
-                              {suggestion.description}
-                            </div>
-                          );
-                        })}
-                      </MapSuggestionsContainer>
-                    </div>
-                  )}
-                </PlacesAutocomplete>
+              Post reminder
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <form onSubmit={(e) => handleSubmit(e, "Reminder")}>
+              <div className="form-group row">
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
+                <div className="col-sm-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="title-col-2"
+                    data-testid="title2"
+                    required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}></input>
+                </div>
               </div>
-            </div>
-
-            <div className="map">
-              <div style={{ height: '50vh', width: '100%' }}>
-                <GoogleMapReact
-                  bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API }}
-                  defaultCenter={defaultProps.center}
-                  defaultZoom={defaultProps.zoom}
-                  yesIWantToUseGoogleMapApiInternals
-
-                >
-                  <AnyReactComponent
-                    lat={59.955413}
-                    lng={30.337844}
-                    text="My Marker"
-                  />
-                </GoogleMapReact>
+              <div className="form-group row">
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Body: </label>
+                <div className='col-sm-10'>
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="body"
+                    data-testid="body2"
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}></textarea>
+                </div>
               </div>
-            </div>
-            <button className="post-button">Add venue</button>
-          </form>
-        </AccordionDetails>
-      </Accordion>
 
-      {/* <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-        data-testid={"accordion4"}
-        style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
-          aria-controls="panel4bh-content"
-          id="panel4bh-header"
-          data-testid={"accordionDrop4"}
+              <div className="form-group row">
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+                <div className="col-sm-10">
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="date-col-2"
+                    data-testid="date2"
+                    required
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}></input>
+                </div>
+              </div>
+              <button className="post-button">Post</button>
+            </form>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+      <div>
+        <Accordion
+          expanded={expanded === "panel2"}
+          onChange={handleChange("panel2")}
+          data-testid={"accordion2"}
+          style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}
         >
-          <Typography
-            sx={{
-              width: "100%",
-              flexShrink: 0,
-              fontWeight: "bold",
-              textAlign: "center",
-            }}
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
+            aria-controls="panel2bh-content"
+            id="panel2bh-header"
+            data-testid={"accordionDrop2"}
           >
-            Remove lecture venue
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div className="venue">
-            IT 4-4
-            <IconButton aria-label="delete" size="large" className="delete-btn">
-              <DeleteIcon style={{ color: "#e32f45" }} />
-            </IconButton>
-          </div>
-        </AccordionDetails>
-      </Accordion> */}
+            <Typography
+              sx={{
+                width: "100%",
+                flexShrink: 0,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              Post due assignment
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <form onSubmit={(e) => handleSubmit(e, "Due Assignment")}>
+              <div className="form-group row">
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Title: </label>
+                <div className="col-sm-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="title-col"
+                    data-testid="title2"
+                    required
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="form-group row">
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Information: </label>
+                <div className='col-sm-10'>
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="information-col"
+                    data-testid="body2"
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                  ></textarea>
+                </div>
+              </div>
+              <div className="form-group row">
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+                <div className="col-sm-10">
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="date-col"
+                    data-testid="date2"
+                    required
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                </div>
+              </div>
+              <button className="post-button">Post</button>
+            </form>
+          </AccordionDetails>
+        </Accordion>
+
+      </div>
+      <div>
+        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
+            aria-controls="panel3bh-content"
+            id="panel3bh-header"
+          >
+            <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >Update lecture venue</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <select
+              onClick={(e) => setActivity(course.course.activity.items[e.target.value])}
+              className="custom-select"
+              placeholder="Select Activity"
+            >
+              <option selected disabled>Select Activity</option>
+              {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
+                return (
+                  <option key={key}
+                    value={key}>{val.day + " " + val.start + "-" + val.end + " " + val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "")}</option>
+                )
+              }
+              )
+              }
+            </select>
+            <form style={{ paddingTop: '15px' }} onSubmit={(e) => { handleAddVenue(e) }}>
+              <div className="form-group row">
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
+                <div className="col-sm-10">
+                  <PlacesAutocomplete
+                    value={selectedLocation}
+                    onChange={setSelectedLocation}
+                    onSelect={handleSelect}
+
+                  >
+                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                      <div>
+                        <input
+                          {...getInputProps({
+                            placeholder: 'Search Places...',
+                            className: 'location-search-input form-control',
+                          })}
+                        />
+                        <MapSuggestionsContainer>
+                          {loading && <div>Loading...</div>}
+                          {suggestions.map((suggestion, index) => {
+                            const style = {
+                              backgroundColor: suggestion.active ? '#e32f45' : '#fff',
+                              cursor: 'pointer',
+                              padding: '5px',
+                            };
+                            return (
+                              <div key={index} {...getSuggestionItemProps(suggestion, { style })}>
+                                {suggestion.description}
+                              </div>
+                            );
+                          })}
+                        </MapSuggestionsContainer>
+                      </div>
+                    )}
+                  </PlacesAutocomplete>
+                </div>
+              </div>
+
+              <div className="map">
+                <div style={{ height: '50vh', width: '100%' }}>
+                  <GoogleMapReact
+                    bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API }}
+                    defaultCenter={defaultProps.center}
+                    defaultZoom={defaultProps.zoom}
+                    yesIWantToUseGoogleMapApiInternals
+
+                  >
+                    <AnyReactComponent
+                      lat={59.955413}
+                      lng={30.337844}
+                      text="My Marker"
+                    />
+                  </GoogleMapReact>
+                </div>
+              </div>
+              <button className="post-button">Add venue</button>
+            </form>
+          </AccordionDetails>
+        </Accordion>
+
+      </div>
+
+
     </div>
   );
 }

@@ -11,7 +11,7 @@ const PostReminder = () => {
 
 
   return (
-    <div style={{ display: 'inline-flex' }}>
+    <div style={{ display: 'inline-flex' ,maxHeight:'100vh'}}>
       <nav style={{ width: '20%' }} >
         {/* Navigation bar content */}
         <LecturerNavigation />
@@ -26,6 +26,7 @@ const PostReminder = () => {
         </div>
         <PostAccordion
           course={state.state} />
+          <br/>
       </main>
 
       <div>

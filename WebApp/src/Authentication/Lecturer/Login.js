@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import { Auth,API,Storage } from "aws-amplify";
+import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { listLecturers } from "../../graphql/queries";
@@ -22,7 +22,7 @@ function Login() {
   const [signUpPassword, setSignUpPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
-  const {lecturer,setLecturer} =useLecturer();
+  const { lecturer, setLecturer } = useLecturer();
 
   //university info
   const universityInfo = [
@@ -53,32 +53,41 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
 
-  const fetchLecturer = async()=>{
-    try{
-     let  lec = await API.graphql({
-          query: listLecturers,
-          variables: {
-            filter: {
-              email: {
-                eq: email
-              }
+  const fetchLecturer = async () => {
+    let fetchError = "Could not find your records.If you are a Lecturer please contact your Institution's   Admin since they may have deleted your information. If you are an Admin please return to the homepage and click 'Continue as Admin'. If you are a Student please use the mobile app.";
+    try {
+      let lec = await API.graphql({
+        query: listLecturers,
+        variables: {
+          filter: {
+            email: {
+              eq: email
             }
-          },
-        });
-    
-
-        if(lec.data.listLecturers.items.length>0){
-          lec=lec.data.listLecturers.items[0];
-          if(lec.institution.logo!==null){
-            lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
-           
           }
-           setLecturer(lec);
-      
+        },
+      });
+
+      if (lec.data.listLecturers.items.length > 0) {
+        lec = lec.data.listLecturers.items[0];
+        try {
+          if (lec.institution.logo !== null) {
+            lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+
+          }
+        } catch (error) {
+
         }
-      }catch(error){
-        console.log(error);
+        setLecturer(lec);
+
       }
+      else {
+        throw Error(fetchError);
+      }
+    } catch (error) {
+      console.log(error);
+      await Auth.signOut();
+      throw Error(fetchError);
+    }
 
   }
   const onSignInPressed = async (event) => {
@@ -100,12 +109,13 @@ function Login() {
       await Auth.signIn(email, password, { role: "Lecturer" });
       setsignInError("");
       //navigate to lecturer home page
-       fetchLecturer().then(()=>navigate("/lecturer/dashboard"));
-      //  navigate("/lecturer/dashboard");
+
+      await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
     } catch (e) {
+      setLoading(false);
       setsignInError(e.message);
     }
-    setLoading(false);
+    //setLoading(false);
   };
 
   const onSignUpPressed = async (event) => {

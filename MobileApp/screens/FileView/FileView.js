@@ -14,7 +14,7 @@ import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { Auth, API } from "aws-amplify"
-import { listStudents } from "../../graphql/queries";
+import { listStudents,getStudent } from "../../graphql/queries";
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 //graphQL call to get the university of the student, which will be used to get the file from that folder.
@@ -62,27 +62,15 @@ const BucketFilesScreen = () => {
     try {
       let stu=student;
       if(student===null){
-        let user = await Auth.currentAuthenticatedUser()
+        const user = await Auth.currentAuthenticatedUser()
         let studentEmail = user.attributes.email; 
         stu = await API.graphql({
-          query: listStudents,
-          variables: {
-            filter: {
-              email: {
-                eq: studentEmail
-              }
-            }
-          }
+          query: getStudent,
+          variables: {id:user.attributes.sub}
         })
         
-        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i];
-            found = true;
-            break;
-          }
-        }
-        if(found===false){
+        stu=stu.data.getStudent;
+        if(stu===false || stu===undefined){
           throw Error();
         }
         updateStudent(stu);

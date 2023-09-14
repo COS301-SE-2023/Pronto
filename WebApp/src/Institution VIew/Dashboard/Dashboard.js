@@ -16,15 +16,15 @@ import EditUniInfoImage from "./EditUniInfoImage.png";
 const Dashboard = () => {
     const navigate = useNavigate()
     return (
-        <div>
+        <div style={{maxHeight:"100vh"}}>
 
             <LeftContainer>
                 <InstitutionNavigation />
 
             </LeftContainer>
             <RightContainer>
-
-                <div className={"grid"} style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                 <br/>
+                <div className={"grid"} style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" ,maxHeight:"100vh"}}>
                     <h1 style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Dashboard</h1>
                     <div className={"row ml-3"} style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                         <div className={"col-6"} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
