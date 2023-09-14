@@ -11,9 +11,10 @@ export default function InstitutionNavigation({ props }) {
     const state = useLocation();
     //const[institution,setInstitution]=useState(state.state)
     //const [admin, setAdmin] = useState(state.state);
-    const {admin,setAdmin} =useAdmin();
+    const { admin, setAdmin } = useAdmin();
+    const location = useLocation();
 
-//    console.log(admin);
+    //    console.log(admin);
     const onSignOut = async (event) => {
         event.preventDefault();
         try {
@@ -26,12 +27,12 @@ export default function InstitutionNavigation({ props }) {
     };
 
 
-    const fetchAdmin =async()=>{
+    const fetchAdmin = async () => {
 
-         try{
-              if(admin===null || admin===undefined){
-                let user=await Auth.currentAuthenticatedUser();
-                let adminEmail=user.attributes.email
+        try {
+            if (admin === null || admin === undefined) {
+                let user = await Auth.currentAuthenticatedUser();
+                let adminEmail = user.attributes.email
                 let adminData = await API.graphql({
                     query: listAdmins,
                     variables: {
@@ -42,23 +43,23 @@ export default function InstitutionNavigation({ props }) {
                         },
                     },
                 });
-                if(adminData.data.listAdmins.items.length>0){
+                if (adminData.data.listAdmins.items.length > 0) {
                     adminData = adminData.data.listAdmins.items[0];
-                    if(adminData.institution.logo!==null){
+                    if (adminData.institution.logo !== null) {
                         adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
                     }
-                setAdmin(adminData);
+                    setAdmin(adminData);
                 }
-          }
+            }
 
-    }catch(error){
-    
-    }
+        } catch (error) {
+
+        }
     }
 
 
     useEffect(() => {
-       
+
         fetchAdmin()
     }, []);
 
@@ -83,47 +84,47 @@ export default function InstitutionNavigation({ props }) {
                 </div>
 
                 <ul className="navbar-nav">
-                    <li className="nav-item text-center" data-testid={'Dashboard'}>
+                    <li data-testid={'Dashboard'}>
                         <Link
                             to={'/institution/dashboard'}
                             state={admin}
-                            className="nav-link"
+                            className={`nav-link text-center ${location.pathname === '/institution/dashboard' ? 'active' : ''}`}
                         >
                             <b>Dashboard</b>
                         </Link>
                     </li>
-                    <li className="nav-item text-center" data-testid={'UploadSchedule'}>
+                    <li data-testid={'UploadSchedule'}>
                         <Link
                             to={'/institution/upload-schedule'}
                             state={admin}
-                            className="nav-link"
+                            className={`nav-link text-center ${location.pathname === '/institution/upload-schedule' ? 'active' : ''}`}
                         >
                             <b>Upload Schedule</b>
                         </Link>
                     </li>
-                    <li className="nav-item text-center" data-testid={'UploadStudentFiles'}>
+                    <li data-testid={'UploadStudentFiles'}>
                         <Link
                             to={'/institution/upload-student-files'}
                             state={admin}
-                            className="nav-link"
+                            className={`nav-link text-center ${location.pathname === '/institution/upload-student-files' ? 'active' : ''}`}
                         >
                             <b>Upload Student Files</b>
                         </Link>
                     </li>
-                    <li className="nav-item text-center" data-testid={'AddLecturer'}>
+                    <li data-testid={'AddLecturer'}>
                         <Link
                             to={'/institution/add-lecturer'}
                             state={admin}
-                            className="nav-link"
+                            className={`nav-link text-center ${location.pathname === '/institution/add-lecturer' ? 'active' : ''}`}
                         >
                             <b>Add/Remove Lecturer</b>
                         </Link>
                     </li>
-                    <li className="nav-item text-center">
+                    <li>
                         <Link
                             to={'/institution/edit-info'}
                             state={admin}
-                            className="nav-link"
+                            className={`nav-link text-center ${location.pathname === '/institution/edit-info' ? 'active' : ''}`}
                         >
                             <b>Edit University Info</b>
                         </Link>

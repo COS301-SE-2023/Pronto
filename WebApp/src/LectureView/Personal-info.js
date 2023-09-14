@@ -13,6 +13,7 @@ import { listLecturers } from '../graphql/queries';
 import UserManual from "./HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../HelpButton';
 import { useLecturer } from '../ContextProviders/LecturerContext';
+import personalInformationImage from "./EditPersonalInfo.png";
 
 const PersonalInfoPage = () => {
     const [expanded, setExpanded] = useState(false);
@@ -20,12 +21,15 @@ const PersonalInfoPage = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-   
-    const [user,setUser]=useState();
-    const [successMessage,setSuccessMessage] =useState("");
- 
 
-    const {lecturer,setLecturer} = useLecturer();
+
+    const [user, setUser] = useState();
+    const [successMessage, setSuccessMessage] = useState("");
+
+    const [firstName, setFirstName] = useState();
+    const [lastName, setLastName] = useState();
+
+    const { lecturer, setLecturer } = useLecturer();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
@@ -34,12 +38,12 @@ const PersonalInfoPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            if(newPassword===confirmPassword){
+            if (newPassword === confirmPassword) {
                 const user = await Auth.currentAuthenticatedUser();
                 Auth.changePassword(user, oldPassword, newPassword);
                 setSuccessMessage("Password change succesful");
             }
-            else{
+            else {
                 setError("New password does not match confirm password");
             }
         } catch (error) {
@@ -50,15 +54,15 @@ const PersonalInfoPage = () => {
         setConfirmPassword("")
     }
 
-    const fetchUser = async()=>{
-        try{
-             let u=await Auth.currentAuthenticatedUser();
-             setUser(u);
-        }catch(error){
+    const fetchUser = async () => {
+        try {
+            let u = await Auth.currentAuthenticatedUser();
+            setUser(u);
+        } catch (error) {
             setError("Something went wrong");
         }
     }
-    
+
     // const fetchLecturer = async () => {
     //     let u = await Auth.currentAuthenticatedUser()
     //     if (lecturer !== null) {
@@ -80,6 +84,7 @@ const PersonalInfoPage = () => {
 
     // }
 
+
     // useEffect(() => {
     //   //  fetchLecturer()
     //   //fetchUser();
@@ -87,16 +92,21 @@ const PersonalInfoPage = () => {
 
     return (
 
-        <div style={{ display: 'inline-flex' }}>
+        <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
-             {successMessage && <SuccessModal  successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
+            {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
             <nav style={{ width: '20%' }} data-testid='InstitutionNavigation'>
                 {/* Navigation bar content */}
-                <LecturerNavigation  />
+                <LecturerNavigation />
             </nav>
 
             <main style={{ width: '900px', marginTop: '30px' }}>
-                <h1 className="moduleHead">Personal Information</h1>
+                <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Personal Information</h1>
+                <div style={{ textAlign: 'center' }}>
+                    <p>This page allows you to edit the information we have stored for you. Click on  a dropdown to get started!</p>
+                    <img src={personalInformationImage} alt="ModulesImage" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+
+                </div>
                 <table className="table table-sm">
                     <tbody>
 
@@ -124,7 +134,7 @@ const PersonalInfoPage = () => {
                 </table>
 
                 <div>
-                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px" ,marginBottom:"15px" }}>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'paccordion'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
                             aria-controls="panel1bh-content"
@@ -186,8 +196,8 @@ const PersonalInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-                
-                </main>
+                <br />
+            </main>
 
             <div>
                 <HelpButton pdfUrl={UserManual} />

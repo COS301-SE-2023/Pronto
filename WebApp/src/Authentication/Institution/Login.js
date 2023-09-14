@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import { Auth,API,Storage } from "aws-amplify";
+import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { listAdmins } from "../../graphql/queries";
 import { useAdmin } from "../../ContextProviders/AdminContext";
@@ -25,35 +25,35 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
 
-  const {admin,setAdmin} =useAdmin();
+  const { admin, setAdmin } = useAdmin();
 
-   const fetchAdmin = async()=>{ 
-    let fetchError="Could not find your records.If you are a Lecturer return to the homepage and click 'Continue as Lecturer'. If you are a Student please use the mobile app"
-    try{
-       
-        let adminData = await API.graphql({
-                    query: listAdmins,
-                    variables: {
-                        filter: {
-                            email: {
-                                eq: email
-                            }
-                        },
-                    },
-                });
-        if(adminData.data.listAdmins.items.length>0){
-            adminData = adminData.data.listAdmins.items[0];
-            if(adminData.institution.logo!==null){
-              adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-                  }
-            setAdmin(adminData);
-          }
-          else{
-             throw Error(fetchError);
-          }
+  const fetchAdmin = async () => {
+    let fetchError = "Could not find your records.If you are a Lecturer return to the homepage and click 'Continue as Lecturer'. If you are a Student please use the mobile app"
+    try {
 
-    }catch(error){
-      await Auth.signOut();    
+      let adminData = await API.graphql({
+        query: listAdmins,
+        variables: {
+          filter: {
+            email: {
+              eq: email
+            }
+          },
+        },
+      });
+      if (adminData.data.listAdmins.items.length > 0) {
+        adminData = adminData.data.listAdmins.items[0];
+        if (adminData.institution.logo !== null) {
+          adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
+        }
+        setAdmin(adminData);
+      }
+      else {
+        throw Error(fetchError);
+      }
+
+    } catch (error) {
+      await Auth.signOut();
       throw Error(fetchError);
     }
   }
@@ -77,11 +77,12 @@ function Login() {
       await Auth.signIn(email, password, { role: "Admin" });
       setsignInError("");
       //navigate to lecturer home page
-      await fetchAdmin().then(()=>navigate("/institution/dashboard"))
+      await fetchAdmin().then(() => navigate("/institution/dashboard"))
     } catch (e) {
+      setLoading(false);
       setsignInError(e.message);
     }
-    setLoading(false);
+    //setLoading(false);
   };
 
 
