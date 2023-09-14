@@ -48,9 +48,6 @@
       "email"
     ],
     "triggers": {
-      "PostAuthentication": [
-        "custom"
-      ],
       "PostConfirmation": [
         "add-to-group"
       ],
@@ -82,15 +79,6 @@
     "dependsOn": [
       {
         "category": "function",
-        "resourceName": "pronto5f713f59PostAuthentication",
-        "triggerProvider": "Cognito",
-        "attributes": [
-          "Arn",
-          "Name"
-        ]
-      },
-      {
-        "category": "function",
         "resourceName": "pronto5f713f59PreSignup",
         "triggerProvider": "Cognito",
         "attributes": [
@@ -120,6 +108,6 @@
     "adminQueries": false,
     "hostedUI": false,
     "authProviders": [],
-    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PostAuthentication\",\n    \"lambdaFunctionName\": \"pronto5f713f59PostAuthentication\"\n  },\n  {\n    \"triggerType\": \"PostConfirmation\",\n    \"lambdaFunctionName\": \"pronto5f713f59PostConfirmation\"\n  },\n  {\n    \"triggerType\": \"PreSignUp\",\n    \"lambdaFunctionName\": \"pronto5f713f59PreSignup\"\n  }\n]"
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PostConfirmation\",\n    \"lambdaFunctionName\": \"pronto5f713f59PostConfirmation\"\n  },\n  {\n    \"triggerType\": \"PreSignUp\",\n    \"lambdaFunctionName\": \"pronto5f713f59PreSignup\"\n  }\n]"
   }
 }
