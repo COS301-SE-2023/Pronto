@@ -72,15 +72,6 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "pronto5f713f59PostAuthentication",
-          "triggerProvider": "Cognito"
-        },
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
           "resourceName": "pronto5f713f59PreSignup",
           "triggerProvider": "Cognito"
         },
@@ -151,11 +142,6 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "pronto5f713f59PostAuthentication": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "pronto5f713f59PostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -189,22 +175,6 @@
         {
           "category": "function",
           "resourceName": "AdminQueries7f7a03b0"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostAuthentication_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostAuthentication"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostAuthentication_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostAuthentication"
         }
       ]
     },
