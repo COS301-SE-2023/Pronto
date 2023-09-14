@@ -25,6 +25,7 @@ const featureData = [
 function Features() {
     const featuresInColumns = [];
     const featuresPerColumn = 3;
+    
 
     for (let i = 0; i < featuresPerColumn; i++) {
         const column = [];

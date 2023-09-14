@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './homepage_style.css';
 import ProntoLogo from "../Authentication/Institution/ProntoLogo.svg";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -7,11 +7,10 @@ import Navbar from "./Navbar";
 import MainText from './MainText';
 import About from './About';
 import Download from './Download';
+import ScrollDownIcon from '../images/scroll-down.png';
 
 function HomePage() {
-  const words = ["Universities", "Lecturers", "Students"];
-  const [wordIndex, setWordIndex] = useState(0);
-  const [letterIndex, setLetterIndex] = useState(0);
+
   const [scrollingUp, setScrollingUp] = useState(true); // Track scroll direction
 
   useEffect(() => {
@@ -32,28 +31,38 @@ function HomePage() {
     };
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLetterIndex(0);
-      setWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-    }, 2000);
 
+
+  useEffect(() => {
+  }, [scrollingUp]);
+
+  const [showScrollIcon, setShowScrollIcon] = useState(true);
+  const scrollDownIconRef = useRef(null);
+
+  const handleScrollDown = () => {
+    // Calculate the distance to scroll (adjust as needed)
+    const scrollDistance = window.innerHeight * 0.9; // Scroll down by half of the viewport height
+    window.scrollBy({ top: scrollDistance, behavior: 'smooth' });
+  };
+
+  const handleScroll = () => {
+    // Calculate the scroll position
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+    // Show/hide the scroll-down icon based on scroll position
+    setShowScrollIcon(scrollY < pageHeight);
+  };
+
+  useEffect(() => {
+    // Attach a scroll event listener to the window
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup the listener when the component unmounts
     return () => {
-      clearInterval(interval);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    if (letterIndex < words[wordIndex].length && scrollingUp) {
-      const timeout = setTimeout(() => {
-        setLetterIndex((prevIndex) => prevIndex + 1);
-      }, 100);
-
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
-  }, [wordIndex, letterIndex, scrollingUp]);
 
   return (
     <div>
@@ -63,6 +72,13 @@ function HomePage() {
       <Features />
       <About />
       <Download />
+
+      {showScrollIcon && (
+        <div className="scroll-down-icon" onClick={handleScrollDown} ref={scrollDownIconRef}>
+          <img src={ScrollDownIcon} alt="Scroll Down" />
+          <p>Scroll down for more</p>
+        </div>
+      )}
     </div>
   );
 }

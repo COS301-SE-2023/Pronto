@@ -255,3 +255,35 @@
   width: 200px;
   margin-bottom: 20px;
 }
+
+.scroll-down-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 1s infinite alternate; /* Create a pulsating effect */
+}
+
+.scroll-down-icon img {
+  width: 30px; /* Adjust the icon size as needed */
+  height: auto;
+}
+
+.scroll-down-icon p {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #e32f45; /* Adjust the text color as needed */
+}
+
+/* Define the pulsating animation */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
