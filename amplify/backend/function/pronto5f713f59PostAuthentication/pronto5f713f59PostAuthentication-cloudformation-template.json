@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.1.1\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Linux\",\"createdBy\":\"AmplifyAdmin\",\"createdWith\":\"12.4.0-rc.244e092066968a2.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "modules": {
       "Type": "String",
@@ -38,21 +38,6 @@
       "Type": "String"
     },
     "s3Key": {
-      "Type": "String"
-    },
-    "appClientId": {
-      "Type": "String"
-    },
-    "appClientIdWeb": {
-      "Type": "String"
-    },
-    "studentsGroupName": {
-      "Type": "String"
-    },
-    "lecturersGroupName": {
-      "Type": "String"
-    },
-    "adminGroupName": {
       "Type": "String"
     }
   },
@@ -103,21 +88,6 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
-            },
-            "AppClientId": {
-              "Ref": "appClientId"
-            },
-            "AppClientIdWeb": {
-              "Ref": "appClientIdWeb"
-            },
-            "StudentsGroupName": {
-              "Ref": "studentsGroupName"
-            },
-            "LecturersGroupName": {
-              "Ref": "lecturersGroupName"
-            },
-            "AdminGroupName": {
-              "Ref": "adminGroupName"
             }
           }
         },

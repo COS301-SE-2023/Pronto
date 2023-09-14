@@ -51,6 +51,9 @@
       "PostAuthentication": [
         "custom"
       ],
+      "PostConfirmation": [
+        "add-to-group"
+      ],
       "PreSignup": [
         "custom"
       ]
@@ -94,21 +97,29 @@
           "Arn",
           "Name"
         ]
+      },
+      {
+        "category": "function",
+        "resourceName": "pronto5f713f59PostConfirmation",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
       }
     ],
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "permissions": [],
+    "permissions": [
+      "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}"
+    ],
     "adminQueryGroup": "adminUserGroup",
     "thirdPartyAuth": false,
     "userPoolGroups": false,
     "adminQueries": false,
     "hostedUI": false,
     "authProviders": [],
-    "authTriggerConnections": [
-      "{\"triggerType\":\"PostAuthentication\",\"lambdaFunctionName\":\"pronto5f713f59PostAuthentication\"}",
-      "{\"triggerType\":\"PreSignUp\",\"lambdaFunctionName\":\"pronto5f713f59PreSignup\"}"
-    ]
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PostAuthentication\",\n    \"lambdaFunctionName\": \"pronto5f713f59PostAuthentication\"\n  },\n  {\n    \"triggerType\": \"PostConfirmation\",\n    \"lambdaFunctionName\": \"pronto5f713f59PostConfirmation\"\n  },\n  {\n    \"triggerType\": \"PreSignUp\",\n    \"lambdaFunctionName\": \"pronto5f713f59PreSignup\"\n  }\n]"
   }
 }

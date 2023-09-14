@@ -83,6 +83,15 @@
           "category": "function",
           "resourceName": "pronto5f713f59PreSignup",
           "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "pronto5f713f59PostConfirmation",
+          "triggerProvider": "Cognito"
         }
       ],
       "frontendAuthConfig": {
@@ -147,6 +156,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "pronto5f713f59PostConfirmation": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "pronto5f713f59PreSignup": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -178,39 +192,7 @@
         }
       ]
     },
-    "AMPLIFY_function_pronto5f713f59PostAuthentication_adminGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostAuthentication"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostAuthentication_appClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostAuthentication"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostAuthentication_appClientIdWeb": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostAuthentication"
-        }
-      ]
-    },
     "AMPLIFY_function_pronto5f713f59PostAuthentication_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PostAuthentication"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PostAuthentication_lecturersGroupName": {
       "usedBy": [
         {
           "category": "function",
@@ -226,51 +208,11 @@
         }
       ]
     },
-    "AMPLIFY_function_pronto5f713f59PostAuthentication_studentsGroupName": {
+    "AMPLIFY_function_pronto5f713f59PostConfirmation_GROUP": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "pronto5f713f59PostAuthentication"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_adminGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_apiApiProntoGraphqlapiendpoint": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_apiApiProntoGraphqlapikey": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_appClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_appClientIdWeb": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
+          "resourceName": "pronto5f713f59PostConfirmation"
         }
       ]
     },
@@ -282,23 +224,7 @@
         }
       ]
     },
-    "AMPLIFY_function_pronto5f713f59PreSignup_lecturersGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
     "AMPLIFY_function_pronto5f713f59PreSignup_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pronto5f713f59PreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_pronto5f713f59PreSignup_studentsGroupName": {
       "usedBy": [
         {
           "category": "function",

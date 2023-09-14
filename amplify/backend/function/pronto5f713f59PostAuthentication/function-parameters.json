@@ -8,31 +8,10 @@
   "resourceName": "pronto5f713f59PostAuthentication",
   "parentStack": "auth",
   "triggerEnvs": "[]",
-  "triggerDir": "/snapshot/repo/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PostAuthentication",
+  "triggerDir": "/snapshot/amplify-cli/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PostAuthentication",
   "triggerTemplate": "PostAuthentication.json.ejs",
   "triggerEventPath": "PostAuthentication.event.json",
   "roleName": "pronto5f713f59PostAuthentication",
   "skipEdit": true,
-  "environmentVariableList": [
-    {
-      "cloudFormationParameterName": "appClientId",
-      "environmentVariableName": "AppClientId"
-    },
-    {
-      "cloudFormationParameterName": "appClientIdWeb",
-      "environmentVariableName": "AppClientIdWeb"
-    },
-    {
-      "cloudFormationParameterName": "studentsGroupName",
-      "environmentVariableName": "StudentsGroupName"
-    },
-    {
-      "cloudFormationParameterName": "lecturersGroupName",
-      "environmentVariableName": "LecturersGroupName"
-    },
-    {
-      "cloudFormationParameterName": "adminGroupName",
-      "environmentVariableName": "AdminGroupName"
-    }
-  ]
+  "environmentVariableList": []
 }
