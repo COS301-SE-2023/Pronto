@@ -80,29 +80,35 @@ jobs:
             npm install
             npm test
 
-  build:
-    strategy:
-      matrix:
-        node_version: [12.x]
-    runs-on: ubuntu-latest
-    steps:      
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          version: ${{ matrix.node_version }}
-      - name: Remove File
-        uses: JesseTG/rm@v1.0.3
-        with:
-          path: amplify
+  build-amplify:
+   runs-on: ubuntu-latest
+   strategy:
+     matrix:
+      node_version: [12.x]
+ 
+   steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
 
-      - name: Install Amplify CLI & Building Project
-        env:
-          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-        run: |
-          npm install -g @aws-amplify/cli 
-          bash scripts/initialise-amplify.sh
-          amplify build
+    - name: Use Node.js ${{ matrix.node_version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node_version }}
+
+    - name: Install Amplify CLI
+      run: npm install -g @aws-amplify/cli
+
+    - name: Configure AWS Credentials
+      run: |
+        echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+        echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+
+    - name: Initialize Amplify
+      run: bash scripts/initialize-amplify.sh
+
+    - name: Build Amplify Project
+      run: amplify build
+
 
  # cypress:
  #   runs-on: ubuntu-latest
