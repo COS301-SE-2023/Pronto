@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import "./App.css"
+import "./Styles/App.css"
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';

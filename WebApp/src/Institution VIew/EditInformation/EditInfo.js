@@ -6,8 +6,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Auth, Storage, API } from 'aws-amplify'
-import { ErrorModal } from '../../ErrorModal';
-import { SuccessModal } from '../../SuccessModal';
+import { ErrorModal } from "../../Error pages/ErrorModal";
+import { SuccessModal } from '../../Error pages/SuccessModal';
 import { updateInstitution } from '../../graphql/mutations';
 import '../Navigation/Navigation.css';
 import HelpButton from '../../HelpButton';
