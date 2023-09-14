@@ -39,6 +39,18 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "apiApiProntoGraphqlapikey": {
+      "Type": "String"
+    },
+    "apiApiProntoGraphqlapiendpoint": {
+      "Type": "String"
+    },
+    "appClientId": {
+      "Type": "String"
+    },
+    "appClientIdWeb": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -88,6 +100,18 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "API_API_PRONTO_GRAPHQLAPIKEY": {
+              "Ref": "apiApiProntoGraphqlapikey"
+            },
+            "API_API_PRONTO_GRAPHQLAPIENDPOINT": {
+              "Ref": "apiApiProntoGraphqlapiendpoint"
+            },
+            "AppClientId": {
+              "Ref": "appClientId"
+            },
+            "AppClientIdWeb": {
+              "Ref": "appClientIdWeb"
             }
           }
         },

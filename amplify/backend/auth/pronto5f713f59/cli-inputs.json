@@ -79,7 +79,7 @@
     "dependsOn": [
       {
         "category": "function",
-        "resourceName": "pronto5f713f59PreSignup",
+        "resourceName": "pronto5f713f59PostConfirmation",
         "triggerProvider": "Cognito",
         "attributes": [
           "Arn",
@@ -88,7 +88,7 @@
       },
       {
         "category": "function",
-        "resourceName": "pronto5f713f59PostConfirmation",
+        "resourceName": "pronto5f713f59PreSignup",
         "triggerProvider": "Cognito",
         "attributes": [
           "Arn",

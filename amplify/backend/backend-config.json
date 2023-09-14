@@ -72,7 +72,7 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "pronto5f713f59PreSignup",
+          "resourceName": "pronto5f713f59PostConfirmation",
           "triggerProvider": "Cognito"
         },
         {
@@ -81,7 +81,7 @@
             "Name"
           ],
           "category": "function",
-          "resourceName": "pronto5f713f59PostConfirmation",
+          "resourceName": "pronto5f713f59PreSignup",
           "triggerProvider": "Cognito"
         }
       ],
@@ -183,6 +183,94 @@
         {
           "category": "function",
           "resourceName": "pronto5f713f59PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostConfirmation_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostConfirmation_appClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostConfirmation_appClientIdWeb": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostConfirmation_lecturersGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PostConfirmation_studentsGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_apiApiProntoGraphqlapiendpoint": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_apiApiProntoGraphqlapikey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_appClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_pronto5f713f59PreSignup_appClientIdWeb": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pronto5f713f59PreSignup"
         }
       ]
     },
