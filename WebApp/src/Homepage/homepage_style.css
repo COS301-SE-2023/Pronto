@@ -1,5 +1,3 @@
-
-
 .topline{
     display: block;
     position: relative;
@@ -14,7 +12,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
-
+  width: 100%;
+  height: 100%;
 }
 
 .cols {
@@ -123,23 +122,13 @@
     color: #fff; /* Set text color on hover */
   }
 
-  .features {
-    width: 100%;
-    position: absolute;
-    top: 95%; /* Adjust the top value as needed */
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    text-align: center;
-}
 
 .feature-container {
   display: flex;
+  width: 100%;
+  height: 100%;
   justify-content: space-between;
   text-align: center;
-  margin-top: 20px;
   position: absolute;
   top: 95%; /* Adjust the top value as needed */
   left: 0;
@@ -196,7 +185,7 @@
   width: 100%;
   height: 80%;
   position: absolute;
-  top: 160%; /* Adjust the top value as needed */
+  top: 175%; /* Adjust the top value as needed */
   left: 0;
   display: flex;
   justify-content: space-between;
@@ -235,7 +224,7 @@
   height: 80%;
   position: absolute;
   left: 0;
-  top: 220%; /* Adjust the top value as needed */
+  top: 260%; /* Adjust the top value as needed */
   display: flex;
   align-items: center; /* Vertically center the content */
   justify-content: space-between;

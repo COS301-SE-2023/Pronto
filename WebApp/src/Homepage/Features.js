@@ -38,24 +38,23 @@ function Features() {
 
     return (
 
-        <div className='features' id="featuresSection">
 
-            <div className='feature-container'>
-                <h1 className='feature-heading'>Features</h1>
-                {featuresInColumns.map((column, columnIndex) => (
-                    <div className='feature-column' key={columnIndex}>
-                        {column.map((feature, index) => (
-                            <div className='feature-box' key={index}>
-                                <img src={feature.imageUrl} alt={feature.title} />
-                                <h2 className='feature-heading'>{feature.title}</h2>
-                                <p className='feature-description'>{feature.description}</p>
-                            </div>
-                        ))}
-                    </div>
-                ))}
+        <div className='feature-container' id="featuresSection">
+            <h1 className='feature-heading'>Features</h1>
+            {featuresInColumns.map((column, columnIndex) => (
+                <div className='feature-column' key={columnIndex}>
+                    {column.map((feature, index) => (
+                        <div className='feature-box' key={index}>
+                            <img src={feature.imageUrl} alt={feature.title} />
+                            <h2 className='feature-heading'>{feature.title}</h2>
+                            <p className='feature-description'>{feature.description}</p>
+                        </div>
+                    ))}
+                </div>
+            ))}
 
-            </div>
         </div>
+
     );
 }
 

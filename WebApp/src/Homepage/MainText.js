@@ -55,20 +55,17 @@ function MainText() {
     };
 
     return (
-
-        <div className='containerHome'>
-            <div className='wrapper'>
-                <div className="cols cols0">
-                    <span className='topline'>The future of education</span>
-                    <h1 class="heading">
-                        For <span className='multiText'>{currentWord}</span>
-                        {showCursor && <span className='cursor'>|</span>}
-                    </h1>
-                </div>
-                <div className="buttons">
-                    <button class="button" onClick={handleInstitutionClick}>Continue as Institution &#x2192;</button>
-                    <button class="button" onClick={handleLecturerClick}>Continue as Lecturer &#x2192;</button>
-                </div>
+        <div className='wrapper'>
+            <div className="cols cols0">
+                <span className='topline'>The future of education</span>
+                <h1 class="heading">
+                    For <span className='multiText'>{currentWord}</span>
+                    {showCursor && <span className='cursor'>|</span>}
+                </h1>
+            </div>
+            <div className="buttons">
+                <button class="button" onClick={handleInstitutionClick}>Continue as Institution &#x2192;</button>
+                <button class="button" onClick={handleLecturerClick}>Continue as Lecturer &#x2192;</button>
             </div>
         </div>
 
