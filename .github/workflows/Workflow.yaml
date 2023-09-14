@@ -1,4 +1,4 @@
-name: Build Mobile App with Amplify Backend
+name: Build Mobile,Web App and Amplify Backend
 
 on:
   push:
@@ -81,33 +81,24 @@ jobs:
             npm test
 
   build-amplify:
-   runs-on: ubuntu-latest
-   strategy:
-     matrix:
-      node_version: [12.x]
- 
-   steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+    runs-on: ubuntu-latest
 
-    - name: Use Node.js ${{ matrix.node_version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node_version }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
 
-    - name: Install Amplify CLI
-      run: npm install -g @aws-amplify/cli
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
 
-    - name: Configure AWS Credentials
-      run: |
-        echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
-        echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+      - name: Install Amplify CLI
+        run: npm install -g @aws-amplify/cli
 
-    - name: Initialize Amplify
-      run: bash scripts/initialize-amplify.sh
-
-    - name: Build Amplify Project
-      run: amplify build
+      - name: Build Amplify Project
+        run: amplify build
 
 
  # cypress:
