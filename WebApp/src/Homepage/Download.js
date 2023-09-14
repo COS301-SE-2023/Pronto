@@ -5,7 +5,7 @@ import IOSQR from "../images/IOSQR.png";
 
 function Download() {
     return (
-        <div className='download-container'>
+        <div id="downloadSection" className='download-container'>
             <h1 className='feature-heading'>Download</h1>
             <div className="download-image-container">
                 <img className="download-image" src={DownloadImage} alt="AboutImage" />

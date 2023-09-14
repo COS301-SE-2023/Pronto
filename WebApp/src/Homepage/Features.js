@@ -38,7 +38,7 @@ function Features() {
 
     return (
 
-        <div className='features'>
+        <div className='features' id="featuresSection">
 
             <div className='feature-container'>
                 <h1 className='feature-heading'>Features</h1>
