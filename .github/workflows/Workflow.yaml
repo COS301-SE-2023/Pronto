@@ -85,27 +85,7 @@ jobs:
       matrix:
         node_version: [12.x]
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-
-      # We need to AWS CLI to configure the account and profile credentials.
-      # Note: The --profile {default} needs to be the same that the profileName in the init.sh
-      - name: Install AWS CLI
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip -u awscliv2.zip
-          sudo ./aws/install --update
-      - name: Configure credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-        run: |
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
-          aws configure set default.region us-east-1
+    steps:      
       - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v1
         with:
