@@ -1,7 +1,7 @@
-const addToGroup = require("../../../../function/pronto5f713f59PostAuthentication/src/add-to-group");
-const adminEvent = require("../../../../function/pronto5f713f59PostAuthentication/src/events/admin.event.json");
-const lecturerEvent = require("../../../../function/pronto5f713f59PostAuthentication/src/events/lecturers.event.json");
-const studentsEvent = require("../../../../function/pronto5f713f59PostAuthentication/src/events/students.event.json");
+const addToGroup = require("../../../../function/pronto5f713f59PostConfirmation/src/add-to-group");
+const adminEvent = require("../../../../function/pronto5f713f59PostConfirmation/src/events/admin.event.json");
+const lecturerEvent = require("../../../../function/pronto5f713f59PostConfirmation/src/events/lecturers.event.json");
+const studentsEvent = require("../../../../function/pronto5f713f59PostConfirmation/src/events/students.event.json");
 
 jest.mock("@aws-sdk/client-cognito-identity-provider", () => {
   return {
