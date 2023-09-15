@@ -12,7 +12,7 @@ import PlacesAutocomplete, {
   geocodeByPlaceId,
   getLatLng,
 } from 'react-places-autocomplete';
-
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import styled from "styled-components";
 import { createAnnouncement, updateActivity } from '../../Graphql/mutations';
 import { API } from 'aws-amplify';
