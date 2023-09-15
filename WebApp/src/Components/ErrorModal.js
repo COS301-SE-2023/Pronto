@@ -24,10 +24,6 @@ export function ErrorModal(errorMessage) {
 
   const [open, setOpen] = useState(true);
 
-  const handleOpen = async () => {
-    setOpen(true)
-  }
-
   const handleClose = async () => {
     setOpen(false)
     errorMessage.setError("")

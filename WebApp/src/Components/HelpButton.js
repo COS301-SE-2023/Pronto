@@ -12,7 +12,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 const HelpButton = ({ pdfUrl }) => {
     const [showPDF, setShowPDF] = useState(false);
     const [numPages, setNumPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
@@ -20,19 +19,6 @@ const HelpButton = ({ pdfUrl }) => {
 
     const togglePDF = () => {
         setShowPDF(!showPDF);
-    };
-
-    const goToPrevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const goToNextPage = () => {
-        if (currentPage < numPages) {
-            setCurrentPage(currentPage + 1);
-        }
-
     };
 
     return (
