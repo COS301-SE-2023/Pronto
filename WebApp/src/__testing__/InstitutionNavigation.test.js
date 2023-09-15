@@ -1,5 +1,5 @@
-import {render, screen, cleanup, fireEvent} from "@testing-library/react";
-import InstitutionNavigation from "../Institution VIew/Navigation/InstitutionNavigation";
+import {render, screen, fireEvent} from "@testing-library/react";
+import InstitutionNavigation from "../Institution View/Navigation/InstitutionNavigation";
 import {BrowserRouter as Router} from "react-router-dom";
 import { waitFor } from '@testing-library/react';
 import React from "react";
