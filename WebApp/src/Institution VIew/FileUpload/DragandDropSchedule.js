@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Amplify, Storage, Auth } from "aws-amplify";
-import ScheduleUpload from '../../images/ScheduleUpload.png';
-import HelpButton from '../../HelpButton';
+import ScheduleUpload from '../Images/ScheduleUpload.png';
+import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/Schedule.pdf";
 
 function DropzoneComponent() {
