@@ -134,6 +134,14 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_prontoPostSignUp_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoPostSignUp_deploymentBucketName": {
       "usedBy": [
         {
@@ -142,7 +150,23 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoPostSignUp_lecturerGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoPostSignUp_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPostSignUp_studentGroupName": {
       "usedBy": [
         {
           "category": "function",
