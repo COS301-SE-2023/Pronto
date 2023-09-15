@@ -69,7 +69,7 @@ const NavigationScreen = ({navigation}) => {
         } else {
             // In the future, this else statement will return the user to the home page
             Alert.alert("Location permission not granted");
-            navigation.navigate('ScheduleTable')
+           // navigation.navigate('ScheduleTable')
         }
     }
 
