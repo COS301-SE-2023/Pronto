@@ -11,18 +11,18 @@ const {
   isAdminAllocated,
   isStudentEmailDomainPartOfInstitution,
 } = require("../../prontoPreSignUp/src/assertInstitutionInfo");
-const isAppClientValid = require("./isAppClientValid.js");
+const isAppClientValid = require("../../prontoPreSignUp/src/isAppClientValid");
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
+
 exports.handler = async (event) => {
   console.table(event);
-  if (!event.request.clientMetadata.role)
-    throw new Error("User role not provided on clientMetadata");
-  if (!event.callerContext.clientId)
-    throw new Error("ClientId not provided on callerContext");
-  if (!Object.values(ROLES).includes(event.request.clientMetadata.role))
-    throw new Error("Invalid User Role");
+  if (
+    !event.request.clientMetadata.role ||
+    !Object.values(ROLES).includes(event.request.clientMetadata.role)
+  )
+    throw new Error("Invalid User Role or Role not provided");
   if (
     !isAppClientValid(
       event.callerContext.clientId,
