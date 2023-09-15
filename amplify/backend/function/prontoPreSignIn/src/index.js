@@ -5,19 +5,47 @@
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
-
+const ROLES = require("../../prontoPreSignUp/src/roles");
+const {
+  isLectureEmailPartOfInstitution,
+  isAdminAllocated,
+  isStudentEmailDomainPartOfInstitution,
+} = require("../../prontoPreSignUp/src/assertInstitutionInfo");
+const isAppClientValid = require("../../prontoPreSignUp/src/isAppClientValid");
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
+
 exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`);
-    return {
-        statusCode: 200,
-    //  Uncomment below to enable CORS requests
-    //  headers: {
-    //      "Access-Control-Allow-Origin": "*",
-    //      "Access-Control-Allow-Headers": "*"
-    //  },
-        body: JSON.stringify('Hello from Lambda!'),
-    };
+  console.table(event);
+  if (
+    !event.request.clientMetadata.role ||
+    !Object.values(ROLES).includes(event.request.clientMetadata.role)
+  )
+    throw new Error("Invalid User Role or Role not provided");
+  if (
+    !isAppClientValid(
+      event.callerContext.clientId,
+      event.request.clientMetadata.role
+    )
+  )
+    throw new Error(
+      `Cannot authenticate user from this app client: 
+      Students Should use the mobile app and Admin/Lectures should use the web app`
+    );
+
+  event.response.autoConfirmUser = false;
+  try {
+    if (
+      await isStudentEmailDomainPartOfInstitution(
+        event.request.userAttributes.email,
+        event.request.clientMetadata.institutionId
+      )
+    )
+      throw new Error("Students Should use the Pronto mobile app");
+  } catch (preAuthError) {
+    console.debug(preAuthError);
+    throw new Error(preAuthError);
+  }
+  return event;
 };
