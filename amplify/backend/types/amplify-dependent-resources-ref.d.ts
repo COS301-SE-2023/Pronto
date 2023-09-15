@@ -1,4 +1,11 @@
 export type AmplifyDependentResourcesAttributes = {
+  "api": {
+    "prontoGraphQlApi": {
+      "GraphQLAPIEndpointOutput": "string",
+      "GraphQLAPIIdOutput": "string",
+      "GraphQLAPIKeyOutput": "string"
+    }
+  },
   "auth": {
     "prontoAuth": {
       "AppClientID": "string",
@@ -13,6 +20,29 @@ export type AmplifyDependentResourcesAttributes = {
       "adminUserGroupGroupRole": "string",
       "lecturerUserGroupGroupRole": "string",
       "studentUserGroupGroupRole": "string"
+    }
+  },
+  "function": {
+    "prontoPostSignUp": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "prontoPreSignIn": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "prontoPreSignUp": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
     }
   }
 }
