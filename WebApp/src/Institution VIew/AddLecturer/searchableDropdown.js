@@ -10,9 +10,10 @@ export default function SearchableDropdown(props){
    const {admin,setAdmin}=useAdmin();
    const [searchTerm,setSearchTerm] =useState("");
    const [isOpen,setIsOpen] = useState(true);
-   const selectedCourses =props.selectedCourses;
-   const setSelectedCourses =props.setSelectedCourses;
+   //const selectedCourses =props.selectedCourses;
+   //const setSelectedCourses =props.setSelectedCourses;
    const [course,setCourse]=useState("");
+   const [selectedCourses,setSelectedCourses] = useState([]); 
 
 
    const handleInputChange = async(event) => {
@@ -42,7 +43,7 @@ export default function SearchableDropdown(props){
          let c=[];
          courseList=courseList.data.searchCourses.items.filter((a)=>a.lecturerId===null)     
          for(let i=0;i<courseList.length;i++){
-          if(props.selectedCourses.filter((a)=>a.id!==courseList[i].id)){
+          if(selectedCourses.filter((a)=>a.id!==courseList[i].id)){
             c.push(courseList[i]);
           }
          }
@@ -72,6 +73,8 @@ export default function SearchableDropdown(props){
     setCourse("");
     setSearchTerm("");
     setCourses([]);
+    selectedCourses.push(course);
+    setSelectedCourses(selectedCourses);
     setIsOpen(false);
   } 
 
