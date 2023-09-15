@@ -4,6 +4,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GoogleMapReact from 'google-map-react';
 
 import PlacesAutocomplete, {
@@ -19,6 +20,7 @@ import { ErrorModal } from '../../ErrorModal';
 import { SuccessModal } from "../../SuccessModal";
 import { useJsApiLoader } from "@react-google-maps/api";
 
+
 export default function PostAccordion(course) {
 
   const [expanded, setExpanded] = useState(false);
@@ -30,11 +32,14 @@ export default function PostAccordion(course) {
   const [successMessage, setSuccessMessage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [latLng,setLatLng] = useState("");  
+  const [lat,setLat]=useState(59.955413);
+  const [lng,setLng]=useState(30.337844);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  
   const handleApiLoaded = (map, maps) => {
     // use map and maps objects
   };
@@ -75,11 +80,10 @@ export default function PostAccordion(course) {
     try {
       const results = await geocodeByAddress(location);
       const latLngValue = await getLatLng(results[0]); // Here is the coordinates
-      console.log(latLngValue);
       setLatLng(latLngValue);
-      //Add code to add to database
-     // console.log(results[0]);
-     // console.log(latLngValue);
+      setLat(latLngValue.lat);
+      setLng(latLngValue.lng);
+      
     } catch (error) {
       console.error("Error fetching coordinates:", error);
     }
@@ -91,14 +95,8 @@ export default function PostAccordion(course) {
   }
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
-    libraries: ["places"],
+    libraries:course.libraries
   });
-
-  if (!isLoaded) {
-    return <div>Loading</div>;
-
-  }
-
 
   const handleSubmit = async (event, type) => {
     try {
@@ -295,7 +293,7 @@ export default function PostAccordion(course) {
               className="custom-select"
               placeholder="Select Activity"
             >
-              <option selected disabled>Select Activity</option>
+              <option value="">Select Activity</option>
               {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
                 return (
                   <option key={key}
@@ -305,10 +303,14 @@ export default function PostAccordion(course) {
               )
               }
             </select>
+            {isLoaded? 
+            (
             <form style={{ paddingTop: '15px' }} onSubmit={(e) => { handleAddVenue(e) }}>
+            
               <div className="form-group row">
                 <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
                 <div className="col-sm-10">
+              
                   <PlacesAutocomplete
                     value={selectedLocation}
                     onChange={setSelectedLocation}
@@ -350,19 +352,26 @@ export default function PostAccordion(course) {
                     bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API }}
                     defaultCenter={defaultProps.center}
                     defaultZoom={defaultProps.zoom}
-                    yesIWantToUseGoogleMapApiInternals
-
+                    //yesIWantToUseGoogleMapApiInternals  
                   >
                     <AnyReactComponent
-                      lat={59.955413}
-                      lng={30.337844}
-                      text="My Marker"
+                     // lat={59.955413}
+                     // lng={30.337844}
+                     lat={lat}
+                     lng={lng} 
+                     text="My Marker"
                     />
                   </GoogleMapReact>
+                  
                 </div>
               </div>
-              <button className="post-button">Add venue</button>
-            </form>
+            <button className="post-button">Add venue</button>
+              
+            </form> 
+            ) 
+            :
+            <div>Loading map...</div>
+            }
           </AccordionDetails>
         </Accordion>
 
