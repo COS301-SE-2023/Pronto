@@ -20,6 +20,10 @@
     {
       "cloudFormationParameterName": "lecturerGroupName",
       "environmentVariableName": "LECTURER_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "modules",
+      "environmentVariableName": "MODULES"
     }
   ]
 }

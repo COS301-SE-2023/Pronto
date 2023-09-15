@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1694770656661" clover="3.2.0">
-  <project timestamp="1694770656661" name="All files">
+<coverage generated="1694771692332" clover="3.2.0">
+  <project timestamp="1694771692332" name="All files">
     <metrics statements="144" coveredstatements="135" conditionals="49" coveredconditionals="44" methods="13" coveredmethods="13" elements="206" coveredelements="192" complexity="0" loc="144" ncloc="144" packages="2" files="7" classes="7"/>
     <package name="prontoPostSignUp.src">
       <metrics statements="46" coveredstatements="43" conditionals="15" coveredconditionals="15" methods="4" coveredmethods="4"/>
