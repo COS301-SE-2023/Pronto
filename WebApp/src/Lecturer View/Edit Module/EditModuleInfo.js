@@ -1,10 +1,10 @@
-import LecturerNavigation from "../LecturerNavigation";
+import LecturerNavigation from "../Navigation/LecturerNavigation";
 import PostAccordion from "../Edit Module/PostAccordion";
-import "../LectureHome.css";
+import "../Dashboard/LectureHome.css";
 import { useLocation } from "react-router-dom";
 import UserManual from "../HelpFiles/EditModuleInfo.pdf";
-import HelpButton from '../../HelpButton';
-import manageImage from "./Manage.png";
+import HelpButton from '../../Components/HelpButton';
+import manageImage from "../Images/Manage.png";
 
 const PostReminder = () => {
   const state = useLocation()
