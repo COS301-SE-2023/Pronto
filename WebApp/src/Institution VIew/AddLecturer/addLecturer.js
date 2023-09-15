@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
+
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses } from "../../Graphql/queries";
-
-import { API, Auth } from 'aws-amplify';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
-import SearchSharpIcon from '@mui/icons-material/SearchSharp';
-import ClearIcon from '@mui/icons-material/Clear';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
+
+import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import ClearIcon from '@mui/icons-material/Clear';
+
+import { API, Auth } from 'aws-amplify';
 
 const AddLecturer = () => {
 
