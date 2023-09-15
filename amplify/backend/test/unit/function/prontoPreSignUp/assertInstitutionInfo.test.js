@@ -6,7 +6,7 @@ const {
   getLectureEmailsFromInstitution,
   getInstitutionAdminId,
   getInstitutionEmailDomains,
-} = require("../../../../function/pronto5f713f59PreSignup/src/assertInstitutionInfo");
+} = require("../../../../function/prontoPreSignUp/src/assertInstitutionInfo");
 const institutionDetails = {
   adminId: "someAdminId",
   lectureremails: ["someLecturerEmail1", "someLecturerEmail2"],

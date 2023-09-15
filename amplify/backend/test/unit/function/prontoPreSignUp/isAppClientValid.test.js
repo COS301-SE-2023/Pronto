@@ -1,8 +1,8 @@
-const isAppClientValid = require("../../../../function/pronto5f713f59PreSignup/src/isAppClientValid");
-const ROLE = require("../../../../function/pronto5f713f59PreSignup/src/roles");
-const adminEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/admin.event.json");
-const lecturerEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/lecturers.event.json");
-const studentsEvent = require("../../../../function/pronto5f713f59PreSignup/src/events/students.event.json");
+const isAppClientValid = require("../../../../function/prontoPreSignUp/src/isAppClientValid");
+const ROLE = require("../../../../function/prontoPreSignUp/src/roles");
+const adminEvent = require("../../../../function/prontoPreSignUp/src/events/admin.event.json");
+const lecturerEvent = require("../../../../function/prontoPreSignUp/src/events/lecturers.event.json");
+const studentsEvent = require("../../../../function/prontoPreSignUp/src/events/students.event.json");
 
 describe("input validation", () => {
   test("should throw Invalid User Role", () => {
