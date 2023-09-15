@@ -18,7 +18,7 @@ import { createAnnouncement, updateActivity } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
 import { ErrorModal } from '../../ErrorModal';
 import { SuccessModal } from "../../SuccessModal";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useJsApiLoader,GoogleMap,Marker } from "@react-google-maps/api";
 
 
 export default function PostAccordion(course) {
@@ -34,7 +34,7 @@ export default function PostAccordion(course) {
   const [latLng,setLatLng] = useState("");  
   const [lat,setLat]=useState(59.955413);
   const [lng,setLng]=useState(30.337844);
-
+  const[isMapLoaded,setIsMapLoaded]=useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -93,10 +93,13 @@ export default function PostAccordion(course) {
   {
     /*Default location for the map*/
   }
-  const { isLoaded } = useJsApiLoader({
+
+
+  const { isLoaded } =  useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
     libraries:course.libraries
-  });
+  })
+
 
   const handleSubmit = async (event, type) => {
     try {
@@ -348,21 +351,14 @@ export default function PostAccordion(course) {
 
               <div className="map">
                 <div style={{ height: '50vh', width: '100%' }}>
-                  <GoogleMapReact
-                    bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API }}
-                    defaultCenter={defaultProps.center}
-                    defaultZoom={defaultProps.zoom}
-                    //yesIWantToUseGoogleMapApiInternals  
-                  >
-                    <AnyReactComponent
-                     // lat={59.955413}
-                     // lng={30.337844}
-                     lat={lat}
-                     lng={lng} 
-                     text="My Marker"
-                    />
-                  </GoogleMapReact>
-                  
+                       <GoogleMap
+                          mapContainerClassName="map"
+                          center={{ lat: lat, lng: lng }}
+                          zoom={18}
+                        >
+                          <Marker position={{ lat: lat, lng: lng }} />
+                      </GoogleMap>
+
                 </div>
               </div>
             <button className="post-button">Add venue</button>
