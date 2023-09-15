@@ -14,7 +14,7 @@ const isAppClientValid = require("../../prontoPreSignUp/src/isAppClientValid");
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 
-const isInstitideAdminOrLecturer = async (institutionId, mail, role) => {
+const isInstitideAdminOrLecturer = async (email, institutionId, role) => {
   if (!email || !institutionId)
     throw new Error(`Invalid institution Id or email`);
   try {
@@ -64,10 +64,11 @@ exports.handler = async (event) => {
   event.response.autoConfirmUser = false;
   try {
     if (
-      await isStudentEmailDomainPartOfInstitution(
+      await isInstitideAdminOrLecturer(
         event.request.userAttributes.email,
-        event.request.clientMetadata.institutionId
-      )
+        event.request.clientMetadata.institutionId,
+        event.request.clientMetadata.role
+      ) && process.env.COGNITO
     )
       throw new Error("Students Should use the Pronto mobile app");
   } catch (preAuthError) {
