@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './homepage_style.css';
-import ProntoLogo from "../Authentication/Institution/ProntoLogo.svg";
-import { useNavigate, useLocation } from "react-router-dom";
-import Features from './Features';
-import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 function MainText() {
     const words = ["Universities", "Lecturers", "Students"];
