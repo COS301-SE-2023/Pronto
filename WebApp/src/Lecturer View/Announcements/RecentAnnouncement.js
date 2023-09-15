@@ -2,22 +2,22 @@ import { useEffect, useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
-import LecturerNavigation from "./LecturerNavigation";
-import "./LectureHome.css";
+import LecturerNavigation from "../Navigation/LecturerNavigation";
+import "../Dashboard/LectureHome.css";
 import { API, Auth } from 'aws-amplify';
-import { listLecturers, announcementsByDate } from '../graphql/queries';
-import { deleteAnnouncement } from '../graphql/mutations';
-import { ErrorModal } from '../ErrorModal';
+import { listLecturers, announcementsByDate } from '../../Graphql/queries';
+import { deleteAnnouncement } from '../../Graphql/mutations';
+import { ErrorModal } from '../../Components/ErrorModal';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import UserManual from "./HelpFiles/Announcements.pdf";
-import HelpButton from '../HelpButton';
-import { useAnnouncement } from '../ContextProviders/AnnouncementContext';
-import { useLecturer } from '../ContextProviders/LecturerContext';
-import recentAnnouncementImage from "./recentAnnouncementImage.png"
+import UserManual from "../HelpFiles/Announcements.pdf";
+import HelpButton from '../../Components/HelpButton';
+import { useAnnouncement } from '../../ContextProviders/AnnouncementContext';
+import { useLecturer } from '../../ContextProviders/LecturerContext';
+import recentAnnouncementImage from "../Images/recentAnnouncementImage.png"
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {

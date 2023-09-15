@@ -5,7 +5,7 @@ import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { listLecturers } from "../../graphql/queries";
+import { listLecturers } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 
 function Login() {
@@ -45,7 +45,11 @@ function Login() {
     {
       value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
       label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
-    },
+    }, 
+    {
+       value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
+       label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
+    }
   ];
 
   const navigate = useNavigate();

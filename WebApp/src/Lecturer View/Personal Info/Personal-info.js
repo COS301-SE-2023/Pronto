@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
-import LecturerNavigation from './LecturerNavigation';
+import LecturerNavigation from '../Navigation/LecturerNavigation';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import '../Institution VIew/Navigation/Navigation.css';
+import '../../Institution View/Navigation/Navigation.css';
 import { Auth, API } from 'aws-amplify'
-import { ErrorModal } from '../ErrorModal';
-import { SuccessModal } from "../SuccessModal"
-import { listLecturers } from '../graphql/queries';
-import UserManual from "./HelpFiles/PersonalInfo.pdf";
-import HelpButton from '../HelpButton';
-import { useLecturer } from '../ContextProviders/LecturerContext';
-import personalInformationImage from "./EditPersonalInfo.png";
+import { ErrorModal } from "../../Components/ErrorModal";
+import { SuccessModal } from "../../Components/SuccessModal"
+import { listLecturers } from '../../Graphql/queries';
+import UserManual from "../HelpFiles/PersonalInfo.pdf";
+import HelpButton from '../../Components/HelpButton';
+import { useLecturer } from '../../ContextProviders/LecturerContext';
+import personalInformationImage from "../Images/EditPersonalInfo.png";
 
 const PersonalInfoPage = () => {
     const [expanded, setExpanded] = useState(false);

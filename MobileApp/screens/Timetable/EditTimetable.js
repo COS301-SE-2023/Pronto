@@ -75,9 +75,10 @@ const EditTimetable = ({ navigation }) => {
             }
           }
         })
-        setCourses(search.data.searchCourses.items)
+        setCourses(search.data.searchCourses.items.filter((item)=>item.institutionId===student.institutionId));
       } catch (e) {
-        Alert.alert(error)
+        console.log(e);
+        Alert.alert(error);
       }
     }
   }

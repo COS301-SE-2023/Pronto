@@ -6,11 +6,11 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Auth, Storage, API } from 'aws-amplify'
-import { ErrorModal } from '../../ErrorModal';
-import { SuccessModal } from '../../SuccessModal';
-import { updateInstitution } from '../../graphql/mutations';
+import { ErrorModal } from "../../Components/ErrorModal";
+import { SuccessModal } from '../../Components/SuccessModal';
+import { updateInstitution } from '../../Graphql/mutations';
 import '../Navigation/Navigation.css';
-import HelpButton from '../../HelpButton';
+import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";
 import { useAdmin } from '../../ContextProviders/AdminContext';
 

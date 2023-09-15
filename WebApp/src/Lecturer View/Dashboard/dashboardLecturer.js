@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styled from "styled-components";
-import LecturerNavigation from "../LecturerNavigation";
+import LecturerNavigation from "../Navigation/LecturerNavigation";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
-import HelpButton from '../../HelpButton';
+import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/LecturerInstructions.pdf";
 import { useNavigate } from 'react-router-dom';
-import EditNoteImage from './EditModuleInfo.png';
-import AnnouncementImage from './Announcements.png';
-import PersonalInfoImage from './Personalnfo.png';
+import EditNoteImage from '../Images/EditModuleInfo.png';
+import AnnouncementImage from '../Images/Announcements.png';
+import PersonalInfoImage from '../Images/Personalnfo.png';
 
 const DashboardLecturer = () => {
     const navigate = useNavigate();
