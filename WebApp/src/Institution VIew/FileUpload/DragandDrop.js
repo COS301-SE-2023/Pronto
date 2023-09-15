@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Amplify, Storage, Auth } from "aws-amplify";
+
 import FileUpload from '../Images/FileUpload.png';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/StudentFiles.pdf";
+
+import { Storage, Auth } from "aws-amplify";
 
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
