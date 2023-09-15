@@ -9,9 +9,9 @@ export const useAnnouncement = () => {
 export const AnnouncementProvider = ({ children }) => {
   const [announcement, setAnnouncement] = useState([]);
   const [nextToken,setNextToken] =useState(null);
-  const updateAnnouncement = (newAnnouncement) => {
+  /*const updateAnnouncement = (newAnnouncement) => {
     setAnnouncement(newAnnouncement);
-  };
+  };*/
 
   return (
     <AnnouncementContext.Provider value={{ announcement,setAnnouncement,nextToken,setNextToken }}>

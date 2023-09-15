@@ -9,9 +9,9 @@ export const useLecturer = () => {
 export const LecturerProvider = ({ children }) => {
   const [lecturer, setLecturer] = useState(null);
 
-  const updateLecturer = (newLecturer) => {
+ /* const updateLecturer = (newLecturer) => {
     setLecturer(newLecturer);
-  };
+  };*/
 
   return (
     <LecturerContext.Provider value={{ lecturer, setLecturer }}>
