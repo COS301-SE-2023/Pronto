@@ -7,15 +7,29 @@
 Amplify Params - DO NOT EDIT */
 const ROLES = require("../../prontoPreSignUp/src/roles");
 const {
-  isLectureEmailPartOfInstitution,
-  isAdminAllocated,
-  isStudentEmailDomainPartOfInstitution,
+  getAndSetInstitutionDetails,
 } = require("../../prontoPreSignUp/src/assertInstitutionInfo");
 const isAppClientValid = require("../../prontoPreSignUp/src/isAppClientValid");
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 
+const isInstitideAdminOrLecturer = async (institutionId, mail, role) => {
+  if (!email || !institutionId)
+    throw new Error(`Invalid institution Id or email`);
+  try {
+    const institutionetails = await getAndSetInstitutionDetails(institutionId);
+    if (!institutionetails)
+      throw new Error(`Failed To retrieve institution details`);
+    switch (role) {
+      case ROLES.Admin:
+
+      case ROLES.Lecture:
+
+      default:
+    }
+  } catch (error) {}
+};
 exports.handler = async (event) => {
   console.table(event);
   if (
