@@ -1,7 +1,7 @@
 import React from 'react';
 import './homepage_style.css';
-import DownloadImage from "../Images/DownloadApp.png";
-import IOSQR from "../Images/IOSQR.png";
+import DownloadImage from "../images/DownloadApp.png";
+import IOSQR from "../images/IOSQR.png";
 
 function Download() {
     return (

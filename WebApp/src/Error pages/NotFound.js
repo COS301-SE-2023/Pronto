@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import "./error.css";
-import ProntoSvg from '../Images/ProntoLogo.svg';
+import ProntoSvg from '../images/ProntoLogo.svg';
 
 function NotFound() {
     const navigate = useNavigate();

@@ -14,7 +14,7 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import styled from "styled-components";
-import { createAnnouncement, updateActivity } from '../../Graphql/mutations';
+import { createAnnouncement, updateActivity } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
 import { ErrorModal } from "../../Components/ErrorModal";
 import {SuccessModal} from "../../Components/SuccessModal";

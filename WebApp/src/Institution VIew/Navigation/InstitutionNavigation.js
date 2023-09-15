@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Navigation.css";
-import logo from "../../Images/university_logo.svg";
 import { Auth, Storage, API } from "aws-amplify";
-import { listAdmins, listInstitutions, lecturersByInstitutionId } from "../../Graphql/queries";
+import { listAdmins, listInstitutions, lecturersByInstitutionId } from "../../graphql/queries";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import InstitutionNavigation from '../Navigation/InstitutionNavigation';
+import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Auth, Storage, API } from 'aws-amplify'
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from '../../Components/SuccessModal';
-import { updateInstitution } from '../../Graphql/mutations';
+import { updateInstitution } from '../../graphql/mutations';
 import '../Navigation/Navigation.css';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";

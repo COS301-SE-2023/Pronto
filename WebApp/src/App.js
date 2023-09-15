@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import LecturerLogin from "./Authentication/Lecturer/Login";
+import LecturerLogin from "./Authentication/Lecturer/Login.js";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
 
@@ -9,11 +9,11 @@ import InstitutionForgotPassword from "./Authentication/Institution/ForgotPasswo
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
 
-import AddLecturer from "./Institution View/AddLecturer/addLecturer";
-import FileUploadPage from "./Institution View/FileUpload/FileUploadPage";
-import EditUniversityInfo from "./Institution View/EditInformation/EditInfo";
-import StudentFileUploadPage from "./Institution View/FileUpload/StudentFileUpload";
-import InstitutionDashboard from "./Institution View/Dashboard/Dashboard";
+import AddLecturer from "./Institution VIew/AddLecturer/addLecturer.js";
+import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
+import EditInfoPage from "./Institution VIew/EditInformation/EditInfo";
+import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
+import InstitutionDashboard from "./Institution VIew/Dashboard/Dashboard";
 
 import EditModuleInfo from "./Lecturer View/Edit Module/EditModuleInfo";
 import Modules from "./Lecturer View/Edit Module/Modules";
@@ -34,7 +34,7 @@ import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext";
 import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import config from "./Components/aws-exports";
+import config from "./aws-exports";
 
 Auth.configure(config);
 Amplify.configure(config);
@@ -109,7 +109,7 @@ function MyRoutes() {
           path="/institution/edit-info"
           element={
             <RequireAdminAuth>
-              <EditUniversityInfo />
+              <EditInfoPage />
             </RequireAdminAuth>
           }
         />

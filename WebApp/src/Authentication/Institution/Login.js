@@ -4,7 +4,7 @@ import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { listAdmins } from "../../Graphql/queries";
+import { listAdmins } from "../../graphql/queries";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 
 function Login() {
@@ -138,8 +138,9 @@ function Login() {
           role: "Admin",
         },
       });
+     
       setsignUpError("");
-      navigate("/institution/confirm-email", { state: { email: email } });
+      //navigate("/institution/confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message);
     }
