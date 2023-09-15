@@ -21,8 +21,11 @@ const isAppClientValid = require("./isAppClientValid.js");
  */
 exports.handler = async (event) => {
   console.table(event);
-  if (!event.request.clientMetadata.role)
-    throw new Error("User role not provided on ClientMetadata");
+  if (
+    !event.request.clientMetadata.role ||
+    !Object.values(ROLES).includes(event.request.clientMetadata.role)
+  )
+    throw new Error("Invalid User Role or Role not provided");
   if (
     !isAppClientValid(
       event.callerContext.clientId,
@@ -56,10 +59,10 @@ exports.handler = async (event) => {
         break;
       case ROLES.Student:
         if (
-          !await isStudentEmailDomainPartOfInstitution(
+          !(await isStudentEmailDomainPartOfInstitution(
             event.request.userAttributes.email,
             event.request.clientMetadata.institutionId
-          )
+          ))
         )
           throw new Error(
             `The provided student email does not match the selected institutions student emails format.
