@@ -20,6 +20,7 @@ console.table(cognitoIdentityServiceProviderClient);
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
 exports.handler = async (event) => {
+  console.table(event);
   if (
     !event.request.clientMetadata.role ||
     !Object.values(ROLES).includes(event.request.clientMetadata.role)
