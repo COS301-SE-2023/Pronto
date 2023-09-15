@@ -19,6 +19,15 @@
     "authprontoAuthUserPoolId": {
       "Type": "String",
       "Default": "authprontoAuthUserPoolId"
+    },
+    "studentGroupName": {
+      "Type": "String"
+    },
+    "adminGroupName": {
+      "Type": "String"
+    },
+    "lecturerGroupName": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -76,6 +85,15 @@
             },
             "AUTH_PRONTOAUTH_USERPOOLID": {
               "Ref": "authprontoAuthUserPoolId"
+            },
+            "STUDENT_GROUP_NAME": {
+              "Ref": "studentGroupName"
+            },
+            "ADMIN_GROUP_NAME": {
+              "Ref": "adminGroupName"
+            },
+            "LECTURER_GROUP_NAME": {
+              "Ref": "lecturerGroupName"
             }
           }
         },
