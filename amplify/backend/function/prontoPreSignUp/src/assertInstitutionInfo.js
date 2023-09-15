@@ -15,7 +15,10 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     query getInstitutionQuery($input: ID!) {
       getInstitution(id: $input) {
         name
-        adminId
+        admin {
+          id
+          email
+        }
         domains
         lectureremails
       }
@@ -43,8 +46,8 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     console.debug(`graphQL Resonse: ${JSON.stringify(body)}`);
     if (body.data) return (institution.details = body.data.getInstitution);
     throw new Error("API ERROR: Failed to retrieve data");
-  } catch (getEmailsQueryError) {
-    console.debug(getEmailsQueryError);
+  } catch (getAndSetInstitutionDetailsError) {
+    console.debug(getAndSetInstitutionDetailsError);
     throw new Error(`Failed To retrieve institution details.`);
   }
 };
@@ -62,7 +65,7 @@ const getLectureEmailsFromInstitution = async (institutionId) => {
 const getInstitutionAdminId = async (institutionId) => {
   try {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
-    return institutionetails.adminId;
+    return institutionetails.admin.id;
   } catch (getInstitutionAdminIdError) {
     console.debug({ getInstitutionAdminIdError });
     throw new Error(`Failed to retrieve admin for the institution.`);
