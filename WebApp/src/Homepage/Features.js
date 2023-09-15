@@ -1,8 +1,8 @@
 import React from 'react';
 import './homepage_style.css';
-import Feature1 from "../images/FileUpload.png";
-import Feature2 from "../images/FileUpload.png";
-import Feature3 from "../images/FileUpload.png";
+import Feature1 from "../Images/DownloadApp.png";
+import Feature2 from "../Images/DownloadApp.png";
+import Feature3 from "../Images/DownloadApp.png";
 
 const featureData = [
     {
