@@ -29,7 +29,6 @@ exports.handler = async (event) => {
   let GroupName;
   console.table(event.request);
   console.table(process.env);
-  console.table(ROLES);
 
   switch (event.callerContext.clientId) {
     case process.env.AppClientId:
