@@ -29,7 +29,11 @@ const isInstitideAdminOrLecturer = async (institutionId, mail, role) => {
         More details on: {path/to/pronto/web/about/institude/admin}`);
         return institutionetails.admin.email === mail;
       case ROLES.Lecture:
-
+        if (!institutionetails.lectureremails)
+          throw new Error(
+            "Lecture email list was not provided, please contact your institution admin"
+          );
+        return institutionetails.lectureremails.includes(email);
       default:
     }
   } catch (error) {}
