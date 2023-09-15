@@ -36,8 +36,13 @@ const isInstitideAdminOrLecturer = async (institutionId, mail, role) => {
         return institutionetails.lectureremails.includes(email);
       default:
     }
-  } catch (error) {}
+  } catch (getAndSetInstitutionDetailsError) {
+    console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
+    DETAILS: ${getAndSetInstitutionDetailsError}`);
+    throw new Error("FAILED TO VALIDATE ADMIN or LECTURER USER ROLE TYPE");
+  }
 };
+
 exports.handler = async (event) => {
   console.table(event);
   if (
