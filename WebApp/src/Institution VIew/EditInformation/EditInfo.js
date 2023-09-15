@@ -1,18 +1,21 @@
 import { useState, useEffect } from 'react';
-import InstitutionNavigation from '../Navigation/InstitutionNavigation';
+
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Auth, Storage, API } from 'aws-amplify'
+
+import '../Navigation/Navigation.css';
+import InstitutionNavigation from '../Navigation/InstitutionNavigation';
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from '../../Components/SuccessModal';
 import { updateInstitution } from '../../Graphql/mutations';
-import '../Navigation/Navigation.css';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";
 import { useAdmin } from '../../ContextProviders/AdminContext';
+
+import { Auth, Storage, API } from 'aws-amplify'
 
 const EditInfoPage = () => {
     const [expanded, setExpanded] = useState(false);
