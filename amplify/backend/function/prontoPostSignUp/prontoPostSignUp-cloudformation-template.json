@@ -28,6 +28,9 @@
     },
     "lecturerGroupName": {
       "Type": "String"
+    },
+    "modules": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -94,6 +97,9 @@
             },
             "LECTURER_GROUP_NAME": {
               "Ref": "lecturerGroupName"
+            },
+            "MODULES": {
+              "Ref": "modules"
             }
           }
         },
