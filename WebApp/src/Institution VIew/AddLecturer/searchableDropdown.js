@@ -1,6 +1,6 @@
 // SearchableDropdown.js
 import {useState } from "react";
-import { searchCourses } from "../../graphql/queries";
+import { searchCourses } from "../../Graphql/queries";
 import {API} from "aws-amplify";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 

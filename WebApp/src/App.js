@@ -9,17 +9,17 @@ import InstitutionForgotPassword from "./Authentication/Institution/ForgotPasswo
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
 
-import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
-import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
-import EditUniversityInfo from "./Institution VIew/EditInformation/EditInfo";
-import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
-import InstitutionDashboard from "./Institution VIew/Dashboard/Dashboard";
+import AddLecturer from "./Institution View/AddLecturer/addLecturer";
+import FileUploadPage from "./Institution View/FileUpload/FileUploadPage";
+import EditUniversityInfo from "./Institution View/EditInformation/EditInfo";
+import StudentFileUploadPage from "./Institution View/FileUpload/StudentFileUpload";
+import InstitutionDashboard from "./Institution View/Dashboard/Dashboard";
 
-import EditModuleInfo from "./LectureView/Edit Module/EditModuleInfo";
-import Modules from "./LectureView/Edit Module/Modules";
-import RecentAnnouncement from "./LectureView/RecentAnnouncement";
-import PersonalInformation from "./LectureView/Personal-info";
-import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
+import EditModuleInfo from "./Lecturer View/Edit Module/EditModuleInfo";
+import Modules from "./Lecturer View/Edit Module/Modules";
+import RecentAnnouncement from "./Lecturer View/Announcements/RecentAnnouncement";
+import PersonalInformation from "./Lecturer View/Personal Info/Personal-info";
+import DashboardLecturer from "./Lecturer View/Dashboard/dashboardLecturer";
 
 import { RequireLecturerAuth } from "./RouteAuthComponents/RequireLecturerAuth";
 import { RequireAdminAuth } from "./RouteAuthComponents/RequireAdminAuth";
@@ -34,7 +34,7 @@ import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext";
 import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import config from "./aws-exports";
+import config from "./Components/aws-exports";
 
 Auth.configure(config);
 Amplify.configure(config);

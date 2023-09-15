@@ -81,7 +81,7 @@ function HomePage() {
                     <CardMedia
                       component="img"
                       height="150"
-                      image={require("./images/Institution.png")}
+                      image={require("./Images/Institution.png")}
                       alt="Institution"
                       sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
                     />
@@ -114,7 +114,7 @@ function HomePage() {
                     <CardMedia
                       component="img"
                       height="150"
-                      image={require("./images/Lecturer.jpg")}
+                      image={require("./Images/Lecturer.jpg")}
                       alt="Institution"
                       sx={{ padding: "1em 1em 0 1em", objectFit: "contain" }}
                     />

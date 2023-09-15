@@ -14,11 +14,11 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 
 import styled from "styled-components";
-import { createAnnouncement, updateActivity } from '../../graphql/mutations';
+import { createAnnouncement, updateActivity } from '../../Graphql/mutations';
 import { API } from 'aws-amplify';
-import { useJsApiLoader,GoogleMap,Marker } from "@react-google-maps/api";
-import { ErrorModal } from "../../Error pages/ErrorModal";
-import {SuccessModal} from "../../Error pages/SuccessModal";
+import { ErrorModal } from "../../Components/ErrorModal";
+import {SuccessModal} from "../../Components/SuccessModal";
+
 
 export default function PostAccordion(course) {
 
