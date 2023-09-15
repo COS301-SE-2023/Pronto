@@ -32,14 +32,14 @@ exports.handler = async (event) => {
   console.table(process.env);
 
   switch (event.callerContext.clientId) {
-    case process.env.AppClientId:
+    case process.env.COGNITO_MOBILE_CLIENT_ID:
       if (event.request.clientMetadata.role !== ROLES.Student)
         throw new Error(
           "The App is reserved for STUDENTS only!\n please signup as a student or if you are an ADMIN or LECTURER, use the web app"
         );
       GroupName = process.env.StudentsGroupName;
       break;
-    case process.env.AppClientIdWeb:
+    case process.env.COGNITO_WEB_CLIENT_ID:
       if (event.request.clientMetadata.role === ROLES.Student)
         throw new Error(
           "The Web App is reserved for ADMINs or LECTURERs only, please signup as an ADMINs or LECTURERs, if you are a STUDENT the Pronto app"
