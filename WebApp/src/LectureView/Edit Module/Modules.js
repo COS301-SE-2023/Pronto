@@ -3,7 +3,7 @@ import LecturerNavigation from "../LecturerNavigation";
 import "../LectureHome.css";
 import { listLecturers, getLecturer } from "../../graphql/queries";
 import { API, Auth } from 'aws-amplify';
-import { ErrorModal } from '../../ErrorModal'
+import { ErrorModal } from "../../Error pages/ErrorModal";
 import { Link } from "react-router-dom";
 import UserManual from "../HelpFiles/EditModuleInfo.pdf";
 import HelpButton from '../../HelpButton';

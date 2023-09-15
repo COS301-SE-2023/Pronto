@@ -16,10 +16,9 @@ import PlacesAutocomplete, {
 import styled from "styled-components";
 import { createAnnouncement, updateActivity } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
-import { ErrorModal } from '../../ErrorModal';
-import { SuccessModal } from "../../SuccessModal";
 import { useJsApiLoader,GoogleMap,Marker } from "@react-google-maps/api";
-
+import { ErrorModal } from "../../Error pages/ErrorModal";
+import {SuccessModal} from "../../Error pages/SuccessModal";
 
 export default function PostAccordion(course) {
 
