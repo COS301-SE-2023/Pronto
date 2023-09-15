@@ -24,12 +24,12 @@ import DashboardLecturer from "./LectureView/Dashboard/dashboardLecturer";
 import { RequireLecturerAuth } from "./RouteAuthComponents/RequireLecturerAuth";
 import { RequireAdminAuth } from "./RouteAuthComponents/RequireAdminAuth";
 import NotFound from "./Error pages/NotFound";
-import HomePage from "./HomePage";
+import HomePage from "./Homepage/HomePage";
 
-import {LecturerProvider} from "./ContextProviders/LecturerContext";
-import {AdminProvider} from "./ContextProviders/AdminContext";
-import {LecturerListProvider} from "./ContextProviders/LecturerListContext";
-import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext";
+import { LecturerProvider } from "./ContextProviders/LecturerContext";
+import { AdminProvider } from "./ContextProviders/AdminContext";
+import { LecturerListProvider } from "./ContextProviders/LecturerListContext";
+import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext";
 
 import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -39,134 +39,133 @@ import config from "./aws-exports";
 Auth.configure(config);
 Amplify.configure(config);
 
-function MyRoutes()
-{
+function MyRoutes() {
   return (
     <BrowserRouter>
-    <Routes>
-    <Route path="/" element={<HomePage />} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
 
-    {/*Lecturer login/register pages*/}
-    <Route path="/lecturer/login" element={<LecturerLogin />} />
-    <Route
-      path="/lecturer/confirm-email"
-      element={<LecturerConfirmEmail />}
-    />
-    <Route
-      path="/lecturer/forgot-password"
-      element={<LecturerForgotPassword />}
-    />
+        {/*Lecturer login/register pages*/}
+        <Route path="/lecturer/login" element={<LecturerLogin />} />
+        <Route
+          path="/lecturer/confirm-email"
+          element={<LecturerConfirmEmail />}
+        />
+        <Route
+          path="/lecturer/forgot-password"
+          element={<LecturerForgotPassword />}
+        />
 
-    {/*Institution login/register pages*/}
-    <Route path="/institution/login" element={<InstitutionLogin />} />
-    <Route
-      path="/institution/confirm-email"
-      element={<InstitutionConfirmEmail />}
-    />
-    <Route
-      path="/institution/successful-apply"
-      element={<InstitutionSuccessfulApply />}
-    />
-    <Route
-      path="/institution/forgot-password"
-      element={<InstitutionForgotPassword />}
-    />
+        {/*Institution login/register pages*/}
+        <Route path="/institution/login" element={<InstitutionLogin />} />
+        <Route
+          path="/institution/confirm-email"
+          element={<InstitutionConfirmEmail />}
+        />
+        <Route
+          path="/institution/successful-apply"
+          element={<InstitutionSuccessfulApply />}
+        />
+        <Route
+          path="/institution/forgot-password"
+          element={<InstitutionForgotPassword />}
+        />
 
 
-    {/*Protected admin routing*/}
-    <Route
-      path="/institution/dashboard"
-      element={
-        <RequireAdminAuth>
-          <InstitutionDashboard />
-        </RequireAdminAuth>
-      }
-    />
-    <Route
-      path="/institution/add-lecturer"
-      element={
-        <RequireAdminAuth>
-          <AddLecturer />
-        </RequireAdminAuth>
-      }
-    />
-    <Route
-      path="/institution/upload-schedule"
-      element={
-        <RequireAdminAuth>
-          <FileUploadPage />
-        </RequireAdminAuth>
-      }
-    />
-    <Route
-      path="/institution/upload-student-files"
-      element={
-        <RequireAdminAuth>
-          <StudentFileUploadPage />
-        </RequireAdminAuth>
-      }
-    />
-    <Route
-      path="/institution/edit-info"
-      element={
-        <RequireAdminAuth>
-          <EditUniversityInfo />
-        </RequireAdminAuth>
-      }
-    />
+        {/*Protected admin routing*/}
+        <Route
+          path="/institution/dashboard"
+          element={
+            <RequireAdminAuth>
+              <InstitutionDashboard />
+            </RequireAdminAuth>
+          }
+        />
+        <Route
+          path="/institution/add-lecturer"
+          element={
+            <RequireAdminAuth>
+              <AddLecturer />
+            </RequireAdminAuth>
+          }
+        />
+        <Route
+          path="/institution/upload-schedule"
+          element={
+            <RequireAdminAuth>
+              <FileUploadPage />
+            </RequireAdminAuth>
+          }
+        />
+        <Route
+          path="/institution/upload-student-files"
+          element={
+            <RequireAdminAuth>
+              <StudentFileUploadPage />
+            </RequireAdminAuth>
+          }
+        />
+        <Route
+          path="/institution/edit-info"
+          element={
+            <RequireAdminAuth>
+              <EditUniversityInfo />
+            </RequireAdminAuth>
+          }
+        />
 
-    {/*Protected lecturer routing*/}
-    <Route
-      path="/lecturer/dashboard"
-      element={
-        <RequireLecturerAuth>
-          <DashboardLecturer />
-        </RequireLecturerAuth>
-      }
-    />
-    <Route
-      path="/lecturer/modules"
-      element={
-        <RequireLecturerAuth>
-          <Modules />
-        </RequireLecturerAuth>
-      }
-    />
-    <Route
-      path="/lecturer/edit-module"
-      element={
-        <RequireLecturerAuth>
-          <EditModuleInfo />
-        </RequireLecturerAuth>
-      }
-    />
-    <Route
-      path="/lecturer/announcement"
-      element={
-        <RequireLecturerAuth>
-          <RecentAnnouncement />
-        </RequireLecturerAuth>
-      }
-    />
-    <Route
-      path="/lecturer/personal-info"
-      element={
-        <RequireLecturerAuth>
-          <PersonalInformation />
-        </RequireLecturerAuth>
-      }
-    />
+        {/*Protected lecturer routing*/}
+        <Route
+          path="/lecturer/dashboard"
+          element={
+            <RequireLecturerAuth>
+              <DashboardLecturer />
+            </RequireLecturerAuth>
+          }
+        />
+        <Route
+          path="/lecturer/modules"
+          element={
+            <RequireLecturerAuth>
+              <Modules />
+            </RequireLecturerAuth>
+          }
+        />
+        <Route
+          path="/lecturer/edit-module"
+          element={
+            <RequireLecturerAuth>
+              <EditModuleInfo />
+            </RequireLecturerAuth>
+          }
+        />
+        <Route
+          path="/lecturer/announcement"
+          element={
+            <RequireLecturerAuth>
+              <RecentAnnouncement />
+            </RequireLecturerAuth>
+          }
+        />
+        <Route
+          path="/lecturer/personal-info"
+          element={
+            <RequireLecturerAuth>
+              <PersonalInformation />
+            </RequireLecturerAuth>
+          }
+        />
 
-    {/*Invalid page*/}
-    <Route path="*" element={<Navigate to="/404" />} />
-    <Route path="/404" element={<NotFound />} />
+        {/*Invalid page*/}
+        <Route path="*" element={<Navigate to="/404" />} />
+        <Route path="/404" element={<NotFound />} />
 
-    </Routes>
+      </Routes>
     </BrowserRouter>
   )
 }
 
-function App(){
+function App() {
   useEffect(() => {
     Amplify.configure(config);
   }, []);
@@ -174,14 +173,14 @@ function App(){
   return (
     <LecturerProvider>
       <AnnouncementProvider>
-      <AdminProvider>
-        <LecturerListProvider>
-    <Authenticator.Provider>
-      <MyRoutes />
-    </Authenticator.Provider>
-    </LecturerListProvider>
-    </AdminProvider>
-    </AnnouncementProvider>
+        <AdminProvider>
+          <LecturerListProvider>
+            <Authenticator.Provider>
+              <MyRoutes />
+            </Authenticator.Provider>
+          </LecturerListProvider>
+        </AdminProvider>
+      </AnnouncementProvider>
     </LecturerProvider>
   );
 }
