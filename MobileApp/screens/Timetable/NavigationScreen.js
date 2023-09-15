@@ -6,8 +6,10 @@ import StepByStepInstructions from '../../components/StepByStepInstructions';
 import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_API_KEY } from "@env";
 import * as Location from 'expo-location';
-import locationInfo from "../../assets/data/locationInfo.json";
-import { SelectList } from "react-native-dropdown-select-list";
+import {SelectList} from "react-native-dropdown-select-list";
+import { useStudent } from "../../ContextProviders/StudentContext";
+import {API,Auth} from "aws-amplify";
+import {getStudent} from "../../graphql/queries";
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -21,7 +23,7 @@ const initialRegion = {
     longitudeDelta: LONGITUDE_DELTA,
 };
 
-const NavigationScreen = () => {
+const NavigationScreen = ({navigation}) => {
 
     const [origin, setOrigin] = useState(null);
     const [destination, setDestination] = useState(null);
@@ -29,10 +31,13 @@ const NavigationScreen = () => {
     const [distance, setDistance] = useState("");
     const [travelTime, setTravelTime] = useState("");
     const [instructions, setInstructions] = useState([]);
+    const [coordinates,setCoordinates] =useState([]);
+  
     const [currentRegion, setCurrentRegion] = useState(initialRegion);
     const mapViewRef = useRef(null);
 
 
+    const {student,updateStudent} = useStudent(); 
     // Function to handle the data from the MapViewDirections component
     function handleOnReady(result) {
         // Extract the step-by-step instructions from the result object
@@ -64,6 +69,7 @@ const NavigationScreen = () => {
         } else {
             // In the future, this else statement will return the user to the home page
             Alert.alert("Location permission not granted");
+           // navigation.navigate('ScheduleTable')
         }
     }
 
@@ -71,29 +77,116 @@ const NavigationScreen = () => {
     // NOTE: the function is called only AFTER the user has granted permission and this WILL NOT change.
     const getUserLocation = async () => {
         try {
-            const location = await Location.getCurrentPositionAsync({});
-            setOrigin(location.coords); // Set the origin to the user's current location
-            // Update the currentRegion state with the user's location
-            const newRegion = {
-                ...currentRegion,
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-            };
-            setCurrentRegion(newRegion);
-            // Use animateToRegion to zoom to the user's location
-            mapViewRef.current.animateToRegion(newRegion, 1000); // You may adjust the duration (1000 ms) as needed
+            //if(origin===null){
+                const location = await Location.getCurrentPositionAsync({});
+                setOrigin(location.coords); // Set the origin to the user's current location
+                // Update the currentRegion state with the user's location
+                const newRegion = {
+                    ...currentRegion,
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                };
+                setCurrentRegion(newRegion);
+                // Use animateToRegion to zoom to the user's location
+                mapViewRef.current.animateToRegion(newRegion, 1000); // You may adjust the duration (1000 ms) as needed
+            //}
         } catch (error) {
             Alert.alert("Please give access to your location to get directions");
         }
     };
+    const fetchLocations = async () => {
+        try {
+            let stu=student; 
+            if (student === null) {
+                const user = await Auth.currentAuthenticatedUser();
+                stu=await API.graphql({
+                     query:getStudent,
+                    variables:{id:user.attributes.sub}
+                    })
+        
+                stu=stu.data.getStudent;
+                if(stu===null || undefined){
+                    throw Error();
+                }
+                await updateStudent(stu);
+            }
+        
+            if(stu.studentTimetableId!==null){
+                let act=[];
+                let courses=[];
+                for (let i = 0; i < stu.enrollments.items.length; i++) {
+                    courses.push(stu.enrollments.items[i].course)
+                }
+
+                for (let i = 0; i < stu.timetable.activityId.length; i++) {
+                    for (let j = 0; j < courses.length; j++) {
+                        try{
+                            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+                            if (index !== undefined) {
+                                act.push(index)
+                                break;
+                            }
+                        }catch(e){
+
+                        }
+
+                    }
+                }
+                act = act.sort((a, b) => {
+                      if (a.start <= b.start)
+                        return -1;
+                      else
+                        return 1;
+                    })
+                stu.timetable.activities=act;
+                await updateStudent(stu);
+                let loc=[];
+                let locationNames= new Map();
+                for(let i=0;i<act.length;i++){
+                    if(act[i].coordinates!==null){
+                        let location=act[i].coordinates.split(';');
+                        if(locationNames.get(location[0])===undefined && location[0]!==""){
+                            let coordinate={ 
+                                key:i,
+                                name:location[0],
+                                value:{
+                                    latitude:parseFloat(location[1]),
+                                    longitude:parseFloat(location[2])
+                                }
+                            }
+                        loc.push(coordinate);
+                        locationNames.set(location[0],"1");
+                    }
+                }
+            }
+            setCoordinates(loc);
+           // console.log(loc);
+        }
+
+    } catch (e) {
+      Alert.alert(error);
+    }
+  }
 
 
-    // useEffect hook to run the requestLocationPermission function when the component is mounted
+
+//    useEffect hook to run the requestLocationPermission function when the component is mounted
+    // useEffect(() => {
+    //     requestLocationPermission().then();
+    //     fetchLocations();
+    //  }, []);
+
     useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
         requestLocationPermission().then();
-    }, []);
+        fetchLocations();
+    });
 
-    // Below defines styling for the location text input for the user's current location
+
+    return unsubscribe
+  }, [navigation])
+
+     // Below defines styling for the location text input for the user's current location
     // Green border will be for location gathered
     // Red border will be for location not gathered and display different text
     const greenStyle = {
@@ -123,8 +216,10 @@ const NavigationScreen = () => {
     //We then traverse the locations and look for the selected location details
     const setDestinationLocation = (itemValue) => {
         setRoute(false);
-        const selectedItem = locationInfo.find(item => item.name === itemValue);
-        if (selectedItem) {
+       // const selectedItem = locationInfo.find(item => item.name === itemValue);
+       const selectedItem = coordinates.find(item=>item.name===itemValue); 
+       
+       if (selectedItem) {
             const dest = {
                 latitude: selectedItem.value.latitude, // Use the latitude from the selected venue
                 longitude: selectedItem.value.longitude, // Use the longitude from the selected venue
@@ -151,7 +246,6 @@ const NavigationScreen = () => {
                 initialRegion={currentRegion}
                 ref={mapViewRef} // Set the ref to mapViewRef
             >
-
 
                 {origin && <Marker coordinate={origin} title="Origin" />}
                 {destination && <Marker coordinate={destination} title="Destination" />}
@@ -191,10 +285,11 @@ const NavigationScreen = () => {
 
                     {/* Select List */}
                     <SelectList
-                        data={locationInfo.map(item => item.name)}
-                        label="Locations"
+                       // data={locationInfo.map(item => item.name)}
+                       data={coordinates.map(item=>item.name)} 
+                       label="Locations"
                         save={"value"}
-                        search={true}
+                        search={false}
                         searchPlaceholder='Search for venue'
                         notFoundText='Venue not found'
                         inputStyles={{
@@ -208,7 +303,7 @@ const NavigationScreen = () => {
                             width: 300, marginBottom: 10, borderWidth: 0
                         }}
                         setSelected={setDestinationLocation}
-                        defaultOption={{ key: '1', value: 'Select Venue' }}
+                       defaultOption={{ key: '1', value: 'Select Venue' }}
 
                     />
                 </View>
@@ -336,4 +431,3 @@ const styles = StyleSheet.create({
 });
 
 export default NavigationScreen;
-

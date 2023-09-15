@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses } from "../../Graphql/queries";
+
 import { API, Auth } from 'aws-amplify';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
@@ -35,7 +36,7 @@ const AddLecturer = () => {
 
     const handleAdd = async (event) => {
         event.preventDefault()
-        if (!isModalOpened) {
+        if (!isModalOpened && adding==="Add") {
             setAdding("Adding...")
             let lecturer = {
                 institutionId: admin.institutionId,
@@ -44,10 +45,16 @@ const AddLecturer = () => {
                 userRole: "Lecturer",
                 email: email,
             };
-
+    
             try {
-                let unique = admin.institution.lectureremails.filter((e) => e === email)
-                if (unique.length === 0) {
+                if(email!==admin.email){
+                //let unique = admin.institution.lectureremails.filter((e) => e === email)
+                let emails=await API.graphql({
+                    query:listLecturers,
+                    variables:{filter :{ email :{eq:lecturer.email}}}
+                })
+                
+                if (emails.data.listLecturers.items.length===0){
                     let mutation = await API.graphql({
                         query: createLecturer,
                         variables: { input: lecturer },
@@ -90,12 +97,16 @@ const AddLecturer = () => {
                         lecturerList.push(lecturer);
                         setLecturerList(lecturerList);
                     }
-                }
+               }
                 else {
                     setError("A lecturer with this email already exists");
                 }
+            }else{
+                setError("You cannot use the same account for Lecturer and Admin activities");
+            }
 
             } catch (error) {
+                console.log(error);
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message
                     if (e.search("Network") !== -1) {
@@ -361,13 +372,14 @@ const AddLecturer = () => {
                 else {
                     setNextToken(lecturers.nextToken);
                 }
-                setNextToken(lecturers.data.lecturersByInstitutionId.nextToken);
+                setNextToken(lecturers.nextToken);
                 setOfferedCourses(offeredCourses);
-                setLecturerList(lecturers.data.lecturersByInstitutionId.items);
+                setLecturerList(lecturers.items);
                 // }
             }
         }
         catch (error) {
+            console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {

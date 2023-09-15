@@ -25,7 +25,8 @@ const PostReminder = () => {
 
         </div>
         <PostAccordion
-          course={state.state} />
+          course={state.state}
+          libraries={["places"]} />
           <br/>
       </main>
 
