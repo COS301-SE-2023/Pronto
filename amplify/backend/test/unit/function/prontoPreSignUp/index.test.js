@@ -14,14 +14,14 @@ jest.mock(
   })
 );
 describe("Input Validation and Error handling", () => {
-  test(`should throw "User role not provided on ClientMetadata"`, async () => {
+  test(`should throw "Invalid User Role or Role not provided"`, async () => {
     const eventWithNullRole = {
       request: {
         clientMetadata: {},
       },
     };
     await expect(preAuth.handler(eventWithNullRole)).rejects.toThrow(
-      /^User role not provided on ClientMetadata$/
+      /^Invalid User Role or Role not provided$/
     );
   });
   test('should throw "Invalid User Role"', async () => {
