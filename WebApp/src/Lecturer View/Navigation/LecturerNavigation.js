@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import "../Institution VIew/Navigation/Navigation.css";
-import logo from "../images/university_logo.svg";
+import "../../Institution View/Navigation/Navigation.css";
+import logo from "../../Images/university_logo.svg";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { listLecturers } from "../graphql/queries";
-import { useLecturer } from "../ContextProviders/LecturerContext";
+import { listLecturers } from "../../Graphql/queries";
+import { useLecturer } from "../../ContextProviders/LecturerContext";
 
 export default function LecturerNavigation(lecturerData) {
   const [user, setUser] = useState("");

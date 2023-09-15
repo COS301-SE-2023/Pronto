@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import LecturerNavigation from "../LecturerNavigation";
-import "../LectureHome.css";
-import { listLecturers, getLecturer } from "../../graphql/queries";
+import LecturerNavigation from "../Navigation/LecturerNavigation";
+import "../Dashboard/LectureHome.css";
+import { listLecturers, getLecturer } from "../../Graphql/queries";
 import { API, Auth } from 'aws-amplify';
-import { ErrorModal } from "../../Error pages/ErrorModal";
+import { ErrorModal } from "../../Components/ErrorModal";
 import { Link } from "react-router-dom";
 import UserManual from "../HelpFiles/EditModuleInfo.pdf";
-import HelpButton from '../../HelpButton';
+import HelpButton from '../../Components/HelpButton';
 import { useLecturer } from "../../ContextProviders/LecturerContext";
-import moduleImage from "./Courses.png";
+import moduleImage from "../Images/Courses.png";
 
 const Modules = () => {
 
