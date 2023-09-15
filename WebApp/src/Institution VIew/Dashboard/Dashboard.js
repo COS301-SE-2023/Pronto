@@ -5,13 +5,13 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import SchoolIcon from '@mui/icons-material/School';
 import EditIcon from '@mui/icons-material/Edit';
-import HelpButton from '../../HelpButton';
+import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/InstitutionInstructions.pdf";
 import { useNavigate } from 'react-router-dom';
-import ScheduleUploadImage from "./ScheduleUploadImage.png";
-import AddRemoveLecturerImage from "./AddRemoveLecturerImage.png";
-import StudenFileUploadImage from "./StudentFileUploadImage.png";
-import EditUniInfoImage from "./EditUniInfoImage.png";
+import ScheduleUploadImage from "../Images/ScheduleUploadImage.png";
+import AddRemoveLecturerImage from "../Images/AddRemoveLecturerImage.png";
+import StudenFileUploadImage from "../Images/StudentFileUploadImage.png";
+import EditUniInfoImage from "../Images/EditUniInfoImage.png";
 
 const Dashboard = () => {
     const navigate = useNavigate()
