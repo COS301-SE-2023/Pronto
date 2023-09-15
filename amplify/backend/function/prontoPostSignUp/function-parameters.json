@@ -1,3 +1,11 @@
 {
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "prontoAuth": [
+        "read",
+        "update"
+      ]
+    }
+  }
 }

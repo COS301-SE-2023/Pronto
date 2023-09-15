@@ -1,4 +1,8 @@
-
+/* Amplify Params - DO NOT EDIT
+	AUTH_PRONTOAUTH_USERPOOLID
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT */
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}

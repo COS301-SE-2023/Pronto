@@ -88,18 +88,99 @@
   "function": {
     "prontoPostSignUp": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "prontoAuth"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "prontoPreSignIn": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "prontoGraphQlApi"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "prontoPreSignUp": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "prontoGraphQlApi"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_prontoPostSignUp_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPostSignUp_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPreSignIn_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPreSignIn"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPreSignIn_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPreSignIn"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPreSignUp_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPreSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPreSignUp_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPreSignUp"
+        }
+      ]
     }
   }
 }
