@@ -67,7 +67,6 @@ const DashboardLecturer = () => {
                                 alt="PersonalInfp"
                                 style={{ width: "250px", height: "250px", cursor: "pointer" }}
                                 onClick={() => {
-                                    //window.location.href = "/lecturer/personal-info";
                                     navigate("/lecturer/personal-info");
                                 }}
                             />
