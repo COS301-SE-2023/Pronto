@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1694771797638" clover="3.2.0">
-  <project timestamp="1694771797638" name="All files">
-    <metrics statements="144" coveredstatements="135" conditionals="49" coveredconditionals="44" methods="13" coveredmethods="13" elements="206" coveredelements="192" complexity="0" loc="144" ncloc="144" packages="2" files="7" classes="7"/>
+<coverage generated="1694782103185" clover="3.2.0">
+  <project timestamp="1694782103185" name="All files">
+    <metrics statements="140" coveredstatements="131" conditionals="49" coveredconditionals="44" methods="13" coveredmethods="13" elements="202" coveredelements="188" complexity="0" loc="140" ncloc="140" packages="2" files="7" classes="7"/>
     <package name="prontoPostSignUp.src">
-      <metrics statements="46" coveredstatements="43" conditionals="15" coveredconditionals="15" methods="4" coveredmethods="4"/>
+      <metrics statements="42" coveredstatements="39" conditionals="15" coveredconditionals="15" methods="4" coveredmethods="4"/>
       <file name="add-to-group.js" path="/Users/bandisa/dev/Pronto/amplify/backend/function/prontoPostSignUp/src/add-to-group.js">
-        <metrics statements="39" coveredstatements="37" conditionals="15" coveredconditionals="15" methods="1" coveredmethods="1"/>
+        <metrics statements="35" coveredstatements="33" conditionals="15" coveredconditionals="15" methods="1" coveredmethods="1"/>
         <line num="6" count="2" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
         <line num="9" count="2" type="stmt"/>
@@ -13,38 +13,34 @@
         <line num="17" count="2" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
         <line num="22" count="2" type="stmt"/>
-        <line num="23" count="11" type="cond" truecount="2" falsecount="0"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="25" count="10" type="cond" truecount="2" falsecount="0"/>
-        <line num="26" count="1" type="stmt"/>
-        <line num="27" count="9" type="cond" truecount="2" falsecount="0"/>
-        <line num="28" count="1" type="stmt"/>
+        <line num="23" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="28" count="9" type="cond" truecount="2" falsecount="0"/>
         <line num="30" count="8" type="stmt"/>
         <line num="31" count="8" type="stmt"/>
-        <line num="32" count="8" type="stmt"/>
-        <line num="34" count="8" type="cond" truecount="3" falsecount="0"/>
-        <line num="36" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="37" count="1" type="stmt"/>
+        <line num="33" count="8" type="cond" truecount="3" falsecount="0"/>
+        <line num="35" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
         <line num="40" count="2" type="stmt"/>
-        <line num="41" count="2" type="stmt"/>
-        <line num="43" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="44" count="1" type="stmt"/>
-        <line num="47" count="3" type="stmt"/>
-        <line num="51" count="3" type="stmt"/>
-        <line num="53" count="1" type="stmt"/>
-        <line num="58" count="5" type="stmt"/>
-        <line num="62" count="5" type="stmt"/>
+        <line num="42" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="46" count="3" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="57" count="5" type="stmt"/>
+        <line num="61" count="5" type="stmt"/>
+        <line num="66" count="5" type="stmt"/>
         <line num="67" count="5" type="stmt"/>
         <line num="68" count="5" type="stmt"/>
         <line num="69" count="5" type="stmt"/>
-        <line num="70" count="5" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
         <line num="74" count="1" type="stmt"/>
-        <line num="75" count="1" type="stmt"/>
+        <line num="78" count="4" type="stmt"/>
         <line num="79" count="4" type="stmt"/>
-        <line num="80" count="4" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="90" count="4" type="stmt"/>
+        <line num="89" count="4" type="stmt"/>
       </file>
       <file name="index.js" path="/Users/bandisa/dev/Pronto/amplify/backend/function/prontoPostSignUp/src/index.js">
         <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>

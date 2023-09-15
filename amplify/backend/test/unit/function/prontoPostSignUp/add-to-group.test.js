@@ -19,7 +19,7 @@ jest.mock("@aws-sdk/client-cognito-identity-provider", () => {
   };
 });
 describe("input validation", () => {
-  test(`Should throw Error('User role not provided on clientMetadata'`, async () => {
+  test(`Should throw Error('Invalid User Role or Role not provided'`, async () => {
     const requestWithNullRole = {
       callerContext: {},
       request: {
@@ -27,10 +27,10 @@ describe("input validation", () => {
       },
     };
     await expect(addToGroup.handler(requestWithNullRole)).rejects.toThrow(
-      "User role not provided on clientMetadata"
+      "Invalid User Role or Role not provided"
     );
   });
-  test(`Should throw Error('ClientId not provided on callerContext'`, async () => {
+  test(`Should throw Error('Invalid User Role or Role not provided'`, async () => {
     const requestWithNullclientId = {
       callerContext: {},
       request: {
@@ -40,10 +40,10 @@ describe("input validation", () => {
       },
     };
     await expect(addToGroup.handler(requestWithNullclientId)).rejects.toThrow(
-      /^ClientId not provided on callerContext$/
+      /^Invalid User Role or Role not provided$/
     );
   });
-  test(`Should throw Error('Invalid User Role'`, async () => {
+  test(`Should throw Error('Invalid User Role or Role not provided'`, async () => {
     const requestWithInvalidRole = {
       callerContext: {
         clientId: "aClientId",
@@ -55,7 +55,20 @@ describe("input validation", () => {
       },
     };
     await expect(addToGroup.handler(requestWithInvalidRole)).rejects.toThrow(
-      /^Invalid User Role$/
+      /^Invalid User Role or Role not provided$/
+    );
+  });
+  test("Should Error: Client Id not provided", async () => {
+    const requestWithInvalidRole = {
+      callerContext: {},
+      request: {
+        clientMetadata: {
+          role: "Student",
+        },
+      },
+    };
+    await expect(addToGroup.handler(requestWithInvalidRole)).rejects.toThrow(
+      /^Client Id not provided$/
     );
   });
   test(`Should throw Error('Unrecognised user pool app client ID='`, async () => {
