@@ -289,7 +289,7 @@ const NavigationScreen = ({navigation}) => {
                        data={coordinates.map(item=>item.name)} 
                        label="Locations"
                         save={"value"}
-                        search={true}
+                        search={false}
                         searchPlaceholder='Search for venue'
                         notFoundText='Venue not found'
                         inputStyles={{
