@@ -190,6 +190,22 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoPreSignUp_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPreSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPreSignUp_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPreSignUp"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoPreSignUp_deploymentBucketName": {
       "usedBy": [
         {
