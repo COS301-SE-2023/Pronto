@@ -4,6 +4,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import GoogleMapReact from 'google-map-react';
 
 import PlacesAutocomplete, {
@@ -15,10 +16,9 @@ import PlacesAutocomplete, {
 import styled from "styled-components";
 import { createAnnouncement, updateActivity } from '../../graphql/mutations';
 import { API } from 'aws-amplify';
+import { useJsApiLoader,GoogleMap,Marker } from "@react-google-maps/api";
 import { ErrorModal } from "../../Error pages/ErrorModal";
 import {SuccessModal} from "../../Error pages/SuccessModal";
-
-import { useJsApiLoader } from "@react-google-maps/api";
 
 export default function PostAccordion(course) {
 
@@ -30,12 +30,15 @@ export default function PostAccordion(course) {
   const [activity, setActivity] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
-
-
+  const [latLng,setLatLng] = useState("");  
+  const [lat,setLat]=useState(59.955413);
+  const [lng,setLng]=useState(30.337844);
+  const[isMapLoaded,setIsMapLoaded]=useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  
   const handleApiLoaded = (map, maps) => {
     // use map and maps objects
   };
@@ -56,16 +59,18 @@ export default function PostAccordion(course) {
       if (activity === "" || activity === undefined || selectedLocation === "") {
         setError("Please pick an activity and location");
       }
-      else {
-        let update = await API.graphql({
-          query: updateActivity,
-          variables: { input: { id: activity.id, coordinates: selectedLocation } }
+      else{
+      
+        let coordinate=selectedLocation+";"+latLng.lat+";"+latLng.lng;
+        let update=await API.graphql({
+          query:updateActivity,
+          variables:{input:{id:activity.id,coordinates:coordinate}}
         })
         setSuccessMessage("Venue updated successfully");
-        //console.log(activity);
       }
 
     } catch (e) {
+      console.log(e);
       setError("Something went wrong.Please try again later");
     }
   }
@@ -73,8 +78,11 @@ export default function PostAccordion(course) {
   const handleSelect = async (location, event) => {
     try {
       const results = await geocodeByAddress(location);
-      const latLng = await getLatLng(results[0]); // Here is the coordinates
-      //Add code to add to database
+      const latLngValue = await getLatLng(results[0]); // Here is the coordinates
+      setLatLng(latLngValue);
+      setLat(latLngValue.lat);
+      setLng(latLngValue.lng);
+      
     } catch (error) {
       console.error("Error fetching coordinates:", error);
     }
@@ -84,15 +92,12 @@ export default function PostAccordion(course) {
   {
     /*Default location for the map*/
   }
-  const { isLoaded } = useJsApiLoader({
+
+
+  const { isLoaded } =  useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
-    libraries: ["places"],
-  });
-
-  if (!isLoaded) {
-    return <div>Loading</div>;
-
-  }
+    libraries:course.libraries
+  })
 
 
   const handleSubmit = async (event, type) => {
@@ -290,7 +295,7 @@ export default function PostAccordion(course) {
               className="custom-select"
               placeholder="Select Activity"
             >
-              <option selected disabled>Select Activity</option>
+              <option value="">Select Activity</option>
               {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
                 return (
                   <option key={key}
@@ -300,10 +305,14 @@ export default function PostAccordion(course) {
               )
               }
             </select>
+            {isLoaded? 
+            (
             <form style={{ paddingTop: '15px' }} onSubmit={(e) => { handleAddVenue(e) }}>
+            
               <div className="form-group row">
                 <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
                 <div className="col-sm-10">
+              
                   <PlacesAutocomplete
                     value={selectedLocation}
                     onChange={setSelectedLocation}
@@ -341,23 +350,23 @@ export default function PostAccordion(course) {
 
               <div className="map">
                 <div style={{ height: '50vh', width: '100%' }}>
-                  <GoogleMapReact
-                    bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API }}
-                    defaultCenter={defaultProps.center}
-                    defaultZoom={defaultProps.zoom}
-                    yesIWantToUseGoogleMapApiInternals
+                       <GoogleMap
+                          mapContainerClassName="map"
+                          center={{ lat: lat, lng: lng }}
+                          zoom={18}
+                        >
+                          <Marker position={{ lat: lat, lng: lng }} />
+                      </GoogleMap>
 
-                  >
-                    <AnyReactComponent
-                      lat={59.955413}
-                      lng={30.337844}
-                      text="My Marker"
-                    />
-                  </GoogleMapReact>
                 </div>
               </div>
-              <button className="post-button">Add venue</button>
-            </form>
+            <button className="post-button">Add venue</button>
+              
+            </form> 
+            ) 
+            :
+            <div>Loading map...</div>
+            }
           </AccordionDetails>
         </Accordion>
 

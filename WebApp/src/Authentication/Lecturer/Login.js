@@ -45,7 +45,11 @@ function Login() {
     {
       value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
       label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
-    },
+    }, 
+    {
+       value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
+       label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
+    }
   ];
 
   const navigate = useNavigate();
