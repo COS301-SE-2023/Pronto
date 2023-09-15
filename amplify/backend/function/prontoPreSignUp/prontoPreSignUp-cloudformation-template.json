@@ -27,6 +27,12 @@
     "apiprontoGraphQlApiGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apiprontoGraphQlApiGraphQLAPIKeyOutput"
+    },
+    "cognitoMobileClientId": {
+      "Type": "String"
+    },
+    "cognitoWebClientId": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -90,6 +96,12 @@
             },
             "API_PRONTOGRAPHQLAPI_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apiprontoGraphQlApiGraphQLAPIKeyOutput"
+            },
+            "COGNITO_MOBILE_CLIENT_ID": {
+              "Ref": "cognitoMobileClientId"
+            },
+            "COGNITO_WEB_CLIENT_ID": {
+              "Ref": "cognitoWebClientId"
             }
           }
         },
