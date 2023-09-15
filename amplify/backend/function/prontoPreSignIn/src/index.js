@@ -26,7 +26,7 @@ const isInstitideAdminOrLecturer = async (email, institutionId, role) => {
         if (!institutionetails.admin)
           throw new Error(`Institude does not have an admin,\n
         Please request for one on AgileArchitectsCapstone@gmail.com\n
-        More details on: {path/to/pronto/web/about/institude/admin}`);
+        More info on: {path/to/pronto/web/about/institude/admin}`);
         return institutionetails.admin.email === mail;
       case ROLES.Lecture:
         if (!institutionetails.lectureremails)
@@ -35,6 +35,7 @@ const isInstitideAdminOrLecturer = async (email, institutionId, role) => {
           );
         return institutionetails.lectureremails.includes(email);
       default:
+        throw new Error("Invalid role");
     }
   } catch (getAndSetInstitutionDetailsError) {
     console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
@@ -64,13 +65,18 @@ exports.handler = async (event) => {
   event.response.autoConfirmUser = false;
   try {
     if (
-      await isInstitideAdminOrLecturer(
+      !(await isInstitideAdminOrLecturer(
         event.request.userAttributes.email,
         event.request.clientMetadata.institutionId,
         event.request.clientMetadata.role
-      ) && process.env.COGNITO
+      )) &&
+      process.env.COGNITO_WEB_CLIENT_ID === event.callerContext.clientId
     )
-      throw new Error("Students Should use the Pronto mobile app");
+      throw new Error(`Only admins/lecturer are allowed to use the web app\n
+      Please Use the mobile if you are student, or sign up as a lecturer/admin
+      Request for an account as an institude admin\n
+      Or contact your institude admin if you are a lecture\n
+      More details on: {path/to/pronto/web/about/institude/admin}`);
   } catch (preAuthError) {
     console.debug(preAuthError);
     throw new Error(preAuthError);
