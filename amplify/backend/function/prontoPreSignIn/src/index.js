@@ -23,7 +23,11 @@ const isInstitideAdminOrLecturer = async (institutionId, mail, role) => {
       throw new Error(`Failed To retrieve institution details`);
     switch (role) {
       case ROLES.Admin:
-
+        if (!institutionetails.admin)
+          throw new Error(`Institude does not have an admin,\n
+        Please request for one on AgileArchitectsCapstone@gmail.com\n
+        More details on: {path/to/pronto/web/about/institude/admin}`);
+        return institutionetails.admin.email === mail;
       case ROLES.Lecture:
 
       default:
