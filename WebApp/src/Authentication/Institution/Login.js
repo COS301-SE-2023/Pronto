@@ -4,7 +4,7 @@ import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { listAdmins } from "../../graphql/queries";
+import { listAdmins } from "../../Graphql/queries";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 
 function Login() {
