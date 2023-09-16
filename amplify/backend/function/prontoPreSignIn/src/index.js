@@ -8,8 +8,8 @@ Amplify Params - DO NOT EDIT */
 const ROLES = require("../../prontoPreSignUp/src/roles");
 const {
   getAndSetInstitutionDetails,
-} = require("../../prontoPreSignUp/src/assertInstitutionInfo");
-const isAppClientValid = require("../../prontoPreSignUp/src/isAppClientValid");
+} = require("./getAndSetInstitutionDetails");
+const isAppClientValid = require("./isAppClientValid");
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
