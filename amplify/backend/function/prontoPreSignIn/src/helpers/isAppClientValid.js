@@ -1,4 +1,4 @@
-const ROLES = require("./roles.js");
+const ROLES = require("../roles.js");
 function isAppClientValid(clientId, role) {
   if (!Object.values(ROLES).includes(role))
     throw new Error("Invalid User Role");
