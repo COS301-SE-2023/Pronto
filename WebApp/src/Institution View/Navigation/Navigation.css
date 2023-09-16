@@ -247,5 +247,23 @@
     filter: blur(3px); /* Adjust the blur amount as needed */
     pointer-events: none; /* Prevent clicks on the blurred area */
   }
+
+  .close-icon {
+    position: absolute;
+    top: 20px; /* Adjust the top distance as needed */
+    right: 20px; /* Adjust the right distance as needed */
+    cursor: pointer;
+    font-size: 24px; /* Adjust the font size as needed */
+    color: #333; /* Adjust the icon color as needed */
+  }
+
+  .close-icon:hover {
+    position: absolute;
+    top: 20px; /* Adjust the top distance as needed */
+    right: 20px; /* Adjust the right distance as needed */
+    cursor: pointer;
+    font-size: 24px; /* Adjust the font size as needed */
+    color: #e32f45; /* Adjust the icon color as needed */
+  }
   
   

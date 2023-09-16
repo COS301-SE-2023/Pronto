@@ -15,6 +15,8 @@ import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";
 import { useAdmin } from '../../ContextProviders/AdminContext';
 import EditUniInfoImage from "../Images/EditUniInfoImage.png";
+import CloseIcon from '@mui/icons-material/Close';
+import TickIcon from '@mui/icons-material/Check';
 
 import { Auth, Storage, API } from 'aws-amplify'
 
@@ -188,6 +190,11 @@ const EditInfoPage = () => {
         fecthUser();
     }, []);
 
+    const handleCloseModal = () => {
+        // Close the modal when the "X" icon is clicked
+        setShowFileModal(false);
+    };
+
     return (
         <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
@@ -195,9 +202,10 @@ const EditInfoPage = () => {
 
             {showFileModal && (
                 <div className="file-upload-modal">
+                    <CloseIcon className="close-icon" onClick={handleCloseModal} />
                     <h2>Logo Preview</h2>
                     <h6>This is how the logo will appear in the navigation menu for lecturers and for your account.</h6>
-
+                    <h6>We recommend a size of: <span style={{ color: "#e32f45" }}>500x500</span> for the best fit</h6>
                     <img
                         src={logoPreview}
                         alt="Logo"
@@ -206,7 +214,9 @@ const EditInfoPage = () => {
                         data-testid={'UniversityImage'}
                     />
 
-                    <button onClick={handleFileSubmit}>Accept &#x2713;</button>
+                    <button style={{ display: "flex", alignItems: "center", justifyContent: "center" }} onClick={handleFileSubmit}>Accept
+                        <TickIcon style={{ fontSize: "20px", marginLeft: "10px" }} />
+                    </button>
                 </div>
             )}
             <div>
