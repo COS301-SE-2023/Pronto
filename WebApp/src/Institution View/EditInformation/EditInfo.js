@@ -14,6 +14,7 @@ import { updateInstitution } from '../../Graphql/mutations';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";
 import { useAdmin } from '../../ContextProviders/AdminContext';
+import EditUniInfoImage from "../Images/EditUniInfoImage.png";
 
 import { Auth, Storage, API } from 'aws-amplify'
 
@@ -195,6 +196,14 @@ const EditInfoPage = () => {
 
             <main style={{ width: '1200px', marginTop: "0%", marginLeft: "25%" }}>
                 <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}> Edit University Information</h1>
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+                    <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", marginBottom: "30px" }}>Use this to change your accounts password, upload a logo, or edit email the domains of valid accounts for the institution.</h6>
+                    <img
+                        src={EditUniInfoImage}
+                        alt="Edit Information"
+                        style={{ width: "200px", height: "200px" }}
+                    />
+                </div>
                 <table className="table table-sm">
                     <tbody>
 
@@ -436,8 +445,8 @@ const EditInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-                <br/>
-            </main>
+                <br />
+            </main >
         </div >
 
     );
