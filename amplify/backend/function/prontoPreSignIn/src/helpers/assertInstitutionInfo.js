@@ -1,3 +1,4 @@
+const ROLES = require("../roles");
 const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINT;
 const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEY;
 let institution = {
