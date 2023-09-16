@@ -8,7 +8,10 @@ const {
   getInstitutionEmailDomains,
 } = require("../../../../function/prontoPreSignUp/src/assertInstitutionInfo");
 const institutionDetails = {
-  adminId: "someAdminId",
+  admin: {
+    id: "someAdminId",
+    email: "admin_test@up.ac.za",
+  },
   lectureremails: ["someLecturerEmail1", "someLecturerEmail2"],
   domains: ["tuks.co.za", "up.ac.za"],
 };
