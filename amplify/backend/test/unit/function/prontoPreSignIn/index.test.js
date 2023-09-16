@@ -38,7 +38,17 @@ describe("testing presignIn inputs", () => {
   });
   test("should throw: Invalid role", async () => {});
 
-
+  test(`should throw: Cannot authenticate user from this app client: 
+      Students Should use the mobile app and Admin/Lectures should use the web app`, async () => {
+    const invalidStudentEvent = { ...studentsEvent };
+    invalidStudentEvent.callerContext.clientId =
+      adminEvent.callerContext.clientId;
+    await expect(preSignIn.handler(studentsEvent)).rejects.toThrowError(
+      `Cannot authenticate user from this app client:\n 
+      Students Should use the mobile app and Admin/Lectures should use the web app`
+    );
+  });
+});
 
 describe("testing preSignIn operation error handling", () => {
   test(`should throw: Institude does not have an admin,\n
