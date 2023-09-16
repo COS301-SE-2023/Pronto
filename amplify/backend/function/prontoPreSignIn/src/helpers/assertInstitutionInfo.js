@@ -1,7 +1,5 @@
-const ROLES = require("../roles");
-const GRAPHQL_ENDPOINT =
-  process.env.API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT;
-const GRAPHQL_API_KEY = process.env.API_PRONTOGRAPHQLAPI_GRAPHQLAPIKEYOUTPUT;
+const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINT;
+const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEY;
 let institution = {
   details: null,
   id: null,
@@ -75,7 +73,7 @@ const isInstitideAdminOrLecturer = async (email, institutionId, role) => {
           );
         return institutionetails.lectureremails.includes(email);
       default:
-        return false;
+        throw new Error("Invalid role");
     }
   } catch (getAndSetInstitutionDetailsError) {
     console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
