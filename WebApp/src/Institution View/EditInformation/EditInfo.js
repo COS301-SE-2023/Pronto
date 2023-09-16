@@ -33,6 +33,7 @@ const EditInfoPage = () => {
     const [domain, setDomain] = useState("");
 
     const [showFileModal, setShowFileModal] = useState(false);
+    const [logoPreview, setLogoPreview] = useState(null);
 
     const { admin, setAdmin } = useAdmin();
 
@@ -69,6 +70,9 @@ const EditInfoPage = () => {
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        // Create a preview URL for the selected image
+        const previewURL = URL.createObjectURL(file);
+        setLogoPreview(previewURL);
         setShowFileModal(true); // Show the file upload modal when a file is selected
     };
 
@@ -191,16 +195,18 @@ const EditInfoPage = () => {
 
             {showFileModal && (
                 <div className="file-upload-modal">
-                    <h2>Upload File</h2>
-                    <input
-                        id="fileInput"
-                        type="file"
-                        accept=".png"
-                        onChange={handleFileSelect}
-                        style={{ display: "none" }}
+                    <h2>Logo Preview</h2>
+                    <h6>This is how the logo will appear in the navigation menu for lecturers and for your account.</h6>
+
+                    <img
+                        src={logoPreview}
+                        alt="Logo"
+                        className="logo offset-2 img-fluid mr-4.5"
+                        style={{ width: "155px", height: "155px" }}
+                        data-testid={'UniversityImage'}
                     />
-                    {/* ... (your file upload UI here) */}
-                    <button onClick={handleFileSubmit}>Submit</button>
+
+                    <button onClick={handleFileSubmit}>Accept &#x2713;</button>
                 </div>
             )}
             <div>

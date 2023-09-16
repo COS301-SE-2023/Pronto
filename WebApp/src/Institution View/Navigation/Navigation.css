@@ -224,6 +224,9 @@
     left: 60%; /* Center horizontally */
     transform: translate(-50%, -50%); /* Center the modal */
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
   }
   
   /* Additional styling for modal content, e.g., form elements */
