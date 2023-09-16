@@ -25,7 +25,7 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
 
-  const { admin, setAdmin } = useAdmin();
+  const { setAdmin } = useAdmin();
 
   const fetchAdmin = async () => {
     let fetchError = "Could not find your records.If you are a Lecturer return to the homepage and click 'Continue as Lecturer'. If you are a Student please use the mobile app"
@@ -270,7 +270,7 @@ function Login() {
               flexDirection: "column",
             }}
           >
-            {passwordIsFocused && (
+            {passwordIsFocused && (  //real time password criteria check
               <>
                 <CriteriaMessage isValid={passwordCriteria.length}>
                   {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters

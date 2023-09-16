@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function AddModal(module) {
+export default function AddModal(course) {
 
   const [open, setOpen] = useState(false);
   const [offeredCourses, setOfferedCourses] = useState([]);
@@ -29,12 +29,12 @@ export default function AddModal(module) {
 
   const handleOpen = async () => {
     setOpen(true)
-    module.setModal(true)
+    course.setModal(true)
     
     let courses = []
     try {
-      for (let i = 0; i < module.selectedCourses.length; i++) {
-        selectedCourses.push(module.selectedCourses[i]);
+      for (let i = 0; i < course.selectedCourses.length; i++) {
+        selectedCourses.push(course.selectedCourses[i]);
       }
       setSelectedCourses(selectedCourses);
     } catch (e) {
@@ -45,12 +45,12 @@ export default function AddModal(module) {
 
   const handleClose = async () => {
     setOpen(false)
-    module.setModal(false)
+    course.setModal(false)
 
     //Remove deleted courses
-    if (module.updateFlag === true) {
+    if (course.updateFlag === true) {
       if (removed.length > 0) {
-        await module.removeCourses(removed, module.lecturerData)
+        await course.removeCourses(removed, course.lecturerData)
       }
       //Add new courses
       let newcourses = []
@@ -59,12 +59,12 @@ export default function AddModal(module) {
           newcourses.push(selectedCourses[i])
         }
       }
-      await module.addCourses(module.lecturerData, newcourses)
-      module.setOfferedCourses(offeredCourses)
+      await course.addCourses(course.lecturerData, newcourses)
+      course.setOfferedCourses(offeredCourses)
     }
     else {
-      module.setSelectedCourses(selectedCourses)
-      module.setOfferedCourses(offeredCourses)
+      course.setSelectedCourses(selectedCourses)
+      course.setOfferedCourses(offeredCourses)
     }
     setOfferedCourses([])
     setSelectedCourses([])

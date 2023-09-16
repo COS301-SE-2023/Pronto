@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
-import LecturerNavigation from "../Navigation/LecturerNavigation";
-import "../Dashboard/LectureHome.css";
-import { listLecturers, getLecturer } from "../../Graphql/queries";
-import { API, Auth } from 'aws-amplify';
-import { ErrorModal } from "../../Components/ErrorModal";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+import "../Dashboard/LectureHome.css";
+import LecturerNavigation from "../Navigation/LecturerNavigation";
+import { listLecturers } from "../../Graphql/queries";
+import { ErrorModal } from "../../Components/ErrorModal";
 import UserManual from "../HelpFiles/EditModuleInfo.pdf";
 import HelpButton from '../../Components/HelpButton';
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 import moduleImage from "../Images/Courses.png";
+
+import { API, Auth } from 'aws-amplify';
 
 const Modules = () => {
 
@@ -47,10 +49,6 @@ const Modules = () => {
   }
 
 
-  // useEffect(() => {
-  //   fetchCourses();
-  // }, [])
-
   return (
     <div style={{ display: 'inline-flex', maxHeight: '100vh' }}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
@@ -82,7 +80,7 @@ const Modules = () => {
             }
           }>Fetching your courses...</p>
         ) : (
-          lecturer?.courses?.items?.length === 0 ?
+          lecturer?.courses?.items?.length === 0 ?  //if there are no courses
 
             (
               <div>
@@ -96,23 +94,11 @@ const Modules = () => {
                     justifyContent: "center"
                   }
                 }>You have no courses</p>
-                {/* <br/>
-          <p style={ 
-            {
-              color: "#e32f45",
-              opacity: 0.9,
-              fontWeight: "50",
-              fontSize: "25px",
-              display: "flex",
-              justifyContent: "center"
-
-            }
-          }>Contact your institution's admin</p> */}
               </div>
             )
             :
             (
-              lecturer?.courses?.items?.map((val, key) => (
+              lecturer?.courses?.items?.map((val, key) => (   //list the course
                 <Link to={'/lecturer/edit-module'} state={val} key={val.coursecode}>
                   <button className="content-button" key={val.coursecode}>
                     {val.coursecode} <span style={{ float: "right", marginRight: 50, color: "#e32f45" }}>&#x2192;</span>
@@ -125,7 +111,7 @@ const Modules = () => {
       </main>
 
       <div>
-        <HelpButton pdfUrl={UserManual} />
+        <HelpButton pdfUrl={UserManual} /> {/* Help menu */}
       </div>
     </div>
   );

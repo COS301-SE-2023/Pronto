@@ -1,20 +1,18 @@
-import { useState, useEffect } from "react";
-import "./Navigation.css";
-import logo from "../../Images/university_logo.svg";
-import { Auth, Storage, API } from "aws-amplify";
-import { listAdmins, listInstitutions, lecturersByInstitutionId } from "../../Graphql/queries";
+import { useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+
+import "./Navigation.css";
+import { listAdmins } from "../../Graphql/queries";
 import { useAdmin } from "../../ContextProviders/AdminContext";
+
+import { Auth, Storage, API } from "aws-amplify";
 
 export default function InstitutionNavigation({ props }) {
     const navigate = useNavigate();
     const state = useLocation();
-    //const[institution,setInstitution]=useState(state.state)
-    //const [admin, setAdmin] = useState(state.state);
     const { admin, setAdmin } = useAdmin();
     const location = useLocation();
 
-    //    console.log(admin);
     const onSignOut = async (event) => {
         event.preventDefault();
         try {
@@ -57,7 +55,6 @@ export default function InstitutionNavigation({ props }) {
         }
     }
 
-
     useEffect(() => {
 
         fetchAdmin()
@@ -66,7 +63,7 @@ export default function InstitutionNavigation({ props }) {
     return (
         <div className={'grid'}>
             <nav className="vertical-navbar col-4 p-4" >
-                <div className="top">
+                <div className="top"> {/* top holds University image and name portion*/}
 
                     <img
                         src={admin !== undefined ? admin !== null ? admin.institution.logoUrl : " " : "  "}

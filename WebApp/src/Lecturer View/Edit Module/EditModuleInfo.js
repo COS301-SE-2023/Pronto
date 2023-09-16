@@ -1,7 +1,8 @@
+import { useLocation } from "react-router-dom";
+
 import LecturerNavigation from "../Navigation/LecturerNavigation";
 import PostAccordion from "../Edit Module/PostAccordion";
 import "../Dashboard/LectureHome.css";
-import { useLocation } from "react-router-dom";
 import UserManual from "../HelpFiles/EditModuleInfo.pdf";
 import HelpButton from '../../Components/HelpButton';
 import manageImage from "../Images/Manage.png";
@@ -31,7 +32,7 @@ const PostReminder = () => {
       </main>
 
       <div>
-        <HelpButton pdfUrl={UserManual} />
+        <HelpButton pdfUrl={UserManual} /> {/* Help menu */}
       </div>
 
     </div>

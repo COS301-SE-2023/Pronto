@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
+
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
-import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses } from "../../Graphql/queries";
-
-import { API, Auth } from 'aws-amplify';
+import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
-import SearchSharpIcon from '@mui/icons-material/SearchSharp';
-import ClearIcon from '@mui/icons-material/Clear';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
+
+import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import ClearIcon from '@mui/icons-material/Clear';
+
+import { API, Auth } from 'aws-amplify';
 
 const AddLecturer = () => {
 
@@ -36,7 +38,7 @@ const AddLecturer = () => {
 
     const handleAdd = async (event) => {
         event.preventDefault()
-        if (!isModalOpened && adding==="Add") {
+        if (!isModalOpened && adding === "Add") {
             setAdding("Adding...")
             let lecturer = {
                 institutionId: admin.institutionId,
@@ -45,65 +47,65 @@ const AddLecturer = () => {
                 userRole: "Lecturer",
                 email: email,
             };
-    
+
             try {
-                if(email!==admin.email){
-                //let unique = admin.institution.lectureremails.filter((e) => e === email)
-                let emails=await API.graphql({
-                    query:listLecturers,
-                    variables:{filter :{ email :{eq:lecturer.email}}}
-                })
-                
-                if (emails.data.listLecturers.items.length===0){
-                    let mutation = await API.graphql({
-                        query: createLecturer,
-                        variables: { input: lecturer },
-                    });
+                if (email !== admin.email) {
+                    //let unique = admin.institution.lectureremails.filter((e) => e === email)
+                    let emails = await API.graphql({
+                        query: listLecturers,
+                        variables: { filter: { email: { eq: lecturer.email } } }
+                    })
 
-                    lecturer = mutation.data.createLecturer
-                    lecturer.courses = {
-                        items: []
-                    };
+                    if (emails.data.listLecturers.items.length === 0) {
+                        let mutation = await API.graphql({
+                            query: createLecturer,
+                            variables: { input: lecturer },
+                        });
 
-                    let emails;
-                    if (admin.institution.lectureremails === null) {
-                        emails = [];
-                        emails.push(email);
+                        lecturer = mutation.data.createLecturer
+                        lecturer.courses = {
+                            items: []
+                        };
+
+                        let emails;
+                        if (admin.institution.lectureremails === null) {
+                            emails = [];
+                            emails.push(email);
+                        }
+                        else {
+                            emails = admin.institution.lectureremails;
+                            emails.push(email);
+                        }
+                        let logoUrl = admin.institution.logoUrl;
+                        let update = {
+                            id: admin.institutionId,
+                            lectureremails: emails
+                        };
+
+                        let u = await API.graphql({
+                            query: updateInstitution,
+                            variables: { input: update },
+                        });
+                        u = u.data.updateInstitution
+                        u.logoUrl = logoUrl;
+                        let ad = admin;
+                        ad.institution = u;
+
+                        setAdmin(ad);
+
+                        //Add lecturer to courses
+                        await addCourses(lecturer, selectedCourses)
+                        if (lecturerList.length <= 10) {
+                            lecturerList.push(lecturer);
+                            setLecturerList(lecturerList);
+                        }
                     }
                     else {
-                        emails = admin.institution.lectureremails;
-                        emails.push(email);
+                        setError("A lecturer with this email already exists");
                     }
-                    let logoUrl = admin.institution.logoUrl;
-                    let update = {
-                        id: admin.institutionId,
-                        lectureremails: emails
-                    };
-
-                    let u = await API.graphql({
-                        query: updateInstitution,
-                        variables: { input: update },
-                    });
-                    u = u.data.updateInstitution
-                    u.logoUrl = logoUrl;
-                    let ad = admin;
-                    ad.institution = u;
-
-                    setAdmin(ad);
-
-                    //Add lecturer to courses
-                    await addCourses(lecturer, selectedCourses)
-                    if (lecturerList.length <= 10) {
-                        lecturerList.push(lecturer);
-                        setLecturerList(lecturerList);
-                    }
-               }
-                else {
-                    setError("A lecturer with this email already exists");
+                } else {
+                    setError("You cannot use the same account for Lecturer and Admin activities");
                 }
-            }else{
-                setError("You cannot use the same account for Lecturer and Admin activities");
-            }
 
             } catch (error) {
                 console.log(error);

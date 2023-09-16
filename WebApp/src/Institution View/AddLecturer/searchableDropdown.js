@@ -1,17 +1,16 @@
-// SearchableDropdown.js
 import {useState } from "react";
+
 import { searchCourses } from "../../Graphql/queries";
-import {API} from "aws-amplify";
 import { useAdmin } from "../../ContextProviders/AdminContext";
+
+import {API} from "aws-amplify";
 
 export default function SearchableDropdown(props){
 
    const [courses,setCourses]=useState(props.courses); 
-   const {admin,setAdmin}=useAdmin();
+   const {admin}=useAdmin();
    const [searchTerm,setSearchTerm] =useState("");
    const [isOpen,setIsOpen] = useState(true);
-   //const selectedCourses =props.selectedCourses;
-   //const setSelectedCourses =props.setSelectedCourses;
    const [course,setCourse]=useState("");
    const [selectedCourses,setSelectedCourses] = useState([]); 
 
@@ -48,7 +47,6 @@ export default function SearchableDropdown(props){
           }
          }
          setCourses(c);
-         //setCourses(courseList.data.searchCourses.items.filter((c)=>c.lecturerId===null));
          setIsOpen(true);
        ;
     }catch(error){
@@ -97,7 +95,6 @@ export default function SearchableDropdown(props){
         {isOpen && (
           <ul className="dropdown-list">
             {courses
-            //.filter((c)=>c.lecturerId===null && c.institutionId===admin.institutionId)
             .map((val, index) => (
                 <li key={index} onClick={() => handleSelectCourse(val)}>
                   {val?.coursecode}

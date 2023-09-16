@@ -12,7 +12,7 @@ export function RequireLecturerAuth({ children }) {
         const user = await Auth.currentAuthenticatedUser({});
         const group = user.signInUserSession.idToken.payload["cognito:groups"][0];
 
-        if (group !== "lecturerUserGroup") {
+        if (group !== "lecturerUserGroup") {  //check if user is a lecturer, set authenticated to true if they are
           setAuthenticated(false);
         } else {
           setAuthenticated(true);
@@ -20,7 +20,7 @@ export function RequireLecturerAuth({ children }) {
       } catch (error) {
         setAuthenticated(false);
       } finally {
-        setCheckUserComplete(true);
+        setCheckUserComplete(true); // if user is logged in and a lecturer, set true which will grant access
       }
     };
 
@@ -33,7 +33,7 @@ export function RequireLecturerAuth({ children }) {
   }
 
   if (!authenticated) {
-    return <Navigate to="/lecturer/login" />;
+    return <Navigate to="/lecturer/login" />; //if not logged in or not a lecturer, take them to the lecturer login
   }
 
   return children;

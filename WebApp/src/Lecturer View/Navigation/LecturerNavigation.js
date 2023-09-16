@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import "../../Institution View/Navigation/Navigation.css";
-import logo from "../../Images/university_logo.svg";
-import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+
+import "../../Institution View/Navigation/Navigation.css";
 import { listLecturers } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
+
+import { Auth, API, Storage } from "aws-amplify";
 
 export default function LecturerNavigation(lecturerData) {
   const [user, setUser] = useState("");
@@ -22,14 +23,6 @@ export default function LecturerNavigation(lecturerData) {
       console.log(e.message);
     }
   };
-
-
-  // const userSet = async () => {
-  //   let u = await Auth.currentAuthenticatedUser();
-  //   u = u.attributes.name + " " + u.attributes.family_name;
-  //   setUser(u);
-
-  // };
 
   const fetchLecturer = async () => {
     let u = await Auth.currentAuthenticatedUser();
@@ -77,7 +70,7 @@ export default function LecturerNavigation(lecturerData) {
   return (
     <div className={"grid"} >
       <nav className="vertical-navbar col-4 p-4">
-        <div className="top">
+        <div className="top"> {/* Top holds the university image and lecturer name */}
           <img
             src={lecturer !== undefined ? lecturer !== null ? lecturer.institution.logoUrl : " " : "  "}
             alt="Logo"
