@@ -32,6 +32,8 @@ const EditInfoPage = () => {
     const [successMessage, setSuccessMessage] = useState("");
     const [domain, setDomain] = useState("");
 
+    const [showFileModal, setShowFileModal] = useState(false);
+
     const { admin, setAdmin } = useAdmin();
 
     const handleChange = (panel) => (event, isExpanded) => {
@@ -67,6 +69,7 @@ const EditInfoPage = () => {
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setShowFileModal(true); // Show the file upload modal when a file is selected
     };
 
 
@@ -185,6 +188,21 @@ const EditInfoPage = () => {
         <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
+
+            {showFileModal && (
+                <div className="file-upload-modal">
+                    <h2>Upload File</h2>
+                    <input
+                        id="fileInput"
+                        type="file"
+                        accept=".png"
+                        onChange={handleFileSelect}
+                        style={{ display: "none" }}
+                    />
+                    {/* ... (your file upload UI here) */}
+                    <button onClick={handleFileSubmit}>Submit</button>
+                </div>
+            )}
             <div>
                 <HelpButton pdfUrl={UserManual} />
             </div>
@@ -194,7 +212,15 @@ const EditInfoPage = () => {
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '1200px', marginTop: "0%", marginLeft: "25%" }}>
+            <main
+                style={{
+                    width: '1200px',
+                    marginTop: '0%',
+                    marginLeft: '25%',
+                    transition: 'filter 0.3s ease', // Add a transition for a smoother effect
+                }}
+                className={showFileModal ? 'blur-background' : ''}
+            >
                 <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}> Edit University Information</h1>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
                     <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", marginBottom: "30px" }}>Use this to change your accounts password, upload a logo, or edit email the domains of valid accounts for the institution.</h6>

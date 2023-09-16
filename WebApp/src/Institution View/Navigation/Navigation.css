@@ -173,3 +173,76 @@
 .dropdown-list li:hover {
     background-color: #f2f2f2;
 }
+
+/* Add this CSS to your component's CSS file or a global stylesheet */
+
+/* Add this CSS to your component's CSS file or a global stylesheet */
+
+/* Styling for the modal overlay (backdrop) */
+.file-upload-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  /* Styling for the modal itself */
+  /* Add this CSS to your component's CSS file or a global stylesheet */
+
+/* Styling for the modal overlay (backdrop) */
+.file-upload-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  /* Styling for the modal itself */
+  .file-upload-modal {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Box shadow for the modal */
+    padding: 20px;
+    max-width: 800px; /* Adjust the width as needed */
+    width: 60%;
+    height: 60%;
+    text-align: center;
+    position: absolute; /* Position the modal absolutely */
+    top: 50%; /* Center vertically */
+    left: 60%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the modal */
+    z-index: 2;
+  }
+  
+  /* Additional styling for modal content, e.g., form elements */
+  .file-upload-modal h2 {
+    margin-bottom: 20px;
+  }
+  
+  .file-upload-modal button {
+    background-color: #e32f45;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .blur-background {
+    filter: blur(3px); /* Adjust the blur amount as needed */
+    pointer-events: none; /* Prevent clicks on the blurred area */
+  }
+  
+  
