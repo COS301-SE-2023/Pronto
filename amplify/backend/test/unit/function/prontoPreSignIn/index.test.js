@@ -31,7 +31,11 @@ describe("testing presignIn inputs", () => {
       "Invalid User Role or Role not provided"
     );
   });
-
+  test("should throw: Invalid institution Id or email", async () => {
+    await expect(
+      isInstitideAdminOrLecturer("", "", ROLES.Admin)
+    ).rejects.toThrowError("Invalid institution Id or email");
+  });
   test("should throw: Invalid role", async () => {});
 
 
