@@ -7,42 +7,12 @@
 Amplify Params - DO NOT EDIT */
 const ROLES = require("../../prontoPreSignUp/src/roles");
 const {
-  getAndSetInstitutionDetails,
-} = require("./getAndSetInstitutionDetails");
-const isAppClientValid = require("./isAppClientValid");
+  isInstitideAdminOrLecturer,
+} = require("./helpers/assertInstitutionInfo");
+const isAppClientValid = require("./helpers/isAppClientValid");
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-
-const isInstitideAdminOrLecturer = async (email, institutionId, role) => {
-  if (!email || !institutionId)
-    throw new Error(`Invalid institution Id or email`);
-  try {
-    const institutionetails = await getAndSetInstitutionDetails(institutionId);
-    if (!institutionetails)
-      throw new Error(`Failed To retrieve institution details`);
-    switch (role) {
-      case ROLES.Admin:
-        if (!institutionetails.admin)
-          throw new Error(`Institude does not have an admin,\n
-        Please request for one on AgileArchitectsCapstone@gmail.com\n
-        More info on: {path/to/pronto/web/about/institude/admin}`);
-        return institutionetails.admin.email === mail;
-      case ROLES.Lecture:
-        if (!institutionetails.lectureremails)
-          throw new Error(
-            "Lecture email list was not provided, please contact your institution admin"
-          );
-        return institutionetails.lectureremails.includes(email);
-      default:
-        throw new Error("Invalid role");
-    }
-  } catch (getAndSetInstitutionDetailsError) {
-    console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
-    DETAILS: ${getAndSetInstitutionDetailsError}`);
-    throw new Error("FAILED TO VALIDATE ADMIN or LECTURER USER ROLE TYPE");
-  }
-};
 
 exports.handler = async (event) => {
   console.table(event);
@@ -58,7 +28,7 @@ exports.handler = async (event) => {
     )
   )
     throw new Error(
-      `Cannot authenticate user from this app client: 
+      `Cannot authenticate user from this app client:\n 
       Students Should use the mobile app and Admin/Lectures should use the web app`
     );
 
