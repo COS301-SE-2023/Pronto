@@ -22,7 +22,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
+
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialog-paper': {
@@ -33,6 +33,8 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
         backdropFilter: "blur(5px)",
     },
 }));
+
+
 
 const AddLecturer = () => {
 
@@ -51,6 +53,7 @@ const AddLecturer = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [lecturerToRemove, setLecturerToRemove] = useState(null);
     const [lecturerToRemoveIndex, setLecturerToRemoveIndex] = useState(null);
+    const [isRemoving, setisRemoving] = useState(false);
 
 
     const [adding, setAdding] = useState("Add")
@@ -234,6 +237,8 @@ const AddLecturer = () => {
     }
 
     const handleConfirmation = async (lecturer, index) => {
+        setisRemoving(true);
+
         if (lecturerToRemove && lecturerToRemoveIndex !== null) {
             const lecturer = lecturerToRemove;
             const index = lecturerToRemoveIndex;
@@ -271,6 +276,7 @@ const AddLecturer = () => {
                 setAdmin(a);
                 setLecturerList(rows);
                 setOpenDialog(false);
+                setisRemoving(false);
             }
             catch (error) {
                 if (error.errors !== undefined) {
@@ -283,9 +289,11 @@ const AddLecturer = () => {
                     setError("Something went wrong. Please try again later");
                 }
                 setOpenDialog(false);
+                setisRemoving(false);
             }
             finally {
                 setOpenDialog(false);
+                setisRemoving(false);
             }
         }
     };
@@ -622,6 +630,7 @@ const AddLecturer = () => {
                             <button
                                 type="submit"
                                 className="btn btn-danger w-100"
+                                style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
                                 data-testid="submitButton"
                             >
                                 {adding}
@@ -716,31 +725,17 @@ const AddLecturer = () => {
                                                 />
                                             </td>
                                             <td>
-                                                <Button
+                                                <button
                                                     onClick={() => handleRemove(val, key)}
                                                     type="button"
                                                     className="btn btn-danger w-100"
+                                                    style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
                                                     data-testid="deleteButton"
                                                 >
                                                     Remove
-                                                </Button>
+                                                </button>
                                             </td>
-                                            <StyledDialog open={openDialog} onClose={() => setOpenDialog(false)}>
-                                                <DialogTitle>Confirmation</DialogTitle>
-                                                <DialogContent>
-                                                    <DialogContentText>
-                                                        Are you sure you want to remove this lecturer?
-                                                    </DialogContentText>
-                                                </DialogContent>
-                                                <DialogActions>
-                                                    <Button onClick={handleConfirmation} color="primary">
-                                                        Confirm
-                                                    </Button>
-                                                    <Button onClick={() => setOpenDialog(false)} color="primary">
-                                                        Cancel
-                                                    </Button>
-                                                </DialogActions>
-                                            </StyledDialog>
+
                                         </tr>
                                     )
                                 })}
@@ -757,7 +752,28 @@ const AddLecturer = () => {
                 </div>
                 <br />
             </main >
-
+            <StyledDialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogTitle
+                    style={{ fontWeight: "500", textAlign: "center" }}
+                >Deletion Confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to remove this lecturer? They will not be able to access their account permanently.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={handleConfirmation}
+                        color="primary"
+                        style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "100px" }} // Add your custom styling here
+                    >
+                        {isRemoving ? "Deleting..." : "Delete"}
+                    </Button>
+                    <Button onClick={() => setOpenDialog(false)} color="primary">
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </StyledDialog>
         </div >
     );
 };
