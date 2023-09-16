@@ -1,5 +1,5 @@
-process.env.AppClientId = "APP_CLIENTID";
-process.env.AppClientIdWeb = "WEB_CLIENTID";
+process.env.COGNITO_MOBILE_CLIENT_ID = "APP_CLIENTID";
+process.env.COGNITO_WEB_CLIENT_ID = "WEB_CLIENTID";
 process.env.StudentsGroupName = "STUDENTSGROUPNAME";
 process.env.LecturersGroupName = "LECTURERGROUPNAME";
 process.env.AdminGroupName = "ADMINGROUPNAME";

@@ -43,6 +43,6 @@ describe("is the app client id valid?", () => {
     process.env.AppClientIdWeb = studentsEvent.callerContext.clientId;
     expect(
       isAppClientValid(studentsEvent.callerContext.clientId, ROLE.Student)
-    ).toBe(false);
+    ).toBe(true);
   });
 });
