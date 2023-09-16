@@ -141,10 +141,9 @@ const EditInfoPage = () => {
     }
 
     const handleFileSubmit = async (event) => {
-
+        setShowFileModal(false);
         if (selectedFile) {
             try {
-
                 const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;
                 let path = await Storage.put(fileKey, selectedFile, {
                     contentType: "image/png",
@@ -192,6 +191,7 @@ const EditInfoPage = () => {
 
     const handleCloseModal = () => {
         // Close the modal when the "X" icon is clicked
+        setSelectedFile(null);
         setShowFileModal(false);
     };
 
@@ -367,13 +367,6 @@ const EditInfoPage = () => {
                                     {selectedFile ? (
                                         <div>
                                             Selected File: {selectedFile.name}
-                                            <button
-                                                onClick={handleFileSubmit}
-                                                className={"btn m-3"}
-                                                style={{ backgroundColor: "#e32f45", color: "white" }}
-                                            >
-                                                Submit
-                                            </button>
                                         </div>
                                     ) : (
                                         <div id={"dropzone"} onClick={handleClick}>
