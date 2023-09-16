@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for prontoPreSignUp/src/index.js</title>
+    <title>Code coverage report for prontoPreSignIn/src/helpers/assertInstitutionInfo.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">prontoPreSignUp/src</a> index.js</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">prontoPreSignIn/src/helpers</a> assertInstitutionInfo.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84% </span>
+                <span class="strong">58.53% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>21/25</span>
+                <span class='fraction'>24/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>12/15</span>
+                <span class='fraction'>7/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>21/25</span>
+                <span class='fraction'>24/40</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -141,35 +141,51 @@
 <a name='L76'></a><a href='#L76'>76</a>
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,123 +195,140 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* Amplify Params - DO NOT EDIT
-	ENV
-	REGION
-	API_PRONTO_GRAPHQLAPIIDOUTPUT
-	API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT
-	API_PRONTO_GRAPHQLAPIKEYOUTPUT
-	AUTH_PRONTOAUTH_USERPOOLID
-	StudentsGroupName
-	LecturersGroupName
-	AdminGroupName
-Amplify Params - DO NOT EDIT */
-const ROLES = require("./roles.js");
-const {
-  isLectureEmailPartOfInstitution,
-  isAdminAllocated,
-  isStudentEmailDomainPartOfInstitution,
-} = require("./assertInstitutionInfo.js");
-const isAppClientValid = require("./isAppClientValid.js");
-/**
- * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
- */
-exports.handler = async (event) =&gt; {
-  console.table(event);
-  if (
-    !event.request.clientMetadata.role ||
-    !Object.values(ROLES).includes(event.request.clientMetadata.role)
-  )
-    throw new Error("Invalid User Role or Role not provided");
-  if (
-    !isAppClientValid(
-      event.callerContext.clientId,
-      event.request.clientMetadata.role
-    )
-  )
-    throw new Error(
-      `Cannot authenticate user from this app client: 
-      Students Should use the mobile app and Admin/Lectures should use the web app`
-    );
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const ROLES = require("../roles");
+const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINT;
+const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEY;
+let institution = {
+  details: null,
+  id: null,
+};
 &nbsp;
-  event.response.autoConfirmUser = false;
-  try {
-    switch (event.request.clientMetadata.role) {
-      case ROLES.Admin:
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (
-          await isAdminAllocated(event.request.clientMetadata.institutionId)
-        ) {
-          throw new Error(`Institution has an admin already.`);
+const getAndSetInstitutionDetails = async (institutionId) =&gt; {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!institutionId)
+<span class="cstat-no" title="statement not covered" >    throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (institution.details &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >institution.id == institutionId)</span>
+<span class="cstat-no" title="statement not covered" >    return institution.details;</span>
+  institution.id = institutionId;
+  const query = /* GraphQL */ `
+    query getInstitutionQuery($input: ID!) {
+      getInstitution(id: $input) {
+        name
+        admin {
+          id
+          email
         }
-<span class="cstat-no" title="statement not covered" >        break;</span>
-      case ROLES.Lecture:
-        const isLectureEmailPartOfInst = await isLectureEmailPartOfInstitution(
-          event.request.userAttributes.email,
-          event.request.clientMetadata.institutionId
-        );
-&nbsp;
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (!isLectureEmailPartOfInst) {
-          throw new Error(`Lecturer email is not part of the Institution.`);
-        }
-<span class="cstat-no" title="statement not covered" >        break;</span>
-      case ROLES.Student:
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (
-          !(await isStudentEmailDomainPartOfInstitution(
-            event.request.userAttributes.email,
-            event.request.clientMetadata.institutionId
-          ))
-        )
-          throw new Error(
-            `The provided student email does not match the selected institutions student emails format.
-          Please use your institution provided email.`
-          );
-<span class="cstat-no" title="statement not covered" >        break;</span>
+        domains
+        lectureremails
+      }
     }
-  } catch (preAuthError) {
-    console.debug(preAuthError);
-    throw new Error(preAuthError);
+  `;
+  const variables = {
+    input: institution.id,
+  };
+  const options = {
+    method: "POST",
+    headers: {
+      "x-api-key": GRAPHQL_API_KEY,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query, variables }),
+  };
+&nbsp;
+  const request = new Request(GRAPHQL_ENDPOINT, options);
+  let body;
+  let response;
+&nbsp;
+  try {
+    response = await fetch(request);
+<span class="cstat-no" title="statement not covered" >    body = await response.json();</span>
+<span class="cstat-no" title="statement not covered" >    console.debug(`graphQL Resonse: ${JSON.stringify(body)}`);</span>
+<span class="cstat-no" title="statement not covered" >    if (body.data) <span class="cstat-no" title="statement not covered" >return (institution.details = body.data.getInstitution);</span></span>
+<span class="cstat-no" title="statement not covered" >    throw new Error("API ERROR: Failed to retrieve data");</span>
+  } catch (getAndSetInstitutionDetailsError) {
+    console.debug(getAndSetInstitutionDetailsError);
+    throw new Error(`Failed To retrieve institution details.`);
   }
-<span class="cstat-no" title="statement not covered" >  return event;</span>
+};
+&nbsp;
+const isInstitideAdminOrLecturer = async (email, institutionId, role) =&gt; {
+  if (!email || !institutionId)
+    throw new Error(`Invalid institution Id or email`);
+  try {
+    const institutionetails = await getAndSetInstitutionDetails(institutionId);
+<span class="cstat-no" title="statement not covered" >    if (!institutionetails)</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error(`Failed To retrieve institution details`);</span>
+<span class="cstat-no" title="statement not covered" >    switch (role) {</span>
+      case ROLES.Admin:
+<span class="cstat-no" title="statement not covered" >        if (!institutionetails.admin)</span>
+<span class="cstat-no" title="statement not covered" >          throw new Error(`Institude does not have an admin,\n</span>
+        Please request for one on AgileArchitectsCapstone@gmail.com\n
+        More info on: {path/to/pronto/web/about/institude/admin}`);
+<span class="cstat-no" title="statement not covered" >        return institutionetails.admin.email === mail;</span>
+      case ROLES.Lecture:
+<span class="cstat-no" title="statement not covered" >        if (!institutionetails.lectureremails)</span>
+<span class="cstat-no" title="statement not covered" >          throw new Error(</span>
+            "Lecture email list was not provided, please contact your institution admin"
+          );
+<span class="cstat-no" title="statement not covered" >        return institutionetails.lectureremails.includes(email);</span>
+      default:
+<span class="cstat-no" title="statement not covered" >        throw new Error("Invalid role");</span>
+    }
+  } catch (getAndSetInstitutionDetailsError) {
+    console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
+    DETAILS: ${getAndSetInstitutionDetailsError}`);
+    throw new Error("FAILED TO VALIDATE ADMIN or LECTURER USER ROLE TYPE");
+  }
+};
+&nbsp;
+module.exports = {
+  getAndSetInstitutionDetails,
+  isInstitideAdminOrLecturer,
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -306,14 +339,14 @@ exports.handler = async (event) =&gt; {
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2023-09-16T17:33:00.785Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     
