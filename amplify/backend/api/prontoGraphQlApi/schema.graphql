@@ -221,7 +221,7 @@ type Announcement
       sortKeyFields: ["createdAt"]
     )
   createdAt: String!
-  anonounceMentStatus: Announcement_Status
+  anonouncementStatus: Announcement_Status
     @function(name: "announcementsHandler-${env}")
 }
 
@@ -253,13 +253,13 @@ enum STATUS {
   OPERATIONAL
 }
 
-enum ENDPOIINT_TYPE_STATUS {
+enum ENDPOINT_TYPE_STATUS {
   SENT
   FAILED
   UNAVAILABLE
 }
 type Announcement_Status {
-  SMS: ENDPOIINT_TYPE_STATUS
-  PUSH: ENDPOIINT_TYPE_STATUS
-  EMAIL: ENDPOIINT_TYPE_STATUS
+  SMS: ENDPOINT_TYPE_STATUS
+  PUSH: ENDPOINT_TYPE_STATUS
+  EMAIL: ENDPOINT_TYPE_STATUS
 }
