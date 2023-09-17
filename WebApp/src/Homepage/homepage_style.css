@@ -130,7 +130,7 @@
   justify-content: space-between;
   text-align: center;
   position: absolute;
-  top: 95%; /* Adjust the top value as needed */
+  top: 75%; /* Adjust the top value as needed */
   left: 0;
   align-items: center;
   animation: slideIn 1s ease;
@@ -186,7 +186,7 @@
   width: 100%;
   height: 80%;
   position: absolute;
-  top: 175%; /* Adjust the top value as needed */
+  top: 185%; /* Adjust the top value as needed */
   left: 0;
   display: flex;
   justify-content: space-between;
@@ -226,7 +226,7 @@
   height: 80%;
   position: absolute;
   left: 0;
-  top: 260%; /* Adjust the top value as needed */
+  top: 280%; /* Adjust the top value as needed */
   display: flex;
   align-items: center; /* Vertically center the content */
   justify-content: space-between;
