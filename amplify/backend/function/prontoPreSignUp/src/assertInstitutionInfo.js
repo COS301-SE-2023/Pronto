@@ -77,6 +77,7 @@ const getInstitutionEmailDomains = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.domains;
   } catch (getInstitutionEmailDomainsError) {
+    console.debug(getInstitutionEmailDomainsError);
     throw new Error(`Failed to retrieve email domains for the institution.`);
   }
 };
