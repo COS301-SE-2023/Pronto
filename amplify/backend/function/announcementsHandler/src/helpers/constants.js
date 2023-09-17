@@ -6,7 +6,13 @@ const GRAPHQL = Object.freeze({
     CREATE_ANNOUNCEMENT: "createAnnouncement",
   },
 });
-
+const NOTIFICATIONS_STATUS = Object.freeze({
+  SENT: "SENT",
+  DISABLE: "DISABLE",
+  FAILED: "FAILED",
+  UNAVAILABLE: "UNAVAILABLE",
+});
 module.exports = {
   GRAPHQL,
+  NOTIFICATIONS_STATUS,
 };
