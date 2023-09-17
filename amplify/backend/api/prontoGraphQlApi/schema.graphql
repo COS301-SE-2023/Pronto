@@ -89,7 +89,7 @@ type Student
   lastname: String!
   userRole: String!
   email: String! @index(name: "byEmail", queryField: "studentByEmail")
-  preference: NotificationPreferance @auth(rules: [{ allow: owner }])
+  preference: notificationPreferance
   institution: Institution! @belongsTo(fields: ["institutionId"])
   timetable: Timetable @hasOne
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
@@ -221,62 +221,17 @@ type Announcement
       sortKeyFields: ["createdAt"]
     )
   createdAt: String!
-  announcementStatus: Announcement_Status
-    @function(name: "announcementsHandler-${env}")
+  anonounceMentStatus: @function(name:"announcementsHandler-${env}")
 }
 
-type NotificationPreferance
-  @model
-  @auth(
-    rules: [
-      { allow: owner, ownerField: "studentId" }
-      { allow: public, operations: [read] }
-    ]
-  ) {
-  studentId: ID! @index(name: "byStudentId")
-  endpoint: Endpoint @function(name: "notificationPreferanceHandler-${env}")
-}
-
-type Notification {
-  courseid: ID!
-  status: STATUS
-}
-
-enum NOTIFICATION_TYPE {
+enum notificationType{
   SMS
   PUSH
-  EMAIL
+  EMAIL 
 }
 
-enum STATUS {
-  UPDATED
-  DISABLED
-  FAILED
-  OPERATIONAL
-}
-
-enum ENDPOINT_TYPE_STATUS {
-  SENT
-  FAILED
-  UNAVAILABLE
-}
-type Announcement_Status {
-  SMS: ENDPOINT_TYPE_STATUS
-  PUSH: ENDPOINT_TYPE_STATUS
-  EMAIL: ENDPOINT_TYPE_STATUS
-  announcement_Matrix: Announcement_Matrix
-  info: String
-}
-
-type Announcement_Matrix {
-  SMS: Int
-  PUSH: Int
-  EMAIL: Int
-}
-
-type Endpoint {
-  type: NOTIFICATION_TYPE
-  endPointAddress: ID
-  status: STATUS
-  info: String
+typen notificationPreferance {
+  type: notificationType
+  enpointID: ID
+  deviceID: ID
 }
