@@ -65,8 +65,6 @@ Pronto is a consolidated university application that provides students with the 
 
 <img src="Documentation/ReadME Resources/Images/bar.png" alt="Alt text" title="bar">
 
-<br>
-
 # Extra Information
 
 ### Refer to the technical installation Manual for all information regarding how to install and run the app. 
