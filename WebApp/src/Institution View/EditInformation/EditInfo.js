@@ -16,6 +16,7 @@ import UserManual from "../HelpFiles/EditInfo.pdf";
 import { useAdmin } from '../../ContextProviders/AdminContext';
 
 import { Auth, Storage, API } from 'aws-amplify'
+import { listAdmins } from '../../Graphql/queries';
 
 const EditInfoPage = () => {
     const [expanded, setExpanded] = useState(false);
@@ -37,30 +38,78 @@ const EditInfoPage = () => {
         setExpanded(isExpanded ? panel : false);
     };
 
+    const [passwordIsValid, setPasswordIsValid] = useState(false);
+
+    const validatePassword = (value) => {
+        const regex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
+        const isValidPassword = regex.test(value);
+
+        setPasswordIsValid(isValidPassword);
+    };
+        
+    const newPasswordSet= (password) =>{
+        let isValidPassword=validatePassword(password);
+        setNewPassword(password);
+        setPasswordIsValid(isValidPassword);
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            if (newPassword === confirmPassword) {
-                Auth.changePassword(user, oldPassword, newPassword);
-                setSuccessMessage("Password changed successfully");
-            } else {
-                setError("New password does not match confirm password");
-            }
+                if(passwordIsValid){
+                    if (newPassword === confirmPassword) {
+                        Auth.changePassword(user, oldPassword, newPassword);
+                        setSuccessMessage("Password changed successfully");
+                    } else {
+                        setError("New password does not match confirm password");
+                    }
+                }else {
+                    setError("New password is too weak.Please ensure your password is at least 8 characters long and  includes at least one lowercase letter, one uppercase letter, one number and one special character");
+                }
         } catch (error) {
-            setError("Password change failed")
+            setError("Password change failed");
         }
-        setOldPassword("")
-        setNewPassword("")
-        setConfirmPassword("")
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
     };
 
     const fecthUser = async () => {
-        let userInfo = await Auth.currentAuthenticatedUser()
-        let username = userInfo?.attributes?.name;
-        const words = username.split(/\s+/);
-        username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
-        setUser(userInfo);
-        setFolderNameS3(username);
+        
+        
+        try{
+            let userInfo = await Auth.currentAuthenticatedUser();
+            //let username = userInfo?.attributes?.name;
+            let adminEmail=userInfo?.attributes?.email;
+            let adminInfo=admin;
+            if(adminInfo===null){
+                let adminData = await API.graphql({
+                    query: listAdmins,
+                    variables: {
+                        filter: {
+                            email: {
+                                eq: adminEmail
+                            }
+                        },
+                    },
+                });
+                if (adminData.data.listAdmins.items.length > 0) {
+                    adminData = adminData.data.listAdmins.items[0];
+                    if (adminData.institution.logo !== null) {
+                        adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                    }
+                    setAdmin(adminData);
+                }
+            }
+            let username=adminInfo.institution.name;
+            const words = username.split(/\s+/);
+            username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
+            setUser(userInfo);
+            setFolderNameS3(username);
+        }catch(e){
+           console.log(e);
+        }
     }
 
     const handleFileSelect = (event) => {
@@ -200,7 +249,7 @@ const EditInfoPage = () => {
 
                         <tr>
                             <td>Institution name:</td>
-                            <td>{user !== null ? user.attributes.name : " "}</td>
+                            <td>{admin !== null ? admin?.institution?.name : " "}</td>
                         </tr>
 
                         <tr>
@@ -210,7 +259,7 @@ const EditInfoPage = () => {
 
                         <tr>
                             <td>Email address:</td>
-                            <td>{user != null ? user.attributes.email : " "}</td>
+                            <td>{admin != null ? admin?.institution?.email : " "}</td>
                         </tr>
 
                     </tbody>
@@ -257,7 +306,7 @@ const EditInfoPage = () => {
                                             data-testid="repword"
                                             required
                                             value={newPassword}
-                                            onChange={(e) => setNewPassword(e.target.value)}></input>
+                                            onChange={(e) => newPasswordSet(e.target.value)}></input>
                                     </div>
                                 </div>
 
