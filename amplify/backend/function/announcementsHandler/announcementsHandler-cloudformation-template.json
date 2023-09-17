@@ -16,13 +16,6 @@
         "s3Key": {
             "Type": "String"
         }
-        
-        ,
-        "pinpointAppId": {
-            "Type": "String"
-        }
-        
-        
         ,
     
     
@@ -93,7 +86,7 @@
                 ]
             },
             "Environment": {
-                "Variables" : {"ENV":{"Ref":"env"},"REGION":{"Ref":"AWS::Region"},"API_PRONTOGRAPHQLAPI_GRAPHQLAPIIDOUTPUT":{"Ref":"apiprontoGraphQlApiGraphQLAPIIdOutput"},"API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT":{"Ref":"apiprontoGraphQlApiGraphQLAPIEndpointOutput"},"API_PRONTOGRAPHQLAPI_GRAPHQLAPIKEYOUTPUT":{"Ref":"apiprontoGraphQlApiGraphQLAPIKeyOutput"},"PINPOINT_APP_ID":{"Ref":"pinpointAppId"}}
+                "Variables" : {"ENV":{"Ref":"env"},"REGION":{"Ref":"AWS::Region"},"API_PRONTOGRAPHQLAPI_GRAPHQLAPIIDOUTPUT":{"Ref":"apiprontoGraphQlApiGraphQLAPIIdOutput"},"API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT":{"Ref":"apiprontoGraphQlApiGraphQLAPIEndpointOutput"},"API_PRONTOGRAPHQLAPI_GRAPHQLAPIKEYOUTPUT":{"Ref":"apiprontoGraphQlApiGraphQLAPIKeyOutput"}}
             },
             "Role": { "Fn::GetAtt": ["LambdaExecutionRole", "Arn"] },
             "Runtime": "nodejs18.x",
@@ -107,13 +100,13 @@
                 "RoleName": {
                     "Fn::If": [
                         "ShouldNotCreateEnvResources",
-                        "prontoLambdaRole20a1b57a",
+                        "prontoLambdaRole2d59855e",
                         {
 
                             "Fn::Join": [
                                 "",
                                 [
-                                    "prontoLambdaRole20a1b57a",
+                                    "prontoLambdaRole2d59855e",
                                     "-",
                                     {
                                         "Ref": "env"
