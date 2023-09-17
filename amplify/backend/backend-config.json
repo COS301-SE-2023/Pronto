@@ -150,6 +150,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_announcementsHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_announcementsHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoPostSignUp_adminGroupName": {
       "usedBy": [
         {
