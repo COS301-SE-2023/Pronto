@@ -37,6 +37,7 @@ type Admin
   @auth(
     rules: [
       { allow: owner, ownerField: "owner" }
+      { allow: public, operations: [read] }
       { allow: groups, groups: ["adminUserGroup"], operations: [read] }
     ]
   ) {
@@ -98,6 +99,8 @@ type Enrollment
   @auth(
     rules: [
       { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: groups, groups: ["lecturerUserGroup"], operations: [read] }
       { allow: groups, groups: ["studentUserGroup"], operations: [read] }
     ]
   ) {
@@ -115,6 +118,7 @@ type Course
   @auth(
     rules: [
       { allow: owner }
+      { allow: public, operations: [read] }
       {
         allow: groups
         groups: ["studentUserGroup", "lecturerUserGroup", "adminUserGroup"]
@@ -187,7 +191,8 @@ type Announcement
   @model
   @auth(
     rules: [
-      { allow: owner }
+      { allow: owner, ownerField: "lecturerId", operations: [read, update] }
+      { allow: public, operations: [read] }
       {
         allow: groups
         groups: ["studentUserGroup", "lecturerUserGroup", "adminUserGroup"]
@@ -197,6 +202,7 @@ type Announcement
   ) {
   id: ID!
   courseId: ID! @index(name: "byAnnouncement")
+  lecturerId: ID
   description: String
   start: String
   end: String
@@ -213,7 +219,7 @@ type Announcement
       sortKeyFields: ["createdAt"]
     )
   createdAt: String!
-  anonounceMentStatus: ANNOUNCEMENTSTATUS
+  anonounceMentStatus: Announcement_Status
     @function(name: "announcementsHandler-${env}")
 }
 
