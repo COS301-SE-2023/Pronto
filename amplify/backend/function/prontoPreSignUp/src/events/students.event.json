@@ -2,15 +2,15 @@
   "userPoolId": "USERPOOLID",
   "userName": "USERNAME",
   "callerContext": {
-    "clientId": "17valkv4rb6ifi4qte115ph4nu"
+    "clientId": "APP_CLIENTID"
   },
   "request": {
     "clientMetadata": {
       "role": "Student",
-      "institutionId": "4419cbaf-7f44-41dd-bdf1-a1db630f3530"
+      "institutionId": "INSTITUTIONID"
     },
     "userAttributes": {
-      "email": "EMAIL@up.ac.za"
+      "email": "EMAIL"
     }
   },
   "response": {}
