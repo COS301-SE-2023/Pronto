@@ -1,8 +1,14 @@
 <p align = "center">
-<img src="Documentation/ReadME Resources/Images//ProntoLogo.svg" alt="Alt text" title="Optional title">
+<img src="Documentation/ReadME Resources/Images/ProntoLogo.svg" alt="Alt text" title="Logo">
 </p>
 
-# Pronto
+<h3 align ='center'> Agile Architects - Capstone Project 2023 </h3>
+<p align = 'center'>Partnered with AWS</p>
+
+<img src="Documentation/ReadME Resources/Images/bar.png" alt="Alt text" title="bar">
+
+<div align = "center">
+<br>
 
 [![GitHub Repo Size in Bytes](https://img.shields.io/github/languages/code-size/COS301-SE-2023/Pronto)](https://github.com/COS301-SE-2023/Pronto)
 [![GitHub Commit Activity](https://img.shields.io/github/commit-activity/w/COS301-SE-2023/Pronto)](https://github.com/COS301-SE-2023/Pronto)
@@ -11,10 +17,12 @@
 [![Open Issues](https://img.shields.io/github/issues/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues?q=is%3Aissue+is%3Aclosed)
 [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595?style=flat-square)](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595)
+</div>
+<img src="Documentation/ReadME Resources/Images/bar.png" alt="Alt text" title="bar">
 
 ## Description
 
-Pronto is a React Native application that helps students to create their timetables in an easy and convenient way. They will also be able to receive reminders, test date and due assignment updates from lecturers. The navigation feature will also make directions to venue halls much easier for pupils that are unfamiliar to the campus.
+Pronto is a consolidated university application that provides students with the ability to conveniently create timetables, receive important notifications from their lecturers, and get directions to their course venues. It also enables them to access important files and documents uploaded by their institution, such as yearly calendars and schedules. Paired with its simple, clean, and useable design, Pronto is the perfect application for use by Institutions, Lecturers and Students.
 
 ## Documentation
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Demo4%20SRS.pdf">🧾 SRS Document</a></div>
@@ -39,6 +47,9 @@ Pronto is a React Native application that helps students to create their timetab
 ## Project Management
 
 <div><a href="https://github.com/orgs/COS301-SE-2023/projects/24">📅 Pronto Project Board </a></div>
+<br>
+
+<img src="Documentation/ReadME Resources/Images/bar.png" alt="Alt text" title="bar">
 
 ## Team Members
 
@@ -52,9 +63,13 @@ Pronto is a React Native application that helps students to create their timetab
 
 <br><br>
 
+<img src="Documentation/ReadME Resources/Images/bar.png" alt="Alt text" title="bar">
+
+<br>
+
 # Extra Information
 
-### Refer to the technical installation Manual for all inforamtion regarding how to install and run the app. 
+### Refer to the technical installation Manual for all information regarding how to install and run the app. 
 ### For directions/clarification on how to use the app, refer to the user manual.
 
 ### Feel free to contact the team via our email address: AgileArchitectsCapstone@gmail.com
