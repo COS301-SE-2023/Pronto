@@ -1,5 +1,5 @@
-const GRAPHQL_ENDPOINT = process.env.API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
-const GRAPHQL_API_KEY = process.env.API_PRONTO_GRAPHQLAPIKEYOUTPUT;
+const GRAPHQL_ENDPOINT = process.env.API_API_PRONTO_GRAPHQLAPIENDPOINT;
+const GRAPHQL_API_KEY = process.env.API_API_PRONTO_GRAPHQLAPIKEY;
 let institution = {
   details: null,
   id: null,
