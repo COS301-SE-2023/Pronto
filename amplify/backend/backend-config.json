@@ -86,6 +86,22 @@
     }
   },
   "function": {
+    "announcementsHandler": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "prontoGraphQlApi"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "prontoPostSignUp": {
       "build": true,
       "dependsOn": [
@@ -134,6 +150,14 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_announcementsHandler_pinpointAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoPostSignUp_adminGroupName": {
       "usedBy": [
         {
