@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "api": {
+      "prontoGraphQlApi": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "pinpointAppId",
+      "environmentVariableName": "PINPOINT_APP_ID"
+    }
+  ]
+}
