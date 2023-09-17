@@ -87,7 +87,7 @@ type Student
   lastname: String!
   userRole: String!
   email: String! @index(name: "byEmail", queryField: "studentByEmail")
-  preference: String
+  preference: notificationPreferance
   institution: Institution! @belongsTo(fields: ["institutionId"])
   timetable: Timetable @hasOne
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
@@ -212,4 +212,17 @@ type Announcement
       sortKeyFields: ["createdAt"]
     )
   createdAt: String!
+  anonounceMentStatus: @function(name:"announcementsHandler-${env}")
+}
+
+enum notificationType{
+  SMS
+  PUSH
+  EMAIL 
+}
+
+typen notificationPreferance {
+  type: notificationType
+  enpointID: ID
+  deviceID: ID
 }
