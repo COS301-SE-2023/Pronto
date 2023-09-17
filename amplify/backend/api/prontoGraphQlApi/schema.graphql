@@ -221,7 +221,7 @@ type Announcement
       sortKeyFields: ["createdAt"]
     )
   createdAt: String!
-  anonounceMentStatus: ANNOUNCEMENTSTATUS
+  anonounceMentStatus: Announcement_Status
     @function(name: "announcementsHandler-${env}")
 }
 
