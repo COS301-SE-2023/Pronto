@@ -1,12 +1,5 @@
 {
   "permissions": {
-    "analytics": {
-      "prontoNotifications": [
-        "create",
-        "read",
-        "update"
-      ]
-    },
     "api": {
       "prontoGraphQlApi": [
         "Query",
@@ -14,5 +7,11 @@
       ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "pinpointAppId",
+      "environmentVariableName": "PINPOINT_APP_ID"
+    }
+  ]
 }
