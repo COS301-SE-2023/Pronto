@@ -28,12 +28,12 @@ exports.handler = async (event) => {
   if (graphQlObject === GRAPHQL.OBJECT_TYPES.MUTATION) {
     switch (fieldName) {
       case GRAPHQL.FIELD_TYPES.CREATE_ANNOUNCEMENT:
-        return "";
+        return { SMS: "", EMAIL: "", PUSH: "" };
 
       case GRAPHQL.FIELD_TYPES.UPDATE_ANNOUNCEMENT:
-        return "";
+        return { SMS: "", EMAIL: "", PUSH: "" };
       case GRAPHQL.FIELD_TYPES.DELETE_ANNOUNCEMENT:
-        return "";
+        return { SMS: "", EMAIL: "", PUSH: "" };
 
       default:
         return { SMS: "", EMAIL: "", PUSH: "" };
