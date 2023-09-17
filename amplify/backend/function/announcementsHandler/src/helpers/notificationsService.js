@@ -1,3 +1,20 @@
+const getEndPoints = /* GraphQL */ `
+  query MyQuery {
+    getCourse(id: $input) {
+      enrollments(limit: 100) {
+        items {
+          student {
+            preference {
+              enpointID
+              type
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 const setAndGetSendMessagesCommandInput = (course, announcement, endpoints) => {
   const SendMessagesCommand = {
     ApplicationId: "",
@@ -41,5 +58,4 @@ const setAndGetSendMessagesCommandInput = (course, announcement, endpoints) => {
 
 const sendMessageOperation = async (sendMessageOperationInput) => {
   const { course, announcement, students } = sendMessageOperationInput;
-  
 };
