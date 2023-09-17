@@ -17,12 +17,22 @@
 [![Open Issues](https://img.shields.io/github/issues/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues?q=is%3Aissue+is%3Aclosed)
 [![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595?style=flat-square)](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595)
+
+![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+![cypress](https://img.shields.io/badge/-cypress-%23E5E5E5?style=for-the-badge&logo=cypress&logoColor=058a5e)
 </div>
 <img src="Documentation/ReadME Resources/Images/bar.png" alt="Alt text" title="bar">
 
 ## Description
 
-Pronto is a consolidated university application that provides students with the ability to conveniently create timetables, receive important notifications from their lecturers, and get directions to their course venues. It also enables them to access important files and documents uploaded by their institution, such as yearly calendars and schedules. Paired with its simple, clean, and useable design, Pronto is the perfect application for use by Institutions, Lecturers and Students.
+Pronto is a consolidated university application that provides students with the ability to conveniently create timetables, receive important notifications from their lecturers, and get directions to their course venues. It also enables them to access important files and documents uploaded by their institution, such as yearly calendars and schedules. Paired with its simple, clean, and user-friendly design, Pronto is the perfect application for use by Institutions, Lecturers and Students.
 
 ## Documentation
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Demo4%20SRS.pdf">🧾 SRS Document</a></div>
@@ -33,15 +43,24 @@ Pronto is a consolidated university application that provides students with the 
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/User%20Manual.pdf">🧾 User Manual</a></div>
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Technical%20Installation.pdf">🧾 Technical Installation Manual</a></div>
 
-### Previous SRS versions
-<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%201%20documents/Demo%201%20SRS.pdf">🧾 Demo 1: SRS Document</a></div>
-<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%202%20documents/Demo2%20SRS.pdf">🧾 Demo 2: SRS Document</a></div>
+<br>
 
-## Demo Recordings
+<details>
+  <summary>Previous SRS versions</summary>
+  <ol style="list-style: none">
+    <li><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%201%20documents/Demo%201%20SRS.pdf">🧾 Demo 1: SRS Document</a></li>
+    <li><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%202%20documents/Demo2%20SRS.pdf">🧾 Demo 2: SRS Document</a></li>
+  </ol>
+</details>
 
-<div><a href="https://drive.google.com/file/d/1HWyxFvWtt6HvSSNpiXuQ2BRM43qTEhgU/view?usp=share_link">📽️ Demo 1</a></div>
-<div><a href="https://drive.google.com/file/d/1iLCdIK4_AjSgFtfEThRByqWEbvSH73xt/view?usp=drive_link">📽️ Demo 2</a></div>
-<div><a href="https://drive.google.com/file/d/1ImiTyPSyAo8VTLaCVQV2lIR6TQg5sghs/view?usp=sharing">📽️ Demo 3</a></div>
+<details>
+  <summary>Demo Recordings</summary>
+  <ol style="list-style: none">
+    <li><a href="https://drive.google.com/file/d/1HWyxFvWtt6HvSSNpiXuQ2BRM43qTEhgU/view?usp=share_link">📽️ Demo 1</a></li>
+    <li><a href="https://drive.google.com/file/d/1iLCdIK4_AjSgFtfEThRByqWEbvSH73xt/view?usp=drive_link">📽️ Demo 2</a></li>
+    <li><a href="https://drive.google.com/file/d/1ImiTyPSyAo8VTLaCVQV2lIR6TQg5sghs/view?usp=sharing">📽️ Demo 3</a></li>
+  </ol>
+</details>
 
 
 ## Project Management
