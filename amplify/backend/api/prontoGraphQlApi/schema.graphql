@@ -216,21 +216,24 @@ type Announcement
   anonounceMentStatus: @function(name:"announcementsHandler-${env}")
 }
 
-enum notificationType{
-  SMS
-  PUSH
-  EMAIL 
-}
 
-typen notificationPreferance {
+type notificationPreferance @auth(rules :[ { allow: owner, ownerField: "userId" }]){
+  userId: ID
   type: notificationType
   enpointID: ID
   deviceID: ID
 }
 
-type Notification @auth(){
+type Notification @auth(rules :[ { allow: owner, ownerField: "courseid" }]){
+  courseid:ID!
   status: STATUS
   endPoinId:ID
+}
+
+enum notificationType {
+  SMS
+  PUSH
+  EMAIL 
 }
 
 enum STATUS{
