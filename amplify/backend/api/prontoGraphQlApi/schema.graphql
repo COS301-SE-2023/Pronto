@@ -87,7 +87,7 @@ type Student
   lastname: String!
   userRole: String!
   email: String! @index(name: "byEmail", queryField: "studentByEmail")
-  preference: notificationPreferance
+  preference: NotificationPreferance @hasOne
   institution: Institution! @belongsTo(fields: ["institutionId"])
   timetable: Timetable @hasOne
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
@@ -134,7 +134,7 @@ type Course
     @hasMany(indexName: "byAnnouncement", fields: ["id"])
   lecturer: Lecturer @belongsTo(fields: ["lecturerId"])
   institution: Institution! @belongsTo(fields: ["institutionId"])
-  notifications: [Notification]
+  notification: Notification @auth(rules: [{ allow: owner }])
 }
 
 type Timetable
@@ -213,32 +213,45 @@ type Announcement
       sortKeyFields: ["createdAt"]
     )
   createdAt: String!
-  
+  anonounceMentStatus: ANNOUNCEMENTSTATUS
+    @function(name: "announcementsHandler-${env}")
 }
 
-
-type notificationPreferance @auth(rules :[ { allow: owner, ownerField: "userId" }]){
-  userId: ID
-  type: notificationType
+type NotificationPreferance
+  @model
+  @auth(rules: [{ allow: owner, ownerField: "userId" }]) {
+  studentId: ID @index(name: "byStudent")
+  type: NOTIFICATION_TYPE
   enpointID: ID
   deviceID: ID
 }
 
-type Notification @auth(rules :[ { allow: owner, ownerField: "courseid" }]){
-  courseid:ID!
+type Notification {
+  courseid: ID!
   status: STATUS
-  endPoinId:ID
+  endPoinId: ID
 }
 
-enum notificationType {
+enum NOTIFICATION_TYPE {
   SMS
   PUSH
-  EMAIL 
+  EMAIL
 }
 
-enum STATUS{
+enum STATUS {
   CREATED
   DISABLE
   FAILED
   OPERATIONAL
+}
+
+enum ENDPOIINT_TYPE_STATUS {
+  SENT
+  FAILED
+  UNAVAILABLE
+}
+type Announcement_Status {
+  SMS: ENDPOIINT_TYPE_STATUS
+  PUSH: ENDPOIINT_TYPE_STATUS
+  EMAIL: ENDPOIINT_TYPE_STATUS
 }
