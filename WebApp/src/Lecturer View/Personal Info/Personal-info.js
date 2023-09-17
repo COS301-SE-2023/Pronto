@@ -26,25 +26,41 @@ const PersonalInfoPage = () => {
     const [user, setUser] = useState();
     const [successMessage, setSuccessMessage] = useState("");
 
-    const [firstName, setFirstName] = useState();
-    const [lastName, setLastName] = useState();
-
     const { lecturer, setLecturer } = useLecturer();
 
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
 
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
+
+  const validatePassword = (value) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
+    const isValidPassword = regex.test(value);
+
+    setPasswordIsValid(isValidPassword);
+  };
+    const newPasswordSet= (password) =>{
+        let isValidPassword=validatePassword(password);
+        setNewPassword(password);
+        setPasswordIsValid(isValidPassword);
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            if (newPassword === confirmPassword) {
-                const user = await Auth.currentAuthenticatedUser();
-                Auth.changePassword(user, oldPassword, newPassword);
-                setSuccessMessage("Password change succesful");
-            }
-            else {
-                setError("New password does not match confirm password");
+            if(passwordIsValid){
+                if (newPassword === confirmPassword) {
+                    const user = await Auth.currentAuthenticatedUser();
+                    Auth.changePassword(user, oldPassword, newPassword);
+                    setSuccessMessage("Password change succesful");
+                }
+                else {
+                    setError("New password does not match confirm password");
+                }
+            }else{
+                setError("New password is too weak.Please ensure your password is at least 8 characters long and  includes at least one lowercase letter, one uppercase letter, one number and one special character")
             }
         } catch (error) {
             setError("Password change failed")
@@ -54,41 +70,40 @@ const PersonalInfoPage = () => {
         setConfirmPassword("")
     }
 
-    const fetchUser = async () => {
-        try {
-            let u = await Auth.currentAuthenticatedUser();
-            setUser(u);
-        } catch (error) {
-            setError("Something went wrong");
+   
+    // const fetchUser = async () => {
+    //     try {
+    //         let u = await Auth.currentAuthenticatedUser();
+    //         setUser(u);
+    //     } catch (error) {
+    //         setError("Something went wrong");
+    //     }
+    // }
+
+    const fetchLecturer = async () => {
+        let u = await Auth.currentAuthenticatedUser()
+        if (lecturer !== null) {
+            const user = await Auth.currentAuthenticatedUser();
+            let lecturer_email = user.attributes.email;
+            let lec = await API.graphql({
+                query: listLecturers,
+                variables: {
+                    filter: {
+                        email: {
+                            eq: lecturer_email
+                        }
+                    }
+                },
+            });
+            setLecturer(lec.data.listLecturers.items[0]);
         }
     }
 
-    // const fetchLecturer = async () => {
-    //     let u = await Auth.currentAuthenticatedUser()
-    //     if (lecturer !== null) {
-    //         const user = await Auth.currentAuthenticatedUser();
-    //         let lecturer_email = user.attributes.email;
-    //         let lec = await API.graphql({
-    //             query: listLecturers,
-    //             variables: {
-    //                 filter: {
-    //                     email: {
-    //                         eq: lecturer_email
-    //                     }
-    //                 }
-    //             },
-    //             authMode: "AMAZON_COGNITO_USER_POOLS",
-    //         });
-    //         setLecturer(lec.data.listLecturers.items[0]);
-    //     }
 
-    // }
-
-
-    // useEffect(() => {
-    //   //  fetchLecturer()
-    //   //fetchUser();
-    // }, [])
+    useEffect(() => {
+        fetchLecturer()
+      //fetchUser();
+    }, [])
 
     return (
 
@@ -173,7 +188,7 @@ const PersonalInfoPage = () => {
                                             data-testid="repword"
                                             required
                                             value={newPassword}
-                                            onChange={(e) => setNewPassword(e.target.value)}></input>
+                                            onChange={(e) => newPasswordSet(e.target.value)}></input>
                                     </div>
                                 </div>
 
