@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import MainText from './MainText';
 import About from './About';
 import Download from './Download';
-import ScrollDownIcon from '../Images/scroll-down.png';
+import ScrollDownIcon from '../Images/scrolldown.png';
 
 function HomePage() {
 
