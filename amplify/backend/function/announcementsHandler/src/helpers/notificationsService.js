@@ -1,3 +1,5 @@
+const { NOTIFICATIONS_STATUS } = require("./constants");
+
 const getEndPoints = /* GraphQL */ `
   query MyQuery {
     getCourse(id: $input) {
@@ -57,5 +59,27 @@ const setAndGetSendMessagesCommandInput = (course, announcement, endpoints) => {
 };
 
 const sendMessageOperation = async (sendMessageOperationInput) => {
-  const { course, announcement, students } = sendMessageOperationInput;
+  const { course, announcement, pinpointClient } = sendMessageOperationInput;
+  const endpoints = {};
+  const sendMessageCommandInput = setAndGetSendMessagesCommandInput(
+    course,
+    announcement,
+    endpoints
+  );
+  try {
+    const sendMessagesCommandOutput = await pinpointClient.send();
+    const responseMetadata = sendMessagesCommandOutput.$metadata;
+    if (responseMetadata.httpStatusCode === 200)
+      return { EMAIL: NOTIFICATIONS_STATUS.SENT };
+  } catch (sendMessagesError) {
+    console.debug(
+      `ERRO SENDING MESSAGES FOR ${course.id}. INFO: ${sendMessagesError}`
+    );
+    return { EMAIL: NOTIFICATIONS_STATUS.FAILED };
+  }
+};
+
+module.exports = {
+  sendMessageOperation,
+  setAndGetSendMessagesCommandInput,
 };
