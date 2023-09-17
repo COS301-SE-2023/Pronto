@@ -139,7 +139,7 @@ type Course
     @hasMany(indexName: "byAnnouncement", fields: ["id"])
   lecturer: Lecturer @belongsTo(fields: ["lecturerId"])
   institution: Institution! @belongsTo(fields: ["institutionId"])
-  notification: Notification @auth(rules: [{ allow: owner }])
+  notifications: [Notification]
 }
 
 type Timetable
@@ -234,4 +234,16 @@ typen notificationPreferance {
   type: notificationType
   enpointID: ID
   deviceID: ID
+}
+
+type Notification @auth(){
+  status: STATUS
+  endPoinId:ID
+}
+
+enum STATUS{
+  CREATED
+  DISABLE
+  FAILED
+  OPERATIONAL
 }
