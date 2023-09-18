@@ -100,6 +100,7 @@ jobs:
       - name: Build Amplify Project
         run: |
           npm install -g @aws-amplify/cli
+          amplify init --appId ${{ secrets.APP_ID }} 
           amplify build
 
 
