@@ -7,6 +7,7 @@ import About from './About';
 import Download from './Download';
 import ScrollDownIcon from './Images/scroll-down.png';
 
+
 function HomePage() {
 
   const [scrollingUp, setScrollingUp] = useState(true); // Track scroll direction
