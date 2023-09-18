@@ -103,24 +103,8 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "prontoPostSignUp": {
+    "prontoAuthPostConfirmation": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": ["Id", "Region"],
-          "category": "analytics",
-          "resourceName": "prontoNotifications"
-        },
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ],
-          "category": "api",
-          "resourceName": "prontoGraphQlApi"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -185,63 +169,7 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoPostSignUp_adminGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_cognitoMobileClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_cognitoWebClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_lecturerGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_studentGroupName": {
+    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
       "usedBy": [
         {
           "category": "function",
