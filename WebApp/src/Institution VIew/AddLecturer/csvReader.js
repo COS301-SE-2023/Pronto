@@ -22,7 +22,7 @@ const CsvFileReader = (props)=>{
     props.setAdding("Adding...This may take a while");
     let emailList=props.emailList;
 
-    for(let i=0;i<lecturerList.length-2;i++){
+    for(let i=0;i<lecturerList.length;i++){
         try{
           
             let lecturer={
@@ -34,7 +34,7 @@ const CsvFileReader = (props)=>{
             }
             if(lecturer.firstname===undefined || lecturer.lastname===undefined || lecturer.email===undefined){
                 console.log("unrecognized field");
-
+                continue;
             }else{
               if(props.adminEmail!==lecturer.email){
                 let emails = await API.graphql({
