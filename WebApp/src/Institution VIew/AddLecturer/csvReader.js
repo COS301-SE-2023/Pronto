@@ -33,8 +33,13 @@ const CsvFileReader = (props)=>{
                 userRole:"Lecturer"
             }
             if(lecturer.firstname===undefined || lecturer.lastname===undefined || lecturer.email===undefined){
-                console.log("unrecognized field");
-                continue;
+                if(i>0){
+                  continue;
+                }
+                else{
+                  props.setError("File contains unrecognised fields.Please use First Name,Last Name, Email Address and Courses");
+                  break;
+                }
             }else{
               if(props.adminEmail!==lecturer.email){
                 let emails = await API.graphql({

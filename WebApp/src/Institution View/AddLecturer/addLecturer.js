@@ -397,15 +397,15 @@ const AddLecturer = () => {
         }
         catch (error) {
             console.log(error);
-            if (error.errors !== undefined) {
-                let e = error.errors[0].message;
-                if (e.search("Network") !== -1) {
-                    setError("Request failed due to network issues");
-                }
-            }
-            else {
-                setError("Something went wrong. Please try again later");
-            }
+            // if (error.errors !== undefined) {
+            //     let e = error.errors[0].message;
+            //     if (e.search("Network") !== -1) {
+            //         setError("Request failed due to network issues");
+            //     }
+            // }
+            // else {
+            //     setError("Something went wrong. Please try again later");
+            // }
         }
     }
 
@@ -617,6 +617,7 @@ const AddLecturer = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <CsvFileReader 
+                               className="form-control"
                                 institutionId={admin?.institutionId}
                                 adding={adding}
                                 setError={setError}
