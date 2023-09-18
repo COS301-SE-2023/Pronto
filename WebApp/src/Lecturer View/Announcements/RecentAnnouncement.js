@@ -168,6 +168,7 @@ export default function RecentAnnouncement() {
         setLoading(false);
       }
     } catch (error) {
+      console.log(error);
       if (error.errors !== undefined) {
         let e = error.errors[0].message
         if (e.search("Network") !== -1) {
@@ -177,9 +178,9 @@ export default function RecentAnnouncement() {
           setError("Something went wrong.Please try again later");
         }
       }
-      else {
-        setError("Your request could not be processed at this time");
-      }
+      // else {
+      //   setError("Your request could not be processed at this time");
+      // }
     }
   }
 

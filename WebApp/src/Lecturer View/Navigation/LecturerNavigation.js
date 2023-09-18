@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
-import "../../Institution View/Navigation/Navigation.css";
+import "../../Institution VIew/Navigation/Navigation.css";
 import { listLecturers } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 
@@ -25,11 +25,14 @@ export default function LecturerNavigation(lecturerData) {
   };
 
   const fetchLecturer = async () => {
-    let u = await Auth.currentAuthenticatedUser();
-    let lecturer_email = u.attributes.email;
-    let lec = lecturer;
+    
     try {
+            let lec = lecturer;
+      
       if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
+        let u = await Auth.currentAuthenticatedUser();
+        let lecturer_email = u?.attributes?.email;
+       
         lec = await API.graphql({
           query: listLecturers,
           variables: {
@@ -62,10 +65,10 @@ export default function LecturerNavigation(lecturerData) {
     }
   }
 
-  useEffect(() => {
-    //userSet();
-    fetchLecturer();
-  });
+  // useEffect(() => {
+  //   //userSet();
+  //   fetchLecturer();
+  // });
 
   return (
     <div className={"grid"} >
