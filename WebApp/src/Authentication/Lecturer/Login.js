@@ -49,6 +49,10 @@ function Login() {
     {
        value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
        label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
+    },
+    {
+      value:process.env.REACT_APP_AGILE_ARCHITECTS_ID,
+      label: process.env.REACT_APP_AGILE_ARCHITECTS_LABEL
     }
   ];
 
