@@ -37,7 +37,7 @@ exports.handler = async (event) => {
         throw new Error(
           "The App is reserved for STUDENTS only!\n please signup as a student or if you are an ADMIN or LECTURER, use the web app"
         );
-      GroupName = process.env.StudentsGroupName;
+      GroupName = process.env.STUDENT_GROUP_NAME;
       break;
     case process.env.COGNITO_WEB_CLIENT_ID:
       if (event.request.clientMetadata.role === ROLES.Student)
@@ -46,8 +46,8 @@ exports.handler = async (event) => {
         );
       GroupName =
         event.request.clientMetadata.role == ROLES.Lecture
-          ? process.env.LecturersGroupName
-          : process.env.AdminGroupName;
+          ? process.env.LECTURER_GROUP_NAME
+          : process.env.ADMIN_GROUP_NAME;
       break;
     default:
       throw new Error(
