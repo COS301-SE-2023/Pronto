@@ -5,7 +5,7 @@ import DragandDropSchedule from "./DragandDropSchedule";
 
 const FileUploadPage = () => {
   return (
-    <div style={{ display: "inline-flex" }}>
+    <div style={{ display: "inline-flex" ,maxHeight:"100vh"}}>
       <nav>
         {/* Navigation bar content */}
         <InstitutionNavigation />
