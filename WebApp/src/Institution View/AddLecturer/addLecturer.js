@@ -83,35 +83,35 @@ const AddLecturer = () => {
                             emails = admin.institution.lectureremails;
                             emails.push(email);
                         }
-                        let logoUrl = admin.institution.logoUrl;
+                        //let logoUrl = admin.institution.logoUrl;
                         let update = {
                             id: admin.institutionId,
                             lectureremails: emails
                         };
 
-                        let u = await API.graphql({
+                        let u = API.graphql({
                             query: updateInstitution,
                             variables: { input: update },
                         });
-                        u = u.data.updateInstitution
-                        u.logoUrl = logoUrl;
-                        let ad = admin;
-                        ad.institution = u;
-
-                        setAdmin(ad);
+                        admin.institution.lectureremails=emails;
+                        setAdmin(admin);
+                        // u = u.data.updateInstitution
+                        // u.logoUrl = logoUrl;
+                        // let ad = admin;
+                        // ad.institution = u;
+                        // admin.lectureremails=emails;
+                        // setAdmin(admin);
 
                         //Add lecturer to courses
                         await addCourses(lecturer, selectedCourses)
-                        if (lecturerList.length <= 10) {
-                            lecturerList.push(lecturer);
-                            setLecturerList(lecturerList);
-                        }
+                        lecturerList.unshift(lecturer);
+                        setLecturerList(lecturerList);
                     }
                     else {
                         setError("A lecturer with this email already exists");
                     }
                 } else {
-                    setError("You cannot use the same account for Lecturer and Admin activities");
+                    setError("You cannot use the same account for both Lecturer and Admin activities");
                 }
 
             } catch (error) {
@@ -241,16 +241,13 @@ const AddLecturer = () => {
                 lectureremails: newEmails
             };
 
-            let u = await API.graphql({
+            let u =  API.graphql({
                 query: updateInstitution,
                 variables: { input: update },
             });
             admin.institution.lectureremails=newEmails;
             setAdmin(admin);
-            //let a = admin;
-            //a.institution = u.data.updateInstitution;
-            //a.institution.logoUrl = admin.institution.logoUrl;
-            //setAdmin(a);
+         
         }
         catch (error) {
             if (error.errors !== undefined) {
