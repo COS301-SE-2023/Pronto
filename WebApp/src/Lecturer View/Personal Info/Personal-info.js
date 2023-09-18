@@ -81,21 +81,24 @@ const PersonalInfoPage = () => {
     // }
 
     const fetchLecturer = async () => {
-        let u = await Auth.currentAuthenticatedUser()
-        if (lecturer !== null) {
-            const user = await Auth.currentAuthenticatedUser();
-            let lecturer_email = user.attributes.email;
-            let lec = await API.graphql({
-                query: listLecturers,
-                variables: {
-                    filter: {
-                        email: {
-                            eq: lecturer_email
+        try{
+            if (lecturer !== null) {
+                const user = await Auth.currentAuthenticatedUser();
+                let lecturer_email = user.attributes.email;
+                let lec = await API.graphql({
+                    query: listLecturers,
+                    variables: {
+                        filter: {
+                            email: {
+                                eq: lecturer_email
+                            }
                         }
-                    }
-                },
-            });
-            setLecturer(lec.data.listLecturers.items[0]);
+                    },
+                });
+                setLecturer(lec.data.listLecturers.items[0]);
+            }
+        }catch(e){
+
         }
     }
 
