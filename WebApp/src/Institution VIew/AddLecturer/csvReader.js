@@ -7,8 +7,7 @@ import { createLecturer,updateCourse,updateInstitution } from '../../Graphql/mut
 import { listCourses,listLecturers } from '../../Graphql/queries';
 
 const CsvFileReader = (props)=>{
-    //console.log(props)
-    const {admin,setAdmin}=useAdmin();
+    
     const[isDisabled ,setIsDisabled]=useState(false);
     const handleFile = async(data, fileInfo) => {
       setIsDisabled(true);
@@ -46,7 +45,7 @@ const CsvFileReader = (props)=>{
             }
             if(lecturer.firstname===undefined || lecturer.lastname===undefined || lecturer.email===undefined){
                 if(i>0){
-                  console.log(lecturer);
+                  
                   continue;
                 }
                 else{
@@ -54,76 +53,74 @@ const CsvFileReader = (props)=>{
                   break;
                 }
             }else{
-              // if(props.adminEmail!==lecturer.email){
-              //   let emails = await API.graphql({
-              //           query: listLecturers,
-              //           variables: { filter: { email: { eq: lecturer.email } } }
-              //       })
-              //   if(emails.data.listLecturers.items.length===0){
-              //     let newLecturer=await API.graphql({
-              //           query:createLecturer,
-              //           variables:{input:lecturer}
-              //         })
+              if(props.adminEmail!==lecturer.email){
+                let emails = await API.graphql({
+                        query: listLecturers,
+                        variables: { filter: { email: { eq: lecturer.email } } }
+                    })
+                if(emails.data.listLecturers.items.length===0){
+                  let newLecturer=await API.graphql({
+                        query:createLecturer,
+                        variables:{input:lecturer}
+                      })
                   
-              //     newLecturer=newLecturer.data.createLecturer;
-              //     emailList.push(lecturer.email);
-              //     let courses=lecturerList[i]['courses']? lecturerList[i]['courses'].split(',') : lecturerList[i]['course']?  lecturerList[i]['course'].split(',') : lecturerList[i]['modules']? lecturerList[i]['modules'].split(',') : lecturerList[i]['module'] ? lecturerList[i]['module'].split(',') : []
+                  newLecturer=newLecturer.data.createLecturer;
+                  emailList.push(lecturer.email);
+                  let courses=lecturerList[i]['courses']? lecturerList[i]['courses'].split(',') : lecturerList[i]['course']?  lecturerList[i]['course'].split(',') : lecturerList[i]['modules']? lecturerList[i]['modules'].split(',') : lecturerList[i]['module'] ? lecturerList[i]['module'].split(',') : []
               
-              //     let filter = `{"filter" : { "or" : [`;
-              //     console.log("courses here");
-              //     console.log(courses);
-              //     if(courses.length>0){
-              //         for (let i = 0; i < courses.length; i++) {
-              //           if(courses[i]!=="" && courses[i]!==" " ){
-              //             if (i === courses.length - 1) {
-              //               filter += `{"coursecode":{"eq":"${courses[i]}" } }`;
-              //             }
-              //           else {
-              //             filter += `{"coursecode":{"eq":"${courses[i]}" } },`;
-              //           } 
-              //         }
-              //       }
-              //       filter += `] }}`;
-                 
-              //       let variables = JSON.parse(filter);
-              //       console.log(variables);
-                    
-              //       try{
-              //         let courseList=await API.graphql({
-              //         query:listCourses,
-              //         variables:variables
-              //       })
-              //       // let list=await API.graphql({
-              //       //   query:listCourses,
-              //       //   variables:{}
-              //       // })
-              //       console.log(courseList);
-              //       courseList=courseList.data.listCourses.items;
-              //       for(let i=0;i<courseList.length;i++){
-              //         console.log("adding courses");  
-              //         let a=await API.graphql({
-              //             query:updateCourse,
-              //             variables:{input:{id:courseList[i].id,lecturerId:newLecturer.id}}
-              //           })
-              //            console.log(a);
-              //       }
+                  let filter = `{"filter" : { "or" : [`;
                   
-                //   }catch(e){
-                //     console.log(e) 
-                //   }
-                // }
-                console.log("ok");
+                  if(courses.length>0){
+                      for (let i = 0; i < courses.length; i++) {
+                        if(courses[i]!=="" && courses[i]!==" " ){
+                          if (i === courses.length - 1) {
+                            filter += `{"coursecode":{"eq":"${courses[i]}" } }`;
+                          }
+                        else {
+                          filter += `{"coursecode":{"eq":"${courses[i]}" } },`;
+                        } 
+                      }
+                    }
+                    filter += `] }}`;
+                 
+                    let variables = JSON.parse(filter);
+                    
+                    try{
+                      let courseList=await API.graphql({
+                      query:listCourses,
+                      variables:variables
+                    })
+                    // let list=await API.graphql({
+                    //   query:listCourses,
+                    //   variables:{}
+                    // })
+                    console.log(courseList);
+                    courseList=courseList.data.listCourses.items;
+                    for(let i=0;i<courseList.length;i++){
+                      console.log("adding courses");  
+                      let a=await API.graphql({
+                          query:updateCourse,
+                          variables:{input:{id:courseList[i].id,lecturerId:newLecturer.id}}
+                        })
+                         
+                    }
+                  
+                  }catch(e){
+                    
+                  }
+                }
+              
                  }
-            //  }
-          //}
+              }
+          }
         }catch(error){
             console.log(error);
         }
         try{
-        // let ins=API.graphql({
-        //   query:updateInstitution,
-        //   variables:{input:{id:props.institutionId,lectureremails:emailList}}
-        // })
+        let ins=API.graphql({
+          query:updateInstitution,
+          variables:{input:{id:props.institutionId,lectureremails:emailList}}
+        })
         }catch(error){
 
         }

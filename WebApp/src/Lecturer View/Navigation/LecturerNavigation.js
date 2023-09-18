@@ -65,10 +65,10 @@ export default function LecturerNavigation(lecturerData) {
     }
   }
 
-  // useEffect(() => {
-  //   //userSet();
-  //   fetchLecturer();
-  // });
+  useEffect(() => {
+    //userSet();
+    fetchLecturer();
+  });
 
   return (
     <div className={"grid"} >

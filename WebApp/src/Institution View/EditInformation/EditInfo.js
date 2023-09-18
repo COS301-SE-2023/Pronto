@@ -241,7 +241,7 @@ const EditInfoPage = () => {
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '1200px', marginTop: "0%", marginLeft: "25%" }}>
+            <main style={{ width: '1200px',  marginLeft: "25%" }}>
                 <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}> Edit University Information</h1>
                 <table className="table table-sm">
                     <tbody>
