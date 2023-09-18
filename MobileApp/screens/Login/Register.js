@@ -133,23 +133,16 @@ const Register = ({ navigation }) => {
 
     setLoading(true);
     try {
-      // navigation.navigate("ConfirmEmail", { email });
-      let t=await API.graphql({
-        query:getInstitution,
-        variables:{id:institutionId},
-        authMode:"API_KEY"
-      })
-
-      //console.log(t.data);
+      
       let a=await Auth.signUp({
         username: email,
         password:password,
         attributes: { email:email, family_name: surname, name:name },
         clientMetadata: { role: "Student", institutionId: institutionId },
       });
-      
-      console.log(a);
-      navigation.navigate("ConfirmEmail", { email });
+
+       console.log(a);
+      navigation.navigate("ConfirmEmail", { email ,institutionId});
     } catch (e) {
       console.log(e)
       Alert.alert("Error", e.message);
