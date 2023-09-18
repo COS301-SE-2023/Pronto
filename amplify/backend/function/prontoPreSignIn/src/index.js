@@ -17,14 +17,14 @@ const isAppClientValid = require("./helpers/isAppClientValid");
 exports.handler = async (event) => {
   console.table(event);
   if (
-    !event.request.clientMetadata.role ||
-    !Object.values(ROLES).includes(event.request.clientMetadata.role)
+    !event.request.validationData.role ||
+    !Object.values(ROLES).includes(event.request.validationData.role)
   )
     throw new Error("Invalid User Role or Role not provided");
   if (
     !isAppClientValid(
       event.callerContext.clientId,
-      event.request.clientMetadata.role
+      event.request.validationData.role
     )
   )
     throw new Error(
@@ -37,8 +37,8 @@ exports.handler = async (event) => {
     if (
       !(await isInstitideAdminOrLecturer(
         event.request.userAttributes.email,
-        event.request.clientMetadata.institutionId,
-        event.request.clientMetadata.role
+        event.request.validationData.institutionId,
+        event.request.validationData.role
       )) &&
       process.env.COGNITO_WEB_CLIENT_ID === event.callerContext.clientId
     )
