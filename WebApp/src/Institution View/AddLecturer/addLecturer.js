@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
+import { createLecturer, deleteLecturer, updateCourse, updateInstitution,updateAdmin } from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
@@ -77,6 +77,8 @@ const AddLecturer = () => {
             };
 
             try {
+    
+                
                 if (email !== admin.email) {
                     //let unique = admin.institution.lectureremails.filter((e) => e === email)
                     let emails = await API.graphql({

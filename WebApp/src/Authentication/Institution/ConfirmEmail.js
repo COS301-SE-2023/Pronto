@@ -22,7 +22,8 @@ function ConfirmEmail() {
     }
     setLoading(true);
     try {
-      await Auth.confirmSignUp(email, code);
+      //await Auth.confirmSignUp(email, code);
+      await Auth.confirmSignUp( email,code, {clientMetadata:{role:"Admin"}})
       setError("");
       navigate("/institution/successful-apply");
     } catch (e) {

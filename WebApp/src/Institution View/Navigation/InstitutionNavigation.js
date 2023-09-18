@@ -43,9 +43,10 @@ export default function InstitutionNavigation({ props }) {
                 });
                 if (adminData.data.listAdmins.items.length > 0) {
                     adminData = adminData.data.listAdmins.items[0];
-                    if (adminData.institution.logo !== null) {
-                        adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-                    }
+                    console.log(adminData)
+                    // if (adminData.institution.logo !== null) {
+                    //     adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                    // }
                     setAdmin(adminData);
                 }
             }
@@ -66,7 +67,7 @@ export default function InstitutionNavigation({ props }) {
                 <div className="top"> {/* top holds University image and name portion*/}
 
                     <img
-                        src={admin !== undefined ? admin !== null ? admin.institution.logoUrl : " " : "  "}
+                        src={admin !== undefined ? admin !== null ? admin.institution?.logoUrl : " " : "  "}
                         alt="Logo"
                         className="logo offset-2 img-fluid mr-4.5"
                         style={{ width: "155px", height: "155px" }}
