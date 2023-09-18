@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './homepage_style.css';
-import ProntoLogo from "../Authentication/Institution/ProntoLogo.svg";
-import { useNavigate, useLocation } from "react-router-dom";
 import Features from './Features';
 import Navbar from "./Navbar";
 import MainText from './MainText';
 import About from './About';
 import Download from './Download';
-import ScrollDownIcon from '../images/scroll-down.png';
+import ScrollDownIcon from './Images/scroll-down.png';
+
 
 function HomePage() {
 

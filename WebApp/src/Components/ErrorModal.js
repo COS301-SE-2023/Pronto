@@ -24,10 +24,6 @@ export function ErrorModal(errorMessage) {
 
   const [open, setOpen] = useState(true);
 
-  const handleOpen = async () => {
-    setOpen(true)
-  }
-
   const handleClose = async () => {
     setOpen(false)
     errorMessage.setError("")
@@ -37,9 +33,6 @@ export function ErrorModal(errorMessage) {
     <div className="form-row">
       <div className="form-group col-6">
 
-        {/* <button onClick={handleOpen}  
-      className="btn btn-primary"
-      data-testid="submitButton">View</button> */}
         <Modal
           open={open}
           onClose={handleClose}

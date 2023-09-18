@@ -1,12 +1,10 @@
-import * as React from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import styled from "styled-components";
 import LecturerNavigation from "../Navigation/LecturerNavigation";
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import CampaignIcon from '@mui/icons-material/Campaign';
-import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/LecturerInstructions.pdf";
-import { useNavigate } from 'react-router-dom';
 import EditNoteImage from '../Images/EditModuleInfo.png';
 import AnnouncementImage from '../Images/Announcements.png';
 import PersonalInfoImage from '../Images/Personalnfo.png';
@@ -30,8 +28,7 @@ const DashboardLecturer = () => {
                     }}>
 
 
-
-                        <HoverableIcon>
+                        <HoverableIcon>  {/* Modules page */}
                             <img
                                 src={EditNoteImage}
                                 alt="Edit Module Info"
@@ -48,7 +45,7 @@ const DashboardLecturer = () => {
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
-                        <HoverableIcon>
+                        <HoverableIcon> {/* Announcements page */}
                             <img
                                 src={AnnouncementImage}
                                 alt="Announcements"
@@ -64,13 +61,12 @@ const DashboardLecturer = () => {
                     <div className={"col-4"} style={{
                         display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"
                     }}>
-                        <HoverableIcon>
+                        <HoverableIcon>   {/* Edit personal info page */}
                             <img
                                 src={PersonalInfoImage}
                                 alt="PersonalInfp"
                                 style={{ width: "250px", height: "250px", cursor: "pointer" }}
                                 onClick={() => {
-                                    //window.location.href = "/lecturer/personal-info";
                                     navigate("/lecturer/personal-info");
                                 }}
                             />
@@ -87,7 +83,7 @@ const DashboardLecturer = () => {
 
         </RightContainer >
         <div>
-            <HelpButton pdfUrl={UserManual} />
+            <HelpButton pdfUrl={UserManual} />  {/* Help menu */}
         </div>
     </div >)
 }

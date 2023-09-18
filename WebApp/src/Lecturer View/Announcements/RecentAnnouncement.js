@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import LecturerNavigation from "../Navigation/LecturerNavigation";
-import "../Dashboard/LectureHome.css";
-import { API, Auth } from 'aws-amplify';
 import { listLecturers, announcementsByDate } from '../../Graphql/queries';
 import { deleteAnnouncement } from '../../Graphql/mutations';
 import { ErrorModal } from '../../Components/ErrorModal';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import LecturerNavigation from "../Navigation/LecturerNavigation";
 import UserManual from "../HelpFiles/Announcements.pdf";
 import HelpButton from '../../Components/HelpButton';
 import { useAnnouncement } from '../../ContextProviders/AnnouncementContext';
 import { useLecturer } from '../../ContextProviders/LecturerContext';
 import recentAnnouncementImage from "../Images/recentAnnouncementImage.png"
+import "../Dashboard/LectureHome.css";
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { styled, alpha } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+
+import { API, Auth } from 'aws-amplify';
+
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
@@ -71,7 +74,6 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function RecentAnnouncement() {
-
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -182,7 +184,7 @@ export default function RecentAnnouncement() {
   }
 
 
-  const loadMore = async () => {
+  const loadMore = async () => { //load more announcements
     try {
       let courses = lecturer.courses.items;
       let year = new Date().getFullYear();
@@ -288,7 +290,7 @@ export default function RecentAnnouncement() {
                       aria-haspopup="true"
                       variant="contained"
                       disableElevation
-                      onClick={(e) => handleDelete(e.target.value)}
+                      onClick={(e) => handleDelete(e.target.value)} //delete an announcement
                       value={key}
                     >
                       Delete
@@ -330,7 +332,7 @@ export default function RecentAnnouncement() {
       </StyledDialog>
 
       <div>
-        <HelpButton pdfUrl={UserManual} />
+        <HelpButton pdfUrl={UserManual} /> {/*help user manual for announcements page*/}
       </div>
     </div >
   );

@@ -12,7 +12,7 @@ export function RequireAdminAuth({ children }) {
         const user = await Auth.currentAuthenticatedUser({});
         const group = user.signInUserSession.idToken.payload["cognito:groups"][0];
 
-        if (group !== "adminUserGroup") {
+        if (group !== "adminUserGroup") { //if the user is not an admin set authentication false
           setAuthenticated(false);
         } else {
           setAuthenticated(true);
@@ -20,7 +20,7 @@ export function RequireAdminAuth({ children }) {
       } catch (error) {
         setAuthenticated(false);
       } finally {
-        setCheckUserComplete(true);
+        setCheckUserComplete(true); //if user is logged in and is an admin, set true which will allow access
       }
     };
 
@@ -33,7 +33,7 @@ export function RequireAdminAuth({ children }) {
   }
 
   if (!authenticated) {
-    return <Navigate to="/institution/login" />;
+    return <Navigate to="/institution/login" />; //if not logged in or not an admin, take them to the admin login
   }
 
   return children;

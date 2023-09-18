@@ -1,0 +1,269 @@
+.vertical-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: calc(100vh - 40px);
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+        /* Increased shadow intensity */
+    transition: width 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    margin: 1%;
+    max-height: fit-content;
+}
+
+/* Center the links vertically */
+.navbar-nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+        /* Allow content to expand and center vertically */
+        justify-content: center;
+        /* Center the content vertically */
+    max-height: fit-content;
+}
+
+
+
+.nav-link {
+    color: #555;
+
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+    margin: 10px 0;
+}
+
+/* Container for navbar links */
+.nav-links-container {
+    flex-grow: 1;
+        /* Allow content to expand and center vertically */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+        /* Center the content vertically */
+        margin-bottom: 20px;
+        /* Add margin at the bottom */
+}
+
+.nav-link:hover {
+    color: #e32f45;
+    border-bottom: 2px solid #e32f45;
+}
+
+/* Logo styling */
+.logo {
+    display: block;
+    margin: 0 auto;
+    border-radius: 50%; /* Circular shape */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    object-fit: cover; /* Prevent stretching and cover the container */
+}
+
+/* Centered text style for top */
+.top {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 10px;
+        /* Adjust the space at the bottom */
+}
+
+.institution-name {
+    margin-top: 0%;
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+    width: calc(12vw);
+    padding: 2px;
+}
+
+/* Updated logout button styling */
+.logoutbtn {
+    text-align: center;
+    padding: 15px 0;
+        /* Reduced padding for the logout button */
+        background-color: transparent;
+        /* Set the background to transparent */
+        border: none;
+        /* Remove any border */
+    width: 100%;
+    margin: 0 auto;
+        /* Horizontally center the button within its container */
+    max-height: fit-content;
+}
+
+/* Media query for smaller screens (e.g., 13 inch) */
+@media (max-width: 768px) {
+    .vertical-navbar {
+        width: 100%;
+            /* Full width on smaller screens */
+    }
+
+    .logoutbtn {
+        position: static;
+            /* Static position on smaller screens */
+    }
+}
+
+.button-no-border {
+    border: none;
+    outline: none;
+    background-color: transparent;
+        /* Optional: You can set the background color if needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;.vertical-navbar .active {
+        color: #e32f45;
+        border-bottom: 2px solid #e32f45;
+    }    
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.grid {
+    height: 80vh;
+}
+
+
+.active {
+    color: #e32f45;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow to the text */
+}
+
+/* Add CSS styles for the SearchableDropdown component */
+.searchable-dropdown {
+    position: relative;
+    display: inline-block;
+    width: "60%"
+}
+
+.search-input {
+    width: 400px;
+    padding: 8px;
+}
+
+.dropdown-list {
+    position: absolute;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: white;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-list li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-list li:hover {
+    background-color: #f2f2f2;
+}
+
+/* Add this CSS to your component's CSS file or a global stylesheet */
+
+/* Add this CSS to your component's CSS file or a global stylesheet */
+
+/* Styling for the modal overlay (backdrop) */
+.file-upload-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  /* Styling for the modal itself */
+  /* Add this CSS to your component's CSS file or a global stylesheet */
+
+/* Styling for the modal overlay (backdrop) */
+.file-upload-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  /* Styling for the modal itself */
+  .file-upload-modal {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Box shadow for the modal */
+    padding: 20px;
+    max-width: 800px; /* Adjust the width as needed */
+    width: 60%;
+    height: 60%;
+    text-align: center;
+    position: absolute; /* Position the modal absolutely */
+    top: 50%; /* Center vertically */
+    left: 60%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the modal */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+  
+  /* Additional styling for modal content, e.g., form elements */
+  .file-upload-modal h2 {
+    margin-bottom: 20px;
+  }
+  
+  .file-upload-modal button {
+    background-color: #e32f45;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .blur-background {
+    filter: blur(3px); /* Adjust the blur amount as needed */
+    pointer-events: none; /* Prevent clicks on the blurred area */
+  }
+
+  .close-icon {
+    position: absolute;
+    top: 20px; /* Adjust the top distance as needed */
+    right: 20px; /* Adjust the right distance as needed */
+    cursor: pointer;
+    font-size: 24px; /* Adjust the font size as needed */
+    color: #333; /* Adjust the icon color as needed */
+  }
+
+  .close-icon:hover {
+    position: absolute;
+    top: 20px; /* Adjust the top distance as needed */
+    right: 20px; /* Adjust the right distance as needed */
+    cursor: pointer;
+    font-size: 24px; /* Adjust the font size as needed */
+    color: #e32f45; /* Adjust the icon color as needed */
+  }
+  
+  

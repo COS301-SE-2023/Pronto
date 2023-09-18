@@ -1,24 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import GoogleMapReact from 'google-map-react';
-
 import PlacesAutocomplete, {
   geocodeByAddress,
-  geocodeByPlaceId,
   getLatLng,
 } from 'react-places-autocomplete';
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 import styled from "styled-components";
 import { createAnnouncement, updateActivity } from '../../Graphql/mutations';
-import { API } from 'aws-amplify';
 import { ErrorModal } from "../../Components/ErrorModal";
 import {SuccessModal} from "../../Components/SuccessModal";
 
+import { API } from 'aws-amplify';
 
 export default function PostAccordion(course) {
 
@@ -38,10 +36,7 @@ export default function PostAccordion(course) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  
-  const handleApiLoaded = (map, maps) => {
-    // use map and maps objects
-  };
+
 
   const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -142,6 +137,7 @@ export default function PostAccordion(course) {
       {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
 
       <div>
+        {/* Post reminder dropdown */}
         <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} data-testid={'accordion1'} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }} >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon style={{ color: "#e32f45" }} />}
@@ -207,7 +203,9 @@ export default function PostAccordion(course) {
           </AccordionDetails>
         </Accordion>
       </div>
+
       <div>
+        {/* Post assignment dropdown */}
         <Accordion
           expanded={expanded === "panel2"}
           onChange={handleChange("panel2")}
@@ -280,7 +278,9 @@ export default function PostAccordion(course) {
         </Accordion>
 
       </div>
+
       <div>
+        {/* Post venue dropdown */}
         <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
@@ -295,7 +295,7 @@ export default function PostAccordion(course) {
               className="custom-select"
               placeholder="Select Activity"
             >
-              <option value="">Select Activity</option>
+              <option value="">Select Activity</option>  {/* dynamic activity selection dropdown */}
               {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
                 return (
                   <option key={key}

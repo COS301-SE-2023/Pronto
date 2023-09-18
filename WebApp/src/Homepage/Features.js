@@ -1,24 +1,24 @@
 import React from 'react';
 import './homepage_style.css';
-import Feature1 from "../images/FileUpload.png";
-import Feature2 from "../images/FileUpload.png";
-import Feature3 from "../images/FileUpload.png";
+import timetables from "./Images/timetables.png";
+import navigation from "./Images/navigation.png";
+import updates from "./Images/updates.png";
 
 const featureData = [
     {
-        title: 'Feature 1',
-        description: 'Description for Feature 1',
-        imageUrl: Feature1,
+        title: 'Create Timetables',
+        description: 'The Pronto mobile application enables students that are enrolled at registered institutions to start building their custom timetables with ease. Conveneintly edit timetables and even download them as a pdf for offline viewing.',
+        imageUrl: timetables,
     },
     {
-        title: 'Feature 2',
-        description: 'Description for Feature 2',
-        imageUrl: Feature2,
+        title: 'Important Updates',
+        description: 'Students can recieve important reminders and due assignment notifications from their Lecturers. Select your preferred notification preference, and never miss an important update again.',
+        imageUrl: updates,
     },
     {
-        title: 'Feature 3',
-        description: 'Description for Feature 3',
-        imageUrl: Feature3,
+        title: 'Campus Navigation',
+        description: 'The campus navigation feature aids students who are new to the campus, or who simply need a convenient way to receive directions to their course`s lecture venues. With Pronto, you`ve found your way!',
+        imageUrl: navigation,
     }
 ];
 
