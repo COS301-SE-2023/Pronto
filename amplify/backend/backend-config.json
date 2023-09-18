@@ -37,7 +37,17 @@
   "auth": {
     "prontoAuth": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -102,17 +112,8 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "prontoPostSignUp": {
+    "prontoAuthPostConfirmation": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "prontoAuth"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -166,67 +167,11 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoPostSignUp_adminGroupName": {
+    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_cognitoMobileClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_cognitoWebClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_lecturerGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_modules": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPostSignUp_studentGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPostSignUp"
+          "resourceName": "prontoAuthPostConfirmation"
         }
       ]
     },
