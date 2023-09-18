@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, fireEvent, act} from '@testing-library/react';
-import AddModal from '../Institution VIew/AddLecturer/addCourse';
+import AddModal from '../Institution View/AddLecturer/addCourse';
 // Mock props
 const mockUpdateFlag = true;
 const mockLecturerData = {
