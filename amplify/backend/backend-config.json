@@ -150,7 +150,39 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_announcementsHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_announcementsHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoPostSignUp_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPostSignUp_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPostSignUp_cognitoWebClientId": {
       "usedBy": [
         {
           "category": "function",

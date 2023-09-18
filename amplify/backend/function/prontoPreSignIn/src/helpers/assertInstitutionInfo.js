@@ -74,7 +74,7 @@ const isInstitideAdminOrLecturer = async (email, institutionId, role) => {
           );
         return institutionetails.lectureremails.includes(email);
       default:
-        throw new Error("Invalid role");
+        return false;
     }
   } catch (getAndSetInstitutionDetailsError) {
     console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
