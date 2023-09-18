@@ -3,10 +3,16 @@ import { useState, useEffect } from "react";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
+import CsvFileReader from "./csvReader";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
 
@@ -17,6 +23,7 @@ import { API, Auth } from 'aws-amplify';
 
 const AddLecturer = () => {
 
+    const [expanded, setExpanded] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -162,6 +169,10 @@ const AddLecturer = () => {
         }
     }
 
+      const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+
     const addCourses = async (lecturer, courseList) => {
 
         try {
@@ -207,10 +218,15 @@ const AddLecturer = () => {
             id: lecturer.id,
         };
         try {
+            const rows = [...lecturerList];
+            rows.splice(index, 1);
+            setLecturerList(rows);
             let removeMutation = await API.graphql({
                 query: deleteLecturer,
                 variables: { input: lec },
             });
+            
+
             let courseList = lecturer.courses.items;
             if (courseList !== undefined) {
                 await removeCourses(courseList, lecturer);
@@ -229,13 +245,12 @@ const AddLecturer = () => {
                 query: updateInstitution,
                 variables: { input: update },
             });
-            let a = admin;
-            a.institution = u.data.updateInstitution;
-            a.institution.logoUrl = admin.institution.logoUrl;
-            const rows = [...lecturerList];
-            rows.splice(index, 1);
-            setAdmin(a);
-            setLecturerList(rows);
+            admin.institution.lectureremails=newEmails;
+            setAdmin(admin);
+            //let a = admin;
+            //a.institution = u.data.updateInstitution;
+            //a.institution.logoUrl = admin.institution.logoUrl;
+            //setAdmin(a);
         }
         catch (error) {
             if (error.errors !== undefined) {
@@ -589,6 +604,28 @@ const AddLecturer = () => {
                         </form>
                     </div>
                 </div>
+                <div style={{textAlign:"center",justifyContent:"center"}}>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}  style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
+                            aria-controls="panel1bh-content"
+                            style={{ "width": "100%" }}
+                        >
+                            <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >
+                                Add using csv
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <CsvFileReader 
+                                institutionId={admin?.institutionId}
+                                adding={adding}
+                                setError={setError}
+                                setAdding={setAdding}
+                                adminEmail={admin?.email} 
+                                emailList={admin?.institution?.lectureremails}/>
+                        </AccordionDetails>
+                    </Accordion>
+                </div>
 
                 {/* Display content */}
                 <h1 className="text-center" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Lecturers</h1>
@@ -632,7 +669,7 @@ const AddLecturer = () => {
                 </div>
                 <div
                     className="card shadow w-100"
-                    style={{ width: '500px', maxHeight: "100vh" }}
+                    style={{ width: '500px' }}
                 >
                     <div className="card-body">
                         <table
