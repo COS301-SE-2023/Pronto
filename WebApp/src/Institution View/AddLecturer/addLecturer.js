@@ -15,6 +15,27 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 import { API, Auth } from 'aws-amplify';
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { styled, alpha } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialog-paper': {
+        minWidth: '400px',
+        borderRadius: '8px',
+        padding: theme.spacing(2),
+        boxShadow: '2', // Remove the shadow
+        backdropFilter: "blur(5px)",
+    },
+}));
+
+
+
 const AddLecturer = () => {
 
     const [firstName, setFirstName] = useState("");
@@ -29,12 +50,19 @@ const AddLecturer = () => {
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const [lecturerToRemove, setLecturerToRemove] = useState(null);
+    const [lecturerToRemoveIndex, setLecturerToRemoveIndex] = useState(null);
+    const [isRemoving, setisRemoving] = useState(false);
+
+
     const [adding, setAdding] = useState("Add")
 
     let limit = 7;
 
     const { admin, setAdmin } = useAdmin();
     const { lecturerList, setLecturerList, nextToken, setNextToken } = useLecturerList()
+
 
     const handleAdd = async (event) => {
         event.preventDefault()
@@ -203,52 +231,72 @@ const AddLecturer = () => {
     }
 
     const handleRemove = async (lecturer, index) => {
-        let lec = {
-            id: lecturer.id,
-        };
-        try {
-            let removeMutation = await API.graphql({
-                query: deleteLecturer,
-                variables: { input: lec },
-            });
-            let courseList = lecturer.courses.items;
-            if (courseList !== undefined) {
-                await removeCourses(courseList, lecturer);
-                setOfferedCourses([...offeredCourses, courseList]);
-
-            }
-
-            let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
-
-            let update = {
-                id: admin.institutionId,
-                lectureremails: newEmails
-            };
-
-            let u = await API.graphql({
-                query: updateInstitution,
-                variables: { input: update },
-            });
-            let a = admin;
-            a.institution = u.data.updateInstitution;
-            a.institution.logoUrl = admin.institution.logoUrl;
-            const rows = [...lecturerList];
-            rows.splice(index, 1);
-            setAdmin(a);
-            setLecturerList(rows);
-        }
-        catch (error) {
-            if (error.errors !== undefined) {
-                let e = error.errors[0].message;
-                if (e.search("Network") !== -1) {
-                    setError("Request failed due to network issues");
-                }
-            }
-            else {
-                setError("Something went wrong. Please try again later");
-            }
-        }
+        setLecturerToRemove(lecturer);
+        setLecturerToRemoveIndex(index);
+        setOpenDialog(true);
     }
+
+    const handleConfirmation = async (lecturer, index) => {
+        setisRemoving(true);
+
+        if (lecturerToRemove && lecturerToRemoveIndex !== null) {
+            const lecturer = lecturerToRemove;
+            const index = lecturerToRemoveIndex;
+            let lec = {
+                id: lecturer.id,
+            };
+            try {
+                let removeMutation = await API.graphql({
+                    query: deleteLecturer,
+                    variables: { input: lec },
+                });
+                let courseList = lecturer.courses.items;
+                if (courseList !== undefined) {
+                    await removeCourses(courseList, lecturer);
+                    setOfferedCourses([...offeredCourses, courseList]);
+
+                }
+
+                let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
+
+                let update = {
+                    id: admin.institutionId,
+                    lectureremails: newEmails
+                };
+
+                let u = await API.graphql({
+                    query: updateInstitution,
+                    variables: { input: update },
+                });
+                let a = admin;
+                a.institution = u.data.updateInstitution;
+                a.institution.logoUrl = admin.institution.logoUrl;
+                const rows = [...lecturerList];
+                rows.splice(index, 1);
+                setAdmin(a);
+                setLecturerList(rows);
+                setOpenDialog(false);
+                setisRemoving(false);
+            }
+            catch (error) {
+                if (error.errors !== undefined) {
+                    let e = error.errors[0].message;
+                    if (e.search("Network") !== -1) {
+                        setError("Request failed due to network issues");
+                    }
+                }
+                else {
+                    setError("Something went wrong. Please try again later");
+                }
+                setOpenDialog(false);
+                setisRemoving(false);
+            }
+            finally {
+                setOpenDialog(false);
+                setisRemoving(false);
+            }
+        }
+    };
 
     const loadMore = async () => {
         try {
@@ -582,6 +630,7 @@ const AddLecturer = () => {
                             <button
                                 type="submit"
                                 className="btn btn-danger w-100"
+                                style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
                                 data-testid="submitButton"
                             >
                                 {adding}
@@ -676,14 +725,17 @@ const AddLecturer = () => {
                                                 />
                                             </td>
                                             <td>
-                                                <button onClick={() => { handleRemove(val, key) }}
+                                                <button
+                                                    onClick={() => handleRemove(val, key)}
                                                     type="button"
                                                     className="btn btn-danger w-100"
+                                                    style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
                                                     data-testid="deleteButton"
                                                 >
                                                     Remove
                                                 </button>
                                             </td>
+
                                         </tr>
                                     )
                                 })}
@@ -699,9 +751,30 @@ const AddLecturer = () => {
                     </div>
                 </div>
                 <br />
-            </main>
-
-        </div>
+            </main >
+            <StyledDialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogTitle
+                    style={{ fontWeight: "500", textAlign: "center" }}
+                >Deletion Confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to remove this lecturer? They will not be able to access their account permanently.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={handleConfirmation}
+                        color="primary"
+                        style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "100px" }} // Add your custom styling here
+                    >
+                        {isRemoving ? "Deleting..." : "Delete"}
+                    </Button>
+                    <Button onClick={() => setOpenDialog(false)} color="primary">
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </StyledDialog>
+        </div >
     );
 };
 

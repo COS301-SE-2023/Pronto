@@ -14,6 +14,9 @@ import { updateInstitution } from '../../Graphql/mutations';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/EditInfo.pdf";
 import { useAdmin } from '../../ContextProviders/AdminContext';
+import EditUniInfoImage from "../Images/EditUniInfoImage.png";
+import CloseIcon from '@mui/icons-material/Close';
+import TickIcon from '@mui/icons-material/Check';
 
 import { Auth, Storage, API } from 'aws-amplify'
 
@@ -30,6 +33,9 @@ const EditInfoPage = () => {
     const [message, setMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [domain, setDomain] = useState("");
+
+    const [showFileModal, setShowFileModal] = useState(false);
+    const [logoPreview, setLogoPreview] = useState(null);
 
     const { admin, setAdmin } = useAdmin();
 
@@ -66,6 +72,10 @@ const EditInfoPage = () => {
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        // Create a preview URL for the selected image
+        const previewURL = URL.createObjectURL(file);
+        setLogoPreview(previewURL);
+        setShowFileModal(true); // Show the file upload modal when a file is selected
     };
 
 
@@ -131,10 +141,9 @@ const EditInfoPage = () => {
     }
 
     const handleFileSubmit = async (event) => {
-
+        setShowFileModal(false);
         if (selectedFile) {
             try {
-
                 const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;
                 let path = await Storage.put(fileKey, selectedFile, {
                     contentType: "image/png",
@@ -180,10 +189,36 @@ const EditInfoPage = () => {
         fecthUser();
     }, []);
 
+    const handleCloseModal = () => {
+        // Close the modal when the "X" icon is clicked
+        setSelectedFile(null);
+        setShowFileModal(false);
+    };
+
     return (
         <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
             {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
+
+            {showFileModal && (
+                <div className="file-upload-modal">
+                    <CloseIcon className="close-icon" onClick={handleCloseModal} />
+                    <h2>Logo Preview</h2>
+                    <h6>This is how the logo will appear in the navigation menu for lecturers and for your account.</h6>
+                    <h6>We recommend a size of: <span style={{ color: "#e32f45" }}>500x500</span> for the best fit</h6>
+                    <img
+                        src={logoPreview}
+                        alt="Logo"
+                        className="logo offset-2 img-fluid mr-4.5"
+                        style={{ width: "155px", height: "155px" }}
+                        data-testid={'UniversityImage'}
+                    />
+
+                    <button style={{ display: "flex", alignItems: "center", justifyContent: "center" }} onClick={handleFileSubmit}>Accept
+                        <TickIcon style={{ fontSize: "20px", marginLeft: "10px" }} />
+                    </button>
+                </div>
+            )}
             <div>
                 <HelpButton pdfUrl={UserManual} />
             </div>
@@ -193,8 +228,24 @@ const EditInfoPage = () => {
                 <InstitutionNavigation />
             </nav>
 
-            <main style={{ width: '1200px', marginTop: "0%", marginLeft: "25%" }}>
+            <main
+                style={{
+                    width: '1200px',
+                    marginTop: '0%',
+                    marginLeft: '25%',
+                    transition: 'filter 0.3s ease', // Add a transition for a smoother effect
+                }}
+                className={showFileModal ? 'blur-background' : ''}
+            >
                 <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}> Edit University Information</h1>
+                <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
+                    <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", marginBottom: "30px" }}>Use this to change your accounts password, upload a logo, or edit email the domains of valid accounts for the institution.</h6>
+                    <img
+                        src={EditUniInfoImage}
+                        alt="Edit Information"
+                        style={{ width: "200px", height: "200px" }}
+                    />
+                </div>
                 <table className="table table-sm">
                     <tbody>
 
@@ -316,13 +367,6 @@ const EditInfoPage = () => {
                                     {selectedFile ? (
                                         <div>
                                             Selected File: {selectedFile.name}
-                                            <button
-                                                onClick={handleFileSubmit}
-                                                className={"btn m-3"}
-                                                style={{ backgroundColor: "#e32f45", color: "white" }}
-                                            >
-                                                Submit
-                                            </button>
                                         </div>
                                     ) : (
                                         <div id={"dropzone"} onClick={handleClick}>
@@ -436,8 +480,8 @@ const EditInfoPage = () => {
                         </AccordionDetails>
                     </Accordion>
                 </div>
-                <br/>
-            </main>
+                <br />
+            </main >
         </div >
 
     );
