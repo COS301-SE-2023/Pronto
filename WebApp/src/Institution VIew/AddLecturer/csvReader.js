@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import CSVReader from 'react-csv-reader';
 import { useAdmin } from '../../ContextProviders/AdminContext';
 import {API} from 'aws-amplify';
@@ -8,13 +9,11 @@ import { listCourses,listLecturers } from '../../Graphql/queries';
 const CsvFileReader = (props)=>{
     //console.log(props)
     const {admin,setAdmin}=useAdmin();
+    const[isDisabled ,setIsDisabled]=useState(false);
     const handleFile = async(data, fileInfo) => {
-        //console.log(props);
-        //console.log('Parsed CSV data:', data);
-        //console.log(data[0]['First Name']);
-        addLecturers(data);
-        //console.log('File info:', fileInfo);
-        
+      setIsDisabled(true);
+      await addLecturers(data);
+      setIsDisabled(false)
         
   };
 
@@ -39,8 +38,8 @@ const CsvFileReader = (props)=>{
           
             let lecturer={
                 institutionId:props.institutionId,
-                firstname:lecturerList[i]['firstname'] ? lecturerList[i]['firstname']  : lecturerList[i]['name']?  lecturerList[i]['name'] : undefined,
-                lastname: lecturerList[i]['lastname']? lecturerList[i]['lastname']  : lecturerList[i]['surname']?  lecturerList[i]['surname'] : undefined,
+                firstname:lecturerList[i]['firstname'] ? lecturerList[i]['firstname']  : lecturerList[i]['name']?  lecturerList[i]['name'] :lecturerList[i]['givenname']? lecturerList[i]['givenname'] : undefined,
+                lastname: lecturerList[i]['lastname']? lecturerList[i]['lastname']  : lecturerList[i]['surname']?  lecturerList[i]['surname'] : lecturerList[i]['familyname']? lecturerList[i]['familyname'] : undefined,
                 email:lecturerList[i]['emailaddress'] ? lecturerList[i]['emailaddress'] : lecturerList[i]['email']? lecturerList[i]['email'] : undefined,
                 userRole:"Lecturer"
             }
@@ -68,7 +67,8 @@ const CsvFileReader = (props)=>{
                   
               //     newLecturer=newLecturer.data.createLecturer;
               //     emailList.push(lecturer.email);
-              //     let courses=lecturerList[i]['courses']? lecturerList[i]['courses'].split(',') : lecturerList[i]['course']?  lecturerList[i]['course'].split(',') : []
+              //     let courses=lecturerList[i]['courses']? lecturerList[i]['courses'].split(',') : lecturerList[i]['course']?  lecturerList[i]['course'].split(',') : lecturerList[i]['modules']? lecturerList[i]['modules'].split(',') : lecturerList[i]['module'] ? lecturerList[i]['module'].split(',') : []
+              
               //     let filter = `{"filter" : { "or" : [`;
               //     console.log("courses here");
               //     console.log(courses);
@@ -125,15 +125,38 @@ const CsvFileReader = (props)=>{
         // })
       
     }
-    props.setAdding("Add")
+    
+    props.setAdding("Add");
+  }
+
+  const dispayError = ()=>{
+    props.setError("File could not be read");
   }
 
     return (
-      <div>
-        <CSVReader
+      <div    style={{
+          height: "100px",
+          width: "100%",
+          padding:"0px",
+          //backgroundColor: "#f7f7f7",
+          //border: "1px solid #ddd",
+          //borderRadius: "50px",
+          //boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", /* Increased shadow intensity */
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+          cursor: "pointer",
+        }}>
+         <CSVReader
+          label="Click here"
+          cssClass="form-control" 
           onFileLoaded={handleFile}
-          inputStyle={{ color: "#e32f45" }} 
+          inputStyle={{opacity:"0",width:"100%",height:"100%",border:"1px solid #ddd"}} 
           parserOptions={papaparseOptions}
+          onError={dispayError}
+          strict={true}
+          disabled={isDisabled}
+
         />
       </div>
     );
