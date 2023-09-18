@@ -177,6 +177,62 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoAuthPostConfirmation_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_lecturerGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_studentGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoPreSignIn_deploymentBucketName": {
       "usedBy": [
         {
