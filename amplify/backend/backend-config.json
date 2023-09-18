@@ -9,9 +9,7 @@
     "prontoGraphQlApi": {
       "dependsOn": [
         {
-          "attributes": [
-            "UserPoolId"
-          ],
+          "attributes": ["UserPoolId"],
           "category": "auth",
           "resourceName": "prontoAuth"
         }
@@ -45,10 +43,7 @@
       "customAuth": false,
       "dependsOn": [
         {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
+          "attributes": ["Arn", "Name"],
           "category": "function",
           "resourceName": "prontoAuthPostConfirmation",
           "triggerProvider": "Cognito"
@@ -56,9 +51,7 @@
       ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
+        "mfaTypes": ["SMS"],
         "passwordProtectionSettings": {
           "passwordPolicyCharacters": [
             "REQUIRES_LOWERCASE",
@@ -68,18 +61,10 @@
           ],
           "passwordPolicyMinLength": 8
         },
-        "signupAttributes": [
-          "EMAIL",
-          "FAMILY_NAME",
-          "NAME"
-        ],
+        "signupAttributes": ["EMAIL", "FAMILY_NAME", "NAME"],
         "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
+        "usernameAttributes": ["EMAIL"],
+        "verificationMechanisms": ["EMAIL"]
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
@@ -122,10 +107,7 @@
       "build": true,
       "dependsOn": [
         {
-          "attributes": [
-            "Id",
-            "Region"
-          ],
+          "attributes": ["Id", "Region"],
           "category": "analytics",
           "resourceName": "prontoNotifications"
         },
@@ -182,13 +164,27 @@
   },
   "notifications": {
     "prontoNotifications": {
-      "channels": [
-        "Email"
-      ],
+      "channels": ["Email"],
       "service": "Pinpoint"
     }
   },
   "parameters": {
+    "AMPLIFY_function_announcementsHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_announcementsHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoPostSignUp_adminGroupName": {
       "usedBy": [
         {
@@ -197,7 +193,23 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoWebClientId": {
+    "AMPLIFY_function_prontoPostSignUp_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPostSignUp_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoPostSignUp"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoPostSignUp_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
