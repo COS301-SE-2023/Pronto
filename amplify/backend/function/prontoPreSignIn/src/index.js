@@ -31,8 +31,6 @@ exports.handler = async (event) => {
       `Cannot authenticate user from this app client: 
       Students Should use the mobile app and Admin/Lectures should use the web app`
     );
-
-  event.response.autoConfirmUser = false;
   try {
     if (
       !(await isInstitideAdminOrLecturer(
