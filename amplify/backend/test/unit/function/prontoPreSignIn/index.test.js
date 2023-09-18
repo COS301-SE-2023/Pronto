@@ -25,7 +25,7 @@ describe("testing presignIn inputs", () => {
   });
   test("should throw: Invalid User Role or Role not provided", async () => {
     const invalidRoleEvent = { ...adminEvent };
-    invalidRoleEvent.request.clientMetadata.role = "";
+    invalidRoleEvent.request.validationData.role = "";
 
     await expect(preSignIn.handler(invalidRoleEvent)).rejects.toThrowError(
       "Invalid User Role or Role not provided"
@@ -44,8 +44,7 @@ describe("testing presignIn inputs", () => {
     invalidStudentEvent.callerContext.clientId =
       adminEvent.callerContext.clientId;
     await expect(preSignIn.handler(studentsEvent)).rejects.toThrowError(
-      `Cannot authenticate user from this app client:\n 
-      Students Should use the mobile app and Admin/Lectures should use the web app`
+      /Cannot authenticate user from this app client/
     );
   });
 });
