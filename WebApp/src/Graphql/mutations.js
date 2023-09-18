@@ -276,3 +276,17 @@ export const updateActivity=`mutation UpdateActivity(
     coordinates
   }
 }`
+
+export const createActivity=`mutation CreateActivity(
+  $input: CreateActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  createActivity(input: $input, condition: $condition) {
+    id
+    courseId
+    activityname
+    day
+    start
+    end
+  }
+}`
