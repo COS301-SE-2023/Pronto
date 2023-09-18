@@ -12,9 +12,10 @@ import {
 import { SelectList } from "react-native-dropdown-select-list";
 import React, { useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Auth } from "aws-amplify";
+import { Auth,API } from "aws-amplify";
 import institutionInfo from "../../assets/data/universityInfo.json";
 import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
+import { getInstitution } from "../../graphql/queries";
 
 const { height } = Dimensions.get("window");
 
@@ -133,15 +134,24 @@ const Register = ({ navigation }) => {
     setLoading(true);
     try {
       // navigation.navigate("ConfirmEmail", { email });
-      await Auth.signUp({
+      let t=await API.graphql({
+        query:getInstitution,
+        variables:{id:institutionId},
+        authMode:"API_KEY"
+      })
+
+      //console.log(t.data);
+      let a=await Auth.signUp({
         username: email,
-        password,
-        attributes: { email, family_name: surname, name },
+        password:password,
+        attributes: { email:email, family_name: surname, name:name },
         clientMetadata: { role: "Student", institutionId: institutionId },
       });
-
+      
+      console.log(a);
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
+      console.log(e)
       Alert.alert("Error", e.message);
     }
     setLoading(false);

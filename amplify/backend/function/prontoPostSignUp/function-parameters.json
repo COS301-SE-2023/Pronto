@@ -1,0 +1,29 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "prontoAuth": [
+        "read",
+        "update"
+      ]
+    }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "studentGroupName",
+      "environmentVariableName": "STUDENT_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "adminGroupName",
+      "environmentVariableName": "ADMIN_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "lecturerGroupName",
+      "environmentVariableName": "LECTURER_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "modules",
+      "environmentVariableName": "MODULES"
+    }
+  ]
+}

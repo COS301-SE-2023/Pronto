@@ -438,3 +438,16 @@ export const getStudent=`query GetStudent($id: ID!) {
       }  
     }
 }`
+
+export const getInstitution=`query GetInstitution($id: ID!) {
+  getInstitution(id: $id) {
+    name
+    admin {
+          id
+          email
+    }
+    domains
+    lectureremails
+  }
+}
+`
