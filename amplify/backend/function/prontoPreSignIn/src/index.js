@@ -5,7 +5,7 @@
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
-const ROLES = require("../../prontoPreSignUp/src/roles");
+const ROLES = require("./roles");
 const {
   isInstitideAdminOrLecturer,
 } = require("./helpers/assertInstitutionInfo");
@@ -28,7 +28,7 @@ exports.handler = async (event) => {
     )
   )
     throw new Error(
-      `Cannot authenticate user from this app client:\n 
+      `Cannot authenticate user from this app client: 
       Students Should use the mobile app and Admin/Lectures should use the web app`
     );
 
