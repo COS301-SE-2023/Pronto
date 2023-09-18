@@ -114,6 +114,7 @@ export default function PostAccordion(course) {
 
       setSuccessMessage("Announcement posted succesfully");
     } catch (error) {
+      console.log(error);
       if (error.errors !== undefined) {
         let e = error.errors[0].message;
 

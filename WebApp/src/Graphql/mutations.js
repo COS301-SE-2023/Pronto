@@ -290,3 +290,17 @@ export const createActivity=`mutation CreateActivity(
     end
   }
 }`
+
+export const deleteCourse=`mutation DeleteCourse(
+  $input: DeleteCourseInput!
+  $condition: ModelCourseConditionInput
+) {
+  deleteCourse(input: $input, condition: $condition) {
+    id
+    institutionId
+    lecturerId
+    coursecode
+    coursename
+    semester
+  }
+}`

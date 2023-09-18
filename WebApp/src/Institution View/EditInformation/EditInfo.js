@@ -430,7 +430,7 @@ const EditInfoPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {admin && admin.institution && admin.institution.domains.map((key, val) => {
+                                    {admin && admin.institution && admin?.institution?.domains?.map((key, val) => {
                                         return (
                                             <tr key={val}>
                                                 <td>{key}</td>

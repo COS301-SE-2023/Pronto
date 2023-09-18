@@ -91,6 +91,7 @@ function Login() {
         if (adminData.institution.logo !== null) {
           adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
         }
+      
         setAdmin(adminData);
       }
       else {
@@ -122,8 +123,8 @@ function Login() {
       await Auth.signIn(email, password, { role: "Admin" });
       setsignInError("");
       
-      //await fetchAdmin().then(() => navigate("/institution/dashboard"))
-      navigate("/institution/dashboard");
+      await fetchAdmin().then(() => navigate("/institution/dashboard"))
+     // navigate("/institution/dashboard");
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
@@ -172,17 +173,7 @@ function Login() {
     setLoading(true);
 
     try {
-      // let inst={
-      //   name:"Agile Architects",
-      //   adminId:"11a868e2-bcc4-4008-a3c8-16e95add8fb3",
-      // }
-
-      // let a= await API.graphql({
-      //   query:createInstitution,
-      //   variables:{input:inst},
-      //   authMode:"API_KEY"
-      // });
-      // console.log(a)
+     
       await Auth.signUp({
         username: email,
         password: signUpPassword,
@@ -196,11 +187,12 @@ function Login() {
           institutionId:institutionId
         },
       });
+  
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
     } catch (e) {
-      console.log(e);
-      //setsignUpError(e.message);
+     // console.log(e);
+      setsignUpError(e.message);
     }
     setLoading(false);
   };
