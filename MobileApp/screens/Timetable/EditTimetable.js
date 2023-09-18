@@ -16,24 +16,25 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { searchCourses, listStudents } from "../../graphql/queries"
-import { createEnrollment, deleteEnrollment, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { searchCourses ,getStudent} from "../../graphql/queries"
+import { createEnrollment,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
-const EditTimetable = ({ onSearch }) => {
+const EditTimetable = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
   const [courses, setCourses] = useState([])
-  const [lectures, setLectures] = useState(["L01", "L02", "L03", "L04", "L05", "L06", "L07", "L08", "L09"])
-  const [tutorials, setTutorials] = useState(["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"])
-  const [practicals, setPracticals] = useState(["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"])
- // const [timetable, setTimetable] = useState(null)
+  const lectures = ["L01", "L02", "L03", "L04", "L05", "L06", "L07", "L08", "L09"];
+  const tutorials = ["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"];
+  const practicals = ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"];
   const [activities, setActivities] = useState([])
-  //const [student, setStudent] = useState(null)
+
   const{student,updateStudent} = useStudent();
   const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
   const [isSaving, setIsSaving] = useState(false);
 
+  const error = "There appear to be network issues.Please try again later"
+  
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module);
@@ -46,9 +47,10 @@ const EditTimetable = ({ onSearch }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-  const addToModules = (module) => {
+  const addToModules = async(module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [module, ...prevModules]);
+
     } else {
       Alert.alert("Module Already Added", "This module is already added to your selection.");
     }
@@ -59,8 +61,7 @@ const EditTimetable = ({ onSearch }) => {
   const [input, setInput] = useState("");
 
   const handleSearch = async (text) => {
-    setInput(text)
-    let error = "There appear to be network issues. Please try again later"
+    setInput(text);
 
     if (text !== null) {
       try {
@@ -74,66 +75,54 @@ const EditTimetable = ({ onSearch }) => {
             }
           }
         })
-        setCourses(search.data.searchCourses.items)
+        setCourses(search.data.searchCourses.items.filter((item)=>item.institutionId===student.institutionId));
       } catch (e) {
-        Alert.alert(error)
+        console.log(e);
+        Alert.alert(error);
       }
     }
   }
 
-  const fetchCourses = async () => {
-    let error = "There appear to be network issues.Please try again later"
+  const fetchCourses = async () =>{
     try {
+      let stu=student;
+      
       if(student===null){
         setIsLoading(true); // Set loading state to true during API call
-        let user = await Auth.currentAuthenticatedUser()
-        let studentEmail = user.attributes.email;
-        let act = []
-        let stu = await API.graphql({
-          query: listStudents,
-          variables: {
-            filter: {
-              email: {
-                eq: studentEmail
-              }
-            }
-          }
-        })
-
-        let found = false
-        for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-          if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-            stu = stu.data.listStudents.items[i];
-            found = true;
-            break;
-          }
-        }
-
-        if(found===false){
-          throw Error();
-        }
-
+        const user = await Auth.currentAuthenticatedUser();
+        let act = [];
+        stu=await API.graphql({
+          query:getStudent,
+          variables:{id:user.attributes.sub}
+        }) 
+        stu=stu.data.getStudent;
         let c = [];
         for (let i = 0; i < stu.enrollments.items.length; i++) {
           c.push(stu.enrollments.items[i].course);
         }
-        setSelectedModules(c)
-        if (stu.timetable !== null) {
+        setSelectedModules(c);
+       
+        if (stu.studentTimetableId !== null && stu.timetable.activityId!==undefined) {
           for (let i = 0; i < stu.timetable.activityId.length; i++) {
             for (let j = 0; j < c.length; j++) {
               let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
               if (index !== undefined) {
-                act.push(index)
+                act.push(index);
                 break;
               }
             }
           }
-          setActivities(act)
+          if(stu.enrollments===undefined){
+            stu.enrollments={
+              items:[]
+            }
+          }
+             updateStudent(stu);
+            setActivities(s.timetable.activities);
         }
-        updateStudent(stu)
-        setIsLoading(false); // Set loading state to false after courses are fetched
-      }else{
         
+        setIsLoading(false); // Set loading state to false after courses are fetched
+    }else{
         let c=[]
         for (let i = 0; i < student.enrollments.items.length; i++) {
           c.push(student.enrollments.items[i].course);
@@ -143,103 +132,125 @@ const EditTimetable = ({ onSearch }) => {
       }
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
-      Alert.alert(error)
-      
+      Alert.alert(error);
+      console.log("From edit");  
+      console.log(e); 
 
     }
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchCourses();
-  }, [])
+  },[]);
 
   const handleSave = async () => {
-
-    let error = "There appear to be network issues.Please try again later"
     try {
       //Create enrollment if it doesnt exist
       setIsSaving(true);
-      let activityIds = []
+      let activityIds = [];
 
-
+      //Extract activity Ids
       for (let i = 0; i < activities.length; i++) {
         if (activities[i] != undefined) {
-          activityIds.push(activities[i].id)
+          activityIds.push(activities[i].id);
         }
       }
-      if (student === null) {
-        throw Error()
-      }
-      if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.items.filter((item) => item.courseId === selectedModule.id).length === 0) {
-        enroll = {
+        if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.items.filter((item) => item.courseId === selectedModule.id).length === 0) {
+        let enroll = {
           courseId: selectedModule.id,
           studentId: student.id,
-        }
+        };
+
         let newEnrollment = await API.graphql({
           query: createEnrollment,
           variables: { input: enroll }
-        })
+        });
+       
         let s = student;
+      
         student.enrollments.items.push(newEnrollment.data.createEnrollment);
-        updateStudent(student);
+       
+       updateStudent(student);
+        
       }
-      if (student.timetable === null) {
+      
+      //Create a new timetable if it doesnt exist
+      if (student.studentTimetableId === null) {
         let newTimetable = {
           studentId: student.id,
           activityId: activityIds,
-        }
+        };
 
         let create = await API.graphql({
           query: createTimetable,
           variables: { input: newTimetable },
         })
+        let a=await API.graphql({
+          query:updateStudentInfo,
+          variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id}}
+        })
 
         let s = student
-        s.timetable = create.data.createTimetable
-        s.timetableId = s.timetable.id
-
-        //setStudent(s)
-        //setTimetable(timetable)
-        updateStudent(s);
+        s.timetable = create.data.createTimetable;
+        s.studentTimetableId = s.timetable.id;
+        student.timetable=create.data.createTimetable;
+        student.studentTimetableId=create.data.createTimetable.id;
+        student.timetable.activities=activities;
+         updateStudent(student);
+        
       }
+
+      //Update existing timetable
       else {
 
-        if (student === null) {
-          throw Error()
-        }
         let newTimetable = {
           id: student.studentTimetableId,
           studentId: student.id,
           activityId: activityIds
         }
+
         let update = await API.graphql({
           query: updateTimetable,
           variables: { input: newTimetable }
         })
+        
         let s = student
-        s.timetable = update.data.updateTimetable
-        //setStudent(s)
-        //setTimetable(update.data.updateTimetable)
-        updateStudent(s);
+        s.timetable = update.data.updateTimetable;
+        student.timetable=update.data.updateTimetable;
+        student.timetable.activities=activities;
+        updateStudent(student);
+        // s= await updateStudent(student);
+        // student.timetable.activities=s.timetable.activities;
       }
       setIsSaving(false);
-      toggleModal(null)
+      toggleModal(null);
+
     } catch (e) {
+      console.log("From save");
+      console.log(e);
       setIsSaving(false);
       Alert.alert(error);
-      
     }
   }
-  const addActivity = (activity) => {
+
+  const addActivity = async (activity) => {
     let rows = [...activities]
     for (let i = 0; i < activities.length; i++) {
       if (activities[i].activityname === activity.activityname && activities[i].courseId === activity.courseId) {
         rows.splice(i, 1)
       }
     }
+   
     rows.push(activity)
-    setActivities(rows)
+    
+    student.timetable.activities=rows;
+    updateStudent(student);
+    //let s=await updateStudent(student);
+   // student.timetable.activities=s.timetable.activities;
+    setActivities(rows);
   }
+
+
   const oneModule = ({ item }) => {
     const handleDelete = async () => {
       Alert.alert(
@@ -259,6 +270,7 @@ const EditTimetable = ({ onSearch }) => {
               let act = activities.filter(
                 (activity) => activity.courseId !== item.id
               );
+            
               let error = "Failed to remove course. Please try again later";
 
               try {
@@ -270,19 +282,19 @@ const EditTimetable = ({ onSearch }) => {
                     });
 
                     student.enrollments.items.splice(i, 1);
-                    updateStudent(student);
                     break;
                   }
                 }
                 await handleSave();
-                setStudent(student);
+                //updateStudent(student);
                 setSelectedModules((prevModules) =>
                   prevModules.filter((module) => module.id !== item.id)
                 );
                 setActivities(act);
                 setSelectedModule(null);
               } catch (e) {
-               
+                console.log("From delete")
+                console.log(e);
                 Alert.alert(error);
               }
             },
@@ -303,7 +315,7 @@ const EditTimetable = ({ onSearch }) => {
             }}
           >
             <Card.Title
-              title={item.coursecode}
+              title={item?.coursecode}
               titleStyle={{
                 fontSize: 20,
                 fontWeight: "bold",
@@ -444,8 +456,8 @@ const EditTimetable = ({ onSearch }) => {
           <ScrollView contentContainerStyle={styles.modalContent}>
             {selectedModule && (
               <View key={selectedModule.id}>
-                <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
-                {/* <Text style={styles.moduleName}>{selectedModule.name}</Text>
+                <Text style={styles.moduleCode}>{selectedModule?.coursecode}</Text>
+                
                 
                 {/* Display lectures */}
                 {lectures.map((lecture, i) => (
@@ -465,6 +477,7 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===lecture)[0]}
                   />
                 ))}
 
@@ -486,12 +499,13 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===tutorial)[0]}
                   />
                 ))}
 
                 {/*Display practicals*/}
                 {practicals.map((practical, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname == practical).length > 0 &&
+                  selectedModule.activity.items.filter(item => item.activityname === practical).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Practical"}
@@ -507,6 +521,7 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===practical)[0]}
                   />
                 ))}
               </View>
@@ -525,7 +540,7 @@ const EditTimetable = ({ onSearch }) => {
 
             outlined={true}
             disabled={isSaving}
-            onPress={() => handleSave()}
+            onPress={async() => { await handleSave()}}
             testID="save-button"
           >
             {isSaving ? (

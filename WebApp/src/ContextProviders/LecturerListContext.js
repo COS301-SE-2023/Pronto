@@ -10,9 +10,9 @@ export const LecturerListProvider = ({ children }) => {
   const [lecturerList, setLecturerList] = useState([]);
   const [nextToken,setNextToken] = useState(null);
 
-  const updateLecturerList = (newLecturerList) => {
+  /*const updateLecturerList = (newLecturerList) => {
     setLecturerList(newLecturerList);
-  };
+  };*/
 
   return (
     <LecturerListContext.Provider value={{ lecturerList, setLecturerList, nextToken,setNextToken }}>
