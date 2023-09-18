@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { Auth } from "aws-amplify";
+import { response } from "express";
 
 const { height } = Dimensions.get("window");
 
@@ -31,16 +32,14 @@ const ConfirmEmail = ({ navigation }) => {
 
     setLoading(true);
     try {
-      console.log(code)
-
-      // await Auth.confirmSignUp({
-      //   username:email,
-      //   code:code,
-      //   clientMetadata:{role: "Student"},
-      //  });
-       
-      response= await Auth.confirmSignUp(email,code,{clientMetadata:{role:"Student"}})
-        console.log(response);        
+      console.log("code: ",code);
+      response= await Auth.confirmSignUp(
+                  email,
+                  code,
+                  {clientMetadata:{role:"Student"}}
+                );        
+ 
+      console.log(response);
       //need to add user to a user group here?
       Alert.alert("Success", "Login to access your account.");
       navigation.navigate("Login");
