@@ -14,7 +14,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { Auth } from "aws-amplify";
-import { response } from "express";
 
 const { height } = Dimensions.get("window");
 
