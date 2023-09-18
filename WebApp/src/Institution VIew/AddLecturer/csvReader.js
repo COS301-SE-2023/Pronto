@@ -30,10 +30,11 @@ const CsvFileReader = (props)=>{
   }
 
   const addLecturers = async(lecturerList)=>{
-    props.setAdding("Adding...This may take a while");
+    
     let emailList=props.emailList;
-    console.log(lecturerList);
-    for(let i=0;i<lecturerList.length;i++){
+    if(lecturerList.length<=101){
+      props.setAdding("Adding...This may take a while");
+      for(let i=0;i<lecturerList.length;i++){
         try{
           
             let lecturer={
@@ -49,8 +50,7 @@ const CsvFileReader = (props)=>{
                   continue;
                 }
                 else{
-                  console.log(lecturer);
-                  props.setError("File contains unrecognised fields.Please use First Name,Last Name, Email Address and Courses");
+                  props.setError("File contains unrecognised fields. Please use First Name,Last Name, Email Address and Courses as field names.");
                   break;
                 }
             }else{
@@ -119,14 +119,22 @@ const CsvFileReader = (props)=>{
         }catch(error){
             console.log(error);
         }
+        try{
         // let ins=API.graphql({
         //   query:updateInstitution,
         //   variables:{input:{id:props.institutionId,lectureremails:emailList}}
         // })
+        }catch(error){
+
+        }
       
     }
     
     props.setAdding("Add");
+    }
+    else{
+      props.setError("Too many lines. Please note you are limited to adding 100 lecturers at a time.");
+    }
   }
 
   const dispayError = ()=>{
@@ -138,10 +146,6 @@ const CsvFileReader = (props)=>{
           height: "100px",
           width: "100%",
           padding:"0px",
-          //backgroundColor: "#f7f7f7",
-          //border: "1px solid #ddd",
-          //borderRadius: "50px",
-          //boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", /* Increased shadow intensity */
           justifyContent: "center",
           alignItems: "center",
           display: "flex",

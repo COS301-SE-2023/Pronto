@@ -165,13 +165,13 @@ const EditInfoPage = () => {
             };
             let update = await API.graphql({
                 query: updateInstitution,
-                variables: { input: inst },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
+                variables: { input: inst }
             });
-            update.data.updateInstitution.logoUrl = logoUrl;
-            let newAdmin = admin;
-            newAdmin.institution = update.data.updateInstitution;
-            setAdmin(newAdmin);
+            //update.data.updateInstitution.logoUrl = logoUrl;
+            //let newAdmin = admin;
+           // newAdmin.institution = update.data.updateInstitution;
+            
+            setAdmin(admin);
             setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
@@ -200,8 +200,7 @@ const EditInfoPage = () => {
                 };
                 let update = await API.graphql({
                     query: updateInstitution,
-                    variables: { input: inst },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
+                    variables: { input: inst }
                 });
 
                 let newAdmin = admin;
@@ -220,7 +219,7 @@ const EditInfoPage = () => {
             // Reset the selected file and upload progress
             setSelectedFile(null);
             setUploadProgress(0);
-            window.location.reload()
+            window.location.reload();
         }
     }
 
