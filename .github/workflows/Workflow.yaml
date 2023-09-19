@@ -108,14 +108,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Wait for the application to start
-        run: |
-          npx wait-on ${{ secrets.CYPRESS_BASE_URL }}
-        timeout-minutes: 1
+      - name: Set E2E_USERS_JSON environment variable
+        env:
+          E2E_USERS_JSON: ${{ secrets.E2E_USERS_JSON }}
+        run: echo "::set-env name=E2E_USERS_JSON::${E2E_USERS_JSON}"
 
       - name: Run Cypress E2E tests
         env:
           BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
-        run: npx cypress run --config baseUrl="${BASE_URL}"
+        run: |
+          npx cypress run --config baseUrl="${BASE_URL}"
 
 
