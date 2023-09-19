@@ -195,9 +195,10 @@ type Announcement
       { allow: public, operations: [read] }
       {
         allow: groups
-        groups: ["studentUserGroup", "lecturerUserGroup", "adminUserGroup"]
+        groups: ["studentUserGroup", "adminUserGroup"]
         operations: [read]
       }
+      { allow: groups, groups: ["lecturerUserGroup"], operations: [create] }
     ]
   ) {
   id: ID!
