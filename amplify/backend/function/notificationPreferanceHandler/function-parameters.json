@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "prontoGraphQlApi": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
