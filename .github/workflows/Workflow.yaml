@@ -110,13 +110,12 @@ jobs:
 
       - name: Wait for the application to start
         run: |
-          npx wait-on ${{ secrets.BASE_URL }}
+          npx wait-on ${{ secrets.CYPRESS_BASE_URL }}
         timeout-minutes: 1
 
       - name: Run Cypress E2E tests
         env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-          LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}
-        run: npx cypress run --config baseUrl="${BASE_URL}" --env LECTURER_PASSWORD="${LECTURER_PASSWORD}"
+          BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
+        run: npx cypress run --config baseUrl="${BASE_URL}"
 
 

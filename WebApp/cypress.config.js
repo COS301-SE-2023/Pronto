@@ -11,7 +11,10 @@ module.exports = defineConfig({
     videosFolder: "test/e2e/cypress/videos",
     baseUrl: "https://fix---auth.d1ckzmac0m6yvh.amplifyapp.com/",
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+
+    },
+    env: {
+      E2E_USERS_JSON: process.env.E2E_USERS_JSON || "", // Set the default value
     },
   },
 });
