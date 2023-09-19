@@ -13,7 +13,7 @@ AWSCLOUDFORMATIONCONFIG="{\
 }"
 AMPLIFY="{\
 \"projectName\":\"pronto\",\
-\"appId\":\"d3j57fmadrzn3\",\
+\"appId\":\"d20q0958evgy5c\",\
 
 \"envName\":\"dev\",\
 \"defaultEditor\":\"code\"\
@@ -29,4 +29,3 @@ amplify pull \
 --amplify $AMPLIFY \
 --frontend $FRONTEND \
 --providers $PROVIDERS \
---yes
