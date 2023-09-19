@@ -55,6 +55,7 @@ const EditTimetable = ({ navigation }) => {
       Alert.alert("Module Already Added", "This module is already added to your selection.");
     }
     setInput("");
+    setCourses([]);
   };
 
 
@@ -105,7 +106,6 @@ const EditTimetable = ({ navigation }) => {
           variables:{id:user.attributes.sub}
         }) 
         stu=stu.data.getStudent;
-        console.log(stu);
         if(stu===null){
           setIsLoading(false);
           return;

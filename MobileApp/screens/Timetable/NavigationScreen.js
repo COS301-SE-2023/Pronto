@@ -105,7 +105,7 @@ const NavigationScreen = ({navigation}) => {
                     })
         
                 stu=stu.data.getStudent;
-                if(stu===null || undefined){
+                if(stu===null || stu===undefined){
                     throw Error();
                 }
                 await updateStudent(stu);
@@ -178,7 +178,7 @@ const NavigationScreen = ({navigation}) => {
 
     useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-        requestLocationPermission().then();
+        requestLocationPermission();
         fetchLocations();
     });
 

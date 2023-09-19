@@ -45,11 +45,9 @@ export default function App() {
           query: getStudent,
           variables: {id:authUser.attributes.sub}
         });
-        // console.log("student info goes here")
-        // console.log(studentInfo)
+        
         studentInfo=studentInfo.data.getStudent;
         setStudent(studentInfo);
-       // console.log(studentInfo);
         if(studentInfo===null){
           
         try{

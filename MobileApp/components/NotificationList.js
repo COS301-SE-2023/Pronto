@@ -342,8 +342,10 @@ const NotificationList = ({ navigation }) => {
             }
         
         </Text>
+         <Text style={{marginLeft:"auto",marginRight:"auto" ,marginBottom:"60px"}}>Swipe down to refresh &#x2193;{'\n\n'}</Text>
         </ScrollView>      
-            )}
+          
+           )}
    
             
           </ScrollView>
@@ -353,7 +355,7 @@ const NotificationList = ({ navigation }) => {
          
                  
       </Card.Content>
-       <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text> 
+       {/* <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text>  */}
       </View>
   );
 };

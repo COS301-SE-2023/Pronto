@@ -41,10 +41,15 @@ const DeleteAccountPage = () => {
               }
 
               if(stu!==null){
-                  // let del = await API.graphql({
-                  //   query: deleteStudent,
-                  //   variables: { input: { id: stu.id } }
-                  // })
+                  try{
+
+                  let del = await API.graphql({
+                    query: deleteStudent,
+                    variables: { input: { id: stu.id } }
+                  })
+                  }catch(e){
+
+                  }
                 updateStudent(null)
               }
                 await Auth.currentAuthenticatedUser().then((user) => {
