@@ -38,6 +38,7 @@ Pronto is a consolidated university application that provides students with the 
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Demo4%20SRS.pdf">🧾 SRS Document</a></div>
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Architectural%20Requirements.pdf">🧾 Architectural Requirement</a></div>
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Code%20Quality%20Standards.pdf">🧾 Code Quality Standards</a></div>
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Testing%20Policy.pdf">🧾 Testing policy/QA metrics</a></div>
 
 ### Manuals
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/User%20Manual.pdf">🧾 User Manual</a></div>
