@@ -77,32 +77,34 @@ const ScheduleTable = ({ navigation,route }) => {
     return results;
   }
 
-
   let error = "There appear to be network issues.Please try again later";
 
   const fetchActivities = async () => {
     try {
       let stu=student;
-     
-    
-      if (student === null) {
-        if(param===null){
+      if (student === null || student.id===undefined) {
+        console.log("Student goes here");
+        
+        if(param===null || param.id===undefined){
           const user = await Auth.currentAuthenticatedUser();
           stu=await API.graphql({
             query:getStudent,
             variables:{id:user.attributes.sub}
           })
+          console.log(stu);
         
-        stu=stu.data.getStudent;
-        //console.log(stu);
+          stu=stu.data.getStudent;
+          console.log(stu);
         }
         else{
           stu=param;
           updateStudent(stu);
-          param=null;
-          
+          param=null;          
         }
-        
+        // if(stu===null){
+        //   throw Error();
+        // }
+
         if(stu.studentTimetableId!==null){
           let act=[];
           let courses=[];
@@ -131,14 +133,13 @@ const ScheduleTable = ({ navigation,route }) => {
                         return 1;
                     })
         stu.timetable.activities=act;
-        await updateStudent(stu);
+        updateStudent(stu);
         setActivities(act);
         createScheduleArray(act);
       }
       else{
-          await updateStudent(stu);
+          updateStudent(stu);
       }         
-  //      console.log(s.timetable.activities);  
     }
     else{
       if(student.timetable!==null && student.timetable.activities!==undefined){
@@ -190,11 +191,10 @@ const ScheduleTable = ({ navigation,route }) => {
           setActivities(act);
           createScheduleArray(act);
         }
-   
       }
-    }
+      }
     } catch (e) {
-      Alert.alert(error);
+      //Alert.alert(error);
       console.log("from schedule")
       console.log(e);
     }
@@ -204,7 +204,6 @@ const ScheduleTable = ({ navigation,route }) => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchActivities()
     });
-
 
     return unsubscribe
   }, [navigation])

@@ -87,22 +87,31 @@ const EditTimetable = ({ navigation }) => {
     try {
       let stu=student;
       
-      if(student===null){
+      console.log("The saved student");
+      console.log(student);
+     if(student===null || student.id===undefined){
         setIsLoading(true); // Set loading state to true during API call
         const user = await Auth.currentAuthenticatedUser();
-        let act = [];
         stu=await API.graphql({
           query:getStudent,
           variables:{id:user.attributes.sub}
         }) 
         stu=stu.data.getStudent;
+        updateStudent(stu);
+      }
+
         let c = [];
+        let act= [];
+        
         for (let i = 0; i < stu.enrollments.items.length; i++) {
           c.push(stu.enrollments.items[i].course);
         }
         setSelectedModules(c);
        
-        if (stu.studentTimetableId !== null && stu.timetable.activityId!==undefined) {
+        console.log("This is the student");
+        console.log(stu);
+
+        if (stu.timetable!==null ) {
           for (let i = 0; i < stu.timetable.activityId.length; i++) {
             for (let j = 0; j < c.length; j++) {
               let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
@@ -112,27 +121,29 @@ const EditTimetable = ({ navigation }) => {
               }
             }
           }
-          if(stu.enrollments===undefined){
-            stu.enrollments={
-              items:[]
-            }
-          }
-             updateStudent(stu);
+          
+            updateStudent(stu);
             setActivities(s.timetable.activities);
         }
         
         setIsLoading(false); // Set loading state to false after courses are fetched
-    }else{
-        let c=[]
-        for (let i = 0; i < student.enrollments.items.length; i++) {
-          c.push(student.enrollments.items[i].course);
-        }
-        setSelectedModules(c);
-        setActivities(student.timetable.activities);
-      }
+    // }else{
+    //     let c=[]
+    //     if(student.enrollments===undefined){
+    //       student.enrollments={
+    //         items:[]
+    //       }
+    //     }
+    //     for (let i = 0; i < student.enrollments.items.length; i++) {
+    //       c.push(student.enrollments.items[i].course);
+    //     }
+    //     setSelectedModules(c);
+        
+    //     setActivities(student.timetable.activities);
+    //   }
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
-      Alert.alert(error);
+      //Alert.alert(error);
       console.log("From edit");  
       console.log(e); 
 
@@ -413,7 +424,7 @@ const EditTimetable = ({ navigation }) => {
                   color: "#e32f45",
                 }}
               >
-                Fetching your modules...
+                Fetching your courses...
               </Text>
             </View>
           ) : ( // Display the "You have no modules" text after loading is completed and no courses are found
@@ -433,7 +444,7 @@ const EditTimetable = ({ navigation }) => {
                     color: "#e32f45",
                   }}
                 >
-                  You have no modules
+                  You have no courses
                 </Text>
               </View>
             ) : null

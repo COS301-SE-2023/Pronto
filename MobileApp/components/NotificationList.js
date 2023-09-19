@@ -38,8 +38,6 @@ const NotificationList = ({ navigation }) => {
         
         setLoading(true);
         const user = await Auth.currentAuthenticatedUser()
-        let studentEmail = user.attributes.email;
-
         let stu = await API.graphql({
           query: getStudent,
           variables: {id:user.attributes.sub}
@@ -61,36 +59,45 @@ const NotificationList = ({ navigation }) => {
         for(let i=0;i<stu.enrollments.items.length;i++){
           courses.push(stu.enrollments.items[i].courseId);
         }
-         
-        let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+        if(courses.length===0){
+          setLoading(false);
+        } 
+        else{
+           let filter=`{"filter" : { "or" : [`;
+          for(let i=0;i<courses.length;i++){
+            if(i===courses.length-1){
+              filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+            }
+            else{
+              filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
+            }
           }
-          else{
-            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-          }
-        }
      
-        filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
+          filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
         
-        let variables = JSON.parse(filter)
-    
-        let announcementList=await API.graphql({
+          let variables = JSON.parse(filter);
+          console.log(variables);   
+          let announcementList=await API.graphql({
             query:listAnnouncements,
             variables:variables
-          })
-          ;
+            });
         
-        setAnnouncement(announcementList.data.listAnnouncements.items);
-        if(announcementList.data.listAnnouncements.items.length<limit){
-          setNextToken(null)
+          console.log(announcementList);  
+          setAnnouncement(announcementList.data.listAnnouncements.items);
+          if(announcementList.data.listAnnouncements.items.length<limit){
+            setNextToken(null)
+          }
+          else{
+            setNextToken(announcementList.data.listAnnouncements.nextToken);
+          }
+          setLoading(false);
         }
-        else{
-          setNextToken(announcementList.data.listAnnouncements.nextToken);
-        }
+      //  setLoading(false);
+
       }
       setLoading(false);
+      console.log(loading)
+      
     } catch (er) {
       
       Alert.alert(error)
@@ -107,35 +114,36 @@ const NotificationList = ({ navigation }) => {
           courses.push(stu.enrollments.items[i].courseId);
         }
          
-        let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+        if(courses.length>0){
+          let filter=`{"filter" : { "or" : [`;
+          for(let i=0;i<courses.length;i++){
+            if(i===courses.length-1){
+              filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+            }
+            else{
+              filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
+            }
+          }
+     
+          filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
+        
+          let variables = JSON.parse(filter)
+    
+          let announcementList=await API.graphql({
+              query:listAnnouncements,
+              variables:variables
+            })
+          ;
+          setAnnouncement(announcementList.data.listAnnouncements.items);
+          if(announcementList.data.listAnnouncements.items.length<limit){
+            setNextToken(null);
           }
           else{
-            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
+            setNextToken(announcementList.data.listAnnouncements.nextToken);
           }
+          setLoading(false);
         }
-     
-        filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-        
-        let variables = JSON.parse(filter)
-    
-        let announcementList=await API.graphql({
-            query:listAnnouncements,
-            variables:variables
-          })
-          ;
-        setAnnouncement(announcementList.data.listAnnouncements.items);
-        if(announcementList.data.listAnnouncements.items.length<limit){
-          setNextToken(null);
-        }
-        else{
-          setNextToken(announcementList.data.listAnnouncements.nextToken);
-        }
-        setLoading(false);
       }catch(e){
-        
         Alert.alert(error)
       }
 
@@ -152,37 +160,38 @@ const NotificationList = ({ navigation }) => {
         courses.push(stu.enrollments.items[i].courseId);
       }
       
-      let filter=`{"filter" : { "or" : [`;
-      for(let i=0;i<courses.length;i++){
-        if(i===courses.length-1){
-          filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
-        }
-        else{
-          filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-        }
-      }
+      if(courses.length>0){
+        let filter=`{"filter" : { "or" : [`;
+        for(let i=0;i<courses.length;i++){
+          if(i===courses.length-1){
+            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+          }
+          else{
+            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
+          }
+        } 
         
-      filter+=`] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;  
-      let variables = JSON.parse(filter)
+        filter+=`] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;  
+        let variables = JSON.parse(filter)
          
-      let announcementList=await API.graphql({
+        let announcementList=await API.graphql({
             query:listAnnouncements,
             variables:variables
           });
         
-      let a=announcementList.data.listAnnouncements.items;
-      for(let i=0;i<a.length;i++){
-        announcement.push(a[i]);
+        let a=announcementList.data.listAnnouncements.items;
+        for(let i=0;i<a.length;i++){
+          announcement.push(a[i]);
+        }
+        if(announcementList.data.listAnnouncements.items.length<limit){
+          setNextToken(null);
+        }
+        else{
+          setNextToken(announcementList.data.listAnnouncements.nextToken);
+        }
+        setAnnouncement(announcement);
       }
-      if(announcementList.data.listAnnouncements.items.length<limit){
-        setNextToken(null);
-      }
-      else{
-        setNextToken(announcementList.data.listAnnouncements.nextToken);
-      }
-      setAnnouncement(announcement)
     }catch(e){
-     
       Alert.alert(error);
     }
   }

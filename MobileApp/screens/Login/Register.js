@@ -135,8 +135,8 @@ const Register = ({ navigation }) => {
       // navigation.navigate("ConfirmEmail", { email });
       await Auth.signUp({
         username: email,
-        password,
-        attributes: { email, family_name: surname, name },
+        passowrd:password,
+        attributes: { email:email, family_name: surname, name:name },
         clientMetadata: { role: "Student", institutionId: institutionId },
       });
 
