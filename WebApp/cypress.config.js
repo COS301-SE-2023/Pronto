@@ -9,7 +9,7 @@ module.exports = defineConfig({
     fixturesFolder: "test/e2e/cypress/fixtures",
     screenshotsFolder: "test/e2e/cypress/screenshots",
     videosFolder: "test/e2e/cypress/videos",
-    baseUrl: "https://prontocapstone.netlify.app",
+    baseUrl: "http://localhost:3000",
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },

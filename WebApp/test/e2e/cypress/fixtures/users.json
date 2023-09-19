@@ -1,23 +1,20 @@
 {
   "lecturers": [
     {
-      "name": "bandisa",
-      "surname": "m",
-      "email": "bandisamasilela@gmail.com",
-      "password": "12345678Up@"
+      "email": "ngwenyaandile530@gmail.com",
+      "name": "Andile",
+      "surname": "Ngwenya"
     },
     {
       "name": "test",
       "surname": "lecturer",
-      "email": "prontotestuserlecturer@gmail.com",
-      "password": "12345678@Up",
+      "email": "yovab14312@tenjb.com",
       "institutionName": "university of pretoria"
     },
     {
       "name": "John",
       "surname": "Doe",
       "email": "ndie2001@gmail.com",
-      "password": "October2001!",
       "institutionName": "university of pretoria"
     }
   ],
