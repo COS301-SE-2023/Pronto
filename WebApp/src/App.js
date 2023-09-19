@@ -9,11 +9,11 @@ import InstitutionForgotPassword from "./Authentication/Institution/ForgotPasswo
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
 
-import AddLecturer from "./Institution VIew/AddLecturer/addLecturer";
-import FileUploadPage from "./Institution VIew/FileUpload/FileUploadPage";
-import EditUniversityInfo from "./Institution VIew/EditInformation/EditInfo";
-import StudentFileUploadPage from "./Institution VIew/FileUpload/StudentFileUpload";
-import InstitutionDashboard from "./Institution VIew/Dashboard/Dashboard";
+import AddLecturer from "./Institution View/AddLecturer/addLecturer";
+import FileUploadPage from "./Institution View/FileUpload/FileUploadPage";
+import EditUniversityInfo from "./Institution View/EditInformation/EditInfo";
+import StudentFileUploadPage from "./Institution View/FileUpload/StudentFileUpload";
+import InstitutionDashboard from "./Institution View/Dashboard/Dashboard";
 
 import EditModuleInfo from "./Lecturer View/Edit Module/EditModuleInfo";
 import Modules from "./Lecturer View/Edit Module/Modules";
