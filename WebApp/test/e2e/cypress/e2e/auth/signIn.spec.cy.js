@@ -8,7 +8,7 @@ describe("Testing sign In", () => {
   /* The test below is responsible for signing in a student, this test uses the incorrect credentials
   and should result in a failed sign in
   */
-  it("should sign in lecturer", function () {
+  it("should not sign in lecturer", function () {
     cy.LecturerSignInFail(
       this.users.lecturers[0].email,
         process.env.LECTURER_PASSWORD
@@ -22,7 +22,7 @@ describe("Testing sign In", () => {
   it("should sign in lecturer", function () {
     cy.LecturerSignIn(
         this.users.lecturers[1].email,
-        process.env.LECTURER_PASSWORD
+        "October01!"
     );
   });
 });

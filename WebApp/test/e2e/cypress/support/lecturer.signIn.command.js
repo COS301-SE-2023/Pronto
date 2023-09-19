@@ -53,7 +53,7 @@ console.log(password);
 
   cy.url({ timeout: 10 * 1000 }).should(
     "eq",
-    `${Cypress.config().baseUrl}/lecturer/dashboard`
+    `${Cypress.config().baseUrl}lecturer/dashboard`
   );
 
 

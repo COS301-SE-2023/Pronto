@@ -108,17 +108,17 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 14  # You can change this to your preferred Node.js version
+        node-version: [18.x]
 
     - name: Install dependencies
       run: npm install
 
-    - name: Start your application (Assuming it's running on localhost:3000)
+    - name: Start your application 
       run: npm start
 
     - name: Wait for the application to start
       run: |
-        npx wait-on http://localhost:3000
+        npx wait-on https://fix---auth.d1ckzmac0m6yvh.amplifyapp.com/
         timeout-minutes: 5
 
     - name: Run Cypress E2E tests
