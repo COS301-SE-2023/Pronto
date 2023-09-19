@@ -95,7 +95,7 @@ jobs:
           bash scripts/initialise-amplify.sh
           amplify build
 
-    cypress:
+  cypress:
       runs-on: ubuntu-latest
       strategy:
         matrix:
