@@ -191,7 +191,7 @@ const PersonalInfoPage = () => {
                                     </div>
                                 </div>
 
-                                <button className="post-button">Update</button>
+                                <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Update</button>
                             </form>
                         </AccordionDetails>
                     </Accordion>
