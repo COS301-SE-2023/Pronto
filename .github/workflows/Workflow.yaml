@@ -95,6 +95,7 @@ jobs:
     defaults:
       run:
         working-directory: ./WebApp
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -102,24 +103,31 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-           node-version: 14
+          node-version: 14
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd ./WebApp  # Change to your project directory
+          npm install
 
-      - name: Start your application 
-        run: npm start
+      - name: Start your application
+        run: |
+          cd ./WebApp  # Change to your project directory
+          npm start
 
       - name: Wait for the application to start
         run: |
-          npx wait-on https://fix---auth.d1ckzmac0m6yvh.amplifyapp.com/
-           timeout-minutes: 5
+          npx wait-on ${{ secrets.BASE_URL }}
+        timeout-minutes: 5
 
-      - name: Run Cypress E2E tests 
+      - name: Run Cypress E2E tests
+        env:
+          BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
+          LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}
         run: |
-            npx cypress run 
-            env :
-            LECTURER_PASSWORD : ${{ secrets.LECTURER_PASSWORD }} # This sets the environment variable for Cypress 
+          cd ./WebApp  # Change to your project directory
+          npx cypress run --env BASE_URL="${BASE_URL}" --env LECTURER_PASSWORD="${LECTURER_PASSWORD}"
+ 
 
       - name: Stop the application
         run: npm stop 
