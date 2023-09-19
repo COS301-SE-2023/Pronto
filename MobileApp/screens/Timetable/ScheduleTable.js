@@ -82,117 +82,111 @@ const ScheduleTable = ({ navigation,route }) => {
   const fetchActivities = async () => {
     try {
       let stu=student;
-      if (student === null || student.id===undefined) {
-        console.log("Student goes here");
-        
+      if (student === null || student.id===undefined) {        
         if(param===null || param.id===undefined){
           const user = await Auth.currentAuthenticatedUser();
           stu=await API.graphql({
             query:getStudent,
             variables:{id:user.attributes.sub}
           })
-          console.log(stu);
-        
           stu=stu.data.getStudent;
-          console.log(stu);
+          //console.log(stu);
         }
         else{
           stu=param;
           updateStudent(stu);
           param=null;          
         }
-        // if(stu===null){
-        //   throw Error();
-        // }
-
-        if(stu.studentTimetableId!==null){
-          let act=[];
-          let courses=[];
-          for (let i = 0; i < stu.enrollments.items.length; i++) {
-            courses.push(stu.enrollments.items[i].course)
-          }
-
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < courses.length; j++) {
-              try{
-                let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-                if (index !== undefined) {
-                  act.push(index)
-                  break;
-                }
-              }catch(e){
-
-              }
-
-            }
-          }
-          act = act.sort((a, b) => {
-                      if (a.start <= b.start)
-                        return -1;
-                      else
-                        return 1;
-                    })
-        stu.timetable.activities=act;
+        if(stu===null || stu.studentTimetableId===null){
+          return;
+        }
         updateStudent(stu);
-        setActivities(act);
-        createScheduleArray(act);
       }
-      else{
-          updateStudent(stu);
-      }         
-    }
-    else{
-      if(student.timetable!==null && student.timetable.activities!==undefined){
-        let changed = false
-        
-        let act=[];
-       
-        
-          act=[];
-          let courses=[];
-          for (let i = 0; i < student.enrollments.items.length; i++) {
-            courses.push(student.enrollments.items[i].course)
-          }
 
-          for (let i = 0; i < student.timetable.activityId.length; i++) {
-            for (let j = 0; j < courses.length; j++) {
-              try{
-                let index = courses[j].activity.items.find(item => item.id === student.timetable.activityId[i])
-                if (index !== undefined) {
-                  act.push(index)
-                  break;
-                }
-              }catch(e){
+      let act=[];
+      let courses=[];
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
+        courses.push(stu.enrollments.items[i].course)
+      }
 
-              }
-
-            }
-          }
-          act = act.sort((a, b) => {
-                      if (a.start <= b.start)
-                        return -1;
-                      else
-                        return 1;
-                    })
-          if (act.length === activities.length) {
-          for (let i = 0; i < act.length; i++) {
-            if (act[i].id !== activities[i].id) {
-              changed = true;
+      for (let i = 0; i < stu.timetable.activityId.length; i++) {
+        for (let j = 0; j < courses.length; j++) {
+          try{
+            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+            if (index !== undefined) {
+              act.push(index)
               break;
             }
+          }catch(e){
+
           }
         }
-        else {
-          changed = true;
-        }          
+      }
+
+      act = act.sort((a, b) => {
+                      if (a.start <= b.start)
+                        return -1;
+                      else
+                        return 1;
+                    })
+      //stu.timetable.activities=act;
+        //updateStudent(stu);
+        setActivities(act);
+        createScheduleArray(act);
+      //}
+               
+    // else{
+    //   if(student.timetable!==null && student.timetable.activities!==undefined){
+    //     let changed = false
+        
+    //     let act=[];
+       
+        
+    //       act=[];
+    //       let courses=[];
+    //       for (let i = 0; i < student.enrollments.items.length; i++) {
+    //         courses.push(student.enrollments.items[i].course)
+    //       }
+
+    //       for (let i = 0; i < student.timetable.activityId.length; i++) {
+    //         for (let j = 0; j < courses.length; j++) {
+    //           try{
+    //             let index = courses[j].activity.items.find(item => item.id === student.timetable.activityId[i])
+    //             if (index !== undefined) {
+    //               act.push(index)
+    //               break;
+    //             }
+    //           }catch(e){
+
+    //           }
+
+    //         }
+    //       }
+    //       act = act.sort((a, b) => {
+    //                   if (a.start <= b.start)
+    //                     return -1;
+    //                   else
+    //                     return 1;
+    //                 })
+    //       if (act.length === activities.length) {
+    //       for (let i = 0; i < act.length; i++) {
+    //         if (act[i].id !== activities[i].id) {
+    //           changed = true;
+    //           break;
+    //         }
+    //       }
+    //     }
+    //     else {
+    //       changed = true;
+    //     }          
 
         
-        if (changed === true){
-          setActivities(act);
-          createScheduleArray(act);
-        }
-      }
-      }
+    //     if (changed === true){
+    //       setActivities(act);
+    //       createScheduleArray(act);
+    //     }
+    //   }
+      //}
     } catch (e) {
       //Alert.alert(error);
       console.log("from schedule")

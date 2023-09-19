@@ -133,13 +133,28 @@ const Register = ({ navigation }) => {
     setLoading(true);
     try {
       // navigation.navigate("ConfirmEmail", { email });
-      await Auth.signUp({
-        username: email,
-        passowrd:password,
-        attributes: { email:email, family_name: surname, name:name },
-        clientMetadata: { role: "Student", institutionId: institutionId },
-      });
-
+      const studentName=name+","+surname;
+      const signUpObject={
+        username:email,
+        password:password,
+        attributes:{
+          email:email,
+          family_name:institutionId,
+          name:studentName
+        },
+        clientMetadata:{
+          role:"Student",
+          instituionId:institutionId
+        }
+      }
+      const u =await Auth.signUp(signUpObject);
+      // const u=await Auth.signUp({
+      //   username: email,
+      //   password:password,
+      //   attributes: { email:email, family_name: surname, name:name },
+      //   clientMetadata: { role: "Student", institutionId: institutionId },
+      // });
+      
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
       Alert.alert("Error", e.message);

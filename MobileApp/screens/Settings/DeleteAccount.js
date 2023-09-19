@@ -41,10 +41,10 @@ const DeleteAccountPage = () => {
               }
 
               if(stu!==null){
-                  let del = await API.graphql({
-                    query: deleteStudent,
-                    variables: { input: { id: stu.id } }
-                  })
+                  // let del = await API.graphql({
+                  //   query: deleteStudent,
+                  //   variables: { input: { id: stu.id } }
+                  // })
                 updateStudent(null)
               }
                 await Auth.currentAuthenticatedUser().then((user) => {
@@ -58,6 +58,7 @@ const DeleteAccountPage = () => {
               //}
             } catch (error) {
 
+              console.log(error);
               Alert.alert("Error", "An error occurred while deleting your account. Please try again later."
               );
             }

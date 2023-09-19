@@ -69,13 +69,24 @@ const EditTimetable = ({ navigation }) => {
           query: searchCourses,
           variables: {
             filter: {
-              coursecode: {
-                matchPhrasePrefix: text
+              and : [
+                      {
+                        coursecode: {
+                          matchPhrasePrefix: text
+                        }
+                      } ,
+                      {
+                        institutionId:{
+                          eq:student.institutionId
+                        }
+                      }
+                    ]
               }
             }
-          }
-        })
-        setCourses(search.data.searchCourses.items.filter((item)=>item.institutionId===student.institutionId));
+          })
+        
+        // setCourses(search.data.searchCourses.items.filter((item)=>item.institutionId===student.institutionId));
+        setCourses(search.data.searchCourses.items);
       } catch (e) {
         console.log(e);
         Alert.alert(error);
@@ -86,10 +97,7 @@ const EditTimetable = ({ navigation }) => {
   const fetchCourses = async () =>{
     try {
       let stu=student;
-      
-      console.log("The saved student");
-      console.log(student);
-     if(student===null || student.id===undefined){
+      if(student===null || student.id===undefined){
         setIsLoading(true); // Set loading state to true during API call
         const user = await Auth.currentAuthenticatedUser();
         stu=await API.graphql({
@@ -97,50 +105,40 @@ const EditTimetable = ({ navigation }) => {
           variables:{id:user.attributes.sub}
         }) 
         stu=stu.data.getStudent;
+        console.log(stu);
+        if(stu===null){
+          setIsLoading(false);
+          return;
+        }
         updateStudent(stu);
       }
 
-        let c = [];
-        let act= [];
+      let c = [];
+      let act= [];
         
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          c.push(stu.enrollments.items[i].course);
-        }
-        setSelectedModules(c);
-       
-        console.log("This is the student");
-        console.log(stu);
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
+        c.push(stu.enrollments.items[i].course);
+      }
+      setSelectedModules(c);
+        
+      if(stu.timetable===null){
+        setActivities([]);
+        setIsLoading(false);
+        return;
+      }
 
-        if (stu.timetable!==null ) {
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < c.length; j++) {
-              let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-              if (index !== undefined) {
-                act.push(index);
-                break;
-              }
-            }
+      for (let i = 0; i < stu.timetable.activityId.length; i++) {
+        for (let j = 0; j < c.length; j++) {
+          let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+          if (index !== undefined) {
+            act.push(index);
+            break;
           }
-          
-            updateStudent(stu);
-            setActivities(s.timetable.activities);
         }
+      }
         
-        setIsLoading(false); // Set loading state to false after courses are fetched
-    // }else{
-    //     let c=[]
-    //     if(student.enrollments===undefined){
-    //       student.enrollments={
-    //         items:[]
-    //       }
-    //     }
-    //     for (let i = 0; i < student.enrollments.items.length; i++) {
-    //       c.push(student.enrollments.items[i].course);
-    //     }
-    //     setSelectedModules(c);
-        
-    //     setActivities(student.timetable.activities);
-    //   }
+      setActivities(act);
+      setIsLoading(false); // Set loading state to false after courses are fetched
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
       //Alert.alert(error);
@@ -253,9 +251,8 @@ const EditTimetable = ({ navigation }) => {
     }
    
     rows.push(activity)
-    
-    student.timetable.activities=rows;
-    updateStudent(student);
+    //student.timetable.activities=rows;
+    //updateStudent(student);
     //let s=await updateStudent(student);
    // student.timetable.activities=s.timetable.activities;
     setActivities(rows);
@@ -392,7 +389,7 @@ const EditTimetable = ({ navigation }) => {
           value={input}
           onChangeText={(text) => handleSearch(text)}
           style={{ fontSize: 15, width: "100%" }}
-          placeholder="Search for your modules"
+          placeholder="Search for your courses"
         />
 
       </View>

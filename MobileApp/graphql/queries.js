@@ -392,6 +392,7 @@ export const getStudent=`query GetStudent($id: ID!) {
       lastname
       email
       studentTimetableId
+      owner
       timetable { 
         id
         activities{ 

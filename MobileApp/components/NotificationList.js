@@ -23,11 +23,9 @@ const NotificationList = ({ navigation }) => {
   const handlePress2 = () => setExpanded2(!expanded2);
   const [loading, setLoading] = useState(false);
   const error = "There appear to be network issues. Please try again later";
-  let limit=4;
+  let limit=1;
   const showFullMessage = (key) => {
     setSelectedAnnouncement(key);
-    //setIsModalVisible(true);
-    //Alert.alert(key.body);
   };
 
   const fetchAnnouncements = async () => {
@@ -76,8 +74,7 @@ const NotificationList = ({ navigation }) => {
      
         filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
         
-        let variables = JSON.parse(filter);
-          //console.log(variables);   
+        let variables = JSON.parse(filter);   
         let announcementList=await API.graphql({
           query:listAnnouncements,
           variables:variables
@@ -100,55 +97,7 @@ const NotificationList = ({ navigation }) => {
     }
   }
 
-  // const onRefresh = async()=>{
-  //     try{
-  //       setLoading(true);
-  //       let stu=student;
-  //       let courses=[];
-  //       for(let i=0;i<stu.enrollments.items.length;i++){
-  //         courses.push(stu.enrollments.items[i].courseId);
-  //       }
-  //       if(courses.length===0){
-  //         setLoading(false);
-  //         return;
-  //       } 
-  //       else{
-  //         let filter=`{"filter" : { "or" : [`;
-  //         for(let i=0;i<courses.length;i++){
-  //           if(i===courses.length-1){
-  //             filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
-  //           }
-  //           else{
-  //             filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-  //           }
-  //         }
-     
-  //         filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-        
-  //         let variables = JSON.parse(filter)
-    
-  //         let announcementList=await API.graphql({
-  //             query:listAnnouncements,
-  //             variables:variables
-  //           })
-  //         ;
-  //         console.log(announcementList);
-  //         setAnnouncement(announcementList.data.listAnnouncements.items);
-  //         if(announcementList.data.listAnnouncements.items.length<limit){
-  //           setNextToken(null);
-  //         }
-  //         else{
-  //           setNextToken(announcementList.data.listAnnouncements.nextToken);
-  //         }
-  //         setLoading(false);
-  //       }
-  //     }catch(e){
-  //       console.log(e);
-  //       Alert.alert(error)
-  //     }
-
-  // }
-
+ 
   const loadMore =async()=>{
     try{
 
@@ -389,7 +338,7 @@ const NotificationList = ({ navigation }) => {
                   Load More 
                 </Button> 
               :  
-              " "
+              ""
             }
         
         </Text>
