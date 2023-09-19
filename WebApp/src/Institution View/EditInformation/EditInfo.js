@@ -214,7 +214,7 @@ const EditInfoPage = () => {
                         data-testid={'UniversityImage'}
                     />
 
-                    <button style={{ display: "flex", alignItems: "center", justifyContent: "center" }} onClick={handleFileSubmit}>Accept
+                    <button style={{ display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "20px" }} onClick={handleFileSubmit}>Accept
                         <TickIcon style={{ fontSize: "20px", marginLeft: "10px" }} />
                     </button>
                 </div>
@@ -438,7 +438,9 @@ const EditInfoPage = () => {
                                                     <button
                                                         type="button"
                                                         onClick={(e) => handleRemoveDomain(e, val)}
-                                                        className="btn btn-danger">
+                                                        className="btn btn-danger"
+                                                        style={{ borderRadius: "20px", width: "100px" }}
+                                                    >
                                                         Remove
                                                     </button>
                                                 </td>
@@ -464,7 +466,9 @@ const EditInfoPage = () => {
                                     <div className='form-group col-6'>
                                         <button
                                             type="submit"
-                                            className="btn btn-danger">
+                                            className="btn btn-danger"
+                                            style={{ borderRadius: "20px", width: "100px" }}
+                                        >
                                             Add
                                         </button>
                                     </div>
@@ -474,7 +478,9 @@ const EditInfoPage = () => {
                             <button
                                 type="submit"
                                 onClick={handleDomainEdit}
-                                className="btn btn-danger">
+                                className="btn btn-danger"
+                                style={{ borderRadius: "20px", width: "100px" }}
+                            >
                                 Done
                             </button>
                         </AccordionDetails>
