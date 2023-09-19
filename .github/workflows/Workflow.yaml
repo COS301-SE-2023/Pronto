@@ -97,12 +97,13 @@ jobs:
 
   cypress:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./WebApp
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      with: 
-        path: ./WebApp
+
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
