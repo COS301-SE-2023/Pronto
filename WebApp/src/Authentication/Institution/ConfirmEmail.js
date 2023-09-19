@@ -11,7 +11,8 @@ function ConfirmEmail() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  let email = location.state.email;
+  let email = (location.state && location.state.email) || '';
+
 
   const [loading, setLoading] = useState(false);
 
@@ -36,6 +37,7 @@ function ConfirmEmail() {
       <Form>
         <LogoContainer>
           <img
+            data-testid="Logo"
             src={ProntoLogo}
             alt="Logo"
             style={{
@@ -45,7 +47,7 @@ function ConfirmEmail() {
             }}
           />
         </LogoContainer>
-        <Subtitle>Confirm account</Subtitle>
+        <Subtitle data-testid={"Subtitle"}>Confirm account</Subtitle>
         <Subtitle
           style={{
             fontSize: "1.1rem",
@@ -53,7 +55,7 @@ function ConfirmEmail() {
         >
           Please enter the code sent to your email to verify your account
         </Subtitle>
-        <Input
+        <Input data-testid="VerificationCode"
           type="text"
           placeholder="Verification Code"
           value={code}
@@ -61,7 +63,7 @@ function ConfirmEmail() {
         />
         {error && <ErrorText>{error}</ErrorText>}
 
-        <Button onClick={onVerifyPressed}>
+        <Button data-testid={"btnVerify"} onClick={onVerifyPressed}>
           {" "}
           {loading ? "Verifying..." : "Verify Code"}
         </Button>
