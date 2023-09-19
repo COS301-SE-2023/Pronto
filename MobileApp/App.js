@@ -39,57 +39,57 @@ export default function App() {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-    //   if(student==="" || student===null) {
-    //     const email=authUser.attributes.email;
-    //     let studentInfo = await API.graphql({
-    //       query: getStudent,
-    //       variables: {id:authUser.attributes.sub}
-    //     });
+      if (student===null || student.id===undefined) {
+        const email=authUser.attributes.email;
+        let studentInfo = await API.graphql({
+          query: getStudent,
+          variables: {id:authUser.attributes.sub}
+        });
       
-    //     studentInfo=studentInfo.data.getStudent;
-    //     setStudent(studentInfo);
+        studentInfo=studentInfo.data.getStudent;
+        setStudent(studentInfo);
         
-    //     if(studentInfo===null){
+        if(studentInfo===null){
           
-    //     try{
-    //       let domain = email.split("@")[1]
-    //       let institution = await API.graphql({
-    //         query: listInstitutions,
-    //         variables: {
-    //           filter: {
-    //             domains: {
-    //               contains: domain
-    //             }
-    //           }
-    //         }
-    //       })
+        try{
+          let domain = email.split("@")[1]
+          let institution = await API.graphql({
+            query: listInstitutions,
+            variables: {
+              filter: {
+                domains: {
+                  contains: domain
+                }
+              }
+            }
+          })
 
           
-    //       institution = institution.data.listInstitutions.items[0]
+          institution = institution.data.listInstitutions.items[0]
 
-    //       //Create student
-    //       let newStudent = {
-    //         id:authUser.attributes.sub,
-    //         institutionId: institution.id,
-    //         firstname: authUser.attributes.name,
-    //         lastname: authUser.attributes.family_name,
-    //         preference:"push",
-    //         userRole: "Student",
-    //         email: email
-    //       }
-    //       let create = await API.graphql({
-    //         query: createStudent,
-    //         variables: { input: newStudent }
-    //       })
+          //Create student
+          let newStudent = {
+            id:authUser.attributes.sub,
+            institutionId: institution.id,
+            firstname: authUser.attributes.name,
+            lastname: authUser.attributes.family_name,
+            preference:"push",
+            userRole: "Student",
+            email: email
+          }
+          let create = await API.graphql({
+            query: createStudent,
+            variables: { input: newStudent }
+          })
            
-    //       setStudent(create.data.createStudent);
+          setStudent(create.data.createStudent);
         
-    //     }catch(error){
-    //       console.log(error)
-    //       console.log("Error fetching student info");
-    //     }
-    //   }
-    // }
+        }catch(error){
+          console.log(error)
+          console.log("Error fetching student info");
+        }
+      }
+    }
       setUser(authUser);
     } catch (e) {
       setUser(null);
