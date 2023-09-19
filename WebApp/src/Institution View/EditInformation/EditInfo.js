@@ -460,6 +460,7 @@ const EditInfoPage = () => {
                                         <input
                                             type="text"
                                             className="form-control"
+                                            placeholder='example.com'
                                             id="colFormLabel5"
                                             data-testid="domain"
                                             value={domain}
