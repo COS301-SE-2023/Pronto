@@ -22,7 +22,7 @@ describe("Testing sign In", () => {
   it("should sign in lecturer", function () {
     cy.LecturerSignIn(
         this.users.lecturers[1].email,
-        "October01!"
+        process.env.LECTURER_PASSWORD
     );
   });
 });
