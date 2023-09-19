@@ -163,6 +163,7 @@ export default function AddModal(course) {
               type="submit"
               className="btn btn-danger float-right"
               data-testid="submitCourses"
+              style={{ borderRadius: "20px", width: "100px" }}
             >
               Done
             </button>
