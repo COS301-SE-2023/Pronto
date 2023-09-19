@@ -326,7 +326,7 @@ const EditInfoPage = () => {
                                     </div>
                                 </div>
 
-                                <button className="post-button button-no-border">Update</button>
+                                <button className="post-button button-no-border" style={{ borderRadius: "20px", cursor: "pointer" }}>Update</button>
                             </form>
                         </AccordionDetails>
                     </Accordion>
@@ -426,7 +426,7 @@ const EditInfoPage = () => {
                             >
                                 <thead>
                                     <tr>
-                                        <th scope="col">Domain</th>
+                                        <th scope="col" style={{ width: "100%", border: "none" }}><h5>Domains</h5></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -439,7 +439,7 @@ const EditInfoPage = () => {
                                                         type="button"
                                                         onClick={(e) => handleRemoveDomain(e, val)}
                                                         className="btn btn-danger"
-                                                        style={{ borderRadius: "20px", width: "100px" }}
+                                                        style={{ borderRadius: "20px", width: "100px", float: "right" }}
                                                     >
                                                         Remove
                                                     </button>
@@ -451,9 +451,12 @@ const EditInfoPage = () => {
                                 </tbody>
                             </table>
                             <form onSubmit={handleAddDomain}>
-                                <div className="form-row">
+                                <h5 style={{ padding: "5px" }}>Add a new domain</h5>
+                                <div className="form-row" style={{
+                                    borderTop: "1px solid #ddd", display: "flex", justifyContent: "space-between", alignItems: "center"
+                                }}>
                                     <div className="form-group col-6">
-                                        {/* <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Enter domain here: </label> */}
+                                        <div style={{ marginTop: "5px" }}>Enter Domain:</div>
                                         <input
                                             type="text"
                                             className="form-control"
@@ -461,27 +464,31 @@ const EditInfoPage = () => {
                                             data-testid="domain"
                                             value={domain}
                                             required
-                                            onChange={(e) => setDomain(e.target.value)}></input>
+                                            onChange={(e) => setDomain(e.target.value)}
+                                            style={{ marginTop: "15px", width: "700px" }}
+                                        >
+                                        </input>
                                     </div>
-                                    <div className='form-group col-6'>
+                                    <div className="form-group col-6">
                                         <button
                                             type="submit"
                                             className="btn btn-danger"
-                                            style={{ borderRadius: "20px", width: "100px" }}
+                                            style={{ borderRadius: "20px", width: "100px", marginTop: "42px", float: "right", marginRight: "10px" }}
                                         >
                                             Add
                                         </button>
                                     </div>
                                 </div>
 
+
                             </form>
                             <button
                                 type="submit"
                                 onClick={handleDomainEdit}
-                                className="btn btn-danger"
-                                style={{ borderRadius: "20px", width: "100px" }}
+                                className="post-button button-no-border"
+                                style={{ borderRadius: "20px", cursor: "pointer" }}
                             >
-                                Done
+                                Confirm
                             </button>
                         </AccordionDetails>
                     </Accordion>
