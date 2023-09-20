@@ -9,6 +9,9 @@ import { useAnnouncement } from '../../ContextProviders/AnnouncementContext';
 import { useLecturer } from '../../ContextProviders/LecturerContext';
 import recentAnnouncementImage from "../Images/recentAnnouncementImage.png"
 import "../Dashboard/LectureHome.css";
+import InfoIcon from '@mui/icons-material/Info';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -285,16 +288,13 @@ export default function RecentAnnouncement() {
                     <h5 className="card-title">{val.title}</h5>
                     <p className="card-text">{val.body}</p>
 
-                    <Button
-                      id="demo-customized-button"
-                      aria-haspopup="true"
-                      variant="contained"
-                      disableElevation
-                      onClick={(e) => handleDelete(e.target.value)} //delete an announcement
-                      value={key}
-                    >
-                      Delete
-                    </Button>
+                    <div style={{ display: 'flex', alignItems: 'center', float: "right", cursor: "pointer" }}>
+                      <InfoIcon style={{ marginRight: '8px', color: "#2da2e1" }} />
+                      <DeleteIcon
+                        style={{ marginRight: '8px', color: "#e32f45", cursor: "pointer" }}
+                        onClick={() => handleDelete(key)} // delete an announcement
+                      />
+                    </div>
 
                   </div>
                 </div>
