@@ -86,7 +86,6 @@ const EditTimetable = ({ navigation }) => {
             }
           })
         
-        // setCourses(search.data.searchCourses.items.filter((item)=>item.institutionId===student.institutionId));
         setCourses(search.data.searchCourses.items);
       } catch (e) {
         console.log(e);
