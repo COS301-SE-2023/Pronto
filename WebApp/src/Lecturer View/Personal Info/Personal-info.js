@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import LecturerNavigation from '../Navigation/LecturerNavigation';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -6,10 +6,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../../Institution View/Navigation/Navigation.css';
-import { Auth, API } from 'aws-amplify'
+import { Auth} from 'aws-amplify'
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from "../../Components/SuccessModal"
-import { listLecturers } from '../../Graphql/queries';
 import UserManual from "../HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../../Components/HelpButton';
 import { useLecturer } from '../../ContextProviders/LecturerContext';

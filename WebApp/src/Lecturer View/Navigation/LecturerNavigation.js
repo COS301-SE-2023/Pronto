@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
 import "../../Institution View/Navigation/Navigation.css";
@@ -7,8 +7,8 @@ import { useLecturer } from "../../ContextProviders/LecturerContext";
 
 import { Auth, API, Storage } from "aws-amplify";
 
-export default function LecturerNavigation(lecturerData) {
-  const [user, setUser] = useState("");
+export default function LecturerNavigation() {
+  
   const navigate = useNavigate();
   const location = useLocation();
   const { lecturer, setLecturer } = useLecturer();
@@ -45,15 +45,14 @@ export default function LecturerNavigation(lecturerData) {
           throw Error()
         }
         lec = lec.data.listLecturers.items[0];
-        //setLecturer(lec)
-
+        
         if (lec.institution.logo === null) {
           lec.institution.logoUrl = "";
         }
 
         else {
           lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
-          //setLecturer(lec);
+        
         }
         setLecturer(lec);
 
@@ -64,9 +63,8 @@ export default function LecturerNavigation(lecturerData) {
   }
 
   useEffect(() => {
-    //userSet();
     fetchLecturer();
-  });
+  },[]);
 
   return (
     <div className={"grid"} >
