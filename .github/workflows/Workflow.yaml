@@ -103,11 +103,10 @@ jobs:
           npm install
           # Any other commands you need to run in this directory
         env:
-          LECTURER_PASSWORD:  ${{ secrets.LECTURER_PASSWORD}}
+          LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}   # Retrieve secret value and set as an environment variable
 
       - name: Run cypress tests
         run: |
           cd ./WebApp   # Change to the desired working directory
+          export CYPRESS_LECTURER_PASSWORD="${{ secrets.LECTURER_PASSWORD }}"  # Set the environment variable for Cypress
           npx cypress run
-        env:
-          LECTURER_PASSWORD : ${{ secrets.LECTURER_PASSWORD}}  # Retrieve another secret value and set as an environment variable
