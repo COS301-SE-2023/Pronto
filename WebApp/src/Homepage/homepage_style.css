@@ -304,3 +304,50 @@
     transform: scale(1.1);
   }
 }
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.mobile-message {
+  text-align: center;
+  padding: 20px;
+  background-color: #f2f2f2; /* Background color for the mobile message */
+  animation: slideUp 1s ease;
+  height: 100vh;
+  margin-top: 50px;
+}
+
+.mobile-message p {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333; /* Text color */
+}
+
+.mobile-message img {
+  max-width: 100%; /* Make sure the image fits within the container */
+  margin-top: 20px; /* Add some spacing between text and the image */
+}
+
+.logoMobile{
+  width: 50%;
+  margin-bottom: 50px;
+}
+
+.mobileImages
+{
+  width: 50%;
+}
+
+.mobileAboutImage
+{
+  width: 80%;
+  margin-bottom: 50px;
+}
