@@ -120,9 +120,18 @@ function Login() {
       return;
     }
     try {
-      await Auth.signIn(email, password, { role: "Admin" });
+      const signInObject= {
+          username:email,
+          password:password,
+          validationData:{
+            role:"Admin",
+            institutionId: institutionId
+          }
+      }
+     
+      const user = await Auth.signIn(signInObject);
       setsignInError("");
-      
+  
       await fetchAdmin().then(() => navigate("/institution/dashboard"))
      // navigate("/institution/dashboard");
     } catch (e) {
@@ -289,7 +298,7 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-            <StyledSelectInput
+          <StyledSelectInput
             options={universityInfo}
             defaultValue={institutionId}
             onChange={handleInstitutionSelection}
@@ -378,6 +387,16 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+          <StyledSelectInput
+            options={universityInfo}
+            defaultValue={institutionId}
+            onChange={handleInstitutionSelection}
+            placeholder="Select an Institution"
+            classNamePrefix="SelectInput"
+            autoComplete="on"
+            spellCheck="true"
+            isSelectionValid={isInstitudeSelected}
+          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"

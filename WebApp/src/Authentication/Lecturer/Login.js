@@ -113,9 +113,19 @@ function Login() {
       return;
     }
 
-    try {
-      await Auth.signIn(email, password, { role: "Lecturer" });
-      setsignInError("");
+
+  try {
+     // await Auth.signIn(email, password, { role: "Lecturer" });
+     const signInObject={
+      username:email,
+      password:password,
+      validationData:{
+        role:"Lecturer",
+        institutionId: institutionId
+      }
+     } 
+     await Auth.signIn(signInObject);
+     setsignInError("");
       //navigate to lecturer home page
 
       await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
@@ -406,6 +416,16 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+              <StyledSelectInput
+            options={universityInfo}
+            defaultValue={institutionId}
+            onChange={handleInstitutionSelection}
+            placeholder="Select an Institution"
+            classNamePrefix="SelectInput"
+            autoComplete="on"
+            spellCheck="true"
+            isSelectionValid={isInstitudeSelected}
+          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
