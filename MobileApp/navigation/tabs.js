@@ -6,8 +6,7 @@ import Notifications from "../screens/Timetable/Notifications";
 import NavigationScreen from "../screens/Timetable/NavigationScreen";
 import FileView from "../screens/FileView/FileView";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { useStudent } from "../ContextProviders/StudentContext";
-import { useEffect } from "react";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -27,8 +26,7 @@ const screenOptions = {
 const Tabs = ({route}) => {
   const s= route.params;
 
-  //console.log("From tabs");
-  //console.log(route);
+
   return (
     <Tab.Navigator {...{ screenOptions }} backBehavior="history">
       <Tab.Screen
