@@ -392,40 +392,40 @@ export default function RecentAnnouncement() {
         <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <DialogContentText id="info-dialog-description">
             <div style={{ display: "flex" }}>
-              <EmailIcon style={{ marginRight: "5px", marginTop: "4px" }} /> <h4>Email Notifications</h4>
+              <EmailIcon style={{ marginRight: "5px", marginTop: "4px", color: "#e32f45" }} /> <h4>Email Notifications</h4>
             </div>
 
             <div style={{ display: "flex" }}>
               {emailStatus >= 90 ? (
                 <span style={{ color: 'green', marginRight: "5px" }}><CheckIcon /></span>
               ) : (
-                <span style={{ color: 'red', marginRight: "5px" }}><ErrorIcon /></span>
+                <span style={{ color: 'orange', marginRight: "5px" }}><ErrorIcon /></span>
               )}
               <p>Status: <span style={{ fontWeight: "bold" }}>{emailStatus}% </span>of students registered for email recieved the announcement</p>
             </div>
 
             <br />
             <div style={{ display: "flex" }}>
-              <SMSIcons style={{ marginRight: "5px", marginTop: "4px" }} /> <h4>SMS Notifications</h4>
+              <SMSIcons style={{ marginRight: "5px", marginTop: "4px", color: "#e32f45" }} /> <h4>SMS Notifications</h4>
             </div>
             <div style={{ display: "flex" }}>
               {smsStatus >= 90 ? (
                 <span style={{ color: 'green', marginRight: "5px" }}><CheckIcon /></span>
               ) : (
-                <span style={{ color: 'red', marginRight: "5px" }}><ErrorIcon /></span>
+                <span style={{ color: 'orange', marginRight: "5px" }}><ErrorIcon /></span>
               )}
               <p>Status: <span style={{ fontWeight: "bold" }}>{smsStatus}%</span> of students registered for SMS recieved the announcement</p>
             </div>
 
             <br />
             <div style={{ display: "flex" }}>
-              <PushIcon style={{ marginRight: "5px", marginTop: "4px" }} /> <h4>Push Notifications</h4>
+              <PushIcon style={{ marginRight: "5px", marginTop: "4px", color: "#e32f45" }} /> <h4>Push Notifications</h4>
             </div>
             <div style={{ display: "flex" }}>
               {pushStatus >= 90 ? (
                 <span style={{ color: 'green', marginRight: "5px" }}><CheckIcon /></span>
               ) : (
-                <span style={{ color: 'red', marginRight: "5px" }}><ErrorIcon /></span>
+                <span style={{ color: 'orange', marginRight: "5px" }}><ErrorIcon /></span>
               )}
               <p>Status: <span style={{ fontWeight: "bold" }}>{pushStatus}%</span> of students registered for push notifications recieved the announcement</p>
             </div>
