@@ -105,4 +105,4 @@ jobs:
         run: npm install cypress --save-dev
 
       - name: Run Cypress tests
-        run: cypress run
+        run: npx cypress run
