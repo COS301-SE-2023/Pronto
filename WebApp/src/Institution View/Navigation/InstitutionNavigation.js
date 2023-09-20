@@ -1,15 +1,13 @@
 import { useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-
 import "./Navigation.css";
 import { listAdmins } from "../../Graphql/queries";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 
 import { Auth, Storage, API } from "aws-amplify";
 
-export default function InstitutionNavigation({ props }) {
+export default function InstitutionNavigation() {
     const navigate = useNavigate();
-    const state = useLocation();
     const { admin, setAdmin } = useAdmin();
     const location = useLocation();
 
@@ -46,8 +44,9 @@ export default function InstitutionNavigation({ props }) {
                     // if (adminData.institution.logo !== null) {
                     //     adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
                     // }
-                    setAdmin(adminData);
+                    setAdmin(adminData);  
                 }
+
             }
 
         } catch (error) {

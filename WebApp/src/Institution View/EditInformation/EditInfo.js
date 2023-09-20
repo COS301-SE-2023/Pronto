@@ -160,8 +160,7 @@ const EditInfoPage = () => {
                 };
                 let update = await API.graphql({
                     query: updateInstitution,
-                    variables: { input: inst },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
+                    variables: { input: inst }
                 });
 
                 let newAdmin = admin;
