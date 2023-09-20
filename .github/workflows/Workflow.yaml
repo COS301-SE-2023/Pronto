@@ -91,26 +91,26 @@ jobs:
           amplify build
 
   cypress-run:
-    runs-on: ubuntu-latest
+   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+   steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
-      - name: Set working directory and install dependencies
-        run: |
-          cd ./WebApp   # Change to the desired working directory
-          npm install
-          # Any other commands you need to run in this directory
-        env:
-          LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}   # Retrieve secret value and set as an environment variable
+    - name: Set working directory and install dependencies
+      run: |
+        cd ./WebApp   
+        npm install
+      env:
+        LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}   # Retrieve secret value and set as an environment variable
 
-      - name: Debug Secret
-        run:
-          echo "Secret Value: ${{ secrets.LECTURER_PASSWORD }}"   # Echo the secret value to the console
+    - name: Test
+      run: |
+        echo "Secret Value: $LECTURER_PASSWORD"  # Print the secret value
+        export CYPRESS_LECTURER_PASSWORD="$LECTURER_PASSWORD"
+        echo "Cypress Environment Variable: $CYPRESS_LECTURER_PASSWORD"
 
-      - name: Run cypress tests
-        run: |
-          cd ./WebApp  
-          export CYPRESS_LECTURER_PASSWORD="${{ secrets.LECTURER_PASSWORD }}"  # Set the environment variable for Cypress
-          npx cypress run
+    - name: Run Cypress tests
+      run: |
+        cd ./WebApp  
+        npx cypress run
