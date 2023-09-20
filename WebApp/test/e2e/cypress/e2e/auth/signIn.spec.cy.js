@@ -13,8 +13,8 @@ describe("Testing sign In", () => {
   */
   it("should not sign in lecturer", function () {
     cy.LecturerSignInFail(
-        users.lecturers[0].email,
-        users.lecturers[1].password
+        "randomEmail@gmail.com",
+        "randomPassword"
     );
   });
 
@@ -23,8 +23,8 @@ describe("Testing sign In", () => {
   */
   it("should sign in lecturer", function () {
     cy.LecturerSignIn(
-        users.lecturers[1].email,
-        lecturerPassword
+        "yovab14312@tenjb.com",
+        Cypress.env('LECTURER_PASSWORD')
     );
   });
 });

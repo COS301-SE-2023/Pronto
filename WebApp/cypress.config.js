@@ -1,4 +1,6 @@
 const { defineConfig } = require("cypress");
+//require dptenv
+require('dotenv').config()
 
 module.exports = defineConfig({
   e2e: {
@@ -14,7 +16,7 @@ module.exports = defineConfig({
 
     },
     env: {
-      E2E_USERS_JSON: process.env.E2E_USERS_JSON || "", // Set the default value
+        LECTURER_PASSWORD: process.env.LECTURER_PASSWORD,
+    }
     },
-  },
 });

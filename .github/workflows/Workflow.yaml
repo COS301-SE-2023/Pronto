@@ -90,21 +90,19 @@ jobs:
           bash scripts/initialise-amplify.sh
           amplify build
 
-  basic-cypress-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    cypress-run:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Install dependencies
+          run: npm install
+        - name: Run cypress tests
+          uses: cypress-io/github-action@v2
+          with:
+            env: LECTURER_PASSWORD=${{ secrets.LECTURER_PASSWORD}}
+            record: true # optional, to record the test results on the cypress dashboard
+          env:
+            # pass the Dashboard record key as an environment variable
+            CYPRESS_RECORD_KEY: ${{ secrets.LECTURER_PASSWORD }}
 
-      - name: Set environment variables
-        run: |
-          echo "LECTURER_PASSWORD=$LECTURER_PASSWORD" >> $GITHUB_ENV
-
-      - name: Install Cypress
-        uses: cypress-io/github-action@v6
-        with:
-          working-directory: ./WebApp
-
-      - name: Run Cypress tests
-        working-directory: ./WebApp
-        run: cypress run
