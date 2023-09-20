@@ -224,28 +224,36 @@ const NotificationList = ({ navigation }) => {
 
             setSelectedAnnouncement(null)
           }}>
+
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <Pressable
+                style={styles.closeButton}
+                onPress={() => setSelectedAnnouncement(null)}
+              >
+                <MaterialIcons name="close" size={24} color="black" />
+              </Pressable>
               <Text style={styles.headerStyle}>{selectedAnnouncement.title}</Text>
               <Text style={styles.subheaderStyle}>{selectedAnnouncement.course.coursecode}</Text>
               <Text style={styles.textStyle}>{selectedAnnouncement.body}</Text>
-              <Button
-                icon="thumb-up"
-                mode="contained"
-                style={{
-                  backgroundColor: "#e32f45",
-                  width: "70%",
-                  margin: "5%",
-                  textAlign: "center",
-                  color: "white",
-                }}
-
-                outlined={true}
-                onPress={() => setSelectedAnnouncement(null)}
-              >
-                Ok
-              </Button>
             </View>
+            <Button
+              icon="check"
+              mode="contained"
+              style={{
+                backgroundColor: "#e32f45",
+                width: "70%",
+
+                textAlign: "center",
+                color: "white",
+                marginBottom: 50,
+              }}
+
+              outlined={true}
+              onPress={() => setSelectedAnnouncement(null)}
+            >
+              Okay
+            </Button>
           </View>
         </Modal>
       }
@@ -264,7 +272,7 @@ const NotificationList = ({ navigation }) => {
             <Card
               key={key}
               style={{
-                marginBottom: 10,
+                margin: 10,
                 backgroundColor: "white",
               }}
               value={key}
@@ -288,13 +296,15 @@ const NotificationList = ({ navigation }) => {
           )}
           expanded={expanded2}
           onPress={handlePress2}
-          style={{ backgroundColor: "white" }}
+          style={{
+            backgroundColor: "white"
+          }}
         >
           {announcement.filter(item => item.type === "Due Assignment").map((val, key) => (
             <Card
               key={key}
               style={{
-                marginBottom: 10,
+                margin: 10,
                 backgroundColor: "white",
               }}
               value={key}
@@ -359,6 +369,7 @@ const NotificationList = ({ navigation }) => {
                         <Card.Title
                           key={key}
                           title={val.course.coursecode}
+                          titleStyle={{ fontWeight: '500' }}
                           subtitle={val.title}
                           left={(props) => (
                             <Avatar.Icon
@@ -376,7 +387,7 @@ const NotificationList = ({ navigation }) => {
                     style={{
                       marginBottom: "0%",
                       marginLeft: "auto",
-                      marginRight: "auto"
+                      marginRight: "auto",
                     }}
                   >
                     {nextToken !== null ?
@@ -433,12 +444,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   modalView: {
-    alignItems: "center",
-    marginTop: 50,
-    marginBottom: 100,
+    flex: 1,
+    justifyContent: "center", // Center vertically
+    alignItems: "center", // Center horizontally
     width: "80%",
     height: "50%",
-    paddingBottom: "0%"
+    paddingBottom: "0%",
   },
   button: {
     borderRadius: 20,
@@ -452,7 +463,7 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: "400",
     textAlign: "center",
     marginBottom: "2.5%",
   },
@@ -461,10 +472,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     marginBottom: "5%",
+    color: "#e32f45",
   },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  closeButton: {
+    position: "absolute",
+    top: 30,
+    right: 5,
+    zIndex: 1, // Ensures it's above other content
   },
 });
 
