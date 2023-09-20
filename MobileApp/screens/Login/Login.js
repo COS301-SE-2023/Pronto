@@ -57,18 +57,14 @@ const Login = ({ navigation }) => {
           institutionId:institutionId
         }
       }
-      // const response = await Auth.signIn(username, password, {
-      //   role: "Student",
-      // });
+      
       const user=await Auth.signIn(signInObject)
-      //console.log(response);
       //  navigation.navigate("Timetable");
     } catch (e) {
       Alert.alert("Sign in error", e.message);
       setLoading(false);
     }
 
-    //setLoading(false);
   };
 
   //validate password on sign in
