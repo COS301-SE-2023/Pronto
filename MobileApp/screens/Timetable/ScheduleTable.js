@@ -88,7 +88,7 @@ const ScheduleTable = ({ navigation,route }) => {
         }
         else{
           stu=param;
-          updateStudent(stu);
+          //updateStudent(stu);
           param=null;          
         }
         if(stu===null || stu.studentTimetableId===null){
@@ -140,6 +140,7 @@ const ScheduleTable = ({ navigation,route }) => {
           setActivities(act);
           createScheduleArray(act);
         }
+
     // else{
     //   if(student.timetable!==null && student.timetable.activities!==undefined){
     //     let changed = false
@@ -205,10 +206,24 @@ const ScheduleTable = ({ navigation,route }) => {
   //   });
   //   return unsubscribe
   // }, [navigation])
-
+  const navigate = (module)=>{
+  let coordinate={}
+  if(module.coordinates!==null || module.coordinates!==undefined){
+    let location=module.coordinates.split(";")
+    coordinate={
+      name:location[0],
+      value:{
+              latitude:parseFloat(location[1]),
+              longitude:parseFloat(location[2])
+        }
+     }
+    }
+    navigation.navigate("Navigation",coordinate)
+  }
+  
   useEffect(()=>{
     fetchActivities();
-  })
+  },)
 
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
@@ -228,6 +243,7 @@ const ScheduleTable = ({ navigation,route }) => {
           venue: modules[moduleKey].venue,
           day: modules[moduleKey].day,
           height: 50,
+          coordinates:modules[moduleKey].coordinates
         });
       });
     }
@@ -291,7 +307,8 @@ const ScheduleTable = ({ navigation,route }) => {
 
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
-        <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}>
+        <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}
+              onPress={()=>navigate(module)}>
           <Card.Content>
             <View
               style={{
