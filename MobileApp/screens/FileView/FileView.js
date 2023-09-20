@@ -29,9 +29,10 @@ const BucketFilesScreen = () => {
   const { student, updateStudent } = useStudent();
 
   useEffect(() => {
-    //  setUniversityName();
-    //  fetchFileList();
+    setUniversityName();
+    fetchFileList();
   }, []);
+
 
   const fetchFileList = async () => {
     try {
