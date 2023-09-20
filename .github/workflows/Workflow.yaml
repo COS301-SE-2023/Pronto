@@ -92,6 +92,9 @@ jobs:
 
   basic-cypress-test:
     runs-on: ubuntu-latest
+    defaults:
+        run:
+            working-directory: ./WebApp
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -104,5 +107,4 @@ jobs:
         uses: cypress-io/github-action@v6
 
       - name: Run Cypress tests
-        working-directory: ./WebApp
         run: cypress run
