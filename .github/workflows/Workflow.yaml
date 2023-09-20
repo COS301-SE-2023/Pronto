@@ -108,16 +108,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Create Cypress environment file
-        run: |
-          echo "E2E_USERS_JSON=${{ secrets.E2E_USERS_JSON }}" > .env
-        env:
-          E2E_USERS_JSON: ${{ secrets.E2E_USERS_JSON }}
-
       - name: Run Cypress E2E tests
+        uses: cypress-io/github-action@v2 # Add this line to use the cypress github action
+        with:
+          browser: chrome # Add this line to specify the browser to use
+          headless: true # Add this line to run the tests in headless mode
         env:
           BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
-        run: |
-          npx cypress run --config baseUrl="${BASE_URL}" --env-file .env
+          CYPRESS_LECTURER_PASSWORD: ${{ secrets.CYPRESS_LECTURER_PASSWORD }} # Add this line to pass the lecturer password as an environment variable
+
 
 
