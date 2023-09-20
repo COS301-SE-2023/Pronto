@@ -115,10 +115,10 @@ const EditInfoPage = () => {
     const handleDomainEdit = async (event) => {
         event.preventDefault();
         try {
-            let logoUrl = null;
-            if (admin.institution.logoUrl !== undefined && admin.institution.logoUrl !== null) {
-                logoUrl = admin.institution.logoUrl;
-            };
+            // let logoUrl = null;
+            // if (admin.institution.logoUrl !== undefined && admin.institution.logoUrl !== null) {
+            //     logoUrl = admin.institution.logoUrl;
+            // };
 
             let inst = {
                 id: admin.institution.id,
@@ -127,16 +127,16 @@ const EditInfoPage = () => {
             let update = await API.graphql({
                 query: updateInstitution,
                 variables: { input: inst },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
             });
-            update.data.updateInstitution.logoUrl = logoUrl;
-            let newAdmin = admin;
-            newAdmin.institution = update.data.updateInstitution;
-            setAdmin(newAdmin);
+            //update.data.updateInstitution.logoUrl = logoUrl;
+            //let newAdmin = admin;
+            //newAdmin.institution = update.data.updateInstitution;
+            setAdmin(admin);
             setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
-            setSuccessMessage("Something went wrong");
+            console.log(error);
+            setError("Something went wrong");
         }
     }
 
