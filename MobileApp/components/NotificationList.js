@@ -333,71 +333,75 @@ const NotificationList = ({ navigation }) => {
                 }}
               >No recent announcements</Text>
             ) : (
-              < ScrollView
-                style={{ height: "70%" }}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={loading}
-                    onRefresh={onRefresh}
-                  />
-                }
-              >
-                {announcement.map((val, key) => (
-                  <Card
-                    key={key}
-                    style={{
-                      marginBottom: 10,
-                      backgroundColor: "white",
-                    }}
-                    value={key}
-                    onPress={(e) => showFullMessage(val)}
-                  >
-                    <Card.Content>
-                      <Card.Title
-                        key={key}
-                        title={val.course.coursecode}
-                        subtitle={val.title}
-                        left={(props) => (
-                          <Avatar.Icon
-                            {...props}
-                            icon={val.type === "Reminder" ? "brain" : "clock"}
-                            color="#e32f45"
-                            style={{ backgroundColor: "white" }}
-                          />
-                        )}
-                      />
-                    </Card.Content>
-                  </Card>
-                ))}
-                <Text
-                  style={{
-                    marginBottom: "0%",
-                    marginLeft: "auto",
-                    marginRight: "auto"
-                  }}
-                >
-                  {nextToken !== null ?
-                    <Button
-                      onPress={loadMore}
-                      mode="contained"
-                      icon="arrow-down"
-                      outlined={true}
-                      testID="load-more-button"
-                      style={{
-                        backgroundColor: "#e32f45",
-                        marginRight: "auto",
-                        marginLeft: "auto",
-                        color: "white"
-                      }}
-                    >
-                      Load More
-                    </Button>
-                    :
-                    " "
+              <View style={{ height: "80%" }}>
+                <Text style={{
+                  marginLeft: "auto", marginRight: "auto", marginBottom: "4%", color: "#808080"
+                }}>Swipe down to refresh &#x2193;</Text>
+                < ScrollView
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={loading}
+                      onRefresh={onRefresh}
+                    />
                   }
-                </Text>
-                <Text style={{ marginLeft: "auto", marginRight: "auto" }}>Swipe down to refresh &#x2193;</Text>
-              </ScrollView>
+                >
+                  {announcement.map((val, key) => (
+                    <Card
+                      key={key}
+                      style={{
+                        marginBottom: 10,
+                        backgroundColor: "white",
+                      }}
+                      value={key}
+                      onPress={(e) => showFullMessage(val)}
+                    >
+                      <Card.Content>
+                        <Card.Title
+                          key={key}
+                          title={val.course.coursecode}
+                          subtitle={val.title}
+                          left={(props) => (
+                            <Avatar.Icon
+                              {...props}
+                              icon={val.type === "Reminder" ? "brain" : "clock"}
+                              color="#e32f45"
+                              style={{ backgroundColor: "white" }}
+                            />
+                          )}
+                        />
+                      </Card.Content>
+                    </Card>
+                  ))}
+                  <Text
+                    style={{
+                      marginBottom: "0%",
+                      marginLeft: "auto",
+                      marginRight: "auto"
+                    }}
+                  >
+                    {nextToken !== null ?
+                      <Button
+                        onPress={loadMore}
+                        mode="contained"
+                        icon="arrow-down"
+                        outlined={true}
+                        testID="load-more-button"
+                        style={{
+                          backgroundColor: "#e32f45",
+                          marginRight: "auto",
+                          marginLeft: "auto",
+                          color: "white"
+                        }}
+                      >
+                        Load More
+                      </Button>
+                      :
+                      " "
+                    }
+                  </Text>
+
+                </ScrollView>
+              </View>
 
             )}
 
