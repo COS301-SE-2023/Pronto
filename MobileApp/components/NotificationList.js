@@ -15,7 +15,6 @@ const NotificationList = ({ navigation }) => {
   const [expanded2, setExpanded2] = useState(false);
   const {student,updateStudent} =useStudent();
   const [selectedAnnouncement,setSelectedAnnouncement]=useState(null);
-  const [isModalVisible,setIsModalVisible]=useState(false);
   const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
 
  
@@ -23,7 +22,7 @@ const NotificationList = ({ navigation }) => {
   const handlePress2 = () => setExpanded2(!expanded2);
   const [loading, setLoading] = useState(false);
   const error = "There appear to be network issues. Please try again later";
-  let limit=1;
+  let limit=4;
   const showFullMessage = (key) => {
     setSelectedAnnouncement(key);
   };
