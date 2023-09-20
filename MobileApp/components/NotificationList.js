@@ -35,7 +35,7 @@ const NotificationList = ({ navigation }) => {
 
 
   //mock data to fetch
-  const fetchAnnouncements = async () => {
+  /* const fetchAnnouncements = async () => {
     try {
       setLoading(true);
 
@@ -48,10 +48,10 @@ const NotificationList = ({ navigation }) => {
       Alert.alert(error);
       setLoading(false);
     }
-  };
+  }; */
 
   //normal fetch announcement (NOT MOCK DATA)
-  /*  const fetchAnnouncements = async () => {
+  const fetchAnnouncements = async () => {
      
       try {
         let stu=student;
@@ -117,7 +117,7 @@ const NotificationList = ({ navigation }) => {
         Alert.alert(error)
         setLoading(false);
       }
-    } */
+    } 
 
 
   const onRefresh = async () => {

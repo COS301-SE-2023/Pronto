@@ -14,8 +14,9 @@ import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { Auth, API } from "aws-amplify"
-import { listStudents,getStudent } from "../../graphql/queries";
+import { listStudents, getStudent } from "../../graphql/queries";
 import { useStudent } from "../../ContextProviders/StudentContext";
+import { mockStudent, mockFileList } from "../../assets/data/mock/mock-filelist";
 
 //graphQL call to get the university of the student, which will be used to get the file from that folder.
 //let studentUniversity = "UniversityOfPretoria";
@@ -25,11 +26,11 @@ const BucketFilesScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [studentUniversity, setStudentUniversity] = useState("")
-  const {student,updateStudent} =useStudent();
+  const { student, updateStudent } = useStudent();
 
   useEffect(() => {
-    setUniversityName();
-    fetchFileList();
+    //  setUniversityName();
+    //  fetchFileList();
   }, []);
 
   const fetchFileList = async () => {
@@ -60,22 +61,22 @@ const BucketFilesScreen = () => {
 
     let error = "There appear to be network issues.Please try again later"
     try {
-      let stu=student;
-      if(student===null){
+      let stu = student;
+      if (student === null) {
         const user = await Auth.currentAuthenticatedUser()
-        let studentEmail = user.attributes.email; 
+        let studentEmail = user.attributes.email;
         stu = await API.graphql({
           query: getStudent,
-          variables: {id:user.attributes.sub}
+          variables: { id: user.attributes.sub }
         })
-        
-        stu=stu.data.getStudent;
-        if(stu===false || stu===undefined){
+
+        stu = stu.data.getStudent;
+        if (stu === false || stu === undefined) {
           throw Error();
         }
         updateStudent(stu);
       }
-    
+
       sU = stu.institution.name
       const words = sU.split(/\s+/); // Split the name into words
       sU = words
@@ -145,6 +146,7 @@ const BucketFilesScreen = () => {
           source={require("../../assets/icons/files.png")}
           style={styles.image}
         />
+        <Text style={styles.swipeToRefresh}>Swipe down to refresh &#x2193;</Text>
       </View>
 
       {isLoading ? (
@@ -167,7 +169,7 @@ const BucketFilesScreen = () => {
           }
         />
       )}
-      <Text style={styles.swipeToRefresh}>Swipe down to refresh &#x2193;</Text>
+
     </View>
   );
 };
