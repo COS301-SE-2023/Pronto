@@ -10,7 +10,9 @@ import { useLecturer } from '../../ContextProviders/LecturerContext';
 import recentAnnouncementImage from "../Images/recentAnnouncementImage.png"
 import "../Dashboard/LectureHome.css";
 import InfoIcon from '@mui/icons-material/Info';
+import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 import Dialog from '@mui/material/Dialog';
@@ -89,6 +91,18 @@ export default function RecentAnnouncement() {
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [deleteConfirmationIndex, setDeleteConfirmationIndex] = useState(null);
+
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
+
+
+  const handleInfoModalOpen = () => {
+    setInfoModalOpen(true);
+  };
+
+  const handleInfoModalClose = () => {
+    setInfoModalOpen(false);
+  };
+
 
   const handleDelete = (key) => {
     // Set the index of the announcement to be deleted and open the confirmation dialog
@@ -289,7 +303,11 @@ export default function RecentAnnouncement() {
                     <p className="card-text">{val.body}</p>
 
                     <div style={{ display: 'flex', alignItems: 'center', float: "right", cursor: "pointer" }}>
-                      <InfoIcon style={{ marginRight: '8px', color: "#2da2e1" }} />
+                      <InfoIcon
+                        style={{ marginRight: '8px', color: "#2da2e1", cursor: "pointer" }}
+                        onClick={handleInfoModalOpen}
+                      />
+
                       <DeleteIcon
                         style={{ marginRight: '8px', color: "#e32f45", cursor: "pointer" }}
                         onClick={() => handleDelete(key)} // delete an announcement
@@ -330,6 +348,48 @@ export default function RecentAnnouncement() {
           </Button>
         </DialogActions>
       </StyledDialog>
+
+      <Dialog
+        open={infoModalOpen}
+        onClose={handleInfoModalClose}
+        aria-labelledby="info-dialog-title"
+        aria-describedby="info-dialog-description"
+        fullWidth
+        maxWidth="md"
+        PaperProps={{ style: { minHeight: '400px', maxHeight: '80vh' } }}
+      >
+        <DialogTitle id="info-dialog-title" style={{ textAlign: 'center' }}>
+          Notification Delivery Status
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={handleInfoModalClose}
+            aria-label="close"
+            style={{ position: 'absolute', right: '30px', top: '10px', color: "#e32f45" }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="info-dialog-description">
+            <h2>Email Notifications</h2>
+            {/* Add content about email notifications here */}
+            <p>Status: Delivered</p>
+            <p>Date: September 20, 2023</p>
+
+            <h2>SMS Notifications</h2>
+            {/* Add content about SMS notifications here */}
+            <p>Status: Not Delivered</p>
+            <p>Date: September 19, 2023</p>
+
+            <h2>Push Notifications</h2>
+            {/* Add content about push notifications here */}
+            <p>Status: Pending</p>
+            <p>Date: September 18, 2023</p>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+
 
       <div>
         <HelpButton pdfUrl={UserManual} /> {/*help user manual for announcements page*/}
