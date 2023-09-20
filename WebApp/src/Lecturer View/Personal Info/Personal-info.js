@@ -21,13 +21,7 @@ const PersonalInfoPage = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-
-
-    const [user, setUser] = useState();
     const [successMessage, setSuccessMessage] = useState("");
-
-    const [firstName, setFirstName] = useState();
-    const [lastName, setLastName] = useState();
 
     const { lecturer, setLecturer } = useLecturer();
 
@@ -53,42 +47,6 @@ const PersonalInfoPage = () => {
         setNewPassword("")
         setConfirmPassword("")
     }
-
-    const fetchUser = async () => {
-        try {
-            let u = await Auth.currentAuthenticatedUser();
-            setUser(u);
-        } catch (error) {
-            setError("Something went wrong");
-        }
-    }
-
-    // const fetchLecturer = async () => {
-    //     let u = await Auth.currentAuthenticatedUser()
-    //     if (lecturer !== null) {
-    //         const user = await Auth.currentAuthenticatedUser();
-    //         let lecturer_email = user.attributes.email;
-    //         let lec = await API.graphql({
-    //             query: listLecturers,
-    //             variables: {
-    //                 filter: {
-    //                     email: {
-    //                         eq: lecturer_email
-    //                     }
-    //                 }
-    //             },
-    //             authMode: "AMAZON_COGNITO_USER_POOLS",
-    //         });
-    //         setLecturer(lec.data.listLecturers.items[0]);
-    //     }
-
-    // }
-
-
-    // useEffect(() => {
-    //   //  fetchLecturer()
-    //   //fetchUser();
-    // }, [])
 
     return (
 
