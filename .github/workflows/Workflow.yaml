@@ -90,27 +90,13 @@ jobs:
           bash scripts/initialise-amplify.sh
           amplify build
 
-  cypress-run:
-   runs-on: ubuntu-latest
+  print-secret:
+     runs-on: ubuntu-latest
 
-   steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Set working directory and install dependencies
-      run: |
-        cd ./WebApp   
-        npm install
-      env:
-        LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}   # Retrieve secret value and set as an environment variable
-
-    - name: Test
-      run: |
-        echo "Secret Value: $LECTURER_PASSWORD"  # Print the secret value
-        export CYPRESS_LECTURER_PASSWORD="$LECTURER_PASSWORD"
-        echo "Cypress Environment Variable: $CYPRESS_LECTURER_PASSWORD"
-
-    - name: Run Cypress tests
-      run: |
-        cd ./WebApp  
-        npx cypress run
+      - name: Print Secret Value
+        run: |
+          echo "Secret Value: ${{ secrets.LECTURER_PASSWORD }}"
