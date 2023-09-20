@@ -23,11 +23,11 @@ const initialRegion = {
     longitudeDelta: LONGITUDE_DELTA,
 };
 
-const NavigationScreen = ({navigation}) => {
+const NavigationScreen = ({navigation,route}) => {
 
     const [origin, setOrigin] = useState(null);
     const [destination, setDestination] = useState(null);
-    const [route, setRoute] = useState(false);
+    const [mapRoute, setMapRoute] = useState(false);
     const [distance, setDistance] = useState("");
     const [travelTime, setTravelTime] = useState("");
     const [instructions, setInstructions] = useState([]);
@@ -35,7 +35,6 @@ const NavigationScreen = ({navigation}) => {
   
     const [currentRegion, setCurrentRegion] = useState(initialRegion);
     const mapViewRef = useRef(null);
-
 
     const {student,updateStudent} = useStudent(); 
     // Function to handle the data from the MapViewDirections component
@@ -69,7 +68,7 @@ const NavigationScreen = ({navigation}) => {
         } else {
             // In the future, this else statement will return the user to the home page
             Alert.alert("Location permission not granted");
-           // navigation.navigate('ScheduleTable')
+            ///navigation.navigate('ScheduleTable')
         }
     }
 
@@ -77,7 +76,7 @@ const NavigationScreen = ({navigation}) => {
     // NOTE: the function is called only AFTER the user has granted permission and this WILL NOT change.
     const getUserLocation = async () => {
         try {
-            //if(origin===null){
+            if(origin===null){
                 const location = await Location.getCurrentPositionAsync({});
                 setOrigin(location.coords); // Set the origin to the user's current location
                 // Update the currentRegion state with the user's location
@@ -89,13 +88,16 @@ const NavigationScreen = ({navigation}) => {
                 setCurrentRegion(newRegion);
                 // Use animateToRegion to zoom to the user's location
                 mapViewRef.current.animateToRegion(newRegion, 1000); // You may adjust the duration (1000 ms) as needed
-            //}
+            }
         } catch (error) {
             Alert.alert("Please give access to your location to get directions");
         }
     };
+
+
     const fetchLocations = async () => {
         try {
+            
             let stu=student; 
             if (student === null) {
                 const user = await Auth.currentAuthenticatedUser();
@@ -108,7 +110,7 @@ const NavigationScreen = ({navigation}) => {
                 if(stu===null || stu===undefined){
                     throw Error();
                 }
-                await updateStudent(stu);
+                updateStudent(stu);
             }
         
             if(stu.studentTimetableId!==null){
@@ -132,14 +134,7 @@ const NavigationScreen = ({navigation}) => {
 
                     }
                 }
-                act = act.sort((a, b) => {
-                      if (a.start <= b.start)
-                        return -1;
-                      else
-                        return 1;
-                    })
-                stu.timetable.activities=act;
-                await updateStudent(stu);
+                
                 let loc=[];
                 let locationNames= new Map();
                 for(let i=0;i<act.length;i++){
@@ -160,8 +155,10 @@ const NavigationScreen = ({navigation}) => {
                 }
             }
             setCoordinates(loc);
-           // console.log(loc);
         }
+        // if(route.params.name!==undefined && route.params.value.longitude!==undefined && route.params.value.latitude!==undefined)    {
+        //         setDestinationLocation(route.params.name)
+        //     }
 
     } catch (e) {
       Alert.alert(error);
@@ -171,20 +168,11 @@ const NavigationScreen = ({navigation}) => {
 
 
 //    useEffect hook to run the requestLocationPermission function when the component is mounted
-    // useEffect(() => {
-    //     requestLocationPermission().then();
-    //     fetchLocations();
-    //  }, []);
-
     useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
         requestLocationPermission();
         fetchLocations();
-    });
+     }, []);
 
-
-    return unsubscribe
-  }, [navigation])
 
      // Below defines styling for the location text input for the user's current location
     // Green border will be for location gathered
@@ -215,12 +203,13 @@ const NavigationScreen = ({navigation}) => {
     // Function to set the destination location, it is called when the user clicks the SelectedList component
     //We then traverse the locations and look for the selected location details
     const setDestinationLocation = (itemValue) => {
-        setRoute(false);
+        setMapRoute(false);
        // const selectedItem = locationInfo.find(item => item.name === itemValue);
        const selectedItem = coordinates.find(item=>item.name===itemValue); 
-       
+    
        if (selectedItem) {
             const dest = {
+                name:selectedItem.name,
                 latitude: selectedItem.value.latitude, // Use the latitude from the selected venue
                 longitude: selectedItem.value.longitude, // Use the longitude from the selected venue
             }
@@ -249,12 +238,12 @@ const NavigationScreen = ({navigation}) => {
 
                 {origin && <Marker coordinate={origin} title="Origin" />}
                 {destination && <Marker coordinate={destination} title="Destination" />}
-                {route && origin && destination && (
+                {mapRoute && origin && destination && (
                     <MapViewDirections
                         origin={origin}
                         destination={destination}
                         apikey={GOOGLE_API_KEY} // Use the imported GOOGLE_API_KEY directly
-                        strokeColor="#e32f45" // Set the route color to #e32f45
+                        strokeColor="#e32f45" // Set the mapRoute color to #e32f45
                         strokeWidth={4}
                         mode="WALKING"
                         onReady={handleOnReady}
@@ -286,12 +275,14 @@ const NavigationScreen = ({navigation}) => {
                     {/* Select List */}
                     <SelectList
                        // data={locationInfo.map(item => item.name)}
-                       data={coordinates.map(item=>item.name)} 
-                       label="Locations"
+                        data={coordinates.map(item=>item.name)} 
+                        label="Locations"
                         save={"value"}
                         search={false}
                         searchPlaceholder='Search for venue'
+                        placeholder={destination ? destination.name:"Select venue"}
                         notFoundText='Venue not found'
+                        defaultOption={destination ? {key:'1',value:destination.name} : { key: '1', value: 'Select Venue'}}
                         inputStyles={{
                             color: 'grey', fontSize: 16
                         }}
@@ -303,7 +294,7 @@ const NavigationScreen = ({navigation}) => {
                             width: 300, marginBottom: 10, borderWidth: 0
                         }}
                         setSelected={setDestinationLocation}
-                       defaultOption={{ key: '1', value: 'Select Venue' }}
+                       //defaultOption={{ key: '1', value: 'Select Venue' }}
 
                     />
                 </View>
@@ -319,8 +310,8 @@ const NavigationScreen = ({navigation}) => {
                                 animated: true, // Set to true for a smooth animation
                             });
 
-                            // Set route to true and trigger the route calculation
-                            setRoute(true);
+                            // Set mapRoute to true and trigger the mapRoute calculation
+                            setMapRoute(true);
                         } else {
                             // Handle case where origin or destination is not set
                             Alert.alert("Origin and destination must be set.");
