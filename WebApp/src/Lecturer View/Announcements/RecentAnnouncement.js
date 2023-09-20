@@ -13,7 +13,12 @@ import InfoIcon from '@mui/icons-material/Info';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
-
+import CheckIcon from '@mui/icons-material/Check';
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
+import EmailIcon from '@mui/icons-material/Email';
+import SMSIcons from '@mui/icons-material/Sms';
+import PushIcon from '@mui/icons-material/PushPinSharp';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -25,6 +30,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 
 import { API, Auth } from 'aws-amplify';
+import Email from '@mui/icons-material/Email';
 
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
@@ -95,8 +101,20 @@ export default function RecentAnnouncement() {
   const [infoModalOpen, setInfoModalOpen] = useState(false);
 
 
+  //use these for the status of each announcement
+  const [emailStatus, setEmailStatus] = useState("");
+  const [smsStatus, setSMSstatus] = useState("");
+  const [pushStatus, setPushStatus] = useState("");
+
+
+
   const handleInfoModalOpen = () => {
     setInfoModalOpen(true);
+    //setting them to defaults, remove once integrated
+    setEmailStatus(90);
+    setSMSstatus(70);
+    setPushStatus(50);
+
   };
 
   const handleInfoModalClose = () => {
@@ -242,6 +260,8 @@ export default function RecentAnnouncement() {
   }, [])
 
 
+
+
   return (
     <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
@@ -354,9 +374,8 @@ export default function RecentAnnouncement() {
         onClose={handleInfoModalClose}
         aria-labelledby="info-dialog-title"
         aria-describedby="info-dialog-description"
-        fullWidth
-        maxWidth="md"
-        PaperProps={{ style: { minHeight: '400px', maxHeight: '80vh' } }}
+
+        PaperProps={{ style: { height: '500px', width: '500px', borderRadius: "20px", padding: "10px" } }}
       >
         <DialogTitle id="info-dialog-title" style={{ textAlign: 'center' }}>
           Notification Delivery Status
@@ -370,23 +389,57 @@ export default function RecentAnnouncement() {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <DialogContentText id="info-dialog-description">
-            <h2>Email Notifications</h2>
-            {/* Add content about email notifications here */}
-            <p>Status: Delivered</p>
-            <p>Date: September 20, 2023</p>
+            <div style={{ display: "flex" }}>
+              <EmailIcon style={{ marginRight: "5px", marginTop: "4px" }} /> <h4>Email Notifications</h4>
+            </div>
 
-            <h2>SMS Notifications</h2>
-            {/* Add content about SMS notifications here */}
-            <p>Status: Not Delivered</p>
-            <p>Date: September 19, 2023</p>
+            <div style={{ display: "flex" }}>
+              {emailStatus >= 90 ? (
+                <span style={{ color: 'green', marginRight: "5px" }}><CheckIcon /></span>
+              ) : (
+                <span style={{ color: 'red', marginRight: "5px" }}><ErrorIcon /></span>
+              )}
+              <p>Status: <span style={{ fontWeight: "bold" }}>{emailStatus}% </span>of students registered for email recieved the announcement</p>
+            </div>
 
-            <h2>Push Notifications</h2>
-            {/* Add content about push notifications here */}
-            <p>Status: Pending</p>
-            <p>Date: September 18, 2023</p>
+            <br />
+            <div style={{ display: "flex" }}>
+              <SMSIcons style={{ marginRight: "5px", marginTop: "4px" }} /> <h4>SMS Notifications</h4>
+            </div>
+            <div style={{ display: "flex" }}>
+              {smsStatus >= 90 ? (
+                <span style={{ color: 'green', marginRight: "5px" }}><CheckIcon /></span>
+              ) : (
+                <span style={{ color: 'red', marginRight: "5px" }}><ErrorIcon /></span>
+              )}
+              <p>Status: <span style={{ fontWeight: "bold" }}>{smsStatus}%</span> of students registered for SMS recieved the announcement</p>
+            </div>
+
+            <br />
+            <div style={{ display: "flex" }}>
+              <PushIcon style={{ marginRight: "5px", marginTop: "4px" }} /> <h4>Push Notifications</h4>
+            </div>
+            <div style={{ display: "flex" }}>
+              {pushStatus >= 90 ? (
+                <span style={{ color: 'green', marginRight: "5px" }}><CheckIcon /></span>
+              ) : (
+                <span style={{ color: 'red', marginRight: "5px" }}><ErrorIcon /></span>
+              )}
+              <p>Status: <span style={{ fontWeight: "bold" }}>{pushStatus}%</span> of students registered for push notifications recieved the announcement</p>
+            </div>
+
           </DialogContentText>
+          <DialogActions style={{ justifyContent: 'center' }}>
+            <Button onClick={handleInfoModalClose} color="primary" sx={{
+              backgroundColor: '#e32f45', color: 'white', width: "200px", borderRadius: "20px", '&:hover': {
+                backgroundColor: '#e32f45', // Set the same background color for hover state
+              },
+            }}>
+              <span>Okay</span> <CheckIcon style={{ fontSize: "15px" }} />
+            </Button>
+          </DialogActions>
         </DialogContent>
       </Dialog>
 
