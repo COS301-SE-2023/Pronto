@@ -90,32 +90,19 @@ jobs:
           bash scripts/initialise-amplify.sh
           amplify build
 
-  cypress:
+  basic-cypress-test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./WebApp
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
+      - name: Set environment variables
+        run: |
+          echo "LECTURER_PASSWORD=$LECTURER_PASSWORD" >> $GITHUB_ENV
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install Cypress
+        uses: cypress-io/github-action@v6
 
-      - name: Run Cypress E2E tests
-        uses: cypress-io/github-action@v2 # Add this line to use the cypress github action
-        with:
-          browser: chrome # Add this line to specify the browser to use
-          headless: true # Add this line to run the tests in headless mode
-        env:
-          BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
-          CYPRESS_LECTURER_PASSWORD: ${{ secrets.CYPRESS_LECTURER_PASSWORD }} # Add this line to pass the lecturer password as an environment variable
-
-
-
+      - name: Run Cypress tests
+        working-directory: ./WebApp
+        run: cypress run
