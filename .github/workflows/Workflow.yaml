@@ -91,20 +91,23 @@ jobs:
           amplify build
 
   cypress-run:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./WebApp
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Install dependencies
-          run: npm install
-        - name: Run cypress tests
-          uses: cypress-io/github-action@v2
-          with:
-            env: LECTURER_PASSWORD=${{ secrets.LECTURER_PASSWORD}}
-            record: true
-          env:
-           LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set working directory and install dependencies
+        run: |
+          cd ./WebApp   # Change to the desired working directory
+          npm install
+          # Any other commands you need to run in this directory
+        env:
+          LECTURER_PASSWORD:  ${{ secrets.LECTURER_PASSWORD}}
+
+      - name: Run cypress tests
+        run: |
+          cd ./WebApp   # Change to the desired working directory
+          npx cypress run
+        env:
+          LECTURER_PASSWORD : ${{ secrets.LECTURER_PASSWORD}}  # Retrieve another secret value and set as an environment variable
