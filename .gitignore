@@ -170,3 +170,4 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+WebApp/src/Components/aws-exports.js
