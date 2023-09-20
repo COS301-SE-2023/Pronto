@@ -90,13 +90,19 @@ jobs:
           bash scripts/initialise-amplify.sh
           amplify build
 
-  print-secret:
-     runs-on: ubuntu-latest
+  cypress:
+    runs-on: ubuntu-latest
 
-     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v3
 
-      - name: Print Secret Value
-        run: |
-          echo "Secret Value: ${{ secrets.LECTURER_PASSWORD }}"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Cypress
+        run: npm install cypress --save-dev
+
+      - name: Run Cypress tests
+        run: npx cypress run
