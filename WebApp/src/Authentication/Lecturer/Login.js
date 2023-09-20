@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
@@ -45,10 +45,10 @@ function Login() {
     {
       value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
       label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
-    }, 
+    },
     {
-       value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
-       label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
+      value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
+      label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
     }
   ];
 
@@ -453,10 +453,19 @@ const Container = styled.div`
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   display: relative;
   overflow: hidden;
-  width: 700px;
-  max-width: 100%;
-  min-height: 400px;
+  width: 100%; /* Make it 100% width */
+  height: 100vh; /* Make it 100% viewport height */
 `;
+
+const slideIn = keyframes`
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
+
 
 const SignUpContainer = styled.div`
   position: absolute;
@@ -513,6 +522,7 @@ const Form = styled.form`
   padding: 0 50px;
   height: 100%;
   text-align: center;
+  animation: ${slideIn} 0.8s ease-in-out;
 `;
 
 const Title = styled.h1`
@@ -581,6 +591,7 @@ const OverlayContainer = styled.div`
   transition: transform 0.5s ease-in-out;
   z-index: 100;
   ${(props) => (props.signin !== true ? `transform: translateX(-100%);` : null)}
+  animation: ${slideIn} 0.8s ease-in-out;
 `;
 
 const Overlay = styled.div`
@@ -618,6 +629,7 @@ const OverlayPanel = styled.div`
 const LeftOverlayPanel = styled(OverlayPanel)`
   transform: translateX(-20%);
   ${(props) => (props.signin !== true ? `transform: translateX(0);` : null)}
+  animation: ${slideIn} 0.8s ease-in-out;
 `;
 
 const RightOverlayPanel = styled(OverlayPanel)`
