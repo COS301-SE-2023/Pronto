@@ -18,7 +18,6 @@ export const announcementsByCourseId=`query AnnouncementsByCourseId(
       title
       date
       venue
-      createdAt
     }
     nextToken
   }
@@ -171,10 +170,7 @@ export const studentsByInstitutionId=`query StudentsByInstitutionId(
       lastname
       userRole
       email
-      createdAt
-      updatedAt
       studentTimetableId
-      owner
     }
     nextToken
   }
@@ -202,7 +198,6 @@ export const enrollmentsByStudentId=`query EnrollmentsByStudentId(
         id 
         coursecode
       }
-      year
     }
     nextToken
   }
@@ -223,8 +218,6 @@ export const listStudents=`query ListStudents(
       firstname
       lastname
       email
-      owner
-      preference
       studentTimetableId
       timetable { 
         id
@@ -301,7 +294,6 @@ export const listCourses=`query ListCourses(
       id
       institutionId
       coursecode
-      semester
     }
     nextToken
   }
@@ -322,8 +314,6 @@ export const getCourse=`query GetCourse($id: ID!) {
     announcents {
       nextToken
     }
-    createdAt
-    updatedAt
   }
 }
 `
