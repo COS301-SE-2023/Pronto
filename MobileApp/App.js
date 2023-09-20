@@ -76,8 +76,7 @@ export default function App() {
             userRole: "Student",
             email: email
           }
-          //console.log("The new student");
-          //console.log(newStudent);
+       
           let create = await API.graphql({
             query: createStudent,
             variables: { input: newStudent }

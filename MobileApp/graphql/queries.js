@@ -47,7 +47,6 @@ export const activitiesByCourseId=`query ActivitiesByCourseId(
       start
       end
       venue
-      group
     }
     nextToken
   }
@@ -382,7 +381,6 @@ export const getStudent=`query GetStudent($id: ID!) {
       lastname
       email
       studentTimetableId
-      owner
       timetable { 
         id
         activities{ 

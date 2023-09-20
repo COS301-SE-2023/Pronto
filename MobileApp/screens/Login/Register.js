@@ -148,12 +148,7 @@ const Register = ({ navigation }) => {
         }
       }
       const u =await Auth.signUp(signUpObject);
-      // const u=await Auth.signUp({
-      //   username: email,
-      //   password:password,
-      //   attributes: { email:email, family_name: surname, name:name },
-      //   clientMetadata: { role: "Student", institutionId: institutionId },
-      // });
+ 
       
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
