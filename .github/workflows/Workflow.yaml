@@ -105,8 +105,12 @@ jobs:
         env:
           LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}   # Retrieve secret value and set as an environment variable
 
+      - name: Debug Secret
+        run:
+          echo "Secret Value: ${{ secrets.LECTURER_PASSWORD }}"   # Echo the secret value to the console
+
       - name: Run cypress tests
         run: |
-          cd ./WebApp   # Change to the desired working directory
+          cd ./WebApp  
           export CYPRESS_LECTURER_PASSWORD="${{ secrets.LECTURER_PASSWORD }}"  # Set the environment variable for Cypress
           npx cypress run
