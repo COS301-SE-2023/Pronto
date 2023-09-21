@@ -1,0 +1,9 @@
+{
+    "data":{
+        "updateCourse":{
+            "id":"id",
+            "coursecode":"coursecode",
+            "lecturerId":"lecturerId"
+        }
+    }
+}
