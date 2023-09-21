@@ -1,0 +1,12 @@
+{
+    "data":{
+        "createAnnouncement":{
+            "id":"id",
+            "title":"title",
+            "body":"body",
+            "date":"date",
+            "createdAt":"createdAt",
+            "type":"type"
+        }
+    }
+}
