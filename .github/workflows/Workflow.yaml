@@ -2,7 +2,7 @@ name: Build Mobile,Web App and Amplify Backend
 
 on:
   push:
-    branches: [ main, dev, frontend, integration, backend,fix---auth ]
+    branches: [ main, dev, frontend, integration, backend]
   pull_request:
     branches: [ main, dev, frontend, integration, backend ]
 
@@ -100,7 +100,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          config-file: cypress.js
 
       - name: Install Cypress
         run: npm install cypress --save-dev
