@@ -17,7 +17,7 @@ describe("Testing sign In", () => {
   it("should sign in lecturer", function () {
     cy.LecturerSignIn(
         "yovab14312@tenjb.com",
-        Cypress.env('LECTURER_PASSWORD')
+        process.env.LECTURER_PASSWORD
     );
   });
 });
