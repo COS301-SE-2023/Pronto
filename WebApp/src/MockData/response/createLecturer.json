@@ -1,0 +1,9 @@
+{
+    "data":{
+        "createLecturer":{
+            "fisrtname":"fisrtname",
+            "lastname":"lastname",
+            "email":"email"
+        }
+    }
+}
