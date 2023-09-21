@@ -52,7 +52,6 @@ jobs:
           npm test
 
   build-backend:
-    if : false
     strategy:
       matrix:
         node_version: [ 12.x ]
@@ -94,6 +93,7 @@ jobs:
           amplify build
 
   cypress:
+    if : false
     runs-on: ubuntu-latest
     environment: Testing
     strategy:
