@@ -93,7 +93,6 @@ jobs:
 
   cypress:
     runs-on: ubuntu-latest
-    environment: Testing
     strategy:
       matrix:
         node-version: [18.x]
