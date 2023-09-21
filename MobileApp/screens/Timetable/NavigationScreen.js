@@ -149,16 +149,32 @@ const NavigationScreen = ({navigation,route}) => {
                                     longitude:parseFloat(location[2])
                                 }
                             }
-                        loc.push(coordinate);
-                        locationNames.set(location[0],"1");
+                            loc.push(coordinate);
+                            locationNames.set(location[0],"1");
+                        }
                     }
                 }
-            }
-            setCoordinates(loc);
+                let changed=false;
+                if(coordinates.length===loc.length){
+                    for(let i=0;i<coordinates.length-1;i++){
+                        if(coordinates[i].name!==loc[i].name){
+                            changed=true;
+
+                        }
+                    }
+                }
+                else{
+                    changed=true;
+                }
+                if(changed){
+                    setCoordinates(loc);
+                }
+                
+                if(route.params.name!==undefined )    {
+                    setDestinationLocation(route.params.name)
+                }
+            
         }
-        // if(route.params.name!==undefined && route.params.value.longitude!==undefined && route.params.value.latitude!==undefined)    {
-        //         setDestinationLocation(route.params.name)
-        //     }
 
     } catch (e) {
       Alert.alert(error);
@@ -167,11 +183,11 @@ const NavigationScreen = ({navigation,route}) => {
 
 
 
-//    useEffect hook to run the requestLocationPermission function when the component is mounted
+// //    useEffect hook to run the requestLocationPermission function when the component is mounted
     useEffect(() => {
         requestLocationPermission();
         fetchLocations();
-     }, []);
+     },[coordinates]);
 
 
      // Below defines styling for the location text input for the user's current location
@@ -205,8 +221,9 @@ const NavigationScreen = ({navigation,route}) => {
     const setDestinationLocation = (itemValue) => {
         setMapRoute(false);
        // const selectedItem = locationInfo.find(item => item.name === itemValue);
+       
        const selectedItem = coordinates.find(item=>item.name===itemValue); 
-    
+        
        if (selectedItem) {
             const dest = {
                 name:selectedItem.name,
@@ -224,6 +241,7 @@ const NavigationScreen = ({navigation,route}) => {
             setCurrentRegion(newRegion);
             mapViewRef.current.animateToRegion(newRegion, 1000);
         }
+        
     }
 
 
@@ -274,15 +292,12 @@ const NavigationScreen = ({navigation,route}) => {
 
                     {/* Select List */}
                     <SelectList
-                       // data={locationInfo.map(item => item.name)}
                         data={coordinates.map(item=>item.name)} 
                         label="Locations"
                         save={"value"}
                         search={false}
-                        searchPlaceholder='Search for venue'
                         placeholder={destination ? destination.name:"Select venue"}
-                        notFoundText='Venue not found'
-                        defaultOption={destination ? {key:'1',value:destination.name} : { key: '1', value: 'Select Venue'}}
+                        // defaultOption={destination ? {key:'1',value:destination.name} : { key: '1', value: 'Select Venue'}}
                         inputStyles={{
                             color: 'grey', fontSize: 16
                         }}
