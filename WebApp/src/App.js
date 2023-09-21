@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 
+import ProntoAdminLogin from "./Authentication/SuperAdmin/Login";
+
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
@@ -44,6 +46,9 @@ function MyRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+
+        {/*Pronto Admin login/register pages*/}
+        <Route path="/prontoadmin/login" element={<ProntoAdminLogin />} />
 
         {/*Lecturer login/register pages*/}
         <Route path="/lecturer/login" element={<LecturerLogin />} />
