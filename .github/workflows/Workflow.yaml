@@ -2,9 +2,9 @@ name: Build Mobile,Web App and Amplify Backend
 
 on:
   push:
-    branches: [ main, dev, frontend, integration, backend, fix---auth ]
+    branches: [ main, dev, frontend, integration, backend ]
   pull_request:
-    branches: [ main, dev, frontend, integration, backend, fix---auth ]
+    branches: [ main, dev, frontend, integration, backend ]
 
 jobs:
   build-mobile:
