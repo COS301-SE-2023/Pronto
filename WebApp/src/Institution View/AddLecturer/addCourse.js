@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import { useState } from "react";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import SearchableDropdown from "./searchableDropdown";
 
 const style = {
   position: 'absolute',
@@ -9,178 +10,170 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '80%',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: '20px',
+  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.3)',
   p: 4,
 };
 
-export default function AddModal(module) {
+export default function AddModal(course) {
+
   const [open, setOpen] = useState(false);
   const [offeredCourses, setOfferedCourses] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [removed, setRemoved] = useState([]);
   const [selected, setSelected] = useState();
 
+
   const handleOpen = async () => {
-    setOpen(true);
-    module.setModal(true);
-    let courses = [];
+    setOpen(true)
+    course.setModal(true)
+
+    let courses = []
     try {
-      for (let i = 0; i < module.courseData.length; i++) {
-        if (module.courseData[i].lecturerId === null) {
-          offeredCourses.push(module.courseData[i]);
-        }
+      for (let i = 0; i < course.selectedCourses.length; i++) {
+        selectedCourses.push(course.selectedCourses[i]);
       }
-      setOfferedCourses(offeredCourses);
-      setSelectedCourses(module.selectedCourses);
+      setSelectedCourses(selectedCourses);
     } catch (e) {
-      alert("No courses found");
+      //alert("No courses found")
     }
-  };
+  }
+
 
   const handleClose = async () => {
-    setOpen(false);
-    module.setModal(false);
+    setOpen(false)
+    course.setModal(false)
 
-    // Remove deleted courses
-    if (module.updateFlag === true) {
+    //Remove deleted courses
+    if (course.updateFlag === true) {
       if (removed.length > 0) {
-        await module.removeCourses(removed, module.lecturerData);
+        await course.removeCourses(removed, course.lecturerData)
       }
-      // Add new courses
-      let newcourses = [];
+      //Add new courses
+      let newcourses = []
       for (let i = 0; i < selectedCourses.length; i++) {
         if (selectedCourses[i].lecturerId === null) {
-          newcourses.push(selectedCourses[i]);
+          newcourses.push(selectedCourses[i])
         }
       }
-      await module.addCourses(module.lecturerData, newcourses);
-      module.setOfferedCourses(offeredCourses);
-    } else {
-      module.setSelectedCourses(selectedCourses);
-      module.setOfferedCourses(offeredCourses);
+      await course.addCourses(course.lecturerData, newcourses)
+      course.setOfferedCourses(offeredCourses)
     }
-    setOfferedCourses([]);
-    setSelectedCourses([]);
-  };
+    else {
+      course.setSelectedCourses(selectedCourses)
+      course.setOfferedCourses(offeredCourses)
+    }
+    setOfferedCourses([])
+    setSelectedCourses([])
+
+  }
 
   const handleAdd = async (event) => {
-    event.preventDefault();
-    let index = -1;
-    if (selected !== null || selected !== undefined) {
-      for (let i = 0; i < offeredCourses.length; i++) {
-        if (offeredCourses[i].id === selected.id) {
-          index = i;
-          break;
-        }
+
+    let added = false;
+    for (let i = 0; i < selectedCourses.length; i++) {
+      if (selectedCourses[i].id === event.id) {
+        added = true;
+        break;
       }
     }
-    setSelectedCourses([...selectedCourses, selected]);
-    offeredCourses.splice(index, 1);
-    setOfferedCourses(offeredCourses);
 
-    //event.target.reset()
-  };
+    if (!added && event.id !== undefined) {
+
+      selectedCourses.push(event);
+      setSelectedCourses(selectedCourses);
+      setOfferedCourses([]);
+    }
+
+  }
 
   const handleRemove = async (index) => {
-    const remove = [...removed, selectedCourses[index]];
-    offeredCourses.push(selectedCourses[index]);
-    selectedCourses.splice(index, 1);
-    setRemoved(remove);
-    setOfferedCourses(offeredCourses);
-    setSelectedCourses(selectedCourses);
-  };
+    const remove = [...removed, selectedCourses[index]]
+    offeredCourses.push(selectedCourses[index])
+    selectedCourses.splice(index, 1)
+    setRemoved(remove)
+    setOfferedCourses(offeredCourses)
+    setSelectedCourses(selectedCourses)
+
+  }
 
   const handleSelect = async (index) => {
-    setSelected(offeredCourses[index]);
-  };
+    setSelected(offeredCourses[index])
+  }
 
-  return (<div className="form-row">
-    <div className="form-group col-6">
-      <button
-        onClick={handleOpen}
-        className="btn btn-danger"
-        data-testid="submitButton"
-      >
-        View
-      </button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        data-testid="modal" // Added data-testid here
-      >
-        <Box sx={style}>
-          <table
-            className="table table-hover"
-            style={{ alignItems: 'center' }}
-            data-testid="coursesTable"
-          >
-            <thead>
-              <tr>
-                <th scope="col">Course Code</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedCourses.map((val, key) => {
-                return (<tr key={key}>
-                  <td>{val.coursecode}</td>
-                  <td>{val.coursename}</td>
-                  <td>
-                    <button
-                      onClick={(e) => handleRemove(key)}
-                      type="button"
-                      className="btn btn-danger"
-                      data-testid="removeButton" // Added data-testid here
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>);
-              })}
-            </tbody>
-          </table>
-          <form onSubmit={(e) => handleAdd(e)}>
-            <div className="form-row">
-              <div className="form-group col-6">
-                <select
-                  onChange={(e) => handleSelect(e.target.value)}
-                  //value={selected}
-                  className="custom-select"
-                  data-testid="courseOption" // Added data-testid here
-                >
-                  <option key="{}"></option>
-                  {offeredCourses.map((val, key) => {
-                    return (<option
-                      key={val.coursecode}
-                      value={key}
+  return (
+    <div className="form-row">
+      <div className="form-group col-6">
 
-                    >
-                      {val.coursecode}
-                    </option>);
-                  })}
-                </select>
-              </div>
-              <button
-                type="submit"
-                className="btn btn-danger"
-                data-testid="addButton" // Added data-testid here
-              >
-                Add
-              </button>
-            </div>
-          </form>
-          <button
-            onClick={handleClose}
-            type="submit"
-            className="btn btn-danger float-right"
-            data-testid="submitCourses" // Added data-testid here
-          >
-            Done
-          </button>
-        </Box>
-      </Modal>
+        <button onClick={handleOpen}
+          className="btn btn-danger"
+          style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
+          data-testid="submitButton">View</button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          data-testid="modal"
+        >
+          <Box sx={style}>
+            <table
+              className="table table-hover"
+              style={{ alignItems: 'center' }}
+              data-testid="coursesTable"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Course Code</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedCourses.map((val, key) => {
+                  return (
+                    <tr key={key}>
+                      <td>
+                        {val?.coursecode}
+                      </td>
+                      <td>
+                        <button onClick={(e) => handleRemove(key)}
+                          type="button"
+                          className="btn btn-danger"
+                          data-testid="removeButton"
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                }
+                )}
+              </tbody>
+            </table>
+            <SearchableDropdown
+              courses={courses}
+              selectedCourses={selectedCourses}
+              setSelectedCourses={setSelectedCourses}
+              handleAdd={handleAdd}
+              data-testid="courseOption"
+            />
+            {/* </div> */}
+            <button
+              onClick={handleClose}
+              type="submit"
+              className="btn btn-danger float-right"
+              data-testid="submitCourses"
+              style={{ borderRadius: "20px", width: "100px" }}
+            >
+              Done
+            </button>
+          </Box>
+        </Modal>
+
+      </div>
     </div>
-  </div>);
+
+  );
 }

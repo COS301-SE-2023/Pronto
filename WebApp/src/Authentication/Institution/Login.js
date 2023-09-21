@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
+import Select from "react-select";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { listAdmins } from "../../Graphql/queries";
+import { createAdmin, createInstitution } from "../../Graphql/mutations";
 import { useAdmin } from "../../ContextProviders/AdminContext";
+import MobileView from "../../Homepage/MobileView";
 
 function Login() {
   const [signIn, toggle] = React.useState(true);
@@ -23,6 +26,47 @@ function Login() {
 
   const navigate = useNavigate();
 
+  const universityInfo = [
+    {
+      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
+      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
+      label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
+    },
+    {
+      value: process.env.REACT_APP_AGILE_ARCHITECTS_ID,
+      label: process.env.REACT_APP_AGILE_ARCHITECTS_LABEL
+    }
+  ];
+
+
+  //select institution
+  const [institutionId, setInstitutionId] = React.useState("");
+  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
+
+  const handleInstitutionSelection = (event) => {
+    setInstitutionId(event.value);
+    setIsInstitudeSelected(true);
+  };
+
   const [loading, setLoading] = useState(false);
 
   const { setAdmin } = useAdmin();
@@ -39,13 +83,16 @@ function Login() {
               eq: email
             }
           },
+
         },
+
       });
       if (adminData.data.listAdmins.items.length > 0) {
         adminData = adminData.data.listAdmins.items[0];
         if (adminData.institution.logo !== null) {
           adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
         }
+
         setAdmin(adminData);
       }
       else {
@@ -74,10 +121,20 @@ function Login() {
       return;
     }
     try {
-      await Auth.signIn(email, password, { role: "Admin" });
+      const signInObject = {
+        username: email,
+        password: password,
+        validationData: {
+          role: "Admin",
+          institutionId: institutionId
+        }
+      }
+
+      const user = await Auth.signIn(signInObject);
       setsignInError("");
-      //navigate to lecturer home page
+
       await fetchAdmin().then(() => navigate("/institution/dashboard"))
+      // navigate("/institution/dashboard");
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
@@ -126,6 +183,7 @@ function Login() {
     setLoading(true);
 
     try {
+
       await Auth.signUp({
         username: email,
         password: signUpPassword,
@@ -136,11 +194,14 @@ function Login() {
         },
         clientMetadata: {
           role: "Admin",
+          institutionId: institutionId
         },
       });
+
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
     } catch (e) {
+      // console.log(e);
       setsignUpError(e.message);
     }
     setLoading(false);
@@ -207,154 +268,184 @@ function Login() {
     setNameIsValid(isValidName);
   };
 
-  return (
-    <Container>
-      <SignUpContainer signin={signIn}>
-        <Form>
-          <Title
-            style={{
-              marginBottom: "20px",
-            }}
-          >
-            Create Institution Account
-          </Title>
-          <Input
-            type="text"
-            placeholder="University Name"
-            value={name}
-            onChange={(event) => {
-              setName(event.target.value);
-              validateName(event.target.value);
-            }}
-            isValidName={nameIsValid}
-          />
-          <Input
-            type="email"
-            placeholder="Adminsitration Email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              validateEmail(event.target.value);
-            }}
-            isValidEmail={emailIsValid}
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={signUpPassword}
-            onChange={(event) => {
-              setSignUpPassword(event.target.value);
-              validatePassword(event.target.value);
-            }}
-            isValidPassword={passwordIsValid}
-            onFocus={handlePasswordFocus}
-            onBlur={handlePasswordBlur}
-          />
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(event) => {
-              setConfirmPassword(event.target.value);
-              validateConfirmPassword(event.target.value);
-            }}
-            passwordMatch={passwordMatch}
-          />
-          {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
-          <Button onClick={onSignUpPressed}>
-            {loading ? "Applying..." : "Apply"}
-          </Button>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {passwordIsFocused && (  //real time password criteria check
-              <>
-                <CriteriaMessage isValid={passwordCriteria.length}>
-                  {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.uppercase}>
-                  {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.lowercase}>
-                  {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.digit}>
-                  {passwordCriteria.digit ? "✓" : "x"} Digit
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.specialChar}>
-                  {passwordCriteria.specialChar ? "✓" : "x"} Special character
-                  (!@#$%^&*()?)
-                </CriteriaMessage>
-              </>
-            )}
-          </div>
-        </Form>
-      </SignUpContainer>
-      <SignInContainer signin={signIn}>
-        <Form>
-          <LogoContainer>
-            <img
-              src={ProntoLogo}
-              alt="Logo"
-              style={{
-                width: "50%",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </LogoContainer>
-          <Subtitle>Institution Login</Subtitle>
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              validateEmail(event.target.value);
-            }}
-            isValidEmail={emailIsValid}
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          <Button onClick={onSignInPressed}>
-            {" "}
-            {loading ? "Signing in..." : "Sign in"}
-          </Button>
-          <Anchor href="/institution/forgot-password">
-            Forgot your password?
-          </Anchor>
-          {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
-        </Form>
-      </SignInContainer>
-      <OverlayContainer signin={signIn}>
-        <Overlay signin={signIn}>
-          <LeftOverlayPanel signin={signIn}>
-            <Title>Have an account?</Title>
-            <Paragraph>
-              Please sign in to access all of Pronto's features
-            </Paragraph>
-            <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
-          </LeftOverlayPanel>
+  const isMobileView = window.innerWidth < 768;
 
-          <RightOverlayPanel signin={signIn}>
-            <Title>No Account?</Title>
-            <Paragraph>
-              Click here to apply for an institution account
-            </Paragraph>
-            <GhostButton onClick={() => toggle(false)}>Apply</GhostButton>
-          </RightOverlayPanel>
-        </Overlay>
-      </OverlayContainer>
-    </Container>
+  return (
+    <div>
+      {
+        isMobileView ? (
+          // Display a message for mobile users
+          <MobileView />
+        ) : (
+          <Container>
+            <SignUpContainer signin={signIn}>
+              <Form>
+                <Title
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  Create Institution Account
+                </Title>
+                <Input
+                  type="text"
+                  placeholder="University Name"
+                  value={name}
+                  onChange={(event) => {
+                    setName(event.target.value);
+                    validateName(event.target.value);
+                  }}
+                  isValidName={nameIsValid}
+                />
+                <Input
+                  type="email"
+                  placeholder="Adminsitration Email"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    validateEmail(event.target.value);
+                  }}
+                  isValidEmail={emailIsValid}
+                />
+                <StyledSelectInput
+                  options={universityInfo}
+                  defaultValue={institutionId}
+                  onChange={handleInstitutionSelection}
+                  placeholder="Select an Institution"
+                  classNamePrefix="SelectInput"
+                  autoComplete="on"
+                  spellCheck="true"
+                  isSelectionValid={isInstitudeSelected}
+                ></StyledSelectInput>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={signUpPassword}
+                  onChange={(event) => {
+                    setSignUpPassword(event.target.value);
+                    validatePassword(event.target.value);
+                  }}
+                  isValidPassword={passwordIsValid}
+                  onFocus={handlePasswordFocus}
+                  onBlur={handlePasswordBlur}
+                />
+                <Input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(event) => {
+                    setConfirmPassword(event.target.value);
+                    validateConfirmPassword(event.target.value);
+                  }}
+                  passwordMatch={passwordMatch}
+                />
+                {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
+                <Button onClick={onSignUpPressed}>
+                  {loading ? "Applying..." : "Apply"}
+                </Button>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {passwordIsFocused && (  //real time password criteria check
+                    <>
+                      <CriteriaMessage isValid={passwordCriteria.length}>
+                        {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.uppercase}>
+                        {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.lowercase}>
+                        {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.digit}>
+                        {passwordCriteria.digit ? "✓" : "x"} Digit
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.specialChar}>
+                        {passwordCriteria.specialChar ? "✓" : "x"} Special character
+                        (!@#$%^&*()?)
+                      </CriteriaMessage>
+                    </>
+                  )}
+                </div>
+              </Form>
+            </SignUpContainer>
+            <SignInContainer signin={signIn}>
+              <Form>
+                <LogoContainer>
+                  <img
+                    src={ProntoLogo}
+                    alt="Logo"
+                    style={{
+                      width: "50%",
+                      height: "auto",
+                      objectFit: "cover",
+                    }}
+                  />
+                </LogoContainer>
+                <Subtitle>Institution Login</Subtitle>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    validateEmail(event.target.value);
+                  }}
+                  isValidEmail={emailIsValid}
+                />
+                <StyledSelectInput
+                  options={universityInfo}
+                  defaultValue={institutionId}
+                  onChange={handleInstitutionSelection}
+                  placeholder="Select an Institution"
+                  classNamePrefix="SelectInput"
+                  autoComplete="on"
+                  spellCheck="true"
+                  isSelectionValid={isInstitudeSelected}
+                ></StyledSelectInput>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                  }}
+                />
+                <Button onClick={onSignInPressed}>
+                  {" "}
+                  {loading ? "Signing in..." : "Sign in"}
+                </Button>
+                <Anchor href="/institution/forgot-password">
+                  Forgot your password?
+                </Anchor>
+                {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
+              </Form>
+            </SignInContainer>
+            <OverlayContainer signin={signIn}>
+              <Overlay signin={signIn}>
+                <LeftOverlayPanel signin={signIn}>
+                  <Title>Have an account?</Title>
+                  <Paragraph>
+                    Please sign in to access all of Pronto's features
+                  </Paragraph>
+                  <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
+                </LeftOverlayPanel>
+
+                <RightOverlayPanel signin={signIn}>
+                  <Title>No Account?</Title>
+                  <Paragraph>
+                    Click here to apply for an institution account
+                  </Paragraph>
+                  <GhostButton onClick={() => toggle(false)}>Apply</GhostButton>
+                </RightOverlayPanel>
+              </Overlay>
+            </OverlayContainer>
+          </Container>
+        )}
+    </div>
   );
 }
 
@@ -572,5 +663,43 @@ const CriteriaMessage = styled.span`
   font-size: 12px;
   color: ${({ isValid }) => (isValid ? "green" : "inherit")};
 `;
+
+const StyledSelectInput = styled(Select)`
+  width: 100%;
+
+  .SelectInput__control {
+    background-color: #eee;
+    border: none;
+    border-radius: 25px;
+    margin: 8px 0;
+  }
+
+  .SelectInput__control--is-focused {
+    border: ${({ isSelectionValid }) =>
+    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+    box-shadow: none;
+  }
+
+  .SelectInput__control:hover {
+    border-color: #eee;
+  }
+
+  .SelectInput__menu {
+    background-color: #eee;
+  }
+
+  .SelectInput__option:hover {
+    background-color: #ec7281;
+  }
+
+  .SelectInput__option--is-selected {
+    background-color: #e32f45;
+  }
+
+  .SelectInput__single-value .SelectInput__control--is-focused {
+    background-color: purple;
+  }
+`;
+
 
 export default Login;
