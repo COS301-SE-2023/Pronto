@@ -1,0 +1,47 @@
+{
+    "data":{
+        "searchLecturers":{
+            "items":
+                [
+                    {
+                        "id":"id-1",
+                        "fisrtname":"fisrtname-1",
+                        "lastname":"lastname-1",
+                        "email":"email-1",
+                        "course":{
+                            "items":{
+                                "id":"courseId-1",
+                                "coursecode":"coursecode-1"
+                            }
+                        }
+                    },
+                    {
+                        "id":"id-2",
+                        "fisrtname":"fisrtname-2",
+                        "lastname":"lastname-2",
+                        "email":"email-2",
+                        "course":{
+                            "items":{
+                                "id":"courseId-2",
+                                "coursecode":"coursecode-2"
+                            }
+                        }
+                    },
+                    {
+                        "id":"id-3",
+                        "fisrtname":"fisrtname-3",
+                        "lastname":"lastname-3",
+                        "email":"email-3",
+                        "course":{
+                            "items":{
+                                "id":"courseId-3",
+                                "coursecode":"coursecode-3"
+                            }
+                        }
+                    }
+                ],
+                "nextToken":"some-token"
+
+        }
+    }
+}
