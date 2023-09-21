@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions, Alert, Button, TextInput, StyleSheet, Image } from "react-native";
+import { View, TouchableOpacity, Text, Dimensions, Alert, StyleSheet, Image } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
@@ -8,8 +8,6 @@ import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
 import { getStudent} from "../../graphql/queries"
-
-import {  createStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 
@@ -141,60 +139,9 @@ const ScheduleTable = ({ navigation,route }) => {
           createScheduleArray(act);
         }
 
-    // else{
-    //   if(student.timetable!==null && student.timetable.activities!==undefined){
-    //     let changed = false
-        
-    //     let act=[];
-       
-        
-    //       act=[];
-    //       let courses=[];
-    //       for (let i = 0; i < student.enrollments.items.length; i++) {
-    //         courses.push(student.enrollments.items[i].course)
-    //       }
-
-    //       for (let i = 0; i < student.timetable.activityId.length; i++) {
-    //         for (let j = 0; j < courses.length; j++) {
-    //           try{
-    //             let index = courses[j].activity.items.find(item => item.id === student.timetable.activityId[i])
-    //             if (index !== undefined) {
-    //               act.push(index)
-    //               break;
-    //             }
-    //           }catch(e){
-
-    //           }
-
-    //         }
-    //       }
-    //       act = act.sort((a, b) => {
-    //                   if (a.start <= b.start)
-    //                     return -1;
-    //                   else
-    //                     return 1;
-    //                 })
-    //       if (act.length === activities.length) {
-    //       for (let i = 0; i < act.length; i++) {
-    //         if (act[i].id !== activities[i].id) {
-    //           changed = true;
-    //           break;
-    //         }
-    //       }
-    //     }
-    //     else {
-    //       changed = true;
-    //     }          
-
-        
-    //     if (changed === true){
-    //       setActivities(act);
-    //       createScheduleArray(act);
-    //     }
-    //   }
-      //}
+    
     } catch (e) {
-      //Alert.alert(error);
+      Alert.alert(error);
       console.log("from schedule")
       console.log(e);
     }
