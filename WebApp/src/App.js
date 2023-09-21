@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 
 import ProntoAdminLogin from "./Authentication/SuperAdmin/Login";
+import ApplicationRequests from "./SuperAdmin View/ApplicationRequests";
+import ViewInstitutions from "./SuperAdmin View/ViewInstitutions";
 
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
@@ -34,7 +36,7 @@ import { LecturerListProvider } from "./ContextProviders/LecturerListContext";
 import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext";
 
 import { Amplify, Auth } from "aws-amplify";
-import { Authenticator } from '@aws-amplify/ui-react';
+import { Authenticator, View } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import config from "./Components/aws-exports";
 
@@ -49,6 +51,8 @@ function MyRoutes() {
 
         {/*Pronto Admin login/register pages*/}
         <Route path="/prontoadmin/login" element={<ProntoAdminLogin />} />
+        <Route path="/superadmin/admin-requests" element={<ApplicationRequests />} />
+        <Route path="/superadmin/view-institutions" element={<ViewInstitutions />} />
 
         {/*Lecturer login/register pages*/}
         <Route path="/lecturer/login" element={<LecturerLogin />} />
