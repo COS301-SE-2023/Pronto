@@ -11,10 +11,6 @@ module.exports = defineConfig({
     screenshotsFolder: "test/e2e/cypress/screenshots",
     videosFolder: "test/e2e/cypress/videos",
     baseUrl: "http://localhost:3000/",
-    env: {
-      // Read the LECTURER_PASSWORD secret from AWS Secrets Manager
-      LECTURER_PASSWORD: "${{ secrets.LECTURER_PASSWORD }}"
-    },
     setupNodeEvents(on, config) {
 
     },

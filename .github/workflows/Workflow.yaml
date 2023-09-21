@@ -101,6 +101,8 @@ jobs:
     defaults:
       run:
         working-directory: ./WebApp
+    env:
+      LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
