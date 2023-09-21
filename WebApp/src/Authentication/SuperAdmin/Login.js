@@ -76,7 +76,7 @@ function Login() {
 
     //add logic to sign into pronto admin account
 
-    alert("sign in pressed");
+    navigate("/superadmin/admin-requests")
 
     /*  try {
         await Auth.signIn(email, password, { role: "Admin" });

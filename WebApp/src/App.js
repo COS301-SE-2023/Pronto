@@ -50,7 +50,7 @@ function MyRoutes() {
         <Route path="/" element={<HomePage />} />
 
         {/*Pronto Admin login/register pages*/}
-        <Route path="/prontoadmin/login" element={<ProntoAdminLogin />} />
+        <Route path="/superadmin/login" element={<ProntoAdminLogin />} />
         <Route path="/superadmin/admin-requests" element={<ApplicationRequests />} />
         <Route path="/superadmin/view-institutions" element={<ViewInstitutions />} />
 

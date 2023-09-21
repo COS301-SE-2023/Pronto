@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import SuperAdminImage from "../Images/SuperAdmin.png";
 
 import "../Institution View/Navigation/Navigation.css";
 
@@ -60,7 +61,16 @@ export default function SuperAdminNavigation({ props }) {
         <div className={'grid'}>
             <nav className="vertical-navbar col-4 p-4" >
                 <div className="top"> {/* top holds University image and name portion*/}
+                    <img
+                        src={SuperAdminImage}
+                        alt="Logo"
+                        className="logo offset-2 img-fluid mr-4.5"
+                        style={{ width: "155px", height: "155px" }}
+                        data-testid={'UniversityImage'}
+                    />
+
                     <div className="institution-name" style={{ paddingTop: '5%' }}>
+                        Pronto Administrator
                     </div>
                 </div>
                 <ul className="navbar-nav">
