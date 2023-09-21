@@ -100,7 +100,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          config-file: cypress.json
+          config-file: cypress.js
 
       - name: Install Cypress
         run: npm install cypress --save-dev

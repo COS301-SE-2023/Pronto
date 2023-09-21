@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import EditModule from '../LectureView/Edit Module/EditModuleInfo';
+import EditModule from '../Lecture View/Edit Module/EditModuleInfo';
 
 describe('EditModule', () => {
 

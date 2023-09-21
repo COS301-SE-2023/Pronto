@@ -1,5 +1,5 @@
 import {render, screen, cleanup, fireEvent} from "@testing-library/react";
-import LecturerNavigation from "../LectureView/LecturerNavigation";
+import LecturerNavigation from "../Lecture View/LecturerNavigation";
 
 beforeEach(() => {
     render(<LecturerNavigation/>);

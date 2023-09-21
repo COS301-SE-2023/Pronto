@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import AddLecturer from '../../src/Institution VIew/AddLecturer/addLecturer';
+import AddLecturer from '../../src/Institution View/AddLecturer/addLecturer';
 
 describe('AddLecturer', () => {
     it('renders the InstitutionNavigation component', () => {

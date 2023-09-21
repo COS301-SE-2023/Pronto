@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import RecentAnnouncement from '../LectureView/RecentAnnouncement';
+import RecentAnnouncement from '../Lecture View/RecentAnnouncement';
 
 describe('RecentAnnouncement', () => {
 

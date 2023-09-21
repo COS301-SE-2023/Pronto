@@ -1,5 +1,5 @@
 import {render, screen, cleanup, fireEvent} from "@testing-library/react";
-import InstitutionNavigation from "../Institution VIew/Navigation/InstitutionNavigation";
+import InstitutionNavigation from "../Institution View/Navigation/InstitutionNavigation";
 
 beforeEach(() => {
     render(<InstitutionNavigation/>);

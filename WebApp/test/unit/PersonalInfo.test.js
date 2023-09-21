@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import PersonalInfo from '../LectureView/Personal-info';
+import PersonalInfo from '../Lecture View/Personal-info';
 
 describe('PersonalInfo', () => {
 
