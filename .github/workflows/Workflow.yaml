@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-mobile:
-    if : {false}
+    if : false
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -33,7 +33,7 @@ jobs:
           directory: ./MobileApp
 
   build-web:
-    if : {false}
+    if : false
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -52,7 +52,7 @@ jobs:
           npm test
 
   build-backend:
-    if : {false}
+    if : false
     strategy:
       matrix:
         node_version: [ 12.x ]
