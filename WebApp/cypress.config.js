@@ -11,7 +11,7 @@ module.exports = defineConfig({
     fixturesFolder: "test/e2e/cypress/fixtures",
     screenshotsFolder: "test/e2e/cypress/screenshots",
     videosFolder: "test/e2e/cypress/videos",
-    baseUrl: "https://fix---auth.d1ckzmac0m6yvh.amplifyapp.com/",
+    baseUrl: "http://localhost:3000/",
     setupNodeEvents(on, config) {
 
     },

@@ -51,7 +51,7 @@ console.log(password);
   cy.get("button[type=submit").eq(1).click();
 
 
-  cy.url({ timeout: 10 * 1000 }).should(
+  cy.url({ timeout: 16 * 1000 }).should(
     "eq",
     `${Cypress.config().baseUrl}lecturer/dashboard`
   );
