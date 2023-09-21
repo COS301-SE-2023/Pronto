@@ -7,7 +7,7 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { listStudents,getStudent, listInstitutions} from "../../graphql/queries"
+import { getStudent} from "../../graphql/queries"
 
 import {  createStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
@@ -207,7 +207,7 @@ const ScheduleTable = ({ navigation,route }) => {
   //   return unsubscribe
   // }, [navigation])
   const navigate = (module)=>{
-  let coordinate={}
+  let coordinate=null
   if(module.coordinates!==null || module.coordinates!==undefined){
     let location=module.coordinates.split(";")
     coordinate={
