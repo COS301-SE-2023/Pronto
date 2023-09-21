@@ -1,0 +1,12 @@
+{
+    "data":{
+        "updateInstitution":{
+            "id":"id",
+            "name":"name",
+            "adminId":"adminId",
+            "logo":"logo",
+            "lectureremails":["email-1","email-2","email-3"],
+            "domains":["domain-1","domain-2","domain-3"]
+        }
+    }
+}
