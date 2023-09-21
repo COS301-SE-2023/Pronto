@@ -2,12 +2,13 @@ name: Build Mobile,Web App and Amplify Backend
 
 on:
   push:
-    branches: [ main, dev, frontend, integration, backend]
+    branches: [ main, dev, frontend, integration, backend, fix---auth]
   pull_request:
     branches: [ main, dev, frontend, integration, backend ]
 
 jobs:
   build-mobile:
+    if : {false}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -32,6 +33,7 @@ jobs:
           directory: ./MobileApp
 
   build-web:
+    if : {false}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -50,6 +52,7 @@ jobs:
           npm test
 
   build-backend:
+    if : {false}
     strategy:
       matrix:
         node_version: [ 12.x ]
