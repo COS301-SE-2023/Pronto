@@ -92,7 +92,6 @@ jobs:
           amplify build
 
   cypress:
-    if: false
     runs-on: ubuntu-latest
     environment: Testing
     strategy:
@@ -102,7 +101,7 @@ jobs:
       run:
         working-directory: ./WebApp
     env:
-      LECTURER_PASSWORD: ${{ secrets.LECTURER_PASSWORD }}
+      CYPRESS_LECTURER_PASSWORD: ${{ secrets.CYPRESS_LECTURER_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
