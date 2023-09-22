@@ -527,7 +527,7 @@ const Form = styled.form`
   padding: 0 50px;
   height: 100%;
   text-align: center;
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const Title = styled.h1`
@@ -596,7 +596,7 @@ const OverlayContainer = styled.div`
   transition: transform 0.5s ease-in-out;
   z-index: 100;
   ${(props) => (props.signin !== true ? `transform: translateX(-100%);` : null)}
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const Overlay = styled.div`
@@ -634,7 +634,7 @@ const OverlayPanel = styled.div`
 const LeftOverlayPanel = styled(OverlayPanel)`
   transform: translateX(-20%);
   ${(props) => (props.signin !== true ? `transform: translateX(0);` : null)}
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const RightOverlayPanel = styled(OverlayPanel)`

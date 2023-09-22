@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse, updateInstitution,updateAdmin, createCourse ,createActivity,deleteCourse, createAdmin} from "../../Graphql/mutations";
+import { createLecturer, deleteLecturer, updateCourse, updateInstitution, updateAdmin, createCourse, createActivity, deleteCourse, createAdmin } from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
@@ -119,7 +119,7 @@ const AddLecturer = () => {
                         // u.logoUrl = logoUrl;
                         // let ad = admin;
                         // ad.institution = u;
-                        admin.institution.lectureremails=emails;
+                        admin.institution.lectureremails = emails;
                         setAdmin(admin);
 
                         //Add lecturer to courses
@@ -272,8 +272,8 @@ const AddLecturer = () => {
                 // let a = admin;
                 // a.institution = u.data.updateInstitution;
                 // a.institution.logoUrl = admin.institution.logoUrl;
-                
-                admin.institution.lectureremails=newEmails;
+
+                admin.institution.lectureremails = newEmails;
                 const rows = [...lecturerList];
                 rows.splice(index, 1);
                 setAdmin(admin);
@@ -557,7 +557,7 @@ const AddLecturer = () => {
 
             <main style={{ width: '900px', marginTop: '10%' }}>
                 {/* Input forms content */}
-                <h1 className="text-center" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Add a lecturer</h1>
+                <h1 className="text-center">Add a lecturer</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to add lecturers to your institution and assign them to their courses. This will allow lecturers to sign up for an account.</h6>
                 <div className="card shadow">
                     <div className="card-body">
@@ -643,7 +643,7 @@ const AddLecturer = () => {
                 </div>
 
                 {/* Display content */}
-                <h1 className="text-center" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Lecturers</h1>
+                <h1 className="text-center">Lecturers</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to search, edit, view and delete lecturers from your institution. Note that removing a lecturer prevents them from creating an account.</h6>
                 {/* Search bar with search material ui icon and border radius of 20px */}
                 <div className="input-group mb-3 p-1">

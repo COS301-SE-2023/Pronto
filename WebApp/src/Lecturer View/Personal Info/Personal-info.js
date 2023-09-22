@@ -6,7 +6,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../../Institution View/Navigation/Navigation.css';
-import { Auth} from 'aws-amplify'
+import { Auth } from 'aws-amplify'
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from "../../Components/SuccessModal"
 import UserManual from "../HelpFiles/PersonalInfo.pdf";
@@ -58,7 +58,7 @@ const PersonalInfoPage = () => {
             </nav>
 
             <main style={{ width: '900px', marginTop: '30px' }}>
-                <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Personal Information</h1>
+                <h1 className="moduleHead">Personal Information</h1>
                 <div style={{ textAlign: 'center' }}>
                     <p>This page allows you to edit the information we have stored for you. Click on  a dropdown to get started!</p>
                     <img src={personalInformationImage} alt="ModulesImage" style={{ maxWidth: '100%', maxHeight: '200px' }} />
