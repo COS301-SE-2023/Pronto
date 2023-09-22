@@ -32,3 +32,38 @@ const validateMobilePhoneNumberOperation = async (
   }
 };
 
+const getUpdateSmsEndpointCommandInput = async (smsEndPointRequest) => {
+  if (!isPhoneNumberPatternValid(smsEndPointRequest.phoneNumber))
+    throw new Error(
+      "Invalid phone number pattern! Number should be follow the pattern +27123456789"
+    );
+  const numberValidateResponse = await validateMobilePhoneNumberOperation(
+    smsEndPointRequest
+  );
+  if (!numberValidateResponse) throw new Error("number is not validated");
+  const updateEndpointInput = {
+    ApplicationId: projectId,
+    EndpointId: endpointId,
+    EndpointRequest: {
+      ChannelType: PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,
+      Address: smsEndPointRequest.phoneNumber,
+      OptOut: "NONE",
+      Location: {
+        PostalCode: numberValidateResponse.ZipCode,
+        City: numberValidateResponse.City,
+        Country: numberValidateResponse.CountryCodeIso2,
+      },
+      Demographic: {
+        Timezone: numberValidateResponse.Timezone,
+      },
+      Attributes: {},
+      User: {
+        UserAttributes: {},
+        UserId: smsEndPointRequest.user.studentId,
+      },
+    },
+  };
+  return updateEndpointInput;
+};
+
+module.exports = { getUpdateSmsEndpointCommandInput };
