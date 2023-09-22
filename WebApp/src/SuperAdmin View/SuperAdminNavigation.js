@@ -1,61 +1,25 @@
-import { useEffect } from "react";
+
+import {  Auth } from "aws-amplify";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import SuperAdminImage from "../Images/SuperAdmin.png";
 
 import "../Institution View/Navigation/Navigation.css";
 
-export default function SuperAdminNavigation({ props }) {
+export default function SuperAdminNavigation() {
     const navigate = useNavigate();
-    const state = useLocation();
+    
 
     const location = useLocation();
 
     const onSignOut = async (event) => {
         event.preventDefault();
-        /*  try {
+         try {
               await Auth.signOut();
-              //navigate to homepage
               navigate("/");
           } catch (e) {
               console.log(e.message);
-          } */
+          } 
     };
-
-
-    /*  const fetchAdmin = async () => {
-  
-          try {
-              if (admin === null || admin === undefined) {
-                  let user = await Auth.currentAuthenticatedUser();
-                  let adminEmail = user.attributes.email
-                  let adminData = await API.graphql({
-                      query: listAdmins,
-                      variables: {
-                          filter: {
-                              email: {
-                                  eq: adminEmail
-                              }
-                          },
-                      },
-                  });
-                  if (adminData.data.listAdmins.items.length > 0) {
-                      adminData = adminData.data.listAdmins.items[0];
-                      if (adminData.institution.logo !== null) {
-                          adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-                      }
-                      setAdmin(adminData);
-                  }
-              }
-  
-          } catch (error) {
-  
-          }
-      }
-  
-      useEffect(() => {
-  
-          fetchAdmin()
-      }, []);  */
 
     return (
         <div className={'grid'}>
