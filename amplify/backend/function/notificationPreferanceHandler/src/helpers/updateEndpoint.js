@@ -1,5 +1,9 @@
 const { UpdateEndpointCommand } = require("@aws-sdk/client-pinpoint");
-const { PINPOINT_CONSTANTS, NOTIFICATIONS_STATUS } = require("./constants");
+const {
+  PINPOINT_CONSTANTS,
+  SES_CONSTANTS,
+  NOTIFICATIONS_STATUS,
+} = require("./constants");
 const {
   verifyEmailAddressOperation,
   getUpdateEmailEndpointCommandInput,
@@ -13,15 +17,10 @@ const getEndPointUpdatedResponseMessage = (type) => {
     case PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS:
       infoMessage = messagePrefix + "to SMS";
       break;
-
     case PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL:
       infoMessage = messagePrefix + "to EMAIL";
-      break;
-
     case PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH:
       infoMessage = "unsupported notification type";
-      break;
-
     default:
       infoMessage = "unsupported notification type";
       break;
@@ -34,20 +33,13 @@ const getUpdateEndPointResponse = (status, type, endpointID) => {
   switch (status) {
     case NOTIFICATIONS_STATUS.UPDATED:
       infoMessage = getEndPointUpdatedResponseMessage(type);
-      break;
-
     case NOTIFICATIONS_STATUS.FAILED:
       infoMessage =
         "failed to configure notication preferance, please retry or contact your institude admin";
-      break;
-
     case NOTIFICATIONS_STATUS.DISABLED:
       infoMessage = "unsupported notification preference type";
-      break;
-
     default:
       infoMessage = "invalid status";
-      break;
   }
   return {
     status: status,
@@ -66,6 +58,7 @@ const updateEndPointOperation = async (updateEndPointRequest) => {
     console.debug(
       `ATTEMPTING TO UPDATE ENDPOINT FOR: ${updateEndPointRequest.user.studentId}`
     );
+    const { user, pinpointClient } = updateEndPointRequest;
     if (!user)
       throw new Error(
         "missing user attributes, please provide email/phone number and studentId"
@@ -74,28 +67,29 @@ const updateEndPointOperation = async (updateEndPointRequest) => {
       throw new Error("server error: unable to process update email request");
     switch (updateEndPointRequest.endPointType) {
       case PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL:
-        const sesClient = updateEndPointRequest.sesClient;
+        const sesClient = updateEndPointRequest.emailEndPointRequest.sesClient;
         if (!sesClient)
           throw new Error(
             "server error: unable to process update email request"
           );
         const isEmailVerified = await verifyEmailAddressOperation({
-          user: user,
-          sesClient: sesClient,
+          ...updateEndPointRequest.emailEndPointRequest,
         });
         if (!isEmailVerified) {
           const additionalDetails = ", email verification failed";
           const verificationFailedResponse = getUpdateEndPointResponse(
             NOTIFICATIONS_STATUS.FAILED,
-            PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
-            user.studentId
+            SES_CONSTANTS.EMAIL,
+            updateEndPointRequest.emailEndPointRequest.user.studentId
           );
           verificationFailedResponse.info =
             verificationFailedResponse.info + additionalDetails;
           return verificationFailedResponse;
         }
         const updateEmailEndpointCommandInput =
-          getUpdateEmailEndpointCommandInput({ user: user });
+          getUpdateEmailEndpointCommandInput(
+            updateEndPointRequest.emailEndPointRequest
+          );
         const updateEmailEndpointCommand = new UpdateEndpointCommand(
           updateEmailEndpointCommandInput
         );
@@ -107,27 +101,26 @@ const updateEndPointOperation = async (updateEndPointRequest) => {
             updateEmailEndpointCommandOutPut
           )}`
         );
+        const { $metadata } = updateEmailEndpointCommandOutPut;
 
-        if (updateEmailEndpointCommandOutPut.$metadata.httpStatusCode !== 202) {
+        if ($metadata.httpStatusCode !== 202) {
           return getUpdateEndPointResponse(
             NOTIFICATIONS_STATUS.FAILED,
             PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
-            user.studentId
+            updateEndPointRequest.emailEndPointRequest.user.studentId
           );
         }
         return getUpdateEndPointResponse(
           NOTIFICATIONS_STATUS.UPDATED,
           PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
-          user.studentId
+          updateEndPointRequest.emailEndPointRequest.user.studentId
         );
 
       case PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS:
         const updateSmsEndpointCommand = new UpdateEndpointCommand(
-          await getUpdateSmsEndpointCommandInput({
-            user: user,
-            phoneNumber: user.endPointAddress,
-            pinpointClient: pinpointClient,
-          })
+          getUpdateSmsEndpointCommandInput(
+            updateEndPointRequest.smsEndPointRequest
+          )
         );
         const updateSmsEndpointCommandOutPut = await pinpointClient.send(
           updateSmsEndpointCommand
@@ -135,18 +128,20 @@ const updateEndPointOperation = async (updateEndPointRequest) => {
         console.debug(
           `UPDATE SMS ENDPOINT REPONSE: ${JSON.stringify(
             updateSmsEndpointCommandOutPut
+          `UPDATE SMS ENDPOINT REPONSE: ${JSON.stringify(
+            updateSmsEndpointCommandOutPut
           )}`
         );
-        if (updateSmsEndpointCommandOutPut.$metadata.httpStatusCode !== 202)
+        if ($metadata.httpStatusCode !== 202)
           return getUpdateEndPointResponse(
             NOTIFICATIONS_STATUS.FAILED,
             PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,
-            user.studentId
+            updateEndPointRequest.emailEndPointRequest.user.studentId
           );
         return getUpdateEndPointResponse(
           NOTIFICATIONS_STATUS.UPDATED,
           PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,
-          user.studentId
+          updateEndPointRequest.emailEndPointRequest.user.studentId
         );
       case PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH:
       //To be implemented once Apple dev account is available/obtained
@@ -154,7 +149,7 @@ const updateEndPointOperation = async (updateEndPointRequest) => {
         return getUpdateEndPointResponse(
           NOTIFICATIONS_STATUS.UPDATED,
           PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
-          user.studentId
+          updateEndPointRequest.emailEndPointRequest.user.studentId
         );
     }
   } catch (UpdateEndpointError) {
@@ -163,7 +158,7 @@ const updateEndPointOperation = async (updateEndPointRequest) => {
       status: NOTIFICATIONS_STATUS.FAILED,
       info: UpdateEndpointError.message,
       type: updateEndPointRequest.endPointType,
-      endpointID: user.studentId,
+      endpointID: updateEndPointRequest.emailEndPointRequest.user.studentId,
     };
   }
 };
