@@ -394,3 +394,40 @@ export const searchLecturerByCourses=`query SearchCourses(
   }
 }
 `
+
+export const coursesByInstitutionId = /* GraphQL */ `
+  query CoursesByInstitutionId(
+    $institutionId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCourseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    coursesByInstitutionId(
+      institutionId: $institutionId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        institutionId
+        coursecode
+        activity {
+          items{
+            day
+            activityname
+            start
+            end
+            venue
+            course{
+              coursecode
+            }
+          }
+        }
+      }
+      nextToken
+    }
+  }
+`;
