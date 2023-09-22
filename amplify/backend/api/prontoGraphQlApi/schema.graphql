@@ -236,10 +236,7 @@ type NotificationPreferance
     ]
   ) {
   studentId: ID! @index(name: "byStudentId")
-  type: NOTIFICATION_TYPE
-  endPointAddress: ID
-  status: STATUS
-  info: string
+  endpoint: Endpoint @function(name: "notificationPreferanceHandler-${env}")
 }
 
 type Notification {
@@ -278,4 +275,11 @@ type Announcement_Matrix {
   SMS: Int
   PUSH: Int
   EMAIL: Int
+}
+
+type Endpoint{
+type: NOTIFICATION_TYPE
+  endPointAddress: ID
+  status: STATUS
+  info: string
 }
