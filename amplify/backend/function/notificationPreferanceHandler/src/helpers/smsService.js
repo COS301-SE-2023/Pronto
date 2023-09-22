@@ -1,31 +1,42 @@
 const { PhoneNumberValidateCommand } = require("@aws-sdk/client-pinpoint");
-const { PINPOINT_CONSTANTS } = require("./constants");
+const { PINPOINT_CONSTANTS, PHONE_TYPE } = require("./constants");
 
 const isPhoneNumberPatternValid = (phoneNumber) => {
-  const mobilePhoneNumberPattern = /^\+\d+$/;
+  const mobilePhoneNumberPattern = /^\+27\d{9}/; //only SA Phone numbers are allowed
   return mobilePhoneNumberPattern.test(phoneNumber);
 };
 
 const validateMobilePhoneNumberOperation = async (
-  validateMobilePhoneNumberOperation
+  validateMobilePhoneNumberRequest
 ) => {
   const phoneNumberValidateCommandInput = {
+    ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
     NumberValidateRequest: {
-      IsoCountryCode: validateMobilePhoneNumberOperation.IsoCountryCode,
-      PhoneNumber: validateMobilePhoneNumberOperation.phoneNumber,
+      IsoCountryCode: process.env.IsoCountryCode,
+      PhoneNumber: validateMobilePhoneNumberRequest.phoneNumber,
     },
   };
   const phoneNumberValidateCommand = new PhoneNumberValidateCommand(
     phoneNumberValidateCommandInput
   );
-  const pinpointClient = validateMobilePhoneNumberOperation.pinpointClient;
+  const pinpointClient = validateMobilePhoneNumberRequest.pinpointClient;
   try {
     const phoneNumberValidateCommandOutput = await pinpointClient.send(
       phoneNumberValidateCommand
     );
+    console.debug(
+      `VALIDATE PHONE NUMBER RESPONSE: ${JSON.stringify(
+        phoneNumberValidateCommandOutput
+      )}`
+    );
     const { $metadata, NumberValidateResponse } =
       phoneNumberValidateCommandOutput;
-    return { NumberValidateResponse: NumberValidateResponse, error: null };
+    if (
+      $metadata.httpStatusCode === 200 &&
+      NumberValidateResponse.PhoneTypeCode === PHONE_TYPE.MOBILE
+    )
+      return NumberValidateResponse;
+    return null;
   } catch (phoneNumberValidateError) {
     console.debug(`ERROR VALIDATING PHONE NUMBER: ${phoneNumberValidateError}`);
     throw new Error("failed to verify phone number");
@@ -40,10 +51,11 @@ const getUpdateSmsEndpointCommandInput = async (smsEndPointRequest) => {
   const numberValidateResponse = await validateMobilePhoneNumberOperation(
     smsEndPointRequest
   );
+  console.table(smsEndPointRequest);
   if (!numberValidateResponse) throw new Error("number is not validated");
   const updateEndpointInput = {
-    ApplicationId: projectId,
-    EndpointId: endpointId,
+    ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
+    EndpointId: smsEndPointRequest.user.studentId,
     EndpointRequest: {
       ChannelType: PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,
       Address: smsEndPointRequest.phoneNumber,
