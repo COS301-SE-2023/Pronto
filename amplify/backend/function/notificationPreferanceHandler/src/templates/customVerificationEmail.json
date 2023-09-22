@@ -1,1 +1,9 @@
-{}
+{
+    "TemplateName": "Verify email",
+    "FromEmailAddress": "pronto.email.notifications@gmail.com",
+    "TemplateSubject": "Please confirm your email address",
+    "TemplateContent": "<html><head></head><body style='font-family:sans-serif;'><h1 style='text-align:center'>Ready to start receiving email notifications with Pronto?</h1><p>Welcome to Pronto! Your notification preference has been set to email. There's just one last step to complete before you can start receiving email notifications. Just click the following link to verify your email address. Once we confirm that you're really you, you'll be able to receive emails of all the latest updates from your lecturers. You'll never miss an announcement again!</p><br><p align=\"center\"><a href=\"#\">Click here to verify your email.</a></p></body></html>",
+    "SuccessRedirectionURL": "https://www.example.com/verifysuccess",
+    "FailureRedirectionURL": "https://www.example.com/verifyfailure"
+  }
+  
