@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { listAdmins } from "../../Graphql/queries";
+import { listAdmins,listInstitutions } from "../../Graphql/queries";
+import { createAdminApplication } from "../../Graphql/mutations";
 import { useAdmin } from "../../ContextProviders/AdminContext";
+import Select from "react-select";
+
 
 function Login() {
-  const [signIn, toggle] = React.useState(true);
+  const [signIn, toggle] = useState(true);
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
 
@@ -25,6 +28,8 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
 
+  const[institutionName,setInstitutionName]=useState("");
+  const [institutions,setInstitutions]=useState([])
   const { setAdmin } = useAdmin();
 
   const fetchAdmin = async () => {
@@ -57,6 +62,35 @@ function Login() {
       throw Error(fetchError);
     }
   }
+
+
+  const fetchInstitutions=async()=>{
+
+    try{
+      
+        let inst=await API.graphql({
+          query:listInstitutions,
+          variables:{},
+          authMode:"API_KEY"
+         });
+         inst=inst.data.listInstitutions.items;
+         let institutionInfo=[];
+         for(let j=0;j<inst.length;j++){
+          let item={
+            value:inst[j].id,
+            label:inst[j].name
+          }
+          institutionInfo.push(item);
+         }
+        setInstitutions(institutionInfo);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    fetchInstitutions();
+  },[])
 
   //function for signing in
   const onSignInPressed = async (event) => {
@@ -136,12 +170,31 @@ function Login() {
         },
         clientMetadata: {
           role: "Admin",
+          institutionId:institutionId
         },
       });
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
+
     } catch (e) {
-      setsignUpError(e.message);
+      
+      const application={
+        name:name,
+        firstname:institutionId,
+        lastname:institutionName,
+        email:email,
+        status:"PENDING"
+      }
+      
+      let f=await API.graphql({
+        query:createAdminApplication,
+        variables:{
+          input:application
+        },
+        authMode:"API_KEY"
+      })
+     // setsignUpError(e.message);
+     setsignUpError("Your application has been sent")
     }
     setLoading(false);
   };
@@ -207,6 +260,16 @@ function Login() {
     setNameIsValid(isValidName);
   };
 
+   const [institutionId, setInstitutionId] = React.useState("");
+  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
+
+  const handleInstitutionSelection = (event) => {
+    setInstitutionId(event.value);
+    setInstitutionName(event.label);
+    setIsInstitudeSelected(true);
+  };
+
+
   return (
     <Container>
       <SignUpContainer signin={signIn}>
@@ -220,7 +283,7 @@ function Login() {
           </Title>
           <Input
             type="text"
-            placeholder="University Name"
+            placeholder="Full Name"
             value={name}
             onChange={(event) => {
               setName(event.target.value);
@@ -238,6 +301,16 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+           <StyledSelectInput
+            options={institutions}
+            defaultValue={institutionId}
+            onChange={handleInstitutionSelection}
+            placeholder="Select an Institution"
+            classNamePrefix="SelectInput"
+            autoComplete="on"
+            spellCheck="true"
+            isSelectionValid={isInstitudeSelected}
+          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
@@ -250,6 +323,7 @@ function Login() {
             onFocus={handlePasswordFocus}
             onBlur={handlePasswordBlur}
           />
+          
           <Input
             type="password"
             placeholder="Confirm Password"
@@ -317,6 +391,16 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+           <StyledSelectInput
+            options={institutions}
+            defaultValue={institutionId}
+            onChange={handleInstitutionSelection}
+            placeholder="Select an Institution"
+            classNamePrefix="SelectInput"
+            autoComplete="on"
+            spellCheck="true"
+            isSelectionValid={isInstitudeSelected}
+          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
@@ -572,5 +656,43 @@ const CriteriaMessage = styled.span`
   font-size: 12px;
   color: ${({ isValid }) => (isValid ? "green" : "inherit")};
 `;
+
+const StyledSelectInput = styled(Select)`
+  width: 100%;
+
+  .SelectInput__control {
+    background-color: #eee;
+    border: none;
+    border-radius: 25px;
+    margin: 8px 0;
+  }
+
+  .SelectInput__control--is-focused {
+    border: ${({ isSelectionValid }) =>
+    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
+    box-shadow: none;
+  }
+
+  .SelectInput__control:hover {
+    border-color: #eee;
+  }
+
+  .SelectInput__menu {
+    background-color: #eee;
+  }
+
+  .SelectInput__option:hover {
+    background-color: #ec7281;
+  }
+
+  .SelectInput__option--is-selected {
+    background-color: #e32f45;
+  }
+
+  .SelectInput__single-value .SelectInput__control--is-focused {
+    background-color: purple;
+  }
+`;
+
 
 export default Login;
