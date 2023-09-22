@@ -122,28 +122,40 @@ export const createAdmin=`mutation CreateAdmin(
     lastname
     userRole
     email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
+    
     owner
   }
 }
 `
+export const createAdminApplication = /* GraphQL */ `
+  mutation CreateAdminApplication(
+    $input: CreateAdminApplicationInput!
+    $condition: ModelAdminApplicationConditionInput
+  ) {
+    createAdminApplication(input: $input, condition: $condition) {
+      id
+      name
+      email
+      status
+    }
+  }
+`;
+
+export const updateAdminApplication = /* GraphQL */ `
+  mutation UpdateAdminApplication(
+    $input: UpdateAdminApplicationInput!
+    $condition: ModelAdminApplicationConditionInput
+  ) {
+    updateAdminApplication(input: $input, condition: $condition) {
+      id
+      name
+      email
+      status
+    }
+  }
+`;
+
+
 
 export const createInstitution=`mutation CreateInstitution(
   $input: CreateInstitutionInput!
@@ -152,14 +164,7 @@ export const createInstitution=`mutation CreateInstitution(
   createInstitution(input: $input, condition: $condition) {
     id
     name
-    location
-    pageUrl
-    campusMapUrl
-    openingTime
-    closingTime
-    minimumDuration
     lectureremails
-    coursecodes
     domains
     adminId     
     createdAt
@@ -174,15 +179,8 @@ export const updateInstitution=`mutation UpdateInstitution(
   updateInstitution(input: $input, condition: $condition) {
     id
     name
-    location
-    pageUrl
     logo
-    campusMapUrl
-    openingTime
-    closingTime
-    minimumDuration
     lectureremails
-    coursecodes
     domains
     adminId
     courses {
@@ -274,5 +272,26 @@ export const updateActivity=`mutation UpdateActivity(
     createdAt
     updatedAt
     coordinates
+  }
+}`
+
+export const deleteInstitution=`mutation DeleteInstitution(
+  $input: DeleteInstitutionInput!
+  $condition: ModelInstitutionConditionInput
+) {
+  deleteInstitution(input: $input, condition: $condition) {
+    id
+    name
+    domains
+    admin {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+    }
+    adminId
+    
   }
 }`
