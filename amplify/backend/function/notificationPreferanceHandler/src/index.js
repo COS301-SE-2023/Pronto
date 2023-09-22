@@ -48,6 +48,19 @@ exports.handler = async (event) => {
         pinpointClient: pinpointClient,
       });
 
+    case PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS:
+      if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
+      const smsEndPointRequest = {
+        user: user,
+        pinpointClient: pinpointClient,
+      };
+      return await updateEndPointOperation({
+        ...smsEndPointRequest,
+        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
+        pinpointClient: pinpointClient,
+      });
+
+
 };
 
 
