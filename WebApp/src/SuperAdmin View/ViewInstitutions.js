@@ -3,13 +3,23 @@ import SuperAdminNavigation from './SuperAdminNavigation';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import "./SuperAdmin.css";
+import {createInstitution,createAdmin, updateInstitution, deleteInstitution} from "../Graphql/mutations";
+import { listInstitutions } from '../Graphql/queries';
 import IconButton from '@mui/material/IconButton'; // Import IconButton
 import CloseIcon from '@mui/icons-material/Close'; // Import the close icon
+import {API } from "aws-amplify"
+import { listAdmins } from '../Graphql/queries';
+import { useEffect } from 'react';
 
 // Modal component for adding institutions
-function AddInstitutionModal({ isOpen, onClose }) {
+function AddInstitutionModal({ isOpen, onClose ,institutions,setInstitutions}) {
     const [universityName, setUniversityName] = useState('');
     const [adminEmail, setAdminEmail] = useState('');
+    const Mailto = ({ email, subject, body, children }) => {
+            return (
+                <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`}>{children}</a>
+        );
+    };
 
     const handleUniversityNameChange = (event) => {
         setUniversityName(event.target.value);
@@ -19,10 +29,88 @@ function AddInstitutionModal({ isOpen, onClose }) {
         setAdminEmail(event.target.value);
     };
 
-    const handleAddInstitution = () => {
+    const handleAddInstitution = async(event) => {
         // Perform the action to add the institution with universityName and adminEmail
         // You can add your logic here
+        event.preventDefault()
+        try{
+            let inst={
+                name:universityName,
+            }
+            let institutionList=await API.graphql({
+                query:listInstitutions,
+                variables:{
+                    filter:{
+                        name:{
+                            eq:universityName
+                        }
+                    }
+                }
+            }) 
+            if(adminEmail!==""){
+                let admins= await API.graphql({
+                    query:listAdmins,
+                    variables:{
+                        filter:{
+                            email:{
+                                eq:adminEmail
+                            }
+                        }
+                    }
+               })
+            if(admins.data.listAdmins.items.length>0)
+                console.log("This administration email is already in use");
+                return
+            }
+            
+            if(institutionList.data.listInstitutions.items.length>0){
+                console.log("An institution with this name already exists");
+                return;
+            }
+        
+            let institution =await API.graphql({
+                    query:createInstitution,
+                    variables:{
+                        input:inst
+                    }
+                })
 
+            institution=institution.data.createInstitution;
+                
+            let email=adminEmail===""? "email":adminEmail;
+            let admin=await API.graphql({
+                    query:createAdmin,
+                    variables:{
+                        input:{
+                            firstname:"",
+                            lastname:"",
+                            userRole:"Admin",
+                            institutionId:institution.id,
+                            email:email
+                        }
+                    }
+                })
+            
+                const u={
+                    id:institution.id,
+                    adminId:admin.data.createAdmin.id
+                }
+        
+            let update=await API.graphql({
+                query:updateInstitution,
+                variables:{
+                    input:u
+                }
+            })
+            
+        institutions.unshift(institution);
+        setInstitutions(institutions);
+                
+        }catch(e){
+           console.log(e)
+        }
+        setAdminEmail("")
+        setUniversityName("")
         // After adding the institution, close the modal
         onClose();
     };
@@ -74,18 +162,7 @@ function AddInstitutionModal({ isOpen, onClose }) {
 export default function ViewInstitutions() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const institutions = [
-        {
-            name: 'Tuks',
-            adminEmail: 'example@example.com',
-            dateApplied: '2023-09-21',
-        },
-        {
-            name: 'University B',
-            adminEmail: 'admin@example.com',
-            dateApplied: '2023-09-20',
-        },
-    ];
+    const [institutions,setInstitutions] =useState([]);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -94,6 +171,35 @@ export default function ViewInstitutions() {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+
+    const fetchInstitutions =async()=>{
+        try{
+             let a=await API.graphql({
+                query:listInstitutions,
+                variables:{}
+             })
+             setInstitutions(a.data.listInstitutions.items);
+        }catch(e){
+            console.log(e);
+        }
+    }
+    const handleDelete = async(institution,index)=>{
+        try
+        {let del=await API.graphql({
+            query:deleteInstitution,
+            variables:{input:{id:institution.id}}
+        })
+        
+        const rows = [...institutions];
+        rows.splice(index, 1);
+        setInstitutions(rows);
+    }catch(error){
+        console.log(error)
+    }
+  }
+    useEffect(()=>{
+        fetchInstitutions();
+    },[])
 
     return (
         <div style={{ display: 'flex', maxHeight: '100vh', position: 'relative' }}>
@@ -109,22 +215,24 @@ export default function ViewInstitutions() {
 
                 {institutions.map((institution, index) => (
                     <div className="card" key={index}>
-                        <div className="card-header">
+                        {/* <div className="card-header">
                             <div className="subjectCode">Institution Application</div>
                             <div className="postDate">{institution.dateApplied}</div>
-                        </div>
+                        </div> */}
                         <div className="card-body">
-                            <h5 className="card-title">Institution Name: {institution.name}</h5>
-                            <p className="card-text">Admin Email Address: {institution.adminEmail}</p>
-
+                            <h5 className="card-title">Institution Name: {institution?.name}</h5>
+                            <p className="card-text">Admin Email Address: {institution?.admin?.email &&institution.admin.email!=="email"? institution.admin.email:""}</p>
+                    
                             <Button
                                 aria-haspopup="true"
                                 variant="contained"
                                 disableElevation
+                                onClick={()=>handleDelete(institution,index)}
                                 style={{ float: 'right', backgroundColor: '#e32f45', borderRadius: '20px' }}
                             >
                                 Delete
                             </Button>
+                            
                         </div>
                     </div>
                 ))}
@@ -136,14 +244,14 @@ export default function ViewInstitutions() {
                         variant="contained"
                         disableElevation
                         style={{ backgroundColor: '#e32f45', borderRadius: '20px' }}
-                        onClick={openModal}
+                        onClick={()=>openModal(setInstitutions,institutions)}
                     >
                         Add Institutions
                     </Button>
                 </div>
 
                 {/* Render the modal component */}
-                <AddInstitutionModal isOpen={isModalOpen} onClose={closeModal} />
+                <AddInstitutionModal isOpen={isModalOpen} onClose={closeModal}  institutions={institutions} setInstitutions={setInstitutions}/>
             </main>
         </div>
     );
