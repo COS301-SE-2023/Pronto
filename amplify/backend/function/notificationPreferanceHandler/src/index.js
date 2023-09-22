@@ -30,44 +30,38 @@ exports.handler = async (event) => {
   );
   const user = {
     studentId: event.studentId,
-    endPointAddress: event.endPoint,
+    endPointAddress: event.endPointAddress,
   };
   switch (event.type) {
     case PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL:
       if (!pinpointClient || !sesClient)
         throw new Error("UNDEFINED NOTIFICATION SERVICE");
-      const emailEndPointRequest = {
+      console.debug("BEGIN: UPDATE TO EMAIL PREFERANCE");
+
+      return await updateEndPointOperation({
         user: user,
         endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
         sesClient: sesClient,
-        pinpointClient: pinpointClient,
-      };
-      return await updateEndPointOperation({
-        ...emailEndPointRequest,
-        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
         pinpointClient: pinpointClient,
       });
 
     case PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS:
       if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
-      const smsEndPointRequest = {
-        user: user,
-        pinpointClient: pinpointClient,
-      };
+      console.debug("BEGIN: UPDATE TO SMS PREFERANCE");
+
       return await updateEndPointOperation({
-        ...smsEndPointRequest,
-        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
+        user: user,
+        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,
         pinpointClient: pinpointClient,
       });
 
     case PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH:
       if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
-      const pushEndPointRequest = {
-        user: user,
-        pinpointClient: pinpointClient,
-      };
+      console.debug("BEGIN: UPDATE TO PUSH PREFERANCE");
+
       return await updateEndPointOperation({
-        ...pushEndPointRequest,
+        user: user,
+        pushEndPointRequest,
         endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
         pinpointClient: pinpointClient,
       });
