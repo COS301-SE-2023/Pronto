@@ -21,16 +21,16 @@ export default function AddModal(course) {
 
   const [open, setOpen] = useState(false);
   const [offeredCourses, setOfferedCourses] = useState([]);
-  const [courses,setCourses] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [removed, setRemoved] = useState([]);
   const [selected, setSelected] = useState();
-  
+
 
   const handleOpen = async () => {
     setOpen(true)
     course.setModal(true)
-    
+
     let courses = []
     try {
       for (let i = 0; i < course.selectedCourses.length; i++) {
@@ -72,22 +72,22 @@ export default function AddModal(course) {
   }
 
   const handleAdd = async (event) => {
-    
-    let added=false;
-      for (let i = 0; i < selectedCourses.length; i++) {
-        if (selectedCourses[i].id === event.id) {
-          added=true;
-          break;
-        }
+
+    let added = false;
+    for (let i = 0; i < selectedCourses.length; i++) {
+      if (selectedCourses[i].id === event.id) {
+        added = true;
+        break;
       }
-      
-    if(!added && event.id!==undefined){
-   
+    }
+
+    if (!added && event.id !== undefined) {
+
       selectedCourses.push(event);
       setSelectedCourses(selectedCourses);
       setOfferedCourses([]);
     }
-   
+
   }
 
   const handleRemove = async (index) => {
@@ -110,12 +110,14 @@ export default function AddModal(course) {
 
         <button onClick={handleOpen}
           className="btn btn-danger"
+          style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
           data-testid="submitButton">View</button>
         <Modal
           open={open}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
+          data-testid="modal"
         >
           <Box sx={style}>
             <table
@@ -150,18 +152,20 @@ export default function AddModal(course) {
                 )}
               </tbody>
             </table>
-               <SearchableDropdown 
-                courses={courses}
-                selectedCourses={selectedCourses}
-                setSelectedCourses={setSelectedCourses} 
-                handleAdd={handleAdd}
-                />
+            <SearchableDropdown
+              courses={courses}
+              selectedCourses={selectedCourses}
+              setSelectedCourses={setSelectedCourses}
+              handleAdd={handleAdd}
+              data-testid="courseOption"
+            />
             {/* </div> */}
             <button
               onClick={handleClose}
               type="submit"
               className="btn btn-danger float-right"
               data-testid="submitCourses"
+              style={{ borderRadius: "20px", width: "100px" }}
             >
               Done
             </button>

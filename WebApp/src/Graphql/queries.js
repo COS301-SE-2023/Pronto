@@ -93,7 +93,6 @@ export const listInstitutions=`query ListInstitutions(
            id
            lecturerId
            coursecode
-           coursename
         }
       }
       lecturer{ 
@@ -106,13 +105,10 @@ export const listInstitutions=`query ListInstitutions(
             items{ 
               id 
               coursecode
-              coursename
             }
           }
         }
       }
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -127,12 +123,6 @@ export const getAdmin=`query GetAdmin($id: ID!) {
     institution {
       id
       name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
       lectureremails
       coursecodes
       domains
@@ -140,9 +130,6 @@ export const getAdmin=`query GetAdmin($id: ID!) {
       createdAt
       updatedAt
     }
-    createdAt
-    updatedAt
-    owner
   }
 }`;
 
@@ -189,10 +176,6 @@ export const listCourses=`query ListCourses(
       institutionId
       lecturerId
       coursecode
-      coursename
-      semester
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -263,25 +246,13 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     institution {
       id
       name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
       lectureremails
-      coursecodes
       domains
       adminId
-      createdAt
-      updatedAt
     }
     courses {
       nextToken
     }
-    createdAt
-    updatedAt
-    owner
   }
 }`
 
@@ -441,3 +412,40 @@ export const searchLecturerByCourses=`query SearchCourses(
   }
 }
 `
+
+export const coursesByInstitutionId = /* GraphQL */ `
+  query CoursesByInstitutionId(
+    $institutionId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCourseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    coursesByInstitutionId(
+      institutionId: $institutionId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        institutionId
+        coursecode
+        activity {
+          items{
+            day
+            activityname
+            start
+            end
+            venue
+            course{
+              coursecode
+            }
+          }
+        }
+      }
+      nextToken
+    }
+  }
+`;

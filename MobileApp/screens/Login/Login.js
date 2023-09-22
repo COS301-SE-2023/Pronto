@@ -10,6 +10,8 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
+import { SelectList } from "react-native-dropdown-select-list";
+import institutionInfo from "../../assets/data/universityInfo.json";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth } from "aws-amplify";
 
@@ -22,6 +24,15 @@ const Login = ({ navigation }) => {
 
   //validate email input for sign in and sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
+  
+  //select instituition
+  const [institutionId, setInstitutionId] = useState("");
+
+  //Validate institutionId
+  const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
+  const validateInstitutionId = () => {
+    setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
+  };
 
   const validateEmail = (value) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,19 +49,28 @@ const Login = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await Auth.signIn(username, password, {
-        role: "Student",
-      });
+      const signInObject={
+        username:username,
+        password:password,
+        validationData:{
+          role:"Student",
+          institutionId:institutionId
+        }
+      }
+      
+      const user=await Auth.signIn(signInObject)
       //  navigation.navigate("Timetable");
+      //console.log("signing in");
+     console.log(response)
     } catch (e) {
+      console.log("Error ",e);
       Alert.alert("Sign in error", e.message);
+      setLoading(false);
     }
 
-    setLoading(false);
   };
 
   //validate password on sign in
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,6 +114,23 @@ const Login = ({ navigation }) => {
             </View>
           )}
         </View>
+        <View style={styles.inputContainer}>
+          {/* Update the boxStyles prop for SelectList */}
+          <SelectList
+            setSelected={(institutionId) => setInstitutionId(institutionId)}
+            data={institutionInfo}
+            save="key"
+            boxStyles={[
+              styles.input,
+              { paddingVertical: 16, backgroundColor: "#E7DADA", opacity: 0.7, textAlignVertical: "center" },
+            ]}
+            defaultOption={{ key: "notSet", value: "Select University" }}
+            placeholder="Select University"
+            searchPlaceholder="Search University"
+            onSelect={(institutionId) => validateInstitutionId(institutionId)}
+          />
+        </View>
+
 
         <View style={styles.inputContainer}>
           <TextInput

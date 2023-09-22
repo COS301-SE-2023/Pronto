@@ -1,5 +1,6 @@
 const { defineConfig } = require("cypress");
 
+
 module.exports = defineConfig({
   e2e: {
     fileServerFolder: "test/e2e",
@@ -9,9 +10,16 @@ module.exports = defineConfig({
     fixturesFolder: "test/e2e/cypress/fixtures",
     screenshotsFolder: "test/e2e/cypress/screenshots",
     videosFolder: "test/e2e/cypress/videos",
-    baseUrl: "https://prontocapstone.netlify.app",
+    baseUrl: "http://localhost:3000/",
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+
+    },
+  },
+
+  component: {
+    devServer: {
+      framework: "create-react-app",
+      bundler: "webpack",
     },
   },
 });

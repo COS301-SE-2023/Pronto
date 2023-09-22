@@ -38,10 +38,10 @@ const Register = ({ navigation }) => {
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
   //select instituition
-  const [institutionId, setInstitutionId] = React.useState("");
+  const [institutionId, setInstitutionId] = useState("");
 
   //Validate institutionId
-  const [isInstitutionIdValid, setIsInstitutionIdValid] = React.useState(false);
+  const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
   const validateInstitutionId = () => {
     setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
   };

@@ -204,7 +204,8 @@ const NotificationPreferences = () => {
       <View style={styles.content}>
         <Text style={styles.title}>Notification Preferences</Text>
         <Text style={{ marginBottom: 20, textAlign: "center" }}>
-          This is how you will receive notifications from your lecturer. Your notification preference is currently set to <Text style={styles.optionText}>{student === null ? "" : student.preference === undefined ? "push" : student.preference === null ? " push" : student.preference}</Text>
+          This is how you will receive notifications from your lecturer. Your notification preference is currently set to
+           {/* <Text style={styles.optionText}>{student === null ? "" : student.preference === undefined ? "push" : student.preference === null ? " push" : student.preference}</Text> */}
         </Text>
         <ImageBackground
           resizeMode="contain"

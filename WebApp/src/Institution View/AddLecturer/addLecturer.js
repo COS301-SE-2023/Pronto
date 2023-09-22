@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
+import { createLecturer, deleteLecturer, updateCourse, updateInstitution,updateAdmin, createCourse ,createActivity,deleteCourse, createAdmin} from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
+import CsvFileReader from "./csvReader";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
 
@@ -15,8 +21,30 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 import { API, Auth } from 'aws-amplify';
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { styled, alpha } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialog-paper': {
+        minWidth: '400px',
+        borderRadius: '8px',
+        padding: theme.spacing(2),
+        boxShadow: '2', // Remove the shadow
+        backdropFilter: "blur(5px)",
+    },
+}));
+
+
+
 const AddLecturer = () => {
 
+    const [expanded, setExpanded] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -29,12 +57,19 @@ const AddLecturer = () => {
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const [lecturerToRemove, setLecturerToRemove] = useState(null);
+    const [lecturerToRemoveIndex, setLecturerToRemoveIndex] = useState(null);
+    const [isRemoving, setisRemoving] = useState(false);
+
+
     const [adding, setAdding] = useState("Add")
 
     let limit = 7;
 
     const { admin, setAdmin } = useAdmin();
     const { lecturerList, setLecturerList, nextToken, setNextToken } = useLecturerList()
+
 
     const handleAdd = async (event) => {
         event.preventDefault()
@@ -49,6 +84,7 @@ const AddLecturer = () => {
             };
 
             try {
+
                 if (email !== admin.email) {
                     //let unique = admin.institution.lectureremails.filter((e) => e === email)
                     let emails = await API.graphql({
@@ -76,35 +112,35 @@ const AddLecturer = () => {
                             emails = admin.institution.lectureremails;
                             emails.push(email);
                         }
-                        let logoUrl = admin.institution.logoUrl;
+                        //let logoUrl = admin.institution.logoUrl;
                         let update = {
                             id: admin.institutionId,
                             lectureremails: emails
                         };
 
-                        let u = await API.graphql({
+                        let u = API.graphql({
                             query: updateInstitution,
                             variables: { input: update },
                         });
-                        u = u.data.updateInstitution
-                        u.logoUrl = logoUrl;
-                        let ad = admin;
-                        ad.institution = u;
-
-                        setAdmin(ad);
+                        admin.institution.lectureremails=emails;
+                        setAdmin(admin);
+                        // u = u.data.updateInstitution
+                        // u.logoUrl = logoUrl;
+                        // let ad = admin;
+                        // ad.institution = u;
+                        // admin.lectureremails=emails;
+                        // setAdmin(admin);
 
                         //Add lecturer to courses
                         await addCourses(lecturer, selectedCourses)
-                        if (lecturerList.length <= 10) {
-                            lecturerList.push(lecturer);
-                            setLecturerList(lecturerList);
-                        }
+                        lecturerList.unshift(lecturer);
+                        setLecturerList(lecturerList);
                     }
                     else {
                         setError("A lecturer with this email already exists");
                     }
                 } else {
-                    setError("You cannot use the same account for Lecturer and Admin activities");
+                    setError("You cannot use the same account for both Lecturer and Admin activities");
                 }
 
             } catch (error) {
@@ -162,6 +198,10 @@ const AddLecturer = () => {
         }
     }
 
+      const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+
     const addCourses = async (lecturer, courseList) => {
 
         try {
@@ -203,52 +243,74 @@ const AddLecturer = () => {
     }
 
     const handleRemove = async (lecturer, index) => {
-        let lec = {
-            id: lecturer.id,
-        };
-        try {
-            let removeMutation = await API.graphql({
-                query: deleteLecturer,
-                variables: { input: lec },
-            });
-            let courseList = lecturer.courses.items;
-            if (courseList !== undefined) {
-                await removeCourses(courseList, lecturer);
-                setOfferedCourses([...offeredCourses, courseList]);
-
-            }
-
-            let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
-
-            let update = {
-                id: admin.institutionId,
-                lectureremails: newEmails
-            };
-
-            let u = await API.graphql({
-                query: updateInstitution,
-                variables: { input: update },
-            });
-            let a = admin;
-            a.institution = u.data.updateInstitution;
-            a.institution.logoUrl = admin.institution.logoUrl;
-            const rows = [...lecturerList];
-            rows.splice(index, 1);
-            setAdmin(a);
-            setLecturerList(rows);
-        }
-        catch (error) {
-            if (error.errors !== undefined) {
-                let e = error.errors[0].message;
-                if (e.search("Network") !== -1) {
-                    setError("Request failed due to network issues");
-                }
-            }
-            else {
-                setError("Something went wrong. Please try again later");
-            }
-        }
+        setLecturerToRemove(lecturer);
+        setLecturerToRemoveIndex(index);
+        setOpenDialog(true);
     }
+
+    const handleConfirmation = async (lecturer, index) => {
+        setisRemoving(true);
+
+        if (lecturerToRemove && lecturerToRemoveIndex !== null) {
+            const lecturer = lecturerToRemove;
+            const index = lecturerToRemoveIndex;
+            let lec = {
+                id: lecturer.id,
+            };
+            try {
+                let removeMutation = await API.graphql({
+                    query: deleteLecturer,
+                    variables: { input: lec },
+                });
+                let courseList = lecturer.courses.items;
+                if (courseList !== undefined) {
+                    await removeCourses(courseList, lecturer);
+                    setOfferedCourses([...offeredCourses, courseList]);
+
+                }
+
+                let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
+
+                let update = {
+                    id: admin.institutionId,
+                    lectureremails: newEmails
+                };
+
+                let u = await API.graphql({
+                    query: updateInstitution,
+                    variables: { input: update },
+                });
+                // let a = admin;
+                // a.institution = u.data.updateInstitution;
+                // a.institution.logoUrl = admin.institution.logoUrl;
+                
+                admin.institution.lectureremails=newEmails;
+                const rows = [...lecturerList];
+                rows.splice(index, 1);
+                setAdmin(admin);
+                setLecturerList(rows);
+                setOpenDialog(false);
+                setisRemoving(false);
+            }
+            catch (error) {
+                if (error.errors !== undefined) {
+                    let e = error.errors[0].message;
+                    if (e.search("Network") !== -1) {
+                        setError("Request failed due to network issues");
+                    }
+                }
+                else {
+                    setError("Something went wrong. Please try again later");
+                }
+                setOpenDialog(false);
+                setisRemoving(false);
+            }
+            finally {
+                setOpenDialog(false);
+                setisRemoving(false);
+            }
+        }
+    };
 
     const loadMore = async () => {
         try {
@@ -382,15 +444,7 @@ const AddLecturer = () => {
         }
         catch (error) {
             console.log(error);
-            if (error.errors !== undefined) {
-                let e = error.errors[0].message;
-                if (e.search("Network") !== -1) {
-                    setError("Request failed due to network issues");
-                }
-            }
-            else {
-                setError("Something went wrong. Please try again later");
-            }
+      
         }
     }
 
@@ -582,12 +636,36 @@ const AddLecturer = () => {
                             <button
                                 type="submit"
                                 className="btn btn-danger w-100"
+                                style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
                                 data-testid="submitButton"
                             >
                                 {adding}
                             </button>
                         </form>
                     </div>
+                </div>
+                <div style={{textAlign:"center",justifyContent:"center"}}>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}  style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)', borderRadius: "20px", marginBottom: "15px" }}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon style={{ "color": "#e32f45" }} />}
+                            aria-controls="panel1bh-content"
+                            style={{ "width": "100%" }}
+                        >
+                            <Typography sx={{ width: '100%', flexShrink: 0, fontWeight: 'bold', textAlign: "center" }} >
+                                Add using csv
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <CsvFileReader 
+                               className="form-control"
+                                institutionId={admin?.institutionId}
+                                adding={adding}
+                                setError={setError}
+                                setAdding={setAdding}
+                                adminEmail={admin?.email} 
+                                emailList={admin?.institution?.lectureremails}/>
+                        </AccordionDetails>
+                    </Accordion>
                 </div>
 
                 {/* Display content */}
@@ -632,7 +710,7 @@ const AddLecturer = () => {
                 </div>
                 <div
                     className="card shadow w-100"
-                    style={{ width: '500px', maxHeight: "100vh" }}
+                    style={{ width: '500px' }}
                 >
                     <div className="card-body">
                         <table
@@ -676,14 +754,17 @@ const AddLecturer = () => {
                                                 />
                                             </td>
                                             <td>
-                                                <button onClick={() => { handleRemove(val, key) }}
+                                                <button
+                                                    onClick={() => handleRemove(val, key)}
                                                     type="button"
                                                     className="btn btn-danger w-100"
+                                                    style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
                                                     data-testid="deleteButton"
                                                 >
                                                     Remove
                                                 </button>
                                             </td>
+
                                         </tr>
                                     )
                                 })}
@@ -699,9 +780,30 @@ const AddLecturer = () => {
                     </div>
                 </div>
                 <br />
-            </main>
-
-        </div>
+            </main >
+            <StyledDialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                <DialogTitle
+                    style={{ fontWeight: "500", textAlign: "center" }}
+                >Deletion Confirmation</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to remove this lecturer? They will not be able to access their account permanently.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={handleConfirmation}
+                        color="primary"
+                        style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "100px" }} // Add your custom styling here
+                    >
+                        {isRemoving ? "Deleting..." : "Delete"}
+                    </Button>
+                    <Button onClick={() => setOpenDialog(false)} color="primary">
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </StyledDialog>
+        </div >
     );
 };
 
