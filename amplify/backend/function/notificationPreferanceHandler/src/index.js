@@ -27,53 +27,72 @@ const pinpointClient = new PinpointClient(config);
 const sesClient = new SESClient(config);
 
 exports.handler = async (event) => {
-  console.debug(
-    `Notification Preferance Handler Event: ${JSON.stringify(event)}`
-  );
+  console.debug(`notificationPreferanceHandler Event: BEGIN`);
+  const { typeName, fieldName, identity, source, request } = event;
+  const student = source;
+  const graphQlRootObjectType = typeName;
+  const sourceTypeName = source["__typename"];
+  const sourceOperationName = source["__operation"];
+  console.debug(JSON.stringify(event));
+  console.debug(`notificationPreferanceHandler Event: END`);
+
   const user = {
-    studentId: event.studentId,
+    studentId: student.id,
     endPointAddress: event.endPointAddress,
   };
-  switch (event.type) {
-    case PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL:
-      if (!pinpointClient || !sesClient)
-        throw new Error("UNDEFINED NOTIFICATION SERVICE");
-      console.debug("BEGIN: UPDATE TO EMAIL PREFERANCE");
+  if (
+    graphQlRootObjectType === GRAPHQL.ROOT_OBJECT &&
+    fieldName === GRAPHQL.FIELDNAME &&
+    sourceTypeName === GRAPHQL.ROOT_OBJECT &&
+    sourceOperationName === GRAPHQL.OPERATION_TYPES.MUTATION
+  ) {
+    switch (source.endpoint.type) {
+      case PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL:
+        if (!pinpointClient || !sesClient)
+          throw new Error("UNDEFINED NOTIFICATION SERVICE");
+        console.debug("BEGIN: UPDATE TO EMAIL PREFERANCE");
 
-      return await updateEndPointOperation({
-        user: user,
-        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
-        sesClient: sesClient,
-        pinpointClient: pinpointClient,
-      });
+        return await updateEndPointOperation({
+          user: user,
+          endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
+          sesClient: sesClient,
+          pinpointClient: pinpointClient,
+        });
 
-    case PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS:
-      if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
-      console.debug("BEGIN: UPDATE TO SMS PREFERANCE");
+      case PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS:
+        if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
+        console.debug("BEGIN: UPDATE TO SMS PREFERANCE");
 
-      return await updateEndPointOperation({
-        user: user,
-        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,
-        pinpointClient: pinpointClient,
-      });
+        return await updateEndPointOperation({
+          user: user,
+          endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,
+          pinpointClient: pinpointClient,
+        });
 
-    case PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH:
-      if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
-      console.debug("BEGIN: UPDATE TO PUSH PREFERANCE");
+      case PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH:
+        if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
+        console.debug("BEGIN: UPDATE TO PUSH PREFERANCE");
 
-      return await updateEndPointOperation({
-        user: user,
-        pushEndPointRequest,
-        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
-        pinpointClient: pinpointClient,
-      });
+        return await updateEndPointOperation({
+          user: user,
+          pushEndPointRequest,
+          endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
+          pinpointClient: pinpointClient,
+        });
 
-    default:
-      return {
-        status: NOTIFICATIONS_STATUS.FAILED,
-        info: "failed to process request: unsupported notification preference type",
-        type: event.type,
-        endpointID: event.endpointID,
-      };
+      default:
+        return {
+          status: NOTIFICATIONS_STATUS.FAILED,
+          info: "failed to process request: unsupported notification preference type",
+          type: source.endpoint.type,
+          endpointID: event.endpointID,
+        };
+    }
   }
+  return {
+    status: NOTIFICATIONS_STATUS.FAILED,
+    info: "operation not allowed",
+    type: source.endpoint.type,
+    endpointID: event.endpointID,
+  };
 };
