@@ -5,7 +5,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import '../../Institution VIew/Navigation/Navigation.css';
+import '../../Institution View/Navigation/Navigation.css';
 import { Auth, API } from 'aws-amplify'
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from "../../Components/SuccessModal"
@@ -60,7 +60,7 @@ const PersonalInfoPage = () => {
                     setError("New password does not match confirm password");
                 }
             }else{
-                setError("New password is too weak.Please ensure your password is at least 8 characters long and  includes at least one lowercase letter, one uppercase letter, one number and one special character");
+                setError("New password is too weak.Please ensure your password is at least 8 characters long and  includes at least one lowercase letter, one uppercase letter, one number and one special character")
             }
         } catch (error) {
             setError("Password change failed")

@@ -1,13 +1,25 @@
 export type AmplifyDependentResourcesAttributes = {
+  "analytics": {
+    "prontoEmailNotifications": {
+      "Id": "string",
+      "Region": "string",
+      "appName": "string"
+    }
+  },
   "api": {
-    "prontoGraphQlApi": {
+    "AdminQueries": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
+    "pronto": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
       "GraphQLAPIKeyOutput": "string"
     }
   },
   "auth": {
-    "prontoAuth": {
+    "pronto5f713f59": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -23,32 +35,31 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
-    "announcementsHandler": {
+    "AdminQueries7f7a03b0": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "prontoPostSignUp": {
+    "pronto5f713f59PostAuthentication": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "prontoPreSignIn": {
+    "pronto5f713f59PreSignup": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
-    },
-    "prontoPreSignUp": {
-      "Arn": "string",
-      "LambdaExecutionRole": "string",
-      "LambdaExecutionRoleArn": "string",
-      "Name": "string",
+    }
+  },
+  "storage": {
+    "prontoBlobeStore": {
+      "BucketName": "string",
       "Region": "string"
     }
   }

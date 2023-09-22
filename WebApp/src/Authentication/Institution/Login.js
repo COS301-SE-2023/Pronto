@@ -74,11 +74,10 @@ function Login() {
       return;
     }
     try {
-      //await Auth.signIn(email, password, { role: "Admin" });
+      await Auth.signIn(email, password, { role: "Admin" });
       setsignInError("");
-      
-      //await fetchAdmin().then(() => navigate("/institution/dashboard"))
-      navigate("/institution/dashboard");
+      //navigate to lecturer home page
+      await fetchAdmin().then(() => navigate("/institution/dashboard"))
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);

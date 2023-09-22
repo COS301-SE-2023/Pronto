@@ -5,7 +5,7 @@ import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { listLecturers,listInstitutions, getInstitution } from "../../Graphql/queries";
+import { listLecturers } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 
 function Login() {
@@ -170,7 +170,6 @@ function Login() {
     setLoading(true);
 
     try {
-      
       await Auth.signUp({
         username: email,
         password: signUpPassword,
@@ -184,15 +183,9 @@ function Login() {
           institutionId: institutionId,
         },
       });
-      // let a=await API.graphql({
-      //   query:listInstitutions,
-      //   variables:{},
-      //   authMode:"API_KEY"
-      // })
-      //console.log(a);
       navigate("/lecturer/confirm-email", { state: { email: email } });
     } catch (e) {
-      //setsignUpError(e.message.split("Error: ")[1]);
+      setsignUpError(e.message.split("Error: ")[1]);
       console.log(e);
     }
     setLoading(false);

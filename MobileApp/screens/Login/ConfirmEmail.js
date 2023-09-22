@@ -27,25 +27,16 @@ const ConfirmEmail = ({ navigation }) => {
   const [loadingResend, setLoadingResend] = useState(false);
 
   const onVerifyPressed = async () => {
-    if (loading || code==="") return;
+    if (loading) return;
 
     setLoading(true);
     try {
-      console.log(code)
+      response = await Auth.confirmSignUp(email, code);
 
-      // await Auth.confirmSignUp({
-      //   username:email,
-      //   code:code,
-      //   clientMetadata:{role: "Student"},
-      //  });
-       
-      response= await Auth.confirmSignUp(email,code,{clientMetadata:{role:"Student"}})
-        console.log(response);        
       //need to add user to a user group here?
       Alert.alert("Success", "Login to access your account.");
       navigation.navigate("Login");
     } catch (e) {
-      console.log(e);
       Alert.alert("Error", e.message);
     }
     setLoading(false);
