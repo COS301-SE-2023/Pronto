@@ -1,13 +1,15 @@
+const { SendMessagesCommand } = require("@aws-sdk/client-pinpoint");
 const { NOTIFICATIONS_STATUS } = require("./constants");
+const { createSubject, createHtmlPart, createTextPart } = require("./message");
 
 const getEndPoints = /* GraphQL */ `
   query MyQuery {
     getCourse(id: $input) {
-      enrollments(limit: 100) {
+      enrollments() {
         items {
           student {
             preference {
-              enpointID
+              endpointID
               type
             }
           }
@@ -17,63 +19,68 @@ const getEndPoints = /* GraphQL */ `
   }
 `;
 
-const setAndGetSendMessagesCommandInput = (course, announcement, endpoints) => {
+const setAndGetSendMessagesCommandInput = (announcement, endpoints) => {
   const SendMessagesCommand = {
-    ApplicationId: "",
+    ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
     MessageRequest: {
+      Addresses: {
+        ["bandisamasilela@gmail.com"]: {
+          ChannelType: "EMAIL",
+        },
+        ["andilengwenya2001@gmail.com"]: {
+          ChannelType: "EMAIL",
+        },
+      },
       MessageConfiguration: {
         EmailMessage: {
-          SimpleEmail: {
-            HtmlPart: { Charset: "UTF-8", Data: "" },
-            Subject: { Charset: "UTF-8", Data: "" },
-            TextPart: { Charset: "UTF-8", Data: "" },
-          },
-          Substitutions: { ...announcement },
-          ReplyToAddresses: ["no-reply@pronto.app"],
           FromAddress: process.env.PRONTO_NOTIFICATIONS_EMAIL,
+          SimpleEmail: {
+            Subject: createSubject(announcement),
+            HtmlPart: createHtmlPart(announcement),
+            TextPart: createTextPart(announcement),
+          },
         },
-        APNSMessage: {}, //to be implemented
-        SMSMessage: {}, //to be implemented
       },
-    },
-    Endpoints: endpoints,
-    //   Endpoints: {
-    //     [endpointId]: {
-    //       //append array of endpoints
-    //       Context: { ...course },
-    //     },
-    //   },
-    TemplateConfiguration: {
-      EmailTemplate: {
-        Name: process.env.EMAIL_TEMPLATE_NAME,
-      },
-      PushTemplate: {
-        Name: process.env.PUSH_TEMPLATE_NAME,
-      },
-      SMSTemplate: {
-        Name: process.env.SMS_TEMPLATE_NAME,
-      },
+      // TemplateConfiguration: {
+      //   EmailTemplate: {
+      //     Name: process.env.EMAIL_TEMPLATE_NAME,
+      //   },
+      //   PushTemplate: {
+      //     Name: process.env.PUSH_TEMPLATE_NAME,
+      //   },
+      //   SMSTemplate: {
+      //     Name: process.env.SMS_TEMPLATE_NAME,
+      //   },
+      // },
     },
   };
   return SendMessagesCommand;
 };
 
 const sendMessageOperation = async (sendMessageOperationInput) => {
-  const { course, announcement, pinpointClient } = sendMessageOperationInput;
+  const { announcement, pinpointClient } = sendMessageOperationInput;
   const endpoints = {};
   const sendMessageCommandInput = setAndGetSendMessagesCommandInput(
-    course,
     announcement,
     endpoints
   );
+  const sendMessagesCommand = new SendMessagesCommand(sendMessageCommandInput);
   try {
-    const sendMessagesCommandOutput = await pinpointClient.send();
+    const sendMessagesCommandOutput = await pinpointClient.send(
+      sendMessagesCommand
+    );
     const responseMetadata = sendMessagesCommandOutput.$metadata;
+    console.debug(
+      `SEND  MESSAGE RESPONSE: ${JSON.stringify(sendMessagesCommandOutput)}`
+    );
+    console.debug(
+      JSON.stringify(sendMessagesCommandOutput.MessageResponse.Result)
+    );
     if (responseMetadata.httpStatusCode === 200)
       return { EMAIL: NOTIFICATIONS_STATUS.SENT };
   } catch (sendMessagesError) {
     console.debug(
-      `ERRO SENDING MESSAGES FOR ${course.id}. INFO: ${sendMessagesError}`
+      `ERRO SENDING MESSAGES FOR ${announcement}. INFO: ${sendMessagesError}`
     );
     return { EMAIL: NOTIFICATIONS_STATUS.FAILED };
   }

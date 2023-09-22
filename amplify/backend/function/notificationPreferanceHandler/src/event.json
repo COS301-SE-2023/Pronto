@@ -1,5 +1,6 @@
 {
-  "key1": "value1",
-  "key2": "value2",
-  "key3": "value3"
+  "studentId": "STUDENT_ID",
+  "type": "EMAIL",
+  "endpointID": "ID",
+  "endPoint": "bandisamasilela1@gmail.com"
 }

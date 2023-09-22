@@ -27,6 +27,14 @@
     "apiprontoGraphQlApiGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apiprontoGraphQlApiGraphQLAPIKeyOutput"
+    },
+    "analyticsprontoNotificationsId": {
+      "Type": "String",
+      "Default": "analyticsprontoNotificationsId"
+    },
+    "analyticsprontoNotificationsRegion": {
+      "Type": "String",
+      "Default": "analyticsprontoNotificationsRegion"
     }
   },
   "Conditions": {
@@ -90,6 +98,12 @@
             },
             "API_PRONTOGRAPHQLAPI_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apiprontoGraphQlApiGraphQLAPIKeyOutput"
+            },
+            "ANALYTICS_PRONTONOTIFICATIONS_ID": {
+              "Ref": "analyticsprontoNotificationsId"
+            },
+            "ANALYTICS_PRONTONOTIFICATIONS_REGION": {
+              "Ref": "analyticsprontoNotificationsRegion"
             }
           }
         },
@@ -201,6 +215,58 @@
         "PolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "mobiletargeting:Put*",
+                "mobiletargeting:Create*",
+                "mobiletargeting:Send*",
+                "mobiletargeting:Get*",
+                "mobiletargeting:List*",
+                "mobiletargeting:Update*"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:mobiletargeting:",
+                      {
+                        "Ref": "analyticsprontoNotificationsRegion"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apps/",
+                      {
+                        "Ref": "analyticsprontoNotificationsId"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:mobiletargeting:",
+                      {
+                        "Ref": "analyticsprontoNotificationsRegion"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apps/",
+                      {
+                        "Ref": "analyticsprontoNotificationsId"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
             {
               "Effect": "Allow",
               "Action": [
