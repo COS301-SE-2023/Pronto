@@ -51,10 +51,11 @@ const getUpdateSmsEndpointCommandInput = async (smsEndPointRequest) => {
   const numberValidateResponse = await validateMobilePhoneNumberOperation(
     smsEndPointRequest
   );
+  console.table(smsEndPointRequest);
   if (!numberValidateResponse) throw new Error("number is not validated");
   const updateEndpointInput = {
-    ApplicationId: projectId,
-    EndpointId: endpointId,
+    ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
+    EndpointId: smsEndPointRequest.user.studentId,
     EndpointRequest: {
       ChannelType: PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,
       Address: smsEndPointRequest.phoneNumber,
