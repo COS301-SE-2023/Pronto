@@ -13,7 +13,10 @@ Amplify Params - DO NOT EDIT */
  */
 const { PinpointClient } = require("@aws-sdk/client-pinpoint");
 const { SESClient } = require("@aws-sdk/client-ses");
-const { PINPOINT_CONSTANTS } = require("./helpers/constants");
+const {
+  PINPOINT_CONSTANTS,
+  NOTIFICATIONS_STATUS,
+} = require("./helpers/constants");
 const { updateEndPointOperation } = require("./helpers/updateEndpoint");
 
 const config = {
@@ -29,13 +32,26 @@ exports.handler = async (event) => {
   );
   const user = {
     studentId: event.studentId,
-    emailAddress: event.endPoint,
+    endPointAddress: event.endPoint,
   };
-  const updateEndPointRequest = {
-    emailEndPointRequest: event.type ? { user: user } : null,
-    sesClient: sesClient,
-    user: user,
-    endPointType: event.type,
-  };
-  return await updateEndPointOperation(updateEndPointRequest);
+  switch (event.type) {
+    case PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL:
+      if (!pinpointClient || !sesClient)
+        throw new Error("UNDEFINED NOTIFICATION SERVICE");
+      const emailEndPointRequest = {
+        user: user,
+        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
+        sesClient: sesClient,
+        pinpointClient: pinpointClient,
+      };
+      return await updateEndPointOperation({
+        ...emailEndPointRequest,
+        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
+        pinpointClient: pinpointClient,
+      });
+
 };
+
+
+
+
