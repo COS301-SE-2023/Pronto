@@ -296,16 +296,25 @@ export default function PostAccordion(course) {
               className="custom-select"
               placeholder="Select Activity"
             >
-              <option value="">Select Activity</option>  {/* dynamic activity selection dropdown */}
-              {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
-                return (
-                  <option key={key}
-                    value={key}>{val.day + " " + val.start + "-" + val.end + " " + val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "")}</option>
-                )
-              }
-              )
-              }
+              <option value="">Select Activity</option>
+              {course &&
+                course.course &&
+                course.course.activity &&
+                course.course.activity.items
+                  .slice() // Create a copy of the array to avoid modifying the original
+                  .sort((a, b) => a.day.localeCompare(b.day)) // Sort by day
+                  .map((val, key) => {
+                    return (
+                      <option
+                        key={key}
+                        value={key}
+                      >
+                        {val.day + " : " + val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "") + " (" + val.start + "-" + val.end + ")"}
+                      </option>
+                    );
+                  })}
             </select>
+
             {isLoaded ?
               (
                 <form style={{ paddingTop: '15px' }} onSubmit={(e) => { handleAddVenue(e) }}>
