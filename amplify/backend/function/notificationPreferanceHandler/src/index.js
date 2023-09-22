@@ -60,6 +60,18 @@ exports.handler = async (event) => {
         pinpointClient: pinpointClient,
       });
 
+    case PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH:
+      if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
+      const pushEndPointRequest = {
+        user: user,
+        pinpointClient: pinpointClient,
+      };
+      return await updateEndPointOperation({
+        ...pushEndPointRequest,
+        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
+        pinpointClient: pinpointClient,
+      });
+
 
 };
 
