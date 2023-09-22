@@ -89,7 +89,9 @@ type Student
   lastname: String!
   userRole: String!
   email: String! @index(name: "byEmail", queryField: "studentByEmail")
-  preference: NotificationPreferance @hasOne
+  preference: NotificationPreferance
+    @index(name: "prefByStudent", queryField: "notificationPreferancebyStudent") rules: [
+      { allow: owner }]
   institution: Institution! @belongsTo(fields: ["institutionId"])
   timetable: Timetable @hasOne
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
