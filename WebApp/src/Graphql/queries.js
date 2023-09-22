@@ -50,9 +50,6 @@ export const getInstitution=`query GetInstitution($id: ID!) {
       firstname
       lastname
       email
-      createdAt
-      updatedAt
-      owner
     }
     adminId
     courses {
@@ -64,8 +61,6 @@ export const getInstitution=`query GetInstitution($id: ID!) {
     lecturer {
       nextToken
     }
-    createdAt
-    updatedAt
   }
 }
 `
@@ -93,7 +88,6 @@ export const listInstitutions=`query ListInstitutions(
            id
            lecturerId
            coursecode
-           coursename
         }
       }
       lecturer{ 
@@ -106,13 +100,10 @@ export const listInstitutions=`query ListInstitutions(
             items{ 
               id 
               coursecode
-              coursename
             }
           }
         }
       }
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -127,22 +118,10 @@ export const getAdmin=`query GetAdmin($id: ID!) {
     institution {
       id
       name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
       lectureremails
-      coursecodes
       domains
       adminId
-      createdAt
-      updatedAt
     }
-    createdAt
-    updatedAt
-    owner
   }
 }`;
 
@@ -189,10 +168,6 @@ export const listCourses=`query ListCourses(
       institutionId
       lecturerId
       coursecode
-      coursename
-      semester
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -260,28 +235,9 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     firstname
     lastname
     email
-    institution {
-      id
-      name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
-      lectureremails
-      coursecodes
-      domains
-      adminId
-      createdAt
-      updatedAt
-    }
     courses {
       nextToken
     }
-    createdAt
-    updatedAt
-    owner
   }
 }`
 
@@ -349,6 +305,29 @@ export const announcementsByDate=`query AnnouncementsByDate (
               nextToken
             }
 }`
+export const listAdminApplications=`
+             query listAdminApplications(
+                  $filter: ModelAdminApplicationFilterInput, 
+                  $limit: Int, 
+                  $nextToken: String)
+                  {
+                    listAdminApplications(
+                      filter: $filter
+                      limit :$limit
+                      nextToken : $nextToken
+                    ){
+                      items{
+                        id
+                        name 
+                        email
+                        status
+                        createdAt
+                        firstname
+                        lastname
+                      }
+                      nextToken
+                    }
+                  }`
 
 export const searchCourses=`query SearchCourses(
   $filter: SearchableCourseFilterInput
