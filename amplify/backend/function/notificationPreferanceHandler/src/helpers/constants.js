@@ -4,8 +4,15 @@ const PINPOINT_CONSTANTS = Object.freeze({
     SMS: "SMS",
     PUSH: "PUSH",
   },
-
   ENDPOINT_STATUS: "ACTIVE",
 });
+
+const NOTIFICATIONS_STATUS = Object.freeze({
+  UPDATED: "UPDATED",
+  DISABLED: "DISABLE",
+  FAILED: "FAILED",
+  OPERATIONAL: "OPERATIONAL",
+});
+
 const SES_CONSTANTS = Object.freeze({ EMAIL: "EMAIL" });
-module.exports = { PINPOINT_CONSTANTS, SES_CONSTANTS };
+module.exports = { PINPOINT_CONSTANTS, SES_CONSTANTS, NOTIFICATIONS_STATUS };
