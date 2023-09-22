@@ -55,6 +55,7 @@ const EditTimetable = ({ navigation }) => {
       Alert.alert("Module Already Added", "This module is already added to your selection.");
     }
     setInput("");
+    setCourses([]);
   };
 
 
@@ -69,13 +70,23 @@ const EditTimetable = ({ navigation }) => {
           query: searchCourses,
           variables: {
             filter: {
-              coursecode: {
-                matchPhrasePrefix: text
+              and : [
+                      {
+                        coursecode: {
+                          matchPhrasePrefix: text
+                        }
+                      } ,
+                      {
+                        institutionId:{
+                          eq:student.institutionId
+                        }
+                      }
+                    ]
               }
             }
-          }
-        })
-        setCourses(search.data.searchCourses.items.filter((item)=>item.institutionId===student.institutionId));
+          })
+        
+        setCourses(search.data.searchCourses.items);
       } catch (e) {
         console.log(e);
         Alert.alert(error);
@@ -86,53 +97,50 @@ const EditTimetable = ({ navigation }) => {
   const fetchCourses = async () =>{
     try {
       let stu=student;
-      
-      if(student===null){
+      if(student===null || student.id===undefined){
         setIsLoading(true); // Set loading state to true during API call
         const user = await Auth.currentAuthenticatedUser();
-        let act = [];
         stu=await API.graphql({
           query:getStudent,
           variables:{id:user.attributes.sub}
         }) 
         stu=stu.data.getStudent;
-        let c = [];
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          c.push(stu.enrollments.items[i].course);
+        if(stu===null){
+          setIsLoading(false);
+          return;
         }
-        setSelectedModules(c);
-       
-        if (stu.studentTimetableId !== null && stu.timetable.activityId!==undefined) {
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < c.length; j++) {
-              let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-              if (index !== undefined) {
-                act.push(index);
-                break;
-              }
-            }
-          }
-          if(stu.enrollments===undefined){
-            stu.enrollments={
-              items:[]
-            }
-          }
-             updateStudent(stu);
-            setActivities(s.timetable.activities);
-        }
-        
-        setIsLoading(false); // Set loading state to false after courses are fetched
-    }else{
-        let c=[]
-        for (let i = 0; i < student.enrollments.items.length; i++) {
-          c.push(student.enrollments.items[i].course);
-        }
-        setSelectedModules(c);
-        setActivities(student.timetable.activities);
+        updateStudent(stu);
       }
+
+      let c = [];
+      let act= [];
+        
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
+        c.push(stu.enrollments.items[i].course);
+      }
+      setSelectedModules(c);
+        
+      if(stu.timetable===null){
+        setActivities([]);
+        setIsLoading(false);
+        return;
+      }
+
+      for (let i = 0; i < stu.timetable.activityId.length; i++) {
+        for (let j = 0; j < c.length; j++) {
+          let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+          if (index !== undefined) {
+            act.push(index);
+            break;
+          }
+        }
+      }
+        
+      setActivities(act);
+      setIsLoading(false); // Set loading state to false after courses are fetched
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
-      Alert.alert(error);
+      //Alert.alert(error);
       console.log("From edit");  
       console.log(e); 
 
@@ -242,9 +250,8 @@ const EditTimetable = ({ navigation }) => {
     }
    
     rows.push(activity)
-    
-    student.timetable.activities=rows;
-    updateStudent(student);
+    //student.timetable.activities=rows;
+    //updateStudent(student);
     //let s=await updateStudent(student);
    // student.timetable.activities=s.timetable.activities;
     setActivities(rows);
@@ -381,7 +388,7 @@ const EditTimetable = ({ navigation }) => {
           value={input}
           onChangeText={(text) => handleSearch(text)}
           style={{ fontSize: 15, width: "100%" }}
-          placeholder="Search for your modules"
+          placeholder="Search for your courses"
         />
 
       </View>
@@ -413,7 +420,7 @@ const EditTimetable = ({ navigation }) => {
                   color: "#e32f45",
                 }}
               >
-                Fetching your modules...
+                Fetching your courses...
               </Text>
             </View>
           ) : ( // Display the "You have no modules" text after loading is completed and no courses are found
@@ -433,7 +440,7 @@ const EditTimetable = ({ navigation }) => {
                     color: "#e32f45",
                   }}
                 >
-                  You have no modules
+                  You have no courses
                 </Text>
               </View>
             ) : null

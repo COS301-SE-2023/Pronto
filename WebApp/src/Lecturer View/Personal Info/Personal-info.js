@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import LecturerNavigation from '../Navigation/LecturerNavigation';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import '../../Institution VIew/Navigation/Navigation.css';
+import '../../Institution View/Navigation/Navigation.css';
 import { Auth, API } from 'aws-amplify'
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from "../../Components/SuccessModal"
-import { listLecturers } from '../../Graphql/queries';
 import UserManual from "../HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../../Components/HelpButton';
 import { useLecturer } from '../../ContextProviders/LecturerContext';
@@ -21,9 +20,6 @@ const PersonalInfoPage = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-
-
-    const [user, setUser] = useState();
     const [successMessage, setSuccessMessage] = useState("");
 
     const { lecturer, setLecturer } = useLecturer();
@@ -69,45 +65,6 @@ const PersonalInfoPage = () => {
         setNewPassword("")
         setConfirmPassword("")
     }
-
-   
-    // const fetchUser = async () => {
-    //     try {
-    //         let u = await Auth.currentAuthenticatedUser();
-    //         setUser(u);
-    //     } catch (error) {
-    //         setError("Something went wrong");
-    //     }
-    // }
-
-    const fetchLecturer = async () => {
-        try{
-            if (lecturer !== null) {
-                const user = await Auth.currentAuthenticatedUser();
-                let lecturer_email = user.attributes.email;
-                let lec = await API.graphql({
-                    query: listLecturers,
-                    variables: {
-                        filter: {
-                            email: {
-                                eq: lecturer_email
-                            }
-                        }
-                    },
-                });
-                setLecturer(lec.data.listLecturers.items[0]);
-            }
-        }catch(e){
-
-        }
-    }
-
-
-    useEffect(() => {
-        fetchLecturer()
-      //fetchUser();
-    }, [])
-
     return (
 
         <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
@@ -209,7 +166,7 @@ const PersonalInfoPage = () => {
                                     </div>
                                 </div>
 
-                                <button className="post-button">Update</button>
+                                <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Update</button>
                             </form>
                         </AccordionDetails>
                     </Accordion>

@@ -39,10 +39,10 @@ const Register = ({ navigation }) => {
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
   //select instituition
-  const [institutionId, setInstitutionId] = React.useState("");
+  const [institutionId, setInstitutionId] = useState("");
 
   //Validate institutionId
-  const [isInstitutionIdValid, setIsInstitutionIdValid] = React.useState(false);
+  const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
   const validateInstitutionId = () => {
     setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
   };
@@ -133,16 +133,25 @@ const Register = ({ navigation }) => {
 
     setLoading(true);
     try {
-      
-      let a=await Auth.signUp({
-        username: email,
+      // navigation.navigate("ConfirmEmail", { email });
+      const studentName=name+","+surname;
+      const signUpObject={
+        username:email,
         password:password,
-        attributes: { email:email, family_name: surname, name:name },
-        clientMetadata: { role: "Student", institutionId: institutionId },
-      });
-
-       console.log(a);
-      navigation.navigate("ConfirmEmail", { email ,institutionId});
+        attributes:{
+          email:email,
+          family_name:institutionId,
+          name:studentName
+        },
+        clientMetadata:{
+          role:"Student",
+          instituionId:institutionId
+        }
+      }
+      const u =await Auth.signUp(signUpObject);
+ 
+      
+      navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
       console.log(e)
       Alert.alert("Error", e.message);

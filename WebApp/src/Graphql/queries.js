@@ -44,6 +44,13 @@ export const getInstitution=`query GetInstitution($id: ID!) {
     name
     lectureremails
     domains
+    admin {
+      id
+      institutionId
+      firstname
+      lastname
+      email
+    }
     adminId
   }
 }
@@ -72,7 +79,6 @@ export const listInstitutions=`query ListInstitutions(
            id
            lecturerId
            coursecode
-           coursename
         }
       }
       lecturer{ 
@@ -85,13 +91,10 @@ export const listInstitutions=`query ListInstitutions(
             items{ 
               id 
               coursecode
-              coursename
             }
           }
         }
       }
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -106,10 +109,15 @@ export const getAdmin=`query GetAdmin($id: ID!) {
     institution {
       id
       name
-      lectureremails
-      domains
       logo
+      lectureremails
+      coursecodes
+      domains
+      adminId
     }
+    createdAt
+    updatedAt
+    owner
   }
 }`;
 
@@ -156,10 +164,6 @@ export const listCourses=`query ListCourses(
       institutionId
       lecturerId
       coursecode
-      coursename
-      semester
-      createdAt
-      updatedAt
     }
     nextToken
   }
@@ -224,25 +228,13 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     institution {
       id
       name
-      location
-      pageUrl
-      campusMapUrl
-      openingTime
-      closingTime
-      minimumDuration
       lectureremails
-      coursecodes
       domains
       adminId
-      createdAt
-      updatedAt
     }
     courses {
       nextToken
     }
-    createdAt
-    updatedAt
-    owner
   }
 }`
 

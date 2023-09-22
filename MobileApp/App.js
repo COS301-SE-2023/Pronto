@@ -39,44 +39,44 @@ export default function App() {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-      if(student==="" || student===null) {
+      if (student===null || student.id===undefined) {
         const email=authUser.attributes.email;
         let studentInfo = await API.graphql({
           query: getStudent,
           variables: {id:authUser.attributes.sub}
         });
-      
+        
         studentInfo=studentInfo.data.getStudent;
         setStudent(studentInfo);
-        
         if(studentInfo===null){
           
         try{
-          let domain = email.split("@")[1]
-          let institution = await API.graphql({
-            query: listInstitutions,
-            variables: {
-              filter: {
-                domains: {
-                  contains: domain
-                }
-              }
-            }
-          })
+          // let domain = email.split("@")[1]
+          // let institution = await API.graphql({
+          //   query: listInstitutions,
+          //   variables: {
+          //     filter: {
+          //       domains: {
+          //         contains: domain
+          //       }
+          //     }
+          //   }
+          // })
 
           
-          institution = institution.data.listInstitutions.items[0]
+          // institution = institution.data.listInstitutions.items[0]
 
           //Create student
+          let name=authUser.attributes.name.split(",")
           let newStudent = {
             id:authUser.attributes.sub,
-            institutionId: institution.id,
-            firstname: authUser.attributes.name,
-            lastname: authUser.attributes.family_name,
-            preference:"push",
+            institutionId: authUser.attributes.family_name,
+            firstname: name[0],
+            lastname: name[1],
             userRole: "Student",
             email: email
           }
+       
           let create = await API.graphql({
             query: createStudent,
             variables: { input: newStudent }
