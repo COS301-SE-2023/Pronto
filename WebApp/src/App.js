@@ -27,6 +27,7 @@ import DashboardLecturer from "./Lecturer View/Dashboard/dashboardLecturer";
 
 import { RequireLecturerAuth } from "./RouteAuthComponents/RequireLecturerAuth";
 import { RequireAdminAuth } from "./RouteAuthComponents/RequireAdminAuth";
+import {RequireSuperAdminAuth} from "./RouteAuthComponents/RequireSuperAdminAuth";
 import NotFound from "./Error pages/NotFound";
 import HomePage from "./Homepage/HomePage";
 
@@ -51,8 +52,21 @@ function MyRoutes() {
 
         {/*Pronto Admin login/register pages*/}
         <Route path="/superadmin/login" element={<ProntoAdminLogin />} />
-        <Route path="/superadmin/admin-requests" element={<ApplicationRequests />} />
-        <Route path="/superadmin/view-institutions" element={<ViewInstitutions />} />
+        <Route 
+            path="/superadmin/admin-requests" 
+            element={
+              <RequireSuperAdminAuth>
+                <ApplicationRequests />
+              </RequireSuperAdminAuth>} 
+          />
+        
+        <Route 
+          path="/superadmin/view-institutions" 
+          element={
+            <RequireSuperAdminAuth>
+              <ViewInstitutions />
+            </RequireSuperAdminAuth>} 
+          />
 
         {/*Lecturer login/register pages*/}
         <Route path="/lecturer/login" element={<LecturerLogin />} />
