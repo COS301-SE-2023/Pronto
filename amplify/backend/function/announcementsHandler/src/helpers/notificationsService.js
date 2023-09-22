@@ -1,58 +1,37 @@
 const { NOTIFICATIONS_STATUS } = require("./constants");
+const { createSubject, createHtmlPart, createTextPart } = require("./message");
+const { getEndPointAddresses } = require("./getAddresseses");
 
-const getEndPoints = /* GraphQL */ `
-  query MyQuery {
-    getCourse(id: $input) {
-      enrollments(limit: 100) {
-        items {
-          student {
-            preference {
-              enpointID
-              type
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-const setAndGetSendMessagesCommandInput = (course, announcement, endpoints) => {
+const setAndGetSendMessagesCommandInput = (announcement, endpoints) => {
+  const addresses = getEndPointAddresses(announcement.courseId);
   const SendMessagesCommand = {
     ApplicationId: "",
     MessageRequest: {
+      Addresses: { addresses },
       MessageConfiguration: {
         EmailMessage: {
           SimpleEmail: {
-            HtmlPart: { Charset: "UTF-8", Data: "" },
-            Subject: { Charset: "UTF-8", Data: "" },
-            TextPart: { Charset: "UTF-8", Data: "" },
+            Subject: createSubject(announcement),
+            HtmlPart: createHtmlPart(announcement),
+            TextPart: createTextPart(announcement),
           },
-          Substitutions: { ...announcement },
-          ReplyToAddresses: ["no-reply@pronto.app"],
-          FromAddress: process.env.PRONTO_NOTIFICATIONS_EMAIL,
         },
-        APNSMessage: {}, //to be implemented
-        SMSMessage: {}, //to be implemented
+        SMSMessage: {
+          MessageType: "TRANSACTIONAL",
+          Body: JSON.stringify(announcement),
+        },
       },
-    },
-    Endpoints: endpoints,
-    //   Endpoints: {
-    //     [endpointId]: {
-    //       //append array of endpoints
-    //       Context: { ...course },
-    //     },
-    //   },
-    TemplateConfiguration: {
-      EmailTemplate: {
-        Name: process.env.EMAIL_TEMPLATE_NAME,
-      },
-      PushTemplate: {
-        Name: process.env.PUSH_TEMPLATE_NAME,
-      },
-      SMSTemplate: {
-        Name: process.env.SMS_TEMPLATE_NAME,
-      },
+      // TemplateConfiguration: {
+      //   EmailTemplate: {
+      //     Name: process.env.EMAIL_TEMPLATE_NAME,
+      //   },
+      //   PushTemplate: {
+      //     Name: process.env.PUSH_TEMPLATE_NAME,
+      //   },
+      //   SMSTemplate: {
+      //     Name: process.env.SMS_TEMPLATE_NAME,
+      //   },
+      // },
     },
   };
   return SendMessagesCommand;
@@ -67,15 +46,42 @@ const sendMessageOperation = async (sendMessageOperationInput) => {
     endpoints
   );
   try {
-    const sendMessagesCommandOutput = await pinpointClient.send();
-    const responseMetadata = sendMessagesCommandOutput.$metadata;
-    if (responseMetadata.httpStatusCode === 200)
-      return { EMAIL: NOTIFICATIONS_STATUS.SENT };
+    const sendMessagesCommandOutput = await pinpointClient.send(
+      sendMessagesCommand
+    );
+    const { $metadata, MessageResponse } = sendMessagesCommandOutput.$metadata;
+    console.debug(
+      `SEND  MESSAGE RESPONSE: ${JSON.stringify(sendMessagesCommandOutput)}`
+    );
+    if ($metadata.httpStatusCode !== 200) {
+      return {
+        EMAIL: NOTIFICATIONS_STATUS.FAILED,
+        SMS: NOTIFICATIONS_STATUS.FAILED,
+        announcement_Matrix: 0,
+        info: "an error occured, please try again or contact your admin",
+      };
+    }
+    let messageDeliveredCount = 0;
+    MessageResponse.Result.map((MessageResult) => {
+      if (MessageResult.DeliveryStatus === "SUCCESSFUL")
+        messageDeliveredCount++;
+    });
+    return {
+      EMAIL: NOTIFICATIONS_STATUS.SENT,
+      SMS: NOTIFICATIONS_STATUS.SENT,
+      announcement_Matrix: messageDeliveredCount,
+      info: "sent to all channels successfuly",
+    };
   } catch (sendMessagesError) {
     console.debug(
       `ERRO SENDING MESSAGES FOR ${course.id}. INFO: ${sendMessagesError}`
     );
-    return { EMAIL: NOTIFICATIONS_STATUS.FAILED };
+    return {
+      EMAIL: NOTIFICATIONS_STATUS.FAILED,
+      SMS: NOTIFICATIONS_STATUS.FAILED,
+      announcement_Matrix: 0,
+      info: "an error occured, please try again or contact your admin",
+    };
   }
 };
 
