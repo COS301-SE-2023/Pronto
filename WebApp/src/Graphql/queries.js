@@ -123,6 +123,12 @@ export const getAdmin=`query GetAdmin($id: ID!) {
     institution {
       id
       name
+      location
+      pageUrl
+      campusMapUrl
+      openingTime
+      closingTime
+      minimumDuration
       lectureremails
       coursecodes
       domains
@@ -130,6 +136,9 @@ export const getAdmin=`query GetAdmin($id: ID!) {
       createdAt
       updatedAt
     }
+    createdAt
+    updatedAt
+    owner
   }
 }`;
 

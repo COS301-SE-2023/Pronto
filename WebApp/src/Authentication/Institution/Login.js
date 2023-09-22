@@ -121,19 +121,11 @@ function Login() {
       return;
     }
     try {
-      const signInObject = {
-        username: email,
-        password: password,
-        validationData: {
-          role: "Admin",
-          institutionId: institutionId
-        }
-      }
-
-      const user = await Auth.signIn(signInObject);
+      await Auth.signIn(email, password, { role: "Admin" });
       setsignInError("");
-      //navigate to lecturer home page
-      await fetchAdmin().then(() => navigate("/institution/dashboard"))
+      
+      //await fetchAdmin().then(() => navigate("/institution/dashboard"))
+      navigate("/institution/dashboard");
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
