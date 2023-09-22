@@ -1,36 +1,14 @@
 const { SendMessagesCommand } = require("@aws-sdk/client-pinpoint");
 const { NOTIFICATIONS_STATUS } = require("./constants");
 const { createSubject, createHtmlPart, createTextPart } = require("./message");
-
-const getEndPoints = /* GraphQL */ `
-  query MyQuery {
-    getCourse(id: $input) {
-      enrollments() {
-        items {
-          student {
-            preference {
-              endpointID
-              type
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+const { getEndPointAddresses } = require("./getAddresseses");
 
 const setAndGetSendMessagesCommandInput = (announcement, endpoints) => {
+  const addresses = getEndPointAddresses(announcement.courseId);
   const SendMessagesCommand = {
     ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
     MessageRequest: {
-      Addresses: {
-        ["bandisamasilela@gmail.com"]: {
-          ChannelType: "EMAIL",
-        },
-        ["andilengwenya2001@gmail.com"]: {
-          ChannelType: "EMAIL",
-        },
-      },
+      Addresses: { addresses },
       MessageConfiguration: {
         EmailMessage: {
           FromAddress: process.env.PRONTO_NOTIFICATIONS_EMAIL,
@@ -39,6 +17,10 @@ const setAndGetSendMessagesCommandInput = (announcement, endpoints) => {
             HtmlPart: createHtmlPart(announcement),
             TextPart: createTextPart(announcement),
           },
+        },
+        SMSMessage: {
+          MessageType: "TRANSACTIONAL",
+          Body: JSON.stringify(announcement),
         },
       },
       // TemplateConfiguration: {
@@ -69,20 +51,39 @@ const sendMessageOperation = async (sendMessageOperationInput) => {
     const sendMessagesCommandOutput = await pinpointClient.send(
       sendMessagesCommand
     );
-    const responseMetadata = sendMessagesCommandOutput.$metadata;
+    const { $metadata, MessageResponse } = sendMessagesCommandOutput.$metadata;
     console.debug(
       `SEND  MESSAGE RESPONSE: ${JSON.stringify(sendMessagesCommandOutput)}`
     );
-    console.debug(
-      JSON.stringify(sendMessagesCommandOutput.MessageResponse.Result)
-    );
-    if (responseMetadata.httpStatusCode === 200)
-      return { EMAIL: NOTIFICATIONS_STATUS.SENT };
+    if ($metadata.httpStatusCode !== 200) {
+      return {
+        EMAIL: NOTIFICATIONS_STATUS.FAILED,
+        SMS: NOTIFICATIONS_STATUS.FAILED,
+        announcement_Matrix: 0,
+        info: "an error occured, please try again or contact your admin",
+      };
+    }
+    let messageDeliveredCount = 0;
+    MessageResponse.Result.map((MessageResult) => {
+      if (MessageResult.DeliveryStatus === "SUCCESSFUL")
+        messageDeliveredCount++;
+    });
+    return {
+      EMAIL: NOTIFICATIONS_STATUS.SENT,
+      SMS: NOTIFICATIONS_STATUS.SENT,
+      announcement_Matrix: messageDeliveredCount,
+      info: "sent to all channels successfuly",
+    };
   } catch (sendMessagesError) {
     console.debug(
       `ERRO SENDING MESSAGES FOR ${announcement}. INFO: ${sendMessagesError}`
     );
-    return { EMAIL: NOTIFICATIONS_STATUS.FAILED };
+    return {
+      EMAIL: NOTIFICATIONS_STATUS.FAILED,
+      SMS: NOTIFICATIONS_STATUS.FAILED,
+      announcement_Matrix: 0,
+      info: "an error occured, please try again or contact your admin",
+    };
   }
 };
 
