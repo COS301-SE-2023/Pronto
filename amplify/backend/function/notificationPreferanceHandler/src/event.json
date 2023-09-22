@@ -1,6 +1,6 @@
 {
   "studentId": "STUDENT_ID",
-  "type": "EMAIL",
+  "type": "SMS",
   "endpointID": "ID",
-  "endPoint": "bandisamasilela1@gmail.com"
+  "endPoint": "a"
 }
