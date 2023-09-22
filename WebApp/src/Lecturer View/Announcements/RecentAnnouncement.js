@@ -375,9 +375,9 @@ export default function RecentAnnouncement() {
         aria-labelledby="info-dialog-title"
         aria-describedby="info-dialog-description"
 
-        PaperProps={{ style: { height: '500px', width: '500px', borderRadius: "20px", padding: "10px" } }}
+        PaperProps={{ style: { height: '550px', width: '550px', borderRadius: "20px", padding: "10px" } }}
       >
-        <DialogTitle id="info-dialog-title" style={{ textAlign: 'center' }}>
+        <DialogTitle id="info-dialog-title" style={{ textAlign: 'center', fontWeight: "400" }}>
           Notification Delivery Status
           <IconButton
             edge="end"
@@ -391,8 +391,10 @@ export default function RecentAnnouncement() {
         </DialogTitle>
         <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
           <DialogContentText id="info-dialog-description">
-            <div style={{ display: "flex" }}>
-              <EmailIcon style={{ marginRight: "5px", marginTop: "4px", color: "#e32f45" }} /> <h4>Email Notifications</h4>
+            <div style={{ textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center" }}>
+
+              <EmailIcon style={{ marginRight: "5px", color: "#e32f45", marginBottom: "14px" }} />
+              <p style={{ fontWeight: "500" }}>Email Notifications</p>
             </div>
 
             <div style={{ display: "flex" }}>
@@ -401,33 +403,39 @@ export default function RecentAnnouncement() {
               ) : (
                 <span style={{ color: 'orange', marginRight: "5px" }}><ErrorIcon /></span>
               )}
-              <p>Status: <span style={{ fontWeight: "bold" }}>{emailStatus}% </span>of students registered for email recieved the announcement</p>
+              <p>Status: <span style={{ fontWeight: "bold" }}>{emailStatus}% </span>of students registered for email received the announcement</p>
             </div>
 
             <br />
-            <div style={{ display: "flex" }}>
-              <SMSIcons style={{ marginRight: "5px", marginTop: "4px", color: "#e32f45" }} /> <h4>SMS Notifications</h4>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <SMSIcons style={{ marginRight: "5px", color: "#e32f45", marginBottom: "14px" }} />
+              <p style={{ fontWeight: "500" }}>SMS Notifications</p>
             </div>
+
             <div style={{ display: "flex" }}>
               {smsStatus >= 90 ? (
                 <span style={{ color: 'green', marginRight: "5px" }}><CheckIcon /></span>
               ) : (
                 <span style={{ color: 'orange', marginRight: "5px" }}><ErrorIcon /></span>
               )}
-              <p>Status: <span style={{ fontWeight: "bold" }}>{smsStatus}%</span> of students registered for SMS recieved the announcement</p>
+              <p>Status: <span style={{ fontWeight: "bold" }}>{smsStatus}%</span> of students registered for SMS received the announcement</p>
             </div>
 
             <br />
-            <div style={{ display: "flex" }}>
-              <PushIcon style={{ marginRight: "5px", marginTop: "4px", color: "#e32f45" }} /> <h4>Push Notifications</h4>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <PushIcon style={{ marginRight: "5px", color: "#e32f45", marginBottom: "14px" }} />
+              <p style={{ fontWeight: "500" }}>Push Notifications</p>
             </div>
+
             <div style={{ display: "flex" }}>
               {pushStatus >= 90 ? (
                 <span style={{ color: 'green', marginRight: "5px" }}><CheckIcon /></span>
               ) : (
                 <span style={{ color: 'orange', marginRight: "5px" }}><ErrorIcon /></span>
               )}
-              <p>Status: <span style={{ fontWeight: "bold" }}>{pushStatus}%</span> of students registered for push notifications recieved the announcement</p>
+              <p>Status: <span style={{ fontWeight: "bold" }}>{pushStatus}%</span> of students registered for push notifications received the announcement</p>
             </div>
 
           </DialogContentText>
@@ -437,7 +445,7 @@ export default function RecentAnnouncement() {
                 backgroundColor: '#e32f45', // Set the same background color for hover state
               },
             }}>
-              <span>Okay</span> <CheckIcon style={{ fontSize: "15px" }} />
+              <span>Okay</span>
             </Button>
           </DialogActions>
         </DialogContent>
