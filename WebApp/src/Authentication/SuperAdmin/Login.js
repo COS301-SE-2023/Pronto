@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import "../Institution/styles.css";
 import ProntoLogo from "../Institution/ProntoLogo.png";
-import { Auth, API, Storage } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { listAdmins } from "../../Graphql/queries";
-import { useAdmin } from "../../ContextProviders/AdminContext";
 
 function Login() {
   const [signIn, toggle] = React.useState(true);
@@ -24,40 +22,7 @@ function Login() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-
-  const { setAdmin } = useAdmin();
-
-  const fetchAdmin = async () => {
-    let fetchError = "Could not find your records.If you are a Lecturer return to the homepage and click 'Continue as Lecturer'. If you are a Student please use the mobile app"
-    try {
-
-      let adminData = await API.graphql({
-        query: listAdmins,
-        variables: {
-          filter: {
-            email: {
-              eq: email
-            }
-          },
-        },
-      });
-      if (adminData.data.listAdmins.items.length > 0) {
-        adminData = adminData.data.listAdmins.items[0];
-        if (adminData.institution.logo !== null) {
-          adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-        }
-        setAdmin(adminData);
-      }
-      else {
-        throw Error(fetchError);
-      }
-
-    } catch (error) {
-      await Auth.signOut();
-      throw Error(fetchError);
-    }
-  }
-
+  
   //function for signing in
   const onSignInPressed = async (event) => {
     if (loading) {
@@ -75,20 +40,16 @@ function Login() {
     }
 
     //add logic to sign into pronto admin account
-
-    navigate("/superadmin/admin-requests")
-
-    /*  try {
-        await Auth.signIn(email, password, { role: "Admin" });
+     try {
+        await Auth.signIn(email, password);
         setsignInError("");
-        //navigate to lecturer home page
-        await fetchAdmin().then(() => navigate("/institution/dashboard"))
+        navigate("/superadmin/admin-requests")
       } catch (e) {
         setLoading(false);
         setsignInError(e.message);
-      }  */
+      }  
 
-    //setLoading(false);
+    setLoading(false);
   };
 
 
