@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { listLecturers } from "../../Graphql/queries";
+import { listLecturers,listInstitutions } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
+
 
 function Login() {
   //sign in states
@@ -23,6 +24,7 @@ function Login() {
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
   const { lecturer, setLecturer } = useLecturer();
+  const [institutions,setInstitutions]=useState([])
 
   //university info
   const universityInfo = [
@@ -94,6 +96,35 @@ function Login() {
     }
 
   }
+
+   const fetchInstitutions=async()=>{
+
+    try{
+          let inst=await API.graphql({
+          query:listInstitutions,
+          variables:{},
+          authMode:"API_KEY"
+         });
+         inst=inst.data.listInstitutions.items;
+         console.log(inst)
+         let institutionInfo=[];
+         for(let j=0;j<inst.length;j++){
+          let item={
+            value:inst[j].id,
+            label:inst[j].name
+          }
+          institutionInfo.push(item);
+         }
+        setInstitutions(institutionInfo);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  useEffect(()=>{
+    fetchInstitutions();
+  })
+
   const onSignInPressed = async (event) => {
     if (loading) {
       return;
@@ -312,7 +343,7 @@ function Login() {
             isValidEmail={emailIsValid}
           />
           <StyledSelectInput
-            options={universityInfo}
+            options={institutions}
             defaultValue={institutionId}
             onChange={handleInstitutionSelection}
             placeholder="Select an Institution"
@@ -402,6 +433,16 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
+           <StyledSelectInput
+            options={institutions}
+            defaultValue={institutionId}
+            onChange={handleInstitutionSelection}
+            placeholder="Select an Institution"
+            classNamePrefix="SelectInput"
+            autoComplete="on"
+            spellCheck="true"
+            isSelectionValid={isInstitudeSelected}
+          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
