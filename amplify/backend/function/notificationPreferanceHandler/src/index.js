@@ -72,7 +72,14 @@ exports.handler = async (event) => {
         pinpointClient: pinpointClient,
       });
 
-
+    default:
+      return {
+        status: NOTIFICATIONS_STATUS.FAILED,
+        info: "failed to process request: unsupported notification preference type",
+        type: event.type,
+        endpointID: event.endpointID,
+      };
+  }
 };
 
 
