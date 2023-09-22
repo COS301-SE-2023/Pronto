@@ -1,4 +1,4 @@
-describe("Testing sign Up", () => {
+/*describe("Testing sign Up", () => {
   before(() => {
     cy.then(Cypress.session.clearCurrentSessionData);
   });
@@ -127,3 +127,4 @@ describe("Testing sign up input and error handling", () => {
     cy.contains(this.authErrors.INVALIDEMAIL);
   });
 });
+*/

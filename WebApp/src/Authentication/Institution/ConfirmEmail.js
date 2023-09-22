@@ -16,6 +16,7 @@ function ConfirmEmail() {
 
   const [loading, setLoading] = useState(false);
 
+
   const onVerifyPressed = async (event) => {
     event.preventDefault();
     if (loading) {
@@ -23,7 +24,8 @@ function ConfirmEmail() {
     }
     setLoading(true);
     try {
-      await Auth.confirmSignUp(email, code);
+      //await Auth.confirmSignUp(email, code);
+      await Auth.confirmSignUp(email, code, { clientMetadata: { role: "Admin" } })
       setError("");
       navigate("/institution/successful-apply");
     } catch (e) {
@@ -154,3 +156,4 @@ const ErrorText = styled.p`
 `;
 
 export default ConfirmEmail;
+
