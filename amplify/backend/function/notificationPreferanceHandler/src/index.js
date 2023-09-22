@@ -9,15 +9,47 @@ Amplify Params - DO NOT EDIT */
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`);
-    return {
-        statusCode: 200,
-    //  Uncomment below to enable CORS requests
-    //  headers: {
-    //      "Access-Control-Allow-Origin": "*",
-    //      "Access-Control-Allow-Headers": "*"
-    //  },
-        body: JSON.stringify('Hello from Lambda!'),
-    };
+const { PinpointClient } = require("@aws-sdk/client-pinpoint");
+const { SESClient } = require("@aws-sdk/client-ses");
+const {
+  PINPOINT_CONSTANTS,
+  NOTIFICATIONS_STATUS,
+} = require("./helpers/constants");
+const { updateEndPointOperation } = require("./helpers/updateEndpoint");
+
+const config = {
+  region: process.env.AWS_REGION,
 };
+
+const pinpointClient = new PinpointClient(config);
+const sesClient = new SESClient(config);
+
+exports.handler = async (event) => {
+  console.debug(
+    `Notification Preferance Handler Event: ${JSON.stringify(event)}`
+  );
+  const user = {
+    studentId: event.studentId,
+    endPointAddress: event.endPoint,
+  };
+  switch (event.type) {
+    case PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL:
+      if (!pinpointClient || !sesClient)
+        throw new Error("UNDEFINED NOTIFICATION SERVICE");
+      const emailEndPointRequest = {
+        user: user,
+        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
+        sesClient: sesClient,
+        pinpointClient: pinpointClient,
+      };
+      return await updateEndPointOperation({
+        ...emailEndPointRequest,
+        endPointType: PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH,
+        pinpointClient: pinpointClient,
+      });
+
+};
+
+
+
+
