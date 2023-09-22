@@ -25,7 +25,6 @@ exports.handler = async (event) => {
   console.debug(`AnnouncementsHandler Event: BEGIN`);
   const { typeName, fieldName, identity, source, request } = event;
   const announcement = source;
-  const course = announcement.course;
   const graphQlRootObjectType = typeName;
   const sourceTypeName = source["__typename"];
   const sourceOperationName = source["__operation"];
