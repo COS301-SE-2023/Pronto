@@ -1,16 +1,16 @@
 {
-  "userPoolId": "USERPOOLID",
-  "userName": "USERNAME",
+  "userPoolId": "us-east-1_LLMUI6foi",
+  "userName": "5418c448-50f1-7021-2fa3-40ec3a072732",
   "callerContext": {
-    "clientId": "APP_CLIENTID"
+    "clientId": "17valkv4rb6ifi4qte115ph4nu"
   },
   "request": {
-    "clientMetadata": {
+    "validationData": {
       "role": "Student",
-      "institutionId": "INSTITUTIONID"
+      "institutionId": "4419cbaf-7f44-41dd-bdf1-a1db630f3530"
     },
     "userAttributes": {
-      "email": "EMAIL"
+      "email": "andilengwenya2001@gmail.com"
     }
   },
   "response": {}

@@ -1,5 +1,46 @@
 {
-  "key1": "value1",
-  "key2": "value2",
-  "key3": "value3"
+  "typeName": "Announcement",
+  "fieldName": "announcementStatus",
+  "arguments": {},
+  "identity": {
+    "claims": {
+      "claim1": "value1"
+    }
+  },
+  "source": {
+    "id": "ANNOUNCEMENT_ID",
+    "courseId": "COURSE_ID",
+    "lecturerId": "LECTURER_ID",
+    "description": "DESCRIPTION",
+    "start": "17:30",
+    "end": "19:30",
+    "date": "10/07/2023",
+    "venue": "VENUE",
+    "course": {
+      "id": "03e4c049-7bbd-4a6d-b068-4603a7f252b9",
+      "institutionId": "def947d1-f8dc-499f-a5fa-3b358b99181f",
+      "lecturerId": "string",
+      "coursecode": "COS301",
+      "coursename": "string",
+      "semester": "string",
+      "enrollments": [{}],
+      "activity": [{}],
+      "announcents": [{}],
+      "lecturer": {},
+      "institution": {},
+      "notification": { "endPointId": "END_POINT_ID" }
+    },
+    "body": "THIS IS THE ANNOUNCEMENT BODY",
+    "title": "TEST ANNOUNCEMENT",
+    "type": "TYPE",
+    "year": "YEAR",
+    "createdAt": "pre ENV",
+    "anonouncementStatus": "ANNOUNCEMENT_STATUS",
+    "__typename": "Announcement",
+    "__operation": "Mutation"
+  },
+  "request": {},
+  "prev": {
+    "prevField1": "prevValue1"
+  }
 }

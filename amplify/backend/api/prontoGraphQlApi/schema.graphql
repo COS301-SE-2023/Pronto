@@ -57,6 +57,7 @@ type Lecturer
   @auth(
     rules: [
       { allow: owner }
+      { allow: public, operations: [read] }
       {
         allow: groups
         groups: ["lecturerUserGroup", "adminUserGroup"]
@@ -220,23 +221,22 @@ type Announcement
       sortKeyFields: ["createdAt"]
     )
   createdAt: String!
-  anonouncementStatus: Announcement_Status
+  announcementStatus: Announcement_Status
     @function(name: "announcementsHandler-${env}")
 }
 
 type NotificationPreferance
   @model
   @auth(rules: [{ allow: owner, ownerField: "userId" }]) {
-  studentId: ID @index(name: "byStudent")
+  studentId: ID! @index(name: "byStudent")
   type: NOTIFICATION_TYPE
-  enpointID: ID
-  deviceID: ID
+  endpointID: ID! @primaryKey
+  endPoint: ID
 }
 
 type Notification {
   courseid: ID!
   status: STATUS
-  endPoinId: ID
 }
 
 enum NOTIFICATION_TYPE {

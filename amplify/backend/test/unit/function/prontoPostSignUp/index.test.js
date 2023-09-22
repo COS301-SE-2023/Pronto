@@ -1,6 +1,6 @@
-const studentsEvent = require("../../../../function/prontoPostSignUp/src/events/students.event.json");
-const moduleIterator = require("../../../../function/prontoPostSignUp/src/index");
-const addToGroup = require("../../../../function/prontoPostSignUp/src/add-to-group");
+const studentsEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/students.event.json");
+const moduleIterator = require("../../../../function/prontoAuthPostConfirmation/src/index");
+const addToGroup = require("../../../../function/prontoAuthPostConfirmation/src/add-to-group");
 
 describe("testing module iterator", () => {
   const OLD_ENV = process.env;
@@ -9,9 +9,12 @@ describe("testing module iterator", () => {
     const mockAddToGroupHandler = jest
       .fn(addToGroup.handler)
       .mockResolvedValue(studentsEvent);
-    jest.mock("../../../../function/prontoPostSignUp/src/index", () => ({
-      handler: mockAddToGroupHandler,
-    }));
+    jest.mock(
+      "../../../../function/prontoAuthPostConfirmation/src/index",
+      () => ({
+        handler: mockAddToGroupHandler,
+      })
+    );
   });
 
   afterAll(() => {
@@ -24,7 +27,7 @@ describe("testing module iterator", () => {
     );
   });
   test("should return the event", async () => {
-    const mockmoduleIterator = require("../../../../function/prontoPostSignUp/src/index");
+    const mockmoduleIterator = require("../../../../function/prontoAuthPostConfirmation/src/index");
     expect(await mockmoduleIterator.handler(studentsEvent)).toMatchObject(
       studentsEvent
     );
