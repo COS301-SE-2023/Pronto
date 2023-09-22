@@ -227,10 +227,15 @@ type Announcement
 
 type NotificationPreferance
   @model
-  @auth(rules: [{ allow: owner, ownerField: "userId" }]) {
-  studentId: ID @index(name: "byStudent")
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "studentId" }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  studentId: ID! @index(name: "byStudentId")
   type: NOTIFICATION_TYPE
-  endpointID: ID
+  endPointAddress: ID
   status: STATUS
   info: string
 }
@@ -263,4 +268,12 @@ type Announcement_Status {
   SMS: ENDPOINT_TYPE_STATUS
   PUSH: ENDPOINT_TYPE_STATUS
   EMAIL: ENDPOINT_TYPE_STATUS
+  announcement_Matrix: Announcement_Matrix
+  info: String
+}
+
+type Announcement_Matrix {
+  SMS: Int
+  PUSH: Int
+  EMAIL: Int
 }
