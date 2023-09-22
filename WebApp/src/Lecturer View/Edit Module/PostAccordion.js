@@ -187,7 +187,7 @@ export default function PostAccordion(course) {
               </div>
 
               <div className="form-group row">
-                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Due Date: </label>
                 <div className="col-sm-10">
                   <input
                     type="date"
@@ -260,7 +260,7 @@ export default function PostAccordion(course) {
                 </div>
               </div>
               <div className="form-group row">
-                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Due Date: </label>
                 <div className="col-sm-10">
                   <input
                     type="date"
@@ -327,7 +327,6 @@ export default function PostAccordion(course) {
                         value={selectedLocation}
                         onChange={setSelectedLocation}
                         onSelect={handleSelect}
-
                       >
                         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                           <div>
@@ -341,7 +340,7 @@ export default function PostAccordion(course) {
                               {loading && <div>Loading...</div>}
                               {suggestions.map((suggestion, index) => {
                                 const style = {
-                                  backgroundColor: suggestion.active ? '#e32f45' : '#fff',
+                                  backgroundColor: suggestion.active ? '#f197a2' : '#fff',
                                   cursor: 'pointer',
                                   padding: '5px',
                                 };
@@ -370,7 +369,7 @@ export default function PostAccordion(course) {
 
                     </div>
                   </div>
-                  <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Add venue</button>
+                  <button style={{ borderRadius: "20px", height: "40px", marginTop: "20px" }} className="post-button">Add venue</button>
 
                 </form>
               )
@@ -383,7 +382,7 @@ export default function PostAccordion(course) {
       </div>
 
 
-    </div>
+    </div >
   );
 }
 //add styling
