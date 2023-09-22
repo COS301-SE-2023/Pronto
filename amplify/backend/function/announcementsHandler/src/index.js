@@ -21,15 +21,12 @@ const pinpointClient = new PinpointClient(config);
 
 exports.handler = async (event) => {
   console.debug(`AnnouncementsHandler Event: BEGIN`);
-  const graphQlObject = event.typeName;
-  const fieldName = event.fieldName;
-  const announcement = event.arguments;
-  const course = announcement.course;
-  // const endPointId = course.notification.endPointId;
-  console.debug({ graphQlObject });
-  console.debug({ fieldName });
-  console.debug({ announcement });
-  console.table(course);
+  const { typeName, fieldName, identity, source, request } = event;
+  const announcement = source;
+  const graphQlRootObjectType = typeName;
+  const sourceTypeName = source["__typename"];
+  const sourceOperationName = source["__operation"];
+  console.debug(JSON.stringify(event));
   console.debug(`AnnouncementsHandler Event: END`);
 
   if (graphQlObject === GRAPHQL.OBJECT_TYPES.MUTATION) {
