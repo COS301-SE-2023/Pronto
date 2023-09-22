@@ -8,7 +8,7 @@ const GRAPHQL = Object.freeze({
 });
 const NOTIFICATIONS_STATUS = Object.freeze({
   SENT: "SENT",
-  DISABLE: "DISABLE",
+  DISABLED: "DISABLED",
   FAILED: "FAILED",
   UNAVAILABLE: "UNAVAILABLE",
 });
