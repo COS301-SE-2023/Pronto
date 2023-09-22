@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
-import "../../Institution VIew/Navigation/Navigation.css";
+import "../../Institution View/Navigation/Navigation.css";
 import { listLecturers } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 
