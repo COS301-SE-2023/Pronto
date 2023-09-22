@@ -1,7 +1,7 @@
 const createSubject = (announcement) => {
   return {
     Charset: "UTF-8",
-    Data: `${announcement.course.coursecode} New ${announcement.type}`,
+    Data: `${announcement.course.coursecode} New Announcement: ${announcement.title}`,
   };
 };
 
@@ -253,7 +253,7 @@ const createHtmlPart = (announcement) => {
     <td align="left" style="padding:0;Margin:0;width:275px">
     <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
     <tr class="es-visible-simple-html-only">
-    <td align="center" style="padding:0;Margin:0"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:24px;color:#333333;font-size:16px;text-align:right">${announcement.arguments.date}</p></td>
+    <td align="center" style="padding:0;Margin:0"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:24px;color:#333333;font-size:16px;text-align:right">SCHEDULE:\n Day: ${announcement.date}\n: Start: ${announcement.start}\n End: ${announcement.end} </p></td>
     </tr>
     </table></td>
     </tr>
@@ -335,7 +335,7 @@ const createHtmlPart = (announcement) => {
 };
 
 const createTextPart = (announcement) => {
-  const body =  `${announcement.course.coursecode} New ${announcement.type}`
+  const body = `${announcement.course.coursecode} New ${announcement.type}`;
   return {
     Charset: "UTF-8",
     Data: body,
