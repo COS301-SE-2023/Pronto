@@ -1,10 +1,7 @@
 const GRAPHQL = Object.freeze({
-  OBJECT_TYPES: { MUTATION: "mutation", QUERY: "Query" },
-  FIELD_TYPES: {
-    UPDATE_ANNOUNCEMENT: "updateAnnouncement",
-    DELETE_ANNOUNCEMENT: "deleteAnnouncement",
-    CREATE_ANNOUNCEMENT: "createAnnouncement",
-  },
+  OPERATION_TYPES: { MUTATION: "Mutation", QUERY: "Query" },
+  FIELDNAME: "announcementStatus",
+  ROOT_OBJECT: "Announcement",
 });
 const NOTIFICATIONS_STATUS = Object.freeze({
   SENT: "SENT",
