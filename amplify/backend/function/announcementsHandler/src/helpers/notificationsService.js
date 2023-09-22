@@ -4,11 +4,10 @@ const { createSubject, createHtmlPart, createTextPart } = require("./message");
 const { getEndPointAddresses } = require("./getAddresseses");
 
 const setAndGetSendMessagesCommandInput = (announcement, endpoints) => {
-  const addresses = getEndPointAddresses(announcement.courseId);
   const SendMessagesCommand = {
     ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
     MessageRequest: {
-      Addresses: { addresses },
+      Addresses: { endpoints },
       MessageConfiguration: {
         EmailMessage: {
           FromAddress: process.env.PRONTO_NOTIFICATIONS_EMAIL,
@@ -39,41 +38,65 @@ const setAndGetSendMessagesCommandInput = (announcement, endpoints) => {
   return SendMessagesCommand;
 };
 
-const sendMessageOperation = async (sendMessageOperationInput) => {
-  const { announcement, pinpointClient } = sendMessageOperationInput;
-  const endpoints = {};
+const processBatchsendMessageOperation = async (
+  sendMessageOperationInput,
+  startIndex,
+  batchSize,
+  endpoints,
+  messageDeliveredCount,
+  pinpointClient
+) => {
+  const endIndex = Math.min(startIndex + batchSize, endpoints.length);
+  const batch = endpoints.slice(startIndex, endIndex);
+  console.log(`Processing batch ${startIndex + 1}-${endIndex}:`, batch);
+  let batchProcessingErrorMessage;
   const sendMessageCommandInput = setAndGetSendMessagesCommandInput(
     announcement,
     endpoints
   );
   const sendMessagesCommand = new SendMessagesCommand(sendMessageCommandInput);
+  const sendMessagesCommandOutput = await pinpointClient.send(
+    sendMessagesCommand
+  );
+  const { $metadata, MessageResponse } = sendMessagesCommandOutput.$metadata;
+  console.debug(
+    `SEND  MESSAGE RESPONSE: ${JSON.stringify(sendMessagesCommandOutput)}`
+  );
+  if ($metadata.httpStatusCode !== 200)
+    (batchProcessingErrorMessage = `an error occured,notifications may have not been sent to all students.
+      Please try again or contact your admin. `),
+      MessageResponse.Result.map((MessageResult) => {
+        if (MessageResult.DeliveryStatus === "SUCCESSFUL")
+          messageDeliveredCount++;
+      });
+  if (endIndex < addresses.length) {
+    setTimeout(() => {
+      processBatch(sendMessageOperationInput, endIndex, batchSize);
+    }, 1000);
+  }
+  console.log("Processing complete.");
+  return {
+    EMAIL: NOTIFICATIONS_STATUS.SENT,
+    SMS: NOTIFICATIONS_STATUS.SENT,
+    announcement_Matrix: messageDeliveredCount,
+    info: !batchProcessingErrorMessage
+      ? "notifications have been sent to all enrolled students"
+      : batchProcessingErrorMessage,
+  };
+};
+const sendMessageOperation = async (sendMessageOperationInput) => {
+  const { announcement, pinpointClient } = sendMessageOperationInput;
+  const endpoints = getEndPointAddresses(announcement.courseId);
+  let messageDeliveredCount = 0;
   try {
-    const sendMessagesCommandOutput = await pinpointClient.send(
-      sendMessagesCommand
+    await processBatchsendMessageOperation(
+      sendMessageOperationInput,
+      0,
+      100,
+      endpoints,
+      messageDeliveredCount,
+      pinpointClient
     );
-    const { $metadata, MessageResponse } = sendMessagesCommandOutput.$metadata;
-    console.debug(
-      `SEND  MESSAGE RESPONSE: ${JSON.stringify(sendMessagesCommandOutput)}`
-    );
-    if ($metadata.httpStatusCode !== 200) {
-      return {
-        EMAIL: NOTIFICATIONS_STATUS.FAILED,
-        SMS: NOTIFICATIONS_STATUS.FAILED,
-        announcement_Matrix: 0,
-        info: "an error occured, please try again or contact your admin",
-      };
-    }
-    let messageDeliveredCount = 0;
-    MessageResponse.Result.map((MessageResult) => {
-      if (MessageResult.DeliveryStatus === "SUCCESSFUL")
-        messageDeliveredCount++;
-    });
-    return {
-      EMAIL: NOTIFICATIONS_STATUS.SENT,
-      SMS: NOTIFICATIONS_STATUS.SENT,
-      announcement_Matrix: messageDeliveredCount,
-      info: "sent to all channels successfuly",
-    };
   } catch (sendMessagesError) {
     console.debug(
       `ERRO SENDING MESSAGES FOR ${announcement}. INFO: ${sendMessagesError}`
