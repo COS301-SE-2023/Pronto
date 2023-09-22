@@ -230,8 +230,9 @@ type NotificationPreferance
   @auth(rules: [{ allow: owner, ownerField: "userId" }]) {
   studentId: ID @index(name: "byStudent")
   type: NOTIFICATION_TYPE
-  enpointID: ID
-  deviceID: ID
+  endpointID: ID
+  status: STATUS
+  info: string
 }
 
 type Notification {
@@ -247,8 +248,8 @@ enum NOTIFICATION_TYPE {
 }
 
 enum STATUS {
-  CREATED
-  DISABLE
+  UPDATED
+  DISABLED
   FAILED
   OPERATIONAL
 }
