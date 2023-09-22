@@ -1,5 +1,9 @@
 const { SendCustomVerificationEmailCommand } = require("@aws-sdk/client-ses");
 
+const isEmailAddressPatternValid = (enailAddress) => {
+  const emailAddressPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  return emailAddressPattern.test(enailAddress);
+};
 const verifyEmailAddressOperation = async (verifyEmailAddressRequst) => {
   console.table(verifyEmailAddressRequst);
   const { user, sesClient } = verifyEmailAddressRequst;
@@ -27,4 +31,30 @@ const verifyEmailAddressOperation = async (verifyEmailAddressRequst) => {
     return false;
   }
 };
-module.exports = { verifyEmailAddressOperation };
+
+const getUpdateEmailEndpointCommandInput = (emailEndPointRequest) => {
+  if (!isEmailAddressPatternValid(emailEndPointRequest.user.emailAddress))
+    throw new Error(
+      "email address is not provided or has an invalid email pattern"
+    );
+  const updateEndpointCommandInput = {
+    ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
+    EndpointId: emailEndPointRequest.user.studentId,
+    EndpointRequest: {
+      Address: emailEndPointRequest.user.emailAddress,
+      ChannelType: PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL,
+      Demographic: {},
+      EndpointStatus: PINPOINT_CONSTANTS.ENDPOINT_STATUS,
+      Metrics: {},
+      User: {
+        UserAttributes: {},
+        UserId: emailEndPointRequest.user.studentId,
+      },
+    },
+  };
+  return updateEndpointCommandInput;
+};
+module.exports = {
+  verifyEmailAddressOperation,
+  getUpdateEmailEndpointCommandInput,
+};
