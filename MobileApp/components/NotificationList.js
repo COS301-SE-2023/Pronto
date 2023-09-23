@@ -15,7 +15,6 @@ const NotificationList = ({ navigation }) => {
   const [expanded2, setExpanded2] = useState(false);
   const {student,updateStudent} =useStudent();
   const [selectedAnnouncement,setSelectedAnnouncement]=useState(null);
-  const [isModalVisible,setIsModalVisible]=useState(false);
   const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
 
  
@@ -26,8 +25,6 @@ const NotificationList = ({ navigation }) => {
   let limit=4;
   const showFullMessage = (key) => {
     setSelectedAnnouncement(key);
-    //setIsModalVisible(true);
-    //Alert.alert(key.body);
   };
 
   const fetchAnnouncements = async () => {
@@ -38,8 +35,6 @@ const NotificationList = ({ navigation }) => {
         
         setLoading(true);
         const user = await Auth.currentAuthenticatedUser()
-        let studentEmail = user.attributes.email;
-
         let stu = await API.graphql({
           query: getStudent,
           variables: {id:user.attributes.sub}
@@ -54,14 +49,18 @@ const NotificationList = ({ navigation }) => {
 
       };
 
-      if(announcement.length===0){
-       
-        setLoading(true);
-        let courses=[];
-        for(let i=0;i<stu.enrollments.items.length;i++){
+      let courses=[];
+      for(let i=0;i<stu.enrollments.items.length;i++){
           courses.push(stu.enrollments.items[i].courseId);
-        }
-         
+      }
+
+      if(courses.length===0){
+        setLoading(false);
+        setAnnouncement([]);
+        return;
+      } 
+        
+      else{
         let filter=`{"filter" : { "or" : [`;
         for(let i=0;i<courses.length;i++){
           if(i===courses.length-1){
@@ -74,23 +73,22 @@ const NotificationList = ({ navigation }) => {
      
         filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
         
-        let variables = JSON.parse(filter)
-    
+        let variables = JSON.parse(filter);   
         let announcementList=await API.graphql({
-            query:listAnnouncements,
-            variables:variables
-          })
-          ;
+          query:listAnnouncements,
+          variables:variables
+        });
         
+            
         setAnnouncement(announcementList.data.listAnnouncements.items);
         if(announcementList.data.listAnnouncements.items.length<limit){
-          setNextToken(null)
+            setNextToken(null);
         }
         else{
           setNextToken(announcementList.data.listAnnouncements.nextToken);
         }
+        setLoading(false);
       }
-      setLoading(false);
     } catch (er) {
       
       Alert.alert(error)
@@ -98,49 +96,7 @@ const NotificationList = ({ navigation }) => {
     }
   }
 
-  const onRefresh = async()=>{
-      try{
-        setLoading(true);
-        let stu=student;
-        let courses=[];
-        for(let i=0;i<stu.enrollments.items.length;i++){
-          courses.push(stu.enrollments.items[i].courseId);
-        }
-         
-        let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
-          }
-          else{
-            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-          }
-        }
-     
-        filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-        
-        let variables = JSON.parse(filter)
-    
-        let announcementList=await API.graphql({
-            query:listAnnouncements,
-            variables:variables
-          })
-          ;
-        setAnnouncement(announcementList.data.listAnnouncements.items);
-        if(announcementList.data.listAnnouncements.items.length<limit){
-          setNextToken(null);
-        }
-        else{
-          setNextToken(announcementList.data.listAnnouncements.nextToken);
-        }
-        setLoading(false);
-      }catch(e){
-        
-        Alert.alert(error)
-      }
-
-  }
-
+ 
   const loadMore =async()=>{
     try{
 
@@ -152,37 +108,41 @@ const NotificationList = ({ navigation }) => {
         courses.push(stu.enrollments.items[i].courseId);
       }
       
-      let filter=`{"filter" : { "or" : [`;
-      for(let i=0;i<courses.length;i++){
-        if(i===courses.length-1){
-          filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
-        }
-        else{
-          filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-        }
+      if(courses.length===0){
+        return;
       }
+      else{
+        let filter=`{"filter" : { "or" : [`;
+        for(let i=0;i<courses.length;i++){
+          if(i===courses.length-1){
+            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+          }
+          else{
+            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
+          }
+        } 
         
-      filter+=`] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;  
-      let variables = JSON.parse(filter)
+        filter+=`] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;  
+        let variables = JSON.parse(filter)
          
-      let announcementList=await API.graphql({
+        let announcementList=await API.graphql({
             query:listAnnouncements,
             variables:variables
           });
         
-      let a=announcementList.data.listAnnouncements.items;
-      for(let i=0;i<a.length;i++){
-        announcement.push(a[i]);
+        let a=announcementList.data.listAnnouncements.items;
+        for(let i=0;i<a.length;i++){
+          announcement.push(a[i]);
+        }
+        if(announcementList.data.listAnnouncements.items.length<limit){
+          setNextToken(null);
+        }
+        else{
+          setNextToken(announcementList.data.listAnnouncements.nextToken);
+        }
+        setAnnouncement(announcement);
       }
-      if(announcementList.data.listAnnouncements.items.length<limit){
-        setNextToken(null);
-      }
-      else{
-        setNextToken(announcementList.data.listAnnouncements.nextToken);
-      }
-      setAnnouncement(announcement)
     }catch(e){
-     
       Alert.alert(error);
     }
   }
@@ -289,9 +249,15 @@ const NotificationList = ({ navigation }) => {
         </List.Accordion>
       </List.Section> 
        
-      <Card.Content>
+      <Card.Content >
         <List.Section title="Recent Announcements">
-          <View>
+          <ScrollView
+             refreshControl={
+                    <RefreshControl
+                      refreshing={loading}
+                      onRefresh={fetchAnnouncements}
+                  />
+                 } >
             {loading ? (
               <Text
                 style={{
@@ -313,12 +279,12 @@ const NotificationList = ({ navigation }) => {
             ) : (
               < ScrollView 
                 style={{ height: "70%" }}
-                 refreshControl={
-                    <RefreshControl
-                      refreshing={loading}
-                      onRefresh={onRefresh}
-                  />
-                 } 
+                //  refreshControl={
+                //     <RefreshControl
+                //       refreshing={loading}
+                //       onRefresh={fetchAnnouncements}
+                //   />
+                //  } 
                 >
                 {announcement.map((val, key) => (
                   <Card
@@ -371,19 +337,24 @@ const NotificationList = ({ navigation }) => {
                   Load More 
                 </Button> 
               :  
-              " "
+              ""
             }
+        
         </Text>
-        <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text>
-        </ScrollView>
-              
-            )}
+         <Text style={{marginLeft:"auto",marginRight:"auto" ,marginBottom:"60px"}}>Swipe down to refresh &#x2193;{'\n\n'}</Text>
+        </ScrollView>      
+          
+           )}
+   
             
-          </View>
+          </ScrollView>
           
         </List.Section>
-       
+      
+         
+                 
       </Card.Content>
+       {/* <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text>  */}
       </View>
   );
 };

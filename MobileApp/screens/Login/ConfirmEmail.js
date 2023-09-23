@@ -15,6 +15,7 @@ import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { Auth } from "aws-amplify";
 
+
 const { height } = Dimensions.get("window");
 
 const ConfirmEmail = ({ navigation }) => {
@@ -31,8 +32,8 @@ const ConfirmEmail = ({ navigation }) => {
 
     setLoading(true);
     try {
-      response = await Auth.confirmSignUp(email, code);
-
+      response = await Auth.confirmSignUp(email, code,{clientMetadata:{role:"Student"}});
+      
       //need to add user to a user group here?
       Alert.alert("Success", "Login to access your account.");
       navigation.navigate("Login");

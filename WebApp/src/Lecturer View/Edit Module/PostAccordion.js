@@ -14,7 +14,7 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import styled from "styled-components";
 import { createAnnouncement, updateActivity } from '../../Graphql/mutations';
 import { ErrorModal } from "../../Components/ErrorModal";
-import {SuccessModal} from "../../Components/SuccessModal";
+import { SuccessModal } from "../../Components/SuccessModal";
 
 import { API } from 'aws-amplify';
 
@@ -28,10 +28,10 @@ export default function PostAccordion(course) {
   const [activity, setActivity] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
-  const [latLng,setLatLng] = useState("");  
-  const [lat,setLat]=useState(59.955413);
-  const [lng,setLng]=useState(30.337844);
-  const[isMapLoaded,setIsMapLoaded]=useState(false);
+  const [latLng, setLatLng] = useState("");
+  const [lat, setLat] = useState(59.955413);
+  const [lng, setLng] = useState(30.337844);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -54,12 +54,12 @@ export default function PostAccordion(course) {
       if (activity === "" || activity === undefined || selectedLocation === "") {
         setError("Please pick an activity and location");
       }
-      else{
-      
-        let coordinate=selectedLocation+";"+latLng.lat+";"+latLng.lng;
-        let update=await API.graphql({
-          query:updateActivity,
-          variables:{input:{id:activity.id,coordinates:coordinate}}
+      else {
+
+        let coordinate = selectedLocation + ";" + latLng.lat + ";" + latLng.lng;
+        let update = await API.graphql({
+          query: updateActivity,
+          variables: { input: { id: activity.id, coordinates: coordinate } }
         })
         setSuccessMessage("Venue updated successfully");
       }
@@ -77,7 +77,7 @@ export default function PostAccordion(course) {
       setLatLng(latLngValue);
       setLat(latLngValue.lat);
       setLng(latLngValue.lng);
-      
+
     } catch (error) {
       console.error("Error fetching coordinates:", error);
     }
@@ -89,9 +89,9 @@ export default function PostAccordion(course) {
   }
 
 
-  const { isLoaded } =  useJsApiLoader({
+  const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
-    libraries:course.libraries
+    libraries: course.libraries
   })
 
 
@@ -114,6 +114,7 @@ export default function PostAccordion(course) {
 
       setSuccessMessage("Announcement posted succesfully");
     } catch (error) {
+      console.log(error);
       if (error.errors !== undefined) {
         let e = error.errors[0].message;
 
@@ -198,7 +199,7 @@ export default function PostAccordion(course) {
                     onChange={(e) => setDate(e.target.value)}></input>
                 </div>
               </div>
-              <button className="post-button">Post</button>
+              <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Post</button>
             </form>
           </AccordionDetails>
         </Accordion>
@@ -272,7 +273,7 @@ export default function PostAccordion(course) {
                   />
                 </div>
               </div>
-              <button className="post-button">Post</button>
+              <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Post</button>
             </form>
           </AccordionDetails>
         </Accordion>
@@ -305,67 +306,67 @@ export default function PostAccordion(course) {
               )
               }
             </select>
-            {isLoaded? 
-            (
-            <form style={{ paddingTop: '15px' }} onSubmit={(e) => { handleAddVenue(e) }}>
-            
-              <div className="form-group row">
-                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
-                <div className="col-sm-10">
-              
-                  <PlacesAutocomplete
-                    value={selectedLocation}
-                    onChange={setSelectedLocation}
-                    onSelect={handleSelect}
+            {isLoaded ?
+              (
+                <form style={{ paddingTop: '15px' }} onSubmit={(e) => { handleAddVenue(e) }}>
 
-                  >
-                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                      <div>
-                        <input
-                          {...getInputProps({
-                            placeholder: 'Search Places...',
-                            className: 'location-search-input form-control',
-                          })}
-                        />
-                        <MapSuggestionsContainer>
-                          {loading && <div>Loading...</div>}
-                          {suggestions.map((suggestion, index) => {
-                            const style = {
-                              backgroundColor: suggestion.active ? '#e32f45' : '#fff',
-                              cursor: 'pointer',
-                              padding: '5px',
-                            };
-                            return (
-                              <div key={index} {...getSuggestionItemProps(suggestion, { style })}>
-                                {suggestion.description}
-                              </div>
-                            );
-                          })}
-                        </MapSuggestionsContainer>
-                      </div>
-                    )}
-                  </PlacesAutocomplete>
-                </div>
-              </div>
+                  <div className="form-group row">
+                    <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Venue: </label>
+                    <div className="col-sm-10">
 
-              <div className="map">
-                <div style={{ height: '50vh', width: '100%' }}>
-                       <GoogleMap
-                          mapContainerClassName="map"
-                          center={{ lat: lat, lng: lng }}
-                          zoom={18}
-                        >
-                          <Marker position={{ lat: lat, lng: lng }} />
+                      <PlacesAutocomplete
+                        value={selectedLocation}
+                        onChange={setSelectedLocation}
+                        onSelect={handleSelect}
+
+                      >
+                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                          <div>
+                            <input
+                              {...getInputProps({
+                                placeholder: 'Search Places...',
+                                className: 'location-search-input form-control',
+                              })}
+                            />
+                            <MapSuggestionsContainer>
+                              {loading && <div>Loading...</div>}
+                              {suggestions.map((suggestion, index) => {
+                                const style = {
+                                  backgroundColor: suggestion.active ? '#e32f45' : '#fff',
+                                  cursor: 'pointer',
+                                  padding: '5px',
+                                };
+                                return (
+                                  <div key={index} {...getSuggestionItemProps(suggestion, { style })}>
+                                    {suggestion.description}
+                                  </div>
+                                );
+                              })}
+                            </MapSuggestionsContainer>
+                          </div>
+                        )}
+                      </PlacesAutocomplete>
+                    </div>
+                  </div>
+
+                  <div className="map">
+                    <div style={{ height: '50vh', width: '100%' }}>
+                      <GoogleMap
+                        mapContainerClassName="map"
+                        center={{ lat: lat, lng: lng }}
+                        zoom={18}
+                      >
+                        <Marker position={{ lat: lat, lng: lng }} />
                       </GoogleMap>
 
-                </div>
-              </div>
-            <button className="post-button">Add venue</button>
-              
-            </form> 
-            ) 
-            :
-            <div>Loading map...</div>
+                    </div>
+                  </div>
+                  <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Add venue</button>
+
+                </form>
+              )
+              :
+              <div>Loading map...</div>
             }
           </AccordionDetails>
         </Accordion>

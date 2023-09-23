@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import LecturerNavigation from '../Navigation/LecturerNavigation';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -6,10 +6,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../../Institution View/Navigation/Navigation.css';
-import { Auth, API } from 'aws-amplify'
+import { Auth} from 'aws-amplify'
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from "../../Components/SuccessModal"
-import { listLecturers } from '../../Graphql/queries';
 import UserManual from "../HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../../Components/HelpButton';
 import { useLecturer } from '../../ContextProviders/LecturerContext';
@@ -21,9 +20,6 @@ const PersonalInfoPage = () => {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
-
-
-    const [user, setUser] = useState();
     const [successMessage, setSuccessMessage] = useState("");
 
     const { lecturer, setLecturer } = useLecturer();
@@ -70,6 +66,7 @@ const PersonalInfoPage = () => {
         setConfirmPassword("")
     }
 
+
    
     // const fetchUser = async () => {
     //     try {
@@ -104,6 +101,7 @@ const PersonalInfoPage = () => {
         fetchLecturer()
       //fetchUser();
     }, [])
+
 
     return (
 
@@ -206,7 +204,7 @@ const PersonalInfoPage = () => {
                                     </div>
                                 </div>
 
-                                <button className="post-button">Update</button>
+                                <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Update</button>
                             </form>
                         </AccordionDetails>
                     </Accordion>

@@ -5,10 +5,13 @@ import Navbar from "./Navbar";
 import MainText from './MainText';
 import About from './About';
 import Download from './Download';
-import ScrollDownIcon from '../Images/scroll-down.png';
+import ScrollDownIcon from './Images/scroll-down.png';
+import ProntoLogo from "../Images/ProntoLogo.svg";
+import AboutImage from "./Images/AboutPicture.png";
+import DesktopAccess from "./Images/DesktopAccess.png";
+import MobileView from "./MobileView";
 
 function HomePage() {
-
   const [scrollingUp, setScrollingUp] = useState(true); // Track scroll direction
 
   useEffect(() => {
@@ -28,11 +31,6 @@ function HomePage() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-
-
-  useEffect(() => {
-  }, [scrollingUp]);
 
   const [showScrollIcon, setShowScrollIcon] = useState(true);
   const scrollDownIconRef = useRef(null);
@@ -62,19 +60,30 @@ function HomePage() {
     };
   }, []);
 
+  // Check if the screen width is less than a certain threshold (e.g., 768px for mobile)
+  const isMobileView = window.innerWidth < 768;
+
   return (
     <div>
-      {/* Use conditional rendering to show/hide the Navbar */}
-      {scrollingUp && <Navbar />}
-      <MainText />
-      <Features />
-      <About />
-      <Download />
+      {/* Conditional rendering to show/hide the Navbar */}
+      {isMobileView ? (
+        // Display a message for mobile users
+        < MobileView />
+      ) : (
+        // Content for desktop users
+        <div>
+          {scrollingUp && <Navbar />}
+          <MainText />
+          <Features />
+          <About />
+          <Download />
 
-      {showScrollIcon && (
-        <div className="scroll-down-icon" onClick={handleScrollDown} ref={scrollDownIconRef}>
-          <img src={ScrollDownIcon} alt="Scroll Down" />
-          <p>Scroll down for more</p>
+          {showScrollIcon && (
+            <div className="scroll-down-icon" onClick={handleScrollDown} ref={scrollDownIconRef}>
+              <img src={ScrollDownIcon} alt="Scroll Down" />
+              <p>Scroll down for more</p>
+            </div>
+          )}
         </div>
       )}
     </div>
