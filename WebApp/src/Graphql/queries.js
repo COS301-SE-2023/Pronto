@@ -390,6 +390,42 @@ export const searchCourses=`query SearchCourses(
   }
 }
 `
+export const coursesByInstitutionId = 
+`query CoursesByInstitutionId(
+    $institutionId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCourseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    coursesByInstitutionId(
+      institutionId: $institutionId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        lecturerId
+        coursecode
+        activity{
+          items{
+            activityname
+            day
+            start
+            end
+            venue
+            course{
+              coursecode
+            }
+          }
+        }
+      }
+      nextToken
+    }
+  }
+`;
 export const searchLecturerByCourses=`query SearchCourses(
   $filter: SearchableCourseFilterInput
   $sort: [SearchableCourseSortInput]
