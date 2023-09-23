@@ -247,6 +247,24 @@ export const updateAdmin=`mutation UpdateAdmin(
   }
 }`
 
+export const createActivity = /* GraphQL */ `
+  mutation CreateActivity(
+    $input: CreateActivityInput!
+    $condition: ModelActivityConditionInput
+  ) {
+    createActivity(input: $input, condition: $condition) {
+      id
+      courseId
+      activityname
+      day
+      start
+      end
+      venue
+      coordinates
+    }
+  }
+`;
+
 
 export const createCourse=`mutation CreateCourse(
   $input: CreateCourseInput!
@@ -276,3 +294,21 @@ export const updateActivity=`mutation UpdateActivity(
     coordinates
   }
 }`
+
+export const deleteCourse = /* GraphQL */ `
+  mutation DeleteCourse(
+    $input: DeleteCourseInput!
+    $condition: ModelCourseConditionInput
+  ) {
+    deleteCourse(input: $input, condition: $condition) {
+      id
+      institutionId
+      coursecode 
+      notification {
+        courseid
+        status
+        endPoinId
+      }
+    }
+  }
+`;
