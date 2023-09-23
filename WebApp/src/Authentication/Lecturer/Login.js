@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { listLecturers,listInstitutions } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
+import MobileView from "../../Homepage/MobileView";
 
 
 function Login() {
@@ -51,6 +52,10 @@ function Login() {
     {
       value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
       label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
+    },
+    {
+      value: process.env.REACT_APP_AGILE_ARCHITECTS_ID,
+      label: process.env.REACT_APP_AGILE_ARCHITECTS_LABEL
     }
   ];
 
@@ -140,8 +145,18 @@ function Login() {
       return;
     }
 
+
     try {
-      await Auth.signIn(email, password, { role: "Lecturer" });
+      // await Auth.signIn(email, password, { role: "Lecturer" });
+      const signInObject = {
+        username: email,
+        password: password,
+        validationData: {
+          role: "Lecturer",
+          institutionId: institutionId
+        }
+      }
+      await Auth.signIn(signInObject);
       setsignInError("");
       //navigate to lecturer home page
 
@@ -300,8 +315,15 @@ function Login() {
     setIsInstitudeSelected(true);
   };
 
+  const isMobileView = window.innerWidth < 768;
 
   return (
+    <div>
+      {
+        isMobileView ? (
+          // Display a message for mobile users
+          <MobileView />
+        ) : (
     <Container>
       <SignUpContainer signin={signIn}>
         <Form>
@@ -483,6 +505,8 @@ function Login() {
         </Overlay>
       </OverlayContainer>
     </Container>
+ )}
+    </div>
   );
 }
 

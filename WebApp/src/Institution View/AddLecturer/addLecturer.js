@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
+import { createLecturer, deleteLecturer, updateCourse, updateInstitution,updateAdmin, createCourse ,createActivity,deleteCourse, createAdmin} from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
@@ -77,6 +77,7 @@ const AddLecturer = () => {
             };
 
             try {
+
                 if (email !== admin.email) {
                     //let unique = admin.institution.lectureremails.filter((e) => e === email)
                     let emails = await API.graphql({
@@ -114,12 +115,12 @@ const AddLecturer = () => {
                             query: updateInstitution,
                             variables: { input: update },
                         });
-                        u = u.data.updateInstitution
-                        u.logoUrl = logoUrl;
-                        let ad = admin;
-                        ad.institution = u;
-
-                        setAdmin(ad);
+                        // u = u.data.updateInstitution
+                        // u.logoUrl = logoUrl;
+                        // let ad = admin;
+                        // ad.institution = u;
+                        admin.institution.lectureremails=emails;
+                        setAdmin(admin);
 
                         //Add lecturer to courses
                         await addCourses(lecturer, selectedCourses)
@@ -268,12 +269,14 @@ const AddLecturer = () => {
                     query: updateInstitution,
                     variables: { input: update },
                 });
-                let a = admin;
-                a.institution = u.data.updateInstitution;
-                a.institution.logoUrl = admin.institution.logoUrl;
+                // let a = admin;
+                // a.institution = u.data.updateInstitution;
+                // a.institution.logoUrl = admin.institution.logoUrl;
+                
+                admin.institution.lectureremails=newEmails;
                 const rows = [...lecturerList];
                 rows.splice(index, 1);
-                setAdmin(a);
+                setAdmin(admin);
                 setLecturerList(rows);
                 setOpenDialog(false);
                 setisRemoving(false);

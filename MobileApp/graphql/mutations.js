@@ -43,11 +43,31 @@ export const createStudent=`mutation CreateStudent(
       studentId
       activityId
     }
-    enrollments {
-      nextToken
+    enrollments { 
+      items{
+        id
+        courseId
+        course{ 
+          id
+          coursecode
+          activity{
+            items{
+              courseId
+              activityname
+              coordinates
+              id
+              day
+              start
+              end
+              venue 
+              course{
+                coursecode
+              }
+            }
+          }
+        }
+      }
     }
-    createdAt
-    updatedAt
     studentTimetableId
   }
 }`

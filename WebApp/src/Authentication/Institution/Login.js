@@ -1,14 +1,15 @@
 import React, { useState,useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import Select from "react-select";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { listAdmins,listInstitutions } from "../../Graphql/queries";
-import { createAdminApplication } from "../../Graphql/mutations";
-import { useAdmin } from "../../ContextProviders/AdminContext";
 import Select from "react-select";
-
+import { createAdmin, createInstitution } from "../../Graphql/mutations";
+import { useAdmin } from "../../ContextProviders/AdminContext";
+import MobileView from "../../Homepage/MobileView";
 
 function Login() {
   const [signIn, toggle] = useState(true);
@@ -25,6 +26,47 @@ function Login() {
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
   const navigate = useNavigate();
+
+  const universityInfo = [
+    {
+      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
+      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
+      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
+      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
+    },
+    {
+      value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
+      label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
+    },
+    {
+      value: process.env.REACT_APP_AGILE_ARCHITECTS_ID,
+      label: process.env.REACT_APP_AGILE_ARCHITECTS_LABEL
+    }
+  ];
+
+
+  //select institution
+  const [institutionId, setInstitutionId] = React.useState("");
+  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
+
+  const handleInstitutionSelection = (event) => {
+    setInstitutionId(event.value);
+    setIsInstitudeSelected(true);
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -44,13 +86,16 @@ function Login() {
               eq: email
             }
           },
+
         },
+
       });
       if (adminData.data.listAdmins.items.length > 0) {
         adminData = adminData.data.listAdmins.items[0];
         if (adminData.institution.logo !== null) {
           adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
         }
+
         setAdmin(adminData);
       }
       else {
@@ -108,10 +153,20 @@ function Login() {
       return;
     }
     try {
-      await Auth.signIn(email, password, { role: "Admin" });
+      const signInObject = {
+        username: email,
+        password: password,
+        validationData: {
+          role: "Admin",
+          institutionId: institutionId
+        }
+      }
+
+      const user = await Auth.signIn(signInObject);
       setsignInError("");
-      //navigate to lecturer home page
+
       await fetchAdmin().then(() => navigate("/institution/dashboard"))
+      // navigate("/institution/dashboard");
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
@@ -160,6 +215,7 @@ function Login() {
     setLoading(true);
 
     try {
+
       await Auth.signUp({
         username: email,
         password: signUpPassword,
@@ -170,9 +226,10 @@ function Login() {
         },
         clientMetadata: {
           role: "Admin",
-          institutionId:institutionId
+          institutionId: institutionId
         },
       });
+
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
 
@@ -260,7 +317,7 @@ function Login() {
     setNameIsValid(isValidName);
   };
 
-   const [institutionId, setInstitutionId] = React.useState("");
+  const [institutionId, setInstitutionId] = React.useState("");
   const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
 
   const handleInstitutionSelection = (event) => {
@@ -269,8 +326,15 @@ function Login() {
     setIsInstitudeSelected(true);
   };
 
+  const isMobileView = window.innerWidth < 768;
 
   return (
+    <div>
+    {
+        isMobileView ? (
+          // Display a message for mobile users
+          <MobileView />
+        ) : (
     <Container>
       <SignUpContainer signin={signIn}>
         <Form>
@@ -439,6 +503,8 @@ function Login() {
         </Overlay>
       </OverlayContainer>
     </Container>
+  )}
+    </div>
   );
 }
 

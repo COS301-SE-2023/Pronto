@@ -115,10 +115,10 @@ const EditInfoPage = () => {
     const handleDomainEdit = async (event) => {
         event.preventDefault();
         try {
-            let logoUrl = null;
-            if (admin.institution.logoUrl !== undefined && admin.institution.logoUrl !== null) {
-                logoUrl = admin.institution.logoUrl;
-            };
+            // let logoUrl = null;
+            // if (admin.institution.logoUrl !== undefined && admin.institution.logoUrl !== null) {
+            //     logoUrl = admin.institution.logoUrl;
+            // };
 
             let inst = {
                 id: admin.institution.id,
@@ -127,16 +127,16 @@ const EditInfoPage = () => {
             let update = await API.graphql({
                 query: updateInstitution,
                 variables: { input: inst },
-                authMode: "AMAZON_COGNITO_USER_POOLS"
             });
-            update.data.updateInstitution.logoUrl = logoUrl;
-            let newAdmin = admin;
-            newAdmin.institution = update.data.updateInstitution;
-            setAdmin(newAdmin);
+            //update.data.updateInstitution.logoUrl = logoUrl;
+            //let newAdmin = admin;
+            //newAdmin.institution = update.data.updateInstitution;
+            setAdmin(admin);
             setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
-            setSuccessMessage("Something went wrong");
+            console.log(error);
+            setError("Something went wrong");
         }
     }
 
@@ -160,8 +160,7 @@ const EditInfoPage = () => {
                 };
                 let update = await API.graphql({
                     query: updateInstitution,
-                    variables: { input: inst },
-                    authMode: "AMAZON_COGNITO_USER_POOLS"
+                    variables: { input: inst }
                 });
 
                 let newAdmin = admin;
@@ -214,7 +213,7 @@ const EditInfoPage = () => {
                         data-testid={'UniversityImage'}
                     />
 
-                    <button style={{ display: "flex", alignItems: "center", justifyContent: "center" }} onClick={handleFileSubmit}>Accept
+                    <button style={{ display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "20px" }} onClick={handleFileSubmit}>Accept
                         <TickIcon style={{ fontSize: "20px", marginLeft: "10px" }} />
                     </button>
                 </div>
@@ -326,7 +325,7 @@ const EditInfoPage = () => {
                                     </div>
                                 </div>
 
-                                <button className="post-button button-no-border">Update</button>
+                                <button className="post-button button-no-border" style={{ borderRadius: "20px", cursor: "pointer" }}>Update</button>
                             </form>
                         </AccordionDetails>
                     </Accordion>
@@ -426,11 +425,11 @@ const EditInfoPage = () => {
                             >
                                 <thead>
                                     <tr>
-                                        <th scope="col">Domain</th>
+                                        <th scope="col" style={{ width: "100%", border: "none" }}><h5>Domains</h5></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {admin && admin.institution && admin.institution.domains.map((key, val) => {
+                                    {admin && admin.institution && admin?.institution?.domains?.map((key, val) => {
                                         return (
                                             <tr key={val}>
                                                 <td>{key}</td>
@@ -438,7 +437,9 @@ const EditInfoPage = () => {
                                                     <button
                                                         type="button"
                                                         onClick={(e) => handleRemoveDomain(e, val)}
-                                                        className="btn btn-danger">
+                                                        className="btn btn-danger"
+                                                        style={{ borderRadius: "20px", width: "100px", float: "right" }}
+                                                    >
                                                         Remove
                                                     </button>
                                                 </td>
@@ -449,33 +450,45 @@ const EditInfoPage = () => {
                                 </tbody>
                             </table>
                             <form onSubmit={handleAddDomain}>
-                                <div className="form-row">
+                                <h5 style={{ padding: "5px" }}>Add a new domain</h5>
+                                <div className="form-row" style={{
+                                    borderTop: "1px solid #ddd", display: "flex", justifyContent: "space-between", alignItems: "center"
+                                }}>
                                     <div className="form-group col-6">
-                                        {/* <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Enter domain here: </label> */}
+                                        <div style={{ marginTop: "5px" }}>Enter Domain:</div>
                                         <input
                                             type="text"
                                             className="form-control"
+                                            placeholder='example.com'
                                             id="colFormLabel5"
                                             data-testid="domain"
                                             value={domain}
                                             required
-                                            onChange={(e) => setDomain(e.target.value)}></input>
+                                            onChange={(e) => setDomain(e.target.value)}
+                                            style={{ marginTop: "15px", width: "700px" }}
+                                        >
+                                        </input>
                                     </div>
-                                    <div className='form-group col-6'>
+                                    <div className="form-group col-6">
                                         <button
                                             type="submit"
-                                            className="btn btn-danger">
+                                            className="btn btn-danger"
+                                            style={{ borderRadius: "20px", width: "100px", marginTop: "42px", float: "right", marginRight: "10px" }}
+                                        >
                                             Add
                                         </button>
                                     </div>
                                 </div>
 
+
                             </form>
                             <button
                                 type="submit"
                                 onClick={handleDomainEdit}
-                                className="btn btn-danger">
-                                Done
+                                className="post-button button-no-border"
+                                style={{ borderRadius: "20px", cursor: "pointer" }}
+                            >
+                                Confirm
                             </button>
                         </AccordionDetails>
                     </Accordion>

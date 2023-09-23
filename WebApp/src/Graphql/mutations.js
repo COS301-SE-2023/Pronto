@@ -28,28 +28,10 @@ export const deleteLecturer=`mutation DeleteLecturer(
                                 lastname
                                 userRole
                                 email
-                                institution {
-                                    id
-                                    name
-                                    location
-                                    pageUrl
-                                    campusMapUrl
-                                    openingTime
-                                    closingTime
-                                    minimumDuration
-                                    lectureremails
-                                    coursecodes
-                                    domains
-                                    adminId
-                                    createdAt
-                                    updatedAt
-                                    }
+                                
                                 courses {
                                     nextToken
                                 }
-                                    createdAt
-                                    updatedAt
-                                    owner
                             }
                         }`                            
                         ;
@@ -64,11 +46,9 @@ export const updateCourse=`mutation UpdateCourse(
     institutionId
     lecturerId
     coursecode
-    coursename
-    createdAt
-    updatedAt
   }
 }`
+
 export const createAnnouncement=`mutation CreateAnnouncement(
   $input: CreateAnnouncementInput!
   $condition: ModelAnnouncementConditionInput
@@ -92,23 +72,8 @@ export const updateAnnouncement=`mutation UpdateAnnouncement(
   updateAnnouncement(input: $input, condition: $condition) {
     id
     courseId
-    description
-    start
-    end
     date
     venue
-    course {
-      id
-      institutionId
-      lecturerId
-      coursecode
-      coursename
-      semester
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
   }
 }`
 export const createAdmin=`mutation CreateAdmin(
@@ -120,9 +85,7 @@ export const createAdmin=`mutation CreateAdmin(
     institutionId
     firstname
     lastname
-    userRole
     email
-    
     owner
   }
 }
@@ -167,8 +130,6 @@ export const createInstitution=`mutation CreateInstitution(
     lectureremails
     domains
     adminId     
-    createdAt
-    updatedAt
   }
 }
 `
@@ -183,17 +144,6 @@ export const updateInstitution=`mutation UpdateInstitution(
     lectureremails
     domains
     adminId
-    courses {
-      nextToken
-    }
-    students {
-      nextToken
-    }
-    lecturer {
-      nextToken
-    }
-    createdAt
-    updatedAt
   }
 
 }`
@@ -204,14 +154,6 @@ export const deleteAnnouncement=`mutation DeleteAnnouncement(
 ) {
   deleteAnnouncement(input: $input, condition: $condition) {
     id
-    courseId
-    description
-    start
-    end
-    date
-    venue
-    createdAt
-    updatedAt
   }
 }
 `
@@ -239,9 +181,6 @@ export const updateAdmin=`mutation UpdateAdmin(
     lastname
     userRole
     email
-    createdAt
-    updatedAt
-    owner
   }
 }`
 
@@ -255,9 +194,6 @@ export const createCourse=`mutation CreateCourse(
     institutionId
     lecturerId
     coursecode
-    semester
-    createdAt
-    updatedAt
   }
 }`
 
@@ -292,6 +228,5 @@ export const deleteInstitution=`mutation DeleteInstitution(
       email
     }
     adminId
-    
   }
 }`
