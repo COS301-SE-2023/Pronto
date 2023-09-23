@@ -9,7 +9,12 @@ import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
-
+import CsvFileReader from "./csvReader";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Typography from '@mui/material/Typography';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -28,6 +33,7 @@ const AddLecturer = () => {
     const [offeredCourses, setOfferedCourses] = useState([]);
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
+    const [expanded,setExpanded] =useState(false);
 
     const [adding, setAdding] = useState("Add")
 
@@ -36,6 +42,9 @@ const AddLecturer = () => {
     const { admin, setAdmin } = useAdmin();
     const { lecturerList, setLecturerList, nextToken, setNextToken } = useLecturerList()
 
+    const handleChange = ()=>{
+        setExpanded(!expanded)
+    }
     const handleAdd = async (event) => {
         event.preventDefault()
         if (!isModalOpened && adding === "Add") {
@@ -86,12 +95,12 @@ const AddLecturer = () => {
                             query: updateInstitution,
                             variables: { input: update },
                         });
-                        u = u.data.updateInstitution
-                        u.logoUrl = logoUrl;
-                        let ad = admin;
-                        ad.institution = u;
-
-                        setAdmin(ad);
+                        // u = u.data.updateInstitution
+                        // u.logoUrl = logoUrl;
+                        // let ad = admin;
+                        // ad.institution = u;
+                         admin.institution.lectureremails=emails 
+                        setAdmin(admin);
 
                         //Add lecturer to courses
                         await addCourses(lecturer, selectedCourses)
@@ -229,12 +238,14 @@ const AddLecturer = () => {
                 query: updateInstitution,
                 variables: { input: update },
             });
-            let a = admin;
-            a.institution = u.data.updateInstitution;
-            a.institution.logoUrl = admin.institution.logoUrl;
+            // let a = admin;
+            // a.institution = u.data.updateInstitution;
+            // a.institution.logoUrl = admin.institution.logoUrl;
             const rows = [...lecturerList];
             rows.splice(index, 1);
-            setAdmin(a);
+            //setAdmin(a);
+            admin.instituion.lectureremails=newEmails;
+            setAdmin(admin);
             setLecturerList(rows);
         }
         catch (error) {
@@ -588,6 +599,19 @@ const AddLecturer = () => {
                             </button>
                         </form>
                     </div>
+                </div>
+
+                <div>
+        
+            
+                    
+                    <CsvFileReader 
+                        adding={adding}
+                        setAdding={setAdding}
+                        adminEmail={admin?.email}
+                        institutionId={admin?.institutionId}
+                        />
+                
                 </div>
 
                 {/* Display content */}
