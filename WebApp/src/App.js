@@ -30,6 +30,7 @@ import { LecturerProvider } from "./ContextProviders/LecturerContext";
 import { AdminProvider } from "./ContextProviders/AdminContext";
 import { LecturerListProvider } from "./ContextProviders/LecturerListContext";
 import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext";
+import {CourseProvider} from "./ContextProviders/CourseContext";
 
 import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -171,17 +172,19 @@ function App() {
   }, []);
 
   return (
-    <LecturerProvider>
-      <AnnouncementProvider>
-        <AdminProvider>
-          <LecturerListProvider>
-            <Authenticator.Provider>
-              <MyRoutes />
-            </Authenticator.Provider>
-          </LecturerListProvider>
-        </AdminProvider>
-      </AnnouncementProvider>
-    </LecturerProvider>
+    <CourseProvider>
+      <LecturerProvider>
+        <AnnouncementProvider>
+          <AdminProvider>
+            <LecturerListProvider>
+              <Authenticator.Provider>
+                <MyRoutes />
+              </Authenticator.Provider>
+            </LecturerListProvider>
+          </AdminProvider>
+        </AnnouncementProvider>
+      </LecturerProvider>
+    </CourseProvider>
   );
 }
 export default App;
