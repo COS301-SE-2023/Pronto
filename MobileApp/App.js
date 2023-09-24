@@ -39,7 +39,7 @@ export default function App() {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-      if(student==="" || student===null) {
+      if(student.id===undefined) {
         const email=authUser.attributes.email;
         let studentInfo = await API.graphql({
           query: getStudent,
