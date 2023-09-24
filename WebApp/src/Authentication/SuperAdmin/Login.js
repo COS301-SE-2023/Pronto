@@ -1,18 +1,13 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import "./styles.css";
-import ProntoLogo from "./ProntoLogo.png";
-import { Auth, API, Storage } from "aws-amplify";
+import "../Institution/styles.css";
+import ProntoLogo from "../Institution/ProntoLogo.png";
+import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import Select from "react-select";
-import { listLecturers,listInstitutions } from "../../Graphql/queries";
-import { useLecturer } from "../../ContextProviders/LecturerContext";
-import MobileView from "../../Homepage/MobileView";
-
 
 function Login() {
-  //sign in states
   const [signIn, toggle] = React.useState(true);
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [signInError, setsignInError] = useState("");
@@ -20,116 +15,15 @@ function Login() {
 
   //sign up states
   const [name, setName] = React.useState("");
-  const [surname, setSurname] = React.useState("");
+
   const [signUpPassword, setSignUpPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-
-  const { lecturer, setLecturer } = useLecturer();
-  const [institutions,setInstitutions]=useState([])
-
-  //university info
-  const universityInfo = [
-    {
-      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
-      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
-      label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
-    },
-    {
-      value: process.env.REACT_APP_AGILE_ARCHITECTS_ID,
-      label: process.env.REACT_APP_AGILE_ARCHITECTS_LABEL
-    }
-  ];
 
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-
-
-  const fetchLecturer = async () => {
-    let fetchError = "Could not find your records.If you are a Lecturer please contact your Institution's   Admin since they may have deleted your information. If you are an Admin please return to the homepage and click 'Continue as Admin'. If you are a Student please use the mobile app.";
-    try {
-      let lec = await API.graphql({
-        query: listLecturers,
-        variables: {
-          filter: {
-            email: {
-              eq: email
-            }
-          }
-        },
-      });
-
-      if (lec.data.listLecturers.items.length > 0) {
-        lec = lec.data.listLecturers.items[0];
-        try {
-          if (lec.institution.logo !== null) {
-            lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
-
-          }
-        } catch (error) {
-
-        }
-        setLecturer(lec);
-
-      }
-      else {
-        throw Error(fetchError);
-      }
-    } catch (error) {
-      console.log(error);
-      await Auth.signOut();
-      throw Error(fetchError);
-    }
-
-  }
-
-   const fetchInstitutions=async()=>{
-
-    try{
-          let inst=await API.graphql({
-          query:listInstitutions,
-          variables:{},
-          authMode:"API_KEY"
-         });
-         inst=inst.data.listInstitutions.items;
-         console.log(inst)
-         let institutionInfo=[];
-         for(let j=0;j<inst.length;j++){
-          let item={
-            value:inst[j].id,
-            label:inst[j].name
-          }
-          institutionInfo.push(item);
-         }
-        setInstitutions(institutionInfo);
-    }catch(error){
-      console.log(error);
-    }
-  }
-
-  useEffect(()=>{
-    fetchInstitutions();
-  })
-
+  
+  //function for signing in
   const onSignInPressed = async (event) => {
     if (loading) {
       return;
@@ -145,47 +39,27 @@ function Login() {
       return;
     }
 
+    //add logic to sign into pronto admin account
+     try {
+        await Auth.signIn(email, password);
+        setsignInError("");
+        navigate("/superadmin/admin-requests")
+      } catch (e) {
+        setLoading(false);
+        setsignInError(e.message);
+      }  
 
-    try {
-      // await Auth.signIn(email, password, { role: "Lecturer" });
-      const signInObject = {
-        username: email,
-        password: password,
-        validationData: {
-          role: "Lecturer",
-          institutionId: institutionId
-        }
-      }
-      await Auth.signIn(signInObject);
-      setsignInError("");
-      //navigate to lecturer home page
-
-      await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
-    } catch (e) {
-      setLoading(false);
-      setsignInError(e.message);
-    }
-    //setLoading(false);
+    setLoading(false);
   };
 
+
+  //function for sign up
   const onSignUpPressed = async (event) => {
     event.preventDefault();
     const errors = []; // Create an array to hold error messages
 
-    if (confirmPassword !== signUpPassword) {
-      errors.push("Passwords do not match");
-    }
-
-    if (!institutionId) {
-      errors.push("Please Select An Institution");
-    }
-
     if (!nameIsValid) {
-      errors.push("Please enter a valid name.");
-    }
-
-    if (!surnameIsValid) {
-      errors.push("Please enter a valid surname.");
+      errors.push("Please enter a valid administrator name.");
     }
 
     if (!emailIsValid) {
@@ -196,6 +70,9 @@ function Login() {
       errors.push(
         "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
       );
+    }
+    if (confirmPassword !== signUpPassword) {
+      errors.push("Passwords do not match");
     }
 
     if (errors.length > 0) {
@@ -215,28 +92,14 @@ function Login() {
 
     setLoading(true);
 
-    try {
-      await Auth.signUp({
-        username: email,
-        password: signUpPassword,
-        attributes: {
-          email: email,
-          name: name,
-          family_name: surname,
-        },
-        clientMetadata: {
-          role: "Lecturer",
-          institutionId: institutionId,
-        },
-      });
-      navigate("/lecturer/confirm-email", { state: { email: email } });
-    } catch (e) {
-      setsignUpError(e.message.split("Error: ")[1]);
-      console.log(e);
-    }
+    //add logic to create pronto admin account here
+
+
+    alert("Sign Up Pressed");
     setLoading(false);
   };
 
+  //validate email input for sign in and sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
 
   const validateEmail = (value) => {
@@ -245,7 +108,7 @@ function Login() {
     setEmailIsValid(isValidEmail);
   };
 
-  //validating password for sign up
+  //validate password on sign up
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const validatePassword = (value) => {
     const regex =
@@ -281,11 +144,15 @@ function Login() {
     setPasswordIsFocused(false);
   };
 
+  //confirm password validation
+  const [passwordMatch, setPasswordMatch] = useState(false);
 
+  const validateConfirmPassword = (value) => {
+    setPasswordMatch(value === signUpPassword);
+  };
 
-  //validate name and surname for sign up
+  //validate university name on signup
   const [nameIsValid, setNameIsValid] = useState(false);
-  const [surnameIsValid, setSurnameIsValid] = useState(false);
 
   const validateName = (value) => {
     const regex = /[a-zA-Z]+/;
@@ -293,37 +160,7 @@ function Login() {
     setNameIsValid(isValidName);
   };
 
-  const validateSurname = (value) => {
-    const regex = /[a-zA-Z]+/;
-    const isValidSurname = regex.test(value);
-    setSurnameIsValid(isValidSurname);
-  };
-
-  //validating confirm password
-  const [passwordMatch, setPasswordMatch] = useState(false);
-
-  const validateConfirmPassword = (value) => {
-    setPasswordMatch(value === signUpPassword);
-  };
-
-  //select institution
-  const [institutionId, setInstitutionId] = React.useState("");
-  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const handleInstitutionSelection = (event) => {
-    setInstitutionId(event.value);
-    setIsInstitudeSelected(true);
-  };
-
-  const isMobileView = window.innerWidth < 768;
-
   return (
-    <div>
-      {
-        isMobileView ? (
-          // Display a message for mobile users
-          <MobileView />
-        ) : (
     <Container>
       <SignUpContainer signin={signIn}>
         <Form>
@@ -332,11 +169,11 @@ function Login() {
               marginBottom: "20px",
             }}
           >
-            Create Lecturer Account
+            Create Pronto Administrator Account
           </Title>
           <Input
             type="text"
-            placeholder="Name"
+            placeholder="Administrator Name"
             value={name}
             onChange={(event) => {
               setName(event.target.value);
@@ -345,18 +182,8 @@ function Login() {
             isValidName={nameIsValid}
           />
           <Input
-            type="text"
-            placeholder="Surname"
-            value={surname}
-            onChange={(event) => {
-              setSurname(event.target.value);
-              validateSurname(event.target.value);
-            }}
-            isValidSurname={surnameIsValid}
-          />
-          <Input
             type="email"
-            placeholder="Email"
+            placeholder="Adminsitration Email"
             value={email}
             onChange={(event) => {
               setEmail(event.target.value);
@@ -364,16 +191,6 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-          <StyledSelectInput
-            options={institutions}
-            defaultValue={institutionId}
-            onChange={handleInstitutionSelection}
-            placeholder="Select an Institution"
-            classNamePrefix="SelectInput"
-            autoComplete="on"
-            spellCheck="true"
-            isSelectionValid={isInstitudeSelected}
-          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
@@ -397,9 +214,8 @@ function Login() {
             passwordMatch={passwordMatch}
           />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
-          {/* Render error text area if error exists */}
-          <Button type="submit" onClick={onSignUpPressed}>
-            {loading ? "Signing up..." : "Sign up"}
+          <Button onClick={onSignUpPressed}>
+            {loading ? "Applying..." : "Apply"}
           </Button>
           <div
             style={{
@@ -407,7 +223,7 @@ function Login() {
               flexDirection: "column",
             }}
           >
-            {passwordIsFocused && (
+            {passwordIsFocused && (  //real time password criteria check
               <>
                 <CriteriaMessage isValid={passwordCriteria.length}>
                   {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
@@ -443,8 +259,7 @@ function Login() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Lecturer Login</Subtitle>
-          {/* input fields for lecturers login*/}
+          <Subtitle>Pronto Administrator Login</Subtitle>
           <Input
             type="email"
             placeholder="Email"
@@ -455,16 +270,6 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-           <StyledSelectInput
-            options={institutions}
-            defaultValue={institutionId}
-            onChange={handleInstitutionSelection}
-            placeholder="Select an Institution"
-            classNamePrefix="SelectInput"
-            autoComplete="on"
-            spellCheck="true"
-            isSelectionValid={isInstitudeSelected}
-          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
@@ -473,14 +278,11 @@ function Login() {
               setPassword(event.target.value);
             }}
           />
-          <Button type="submit" onClick={onSignInPressed}>
+          <Button onClick={onSignInPressed}>
+            {" "}
             {loading ? "Signing in..." : "Sign in"}
           </Button>
-          <Anchor type="text/html" href="/lecturer/forgot-password">
-            Forgot your password?
-          </Anchor>
           {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
-          {/* Render error text area if error exists */}
         </Form>
       </SignInContainer>
       <OverlayContainer signin={signIn}>
@@ -490,37 +292,23 @@ function Login() {
             <Paragraph>
               Please sign in to access all of Pronto's features
             </Paragraph>
-            <GhostButton type="button" onClick={() => toggle(true)}>
-              Sign In
-            </GhostButton>
+            <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
           </LeftOverlayPanel>
 
-          <RightOverlayPanel className="rightOverlay" signin={signIn}>
+          <RightOverlayPanel signin={signIn}>
             <Title>No Account?</Title>
-            <Paragraph>Click here to verify a lecturer account</Paragraph>
-            <GhostButton type="button" onClick={() => toggle(false)}>
-              Sign Up
-            </GhostButton>
+            <Paragraph>
+              Click here to apply for a pronto admin account
+            </Paragraph>
+            <GhostButton onClick={() => toggle(false)}>Apply</GhostButton>
           </RightOverlayPanel>
         </Overlay>
       </OverlayContainer>
     </Container>
- )}
-    </div>
   );
 }
 
 //styles
-
-const Container = styled.div`
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  display: relative;
-  overflow: hidden;
-  width: 100%; /* Make it 100% width */
-  height: 100vh; /* Make it 100% viewport height */
-`;
 
 const slideIn = keyframes`
   from {
@@ -531,6 +319,16 @@ const slideIn = keyframes`
   }
 `;
 
+
+const Container = styled.div`
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  display: relative;
+  overflow: hidden;
+  width: 100%; /* Make it 100% width */
+  height: 100vh; /* Make it 100% viewport height */
+`;
 
 const SignUpContainer = styled.div`
   position: absolute;
@@ -549,6 +347,7 @@ const SignUpContainer = styled.div`
     z-index: 5;
   `
       : null}
+     
 `;
 
 const Subtitle = styled.p`
@@ -722,43 +521,6 @@ const CriteriaMessage = styled.span`
   margin-right: 10px;
   font-size: 12px;
   color: ${({ isValid }) => (isValid ? "green" : "inherit")};
-`;
-
-const StyledSelectInput = styled(Select)`
-  width: 100%;
-
-  .SelectInput__control {
-    background-color: #eee;
-    border: none;
-    border-radius: 25px;
-    margin: 8px 0;
-  }
-
-  .SelectInput__control--is-focused {
-    border: ${({ isSelectionValid }) =>
-    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
-    box-shadow: none;
-  }
-
-  .SelectInput__control:hover {
-    border-color: #eee;
-  }
-
-  .SelectInput__menu {
-    background-color: #eee;
-  }
-
-  .SelectInput__option:hover {
-    background-color: #ec7281;
-  }
-
-  .SelectInput__option--is-selected {
-    background-color: #e32f45;
-  }
-
-  .SelectInput__single-value .SelectInput__control--is-focused {
-    background-color: purple;
-  }
 `;
 
 export default Login;

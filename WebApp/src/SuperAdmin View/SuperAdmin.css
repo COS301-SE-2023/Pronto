@@ -1,0 +1,57 @@
+/* AddInstitutionModal.jsx */
+
+/* Modal styles */
+.modal {
+    display: block; /* Change from "display: none;" to "display: block;" */
+    position: absolute;
+    top: 30%;
+    left: 18%;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    border: none; 
+    
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    backdrop-filter: blur(5px); /* Apply a blur effect */
+    z-index: 1; /* Place it below the modal */
+  }
+
+
+
+.modal-content {
+    background-color: #fff; /* White background */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    max-width: 80%;
+    border: none;
+    text-align: center;
+}
+
+/* Close button styles */
+.modal-content button {
+    background-color: #e32f45;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.no-hover-color-change:hover {
+    background-color: #e32f45 !important; /* Set the button's background color to its normal color on hover */
+    color: #fff !important; /* Set the button's text color to its normal color on hover */
+  }
+
+
+
+/* Make sure to import this CSS in your main stylesheet */
