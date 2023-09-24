@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LecturerNavigation from '../Navigation/LecturerNavigation';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -6,13 +6,14 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import '../../Institution View/Navigation/Navigation.css';
-import { Auth } from 'aws-amplify'
+import { Auth, API } from 'aws-amplify'
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from "../../Components/SuccessModal"
 import UserManual from "../HelpFiles/PersonalInfo.pdf";
 import HelpButton from '../../Components/HelpButton';
 import { useLecturer } from '../../ContextProviders/LecturerContext';
 import personalInformationImage from "../Images/EditPersonalInfo.png";
+import { listLecturers } from '../../Graphql/queries';
 
 const PersonalInfoPage = () => {
     const [expanded, setExpanded] = useState(false);
@@ -28,17 +29,17 @@ const PersonalInfoPage = () => {
         setExpanded(isExpanded ? panel : false);
     };
 
-  const [passwordIsValid, setPasswordIsValid] = useState(false);
+    const [passwordIsValid, setPasswordIsValid] = useState(false);
 
-  const validatePassword = (value) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
-    const isValidPassword = regex.test(value);
+    const validatePassword = (value) => {
+        const regex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
+        const isValidPassword = regex.test(value);
 
-    setPasswordIsValid(isValidPassword);
-  };
-    const newPasswordSet= (password) =>{
-        let isValidPassword=validatePassword(password);
+        setPasswordIsValid(isValidPassword);
+    };
+    const newPasswordSet = (password) => {
+        let isValidPassword = validatePassword(password);
         setNewPassword(password);
         setPasswordIsValid(isValidPassword);
     }
@@ -46,7 +47,7 @@ const PersonalInfoPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            if(passwordIsValid){
+            if (passwordIsValid) {
                 if (newPassword === confirmPassword) {
                     const user = await Auth.currentAuthenticatedUser();
                     Auth.changePassword(user, oldPassword, newPassword);
@@ -55,7 +56,7 @@ const PersonalInfoPage = () => {
                 else {
                     setError("New password does not match confirm password");
                 }
-            }else{
+            } else {
                 setError("New password is too weak.Please ensure your password is at least 8 characters long and  includes at least one lowercase letter, one uppercase letter, one number and one special character")
             }
         } catch (error) {
@@ -67,7 +68,7 @@ const PersonalInfoPage = () => {
     }
 
 
-   
+
     // const fetchUser = async () => {
     //     try {
     //         let u = await Auth.currentAuthenticatedUser();
@@ -78,7 +79,7 @@ const PersonalInfoPage = () => {
     // }
 
     const fetchLecturer = async () => {
-        let u = await Auth.currentAuthenticatedUser()
+        await Auth.currentAuthenticatedUser()
         if (lecturer !== null) {
             const user = await Auth.currentAuthenticatedUser();
             let lecturer_email = user.attributes.email;
@@ -99,7 +100,7 @@ const PersonalInfoPage = () => {
 
     useEffect(() => {
         fetchLecturer()
-      //fetchUser();
+        //fetchUser();
     }, [])
 
 

@@ -6,9 +6,6 @@ import MainText from './MainText';
 import About from './About';
 import Download from './Download';
 import ScrollDownIcon from './Images/scroll-down.png';
-import ProntoLogo from "../Images/ProntoLogo.svg";
-import AboutImage from "./Images/AboutPicture.png";
-import DesktopAccess from "./Images/DesktopAccess.png";
 import MobileView from "./MobileView";
 
 function HomePage() {
