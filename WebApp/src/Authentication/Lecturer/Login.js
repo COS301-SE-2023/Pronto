@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import styled, { keyframes } from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { listLecturers } from "../../Graphql/queries";
+import { listLecturers, listInstitutions } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 import MobileView from "../../Homepage/MobileView";
 
@@ -23,39 +24,9 @@ function Login() {
   const [signUpPassword, setSignUpPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
+  //this is used to maintain a global state, DO NOT REMOVE
   const { lecturer, setLecturer } = useLecturer();
-
-  //university info
-  const universityInfo = [
-    {
-      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
-      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
-      label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
-    },
-    {
-      value: process.env.REACT_APP_AGILE_ARCHITECTS_ID,
-      label: process.env.REACT_APP_AGILE_ARCHITECTS_LABEL
-    }
-  ];
+  const [institutions, setInstitutions] = useState([])
 
   const navigate = useNavigate();
 
@@ -99,6 +70,35 @@ function Login() {
     }
 
   }
+  const fetchInstitutions = async () => {
+
+    try {
+      let inst = await API.graphql({
+        query: listInstitutions,
+        variables: {},
+        authMode: "API_KEY"
+      });
+      inst = inst.data.listInstitutions.items;
+      console.log(inst)
+      let institutionInfo = [];
+      for (let j = 0; j < inst.length; j++) {
+        let item = {
+          value: inst[j].id,
+          label: inst[j].name
+        }
+        institutionInfo.push(item);
+      }
+      setInstitutions(institutionInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchInstitutions();
+  })
+
+
   const onSignInPressed = async (event) => {
     if (loading) {
       return;
@@ -334,8 +334,8 @@ function Login() {
                   isValidEmail={emailIsValid}
                 />
                 <StyledSelectInput
-                  options={universityInfo}
                   defaultValue={"University of Pretoria"}
+                  options={institutions}             
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"
@@ -425,7 +425,7 @@ function Login() {
                   isValidEmail={emailIsValid}
                 />
                 <StyledSelectInput
-                  options={universityInfo}
+                  options={institutions}
                   defaultValue={institutionId}
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"

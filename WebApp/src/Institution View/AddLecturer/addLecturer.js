@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse, updateInstitution,updateAdmin, createCourse ,createActivity,deleteCourse, createAdmin} from "../../Graphql/mutations";
+import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
@@ -9,7 +9,7 @@ import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
-
+import CsvFileReader from "./csvReader";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import ClearIcon from '@mui/icons-material/Clear';
 
@@ -20,7 +20,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 
 
@@ -49,6 +49,7 @@ const AddLecturer = () => {
     const [offeredCourses, setOfferedCourses] = useState([]);
     const [selectedCourses, setSelectedCourses] = useState([]);
     const [error, setError] = useState("");
+    const [expanded, setExpanded] = useState(false);
 
     const [openDialog, setOpenDialog] = useState(false);
     const [lecturerToRemove, setLecturerToRemove] = useState(null);
@@ -63,6 +64,9 @@ const AddLecturer = () => {
     const { admin, setAdmin } = useAdmin();
     const { lecturerList, setLecturerList, nextToken, setNextToken } = useLecturerList()
 
+    const handleChange = () => {
+        setExpanded(!expanded)
+    }
 
     const handleAdd = async (event) => {
         event.preventDefault()
@@ -105,13 +109,13 @@ const AddLecturer = () => {
                             emails = admin.institution.lectureremails;
                             emails.push(email);
                         }
-                        let logoUrl = admin.institution.logoUrl;
+                        
                         let update = {
                             id: admin.institutionId,
                             lectureremails: emails
                         };
 
-                        let u = await API.graphql({
+                        await API.graphql({
                             query: updateInstitution,
                             variables: { input: update },
                         });
@@ -119,7 +123,7 @@ const AddLecturer = () => {
                         // u.logoUrl = logoUrl;
                         // let ad = admin;
                         // ad.institution = u;
-                        admin.institution.lectureremails=emails;
+                        admin.institution.lectureremails = emails;
                         setAdmin(admin);
 
                         //Add lecturer to courses
@@ -272,8 +276,8 @@ const AddLecturer = () => {
                 // let a = admin;
                 // a.institution = u.data.updateInstitution;
                 // a.institution.logoUrl = admin.institution.logoUrl;
-                
-                admin.institution.lectureremails=newEmails;
+
+                admin.institution.lectureremails = newEmails;
                 const rows = [...lecturerList];
                 rows.splice(index, 1);
                 setAdmin(admin);
@@ -640,6 +644,18 @@ const AddLecturer = () => {
                             </button>
                         </form>
                     </div>
+                </div>
+                <div>
+
+
+
+                    <CsvFileReader
+                        adding={adding}
+                        setAdding={setAdding}
+                        adminEmail={admin?.email}
+                        institutionId={admin?.institutionId}
+                    />
+
                 </div>
 
                 {/* Display content */}
