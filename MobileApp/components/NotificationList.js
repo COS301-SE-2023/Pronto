@@ -263,25 +263,33 @@ const NotificationList = ({ navigation }) => {
                 }}
               >Loading announcements...</Text>
             ) : announcement.length === 0 ? (
-              <Text
-                style={{
-                  fontSize: 30,
-                  fontWeight: 200,
-                  color: "#e32f45",
-                  textAlign: "center"
-                }}
-              >No recent announcements</Text>
+              <ScrollView 
+                refreshControl={
+                  <RefreshControl 
+                    refreshing={loading}
+                    onRefresh={fetchAnnouncements}
+                    /> 
+                }>
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      fontWeight: 200,
+                      color: "#e32f45",
+                      textAlign: "center"
+                    }}
+                  >No recent announcements</Text>
+              </ScrollView>
+              
             ) : (
               <View style={{ height: "80%" }}>
                 <Text style={{
                   marginLeft: "auto", marginRight: "auto", marginBottom: "4%", color: "#808080"
                 }}>Swipe down to refresh &#x2193;</Text>
-                < View
+                < ScrollView
                   refreshControl={
                     <RefreshControl
                       refreshing={loading}
                       onRefresh={fetchAnnouncements}
-                   
                    />
                   }
                 >
@@ -337,11 +345,11 @@ const NotificationList = ({ navigation }) => {
                         Load More
                       </Button>
                       :
-                      ""
+                      <Text>{"\n\n\n\n\n"}</Text>
                     }
                   </Text>
 
-                </View>
+                </ScrollView>
               </View>
 
             )}
