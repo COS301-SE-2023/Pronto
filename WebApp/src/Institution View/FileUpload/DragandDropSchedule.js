@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-
 import ScheduleUpload from '../Images/ScheduleUpload.png';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/Schedule.pdf";
-
 import { coursesByInstitutionId, listAdmins } from "../../Graphql/queries";
 import CourseReader from "./CourseReader"
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useCourse } from "../../ContextProviders/CourseContext";
-import { Storage, Auth,API } from "aws-amplify";
+import { Storage, Auth, API } from "aws-amplify";
 
 
 function DropzoneComponent() {
@@ -17,59 +15,75 @@ function DropzoneComponent() {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
   const [folderNameS3, setFolderNameS3] = useState("");
-  const{admin,setAdmin }=useAdmin();
-  const{course,setCourse} =useCourse();
-  const[activities,setActvities] =useState([]);
+  const { admin, setAdmin } = useAdmin();
+  const { course, setCourse } = useCourse();
+  const [activities, setActvities] = useState([]);
   useEffect(() => {
     //fetchUserData();
     fetchCourses()
   }, []);
 
+  //use this function to download excel template
+  const downloadExcelFile = async () => {
+    try {
+      const fileKey = "path/to/your/excel/file.xlsx"; // Replace with the actual S3 file key
+      const url = await Storage.get(fileKey, { download: true });
 
-  const fetchCourses = async()=>{
-    try{
-      let adminInfo=admin;
-      if(admin===null){
+      // Create an anchor element to trigger the download
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "excel_file.xlsx"; // Specify the desired file name
+      anchor.click();
+    } catch (error) {
+      console.error("Error downloading Excel file", error);
+    }
+  };
+
+
+  const fetchCourses = async () => {
+    try {
+      let adminInfo = admin;
+      if (admin === null) {
         let user = await Auth.currentAuthenticatedUser();
         let adminEmail = user.attributes.email;
         adminInfo = await API.graphql({
-                        query: listAdmins,
-                        variables: {
-                            filter: {
-                                email: {
-                                    eq: adminEmail
-                                }
-                            }
-                        }
-                    })
+          query: listAdmins,
+          variables: {
+            filter: {
+              email: {
+                eq: adminEmail
+              }
+            }
+          }
+        })
         adminInfo = adminInfo.data.listAdmins.items[0];
         setAdmin(adminInfo);
       }
-      if(course.length===0){
-        let courseList=await API.graphql({
-          query:coursesByInstitutionId,
-          variables:{
-            institutionId:adminInfo.institutionId,
+      if (course.length === 0) {
+        let courseList = await API.graphql({
+          query: coursesByInstitutionId,
+          variables: {
+            institutionId: adminInfo.institutionId,
           }
         })
-      
-        courseList=courseList.data.coursesByInstitutionId.items;
+
+        courseList = courseList.data.coursesByInstitutionId.items;
         setCourse(courseList);
-        
-        let act=[];
-        for(let i=0;i<courseList.length;i++){
-          for(let j=0;j<courseList[i].activity.items.length;j++){
+
+        let act = [];
+        for (let i = 0; i < courseList.length; i++) {
+          for (let j = 0; j < courseList[i].activity.items.length; j++) {
             act.push(courseList[i].activity.items[j]);
           }
         }
         console.log(act);
         setActvities(act);
-        
+
       }
-    
+
       console.log(course);
 
-    }catch(error){
+    } catch (error) {
 
     }
   }
@@ -173,22 +187,29 @@ function DropzoneComponent() {
     <div>
       <h6 style={{ marginBottom: "10px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
       <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
-      {/* <div
+      <div
         className="dropzone text-center"
         onDrop={handleFileDrop}
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.03)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}
         style={{
           height: "100px",
           width: "100%",
           backgroundColor: "#f7f7f7",
           border: "1px solid #ddd",
           borderRadius: "50px",
-          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", /* Increased shadow intensity 
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)",
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
           cursor: "pointer",
+          transition: "transform 0.3s"
         }}
       >
         {selectedFile ? (
@@ -239,8 +260,23 @@ function DropzoneComponent() {
         accept=".xls, .xlsx"
         onChange={handleFileSelect}
         style={{ display: "none" }}
-      /> */}
-      <div>
+      />
+
+      <p style={{ marginTop: "50px" }}>...or download template to get started</p>
+      <button
+        onClick={downloadExcelFile}
+        className="btn m-3"
+        style={{ backgroundColor: "#e32f45", color: "white", borderRadius: "20px", boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", transition: "transform 0.3s" }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.1)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}
+      >
+        Download template
+      </button>
+      {/* <div>
         <table>
           <thead>
             <tr>
@@ -273,9 +309,9 @@ function DropzoneComponent() {
                       course={course}
                       setCourse={setCourse}
                       />
-      </div>
-    <div>
-        <HelpButton pdfUrl={UserManual} />
+      </div>  */}
+      < div >
+        < HelpButton pdfUrl={UserManual} />
       </div>
     </div >
   );

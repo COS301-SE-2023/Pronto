@@ -122,6 +122,12 @@ function DropzoneComponent() {
         onDrop={handleFileDrop}
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.03)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}
         style={{
           height: "100px",
           width: "100%",
@@ -133,6 +139,7 @@ function DropzoneComponent() {
           alignItems: "center",
           display: "flex",
           cursor: "pointer",
+          transition: "transform 0.3s"
         }}
       >
         {selectedFile ? (

@@ -66,3 +66,7 @@
   align-items: flex-end;
   justify-content: flex-end;
  }
+
+ .help-icon:hover{
+  transform: scale(1.2);
+ }
