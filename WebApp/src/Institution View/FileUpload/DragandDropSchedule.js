@@ -4,7 +4,12 @@ import ScheduleUpload from '../Images/ScheduleUpload.png';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/Schedule.pdf";
 
-import { Storage, Auth } from "aws-amplify";
+import { coursesByInstitutionId, listAdmins } from "../../Graphql/queries";
+import CourseReader from "./CourseReader"
+import { useAdmin } from "../../ContextProviders/AdminContext";
+import { useCourse } from "../../ContextProviders/CourseContext";
+import { Storage, Auth,API } from "aws-amplify";
+
 
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -12,27 +17,78 @@ function DropzoneComponent() {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
   const [folderNameS3, setFolderNameS3] = useState("");
-
+  const{admin,setAdmin }=useAdmin();
+  const{course,setCourse} =useCourse();
+  const[activities,setActvities] =useState([]);
   useEffect(() => {
-    fetchUserData();
+    //fetchUserData();
+    fetchCourses()
   }, []);
 
-  const fetchUserData = async () => {
-    try {
-      const userInfo = await Auth.currentUserInfo();
-      setUser(userInfo);
-      let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
-      const words = username.split(/\s+/); // Split the name into words
-      username = words
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
-        .join(""); // Join the words without spaces
 
-      setFolderNameS3(username);
-      setMessage("");
-    } catch (error) {
-      setMessage("Error fetching user data");
+  const fetchCourses = async()=>{
+    try{
+      let adminInfo=admin;
+      if(admin===null){
+        let user = await Auth.currentAuthenticatedUser();
+        let adminEmail = user.attributes.email;
+        adminInfo = await API.graphql({
+                        query: listAdmins,
+                        variables: {
+                            filter: {
+                                email: {
+                                    eq: adminEmail
+                                }
+                            }
+                        }
+                    })
+        adminInfo = adminInfo.data.listAdmins.items[0];
+        setAdmin(adminInfo);
+      }
+      if(course.length===0){
+        let courseList=await API.graphql({
+          query:coursesByInstitutionId,
+          variables:{
+            institutionId:adminInfo.institutionId,
+          }
+        })
+      
+        courseList=courseList.data.coursesByInstitutionId.items;
+        setCourse(courseList);
+        
+        let act=[];
+        for(let i=0;i<courseList.length;i++){
+          for(let j=0;j<courseList[i].activity.items.length;j++){
+            act.push(courseList[i].activity.items[j]);
+          }
+        }
+        console.log(act);
+        setActvities(act);
+        
+      }
+    
+      console.log(course);
+
+    }catch(error){
+
     }
-  };
+  }
+  // const fetchUserData = async () => {
+  //   try {
+  //     const userInfo = await Auth.currentUserInfo();
+  //     setUser(userInfo);
+  //     let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
+  //     const words = username.split(/\s+/); // Split the name into words
+  //     username = words
+  //       .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
+  //       .join(""); // Join the words without spaces
+
+  //     setFolderNameS3(username);
+  //     setMessage("");
+  //   } catch (error) {
+  //     setMessage("Error fetching user data");
+  //   }
+  // };
 
   const createFolder = async (folderName) => {
     try {
@@ -117,7 +173,7 @@ function DropzoneComponent() {
     <div>
       <h6 style={{ marginBottom: "10px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
       <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
-      <div
+      {/* <div
         className="dropzone text-center"
         onDrop={handleFileDrop}
         onDragOver={handleDragOver}
@@ -128,7 +184,7 @@ function DropzoneComponent() {
           backgroundColor: "#f7f7f7",
           border: "1px solid #ddd",
           borderRadius: "50px",
-          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", /* Increased shadow intensity */
+          boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", /* Increased shadow intensity 
           justifyContent: "center",
           alignItems: "center",
           display: "flex",
@@ -183,8 +239,42 @@ function DropzoneComponent() {
         accept=".xls, .xlsx"
         onChange={handleFileSelect}
         style={{ display: "none" }}
-      />
+      /> */}
       <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Course Code</th>
+              <th>Day</th>
+              <th>Activity</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Venue</th>
+            </tr>
+          </thead>
+          <tbody>
+            {activities?.items?.map((activity,index)=>{
+              return(
+                <tr key={index}>
+                  <td>{activity?.course?.coursecode}</td>
+                  <td>{activity?.activityname}</td>
+                  <td>{activity?.day}</td>
+                  <td>{activity?.start}</td>
+                  <td>{activity?.end}</td>
+                  <td>{activity?.venue}</td>
+                </tr>
+              )
+            })}
+        </tbody>
+        </table>
+      </div>
+      <div>
+        <CourseReader institutionId={admin?.institutionId}
+                      course={course}
+                      setCourse={setCourse}
+                      />
+      </div>
+    <div>
         <HelpButton pdfUrl={UserManual} />
       </div>
     </div >

@@ -184,6 +184,24 @@ export const updateAdmin=`mutation UpdateAdmin(
   }
 }`
 
+export const createActivity = /* GraphQL */ `
+  mutation CreateActivity(
+    $input: CreateActivityInput!
+    $condition: ModelActivityConditionInput
+  ) {
+    createActivity(input: $input, condition: $condition) {
+      id
+      courseId
+      activityname
+      day
+      start
+      end
+      venue
+      coordinates
+    }
+  }
+`;
+
 
 export const createCourse=`mutation CreateCourse(
   $input: CreateCourseInput!
@@ -211,9 +229,43 @@ export const updateActivity=`mutation UpdateActivity(
   }
 }`
 
-export const deleteInstitution=`mutation DeleteInstitution(
-  $input: DeleteInstitutionInput!
-  $condition: ModelInstitutionConditionInput
+
+
+export const deleteCourse = /* GraphQL */ `
+  mutation DeleteCourse(
+    $input: DeleteCourseInput!
+    $condition: ModelCourseConditionInput
+  ) {
+    deleteCourse(input: $input, condition: $condition) {
+      id
+      institutionId
+      coursecode 
+      notification {
+        courseid
+        status
+        endPoinId
+      }
+    }
+  }
+`
+export const createActivity=`mutation CreateActivity(
+  $input: CreateActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  createActivity(input: $input, condition: $condition) {
+    id
+    courseId
+    activityname
+    day
+    start
+    end
+  }
+}`
+
+export const deleteCourse=`mutation DeleteCourse(
+  $input: DeleteCourseInput!
+  $condition: ModelCourseConditionInput
+
 ) {
   deleteInstitution(input: $input, condition: $condition) {
     id
@@ -230,3 +282,4 @@ export const deleteInstitution=`mutation DeleteInstitution(
     adminId
   }
 }`
+

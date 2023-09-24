@@ -6,7 +6,9 @@ node_modules/
 *.log
 *.tgz
 amplify\team-provider-info.json
-
+src/aws-exports.js
+WebApp/src/Components/aws-exports.js
+MobileApp/src/Components/aws-exports.js
 # WebStorm
 .idea/
 *.iml
