@@ -327,7 +327,11 @@ export default function PostAccordion(course) {
                       <PlacesAutocomplete
                         value={selectedLocation}
                         onChange={setSelectedLocation}
-                        onSelect={handleSelect}
+                        onSelect={(location) => {
+                          setSelectedLocation(location);
+                          handleSelect(location);
+                          // Optionally, you can also update the latLng and other related state here
+                        }}
                       >
                         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                           <div>
@@ -346,7 +350,17 @@ export default function PostAccordion(course) {
                                   padding: '5px',
                                 };
                                 return (
-                                  <div key={index} {...getSuggestionItemProps(suggestion, { style })}>
+                                  <div
+                                    key={index}
+                                    {...getSuggestionItemProps(suggestion, {
+                                      style,
+                                      onClick: () => {
+                                        // Handle the selection of a suggestion
+                                        setSelectedLocation(suggestion.description);
+                                        // Optionally, you can also update the latLng and other related state here
+                                      },
+                                    })}
+                                  >
                                     {suggestion.description}
                                   </div>
                                 );
@@ -355,6 +369,7 @@ export default function PostAccordion(course) {
                           </div>
                         )}
                       </PlacesAutocomplete>
+
                     </div>
                   </div>
 
