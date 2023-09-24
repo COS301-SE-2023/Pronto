@@ -22,7 +22,7 @@ function Login() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-  
+
   //function for signing in
   const onSignInPressed = async (event) => {
     if (loading) {
@@ -40,14 +40,14 @@ function Login() {
     }
 
     //add logic to sign into pronto admin account
-     try {
-        await Auth.signIn(email, password);
-        setsignInError("");
-        navigate("/superadmin/admin-requests")
-      } catch (e) {
-        setLoading(false);
-        setsignInError(e.message);
-      }  
+    try {
+      await Auth.signIn(email, password);
+      setsignInError("");
+      navigate("/superadmin/admin-requests")
+    } catch (e) {
+      setLoading(false);
+      setsignInError(e.message);
+    }
 
     setLoading(false);
   };
@@ -436,13 +436,6 @@ const Button = styled.button`
 const GhostButton = styled(Button)`
   background-color: transparent;
   border-color: #ffffff;
-`;
-
-const Anchor = styled.a`
-  color: #333;
-  font-size: 14px;
-  text-decoration: none;
-  margin: 15px 0;
 `;
 
 const OverlayContainer = styled.div`

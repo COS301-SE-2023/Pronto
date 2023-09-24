@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import styled, { keyframes } from "styled-components";
 import Select from "react-select";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { listAdmins } from "../../Graphql/queries";
-import { createAdmin, createInstitution } from "../../Graphql/mutations";
+import { listAdmins, listInstitutions } from "../../Graphql/queries";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import MobileView from "../../Homepage/MobileView";
 
@@ -26,48 +26,19 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const universityInfo = [
-    {
-      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
-      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
-      label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
-    },
-    {
-      value: process.env.REACT_APP_AGILE_ARCHITECTS_ID,
-      label: process.env.REACT_APP_AGILE_ARCHITECTS_LABEL
-    }
-  ];
-
 
   //select institution
-  const [institutionId, setInstitutionId] = React.useState("");
+  /* const [institutionId, setInstitutionId] = React.useState("");
   const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
 
   const handleInstitutionSelection = (event) => {
     setInstitutionId(event.value);
     setIsInstitudeSelected(true);
-  };
+  }; */
 
   const [loading, setLoading] = useState(false);
+  const [institutionName, setInstitutionName] = useState("");
+  const [institutions, setInstitutions] = useState([])
 
   const { setAdmin } = useAdmin();
 
@@ -105,6 +76,35 @@ function Login() {
     }
   }
 
+
+  const fetchInstitutions = async () => {
+
+    try {
+
+      let inst = await API.graphql({
+        query: listInstitutions,
+        variables: {},
+        authMode: "API_KEY"
+      });
+      inst = inst.data.listInstitutions.items;
+      let institutionInfo = [];
+      for (let j = 0; j < inst.length; j++) {
+        let item = {
+          value: inst[j].id,
+          label: inst[j].name
+        }
+        institutionInfo.push(item);
+      }
+      setInstitutions(institutionInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchInstitutions();
+  }, [])
+
   //function for signing in
   const onSignInPressed = async (event) => {
     if (loading) {
@@ -130,7 +130,7 @@ function Login() {
         }
       }
 
-      const user = await Auth.signIn(signInObject);
+      await Auth.signIn(signInObject);
       setsignInError("");
 
       await fetchAdmin().then(() => navigate("/institution/dashboard"))
@@ -201,8 +201,24 @@ function Login() {
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
     } catch (e) {
-      // console.log(e);
-      setsignUpError(e.message);
+
+      const application = {
+        name: name,
+        firstname: institutionId,
+        lastname: institutionName,
+        email: email,
+        status: "PENDING"
+      }
+
+      await API.graphql({
+        query: createAdminApplication,
+        variables: {
+          input: application
+        },
+        authMode: "API_KEY"
+      })
+      // setsignUpError(e.message);
+      setsignUpError("Your application has been sent")
     }
     setLoading(false);
   };
@@ -289,7 +305,7 @@ function Login() {
                 </Title>
                 <Input
                   type="text"
-                  placeholder="University Name"
+                  placeholder="Full Name"
                   value={name}
                   onChange={(event) => {
                     setName(event.target.value);
@@ -308,7 +324,7 @@ function Login() {
                   isValidEmail={emailIsValid}
                 />
                 <StyledSelectInput
-                  options={universityInfo}
+                  options={institutions}
                   defaultValue={institutionId}
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
@@ -397,8 +413,8 @@ function Login() {
                   isValidEmail={emailIsValid}
                 />
                 <StyledSelectInput
-                  options={universityInfo}
-                  defaultValue={institutionId}
+                  options={institutions}
+                  defaultValue={"University of Pretoria"}
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"

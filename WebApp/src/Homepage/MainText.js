@@ -22,7 +22,7 @@ function MainText() {
         return () => {
             clearInterval(interval);
         };
-    }, []);
+    });
 
     useEffect(() => {
         if (letterIndex < words[wordIndex].length) {
