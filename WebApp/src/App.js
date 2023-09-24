@@ -38,7 +38,7 @@ import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext";
 import {CourseProvider} from "./ContextProviders/CourseContext";
 
 import { Amplify, Auth } from "aws-amplify";
-import { Authenticator, View } from '@aws-amplify/ui-react';
+import { Authenticator } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import config from "./Components/aws-exports";
 

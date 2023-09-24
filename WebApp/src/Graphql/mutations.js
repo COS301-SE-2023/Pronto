@@ -1,4 +1,4 @@
-export const createLecturer=`mutation CreateLecturer(
+export const createLecturer = `mutation CreateLecturer(
   $input: CreateLecturerInput!
   $condition: ModelLecturerConditionInput
 ) {
@@ -17,7 +17,7 @@ export const createLecturer=`mutation CreateLecturer(
   }
 }`
 
-export const deleteLecturer=`mutation DeleteLecturer(
+export const deleteLecturer = `mutation DeleteLecturer(
                                 $input: DeleteLecturerInput!
                                 $condition: ModelLecturerConditionInput
                                 ) {
@@ -33,11 +33,11 @@ export const deleteLecturer=`mutation DeleteLecturer(
                                     nextToken
                                 }
                             }
-                        }`                            
-                        ;
+                        }`
+  ;
 
 
-export const updateCourse=`mutation UpdateCourse(
+export const updateCourse = `mutation UpdateCourse(
   $input: UpdateCourseInput!
   $condition: ModelCourseConditionInput
 ) {
@@ -49,7 +49,7 @@ export const updateCourse=`mutation UpdateCourse(
   }
 }`
 
-export const createAnnouncement=`mutation CreateAnnouncement(
+export const createAnnouncement = `mutation CreateAnnouncement(
   $input: CreateAnnouncementInput!
   $condition: ModelAnnouncementConditionInput
 ) {
@@ -65,7 +65,7 @@ export const createAnnouncement=`mutation CreateAnnouncement(
   }
 }
 `
-export const updateAnnouncement=`mutation UpdateAnnouncement(
+export const updateAnnouncement = `mutation UpdateAnnouncement(
   $input: UpdateAnnouncementInput!
   $condition: ModelAnnouncementConditionInput
 ) {
@@ -76,7 +76,7 @@ export const updateAnnouncement=`mutation UpdateAnnouncement(
     venue
   }
 }`
-export const createAdmin=`mutation CreateAdmin(
+export const createAdmin = `mutation CreateAdmin(
   $input: CreateAdminInput!
   $condition: ModelAdminConditionInput
 ) {
@@ -120,7 +120,7 @@ export const updateAdminApplication = /* GraphQL */ `
 
 
 
-export const createInstitution=`mutation CreateInstitution(
+export const createInstitution = `mutation CreateInstitution(
   $input: CreateInstitutionInput!
   $condition: ModelInstitutionConditionInput
 ) {
@@ -133,7 +133,7 @@ export const createInstitution=`mutation CreateInstitution(
   }
 }
 `
-export const updateInstitution=`mutation UpdateInstitution(
+export const updateInstitution = `mutation UpdateInstitution(
   $input: UpdateInstitutionInput!
   $condition: ModelInstitutionConditionInput
 ) {
@@ -148,7 +148,7 @@ export const updateInstitution=`mutation UpdateInstitution(
 
 }`
 
-export const deleteAnnouncement=`mutation DeleteAnnouncement(
+export const deleteAnnouncement = `mutation DeleteAnnouncement(
   $input: DeleteAnnouncementInput!
   $condition: ModelAnnouncementConditionInput
 ) {
@@ -157,7 +157,7 @@ export const deleteAnnouncement=`mutation DeleteAnnouncement(
   }
 }
 `
-export const updateAdmin=`mutation UpdateAdmin(
+export const updateAdmin = `mutation UpdateAdmin(
   $input: UpdateAdminInput!
   $condition: ModelAdminConditionInput
 ) {
@@ -203,7 +203,7 @@ export const createActivity = /* GraphQL */ `
 `;
 
 
-export const createCourse=`mutation CreateCourse(
+export const createCourse = `mutation CreateCourse(
   $input: CreateCourseInput!
   $condition: ModelCourseConditionInput
 ) {
@@ -215,7 +215,7 @@ export const createCourse=`mutation CreateCourse(
   }
 }`
 
-export const updateActivity=`mutation UpdateActivity(
+export const updateActivity = `mutation UpdateActivity(
   $input: UpdateActivityInput!
   $condition: ModelActivityConditionInput
 ) {
@@ -230,39 +230,7 @@ export const updateActivity=`mutation UpdateActivity(
 }`
 
 
-
-export const deleteCourse = /* GraphQL */ `
-  mutation DeleteCourse(
-    $input: DeleteCourseInput!
-    $condition: ModelCourseConditionInput
-  ) {
-    deleteCourse(input: $input, condition: $condition) {
-      id
-      institutionId
-      coursecode 
-      notification {
-        courseid
-        status
-        endPoinId
-      }
-    }
-  }
-`
-export const createActivity=`mutation CreateActivity(
-  $input: CreateActivityInput!
-  $condition: ModelActivityConditionInput
-) {
-  createActivity(input: $input, condition: $condition) {
-    id
-    courseId
-    activityname
-    day
-    start
-    end
-  }
-}`
-
-export const deleteCourse=`mutation DeleteCourse(
+export const deleteCourse = `mutation DeleteCourse(
   $input: DeleteCourseInput!
   $condition: ModelCourseConditionInput
 
@@ -282,4 +250,25 @@ export const deleteCourse=`mutation DeleteCourse(
     adminId
   }
 }`
+
+export const deleteInstitution =
+  `mutation DeleteInstitution(
+    $input: DeleteInstitutionInput!
+    $condition: ModelInstitutionConditionInput
+  ) {
+    deleteInstitution(input: $input, condition: $condition) {
+      id
+      name
+      lectureremails
+      logo
+      domains
+      adminId
+      owner
+      courses {
+        nextToken
+      }
+      
+    }
+  }
+;`
 

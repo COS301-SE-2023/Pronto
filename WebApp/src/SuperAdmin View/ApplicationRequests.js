@@ -22,11 +22,11 @@ export default function ApplicationRequests() {
        })
        admin=admin.data.getInstitution.admin;
        admin.email=requests[index].email;
-       let updated=await API.graphql({
+       await API.graphql({
         query:updateAdmin,
         variables:{input:admin}
        })
-          let updateRequest=await API.graphql({
+          await API.graphql({
             query:updateAdminApplication,
             variables:{input:{id:requests[index].id,status:"ACCEPTED"}}
           })
@@ -40,7 +40,7 @@ export default function ApplicationRequests() {
   const declineRequest = async(index) => {
     const updatedRequests = [...requests];
     try{
-      let updateRequest=await API.graphql({
+      await API.graphql({
             query:updateAdminApplication,
             variables:{input:{id:requests[index].id,status:"REJECTED"}}
           })

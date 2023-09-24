@@ -31,7 +31,6 @@ export default function AddModal(course) {
     setOpen(true)
     course.setModal(true)
 
-    let courses = []
     try {
       for (let i = 0; i < course.selectedCourses.length; i++) {
         selectedCourses.push(course.selectedCourses[i]);
@@ -100,9 +99,7 @@ export default function AddModal(course) {
 
   }
 
-  const handleSelect = async (index) => {
-    setSelected(offeredCourses[index])
-  }
+
 
   return (
     <div className="form-row">

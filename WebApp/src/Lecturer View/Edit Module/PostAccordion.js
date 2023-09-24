@@ -31,22 +31,12 @@ export default function PostAccordion(course) {
   const [latLng, setLatLng] = useState("");
   const [lat, setLat] = useState(59.955413);
   const [lng, setLng] = useState(30.337844);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
+
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-
-
-  const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
-  const defaultProps = {
-    center: {
-      lat: -25.753899044547356,
-      lng: 28.23134724523217
-    },
-    zoom: 16
-  };
 
   const handleAddVenue = async (event) => {
     event.preventDefault();
@@ -57,7 +47,7 @@ export default function PostAccordion(course) {
       else {
 
         let coordinate = selectedLocation + ";" + latLng.lat + ";" + latLng.lng;
-        let update = await API.graphql({
+        await API.graphql({
           query: updateActivity,
           variables: { input: { id: activity.id, coordinates: coordinate } }
         })
@@ -107,7 +97,7 @@ export default function PostAccordion(course) {
         type: type
       };
 
-      let mutation = await API.graphql({
+      await API.graphql({
         query: createAnnouncement,
         variables: { input: announcement },
       });
