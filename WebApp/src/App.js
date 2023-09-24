@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
 
+import ProntoAdminLogin from "./Authentication/SuperAdmin/Login";
+import ApplicationRequests from "./SuperAdmin View/ApplicationRequests";
+import ViewInstitutions from "./SuperAdmin View/ViewInstitutions";
+
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
@@ -23,6 +27,7 @@ import DashboardLecturer from "./Lecturer View/Dashboard/dashboardLecturer";
 
 import { RequireLecturerAuth } from "./RouteAuthComponents/RequireLecturerAuth";
 import { RequireAdminAuth } from "./RouteAuthComponents/RequireAdminAuth";
+import {RequireSuperAdminAuth} from "./RouteAuthComponents/RequireSuperAdminAuth";
 import NotFound from "./Error pages/NotFound";
 import HomePage from "./Homepage/HomePage";
 
@@ -30,9 +35,10 @@ import { LecturerProvider } from "./ContextProviders/LecturerContext";
 import { AdminProvider } from "./ContextProviders/AdminContext";
 import { LecturerListProvider } from "./ContextProviders/LecturerListContext";
 import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext";
+import {CourseProvider} from "./ContextProviders/CourseContext";
 
 import { Amplify, Auth } from "aws-amplify";
-import { Authenticator } from '@aws-amplify/ui-react';
+import { Authenticator, View } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import config from "./Components/aws-exports";
 
@@ -44,6 +50,24 @@ function MyRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+
+        {/*Pronto Admin login/register pages*/}
+        <Route path="/superadmin/login" element={<ProntoAdminLogin />} />
+        <Route 
+            path="/superadmin/admin-requests" 
+            element={
+              <RequireSuperAdminAuth>
+                <ApplicationRequests />
+              </RequireSuperAdminAuth>} 
+          />
+        
+        <Route 
+          path="/superadmin/view-institutions" 
+          element={
+            <RequireSuperAdminAuth>
+              <ViewInstitutions />
+            </RequireSuperAdminAuth>} 
+          />
 
         {/*Lecturer login/register pages*/}
         <Route path="/lecturer/login" element={<LecturerLogin />} />
@@ -171,17 +195,19 @@ function App() {
   }, []);
 
   return (
-    <LecturerProvider>
-      <AnnouncementProvider>
-        <AdminProvider>
-          <LecturerListProvider>
-            <Authenticator.Provider>
-              <MyRoutes />
-            </Authenticator.Provider>
-          </LecturerListProvider>
-        </AdminProvider>
-      </AnnouncementProvider>
-    </LecturerProvider>
+    <CourseProvider>
+      <LecturerProvider>
+        <AnnouncementProvider>
+          <AdminProvider>
+            <LecturerListProvider>
+              <Authenticator.Provider>
+                <MyRoutes />
+              </Authenticator.Provider>
+            </LecturerListProvider>
+          </AdminProvider>
+        </AnnouncementProvider>
+      </LecturerProvider>
+    </CourseProvider>
   );
 }
 export default App;
