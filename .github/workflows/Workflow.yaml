@@ -95,12 +95,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [ 18.x ]
     defaults:
       run:
         working-directory: ./WebApp
-    env:
-      CYPRESS_LECTURER_PASSWORD: ${{ secrets.CYPRESS_LECTURER_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -108,15 +106,62 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 18.x
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build and start the app
-        run: |
-          npm start &
-           sleep 30
-
       - name: Run Cypress tests
         run: npx cypress run
+
+  backend-unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version}}
+      - run: |
+          npm install
+          npm test
+  deploy-mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+          project-root: MobileApp
+
+      - name: Install dependencies
+        run: |
+          cd MobileApp  # Change to the MobileApp directory
+          npm install
+
+      - name: Publish update
+        run: |
+          cd MobileApp  # Change to the MobileApp directory
+          eas update --auto

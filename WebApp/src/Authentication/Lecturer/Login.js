@@ -335,7 +335,7 @@ function Login() {
                 />
                 <StyledSelectInput
                   options={universityInfo}
-                  defaultValue={institutionId}
+                  defaultValue={"University of Pretoria"}
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"
@@ -433,6 +433,7 @@ function Login() {
                   autoComplete="on"
                   spellCheck="true"
                   isSelectionValid={isInstitudeSelected}
+                  className="SelectInput"
                 ></StyledSelectInput>
                 <Input
                   type="password"

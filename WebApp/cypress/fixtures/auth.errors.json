@@ -1,0 +1,9 @@
+{
+  "LECTUEREREMAILERROR": "Lecturer email is not part of the Institution..",
+  "INVALIDNAME": "Please enter a valid name.",
+  "INVALIDSURNAME": "Please enter a valid surname",
+  "INVALIDEMAIL": "Please enter a valid email address.",
+  "INVALIDPASSWORD": "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (@$!%*?&).",
+  "INSTITUTIONERROR": "Please Select An Institution",
+  "CONFIRMPASSWORDERROR": "Passwords do not match"
+}
