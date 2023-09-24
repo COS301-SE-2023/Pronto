@@ -52,15 +52,4 @@ describe("Register", () => {
 
     });
 
-    it("displays password error message for invalid password", async () => {
-        const { getByTestId } = render(<Register />);
-
-        // Modify the password input value to be an invalid password
-        act(() => {
-            fireEvent.changeText(getByTestId("password-input"), "weak");
-        });
-
-
-    });
-
 });

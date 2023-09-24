@@ -50,7 +50,7 @@ const Register = ({ navigation }) => {
   const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
   const validateSignUpPassword = (value) => {
     const regex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidSignUpPassword = regex.test(value);
 
     setPasswordSignUpIsValid(isValidSignUpPassword);
@@ -117,7 +117,7 @@ const Register = ({ navigation }) => {
 
     if (!passwordSignUpIsValid) {
       errorMessage +=
-          "Please enter a password with at least 8 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.\n";
+        "Please enter a password with at least 8 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character.\n";
     }
 
     if (!passwordMatch) {
@@ -148,8 +148,8 @@ const Register = ({ navigation }) => {
         }
       }
       const u =await Auth.signUp(signUpObject);
-
-
+ 
+      
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
       Alert.alert("Error", e.message);
@@ -166,191 +166,190 @@ const Register = ({ navigation }) => {
   };
 
   return (
-      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-        <View style={styles.contentContainer}>
-          <View style={styles.centered}>
-            <Text style={styles.title}>Create Account</Text>
-            <Text style={styles.subtitle}>
-              Create an account so you can explore all the features!
-            </Text>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-                placeholder="Name"
-                onFocus={() => setIsTypingName(true)}
-                value={name}
-                onChangeText={(value) => {
-                  setName(value);
-                  validateName(value);
-                }}
-                placeholderTextColor={"#666666"}
-                style={styles.input}
-            />
-
-            {isTypingName && nameIsValid && (
-                <View style={styles.iconContainer}>
-                  <Ionicons name="checkmark-circle" size={24} color="green" />
-                </View>
-            )}
-
-            {isTypingName && !nameIsValid && (
-                <View style={styles.iconContainer}>
-                  <MaterialIcons name="cancel" size={24} color="red" />
-                </View>
-            )}
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-                placeholder="Surname"
-                onFocus={() => setIsTypingSurname(true)}
-                value={surname}
-                onChangeText={(value) => {
-                  setSurname(value);
-                  validateSurname(value);
-                }}
-                placeholderTextColor={"#666666"}
-                style={styles.input}
-            />
-
-            {isTypingSurname && surnameIsValid && (
-                <View style={styles.iconContainer}>
-                  <Ionicons name="checkmark-circle" size={24} color="green" />
-                </View>
-            )}
-
-            {isTypingSurname && !surnameIsValid && (
-                <View style={styles.iconContainer}>
-                  <MaterialIcons name="cancel" size={24} color="red" />
-                </View>
-            )}
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-                testID='email-input'
-                placeholder="Email"
-                autoCapitalize="none"
-                placeholderTextColor={"#666666"}
-                value={email}
-                onChangeText={(value) => {
-                  setEmail(value);
-                  validateEmail(value);
-                }}
-                style={[styles.input]}
-                onFocus={() => setIsTypingEmail(true)}
-            />
-
-            {isTypingEmail && emailIsValid && (
-                <View style={styles.iconContainer}>
-                  <Ionicons name="checkmark-circle" size={24} color="green" />
-                </View>
-            )}
-
-            {isTypingEmail && !emailIsValid && (
-                <View style={styles.iconContainer}>
-                  <MaterialIcons name="cancel" size={24} color="red"  testID='email-error-icon'/>
-                </View>
-            )}
-          </View>
-
-          <View style={styles.inputContainer}>
-            {/* Update the boxStyles prop for SelectList */}
-            <SelectList
-                setSelected={(institutionId) => setInstitutionId(institutionId)}
-                data={institutionInfo}
-                save="key"
-                boxStyles={[
-                  styles.input,
-                  { paddingVertical: 16, backgroundColor: "#E7DADA", opacity: 0.7, textAlignVertical: "center" },
-                ]}
-                defaultOption={{ key: "notSet", value: "Select University" }}
-                placeholder="Select University"
-                searchPlaceholder="Search University"
-                onSelect={(institutionId) => validateInstitutionId(institutionId)}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-                placeholder="Password"
-                autoCapitalize="none"
-                placeholderTextColor="#666666"
-                secureTextEntry={true}
-                style={[styles.input]}
-                value={password}
-                onChangeText={(value) => {
-                  setPassword(value);
-                  setPasswordSignUpIsValid(value);
-                  validateSignUpPassword(value);
-                }}
-                onFocus={() => setIsTypingPassword(true)}
-                testID="password-input"
-            />
-            {isTypingPassword && passwordSignUpIsValid && (
-                <View style={styles.iconContainer}>
-                  <Ionicons name="checkmark-circle" size={24} color="green" />
-                </View>
-            )}
-
-            {isTypingPassword && !passwordSignUpIsValid && (
-                <View style={styles.iconContainer}>
-                  <MaterialIcons name="cancel" size={24} color="red" />
-                </View>
-            )}
-
-            {isTypingPassword && !passwordSignUpIsValid && (
-                <PasswordCriteriaMessage criteria={passwordCriteria} />
-            )}
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-                placeholder="Confirm Password"
-                autoCapitalize="none"
-                placeholderTextColor={"#666666"}
-                value={confirmPassword}
-                secureTextEntry={true}
-                onFocus={() => setIsTypingPasswordMatch(true)}
-                style={styles.input}
-                onChangeText={(value) => {
-                  setConfirmPassword(value);
-                  validateConfirmPassword(value);
-                }}
-                passwordMatch={passwordMatch}
-            />
-
-            {isTypingPasswordMatch && passwordMatch && (
-                <View style={styles.iconContainer}>
-                  <Ionicons name="checkmark-circle" size={24} color="green" />
-                </View>
-            )}
-
-            {isTypingPasswordMatch && !passwordMatch && (
-                <View style={styles.iconContainer}>
-                  <MaterialIcons name="cancel" size={24} color="red" />
-                </View>
-            )}
-          </View>
-
-          <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} testID='sign-up-button'>
-            <Text style={styles.signUpButtonText}>
-              {" "}
-              {loading ? "Signing up..." : "Sign up"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-              style={styles.haveAccountButton}
-              onPress={() => navigation.navigate("Login")}
-          >
-            <Text style={styles.haveAccountButtonText}>
-              Already have an account?
-            </Text>
-          </TouchableOpacity>
+    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+      <View style={styles.contentContainer}>
+        <View style={styles.centered}>
+          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.subtitle}>
+            Create an account so you can explore all the features!
+          </Text>
         </View>
-      </ScrollView>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Name"
+            onFocus={() => setIsTypingName(true)}
+            value={name}
+            onChangeText={(value) => {
+              setName(value);
+              validateName(value);
+            }}
+            placeholderTextColor={"#666666"}
+            style={styles.input}
+          />
+
+          {isTypingName && nameIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingName && !nameIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Surname"
+            onFocus={() => setIsTypingSurname(true)}
+            value={surname}
+            onChangeText={(value) => {
+              setSurname(value);
+              validateSurname(value);
+            }}
+            placeholderTextColor={"#666666"}
+            style={styles.input}
+          />
+
+          {isTypingSurname && surnameIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingSurname && !surnameIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+              testID='email-input'
+            placeholder="Email"
+            autoCapitalize="none"
+            placeholderTextColor={"#666666"}
+            value={email}
+            onChangeText={(value) => {
+              setEmail(value);
+              validateEmail(value);
+            }}
+            style={[styles.input]}
+            onFocus={() => setIsTypingEmail(true)}
+          />
+
+          {isTypingEmail && emailIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingEmail && !emailIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red"  testID='email-error-icon'/>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
+          {/* Update the boxStyles prop for SelectList */}
+          <SelectList
+            setSelected={(institutionId) => setInstitutionId(institutionId)}
+            data={institutionInfo}
+            save="key"
+            boxStyles={[
+              styles.input,
+              { paddingVertical: 16, backgroundColor: "#E7DADA", opacity: 0.7, textAlignVertical: "center" },
+            ]}
+            defaultOption={{ key: "notSet", value: "Select University" }}
+            placeholder="Select University"
+            searchPlaceholder="Search University"
+            onSelect={(institutionId) => validateInstitutionId(institutionId)}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Password"
+            autoCapitalize="none"
+            placeholderTextColor="#666666"
+            secureTextEntry={true}
+            style={[styles.input]}
+            value={password}
+            onChangeText={(value) => {
+              setPassword(value);
+              setPasswordSignUpIsValid(value);
+              validateSignUpPassword(value);
+            }}
+            onFocus={() => setIsTypingPassword(true)}
+          />
+          {isTypingPassword && passwordSignUpIsValid && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingPassword && !passwordSignUpIsValid && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+
+          {isTypingPassword && !passwordSignUpIsValid && (
+            <PasswordCriteriaMessage criteria={passwordCriteria} />
+          )}
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Confirm Password"
+            autoCapitalize="none"
+            placeholderTextColor={"#666666"}
+            value={confirmPassword}
+            secureTextEntry={true}
+            onFocus={() => setIsTypingPasswordMatch(true)}
+            style={styles.input}
+            onChangeText={(value) => {
+              setConfirmPassword(value);
+              validateConfirmPassword(value);
+            }}
+            passwordMatch={passwordMatch}
+          />
+
+          {isTypingPasswordMatch && passwordMatch && (
+            <View style={styles.iconContainer}>
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingPasswordMatch && !passwordMatch && (
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} testID='sign-up-button'>
+          <Text style={styles.signUpButtonText}>
+            {" "}
+            {loading ? "Signing up..." : "Sign up"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.haveAccountButton}
+          onPress={() => navigation.navigate("Login")}
+        >
+          <Text style={styles.haveAccountButtonText}>
+            Already have an account?
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 

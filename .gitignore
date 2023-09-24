@@ -6,9 +6,7 @@ node_modules/
 *.log
 *.tgz
 amplify\team-provider-info.json
-src/aws-exports.js
-WebApp/src/Components/aws-exports.js
-MobileApp/src/Components/aws-exports.js
+
 # WebStorm
 .idea/
 *.iml
@@ -152,7 +150,6 @@ node_modules/
 team-provider-info.json
 
 #amplify-do-not-edit-begin
-
 backend/amplify/\#current-cloud-backend
 backend/amplify/.config/local-*
 backend/amplify/logs
@@ -160,9 +157,6 @@ backend/amplify/mock-data
 backend/amplify/mock-api-resources
 backend/amplify/backend/amplify-meta.json
 backend/amplify/backend/.temp
-
-
-
 build/
 dist/
 node_modules/

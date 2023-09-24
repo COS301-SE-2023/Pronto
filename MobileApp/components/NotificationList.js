@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Alert, View, StyleSheet, Modal, Text, RefreshControl, IconButton, Pressable } from "react-native";
-import { List, Card, Avatar, Button, Portal, PaperProvider } from "react-native-paper";
+import { Alert, View, StyleSheet,Modal, Text ,RefreshControl,IconButton,Pressable} from "react-native";
+import { List, Card, Avatar,Button,Portal,PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { listStudents, getStudent, announcementsByDate, listAnnouncements } from "../graphql/queries";
+import { listStudents,getStudent,announcementsByDate, listAnnouncements } from "../graphql/queries";
 import { Auth, API } from "aws-amplify"
 import { useStudent } from "../ContextProviders/StudentContext";
 import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
@@ -11,27 +11,24 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const NotificationList = ({ navigation }) => {
 
-  //if you need to use mock data for styling
-  const mockAnnouncements = require('../assets/data/mock/mock-announcement.json');
-
   const [expanded1, setExpanded1] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
   const {student,updateStudent} =useStudent();
   const [selectedAnnouncement,setSelectedAnnouncement]=useState(null);
   const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
 
+ 
   const handlePress1 = () => setExpanded1(!expanded1);
   const handlePress2 = () => setExpanded2(!expanded2);
   const [loading, setLoading] = useState(false);
   const error = "There appear to be network issues. Please try again later";
-  let limit = 4;
+  let limit=4;
   const showFullMessage = (key) => {
     setSelectedAnnouncement(key);
   };
 
-
-  //mock data to fetch
   const fetchAnnouncements = async () => {
+   
     try {
       let stu=student;
       if(student===null){
@@ -50,9 +47,8 @@ const NotificationList = ({ navigation }) => {
         }
         updateStudent(stu);
 
-      // Use the mockAnnouncements array as the source of announcements
-      setAnnouncement(mockAnnouncements);
-      setNextToken(null);
+      };
+
       let courses=[];
       for(let i=0;i<stu.enrollments.items.length;i++){
           courses.push(stu.enrollments.items[i].courseId);
@@ -98,7 +94,7 @@ const NotificationList = ({ navigation }) => {
       Alert.alert(error)
       setLoading(false);
     }
-  };
+  }
 
  
   const loadMore =async()=>{
@@ -122,7 +118,7 @@ const NotificationList = ({ navigation }) => {
             filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
           }
           else{
-            setNextToken(announcementList.data.listAnnouncements.nextToken);
+            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
           }
         } 
         
@@ -151,53 +147,45 @@ const NotificationList = ({ navigation }) => {
     }
   }
 
-  useEffect(() => {
+  useEffect(()=>{
     fetchAnnouncements();
-  }, [])
+  },[])
 
   return (
     <View >
 
-      {selectedAnnouncement &&
-        <Modal
-          animationType="slide"
-          transparent={true}
-          onRequestClose={() => {
+   { selectedAnnouncement && 
+      <Modal
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+      
+          setSelectedAnnouncement(null)
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.headerStyle}>{selectedAnnouncement.title}</Text>
+            <Text style={styles.subheaderStyle}>{selectedAnnouncement.course.coursecode}</Text>
+            <Text style={styles.textStyle}>{selectedAnnouncement.body}</Text>
+         <Button
+            icon="thumb-up"
+            mode="contained"
+            style={{
+              backgroundColor: "#e32f45",
+              width: "70%",
+              margin: "5%",
+              textAlign: "center",
+              color: "white",
+            }}
 
-            setSelectedAnnouncement(null)
-          }}>
-
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Pressable
-                style={styles.closeButton}
-                onPress={() => setSelectedAnnouncement(null)}
-              >
-                <MaterialIcons name="close" size={24} color="black" />
-              </Pressable>
-              <Text style={styles.headerStyle}>{selectedAnnouncement.title}</Text>
-              <Text style={styles.subheaderStyle}>{selectedAnnouncement.course.coursecode}</Text>
-              <Text style={styles.textStyle}>{selectedAnnouncement.body}</Text>
-            </View>
-            <Button
-              icon="check"
-              mode="contained"
-              style={{
-                backgroundColor: "#e32f45",
-                width: "70%",
-
-                textAlign: "center",
-                color: "white",
-                marginBottom: 50,
-              }}
-
-              outlined={true}
-              onPress={() => setSelectedAnnouncement(null)}
-            >
-              Okay
+            outlined={true}
+            onPress={() => setSelectedAnnouncement(null)}
+          >
+            Ok
             </Button>
           </View>
-        </Modal>
+        </View>
+      </Modal>
       }
       <List.Section title="Announcements" style={{ margin: 10 }}>
         <List.Accordion
@@ -210,11 +198,11 @@ const NotificationList = ({ navigation }) => {
           onPress={handlePress1}
           style={{ backgroundColor: "white" }}
         >
-          {announcement.filter(item => item.type === "Reminder").map((val, key) => (
+          {announcement.filter(item=>item.type==="Reminder").map((val, key) => (
             <Card
               key={key}
               style={{
-                margin: 10,
+                marginBottom: 10,
                 backgroundColor: "white",
               }}
               value={key}
@@ -238,15 +226,13 @@ const NotificationList = ({ navigation }) => {
           )}
           expanded={expanded2}
           onPress={handlePress2}
-          style={{
-            backgroundColor: "white"
-          }}
+          style={{ backgroundColor: "white" }}
         >
-          {announcement.filter(item => item.type === "Due Assignment").map((val, key) => (
+          {announcement.filter(item=>item.type==="Due Assignment").map((val, key) => (
             <Card
               key={key}
               style={{
-                margin: 10,
+                marginBottom: 10,
                 backgroundColor: "white",
               }}
               value={key}
@@ -259,11 +245,11 @@ const NotificationList = ({ navigation }) => {
               </Card.Content>
             </Card>
           ))}
-
+       
         </List.Accordion>
-      </List.Section>
-
-      <Card.Content>
+      </List.Section> 
+       
+      <Card.Content >
         <List.Section title="Recent Announcements">
           <ScrollView
              refreshControl={
@@ -291,85 +277,85 @@ const NotificationList = ({ navigation }) => {
                 }}
               >No recent announcements</Text>
             ) : (
-              <View style={{ height: "80%" }}>
-                <Text style={{
-                  marginLeft: "auto", marginRight: "auto", marginBottom: "4%", color: "#808080"
-                }}>Swipe down to refresh &#x2193;</Text>
-                < ScrollView
-                  refreshControl={
-                    <RefreshControl
-                      refreshing={loading}
-                      onRefresh={onRefresh}
-                    />
-                  }
+              < ScrollView 
+                style={{ height: "70%" }}
+                //  refreshControl={
+                //     <RefreshControl
+                //       refreshing={loading}
+                //       onRefresh={fetchAnnouncements}
+                //   />
+                //  } 
                 >
-                  {announcement.map((val, key) => (
-                    <Card
-                      key={key}
-                      style={{
-                        marginBottom: 10,
-                        backgroundColor: "white",
-                      }}
-                      value={key}
-                      onPress={(e) => showFullMessage(val)}
-                    >
-                      <Card.Content>
-                        <Card.Title
-                          key={key}
-                          title={val.course.coursecode}
-                          titleStyle={{ fontWeight: '500' }}
-                          subtitle={val.title}
-                          left={(props) => (
-                            <Avatar.Icon
-                              {...props}
-                              icon={val.type === "Reminder" ? "brain" : "clock"}
-                              color="#e32f45"
-                              style={{ backgroundColor: "white" }}
-                            />
-                          )}
-                        />
-                      </Card.Content>
-                    </Card>
-                  ))}
-                  <Text
+                {announcement.map((val, key) => (
+                  <Card
+                    key={key}
                     style={{
-                      marginBottom: "0%",
-                      marginLeft: "auto",
-                      marginRight: "auto",
+                      marginBottom: 10,
+                      backgroundColor: "white",
                     }}
+                    value={key}
+                    onPress={(e) => showFullMessage(val)}
                   >
-                    {nextToken !== null ?
-                      <Button
-                        onPress={loadMore}
-                        mode="contained"
-                        icon="arrow-down"
-                        outlined={true}
-                        testID="load-more-button"
-                        style={{
-                          backgroundColor: "#e32f45",
-                          marginRight: "auto",
-                          marginLeft: "auto",
-                          color: "white"
-                        }}
-                      >
-                        Load More
-                      </Button>
-                      :
-                      " "
-                    }
-                  </Text>
-
-                </ScrollView>
-              </View>
-
-            )}
-
-          </View>
-
+                    <Card.Content>
+                      <Card.Title
+                        key={key}
+                        title={val.course.coursecode}
+                        subtitle={val.title}
+                        left={(props) => (
+                          <Avatar.Icon
+                            {...props}
+                            icon={val.type==="Reminder"? "brain" : "clock"}
+                            color="#e32f45"
+                            style={{ backgroundColor: "white" }}
+                          />
+                        )}
+                      />
+                    </Card.Content>
+                  </Card>
+                ))}
+        <Text
+          style={{
+            marginBottom:"0%",
+            marginLeft:"auto",
+            marginRight:"auto"
+          }}
+          >
+          { nextToken !==null ? 
+              <Button 
+                onPress={loadMore} 
+                mode="contained"
+                icon="arrow-down"
+                outlined={true}
+                testID="load-more-button"
+                style={{
+                  backgroundColor: "#e32f45",
+                  marginRight:"auto",
+                  marginLeft:"auto",
+                  color:"white"
+                }}
+              > 
+                  Load More 
+                </Button> 
+              :  
+              ""
+            }
+        
+        </Text>
+         <Text style={{marginLeft:"auto",marginRight:"auto" ,marginBottom:"60px"}}>Swipe down to refresh &#x2193;{'\n\n'}</Text>
+        </ScrollView>      
+          
+           )}
+   
+            
+          </ScrollView>
+          
         </List.Section>
-
+      
+         
+                 
       </Card.Content>
-    </View>
+       {/* <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text>  */}
+      </View>
   );
 };
 
@@ -392,12 +378,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   modalView: {
-    flex: 1,
-    justifyContent: "center", // Center vertically
-    alignItems: "center", // Center horizontally
+    alignItems: "center",
+    marginTop: 50,
+    marginBottom: 100,
     width: "80%",
-    height: "50%",
-    paddingBottom: "0%",
+    height:"50%",
+    paddingBottom: "0%"
   },
   button: {
     borderRadius: 20,
@@ -408,10 +394,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: "center",
     marginBottom: "5%",
-  },
+ },
   headerStyle: {
     fontSize: 30,
-    fontWeight: "400",
+    fontWeight: "bold",
     textAlign: "center",
     marginBottom: "2.5%",
   },
@@ -420,17 +406,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     marginBottom: "5%",
-    color: "#e32f45",
   },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-  },
-  closeButton: {
-    position: "absolute",
-    top: 30,
-    right: 5,
-    zIndex: 1, // Ensures it's above other content
   },
 });
 

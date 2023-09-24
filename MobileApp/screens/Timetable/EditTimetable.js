@@ -16,32 +16,25 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { searchCourses, getStudent } from "../../graphql/queries"
-import { createEnrollment, deleteEnrollment, updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { searchCourses ,getStudent} from "../../graphql/queries"
+import { createEnrollment,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
-import mockData from "../../assets/data/mock/mock-modules";
 
 const EditTimetable = ({ navigation }) => {
-
-  //mock data
-  /* const [courses, setCourses] = useState(mockData.courses);
-  const [activities, setActivities] = useState(mockData.activities);
-  const [isLoading, setIsLoading] = useState(false); */
-
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
-  const [courses, setCourses] = useState([])  //comment out when not mocking
+  const [courses, setCourses] = useState([])
   const lectures = ["L01", "L02", "L03", "L04", "L05", "L06", "L07", "L08", "L09"];
   const tutorials = ["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"];
   const practicals = ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"];
   const [activities, setActivities] = useState([])
 
-  const { student, updateStudent } = useStudent();
-  const [isLoading, setIsLoading] = useState(true); // New state variable for loading state, uncomment when not mocking
+  const{student,updateStudent} = useStudent();
+  const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
   const [isSaving, setIsSaving] = useState(false);
 
   const error = "There appear to be network issues.Please try again later"
-
+  
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module);
@@ -54,7 +47,7 @@ const EditTimetable = ({ navigation }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-  const addToModules = async (module) => {
+  const addToModules = async(module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [module, ...prevModules]);
 
@@ -101,7 +94,7 @@ const EditTimetable = ({ navigation }) => {
     }
   }
 
-  const fetchCourses = async () => {
+  const fetchCourses = async () =>{
     try {
       let stu=student;
       if(student===null || student.id===undefined){
@@ -154,9 +147,9 @@ const EditTimetable = ({ navigation }) => {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchCourses();
-  }, []);
+  },[]);
 
   const handleSave = async () => {
     try {
@@ -170,7 +163,7 @@ const EditTimetable = ({ navigation }) => {
           activityIds.push(activities[i].id);
         }
       }
-      if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.items.filter((item) => item.courseId === selectedModule.id).length === 0) {
+        if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.items.filter((item) => item.courseId === selectedModule.id).length === 0) {
         let enroll = {
           courseId: selectedModule.id,
           studentId: student.id,
@@ -180,15 +173,15 @@ const EditTimetable = ({ navigation }) => {
           query: createEnrollment,
           variables: { input: enroll }
         });
-
+       
         let s = student;
-
+      
         student.enrollments.items.push(newEnrollment.data.createEnrollment);
-
-        updateStudent(student);
-
+       
+       updateStudent(student);
+        
       }
-
+      
       //Create a new timetable if it doesnt exist
       if (student.studentTimetableId === null) {
         let newTimetable = {
@@ -200,19 +193,19 @@ const EditTimetable = ({ navigation }) => {
           query: createTimetable,
           variables: { input: newTimetable },
         })
-        let a = await API.graphql({
-          query: updateStudentInfo,
-          variables: { input: { id: student.id, studentTimetableId: create.data.createTimetable.id } }
+        let a=await API.graphql({
+          query:updateStudentInfo,
+          variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id}}
         })
 
         let s = student
         s.timetable = create.data.createTimetable;
         s.studentTimetableId = s.timetable.id;
-        student.timetable = create.data.createTimetable;
-        student.studentTimetableId = create.data.createTimetable.id;
-        student.timetable.activities = activities;
-        updateStudent(student);
-
+        student.timetable=create.data.createTimetable;
+        student.studentTimetableId=create.data.createTimetable.id;
+        student.timetable.activities=activities;
+         updateStudent(student);
+        
       }
 
       //Update existing timetable
@@ -228,11 +221,11 @@ const EditTimetable = ({ navigation }) => {
           query: updateTimetable,
           variables: { input: newTimetable }
         })
-
+        
         let s = student
         s.timetable = update.data.updateTimetable;
-        student.timetable = update.data.updateTimetable;
-        student.timetable.activities = activities;
+        student.timetable=update.data.updateTimetable;
+        student.timetable.activities=activities;
         updateStudent(student);
         // s= await updateStudent(student);
         // student.timetable.activities=s.timetable.activities;
@@ -255,12 +248,12 @@ const EditTimetable = ({ navigation }) => {
         rows.splice(i, 1)
       }
     }
-
+   
     rows.push(activity)
     //student.timetable.activities=rows;
     //updateStudent(student);
     //let s=await updateStudent(student);
-    // student.timetable.activities=s.timetable.activities;
+   // student.timetable.activities=s.timetable.activities;
     setActivities(rows);
   }
 
@@ -284,7 +277,7 @@ const EditTimetable = ({ navigation }) => {
               let act = activities.filter(
                 (activity) => activity.courseId !== item.id
               );
-
+            
               let error = "Failed to remove course. Please try again later";
 
               try {
@@ -471,8 +464,8 @@ const EditTimetable = ({ navigation }) => {
             {selectedModule && (
               <View key={selectedModule.id}>
                 <Text style={styles.moduleCode}>{selectedModule?.coursecode}</Text>
-
-
+                
+                
                 {/* Display lectures */}
                 {lectures.map((lecture, i) => (
                   selectedModule.activity.items.filter(item => item.activityname == lecture).length > 0 &&
@@ -491,7 +484,7 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
-                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === lecture)[0]}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===lecture)[0]}
                   />
                 ))}
 
@@ -513,7 +506,7 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
-                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === tutorial)[0]}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===tutorial)[0]}
                   />
                 ))}
 
@@ -535,7 +528,7 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
-                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === practical)[0]}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===practical)[0]}
                   />
                 ))}
               </View>
@@ -554,7 +547,7 @@ const EditTimetable = ({ navigation }) => {
 
             outlined={true}
             disabled={isSaving}
-            onPress={async () => { await handleSave() }}
+            onPress={async() => { await handleSave()}}
             testID="save-button"
           >
             {isSaving ? (

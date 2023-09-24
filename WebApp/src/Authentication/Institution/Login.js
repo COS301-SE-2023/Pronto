@@ -1,21 +1,20 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Select from "react-select";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { listAdmins,listInstitutions } from "../../Graphql/queries";
-import Select from "react-select";
+import { listAdmins } from "../../Graphql/queries";
 import { createAdmin, createInstitution } from "../../Graphql/mutations";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import MobileView from "../../Homepage/MobileView";
 
 function Login() {
-  const [signIn, toggle] = useState(true);
+  const [signIn, toggle] = React.useState(true);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
 
@@ -70,8 +69,6 @@ function Login() {
 
   const [loading, setLoading] = useState(false);
 
-  const[institutionName,setInstitutionName]=useState("");
-  const [institutions,setInstitutions]=useState([])
   const { setAdmin } = useAdmin();
 
   const fetchAdmin = async () => {
@@ -107,35 +104,6 @@ function Login() {
       throw Error(fetchError);
     }
   }
-
-
-  const fetchInstitutions=async()=>{
-
-    try{
-      
-        let inst=await API.graphql({
-          query:listInstitutions,
-          variables:{},
-          authMode:"API_KEY"
-         });
-         inst=inst.data.listInstitutions.items;
-         let institutionInfo=[];
-         for(let j=0;j<inst.length;j++){
-          let item={
-            value:inst[j].id,
-            label:inst[j].name
-          }
-          institutionInfo.push(item);
-         }
-        setInstitutions(institutionInfo);
-    }catch(error){
-      console.log(error);
-    }
-  }
-
-  useEffect(()=>{
-    fetchInstitutions();
-  },[])
 
   //function for signing in
   const onSignInPressed = async (event) => {
@@ -232,26 +200,9 @@ function Login() {
 
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
-
     } catch (e) {
-      
-      const application={
-        name:name,
-        firstname:institutionId,
-        lastname:institutionName,
-        email:email,
-        status:"PENDING"
-      }
-      
-      let f=await API.graphql({
-        query:createAdminApplication,
-        variables:{
-          input:application
-        },
-        authMode:"API_KEY"
-      })
-     // setsignUpError(e.message);
-     setsignUpError("Your application has been sent")
+      // console.log(e);
+      setsignUpError(e.message);
     }
     setLoading(false);
   };
@@ -317,193 +268,183 @@ function Login() {
     setNameIsValid(isValidName);
   };
 
-  const [institutionId, setInstitutionId] = React.useState("");
-  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const handleInstitutionSelection = (event) => {
-    setInstitutionId(event.value);
-    setInstitutionName(event.label);
-    setIsInstitudeSelected(true);
-  };
-
   const isMobileView = window.innerWidth < 768;
 
   return (
     <div>
-    {
+      {
         isMobileView ? (
           // Display a message for mobile users
           <MobileView />
         ) : (
-    <Container>
-      <SignUpContainer signin={signIn}>
-        <Form>
-          <Title
-            style={{
-              marginBottom: "20px",
-            }}
-          >
-            Create Institution Account
-          </Title>
-          <Input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(event) => {
-              setName(event.target.value);
-              validateName(event.target.value);
-            }}
-            isValidName={nameIsValid}
-          />
-          <Input
-            type="email"
-            placeholder="Adminsitration Email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              validateEmail(event.target.value);
-            }}
-            isValidEmail={emailIsValid}
-          />
-           <StyledSelectInput
-            options={institutions}
-            defaultValue={institutionId}
-            onChange={handleInstitutionSelection}
-            placeholder="Select an Institution"
-            classNamePrefix="SelectInput"
-            autoComplete="on"
-            spellCheck="true"
-            isSelectionValid={isInstitudeSelected}
-          ></StyledSelectInput>
-          <Input
-            type="password"
-            placeholder="Password"
-            value={signUpPassword}
-            onChange={(event) => {
-              setSignUpPassword(event.target.value);
-              validatePassword(event.target.value);
-            }}
-            isValidPassword={passwordIsValid}
-            onFocus={handlePasswordFocus}
-            onBlur={handlePasswordBlur}
-          />
-          
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(event) => {
-              setConfirmPassword(event.target.value);
-              validateConfirmPassword(event.target.value);
-            }}
-            passwordMatch={passwordMatch}
-          />
-          {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
-          <Button onClick={onSignUpPressed}>
-            {loading ? "Applying..." : "Apply"}
-          </Button>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {passwordIsFocused && (  //real time password criteria check
-              <>
-                <CriteriaMessage isValid={passwordCriteria.length}>
-                  {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.uppercase}>
-                  {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.lowercase}>
-                  {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.digit}>
-                  {passwordCriteria.digit ? "✓" : "x"} Digit
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.specialChar}>
-                  {passwordCriteria.specialChar ? "✓" : "x"} Special character
-                  (!@#$%^&*()?)
-                </CriteriaMessage>
-              </>
-            )}
-          </div>
-        </Form>
-      </SignUpContainer>
-      <SignInContainer signin={signIn}>
-        <Form>
-          <LogoContainer>
-            <img
-              src={ProntoLogo}
-              alt="Logo"
-              style={{
-                width: "50%",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </LogoContainer>
-          <Subtitle>Institution Login</Subtitle>
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              validateEmail(event.target.value);
-            }}
-            isValidEmail={emailIsValid}
-          />
-           <StyledSelectInput
-            options={institutions}
-            defaultValue={institutionId}
-            onChange={handleInstitutionSelection}
-            placeholder="Select an Institution"
-            classNamePrefix="SelectInput"
-            autoComplete="on"
-            spellCheck="true"
-            isSelectionValid={isInstitudeSelected}
-          ></StyledSelectInput>
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          <Button onClick={onSignInPressed}>
-            {" "}
-            {loading ? "Signing in..." : "Sign in"}
-          </Button>
-          <Anchor href="/institution/forgot-password">
-            Forgot your password?
-          </Anchor>
-          {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
-        </Form>
-      </SignInContainer>
-      <OverlayContainer signin={signIn}>
-        <Overlay signin={signIn}>
-          <LeftOverlayPanel signin={signIn}>
-            <Title>Have an account?</Title>
-            <Paragraph>
-              Please sign in to access all of Pronto's features
-            </Paragraph>
-            <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
-          </LeftOverlayPanel>
+          <Container>
+            <SignUpContainer signin={signIn}>
+              <Form>
+                <Title
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  Create Institution Account
+                </Title>
+                <Input
+                  type="text"
+                  placeholder="University Name"
+                  value={name}
+                  onChange={(event) => {
+                    setName(event.target.value);
+                    validateName(event.target.value);
+                  }}
+                  isValidName={nameIsValid}
+                />
+                <Input
+                  type="email"
+                  placeholder="Adminsitration Email"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    validateEmail(event.target.value);
+                  }}
+                  isValidEmail={emailIsValid}
+                />
+                <StyledSelectInput
+                  options={universityInfo}
+                  defaultValue={institutionId}
+                  onChange={handleInstitutionSelection}
+                  placeholder="Select an Institution"
+                  classNamePrefix="SelectInput"
+                  autoComplete="on"
+                  spellCheck="true"
+                  isSelectionValid={isInstitudeSelected}
+                ></StyledSelectInput>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={signUpPassword}
+                  onChange={(event) => {
+                    setSignUpPassword(event.target.value);
+                    validatePassword(event.target.value);
+                  }}
+                  isValidPassword={passwordIsValid}
+                  onFocus={handlePasswordFocus}
+                  onBlur={handlePasswordBlur}
+                />
+                <Input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(event) => {
+                    setConfirmPassword(event.target.value);
+                    validateConfirmPassword(event.target.value);
+                  }}
+                  passwordMatch={passwordMatch}
+                />
+                {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
+                <Button onClick={onSignUpPressed}>
+                  {loading ? "Applying..." : "Apply"}
+                </Button>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {passwordIsFocused && (  //real time password criteria check
+                    <>
+                      <CriteriaMessage isValid={passwordCriteria.length}>
+                        {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.uppercase}>
+                        {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.lowercase}>
+                        {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.digit}>
+                        {passwordCriteria.digit ? "✓" : "x"} Digit
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.specialChar}>
+                        {passwordCriteria.specialChar ? "✓" : "x"} Special character
+                        (!@#$%^&*()?)
+                      </CriteriaMessage>
+                    </>
+                  )}
+                </div>
+              </Form>
+            </SignUpContainer>
+            <SignInContainer signin={signIn}>
+              <Form>
+                <LogoContainer>
+                  <img
+                    src={ProntoLogo}
+                    alt="Logo"
+                    style={{
+                      width: "50%",
+                      height: "auto",
+                      objectFit: "cover",
+                    }}
+                  />
+                </LogoContainer>
+                <Subtitle>Institution Login</Subtitle>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    validateEmail(event.target.value);
+                  }}
+                  isValidEmail={emailIsValid}
+                />
+                <StyledSelectInput
+                  options={universityInfo}
+                  defaultValue={institutionId}
+                  onChange={handleInstitutionSelection}
+                  placeholder="Select an Institution"
+                  classNamePrefix="SelectInput"
+                  autoComplete="on"
+                  spellCheck="true"
+                  isSelectionValid={isInstitudeSelected}
+                ></StyledSelectInput>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                  }}
+                />
+                <Button onClick={onSignInPressed}>
+                  {" "}
+                  {loading ? "Signing in..." : "Sign in"}
+                </Button>
+                <Anchor href="/institution/forgot-password">
+                  Forgot your password?
+                </Anchor>
+                {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
+              </Form>
+            </SignInContainer>
+            <OverlayContainer signin={signIn}>
+              <Overlay signin={signIn}>
+                <LeftOverlayPanel signin={signIn}>
+                  <Title>Have an account?</Title>
+                  <Paragraph>
+                    Please sign in to access all of Pronto's features
+                  </Paragraph>
+                  <GhostButton onClick={() => toggle(true)}>Sign In</GhostButton>
+                </LeftOverlayPanel>
 
-          <RightOverlayPanel signin={signIn}>
-            <Title>No Account?</Title>
-            <Paragraph>
-              Click here to apply for an institution account
-            </Paragraph>
-            <GhostButton onClick={() => toggle(false)}>Apply</GhostButton>
-          </RightOverlayPanel>
-        </Overlay>
-      </OverlayContainer>
-    </Container>
-  )}
+                <RightOverlayPanel signin={signIn}>
+                  <Title>No Account?</Title>
+                  <Paragraph>
+                    Click here to apply for an institution account
+                  </Paragraph>
+                  <GhostButton onClick={() => toggle(false)}>Apply</GhostButton>
+                </RightOverlayPanel>
+              </Overlay>
+            </OverlayContainer>
+          </Container>
+        )}
     </div>
   );
 }
