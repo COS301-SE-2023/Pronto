@@ -170,3 +170,39 @@ export const deleteStudent=`mutation DeleteStudent(
     owner
   }
 }`
+
+export const createNotificationPreferance = `
+  mutation CreateNotificationPreferance(
+    $input: CreateNotificationPreferanceInput!
+    $condition: ModelNotificationPreferanceConditionInput
+  ) {
+    createNotificationPreferance(input: $input, condition: $condition) {
+      studentId
+      type
+      enpointID
+      deviceID
+      id
+      createdAt
+      updatedAt
+      userId
+    }
+  }
+`;
+
+export const updateNotificationPreferance = /* GraphQL */ `
+  mutation UpdateNotificationPreferance(
+    $input: UpdateNotificationPreferanceInput!
+    $condition: ModelNotificationPreferanceConditionInput
+  ) {
+    updateNotificationPreferance(input: $input, condition: $condition) {
+      studentId
+      type
+      enpointID
+      deviceID
+      id
+      createdAt
+      updatedAt
+      userId
+    }
+  }
+`;

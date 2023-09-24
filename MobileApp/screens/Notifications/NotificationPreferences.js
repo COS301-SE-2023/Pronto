@@ -17,7 +17,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { Auth, API } from "aws-amplify";
 import { getStudent } from "../../graphql/queries";
 import { useStudent } from "../../ContextProviders/StudentContext";
-import { updateStudentInfo } from "../../graphql/mutations";
+import { updateStudentInfo,updateNotificationPreferance,createNotificationPreferance } from "../../graphql/mutations";
 
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -83,8 +83,9 @@ const NotificationPreferences = () => {
       setModalVisible(true); // Show the phone number modal when "SMS" option is clicked
     } else if (option === "email") {
       // Fetch user's email from Cognito
-      const userEmail = await fetchUserEmail();
-      setEmail(userEmail); // Set the email state with the user's email
+     // const userEmail = await fetchUserEmail();
+     //const email=student.email;
+     setEmail(student.email); // Set the email state with the user's email
       setEmailModalVisible(true); // Show the "Email Modal"
     } else {
       setShowSaveButton(true);
@@ -96,19 +97,33 @@ const NotificationPreferences = () => {
 
     try {
 
-      let update = await API.graphql({
-        query: updateStudentInfo,
-        variables: { input: { id: student.id, preference: selectedOption } }
-      })
-
-      student.preference = selectedOption;
+      if(student.preference===null){
+          
+          let pref=await API.graphql({
+            query:createNotificationPreferance,
+            variables:{input:{studentId:student.id,type:selectedOption.toUpperCase()}}
+          })
+          
+          student.preference=pref.data.createNotificationPreferance;
+          student.studentPreferenceId=pref.data.createNotificationPreferance.id
+      }
+      else{
+        let pref=await API.graphql({
+          query:updateNotificationPreferance,
+          variables:{input:{id:student.studentPreferenceId,type:selectedOption.toUpperCase()}}
+        })
+             
+          student.preference=pref.data.updateNotificationPreferance;
+          student.studentPreferenceId=pref.data.updateNotificationPreferance.id
+      }
       updateStudent(student);
       Alert.alert(
         "Preferences Updated",
         `Preference successfully updated to ${selectedOption}`
       );
     } catch (e) {
-      Alert.alert("Failed to update preference");
+       Alert.alert("Failed to update preference");
+     
     }
 
     setShowSaveButton(false);
@@ -205,7 +220,7 @@ const NotificationPreferences = () => {
         <Text style={styles.title}>Notification Preferences</Text>
         <Text style={{ marginBottom: 20, textAlign: "center" }}>
           This is how you will receive notifications from your lecturer. Your notification preference is currently set to
-           {/* <Text style={styles.optionText}>{student === null ? "" : student.preference === undefined ? "push" : student.preference === null ? " push" : student.preference}</Text> */}
+           <Text style={styles.optionText}>{student === null ? "" : student.preference === null ? " email" : " "+student.preference.type.toLowerCase()}</Text>
         </Text>
         <ImageBackground
           resizeMode="contain"
@@ -247,7 +262,7 @@ const NotificationPreferences = () => {
         >
           <Text style={styles.optionText}>Push Notifications</Text>
         </TouchableOpacity>
-        {/* 
+         
         {showSaveButton ? (
           <TouchableOpacity
             style={styles.saveButton}

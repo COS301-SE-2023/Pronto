@@ -49,14 +49,13 @@ const trackUserActivity= async()=>{
     
     Auth.signOut()
       .then(()=>{
-        console.log("Session expired");
         setExpired(true);
         //setAuthenticated(false);
       })
       .catch(error=>{
 
       })
-  }, 1 * 60 * 1000); // 30 minutes in milliseconds
+  }, 60 * 60 * 1000); // 30 minutes in milliseconds
 }
 
 // // Attach the event listener to the desired user activity events
