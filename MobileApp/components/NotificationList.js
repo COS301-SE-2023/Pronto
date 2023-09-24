@@ -33,14 +33,13 @@ const NotificationList = ({ navigation }) => {
   const fetchAnnouncements = async () => {
    
     try {
+      setLoading(true);
       let stu=student;
       if(student===null){
         
-        setLoading(true);
+        //setLoading(true);
         const user = await Auth.currentAuthenticatedUser()
-        let studentEmail = user.attributes.email;
-
-        let stu = await API.graphql({
+        stu = await API.graphql({
           query: getStudent,
           variables: {id:user.attributes.sub}
         })
@@ -51,46 +50,50 @@ const NotificationList = ({ navigation }) => {
           throw Error();
         }
         updateStudent(stu);
+      }
+      
 
-      };
-
-      if(announcement.length===0){
-       
-        setLoading(true);
-        let courses=[];
-        for(let i=0;i<stu.enrollments.items.length;i++){
+      // Use the mockAnnouncements array as the source of announcements
+      //setAnnouncement(mockAnnouncements);
+      setNextToken(null);
+      
+      let courses=[];
+      for(let i=0;i<stu.enrollments.items.length;i++){
           courses.push(stu.enrollments.items[i].courseId);
-        }
+      }
+      if(courses.length===0){
+        setLoading(false);
+        setAnnouncement([]);
+        return;
+      }
          
-        let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+      let filter=`{"filter" : { "or" : [`;
+      for(let i=0;i<courses.length;i++){
+        if(i===courses.length-1){
+          filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
           }
-          else{
-            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-          }
-        }
-     
-        filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-        
-        let variables = JSON.parse(filter)
-    
-        let announcementList=await API.graphql({
-            query:listAnnouncements,
-            variables:variables
-          })
-          ;
-        
-        setAnnouncement(announcementList.data.listAnnouncements.items);
-        if(announcementList.data.listAnnouncements.items.length<limit){
-          setNextToken(null)
-        }
         else{
-          setNextToken(announcementList.data.listAnnouncements.nextToken);
+          filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
         }
       }
-      setLoading(false);
+     
+      filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;  
+      let variables = JSON.parse(filter)
+    
+      let announcementList=await API.graphql({
+            query:listAnnouncements,
+            variables:variables
+          });
+        
+      setAnnouncement(announcementList.data.listAnnouncements.items);
+      if(announcementList.data.listAnnouncements.items.length<limit){
+          setNextToken(null)
+        }
+      else{
+          setNextToken(announcementList.data.listAnnouncements.nextToken);
+        }
+        setLoading(false);
+     // }
     } catch (er) {
       
       Alert.alert(error)
@@ -98,48 +101,6 @@ const NotificationList = ({ navigation }) => {
     }
   }
 
-  const onRefresh = async()=>{
-      try{
-        setLoading(true);
-        let stu=student;
-        let courses=[];
-        for(let i=0;i<stu.enrollments.items.length;i++){
-          courses.push(stu.enrollments.items[i].courseId);
-        }
-         
-        let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
-          }
-          else{
-            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-          }
-        }
-     
-        filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-        
-        let variables = JSON.parse(filter)
-    
-        let announcementList=await API.graphql({
-            query:listAnnouncements,
-            variables:variables
-          })
-          ;
-        setAnnouncement(announcementList.data.listAnnouncements.items);
-        if(announcementList.data.listAnnouncements.items.length<limit){
-          setNextToken(null);
-        }
-        else{
-          setNextToken(announcementList.data.listAnnouncements.nextToken);
-        }
-        setLoading(false);
-      }catch(e){
-        
-        Alert.alert(error)
-      }
-
-  }
 
   const loadMore =async()=>{
     try{
@@ -311,76 +272,82 @@ const NotificationList = ({ navigation }) => {
                 }}
               >No recent announcements</Text>
             ) : (
-              < ScrollView 
-                style={{ height: "70%" }}
-                 refreshControl={
+              <View style={{ height: "80%" }}>
+                <Text style={{
+                  marginLeft: "auto", marginRight: "auto", marginBottom: "4%", color: "#808080"
+                }}>Swipe down to refresh &#x2193;</Text>
+                < View
+                  refreshControl={
                     <RefreshControl
                       refreshing={loading}
-                      onRefresh={onRefresh}
-                  />
-                 } 
+                      onRefresh={fetchAnnouncements}
+                   
+                   />
+                  }
                 >
-                {announcement.map((val, key) => (
-                  <Card
-                    key={key}
+                  {announcement.map((val, key) => (
+                    <Card
+                      key={key}
+                      style={{
+                        marginBottom: 10,
+                        backgroundColor: "white",
+                      }}
+                      value={key}
+                      onPress={(e) => showFullMessage(val)}
+                    >
+                      <Card.Content>
+                        <Card.Title
+                          key={key}
+                          title={val.course.coursecode}
+                          titleStyle={{ fontWeight: '500' }}
+                          subtitle={val.title}
+                          left={(props) => (
+                            <Avatar.Icon
+                              {...props}
+                              icon={val.type === "Reminder" ? "brain" : "clock"}
+                              color="#e32f45"
+                              style={{ backgroundColor: "white" }}
+                            />
+                          )}
+                        />
+                      </Card.Content>
+                    </Card>
+                  ))}
+                  <Text
                     style={{
-                      marginBottom: 10,
-                      backgroundColor: "white",
+                      marginBottom: "0%",
+                      marginLeft: "auto",
+                      marginRight: "auto",
                     }}
-                    value={key}
-                    onPress={(e) => showFullMessage(val)}
                   >
-                    <Card.Content>
-                      <Card.Title
-                        key={key}
-                        title={val.course.coursecode}
-                        subtitle={val.title}
-                        left={(props) => (
-                          <Avatar.Icon
-                            {...props}
-                            icon={val.type==="Reminder"? "brain" : "clock"}
-                            color="#e32f45"
-                            style={{ backgroundColor: "white" }}
-                          />
-                        )}
-                      />
-                    </Card.Content>
-                  </Card>
-                ))}
-        <Text
-          style={{
-            marginBottom:"0%",
-            marginLeft:"auto",
-            marginRight:"auto"
-          }}
-          >
-          { nextToken !==null ? 
-              <Button 
-                onPress={loadMore} 
-                mode="contained"
-                icon="arrow-down"
-                outlined={true}
-                testID="load-more-button"
-                style={{
-                  backgroundColor: "#e32f45",
-                  marginRight:"auto",
-                  marginLeft:"auto",
-                  color:"white"
-                }}
-              > 
-                  Load More 
-                </Button> 
-              :  
-              " "
-            }
-        </Text>
-        <Text style={{marginLeft:"auto",marginRight:"auto"}}>Swipe down to refresh &#x2193;</Text>
-        </ScrollView>
-              
+                    {nextToken !== null ?
+                      <Button
+                        onPress={loadMore}
+                        mode="contained"
+                        icon="arrow-down"
+                        outlined={true}
+                        testID="load-more-button"
+                        style={{
+                          backgroundColor: "#e32f45",
+                          marginRight: "auto",
+                          marginLeft: "auto",
+                          color: "white"
+                        }}
+                      >
+                        Load More
+                      </Button>
+                      :
+                      ""
+                    }
+                  </Text>
+
+                </View>
+              </View>
+
             )}
-            
+
           </View>
-          
+
         </List.Section>
        
       </Card.Content>

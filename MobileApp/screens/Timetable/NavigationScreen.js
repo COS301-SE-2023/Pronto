@@ -108,7 +108,7 @@ const NavigationScreen = ({navigation}) => {
                 if(stu===null || undefined){
                     throw Error();
                 }
-                await updateStudent(stu);
+                updateStudent(stu);
             }
         
             if(stu.studentTimetableId!==null){
@@ -132,14 +132,7 @@ const NavigationScreen = ({navigation}) => {
 
                     }
                 }
-                act = act.sort((a, b) => {
-                      if (a.start <= b.start)
-                        return -1;
-                      else
-                        return 1;
-                    })
-                stu.timetable.activities=act;
-                await updateStudent(stu);
+              
                 let loc=[];
                 let locationNames= new Map();
                 for(let i=0;i<act.length;i++){
@@ -162,9 +155,9 @@ const NavigationScreen = ({navigation}) => {
             setCoordinates(loc);
            // console.log(loc);
         }
-
     } catch (e) {
-      Alert.alert(error);
+      //Alert.alert(error);
+      console.log(e);
     }
   }
 
