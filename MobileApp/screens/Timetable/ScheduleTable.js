@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions, Alert, Button, TextInput, StyleSheet, Image } from "react-native";
+import { View, TouchableOpacity, Text, Dimensions, Alert, StyleSheet, Image } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
 import { API, Auth } from 'aws-amplify'
@@ -7,9 +7,7 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { listStudents,getStudent, listInstitutions} from "../../graphql/queries"
-
-import {  createStudent } from "../../graphql/mutations";
+import { getStudent} from "../../graphql/queries"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 
@@ -49,131 +47,83 @@ const ScheduleTable = ({ navigation,route }) => {
     ].indexOf(dayOfWeek);
     const results = [];
     let month = date.getMonth()
-    
+    let limit=month+2
     
     // Loop through each month of the year
-    //for (month; month < limit; month++) {
+    for (month; month < limit; month++) {
       // Create a new date object for the first day of the month
-      
       const firstDayOfMonth = new Date(year, month, 1);
 
       // Find the first occurrence of the specified day of the week
       const diff = dayIndex - firstDayOfMonth.getDay();
       let dayOfMonth = diff >= 0 ? diff + 1 : diff + 8;
-      
-      while(dayOfMonth<date.getDate()){
-        dayOfMonth+=7;
-      }
-      //while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
-      for(let i=0;i<4;i++){  
-      const dateString = `${year}-${(month + 1)
+
+      // Loop through the rest of the month, adding dates for the specified day of the week
+      while (dayOfMonth <= new Date(year, month + 1, 0).getDate()) {
+        const dateString = `${year}-${(month + 1)
           .toString()
           .padStart(2, "0")}-${dayOfMonth.toString().padStart(2, "0")}`;
-        //if(dayOfMonth>=date.getDate())
         results.push(dateString);
         dayOfMonth += 7;
       }
-    //}
+    }
     return results;
   }
-
 
   let error = "There appear to be network issues.Please try again later";
 
   const fetchActivities = async () => {
     try {
       let stu=student;
-     
-    
-      if (student === null) {
-        if(param===null){
+      if (student === null || student.id===undefined) {        
+        if(param===null || param.id===undefined){
           const user = await Auth.currentAuthenticatedUser();
           stu=await API.graphql({
             query:getStudent,
             variables:{id:user.attributes.sub}
           })
-        
-        stu=stu.data.getStudent;
-        //console.log(stu);
+          stu=stu.data.getStudent;
         }
         else{
           stu=param;
-          updateStudent(stu);
-          param=null;
-          
+          //updateStudent(stu);
+          param=null;          
         }
-        
-        if(stu.studentTimetableId!==null){
-          let act=[];
-          let courses=[];
-          for (let i = 0; i < stu.enrollments.items.length; i++) {
-            courses.push(stu.enrollments.items[i].course)
-          }
-
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < courses.length; j++) {
-              try{
-                let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-                if (index !== undefined) {
-                  act.push(index)
-                  break;
-                }
-              }catch(e){
-
-              }
-
-            }
-          }
-          act = act.sort((a, b) => {
-                      if (a.start <= b.start)
-                        return -1;
-                      else
-                        return 1;
-                    })
-        stu.timetable.activities=act;
-        await updateStudent(stu);
-        setActivities(act);
-        createScheduleArray(act);
+        if(stu===null || stu.studentTimetableId===null){
+          return;
+        }
+        updateStudent(stu);
       }
-      else{
-          await updateStudent(stu);
-      }         
-  //      console.log(s.timetable.activities);  
-    }
-    else{
-      if(student.timetable!==null && student.timetable.activities!==undefined){
-        let changed = false
-        
-        let act=[];
-       
-        
-          act=[];
-          let courses=[];
-          for (let i = 0; i < student.enrollments.items.length; i++) {
-            courses.push(student.enrollments.items[i].course)
-          }
 
-          for (let i = 0; i < student.timetable.activityId.length; i++) {
-            for (let j = 0; j < courses.length; j++) {
-              try{
-                let index = courses[j].activity.items.find(item => item.id === student.timetable.activityId[i])
-                if (index !== undefined) {
-                  act.push(index)
-                  break;
-                }
-              }catch(e){
+      let act=[];
+      let courses=[];
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
+        courses.push(stu.enrollments.items[i].course)
+      }
 
-              }
-
+      for (let i = 0; i < stu.timetable.activityId.length; i++) {
+        for (let j = 0; j < courses.length; j++) {
+          try{
+            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+            if (index !== undefined) {
+              act.push(index)
+              break;
             }
+          }catch(e){
+
           }
-          act = act.sort((a, b) => {
+        }
+      }
+
+      act = act.sort((a, b) => {
                       if (a.start <= b.start)
                         return -1;
                       else
                         return 1;
                     })
-          if (act.length === activities.length) {
+      
+        let changed=false;
+         if (act.length === activities.length) {
           for (let i = 0; i < act.length; i++) {
             if (act[i].id !== activities[i].id) {
               changed = true;
@@ -184,15 +134,12 @@ const ScheduleTable = ({ navigation,route }) => {
         else {
           changed = true;
         }          
-
-        
-        if (changed === true){
+        if(changed===true){
           setActivities(act);
           createScheduleArray(act);
         }
-   
-      }
-    }
+
+    
     } catch (e) {
       Alert.alert(error);
       console.log("from schedule")
@@ -200,15 +147,30 @@ const ScheduleTable = ({ navigation,route }) => {
     }
   }
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      fetchActivities()
-    });
-
-
-    return unsubscribe
-  }, [navigation])
-
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     fetchActivities()
+  //   });
+  //   return unsubscribe
+  // }, [navigation])
+  const navigate = (module)=>{
+  let coordinate=null
+  if(module.coordinates!==null && module.coordinates!==undefined){
+    let location=module.coordinates.split(";")
+    coordinate={
+      name:location[0],
+      value:{
+              latitude:parseFloat(location[1]),
+              longitude:parseFloat(location[2])
+        }
+     }
+    }
+    navigation.navigate("Navigation",coordinate)
+  }
+  
+  useEffect(()=>{
+    fetchActivities();
+  },)
 
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
@@ -228,6 +190,7 @@ const ScheduleTable = ({ navigation,route }) => {
           venue: modules[moduleKey].venue,
           day: modules[moduleKey].day,
           height: 50,
+          coordinates:modules[moduleKey].coordinates
         });
       });
     }
@@ -291,7 +254,8 @@ const ScheduleTable = ({ navigation,route }) => {
 
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
-        <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}>
+        <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}
+              onPress={()=>navigate(module)}>
           <Card.Content>
             <View
               style={{
