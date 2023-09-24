@@ -32,6 +32,7 @@ export default function PostAccordion(course) {
   const [lat, setLat] = useState(59.955413);
   const [lng, setLng] = useState(30.337844);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -387,7 +388,7 @@ export default function PostAccordion(course) {
 }
 //add styling
 const MapSuggestionsContainer = styled.div`
-      max-width: 300px;
+      max-width: 810px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
