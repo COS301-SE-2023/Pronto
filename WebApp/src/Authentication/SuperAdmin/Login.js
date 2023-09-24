@@ -1,21 +1,15 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import Select from "react-select";
-import "./styles.css";
-import ProntoLogo from "./ProntoLogo.png";
-import { Auth, API, Storage } from "aws-amplify";
+import "../Institution/styles.css";
+import ProntoLogo from "../Institution/ProntoLogo.png";
+import { Auth } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { listAdmins,listInstitutions } from "../../Graphql/queries";
-import Select from "react-select";
-import { createAdmin, createInstitution } from "../../Graphql/mutations";
-import { useAdmin } from "../../ContextProviders/AdminContext";
-import MobileView from "../../Homepage/MobileView";
 
 function Login() {
-  const [signIn, toggle] = useState(true);
+  const [signIn, toggle] = React.useState(true);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
 
@@ -27,116 +21,8 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const universityInfo = [
-    {
-      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
-      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_A_REAL_UNIVERSITY_ID,
-      label: process.env.REACT_APP_A_REAL_UNIVERSITY_LABEL
-    },
-    {
-      value: process.env.REACT_APP_AGILE_ARCHITECTS_ID,
-      label: process.env.REACT_APP_AGILE_ARCHITECTS_LABEL
-    }
-  ];
-
-
-  //select institution
-  const [institutionId, setInstitutionId] = React.useState("");
-  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const handleInstitutionSelection = (event) => {
-    setInstitutionId(event.value);
-    setIsInstitudeSelected(true);
-  };
-
   const [loading, setLoading] = useState(false);
-
-  const[institutionName,setInstitutionName]=useState("");
-  const [institutions,setInstitutions]=useState([])
-  const { setAdmin } = useAdmin();
-
-  const fetchAdmin = async () => {
-    let fetchError = "Could not find your records.If you are a Lecturer return to the homepage and click 'Continue as Lecturer'. If you are a Student please use the mobile app"
-    try {
-
-      let adminData = await API.graphql({
-        query: listAdmins,
-        variables: {
-          filter: {
-            email: {
-              eq: email
-            }
-          },
-
-        },
-
-      });
-      if (adminData.data.listAdmins.items.length > 0) {
-        adminData = adminData.data.listAdmins.items[0];
-        if (adminData.institution.logo !== null) {
-          adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-        }
-
-        setAdmin(adminData);
-      }
-      else {
-        throw Error(fetchError);
-      }
-
-    } catch (error) {
-      await Auth.signOut();
-      throw Error(fetchError);
-    }
-  }
-
-
-  const fetchInstitutions=async()=>{
-
-    try{
-      
-        let inst=await API.graphql({
-          query:listInstitutions,
-          variables:{},
-          authMode:"API_KEY"
-         });
-         inst=inst.data.listInstitutions.items;
-         let institutionInfo=[];
-         for(let j=0;j<inst.length;j++){
-          let item={
-            value:inst[j].id,
-            label:inst[j].name
-          }
-          institutionInfo.push(item);
-         }
-        setInstitutions(institutionInfo);
-    }catch(error){
-      console.log(error);
-    }
-  }
-
-  useEffect(()=>{
-    fetchInstitutions();
-  },[])
-
+  
   //function for signing in
   const onSignInPressed = async (event) => {
     if (loading) {
@@ -152,26 +38,18 @@ function Login() {
       setLoading(false);
       return;
     }
-    try {
-      const signInObject = {
-        username: email,
-        password: password,
-        validationData: {
-          role: "Admin",
-          institutionId: institutionId
-        }
-      }
 
-      const user = await Auth.signIn(signInObject);
-      setsignInError("");
+    //add logic to sign into pronto admin account
+     try {
+        await Auth.signIn(email, password);
+        setsignInError("");
+        navigate("/superadmin/admin-requests")
+      } catch (e) {
+        setLoading(false);
+        setsignInError(e.message);
+      }  
 
-      await fetchAdmin().then(() => navigate("/institution/dashboard"))
-      // navigate("/institution/dashboard");
-    } catch (e) {
-      setLoading(false);
-      setsignInError(e.message);
-    }
-    //setLoading(false);
+    setLoading(false);
   };
 
 
@@ -181,7 +59,7 @@ function Login() {
     const errors = []; // Create an array to hold error messages
 
     if (!nameIsValid) {
-      errors.push("Please enter a university valid name.");
+      errors.push("Please enter a valid administrator name.");
     }
 
     if (!emailIsValid) {
@@ -214,45 +92,10 @@ function Login() {
 
     setLoading(true);
 
-    try {
+    //add logic to create pronto admin account here
 
-      await Auth.signUp({
-        username: email,
-        password: signUpPassword,
-        attributes: {
-          email: email,
-          name: name,
-          family_name: "",
-        },
-        clientMetadata: {
-          role: "Admin",
-          institutionId: institutionId
-        },
-      });
 
-      setsignUpError("");
-      navigate("/institution/confirm-email", { state: { email: email } });
-
-    } catch (e) {
-      
-      const application={
-        name:name,
-        firstname:institutionId,
-        lastname:institutionName,
-        email:email,
-        status:"PENDING"
-      }
-      
-      let f=await API.graphql({
-        query:createAdminApplication,
-        variables:{
-          input:application
-        },
-        authMode:"API_KEY"
-      })
-     // setsignUpError(e.message);
-     setsignUpError("Your application has been sent")
-    }
+    alert("Sign Up Pressed");
     setLoading(false);
   };
 
@@ -317,24 +160,7 @@ function Login() {
     setNameIsValid(isValidName);
   };
 
-  const [institutionId, setInstitutionId] = React.useState("");
-  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const handleInstitutionSelection = (event) => {
-    setInstitutionId(event.value);
-    setInstitutionName(event.label);
-    setIsInstitudeSelected(true);
-  };
-
-  const isMobileView = window.innerWidth < 768;
-
   return (
-    <div>
-    {
-        isMobileView ? (
-          // Display a message for mobile users
-          <MobileView />
-        ) : (
     <Container>
       <SignUpContainer signin={signIn}>
         <Form>
@@ -343,11 +169,11 @@ function Login() {
               marginBottom: "20px",
             }}
           >
-            Create Institution Account
+            Create Pronto Administrator Account
           </Title>
           <Input
             type="text"
-            placeholder="Full Name"
+            placeholder="Administrator Name"
             value={name}
             onChange={(event) => {
               setName(event.target.value);
@@ -365,16 +191,6 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-           <StyledSelectInput
-            options={institutions}
-            defaultValue={institutionId}
-            onChange={handleInstitutionSelection}
-            placeholder="Select an Institution"
-            classNamePrefix="SelectInput"
-            autoComplete="on"
-            spellCheck="true"
-            isSelectionValid={isInstitudeSelected}
-          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
@@ -387,7 +203,6 @@ function Login() {
             onFocus={handlePasswordFocus}
             onBlur={handlePasswordBlur}
           />
-          
           <Input
             type="password"
             placeholder="Confirm Password"
@@ -444,7 +259,7 @@ function Login() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Institution Login</Subtitle>
+          <Subtitle>Pronto Administrator Login</Subtitle>
           <Input
             type="email"
             placeholder="Email"
@@ -455,16 +270,6 @@ function Login() {
             }}
             isValidEmail={emailIsValid}
           />
-           <StyledSelectInput
-            options={institutions}
-            defaultValue={institutionId}
-            onChange={handleInstitutionSelection}
-            placeholder="Select an Institution"
-            classNamePrefix="SelectInput"
-            autoComplete="on"
-            spellCheck="true"
-            isSelectionValid={isInstitudeSelected}
-          ></StyledSelectInput>
           <Input
             type="password"
             placeholder="Password"
@@ -477,9 +282,6 @@ function Login() {
             {" "}
             {loading ? "Signing in..." : "Sign in"}
           </Button>
-          <Anchor href="/institution/forgot-password">
-            Forgot your password?
-          </Anchor>
           {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
         </Form>
       </SignInContainer>
@@ -496,15 +298,13 @@ function Login() {
           <RightOverlayPanel signin={signIn}>
             <Title>No Account?</Title>
             <Paragraph>
-              Click here to apply for an institution account
+              Click here to apply for a pronto admin account
             </Paragraph>
             <GhostButton onClick={() => toggle(false)}>Apply</GhostButton>
           </RightOverlayPanel>
         </Overlay>
       </OverlayContainer>
     </Container>
-  )}
-    </div>
   );
 }
 
@@ -722,43 +522,5 @@ const CriteriaMessage = styled.span`
   font-size: 12px;
   color: ${({ isValid }) => (isValid ? "green" : "inherit")};
 `;
-
-const StyledSelectInput = styled(Select)`
-  width: 100%;
-
-  .SelectInput__control {
-    background-color: #eee;
-    border: none;
-    border-radius: 25px;
-    margin: 8px 0;
-  }
-
-  .SelectInput__control--is-focused {
-    border: ${({ isSelectionValid }) =>
-    isSelectionValid ? "2px solid green;" : "2px solid #e32f45;"}
-    box-shadow: none;
-  }
-
-  .SelectInput__control:hover {
-    border-color: #eee;
-  }
-
-  .SelectInput__menu {
-    background-color: #eee;
-  }
-
-  .SelectInput__option:hover {
-    background-color: #ec7281;
-  }
-
-  .SelectInput__option--is-selected {
-    background-color: #e32f45;
-  }
-
-  .SelectInput__single-value .SelectInput__control--is-focused {
-    background-color: purple;
-  }
-`;
-
 
 export default Login;
