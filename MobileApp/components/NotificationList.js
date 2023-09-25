@@ -131,8 +131,6 @@ const NotificationList = ({ navigation }) => {
                 setAnnouncement(announcement);
             }
         } catch (e) {
-            //Alert.alert(error);
-            console.log(e);
         }
     }
 

@@ -32,7 +32,6 @@ const ProfilePage = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.log("Error fetching user data:", error);
     }
   };
 

@@ -71,8 +71,6 @@ export default function App() {
           setStudent(create.data.createStudent);
         
         }catch(error){
-          console.log(error)
-          console.log("Error fetching student info");
         }
       }
     }

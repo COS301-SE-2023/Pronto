@@ -10,7 +10,6 @@ export const StudentProvider = ({ children }) => {
   const [student, setStudent] = useState(null);
   
   const updateStudent = async (newStudent) => {
-    console.log(newStudent);
     setStudent(newStudent);
   };
 

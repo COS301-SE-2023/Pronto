@@ -88,7 +88,6 @@ const EditTimetable = ({ navigation }) => {
         
         setCourses(search.data.searchCourses.items);
       } catch (e) {
-        console.log(e);
         Alert.alert(error);
       }
     }
@@ -300,8 +299,6 @@ const EditTimetable = ({ navigation }) => {
                 setActivities(act);
                 setSelectedModule(null);
               } catch (e) {
-                console.log("From delete")
-                console.log(e);
                 Alert.alert(error);
               }
             },

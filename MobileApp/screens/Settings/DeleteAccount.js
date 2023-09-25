@@ -29,7 +29,6 @@ const DeleteAccountPage = () => {
             try {
 
               let stu=student 
-              console.log(student);
               if(student===null){
                 const user = await Auth.currentAuthenticatedUser()
                 let studentEmail = user.attributes.email;
@@ -62,8 +61,6 @@ const DeleteAccountPage = () => {
               );
               //}
             } catch (error) {
-
-              console.log(error);
               Alert.alert("Error", "An error occurred while deleting your account. Please try again later."
               );
             }

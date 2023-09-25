@@ -84,7 +84,6 @@ const BucketFilesScreen = () => {
       await setStudentUniversity(sU)
       return sU
     } catch (e) {
-      console.log(e);
       Alert.alert(error);
     }
   }

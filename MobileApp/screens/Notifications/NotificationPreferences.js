@@ -74,7 +74,6 @@ const NotificationPreferences = () => {
         updateStudent(student);
       }
     } catch (e) {
-      console.log(e)
     }
   }
   const handleOptionSelect = async (option) => {
