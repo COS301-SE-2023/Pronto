@@ -1,13 +1,13 @@
-const preSignIn = require("../../../../function/prontoPreSignIn/src/index");
+const preSignIn = require("../../../../function/prontoAuthPreAuthentication/src/index");
 const {
   isInstitideAdminOrLecturer,
-} = require("../../../../function/prontoPreSignIn/src/helpers/assertInstitutionInfo");
-const ROLES = require("../../../../function/prontoPreSignIn/src/roles");
+} = require("../../../../function/prontoAuthPreAuthentication/src/helpers/assertInstitutionInfo");
+const ROLES = require("../../../../function/prontoAuthPreAuthentication/src/roles");
 
-const adminEvent = require("../../../../function/prontoPreSignIn/src/events/admin.event.json");
-const lecturerEvent = require("../../../../function/prontoPreSignIn/src/events/lecturers.event.json");
-const studentsEvent = require("../../../../function/prontoPreSignIn/src/events/students.event.json");
-const preAuth = require("../../../../function/prontoPreSignIn/src/index");
+const adminEvent = require("../../../../function/prontoAuthPreAuthentication/src/events/admin.event.json");
+const lecturerEvent = require("../../../../function/prontoAuthPreAuthentication/src/events/lecturers.event.json");
+const studentsEvent = require("../../../../function/prontoAuthPreAuthentication/src/events/students.event.json");
+const preAuth = require("../../../../function/prontoAuthPreAuthentication/src/index");
 global.Request = jest.fn((input, options) => null);
 
 const institutionDetails = {

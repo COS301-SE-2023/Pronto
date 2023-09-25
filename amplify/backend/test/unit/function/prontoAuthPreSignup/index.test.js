@@ -1,10 +1,10 @@
-const adminEvent = require("../../../../function/prontoPreSignUp/src/events/admin.event.json");
-const lecturerEvent = require("../../../../function/prontoPreSignUp/src/events/lecturers.event.json");
-const studentsEvent = require("../../../../function/prontoPreSignUp/src/events/students.event.json");
-const preAuth = require("../../../../function/prontoPreSignUp/src/index");
+const adminEvent = require("../../../../function/prontoAuthPreSignup/src/events/admin.event.json");
+const lecturerEvent = require("../../../../function/prontoAuthPreSignup/src/events/lecturers.event.json");
+const studentsEvent = require("../../../../function/prontoAuthPreSignup/src/events/students.event.json");
+const preAuth = require("../../../../function/prontoAuthPreSignup/src/index");
 
 jest.mock(
-  "../../../../function/prontoPreSignUp/src/assertInstitutionInfo",
+  "../../../../function/prontoAuthPreSignup/src/assertInstitutionInfo",
   () => ({
     isLectureEmailPartOfInstitution: jest.fn(() => Promise.resolve(false)),
     isAdminAllocated: jest.fn(() => Promise.resolve(true)),
