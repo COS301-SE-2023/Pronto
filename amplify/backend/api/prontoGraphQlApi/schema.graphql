@@ -281,3 +281,4 @@ type Endpoint {
   status: STATUS
   info: String
 }
+
