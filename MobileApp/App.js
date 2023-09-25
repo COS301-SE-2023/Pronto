@@ -16,11 +16,11 @@ import HelpScreen from "./screens/Settings/HelpScreen";
 import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
-import {AnnouncementProvider} from "./ContextProviders/AnnouncementContext"
-import {StudentProvider,useStudent} from "./ContextProviders/StudentContext";
-import { getStudent,listInstitutions } from "./graphql/queries";
-import {createStudent} from "./graphql/mutations";
-import {API} from "aws-amplify"
+import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext"
+import { StudentProvider, useStudent } from "./ContextProviders/StudentContext";
+import { getStudent, listInstitutions } from "./graphql/queries";
+import { createStudent } from "./graphql/mutations";
+import { API } from "aws-amplify"
 import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
@@ -33,49 +33,49 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-  const [student,setStudent]=useState("")
+  const [student, setStudent] = useState("")
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-      if (student===null || student.id===undefined) {
-        const email=authUser.attributes.email;
+      if (student === null || student.id === undefined) {
+        const email = authUser.attributes.email;
         let studentInfo = await API.graphql({
           query: getStudent,
-          variables: {id:authUser.attributes.sub}
+          variables: { id: authUser.attributes.sub }
         });
-        
-        studentInfo=studentInfo.data.getStudent;
+
+        studentInfo = studentInfo.data.getStudent;
         setStudent(studentInfo);
-        if(studentInfo===null){
-          
-        try{
-      
-          //Create student
-          let name=authUser.attributes.name.split(",")
-          let newStudent = {
-            id:authUser.attributes.sub,
-            institutionId: authUser.attributes.family_name,
-            firstname: name[0],
-            lastname: name[1],
-            userRole: "Student",
-            email: email
+        if (studentInfo === null) {
+
+          try {
+
+            //Create student
+            let name = authUser.attributes.name.split(",")
+            let newStudent = {
+              id: authUser.attributes.sub,
+              institutionId: authUser.attributes.family_name,
+              firstname: name[0],
+              lastname: name[1],
+              userRole: "Student",
+              email: email
+            }
+
+            let create = await API.graphql({
+              query: createStudent,
+              variables: { input: newStudent }
+            })
+
+            setStudent(create.data.createStudent);
+
+          } catch (error) {
+            console.log(error)
+            console.log("Error fetching student info");
           }
-       
-          let create = await API.graphql({
-            query: createStudent,
-            variables: { input: newStudent }
-          })
-           
-          setStudent(create.data.createStudent);
-        
-        }catch(error){
-          console.log(error)
-          console.log("Error fetching student info");
         }
       }
-    }
       setUser(authUser);
     } catch (e) {
       setUser(null);
@@ -99,128 +99,140 @@ export default function App() {
   if (user === undefined) {
     return (
       <StudentProvider>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
 
-        <ImageBackground
-          resizeMode="contain"
+          <ImageBackground
+            resizeMode="contain"
 
-          source={require("./assets/splash.gif")}
-          style={{ width: 403, height: 508, alignSelf: "center" }}
-        />
+            source={require("./assets/splash.gif")}
+            style={{ width: 403, height: 508, alignSelf: "center" }}
+          />
 
-        <View style={{ display: "flex", flexDirection: "row" }}>
-          <ActivityIndicator color={"#e32f45"} size={"small"} />
-          <Text style={{ color: "#e32f45" }}> Checking account details...</Text>
+          <View style={{ display: "flex", flexDirection: "row" }}>
+            <ActivityIndicator color={"#e32f45"} size={"small"} />
+            <Text style={{ color: "#e32f45" }}> Checking account details...</Text>
+
+          </View>
+
 
         </View>
-
-
-      </View>
       </StudentProvider>
     );
   }
   return (
     <StudentProvider>
       <AnnouncementProvider>
-    <NavigationContainer>
-      <Stack.Navigator>
-        {user ? (
-          <>
-            <Stack.Screen
-              name="Tabs"
-              component={Tabs}
-              initialParams={student}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AccountSettings"
-              component={AccountSettings}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Notification Preferences"
-              component={NotificationPreferences}
-              options={{ headerShown: true }}
-            />
-            <Stack.Screen
-              name="Privacy Policy"
-              component={PrivacyPolicyScreen}
-              options={{ headerShown: true }}
-            />
-            <Stack.Screen
-              name="Profile Page"
-              component={ProfilePage}
-              options={{ headerShown: true }}
-            />
+        <NavigationContainer>
+          <Stack.Navigator>
+            {user ? (
+              <>
+                <Stack.Screen
+                  name="Tabs"
+                  component={Tabs}
+                  initialParams={student}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AccountSettings"
+                  component={AccountSettings}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Notification Preferences"
+                  component={NotificationPreferences}
+                  options={{ headerShown: true }}
+                />
+                <Stack.Screen
+                  name="Privacy Policy"
+                  component={PrivacyPolicyScreen}
+                  options={{ headerShown: true }}
+                />
+                <Stack.Screen
+                  name="Profile Page"
+                  component={ProfilePage}
+                  options={{ headerShown: true }}
+                />
 
-            <Stack.Screen
-              name="Reset Password"
-              component={ResetPassword}
-              options={{ headerShown: true }}
-            />
+                <Stack.Screen
+                  name="Reset Password"
+                  component={ResetPassword}
+                  options={{ headerShown: true }}
+                />
 
-            <Stack.Screen
-              name="Delete Account"
-              component={DeleteAccountPage}
-              options={{ headerShown: true }}
-            />
+                <Stack.Screen
+                  name="Delete Account"
+                  component={DeleteAccountPage}
+                  options={{ headerShown: true }}
+                />
 
-            <Stack.Screen
-              name="About"
-              component={AboutScreen}
-              options={{ headerShown: true }}
-            />
+                <Stack.Screen
+                  name="About"
+                  component={AboutScreen}
+                  options={{ headerShown: true }}
+                />
 
 
-            <Stack.Screen
-              name="Help"
-              component={HelpScreen}
-              options={{ headerShown: true }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="Welcome"
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Register"
-              component={Register}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ResetPassword"
-              component={ResetPassword}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="VerifyCode"
-              component={VerifyCode}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ConfirmEmail"
-              component={ConfirmEmail}
-              options={{ headerShown: false }}
-            />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-    </AnnouncementProvider>
+                <Stack.Screen
+                  name="Help"
+                  component={HelpScreen}
+                  options={{ headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="VerifyCode"
+                  component={VerifyCode}
+                  options={{ headerShown: false }}
+                />
+
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  options={{ headerShown: false }}
+                />
+              </>
+            ) : (
+              <>
+                <Stack.Screen
+                  name="Welcome"
+                  component={WelcomeScreen}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Register"
+                  component={Register}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="ResetPassword"
+                  component={ResetPassword}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="VerifyCode"
+                  component={VerifyCode}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="ConfirmEmail"
+                  component={ConfirmEmail}
+                  options={{ headerShown: false }}
+                />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AnnouncementProvider>
     </StudentProvider>
   );
 }
