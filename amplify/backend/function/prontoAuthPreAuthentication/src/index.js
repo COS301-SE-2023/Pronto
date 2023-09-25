@@ -1,11 +1,15 @@
 /* Amplify Params - DO NOT EDIT
-	API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT
-	API_PRONTOGRAPHQLAPI_GRAPHQLAPIIDOUTPUT
-	API_PRONTOGRAPHQLAPI_GRAPHQLAPIKEYOUTPUT
 	ENV
 	REGION
+	API_PRONTO_GRAPHQLAPIIDOUTPUT
+	API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT
+	API_PRONTO_GRAPHQLAPIKEYOUTPUT
+	AUTH_PRONTOAUTH_USERPOOLID
+	StudentsGroupName
+	LecturersGroupName
+	AdminGroupName
 Amplify Params - DO NOT EDIT */
-const ROLES = require("./roles");
+const ROLES = require("./roles.js");
 const {
   isInstitideAdminOrLecturer,
 } = require("./helpers/assertInstitutionInfo");
