@@ -325,16 +325,7 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-                <StyledSelectInput
-                  options={institutions}
-                  defaultValue={institutionId}
-                  onChange={handleInstitutionSelection}
-                  placeholder="Select an Institution"
-                  classNamePrefix="SelectInput"
-                  autoComplete="on"
-                  spellCheck="true"
-                  isSelectionValid={isInstitudeSelected}
-                ></StyledSelectInput>
+                
                 <Input
                   type="password"
                   placeholder="Password"
@@ -414,16 +405,7 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-                <StyledSelectInput
-                  options={institutions}
-                  defaultValue={"University of Pretoria"}
-                  onChange={handleInstitutionSelection}
-                  placeholder="Select an Institution"
-                  classNamePrefix="SelectInput"
-                  autoComplete="on"
-                  spellCheck="true"
-                  isSelectionValid={isInstitudeSelected}
-                ></StyledSelectInput>
+                
                 <Input
                   type="password"
                   placeholder="Password"
