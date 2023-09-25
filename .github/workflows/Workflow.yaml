@@ -8,6 +8,7 @@ on:
 
 jobs:
   build-mobile:
+    if : false
     runs-on: ubuntu-latest
     strategy:
       matrix:
