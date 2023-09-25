@@ -203,7 +203,8 @@ function Login() {
       navigate("/institution/confirm-email", { state: { email: email } });
 
     } catch (e) {
-
+      setsignUpError(e.message);
+      try{
       const application = {
         name: name,
         firstname: institutionId,
@@ -219,8 +220,11 @@ function Login() {
         },
         authMode: "API_KEY"
       })
-      // setsignUpError(e.message);
-      setsignUpError("Your application has been sent")
+    }catch(erro){
+      setLoading(false);
+    }
+      
+      //setsignUpError("Your application has been sent")
     }
     setLoading(false);
   };
