@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { useBeforeunload } from 'react-beforeunload';
 
+import SuperAdminLogin from "./Authentication/SuperAdmin/Login";
+import SuperApplicationRequest from "./SuperAdmin View/ApplicationRequests";
+import SuperAdminViewInstitutions from "./SuperAdmin View/ViewInstitutions";
+
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
 import LecturerConfirmEmail from "./Authentication/Lecturer/ConfirmEmail";
@@ -41,30 +45,35 @@ Auth.configure(config);
 Amplify.configure(config);
 
 function MyRoutes() {
-useEffect(() => {
-  const unloadCallback = (event) => {
-    Auth.signOut()
-      .then(()=>{
-        event.preventDefault();
-        event.returnValue = "";
-        return "";
-      })
-    .catch((e)=>{
+  useEffect(() => {
+    const unloadCallback = (event) => {
+      Auth.signOut()
+        .then(() => {
+          event.preventDefault();
+          event.returnValue = "";
+          return "";
+        })
+        .catch((e) => {
 
-    })  
-  };
+        })
+    };
 
-  window.addEventListener("beforeunload", unloadCallback);
-  return () => window.removeEventListener("beforeunload", unloadCallback);
-}, []);
-  
-   useBeforeunload(() => "Are you sure to close this tab?");
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
+
+  // useBeforeunload(() => "Are you sure to close this tab?");
 
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+
+
+        <Route path="/superadmin/login" element={<SuperAdminLogin />} />
+        <Route path="/superadmin/admin-requests" element={<SuperApplicationRequest />} />
+        <Route path="/superadmin/view-institutions" element={<SuperAdminViewInstitutions />} />
 
         {/*Lecturer login/register pages*/}
         <Route path="/lecturer/login" element={<LecturerLogin />} />

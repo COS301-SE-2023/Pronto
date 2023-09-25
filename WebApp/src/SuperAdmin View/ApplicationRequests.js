@@ -3,77 +3,78 @@ import SuperAdminNavigation from './SuperAdminNavigation';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
-import {API} from "aws-amplify";
-import { getInstitution ,listAdminApplications} from '../Graphql/queries';
-import { updateAdmin,updateAdminApplication } from '../Graphql/mutations';
+import { API } from "aws-amplify";
+import { getInstitution } from '../Graphql/queries';
+//import { getInstitution ,listAdminApplications} from '../Graphql/queries';
+import { updateAdmin, updateAdminApplication } from '../Graphql/mutations';
 
 export default function ApplicationRequests() {
-  
-  const [requests,setRequests]=useState([]);
-  
 
-  const acceptRequest = async(index) => {
+  const [requests, setRequests] = useState([]);
+
+
+  const acceptRequest = async (index) => {
     const updatedRequests = [...requests];
-    
-    try{
-       let admin=await API.graphql({
-        query:getInstitution,
-        variables:{id:requests[index].firstname}
-       })
-       admin=admin.data.getInstitution.admin;
-       admin.email=requests[index].email;
-       await API.graphql({
-        query:updateAdmin,
-        variables:{input:admin}
-       })
-          await API.graphql({
-            query:updateAdminApplication,
-            variables:{input:{id:requests[index].id,status:"ACCEPTED"}}
-          })
-        updatedRequests.splice(index, 1);
-        setRequests(updatedRequests);  
-    }catch(error){
+
+    try {
+      let admin = await API.graphql({
+        query: getInstitution,
+        variables: { id: requests[index].firstname }
+      })
+      admin = admin.data.getInstitution.admin;
+      admin.email = requests[index].email;
+      await API.graphql({
+        query: updateAdmin,
+        variables: { input: admin }
+      })
+      await API.graphql({
+        query: updateAdminApplication,
+        variables: { input: { id: requests[index].id, status: "ACCEPTED" } }
+      })
+      updatedRequests.splice(index, 1);
+      setRequests(updatedRequests);
+    } catch (error) {
       console.log(error);
     }
   };
 
-  const declineRequest = async(index) => {
+  const declineRequest = async (index) => {
     const updatedRequests = [...requests];
-    try{
+    try {
       await API.graphql({
-            query:updateAdminApplication,
-            variables:{input:{id:requests[index].id,status:"REJECTED"}}
-          })
-      
+        query: updateAdminApplication,
+        variables: { input: { id: requests[index].id, status: "REJECTED" } }
+      })
+
       updatedRequests.splice(index, 1);
       setRequests(updatedRequests);
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
   };
 
-  const fetchRequests=async()=>{
-    try{
-      let r=await API.graphql({
-        query:listAdminApplications,
-        variables:{
-          filter:{
-            status:{
-              eq:"PENDING"
-            }
-          }
-        }
-      })
-      setRequests(r.data.listAdminApplications.items);
-    
-    }catch(error){
-      console.log(error)
-    }
-
-  }
-  useEffect(()=>{
-    fetchRequests();
-  },[])
+  /*  const fetchRequests=async()=>{
+     try{
+       let r=await API.graphql({
+         query:listAdminApplications,
+         variables:{
+           filter:{
+             status:{
+               eq:"PENDING"
+             }
+           }
+         }
+       })
+       setRequests(r.data.listAdminApplications.items);
+     
+     }catch(error){
+       console.log(error)
+     }
+ 
+   }
+   useEffect(()=>{
+     fetchRequests();
+   },[]) */
 
   return (
     <div style={{ display: 'flex', maxHeight: '100vh' }}>
@@ -94,9 +95,9 @@ export default function ApplicationRequests() {
             </div>
             <div className="card-body">
               <h5 className="card-title">{request.lastname}</h5>
-              <p className="card-text">{request.name+ " applied to be an admin"}</p>
-               <p className='card-text'>Contact them at  <a href={`mailto:${request.email}?subject=${encodeURIComponent("Pronto Admins")}&body=${encodeURIComponent("Hello "+request.name +" Your request has been (rejected/accepted)")}`} > {request.email}</a></p>
-            
+              <p className="card-text">{request.name + " applied to be an admin"}</p>
+              <p className='card-text'>Contact them at  <a href={`mailto:${request.email}?subject=${encodeURIComponent("Pronto Admins")}&body=${encodeURIComponent("Hello " + request.name + " Your request has been (rejected/accepted)")}`} > {request.email}</a></p>
+
               <div style={{ float: "right" }}>
 
 

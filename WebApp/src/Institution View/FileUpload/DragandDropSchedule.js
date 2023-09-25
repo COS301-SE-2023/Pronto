@@ -5,7 +5,7 @@ import UserManual from "../HelpFiles/Schedule.pdf";
 import { listAdmins } from "../../Graphql/queries";
 import CourseReader from "./CourseReader"
 import { useAdmin } from "../../ContextProviders/AdminContext";
-import { useCourse } from "../../ContextProviders/CourseContext";
+//import { useCourse } from "../../ContextProviders/CourseContext";
 import { Storage, Auth, API } from "aws-amplify";
 
 function DropzoneComponent() {
@@ -15,8 +15,8 @@ function DropzoneComponent() {
   const [user, setUser] = useState(null);
   const [folderNameS3, setFolderNameS3] = useState("");
   const { admin, setAdmin } = useAdmin();
-  const { course, setCourse } = useCourse();
-  const [activities, setActvities] = useState([]);
+  // const { course, setCourse } = useCourse();
+  // const [activities, setActvities] = useState([]);
 
   const fetchUserData = async () => {
     try {
