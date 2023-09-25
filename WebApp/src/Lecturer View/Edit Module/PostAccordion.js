@@ -188,7 +188,14 @@ export default function PostAccordion(course) {
                     onChange={(e) => setDate(e.target.value)}></input>
                 </div>
               </div>
-              <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Post</button>
+              <button style={{ borderRadius: "20px", height: "40px" ,transition: "transform 0.3s", cursor:"pointer" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                }} className="post-button">
+                  Post</button>
             </form>
           </AccordionDetails>
         </Accordion>
@@ -262,7 +269,15 @@ export default function PostAccordion(course) {
                   />
                 </div>
               </div>
-              <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Post</button>
+              <button style={{ borderRadius: "20px", height: "40px" ,transition: "transform 0.3s", cursor:"pointer" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                }} className="post-button">
+
+                 Post</button>
             </form>
           </AccordionDetails>
         </Accordion>
@@ -373,7 +388,14 @@ export default function PostAccordion(course) {
 
                     </div>
                   </div>
-                  <button style={{ borderRadius: "20px", height: "40px", marginTop: "20px" }} className="post-button">Add venue</button>
+                  <button style={{ borderRadius: "20px", height: "40px", marginTop: "20px" ,transition: "transform 0.3s", cursor:"pointer" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                }} className="post-button">
+                  Add venue</button>
 
                 </form>
               )
