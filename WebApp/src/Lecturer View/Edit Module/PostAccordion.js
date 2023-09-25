@@ -67,16 +67,18 @@ export default function PostAccordion(course) {
   const handleSelect = async (location, event) => {
     try {
       const results = await geocodeByAddress(location);
-      const latLngValue = await getLatLng(results[0]); // Here is the coordinates
+      const latLngValue = await getLatLng(results[0]);
+      const locationParts = location.split(','); // Split by comma
+      const locationName = locationParts[0].trim(); // Get the part before the first comma
+      setSelectedLocation(locationName);
       setLatLng(latLngValue);
       setLat(latLngValue.lat);
       setLng(latLngValue.lng);
-
     } catch (error) {
       console.error("Error fetching coordinates:", error);
     }
-
   };
+
 
   {
     /*Default location for the map*/
@@ -339,9 +341,7 @@ export default function PostAccordion(course) {
                         value={selectedLocation}
                         onChange={setSelectedLocation}
                         onSelect={(location) => {
-                          setSelectedLocation(location);
                           handleSelect(location);
-                          // Optionally, you can also update the latLng and other related state here
                         }}
                       >
                         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
