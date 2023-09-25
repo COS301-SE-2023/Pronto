@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useBeforeunload } from 'react-beforeunload';
+//import { useBeforeunload } from 'react-beforeunload';
 
 import SuperAdminLogin from "./Authentication/SuperAdmin/Login";
 import SuperApplicationRequest from "./SuperAdmin View/ApplicationRequests";
@@ -28,6 +28,7 @@ import DashboardLecturer from "./Lecturer View/Dashboard/dashboardLecturer";
 
 import { RequireLecturerAuth } from "./RouteAuthComponents/RequireLecturerAuth";
 import { RequireAdminAuth } from "./RouteAuthComponents/RequireAdminAuth";
+import { RequireSuperAdminAuth } from "./RouteAuthComponents/RequireSuperAdminAuth";
 import NotFound from "./Error pages/NotFound";
 import HomePage from "./Homepage/HomePage";
 
@@ -70,10 +71,22 @@ function MyRoutes() {
       <Routes>
         <Route path="/" element={<HomePage />} />
 
-
+        {/*Super Admin pages*/}
         <Route path="/superadmin/login" element={<SuperAdminLogin />} />
-        <Route path="/superadmin/admin-requests" element={<SuperApplicationRequest />} />
-        <Route path="/superadmin/view-institutions" element={<SuperAdminViewInstitutions />} />
+
+        <Route path="/superadmin/admin-requests" 
+        element={
+        <RequireSuperAdminAuth>
+          <SuperApplicationRequest />
+        </RequireSuperAdminAuth>}
+        />
+
+        <Route path="/superadmin/view-institutions" 
+        element={
+        <RequireSuperAdminAuth>
+          <SuperAdminViewInstitutions />
+        </RequireSuperAdminAuth>} 
+        />
 
         {/*Lecturer login/register pages*/}
         <Route path="/lecturer/login" element={<LecturerLogin />} />
