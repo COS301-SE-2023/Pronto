@@ -153,20 +153,20 @@ const ScheduleTable = ({ navigation,route }) => {
   //   });
   //   return unsubscribe
   // }, [navigation])
-  const navigate = (module)=>{
-  let coordinate=null
-  if(module.coordinates!==null || module.coordinates!==undefined){
-    let location=module.coordinates.split(";")
-    coordinate={
-      name:location[0],
-      value:{
-              latitude:parseFloat(location[1]),
-              longitude:parseFloat(location[2])
-        }
-     }
-    }
-    navigation.navigate("Navigation",coordinate)
-  }
+  // const navigate = (module)=>{
+  // let coordinate=null
+  // if(module.coordinates!==null || module.coordinates!==undefined){
+  //   let location=module.coordinates.split(";")
+  //   coordinate={
+  //     name:location[0],
+  //     value:{
+  //             latitude:parseFloat(location[1]),
+  //             longitude:parseFloat(location[2])
+  //       }
+  //    }
+  //   }
+  //   navigation.navigate("Navigation",coordinate)
+  // }
   
   useEffect(()=>{
     fetchActivities();
