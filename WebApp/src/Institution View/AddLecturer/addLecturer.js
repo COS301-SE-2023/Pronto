@@ -23,6 +23,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 
+import AddLecturerImage from "../../Images/AddLecturer.png";
+
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialog-paper': {
@@ -110,7 +112,7 @@ const AddLecturer = () => {
                             emails = admin.institution.lectureremails;
                             emails.push(email);
                         }
-                        
+
                         let update = {
                             id: admin.institutionId,
                             lectureremails: emails
@@ -566,6 +568,9 @@ const AddLecturer = () => {
                 {/* Input forms content */}
                 <h1 className="text-center" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Add a lecturer</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to add lecturers to your institution and assign them to their courses. This will allow lecturers to sign up for an account.</h6>
+                <div style={{ display: "flex", alignItems: 'center', justifyContent: "center" }}>
+                    <img src={AddLecturerImage} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="AddLecturer" />
+                </div>
                 <div className="card shadow">
                     <div className="card-body">
                         <form onSubmit={handleAdd}>

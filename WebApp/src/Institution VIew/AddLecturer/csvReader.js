@@ -4,6 +4,8 @@ import { useAdmin } from '../../ContextProviders/AdminContext';
 import { API } from 'aws-amplify';
 import { createLecturer, updateCourse, updateInstitution } from '../../Graphql/mutations';
 import { listCourses, listLecturers } from '../../Graphql/queries';
+import "./csvReader.css";
+import UploadCSV from "../../Images/UploadCSV.png";
 
 
 const CsvFileReader = (props) => {
@@ -120,28 +122,26 @@ const CsvFileReader = (props) => {
   }
 
   return (
-    <div>
-      <div style={{
-        height: "100px",
-        width: "100%",
-        padding: "0px",
-        justifyContent: "center",
-        alignItems: "center",
-        display: "flex",
-        cursor: "pointer",
-      }}>
-        <CSVReader
-          label="Add using csv"
-          cssClass="form-control"
-          onFileLoaded={handleFile}
-          inputStyle={{ opacity: "0", width: "100%", height: "100%", border: "1px solid #ddd" }}
-          parserOptions={papaparseOptions}
-          strict={true}
-        //disabled={isDisabled}
-
-        />
+    <div className='csv-container'>
+      <p>...or alternatively, add lecturers with a CSV file:</p>
+      <div style={{ display: "flex", alignItems: 'center', justifyContent: "center" }}>
+        <img src={UploadCSV} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="AddLecturer" />
       </div>
-    </div>
+      <div className='csv_component'>
+        <label className="csv-reader-label">
+          <p className="csv-reader-text">Click here to upload lecturers</p>
+
+          <CSVReader
+            label=""
+            cssClass="form-control csv-reader-input"
+            onFileLoaded={handleFile}
+            parserOptions={papaparseOptions}
+            strict={true}
+          />
+
+        </label>
+      </div>
+    </div >
   );
 }
 
