@@ -333,6 +333,17 @@ function Login() {
                   isValidEmail={emailIsValid}
                 />
                 
+                <StyledSelectInput
+                  defaultValue={"University of Pretoria"}
+                  options={institutions}             
+                  onChange={handleInstitutionSelection}
+                  placeholder="Select an Institution"
+                  classNamePrefix="SelectInput"
+                  autoComplete="on"
+                  spellCheck="true"
+                  isSelectionValid={isInstitudeSelected}
+                ></StyledSelectInput>
+                
                 <Input
                   type="password"
                   placeholder="Password"
