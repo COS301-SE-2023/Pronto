@@ -33,6 +33,26 @@
     {
       "cloudFormationParameterName": "studentGroupName",
       "environmentVariableName": "STUDENT_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "cognitoWebClientId",
+      "environmentVariableName": "cognitoWebClientId"
+    },
+    {
+      "cloudFormationParameterName": "studentGroupName",
+      "environmentVariableName": "studentGroupName"
+    },
+    {
+      "cloudFormationParameterName": "lecturerGroupName",
+      "environmentVariableName": "lecturerGroupName"
+    },
+    {
+      "cloudFormationParameterName": "adminGroupName",
+      "environmentVariableName": "adminGroupName"
+    },
+    {
+      "cloudFormationParameterName": "cognitoMobileClientId",
+      "environmentVariableName": "cognitoMobileClientId"
     }
   ]
 }
