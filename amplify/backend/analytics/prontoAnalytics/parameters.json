@@ -1,0 +1,21 @@
+{
+    "appName": "prontoAnalytics",
+    "roleName": "pinpointLambdaRoleff8b12a4",
+    "cloudformationPolicyName": "cloudformationPolicyff8b12a4",
+    "cloudWatchPolicyName": "cloudWatchPolicyff8b12a4",
+    "pinpointPolicyName": "pinpointPolicyff8b12a4",
+    "authPolicyName": "pinpoint_amplify_ff8b12a4",
+    "unauthPolicyName": "pinpoint_amplify_ff8b12a4",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

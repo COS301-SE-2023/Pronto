@@ -18,7 +18,7 @@ const isAppClientValid = require("./helpers/isAppClientValid");
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
   console.table(event);
   if (
     !event.request.validationData.role ||
