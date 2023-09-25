@@ -94,7 +94,8 @@ function Login() {
           label: inst[j].name
         }
         institutionInfo.push(item);
-      }
+      
+          }
       setInstitutions(institutionInfo);
     } catch (error) {
       console.log(error);
