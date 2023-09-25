@@ -52,9 +52,9 @@ function MyRoutes() {
         <Route path="/" element={<HomePage />} />
 
         {/*Pronto Admin login/register pages*/}
-        <Route path="/superadmin/login" element={<ProntoAdminLogin />} />
+        <Route path="/ROYGBIV" element={<ProntoAdminLogin />} />
         <Route 
-            path="/superadmin/admin-requests" 
+            path="/ROYGBIV/1" 
             element={
               <RequireSuperAdminAuth>
                 <ApplicationRequests />
@@ -62,7 +62,7 @@ function MyRoutes() {
           />
         
         <Route 
-          path="/superadmin/view-institutions" 
+          path="/ROYGBIV/2" 
           element={
             <RequireSuperAdminAuth>
               <ViewInstitutions />
