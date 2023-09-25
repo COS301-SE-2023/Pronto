@@ -245,3 +245,32 @@ export const deleteInstitution =
 ;`
 
 
+
+export const createAdminApplication = /* GraphQL */ `
+  mutation CreateAdminApplication(
+    $input: CreateAdminApplicationInput!
+    $condition: ModelAdminApplicationConditionInput
+  ) {
+    createAdminApplication(input: $input, condition: $condition) {
+      id
+      name
+      email
+      status
+    }
+  }
+`;
+
+export const updateAdminApplication = /* GraphQL */ `
+  mutation UpdateAdminApplication(
+    $input: UpdateAdminApplicationInput!
+    $condition: ModelAdminApplicationConditionInput
+  ) {
+    updateAdminApplication(input: $input, condition: $condition) {
+      id
+      name
+      email
+      status
+    }
+  }
+`;
+

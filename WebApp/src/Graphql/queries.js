@@ -74,27 +74,6 @@ export const listInstitutions=`query ListInstitutions(
         lastname
         email
       }
-      courses{ 
-        items { 
-           id
-           lecturerId
-           coursecode
-        }
-      }
-      lecturer{ 
-        items{ 
-          id
-          firstname
-          lastname
-          email
-          courses { 
-            items{ 
-              id 
-              coursecode
-            }
-          }
-        }
-      }
     }
     nextToken
   }

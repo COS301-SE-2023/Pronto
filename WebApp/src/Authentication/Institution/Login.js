@@ -7,6 +7,7 @@ import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { listAdmins, listInstitutions } from "../../Graphql/queries";
+import { createAdminApplication } from "../../Graphql/mutations";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import MobileView from "../../Homepage/MobileView";
 
@@ -28,13 +29,14 @@ function Login() {
 
 
   //select institution
-  /* const [institutionId, setInstitutionId] = React.useState("");
+   const [institutionId, setInstitutionId] = React.useState("");
   const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
 
   const handleInstitutionSelection = (event) => {
     setInstitutionId(event.value);
+    setInstitutionName(event.label)
     setIsInstitudeSelected(true);
-  }; */
+  }; 
 
   const [loading, setLoading] = useState(false);
   const [institutionName, setInstitutionName] = useState("");

@@ -79,7 +79,6 @@ function Login() {
         authMode: "API_KEY"
       });
       inst = inst.data.listInstitutions.items;
-      console.log(inst)
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -96,7 +95,7 @@ function Login() {
 
   useEffect(() => {
     fetchInstitutions();
-  })
+  },[])
 
 
   const onSignInPressed = async (event) => {

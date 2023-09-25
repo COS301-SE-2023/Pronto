@@ -95,7 +95,7 @@ export default function ApplicationRequests() {
             <div className="card-body">
               <h5 className="card-title">{request.lastname}</h5>
               <p className="card-text">{request.name+ " applied to be an admin"}</p>
-               <p className='card-text'>Contact them at <a href="mailto:">{request.email}</a></p>
+               <p className='card-text'>Contact them at  <a href={`mailto:${request.email}?subject=${encodeURIComponent("Pronto Admins")}&body=${encodeURIComponent("Hello "+request.name +" Your request has been (rejected/accepted)")}`} > {request.email}</a></p>
             
               <div style={{ float: "right" }}>
 
