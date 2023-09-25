@@ -108,7 +108,7 @@ const NotificationList = ({navigation}) => {
                     if (i === courses.length - 1) {
                         filter += `{"courseId":{"eq":"${courses[i]}" } }`;
                     } else {
-                        setNextToken(announcementList.data.listAnnouncements.nextToken);
+                        filter += `{"courseId":{"eq":"${courses[i]}" } },`;
                     }
                 }
 
@@ -118,7 +118,7 @@ const NotificationList = ({navigation}) => {
                 let announcementList = await API.graphql({
                     query: listAnnouncements, variables: variables
                 });
-
+            
                 let a = announcementList.data.listAnnouncements.items;
                 for (let i = 0; i < a.length; i++) {
                     announcement.push(a[i]);
@@ -131,7 +131,8 @@ const NotificationList = ({navigation}) => {
                 setAnnouncement(announcement);
             }
         } catch (e) {
-            Alert.alert(error);
+            //Alert.alert(error);
+            console.log(e);
         }
     }
 
