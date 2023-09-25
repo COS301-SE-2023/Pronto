@@ -16,9 +16,9 @@ const NotificationList = ({ navigation }) => {
 
   const [expanded1, setExpanded1] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
-  const {student,updateStudent} =useStudent();
-  const [selectedAnnouncement,setSelectedAnnouncement]=useState(null);
-  const {announcement,setAnnouncement,nextToken,setNextToken}=useAnnouncement();
+  const { student, updateStudent } = useStudent();
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const { announcement, setAnnouncement, nextToken, setNextToken } = useAnnouncement();
 
   const handlePress1 = () => setExpanded1(!expanded1);
   const handlePress2 = () => setExpanded2(!expanded2);
@@ -33,120 +33,121 @@ const NotificationList = ({ navigation }) => {
   //mock data to fetch
   const fetchAnnouncements = async () => {
     try {
-      let stu=student;
-      if(student===null){
-        
+      let stu = student;
+      if (student === null) {
+
         setLoading(true);
         const user = await Auth.currentAuthenticatedUser()
         let stu = await API.graphql({
           query: getStudent,
-          variables: {id:user.attributes.sub}
+          variables: { id: user.attributes.sub }
         })
-      
-        stu=stu.data.getStudent;
-                
-        if(stu===null || stu===undefined){
+
+        stu = stu.data.getStudent;
+
+        if (stu === null || stu === undefined) {
           throw Error();
         }
         updateStudent(stu);
 
-      // Use the mockAnnouncements array as the source of announcements
-      setAnnouncement(mockAnnouncements);
-      setNextToken(null);
-      let courses=[];
-      for(let i=0;i<stu.enrollments.items.length;i++){
+        // Use the mockAnnouncements array as the source of announcements
+        setAnnouncement(mockAnnouncements);
+        setNextToken(null);
+        let courses = [];
+        for (let i = 0; i < stu.enrollments.items.length; i++) {
           courses.push(stu.enrollments.items[i].courseId);
-      }
+        }
 
-      if(courses.length===0){
-        setLoading(false);
-        setAnnouncement([]);
-        return;
-      } 
-        
-      else{
-        let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
-          }
-          else{
-            filter+=`{"courseId":{"eq":"${courses[i]}" } },`;
-          }
+        if (courses.length === 0) {
+          setLoading(false);
+          setAnnouncement([]);
+          return;
         }
-     
-        filter+=`] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-        
-        let variables = JSON.parse(filter);   
-        let announcementList=await API.graphql({
-          query:listAnnouncements,
-          variables:variables
-        });
-        
-            
-        setAnnouncement(announcementList.data.listAnnouncements.items);
-        if(announcementList.data.listAnnouncements.items.length<limit){
+
+        else {
+          let filter = `{"filter" : { "or" : [`;
+          for (let i = 0; i < courses.length; i++) {
+            if (i === courses.length - 1) {
+              filter += `{"courseId":{"eq":"${courses[i]}" } }`;
+            }
+            else {
+              filter += `{"courseId":{"eq":"${courses[i]}" } },`;
+            }
+          }
+
+          filter += `] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
+
+          let variables = JSON.parse(filter);
+          let announcementList = await API.graphql({
+            query: listAnnouncements,
+            variables: variables
+          });
+
+
+          setAnnouncement(announcementList.data.listAnnouncements.items);
+          if (announcementList.data.listAnnouncements.items.length < limit) {
             setNextToken(null);
+          }
+          else {
+            setNextToken(announcementList.data.listAnnouncements.nextToken);
+          }
+          setLoading(false);
         }
-        else{
-          setNextToken(announcementList.data.listAnnouncements.nextToken);
-        }
-        setLoading(false);
       }
     } catch (er) {
-      
+
       Alert.alert(error)
       setLoading(false);
     }
   };
 
- 
-  const loadMore =async()=>{
-    try{
 
-      let stu=student;
-      let year=new Date().getFullYear();
-      let courses=[];
-        
-      for(let i=0;i<stu.enrollments.items.length;i++){
+  const loadMore = async () => {
+    try {
+
+      let stu = student;
+      let year = new Date().getFullYear();
+      let courses = [];
+
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
         courses.push(stu.enrollments.items[i].courseId);
       }
-      
-      if(courses.length===0){
+
+      if (courses.length === 0) {
         return;
       }
-      else{
-        let filter=`{"filter" : { "or" : [`;
-        for(let i=0;i<courses.length;i++){
-          if(i===courses.length-1){
-            filter+=`{"courseId":{"eq":"${courses[i]}" } }`;
+      else {
+        let filter = `{"filter" : { "or" : [`;
+        for (let i = 0; i < courses.length; i++) {
+          if (i === courses.length - 1) {
+            filter += `{"courseId":{"eq":"${courses[i]}" } }`;
           }
-          else{
+          else {
             setNextToken(announcementList.data.listAnnouncements.nextToken);
           }
-        } 
-        
-        filter+=`] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;  
+        }
+
+        filter += `] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;
         let variables = JSON.parse(filter)
-         
-        let announcementList=await API.graphql({
-            query:listAnnouncements,
-            variables:variables
-          });
-        
-        let a=announcementList.data.listAnnouncements.items;
-        for(let i=0;i<a.length;i++){
+
+        let announcementList = await API.graphql({
+          query: listAnnouncements,
+          variables: variables
+        });
+
+        let a = announcementList.data.listAnnouncements.items;
+        for (let i = 0; i < a.length; i++) {
           announcement.push(a[i]);
         }
-        if(announcementList.data.listAnnouncements.items.length<limit){
+        if (announcementList.data.listAnnouncements.items.length < limit) {
           setNextToken(null);
         }
-        else{
+        else {
           setNextToken(announcementList.data.listAnnouncements.nextToken);
         }
         setAnnouncement(announcement);
       }
-    }catch(e){
+    } catch (e) {
       Alert.alert(error);
     }
   }
@@ -266,12 +267,12 @@ const NotificationList = ({ navigation }) => {
       <Card.Content>
         <List.Section title="Recent Announcements">
           <ScrollView
-             refreshControl={
-                    <RefreshControl
-                      refreshing={loading}
-                      onRefresh={fetchAnnouncements}
-                  />
-                 } >
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={fetchAnnouncements}
+              />
+            } >
             {loading ? (
               <Text
                 style={{
@@ -364,7 +365,7 @@ const NotificationList = ({ navigation }) => {
 
             )}
 
-          </View>
+          </ScrollView>
 
         </List.Section>
 
