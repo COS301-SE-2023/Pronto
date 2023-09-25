@@ -66,7 +66,6 @@ function DropzoneComponent() {
         }
         
         setActvities(act);
-        console.log(act);
   //    }
 
     }catch(error){
