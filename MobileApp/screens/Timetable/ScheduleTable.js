@@ -7,17 +7,19 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { getStudent} from "../../graphql/queries"
+import { getStudent } from "../../graphql/queries"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
 
 
-const ScheduleTable = ({ navigation,route }) => {
+const ScheduleTable = ({ navigation, route }) => {
   const [activities, setActivities] = useState([]);
   const [schedule, setSchedule] = useState(null);
   const { student, updateStudent } = useStudent();
   const [timetableLoaded, setTimetableLoaded] = useState(false);
-  let param=route.params;
+  const [agendaKey, setAgendaKey] = useState(0);
+
+  let param = route.params;
   var scheduleArray = {}
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const ScheduleTable = ({ navigation,route }) => {
   }, [activities, timetableLoaded]);
 
   //function to take in a day, and give all dates of the year that a day occurs
-   const getDatesForDayOfWeek = (dayOfWeek) => {
+  const getDatesForDayOfWeek = (dayOfWeek) => {
     const date = new Date();
     const year = date.getFullYear();
     const dayIndex = [
@@ -47,8 +49,8 @@ const ScheduleTable = ({ navigation,route }) => {
     ].indexOf(dayOfWeek);
     const results = [];
     let month = date.getMonth()
-    let limit=month+2
-    
+    let limit = month + 2
+
     // Loop through each month of the year
     for (month; month < limit; month++) {
       // Create a new date object for the first day of the month
@@ -74,72 +76,72 @@ const ScheduleTable = ({ navigation,route }) => {
 
   const fetchActivities = async () => {
     try {
-      let stu=student;
-      if (student === null || student.id===undefined) {        
-        if(param===null || param.id===undefined){
+      let stu = student;
+      if (student === null || student.id === undefined) {
+        if (param === null || param.id === undefined) {
           const user = await Auth.currentAuthenticatedUser();
-          stu=await API.graphql({
-            query:getStudent,
-            variables:{id:user.attributes.sub}
+          stu = await API.graphql({
+            query: getStudent,
+            variables: { id: user.attributes.sub }
           })
-          stu=stu.data.getStudent;
+          stu = stu.data.getStudent;
         }
-        else{
-          stu=param;
+        else {
+          stu = param;
           //updateStudent(stu);
-          param=null;          
+          param = null;
         }
-        if(stu===null || stu.studentTimetableId===null){
+        if (stu === null || stu.studentTimetableId === null) {
           return;
         }
         updateStudent(stu);
       }
 
-      let act=[];
-      let courses=[];
+      let act = [];
+      let courses = [];
       for (let i = 0; i < stu.enrollments.items.length; i++) {
         courses.push(stu.enrollments.items[i].course)
       }
 
       for (let i = 0; i < stu.timetable.activityId.length; i++) {
         for (let j = 0; j < courses.length; j++) {
-          try{
+          try {
             let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
             if (index !== undefined) {
               act.push(index)
               break;
             }
-          }catch(e){
+          } catch (e) {
 
           }
         }
       }
 
       act = act.sort((a, b) => {
-                      if (a.start <= b.start)
-                        return -1;
-                      else
-                        return 1;
-                    })
-      
-        let changed=false;
-         if (act.length === activities.length) {
-          for (let i = 0; i < act.length; i++) {
-            if (act[i].id !== activities[i].id) {
-              changed = true;
-              break;
-            }
+        if (a.start <= b.start)
+          return -1;
+        else
+          return 1;
+      })
+
+      let changed = false;
+      if (act.length === activities.length) {
+        for (let i = 0; i < act.length; i++) {
+          if (act[i].id !== activities[i].id) {
+            changed = true;
+            break;
           }
         }
-        else {
-          changed = true;
-        }          
-        if(changed===true){
-          setActivities(act);
-          createScheduleArray(act);
-        }
+      }
+      else {
+        changed = true;
+      }
+      if (changed === true) {
+        setActivities(act);
+        createScheduleArray(act);
+      }
 
-    
+
     } catch (e) {
       Alert.alert(error);
     }
@@ -165,8 +167,8 @@ const ScheduleTable = ({ navigation,route }) => {
   //   }
   //   navigation.navigate("Navigation",coordinate)
   // }
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     fetchActivities();
   },)
 
@@ -188,7 +190,7 @@ const ScheduleTable = ({ navigation,route }) => {
           venue: modules[moduleKey].venue,
           day: modules[moduleKey].day,
           height: 50,
-          coordinates:modules[moduleKey].coordinates
+          coordinates: modules[moduleKey].coordinates
         });
       });
     }
@@ -229,13 +231,14 @@ const ScheduleTable = ({ navigation,route }) => {
 
         if (clashes[timeSlot] && clashes[timeSlot].includes(module.id)) {
           module.isClash = true;
+          setAgendaKey(agendaKey + 1);  //refreshes the agenda component to display clash immediately
         } else {
           module.isClash = false;
         }
       });
     });
 
-    
+
     setSchedule(scheduleArray);
     setTimetableLoaded(true);
   };
@@ -253,7 +256,7 @@ const ScheduleTable = ({ navigation,route }) => {
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
         <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}
-              onPress={()=>navigate(module)}>
+          onPress={() => navigate(module)}>
           <Card.Content>
             <View
               style={{
@@ -461,6 +464,7 @@ const ScheduleTable = ({ navigation,route }) => {
   return (
     <View style={{ height: windowHeight, width: windowWidth }}>
       <Agenda
+        key={agendaKey}
         items={schedule}
         selected={year + "-" + month + "-" + date}
         renderItem={renderItem}
