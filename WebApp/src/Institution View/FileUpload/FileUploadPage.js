@@ -20,7 +20,6 @@ const FileUploadPage = () => {
           alignItems: "center",
           justifyContent: "center",
           width: "100%",
-          textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)"
         }}>Upload Schedule</h1>
         <DragandDropSchedule />
       </main>

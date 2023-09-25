@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import styled, { keyframes } from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
@@ -8,7 +9,6 @@ import Select from "react-select";
 import { listLecturers, listInstitutions } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 import MobileView from "../../Homepage/MobileView";
-
 
 function Login() {
   //sign in states
@@ -70,7 +70,6 @@ function Login() {
     }
 
   }
-
   const fetchInstitutions = async () => {
 
     try {
@@ -80,7 +79,6 @@ function Login() {
         authMode: "API_KEY"
       });
       inst = inst.data.listInstitutions.items;
-      console.log(inst)
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -97,7 +95,8 @@ function Login() {
 
   useEffect(() => {
     fetchInstitutions();
-  })
+  },[])
+
 
   const onSignInPressed = async (event) => {
     if (loading) {
@@ -334,8 +333,8 @@ function Login() {
                   isValidEmail={emailIsValid}
                 />
                 <StyledSelectInput
-                  options={institutions}
-                  defaultValue={institutionId}
+                  defaultValue={"University of Pretoria"}
+                  options={institutions}             
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"
@@ -433,6 +432,7 @@ function Login() {
                   autoComplete="on"
                   spellCheck="true"
                   isSelectionValid={isInstitudeSelected}
+                  className="SelectInput"
                 ></StyledSelectInput>
                 <Input
                   type="password"
@@ -556,7 +556,7 @@ const Form = styled.form`
   padding: 0 50px;
   height: 100%;
   text-align: center;
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const Title = styled.h1`
@@ -625,7 +625,7 @@ const OverlayContainer = styled.div`
   transition: transform 0.5s ease-in-out;
   z-index: 100;
   ${(props) => (props.signin !== true ? `transform: translateX(-100%);` : null)}
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const Overlay = styled.div`
@@ -663,7 +663,7 @@ const OverlayPanel = styled.div`
 const LeftOverlayPanel = styled(OverlayPanel)`
   transform: translateX(-20%);
   ${(props) => (props.signin !== true ? `transform: translateX(0);` : null)}
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const RightOverlayPanel = styled(OverlayPanel)`

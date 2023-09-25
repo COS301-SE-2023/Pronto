@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import styled, { keyframes } from "styled-components";
 import Select from "react-select";
 import "./styles.css";
@@ -11,10 +12,10 @@ import { useAdmin } from "../../ContextProviders/AdminContext";
 import MobileView from "../../Homepage/MobileView";
 
 function Login() {
-  const [signIn, toggle] = useState(true);
+  const [signIn, toggle] = React.useState(true);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
 
@@ -28,18 +29,19 @@ function Login() {
 
 
   //select institution
-  /* const [institutionId, setInstitutionId] = React.useState("");
+   const [institutionId, setInstitutionId] = React.useState("");
   const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
 
   const handleInstitutionSelection = (event) => {
     setInstitutionId(event.value);
+    setInstitutionName(event.label)
     setIsInstitudeSelected(true);
-  }; */
+  }; 
 
   const [loading, setLoading] = useState(false);
-
   const [institutionName, setInstitutionName] = useState("");
   const [institutions, setInstitutions] = useState([])
+
   const { setAdmin } = useAdmin();
 
   const fetchAdmin = async () => {
@@ -200,7 +202,6 @@ function Login() {
 
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
-
     } catch (e) {
 
       const application = {
@@ -285,15 +286,6 @@ function Login() {
     setNameIsValid(isValidName);
   };
 
-  const [institutionId, setInstitutionId] = React.useState("");
-  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const handleInstitutionSelection = (event) => {
-    setInstitutionId(event.value);
-    setInstitutionName(event.label);
-    setIsInstitudeSelected(true);
-  };
-
   const isMobileView = window.innerWidth < 768;
 
   return (
@@ -355,7 +347,6 @@ function Login() {
                   onFocus={handlePasswordFocus}
                   onBlur={handlePasswordBlur}
                 />
-
                 <Input
                   type="password"
                   placeholder="Confirm Password"
@@ -425,7 +416,7 @@ function Login() {
                 />
                 <StyledSelectInput
                   options={institutions}
-                  defaultValue={institutionId}
+                  defaultValue={"University of Pretoria"}
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"
@@ -554,7 +545,7 @@ const Form = styled.form`
   padding: 0 50px;
   height: 100%;
   text-align: center;
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const Title = styled.h1`
@@ -623,7 +614,7 @@ const OverlayContainer = styled.div`
   transition: transform 0.5s ease-in-out;
   z-index: 100;
   ${(props) => (props.signin !== true ? `transform: translateX(-100%);` : null)}
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const Overlay = styled.div`
@@ -661,7 +652,7 @@ const OverlayPanel = styled.div`
 const LeftOverlayPanel = styled(OverlayPanel)`
   transform: translateX(-20%);
   ${(props) => (props.signin !== true ? `transform: translateX(0);` : null)}
-  animation: ${slideIn} 0.8s ease-in-out;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const RightOverlayPanel = styled(OverlayPanel)`

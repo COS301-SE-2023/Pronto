@@ -32,7 +32,6 @@ export default function PostAccordion(course) {
   const [lat, setLat] = useState(59.955413);
   const [lng, setLng] = useState(30.337844);
 
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -177,7 +176,7 @@ export default function PostAccordion(course) {
               </div>
 
               <div className="form-group row">
-                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Due Date: </label>
                 <div className="col-sm-10">
                   <input
                     type="date"
@@ -250,7 +249,7 @@ export default function PostAccordion(course) {
                 </div>
               </div>
               <div className="form-group row">
-                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Date: </label>
+                <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Due Date: </label>
                 <div className="col-sm-10">
                   <input
                     type="date"
@@ -286,16 +285,25 @@ export default function PostAccordion(course) {
               className="custom-select"
               placeholder="Select Activity"
             >
-              <option value="">Select Activity</option>  {/* dynamic activity selection dropdown */}
-              {course && course.course && course.course.activity && course.course.activity.items.map((val, key) => {
-                return (
-                  <option key={key}
-                    value={key}>{val.day + " " + val.start + "-" + val.end + " " + val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "")}</option>
-                )
-              }
-              )
-              }
+              <option value="">Select Activity</option>
+              {course &&
+                course.course &&
+                course.course.activity &&
+                course.course.activity.items
+                  .slice() // Create a copy of the array to avoid modifying the original
+                  .sort((a, b) => a.day.localeCompare(b.day)) // Sort by day
+                  .map((val, key) => {
+                    return (
+                      <option
+                        key={key}
+                        value={key}
+                      >
+                        {val.day + " : " + val.activityname.replace("L", "Lecture ").replace("P", "Practical ").replace("T", "Tutorial ").replace("0", "") + " (" + val.start + "-" + val.end + ")"}
+                      </option>
+                    );
+                  })}
             </select>
+
             {isLoaded ?
               (
                 <form style={{ paddingTop: '15px' }} onSubmit={(e) => { handleAddVenue(e) }}>
@@ -307,8 +315,11 @@ export default function PostAccordion(course) {
                       <PlacesAutocomplete
                         value={selectedLocation}
                         onChange={setSelectedLocation}
-                        onSelect={handleSelect}
-
+                        onSelect={(location) => {
+                          setSelectedLocation(location);
+                          handleSelect(location);
+                          // Optionally, you can also update the latLng and other related state here
+                        }}
                       >
                         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                           <div>
@@ -322,12 +333,22 @@ export default function PostAccordion(course) {
                               {loading && <div>Loading...</div>}
                               {suggestions.map((suggestion, index) => {
                                 const style = {
-                                  backgroundColor: suggestion.active ? '#e32f45' : '#fff',
+                                  backgroundColor: suggestion.active ? '#f197a2' : '#fff',
                                   cursor: 'pointer',
                                   padding: '5px',
                                 };
                                 return (
-                                  <div key={index} {...getSuggestionItemProps(suggestion, { style })}>
+                                  <div
+                                    key={index}
+                                    {...getSuggestionItemProps(suggestion, {
+                                      style,
+                                      onClick: () => {
+                                        // Handle the selection of a suggestion
+                                        setSelectedLocation(suggestion.description);
+                                        // Optionally, you can also update the latLng and other related state here
+                                      },
+                                    })}
+                                  >
                                     {suggestion.description}
                                   </div>
                                 );
@@ -336,6 +357,7 @@ export default function PostAccordion(course) {
                           </div>
                         )}
                       </PlacesAutocomplete>
+
                     </div>
                   </div>
 
@@ -351,7 +373,7 @@ export default function PostAccordion(course) {
 
                     </div>
                   </div>
-                  <button style={{ borderRadius: "20px", height: "40px" }} className="post-button">Add venue</button>
+                  <button style={{ borderRadius: "20px", height: "40px", marginTop: "20px" }} className="post-button">Add venue</button>
 
                 </form>
               )
@@ -364,12 +386,12 @@ export default function PostAccordion(course) {
       </div>
 
 
-    </div>
+    </div >
   );
 }
 //add styling
 const MapSuggestionsContainer = styled.div`
-      max-width: 300px;
+      max-width: 810px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

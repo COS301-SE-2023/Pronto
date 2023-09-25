@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Dimensions,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -24,7 +25,7 @@ const Login = ({ navigation }) => {
 
   //validate email input for sign in and sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
-  
+
   //select instituition
   const [institutionId, setInstitutionId] = useState("");
 
@@ -49,16 +50,16 @@ const Login = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const signInObject={
-        username:username,
-        password:password,
-        validationData:{
-          role:"Student",
-          institutionId:institutionId
+      const signInObject = {
+        username: username,
+        password: password,
+        validationData: {
+          role: "Student",
+          institutionId: institutionId
         }
       }
-      
-      const user=await Auth.signIn(signInObject)
+
+      const user = await Auth.signIn(signInObject)
       //  navigation.navigate("Timetable");
     } catch (e) {
       Alert.alert("Sign in error", e.message);
@@ -114,19 +115,7 @@ const Login = ({ navigation }) => {
         </View>
         <View style={styles.inputContainer}>
           {/* Update the boxStyles prop for SelectList */}
-          <SelectList
-            setSelected={(institutionId) => setInstitutionId(institutionId)}
-            data={institutionInfo}
-            save="key"
-            boxStyles={[
-              styles.input,
-              { paddingVertical: 16, backgroundColor: "#E7DADA", opacity: 0.7, textAlignVertical: "center" },
-            ]}
-            defaultOption={{ key: "notSet", value: "Select University" }}
-            placeholder="Select University"
-            searchPlaceholder="Search University"
-            onSelect={(institutionId) => validateInstitutionId(institutionId)}
-          />
+
         </View>
 
 
@@ -175,6 +164,7 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center"
   },
   contentContainer: {
     flex: 1,
@@ -193,7 +183,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subtitle: {
-    fontWeight: "bold",
+    fontWeight: "600",
     textAlign: "center",
     fontSize: 15,
     maxWidth: "70%",
@@ -230,6 +220,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
+    elevation: 5,
   },
   createAccountButton: {
     padding: 10,

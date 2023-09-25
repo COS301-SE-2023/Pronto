@@ -66,7 +66,6 @@ const AddLecturer = () => {
     const { admin, setAdmin } = useAdmin();
     const { lecturerList, setLecturerList, nextToken, setNextToken } = useLecturerList()
 
-
     const handleChange = () => {
         setExpanded(!expanded)
     }
@@ -126,8 +125,7 @@ const AddLecturer = () => {
                         // u.logoUrl = logoUrl;
                         // let ad = admin;
                         // ad.institution = u;
-                        admin.institution.lectureremails = emails
-
+                        admin.institution.lectureremails = emails;
                         setAdmin(admin);
 
                         //Add lecturer to courses
@@ -263,7 +261,6 @@ const AddLecturer = () => {
                 if (courseList !== undefined) {
                     await removeCourses(courseList, lecturer);
                     setOfferedCourses([...offeredCourses, courseList]);
-
 
                 }
 
@@ -566,7 +563,7 @@ const AddLecturer = () => {
 
             <main style={{ width: '900px', marginTop: '10%' }}>
                 {/* Input forms content */}
-                <h1 className="text-center" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Add a lecturer</h1>
+                <h1 className="text-center">Add a lecturer</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to add lecturers to your institution and assign them to their courses. This will allow lecturers to sign up for an account.</h6>
                 <div style={{ display: "flex", alignItems: 'center', justifyContent: "center" }}>
                     <img src={AddLecturerImage} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="AddLecturer" />
@@ -653,7 +650,6 @@ const AddLecturer = () => {
                         </form>
                     </div>
                 </div>
-
                 <div>
 
 
@@ -668,7 +664,7 @@ const AddLecturer = () => {
                 </div>
 
                 {/* Display content */}
-                <h1 className="text-center" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Lecturers</h1>
+                <h1 className="text-center">Lecturers</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to search, edit, view and delete lecturers from your institution. Note that removing a lecturer prevents them from creating an account.</h6>
                 {/* Search bar with search material ui icon and border radius of 20px */}
                 <div className="input-group mb-3 p-1">
@@ -733,7 +729,7 @@ const AddLecturer = () => {
                                             <td>{val.firstname}</td>
                                             <td>{val.lastname}</td>
                                             <td>
-                                                <a href="mailto:" data-testid="lecturerEmail">
+                                                <a href={`mailto:${val.email}?subject=${encodeURIComponent("Pronto Lecturers")}&body=${encodeURIComponent("Hello "+val.firstname+" "+val.lastname+". You have been (added to Pronto/removed from Pronto)")}`} data-testid="lecturerEmail">
                                                     {val.email}
                                                 </a>
                                             </td>

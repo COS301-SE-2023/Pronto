@@ -381,6 +381,14 @@ export const getStudent=`query GetStudent($id: ID!) {
       lastname
       email
       studentTimetableId
+      preference {
+        type
+        enpointID
+        deviceID
+        id
+        userId
+      }
+      studentPreferenceId
       timetable { 
         id
         activities{ 

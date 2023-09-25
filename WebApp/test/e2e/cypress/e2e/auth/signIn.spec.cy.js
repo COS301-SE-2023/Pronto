@@ -15,9 +15,10 @@ describe("Testing sign In", () => {
      and should result in a successful sign in
   */
   it("should sign in lecturer", function () {
+    const password = Cypress.env("CYPRESS_LECTURER_PASSWORD");
     cy.LecturerSignIn(
         "yovab14312@tenjb.com",
-        process.env.LECTURER_PASSWORD
+        password
     );
   });
 });

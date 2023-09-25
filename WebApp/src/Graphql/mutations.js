@@ -86,39 +86,16 @@ export const createAdmin = `mutation CreateAdmin(
     firstname
     lastname
     email
-    owner
+    institution {
+      id
+      name
+      lectureremails
+      domains
+      adminId
+    }
   }
 }
 `
-export const createAdminApplication = /* GraphQL */ `
-  mutation CreateAdminApplication(
-    $input: CreateAdminApplicationInput!
-    $condition: ModelAdminApplicationConditionInput
-  ) {
-    createAdminApplication(input: $input, condition: $condition) {
-      id
-      name
-      email
-      status
-    }
-  }
-`;
-
-export const updateAdminApplication = /* GraphQL */ `
-  mutation UpdateAdminApplication(
-    $input: UpdateAdminApplicationInput!
-    $condition: ModelAdminApplicationConditionInput
-  ) {
-    updateAdminApplication(input: $input, condition: $condition) {
-      id
-      name
-      email
-      status
-    }
-  }
-`;
-
-
 
 export const createInstitution = `mutation CreateInstitution(
   $input: CreateInstitutionInput!
@@ -127,7 +104,12 @@ export const createInstitution = `mutation CreateInstitution(
   createInstitution(input: $input, condition: $condition) {
     id
     name
+    admin{
+      email
+      name
+    }
     lectureremails
+    coursecodes
     domains
     adminId     
   }
@@ -184,24 +166,6 @@ export const updateAdmin = `mutation UpdateAdmin(
   }
 }`
 
-export const createActivity = /* GraphQL */ `
-  mutation CreateActivity(
-    $input: CreateActivityInput!
-    $condition: ModelActivityConditionInput
-  ) {
-    createActivity(input: $input, condition: $condition) {
-      id
-      courseId
-      activityname
-      day
-      start
-      end
-      venue
-      coordinates
-    }
-  }
-`;
-
 
 export const createCourse = `mutation CreateCourse(
   $input: CreateCourseInput!
@@ -230,25 +194,33 @@ export const updateActivity = `mutation UpdateActivity(
 }`
 
 
+export const createActivity=`mutation CreateActivity(
+  $input: CreateActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  createActivity(input: $input, condition: $condition) {
+    id
+    courseId
+    activityname
+    day
+    start
+    end
+  }
+}`
+
+
 export const deleteCourse = `mutation DeleteCourse(
   $input: DeleteCourseInput!
   $condition: ModelCourseConditionInput
-
 ) {
-  deleteInstitution(input: $input, condition: $condition) {
+  deleteCourse(input: $input, condition: $condition) {
     id
-    name
-    domains
-    admin {
-      id
-      institutionId
-      firstname
-      lastname
-      userRole
-      email
-    }
-    adminId
+    institutionId
+    lecturerId
+    coursecode
+    coursename
   }
+
 }`
 
 export const deleteInstitution =
@@ -271,4 +243,34 @@ export const deleteInstitution =
     }
   }
 ;`
+
+
+
+export const createAdminApplication = /* GraphQL */ `
+  mutation CreateAdminApplication(
+    $input: CreateAdminApplicationInput!
+    $condition: ModelAdminApplicationConditionInput
+  ) {
+    createAdminApplication(input: $input, condition: $condition) {
+      id
+      name
+      email
+      status
+    }
+  }
+`;
+
+export const updateAdminApplication = /* GraphQL */ `
+  mutation UpdateAdminApplication(
+    $input: UpdateAdminApplicationInput!
+    $condition: ModelAdminApplicationConditionInput
+  ) {
+    updateAdminApplication(input: $input, condition: $condition) {
+      id
+      name
+      email
+      status
+    }
+  }
+`;
 

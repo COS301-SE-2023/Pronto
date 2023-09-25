@@ -1,32 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ImageBackground ,ScrollView } from "react-native";
 import { Auth } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { getStudent } from "../../graphql/queries";
 
-
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { student, updateStudent } = useStudent();
+  const {student,updateStudent}=useStudent();
   useEffect(() => {
     fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
-      if (student === null) {
+      if(student===null){
         setIsLoading(true);
         const userInfo = await Auth.currentAuthenticatedUser();
         //setUser(userInfo);
-        let studentEmail = userInfo.attributes.email;
+        let studentEmail = userInfo.attributes.email; 
         let stu = await API.graphql({
           query: getStudent,
-          variables: { id: userInfo.attributes.sub }
-
+          variables: {id:userInfo.attributes.sub }
+          
         })
-        stu = stu.data.getStudent;
-        if (stu === undefined || stu === null) {
+        stu=stu.data.getStudent;
+        if(stu===undefined || stu === null){
           throw Error();
         }
         updateStudent(stu);
@@ -82,26 +81,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-
   },
   image: {
     width: 200, // Specify the desired width
     height: 200, // Specify the desired height
   },
   infoContainer: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "#e32f45",
     paddingLeft: 50,
     paddingRight: 50,
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingTop:20,
+    paddingBottom:20,
     marginBottom: 0,
     textAlign: "center",
     borderRadius: 20,
   },
   label: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: "bold",
     marginTop: 10,
   },
   text: {

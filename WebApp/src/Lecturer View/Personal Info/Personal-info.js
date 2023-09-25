@@ -68,7 +68,6 @@ const PersonalInfoPage = () => {
     }
 
 
-
     // const fetchUser = async () => {
     //     try {
     //         let u = await Auth.currentAuthenticatedUser();
@@ -115,7 +114,7 @@ const PersonalInfoPage = () => {
             </nav>
 
             <main style={{ width: '900px', marginTop: '30px' }}>
-                <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Personal Information</h1>
+                <h1 className="moduleHead">Personal Information</h1>
                 <div style={{ textAlign: 'center' }}>
                     <p>This page allows you to edit the information we have stored for you. Click on  a dropdown to get started!</p>
                     <img src={personalInformationImage} alt="ModulesImage" style={{ maxWidth: '100%', maxHeight: '200px' }} />
@@ -187,7 +186,7 @@ const PersonalInfoPage = () => {
                                             data-testid="repword"
                                             required
                                             value={newPassword}
-                                            onChange={(e) => newPasswordSet(e.target.value)}></input>
+                                            onChange={(e) => setNewPassword(e.target.value)}></input>
                                     </div>
                                 </div>
 

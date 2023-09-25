@@ -8,7 +8,6 @@ import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useCourse } from "../../ContextProviders/CourseContext";
 import { Storage, Auth, API } from "aws-amplify";
 
-
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -18,10 +17,11 @@ function DropzoneComponent() {
   const { admin, setAdmin } = useAdmin();
   const { course, setCourse } = useCourse();
   const [activities, setActvities] = useState([]);
+
   useEffect(() => {
-    //fetchUserData();
-    fetchCourses()
+    fetchUserData();
   }, []);
+
 
   //use this function to download excel template
   const downloadExcelFile = async () => {
@@ -86,23 +86,7 @@ function DropzoneComponent() {
     } catch (error) {
 
     }
-  }
-  // const fetchUserData = async () => {
-  //   try {
-  //     const userInfo = await Auth.currentUserInfo();
-  //     setUser(userInfo);
-  //     let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
-  //     const words = username.split(/\s+/); // Split the name into words
-  //     username = words
-  //       .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
-  //       .join(""); // Join the words without spaces
-
-  //     setFolderNameS3(username);
-  //     setMessage("");
-  //   } catch (error) {
-  //     setMessage("Error fetching user data");
-  //   }
-  // };
+  };
 
   const createFolder = async (folderName) => {
     try {

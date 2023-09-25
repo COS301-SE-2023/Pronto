@@ -20,7 +20,7 @@ const DashboardLecturer = () => {
 
 
             <div className={"grid"} >
-                <h1 style={{ position: "absolute", top: "15%", left: "42%", textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Dashboard</h1>
+                <h1 style={{ position: "absolute", top: "15%", left: "42%" }}>Dashboard</h1>
                 <div className={"row ml-3"} style={{ alignItems: "center", height: "90vh" }}>
 
                     <div className={"col-4"} style={{
@@ -37,7 +37,7 @@ const DashboardLecturer = () => {
                                     navigate("/lecturer/modules");
                                 }}
                             />
-                            <span style={{ fontSize: "30px", textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Edit Module Info</span>
+                            <span style={{ fontSize: "30px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Edit Module Info</span>
                         </HoverableIcon>
                     </div>
 
@@ -54,7 +54,7 @@ const DashboardLecturer = () => {
                                     navigate("/lecturer/announcement");
                                 }}
                             />
-                            <span style={{ fontSize: "30px", textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Announcements</span>
+                            <span style={{ fontSize: "30px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Announcements</span>
                         </HoverableIcon>
                     </div>
 
@@ -72,7 +72,7 @@ const DashboardLecturer = () => {
                             />
 
 
-                            <span style={{ fontSize: "30px", textShadow: "2px 2px 4px rgba(0, 0.3, 0.2, 0.3)" }}>Edit Personal Info</span>
+                            <span style={{ fontSize: "30px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Edit Personal Info</span>
                         </HoverableIcon>
                     </div>
 
