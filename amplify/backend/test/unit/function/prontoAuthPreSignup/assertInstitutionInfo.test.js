@@ -6,8 +6,9 @@ const {
   getLectureEmailsFromInstitution,
   getInstitutionAdminId,
   getInstitutionEmailDomains,
-} = require("../../../../function/prontoPreSignUp/src/assertInstitutionInfo");
+} = require("../../../../function/prontoAuthPreSignup/src/assertInstitutionInfo");
 const institutionDetails = {
+  adminId: "someAdminId",
   admin: {
     id: "someAdminId",
     email: "admin_test@up.ac.za",
@@ -116,7 +117,7 @@ describe("Testing GraphQL API Calls", () => {
     const someInstitutionId = "someInstitutionId";
     const someEmail = "someEmail";
     const someStudentEmail = "a@tuks.co.za";
-    expect(await isAdminAllocated(someEmail, someInstitutionId)).toBe(true);
+    expect(await isAdminAllocated(someInstitutionId)).toBe(true);
     expect(
       await isLectureEmailPartOfInstitution(someEmail, someInstitutionId)
     ).toBe(false);

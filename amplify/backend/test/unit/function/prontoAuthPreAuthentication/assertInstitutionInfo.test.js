@@ -1,7 +1,7 @@
 const {
   isInstitideAdminOrLecturer,
-} = require("../../../../function/prontoPreSignIn/src/helpers/assertInstitutionInfo");
-const ROLES = require("../../../../function/prontoPreSignIn/src/roles");
+} = require("../../../../function/prontoAuthPreAuthentication/src/helpers/assertInstitutionInfo");
+const ROLES = require("../../../../function/prontoAuthPreAuthentication/src/roles");
 global.Request = jest.fn((input, options) => null);
 
 describe("tests isInstitideAdminOrLecturer", () => {
