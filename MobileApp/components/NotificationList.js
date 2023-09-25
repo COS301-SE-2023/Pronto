@@ -235,10 +235,10 @@ const NotificationList = ({navigation}) => {
             <Card.Content>
                 <List.Section title="Recent Announcements">
                     <ScrollView
-                        // refreshControl={<RefreshControl
-                        //     refreshing={loading}
-                        //     onRefresh={fetchAnnouncements}
-                        // />}
+                        refreshControl={<RefreshControl
+                            refreshing={loading}
+                            onRefresh={fetchAnnouncements}
+                        />}
                         >
                         {loading ? (<Text
                                 style={{
@@ -253,10 +253,10 @@ const NotificationList = ({navigation}) => {
                                     marginLeft: "auto", marginRight: "auto", marginBottom: "4%", color: "#808080"
                                 }}>Swipe down to refresh &#x2193;</Text>
                                 < ScrollView
-                                    refreshControl={<RefreshControl
-                                        refreshing={loading}
-                                        onRefresh={fetchAnnouncements}
-                                    />}
+                                    // refreshControl={<RefreshControl
+                                    //     refreshing={loading}
+                                    //     onRefresh={fetchAnnouncements}
+                                    // />}
                                 >
                                     {announcement.map((val, key) => (<Card
                                             key={key}
