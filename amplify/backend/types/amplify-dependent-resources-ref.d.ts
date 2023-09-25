@@ -1,13 +1,13 @@
 export type AmplifyDependentResourcesAttributes = {
   "analytics": {
-    "prontoNotifications": {
+    "prontoAnalytics": {
       "Id": "string",
       "Region": "string",
       "appName": "string"
     }
   },
   "api": {
-    "prontoGraphQlApi": {
+    "pronto": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
       "GraphQLAPIKeyOutput": "string"
@@ -26,7 +26,8 @@ export type AmplifyDependentResourcesAttributes = {
     "userPoolGroups": {
       "adminUserGroupGroupRole": "string",
       "lecturerUserGroupGroupRole": "string",
-      "studentUserGroupGroupRole": "string"
+      "studentsUserGroupGroupRole": "string",
+      "superUserGroupGroupRole": "string"
     }
   },
   "function": {
@@ -44,18 +45,24 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     },
-    "prontoPreSignIn": {
+    "prontoAuthPreAuthentication": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "prontoPreSignUp": {
+    "prontoAuthPreSignup": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
+      "Region": "string"
+    }
+  },
+  "storage": {
+    "prontoBlobeStore": {
+      "BucketName": "string",
       "Region": "string"
     }
   }

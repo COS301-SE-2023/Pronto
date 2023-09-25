@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "prontoUserIdentityPool",
-    "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "prontofad0a131",
-    "userPoolName": "prontoUserPool",
+    "identityPoolName": "prontoIdentityPool",
+    "allowUnauthenticatedIdentities": false,
+    "resourceNameTruncated": "pronto30103874",
+    "userPoolName": "prontoUserPoll",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -14,10 +14,10 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Pronto Verification Code",
-    "emailVerificationMessage": "Your Pronto Verification Code is {####}",
+    "emailVerificationSubject": "PRONTO verification code",
+    "emailVerificationMessage": "Your verification code is {####}",
     "defaultPasswordPolicy": true,
-    "passwordPolicyMinLength": 8,
+    "passwordPolicyMinLength": "8",
     "passwordPolicyCharacters": [
       "Requires Lowercase",
       "Requires Uppercase",
@@ -31,16 +31,20 @@
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
-    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientRefreshTokenValidity": "30",
     "userpoolClientWriteAttributes": [
-      "email"
+      "email",
+      "family_name",
+      "name"
     ],
     "userpoolClientReadAttributes": [
-      "email"
+      "email",
+      "family_name",
+      "name"
     ],
-    "userpoolClientLambdaRole": "prontofad0a131_userpoolclient_lambda_role",
-    "userpoolClientSetAttributes": false,
-    "sharedId": "fad0a131",
+    "userpoolClientLambdaRole": "pronto30103874_userpoolclient_lambda_role",
+    "userpoolClientSetAttributes": true,
+    "sharedId": "30103874",
     "resourceName": "prontoAuth",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "manual",
@@ -53,13 +57,20 @@
     "triggers": {
       "PostConfirmation": [
         "add-to-group"
+      ],
+      "PreAuthentication": [
+        "custom"
+      ],
+      "PreSignup": [
+        "custom"
       ]
     },
     "hostedUI": false,
     "userPoolGroupList": [
+      "superUserGroup",
       "adminUserGroup",
       "lecturerUserGroup",
-      "studentUserGroup"
+      "studentsUserGroup"
     ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
@@ -86,15 +97,37 @@
           "Arn",
           "Name"
         ]
+      },
+      {
+        "category": "function",
+        "resourceName": "prontoAuthPreAuthentication",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      },
+      {
+        "category": "function",
+        "resourceName": "prontoAuthPreSignup",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
       }
+    ],
+    "permissions": [
+      "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}"
+    ],
+    "authTriggerConnections": [
+      "{\"triggerType\":\"PostConfirmation\",\"lambdaFunctionName\":\"prontoAuthPostConfirmation\"}",
+      "{\"triggerType\":\"PreAuthentication\",\"lambdaFunctionName\":\"prontoAuthPreAuthentication\"}",
+      "{\"triggerType\":\"PreSignUp\",\"lambdaFunctionName\":\"prontoAuthPreSignup\"}"
     ],
     "authProviders": [],
     "parentStack": {
       "Ref": "AWS::StackId"
-    },
-    "permissions": [
-      "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}"
-    ],
-    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PostConfirmation\",\n    \"lambdaFunctionName\": \"prontoAuthPostConfirmation\"\n  }\n]"
+    }
   }
 }

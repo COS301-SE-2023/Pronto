@@ -1,12 +1,12 @@
 {
   "analytics": {
-    "prontoNotifications": {
+    "prontoAnalytics": {
       "providerPlugin": "awscloudformation",
       "service": "Pinpoint"
     }
   },
   "api": {
-    "prontoGraphQlApi": {
+    "pronto": {
       "dependsOn": [
         {
           "attributes": ["UserPoolId"],
@@ -19,9 +19,9 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2023-10-15T07:00:19.470Z",
+                "apiKeyExpirationDate": "2023-10-25T16:21:12.683Z",
                 "apiKeyExpirationDays": 30,
-                "description": "PRONTO_GRAPH_API_KEY"
+                "description": "pronto api key"
               },
               "authenticationType": "API_KEY"
             }
@@ -47,6 +47,24 @@
           "category": "function",
           "resourceName": "prontoAuthPostConfirmation",
           "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication",
+          "triggerProvider": "Cognito"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup",
+          "triggerProvider": "Cognito"
         }
       ],
       "frontendAuthConfig": {
@@ -59,7 +77,7 @@
             "REQUIRES_NUMBERS",
             "REQUIRES_SYMBOLS"
           ],
-          "passwordPolicyMinLength": 8
+          "passwordPolicyMinLength": "8"
         },
         "signupAttributes": ["EMAIL", "FAMILY_NAME", "NAME"],
         "socialProviders": [],
@@ -89,26 +107,30 @@
   "function": {
     "announcementsHandler": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "pronto"
+        },
+        {
+          "attributes": [
+            "Id",
+            "Region"
+          ],
+          "category": "analytics",
+          "resourceName": "prontoAnalytics"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "notificationPreferanceHandler": {
       "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "prontoAuthPostConfirmation": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "prontoAuthPostConfirmation": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "prontoPreSignIn": {
-      "build": true,
       "dependsOn": [
         {
           "attributes": [
@@ -117,36 +139,101 @@
             "GraphQLAPIKeyOutput"
           ],
           "category": "api",
-          "resourceName": "prontoGraphQlApi"
+          "resourceName": "pronto"
+        },
+        {
+          "attributes": [
+            "Id",
+            "Region"
+          ],
+          "category": "analytics",
+          "resourceName": "prontoAnalytics"
         }
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "prontoPreSignUp": {
+    "prontoAuthPostConfirmation": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ],
-          "category": "api",
-          "resourceName": "prontoGraphQlApi"
-        }
-      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "prontoAuthPreAuthentication": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "prontoAuthPreSignup": {
+      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "notifications": {
-    "prontoNotifications": {
-      "channels": ["Email"],
+    "prontoAnalytics": {
+      "channels": [
+        "Email"
+      ],
       "service": "Pinpoint"
     }
   },
   "parameters": {
+    "AMPLIFY_analytics_Pinpoint_Id": {
+      "usedBy": [
+        {
+          "category": "analytics",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_analytics_Pinpoint_Name": {
+      "usedBy": [
+        {
+          "category": "analytics",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_analytics_Pinpoint_Region": {
+      "usedBy": [
+        {
+          "category": "analytics",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_function_announcementsHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_announcementsHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_notificationPreferanceHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "notificationPreferanceHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_notificationPreferanceHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "notificationPreferanceHandler"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
       "usedBy": [
         {
@@ -202,6 +289,73 @@
           "resourceName": "prontoAuthPreSignup"
         }
       ]
+    },
+    "AMPLIFY_notifications_Pinpoint_Id": {
+      "usedBy": [
+        {
+          "category": "notifications",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_notifications_Pinpoint_Name": {
+      "usedBy": [
+        {
+          "category": "notifications",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_notifications_Pinpoint_Region": {
+      "usedBy": [
+        {
+          "category": "notifications",
+          "resourceName": "Pinpoint"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "prontoBlobeStore": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "prontoAuth"
+        },
+        {
+          "attributes": [
+            "superUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "adminUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "lecturerUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        },
+        {
+          "attributes": [
+            "studentsUserGroupGroupRole"
+          ],
+          "category": "auth",
+          "resourceName": "userPoolGroups"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
     }
   }
 }
