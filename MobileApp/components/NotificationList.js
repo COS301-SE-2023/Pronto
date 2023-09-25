@@ -24,21 +24,18 @@ const NotificationList = ({navigation}) => {
     const handlePress2 = () => setExpanded2(!expanded2);
     const [loading, setLoading] = useState(false);
     const error = "There appear to be network issues. Please try again later";
-    let limit = 4;
+    let limit = 3;
     const showFullMessage = (key) => {
         setSelectedAnnouncement(key);
     };
 
-
-    //mock data to fetch
     const fetchAnnouncements = async () => {
         try {
             let stu = student;
+            setLoading(true);
             if (student === null) {
-
-                setLoading(true);
                 const user = await Auth.currentAuthenticatedUser()
-                let stu = await API.graphql({
+                stu = await API.graphql({
                     query: getStudent, variables: {id: user.attributes.sub}
                 })
 
@@ -48,53 +45,47 @@ const NotificationList = ({navigation}) => {
                     throw Error();
                 }
                 updateStudent(stu);
+            }
+               
+            let courses = [];
+            for (let i = 0; i < stu.enrollments.items.length; i++) {
+                courses.push(stu.enrollments.items[i].courseId);
+            }
 
-                // Use the mockAnnouncements array as the source of announcements
-                setAnnouncement(mockAnnouncements);
-                setNextToken(null);
-                let courses = [];
-                for (let i = 0; i < stu.enrollments.items.length; i++) {
-                    courses.push(stu.enrollments.items[i].courseId);
-                }
-
-                if (courses.length === 0) {
-                    setLoading(false);
-                    setAnnouncement([]);
-
-                } else {
-                    let filter = `{"filter" : { "or" : [`;
-                    for (let i = 0; i < courses.length; i++) {
-                        if (i === courses.length - 1) {
-                            filter += `{"courseId":{"eq":"${courses[i]}" } }`;
-                        } else {
-                            filter += `{"courseId":{"eq":"${courses[i]}" } },`;
-                        }
-                    }
-
-                    filter += `] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-
-                    let variables = JSON.parse(filter);
-                    let announcementList = await API.graphql({
-                        query: listAnnouncements, variables: variables
-                    });
-
-
-                    setAnnouncement(announcementList.data.listAnnouncements.items);
-                    if (announcementList.data.listAnnouncements.items.length < limit) {
-                        setNextToken(null);
+            if (courses.length === 0) {
+                setLoading(false);
+                setAnnouncement([]);
+                return;
+            } else {
+                let filter = `{"filter" : { "or" : [`;
+                for (let i = 0; i < courses.length; i++) {
+                    if (i === courses.length - 1) {
+                        filter += `{"courseId":{"eq":"${courses[i]}" } }`;
                     } else {
-                        setNextToken(announcementList.data.listAnnouncements.nextToken);
+                        filter += `{"courseId":{"eq":"${courses[i]}" } },`;
                     }
-                    setLoading(false);
                 }
+
+                filter += `] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
+
+                let variables = JSON.parse(filter);
+                let announcementList = await API.graphql({
+                    query: listAnnouncements, variables: variables
+                });
+
+                setAnnouncement(announcementList.data.listAnnouncements.items);
+                if (announcementList.data.listAnnouncements.items.length < limit) {
+                    setNextToken(null);
+                } else {
+                    setNextToken(announcementList.data.listAnnouncements.nextToken);
+                }
+                setLoading(false);
             }
         } catch (er) {
-
             Alert.alert(error)
             setLoading(false);
         }
     };
-
 
     const loadMore = async () => {
         try {
@@ -108,6 +99,8 @@ const NotificationList = ({navigation}) => {
             }
 
             if (courses.length === 0) {
+                setAnnouncement([]);
+                return;
 
             } else {
                 let filter = `{"filter" : { "or" : [`;
@@ -115,7 +108,7 @@ const NotificationList = ({navigation}) => {
                     if (i === courses.length - 1) {
                         filter += `{"courseId":{"eq":"${courses[i]}" } }`;
                     } else {
-                        setNextToken(announcementList.data.listAnnouncements.nextToken);
+                        filter += `{"courseId":{"eq":"${courses[i]}" } },`;
                     }
                 }
 
@@ -125,7 +118,7 @@ const NotificationList = ({navigation}) => {
                 let announcementList = await API.graphql({
                     query: listAnnouncements, variables: variables
                 });
-
+            
                 let a = announcementList.data.listAnnouncements.items;
                 for (let i = 0; i < a.length; i++) {
                     announcement.push(a[i]);
@@ -138,7 +131,8 @@ const NotificationList = ({navigation}) => {
                 setAnnouncement(announcement);
             }
         } catch (e) {
-            Alert.alert(error);
+            //Alert.alert(error);
+            console.log(e);
         }
     }
 
@@ -244,7 +238,8 @@ const NotificationList = ({navigation}) => {
                         refreshControl={<RefreshControl
                             refreshing={loading}
                             onRefresh={fetchAnnouncements}
-                        />}>
+                        />}
+                        >
                         {loading ? (<Text
                                 style={{
                                     fontSize: 30, fontWeight: 200, color: "#e32f45", textAlign: "center"
@@ -258,10 +253,10 @@ const NotificationList = ({navigation}) => {
                                     marginLeft: "auto", marginRight: "auto", marginBottom: "4%", color: "#808080"
                                 }}>Swipe down to refresh &#x2193;</Text>
                                 < ScrollView
-                                    refreshControl={<RefreshControl
-                                        refreshing={loading}
-                                        onRefresh={onRefresh}
-                                    />}
+                                    // refreshControl={<RefreshControl
+                                    //     refreshing={loading}
+                                    //     onRefresh={fetchAnnouncements}
+                                    // />}
                                 >
                                     {announcement.map((val, key) => (<Card
                                             key={key}
@@ -301,13 +296,14 @@ const NotificationList = ({navigation}) => {
                                                 backgroundColor: "#e32f45",
                                                 marginRight: "auto",
                                                 marginLeft: "auto",
+                                                marginBottom:"20%",
                                                 color: "white"
                                             }}
                                         >
                                             Load More
                                         </Button> : " "}
                                     </Text>
-
+                                <Text>{"\n\n\n\n\n\n\n"}</Text>
                                 </ScrollView>
                             </View>
 
