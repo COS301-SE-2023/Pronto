@@ -64,7 +64,6 @@ const AddLecturer = () => {
     const { admin, setAdmin } = useAdmin();
     const { lecturerList, setLecturerList, nextToken, setNextToken } = useLecturerList()
 
-
     const handleChange = () => {
         setExpanded(!expanded)
     }
@@ -124,8 +123,7 @@ const AddLecturer = () => {
                         // u.logoUrl = logoUrl;
                         // let ad = admin;
                         // ad.institution = u;
-                        admin.institution.lectureremails = emails
-
+                        admin.institution.lectureremails = emails;
                         setAdmin(admin);
 
                         //Add lecturer to courses
@@ -261,7 +259,6 @@ const AddLecturer = () => {
                 if (courseList !== undefined) {
                     await removeCourses(courseList, lecturer);
                     setOfferedCourses([...offeredCourses, courseList]);
-
 
                 }
 
@@ -648,7 +645,6 @@ const AddLecturer = () => {
                         </form>
                     </div>
                 </div>
-
                 <div>
 
 

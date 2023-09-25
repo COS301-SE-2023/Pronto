@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "pronto",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authpronto5f713f59",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

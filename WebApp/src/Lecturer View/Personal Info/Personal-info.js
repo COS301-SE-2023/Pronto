@@ -68,7 +68,6 @@ const PersonalInfoPage = () => {
     }
 
 
-
     // const fetchUser = async () => {
     //     try {
     //         let u = await Auth.currentAuthenticatedUser();
@@ -187,7 +186,7 @@ const PersonalInfoPage = () => {
                                             data-testid="repword"
                                             required
                                             value={newPassword}
-                                            onChange={(e) => newPasswordSet(e.target.value)}></input>
+                                            onChange={(e) => setNewPassword(e.target.value)}></input>
                                     </div>
                                 </div>
 

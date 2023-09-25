@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import styled, { keyframes } from "styled-components";
 import Select from "react-select";
 import "./styles.css";
@@ -6,15 +7,14 @@ import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { listAdmins, listInstitutions } from "../../Graphql/queries";
-import { createAdminApplication } from "../../Graphql/mutations";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import MobileView from "../../Homepage/MobileView";
 
 function Login() {
-  const [signIn, toggle] = useState(true);
+  const [signIn, toggle] = React.useState(true);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
 
@@ -37,9 +37,9 @@ function Login() {
   }; */
 
   const [loading, setLoading] = useState(false);
-
   const [institutionName, setInstitutionName] = useState("");
   const [institutions, setInstitutions] = useState([])
+
   const { setAdmin } = useAdmin();
 
   const fetchAdmin = async () => {
@@ -200,7 +200,6 @@ function Login() {
 
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
-
     } catch (e) {
 
       const application = {
@@ -285,15 +284,6 @@ function Login() {
     setNameIsValid(isValidName);
   };
 
-  const [institutionId, setInstitutionId] = React.useState("");
-  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const handleInstitutionSelection = (event) => {
-    setInstitutionId(event.value);
-    setInstitutionName(event.label);
-    setIsInstitudeSelected(true);
-  };
-
   const isMobileView = window.innerWidth < 768;
 
   return (
@@ -355,7 +345,6 @@ function Login() {
                   onFocus={handlePasswordFocus}
                   onBlur={handlePasswordBlur}
                 />
-
                 <Input
                   type="password"
                   placeholder="Confirm Password"
@@ -425,7 +414,7 @@ function Login() {
                 />
                 <StyledSelectInput
                   options={institutions}
-                  defaultValue={institutionId}
+                  defaultValue={"University of Pretoria"}
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"

@@ -286,6 +286,7 @@ const Register = ({ navigation }) => {
               validateSignUpPassword(value);
             }}
             onFocus={() => setIsTypingPassword(true)}
+            testID={"password-input"}
           />
           {isTypingPassword && passwordSignUpIsValid && (
             <View style={styles.iconContainer}>

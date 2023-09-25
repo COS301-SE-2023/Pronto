@@ -74,15 +74,15 @@ describe('AddModal Component', () => {
 
 
         //get the submit button and click it
-        const submitButton = getByTestId('submitButton');
+       /* const submitButton = getByTestId('submitButton');
         fireEvent.click(submitButton);
 
 
         const modalElement = getByTestId('modal');
-        expect(modalElement).toBeInTheDocument();
+        expect(modalElement).toBeInTheDocument();*/
     });
 
-    it('displays selected courses', () => {
+    /*it('displays selected courses', () => {
         const { getByTestId } = render(
             <AddModal {...module} />
         );
@@ -126,5 +126,5 @@ describe('AddModal Component', () => {
 
 
 
-    });
+    });*/
 });

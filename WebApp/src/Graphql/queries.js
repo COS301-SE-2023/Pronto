@@ -52,15 +52,6 @@ export const getInstitution=`query GetInstitution($id: ID!) {
       email
     }
     adminId
-    courses {
-      nextToken
-    }
-    students {
-      nextToken
-    }
-    lecturer {
-      nextToken
-    }
   }
 }
 `
@@ -118,6 +109,7 @@ export const getAdmin=`query GetAdmin($id: ID!) {
     institution {
       id
       name
+      logo
       lectureremails
       domains
       adminId
@@ -235,6 +227,13 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     firstname
     lastname
     email
+    institution {
+      id
+      name
+      lectureremails
+      domains
+      adminId
+    }
     courses {
       nextToken
     }
@@ -305,29 +304,6 @@ export const announcementsByDate=`query AnnouncementsByDate (
               nextToken
             }
 }`
-export const listAdminApplications=`
-             query listAdminApplications(
-                  $filter: ModelAdminApplicationFilterInput, 
-                  $limit: Int, 
-                  $nextToken: String)
-                  {
-                    listAdminApplications(
-                      filter: $filter
-                      limit :$limit
-                      nextToken : $nextToken
-                    ){
-                      items{
-                        id
-                        name 
-                        email
-                        status
-                        createdAt
-                        firstname
-                        lastname
-                      }
-                      nextToken
-                    }
-                  }`
 
 export const searchCourses=`query SearchCourses(
   $filter: SearchableCourseFilterInput
@@ -369,42 +345,6 @@ export const searchCourses=`query SearchCourses(
   }
 }
 `
-export const coursesByInstitutionId = 
-`query CoursesByInstitutionId(
-    $institutionId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelCourseFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    coursesByInstitutionId(
-      institutionId: $institutionId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        lecturerId
-        coursecode
-        activity{
-          items{
-            activityname
-            day
-            start
-            end
-            venue
-            course{
-              coursecode
-            }
-          }
-        }
-      }
-      nextToken
-    }
-  }
-`;
 export const searchLecturerByCourses=`query SearchCourses(
   $filter: SearchableCourseFilterInput
   $sort: [SearchableCourseSortInput]

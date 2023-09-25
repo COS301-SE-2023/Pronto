@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import styled, { keyframes } from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
@@ -8,7 +9,6 @@ import Select from "react-select";
 import { listLecturers, listInstitutions } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
 import MobileView from "../../Homepage/MobileView";
-
 
 function Login() {
   //sign in states
@@ -70,7 +70,6 @@ function Login() {
     }
 
   }
-
   const fetchInstitutions = async () => {
 
     try {
@@ -98,6 +97,7 @@ function Login() {
   useEffect(() => {
     fetchInstitutions();
   })
+
 
   const onSignInPressed = async (event) => {
     if (loading) {
@@ -334,8 +334,8 @@ function Login() {
                   isValidEmail={emailIsValid}
                 />
                 <StyledSelectInput
-                  options={institutions}
-                  defaultValue={institutionId}
+                  defaultValue={"University of Pretoria"}
+                  options={institutions}             
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"
@@ -433,6 +433,7 @@ function Login() {
                   autoComplete="on"
                   spellCheck="true"
                   isSelectionValid={isInstitudeSelected}
+                  className="SelectInput"
                 ></StyledSelectInput>
                 <Input
                   type="password"

@@ -1,0 +1,42 @@
+[
+  {
+    "username": "lecturer1",
+    "password": "Pasword1",
+    "courseID": "course1"
+  },
+  {
+    "username": "lecturer2",
+    "password": "password2",
+    "courseID": "course2"
+  },
+  {
+    "username": "lecturer3",
+    "password": "password3",
+    "courseID": "course3"
+  },
+  {
+    "username": "lecturer20",
+    "password": "password20",
+    "courseID": "course20"
+  },
+  {
+    "username": "john_doe",
+    "password": "JD_password123",
+    "courseID": "CS101"
+  },
+  {
+    "username": "jane_smith",
+    "password": "JS_password456",
+    "courseID": "ENG201"
+  },
+  {
+    "username": "lecturer10",
+    "password": "October01!",
+    "courseID": "MATH300"
+  },
+  {
+    "username": "lecturer20",
+    "password": "L20_password789",
+    "courseID": "HIST400"
+  }
+]
