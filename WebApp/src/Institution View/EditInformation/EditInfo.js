@@ -285,7 +285,7 @@ const EditInfoPage = () => {
                 }}
                 className={showFileModal ? 'blur-background' : ''}
             >
-                <h1 className="moduleHead" style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}> Edit University Information</h1>
+                <h1 className="moduleHead"> Edit University Information</h1>
                 <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}>
                     <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", marginBottom: "30px" }}>Use this to change your accounts password, upload a logo, or edit email the domains of valid accounts for the institution.</h6>
                     <img
