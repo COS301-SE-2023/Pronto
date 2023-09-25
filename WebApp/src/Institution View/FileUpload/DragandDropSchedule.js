@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ScheduleUpload from '../Images/ScheduleUpload.png';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/Schedule.pdf";
-import { coursesByInstitutionId, listAdmins } from "../../Graphql/queries";
+import { listAdmins } from "../../Graphql/queries";
 import CourseReader from "./CourseReader"
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useCourse } from "../../ContextProviders/CourseContext";
@@ -17,6 +17,23 @@ function DropzoneComponent() {
   const { admin, setAdmin } = useAdmin();
   const { course, setCourse } = useCourse();
   const [activities, setActvities] = useState([]);
+
+  const fetchUserData = async () => {
+    try {
+      const userInfo = await Auth.currentUserInfo();
+      setUser(userInfo);
+      let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
+      const words = username.split(/\s+/); // Split the name into words
+      username = words
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
+        .join(""); // Join the words without spaces
+
+      setFolderNameS3(username);
+      setMessage("");
+    } catch (error) {
+      setMessage("Error fetching user data");
+    }
+  };
 
   useEffect(() => {
     fetchUserData();
@@ -40,53 +57,53 @@ function DropzoneComponent() {
   };
 
 
-  const fetchCourses = async () => {
-    try {
-      let adminInfo = admin;
-      if (admin === null) {
-        let user = await Auth.currentAuthenticatedUser();
-        let adminEmail = user.attributes.email;
-        adminInfo = await API.graphql({
-          query: listAdmins,
-          variables: {
-            filter: {
-              email: {
-                eq: adminEmail
-              }
-            }
-          }
-        })
-        adminInfo = adminInfo.data.listAdmins.items[0];
-        setAdmin(adminInfo);
-      }
-      if (course.length === 0) {
-        let courseList = await API.graphql({
-          query: coursesByInstitutionId,
-          variables: {
-            institutionId: adminInfo.institutionId,
-          }
-        })
-
-        courseList = courseList.data.coursesByInstitutionId.items;
-        setCourse(courseList);
-
-        let act = [];
-        for (let i = 0; i < courseList.length; i++) {
-          for (let j = 0; j < courseList[i].activity.items.length; j++) {
-            act.push(courseList[i].activity.items[j]);
-          }
-        }
-        console.log(act);
-        setActvities(act);
-
-      }
-
-      console.log(course);
-
-    } catch (error) {
-
-    }
-  };
+  /* const fetchCourses = async () => {
+     try {
+       let adminInfo = admin;
+       if (admin === null) {
+         let user = await Auth.currentAuthenticatedUser();
+         let adminEmail = user.attributes.email;
+         adminInfo = await API.graphql({
+           query: listAdmins,
+           variables: {
+             filter: {
+               email: {
+                 eq: adminEmail
+               }
+             }
+           }
+         })
+         adminInfo = adminInfo.data.listAdmins.items[0];
+         setAdmin(adminInfo);
+       }
+       if (course.length === 0) {
+         let courseList = await API.graphql({
+           query: coursesByInstitutionId,
+           variables: {
+             institutionId: adminInfo.institutionId,
+           }
+         })
+ 
+         courseList = courseList.data.coursesByInstitutionId.items;
+         setCourse(courseList);
+ 
+         let act = [];
+         for (let i = 0; i < courseList.length; i++) {
+           for (let j = 0; j < courseList[i].activity.items.length; j++) {
+             act.push(courseList[i].activity.items[j]);
+           }
+         }
+         console.log(act);
+         setActvities(act);
+ 
+       }
+ 
+       console.log(course);
+ 
+     } catch (error) {
+ 
+     }
+   }; */
 
   const createFolder = async (folderName) => {
     try {
