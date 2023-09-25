@@ -446,7 +446,8 @@ export default function RecentAnnouncement() {
           <DialogActions style={{ justifyContent: 'center' }}>
             <Button onClick={handleInfoModalClose} color="primary" sx={{
               backgroundColor: '#e32f45', color: 'white', width: "200px", borderRadius: "20px", '&:hover': {
-                backgroundColor: '#e32f45', // Set the same background color for hover state
+                backgroundColor: '#e32f45',
+                transform: 'scale(1.1)', // Set the same background color for hover state
               },
             }}>
               <span>Okay</span>
