@@ -12,47 +12,5 @@
   "triggerTemplate": "PostConfirmation.json.ejs",
   "triggerEventPath": "PostConfirmation.event.json",
   "roleName": "prontoAuthPostConfirmation",
-  "skipEdit": true,
-  "environmentVariableList": [
-    {
-      "cloudFormationParameterName": "cognitoWebClientId",
-      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
-    },
-    {
-      "cloudFormationParameterName": "cognitoMobileClientId",
-      "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
-    },
-    {
-      "cloudFormationParameterName": "adminGroupName",
-      "environmentVariableName": "ADMIN_GROUP_NAME"
-    },
-    {
-      "cloudFormationParameterName": "lecturerGroupName",
-      "environmentVariableName": "LECTURER_GROUP_NAME"
-    },
-    {
-      "cloudFormationParameterName": "studentGroupName",
-      "environmentVariableName": "STUDENT_GROUP_NAME"
-    },
-    {
-      "cloudFormationParameterName": "cognitoWebClientId",
-      "environmentVariableName": "cognitoWebClientId"
-    },
-    {
-      "cloudFormationParameterName": "studentGroupName",
-      "environmentVariableName": "studentGroupName"
-    },
-    {
-      "cloudFormationParameterName": "lecturerGroupName",
-      "environmentVariableName": "lecturerGroupName"
-    },
-    {
-      "cloudFormationParameterName": "adminGroupName",
-      "environmentVariableName": "adminGroupName"
-    },
-    {
-      "cloudFormationParameterName": "cognitoMobileClientId",
-      "environmentVariableName": "cognitoMobileClientId"
-    }
-  ]
+  "skipEdit": true
 }

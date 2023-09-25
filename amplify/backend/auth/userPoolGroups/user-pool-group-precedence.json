@@ -1,14 +1,18 @@
 [
   {
-    "groupName": "adminUserGroup",
+    "groupName": "superUserGroup",
     "precedence": 1
   },
   {
-    "groupName": "lecturerUserGroup",
+    "groupName": "adminUserGroup",
     "precedence": 2
   },
   {
-    "groupName": "studentUserGroup",
+    "groupName": "lecturerUserGroup",
     "precedence": 3
+  },
+  {
+    "groupName": "studentsUserGroup",
+    "precedence": 4
   }
 ]
