@@ -679,9 +679,11 @@ const AddLecturer = () => {
                     <div className="input-group-append">
                         <button onClick={handleSearch}
                             className="btn btn-outline-danger"
-                            style ={{cursor: 'pointer',
-                            transition: 'color 0.3s', // Add a smooth transition for the color change
-                            color: searchIcon ? '#FFFFFF' : '#e32f45',}}
+                            style={{
+                                cursor: 'pointer',
+                                transition: 'color 0.3s', // Add a smooth transition for the color change
+                                color: searchIcon ? '#FFFFFF' : '#e32f45',
+                            }}
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
@@ -689,7 +691,7 @@ const AddLecturer = () => {
                             onMouseLeave={() => setSearchIcon(false)}
                         //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
-                            
+
                             <div className="input-group-append">
                                 {searchIcon === false ? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "ffffff" }} />}
                             </div>
@@ -735,7 +737,7 @@ const AddLecturer = () => {
                                             <td>{val.firstname}</td>
                                             <td>{val.lastname}</td>
                                             <td>
-                                                <a href={`mailto:${val.email}?subject=${encodeURIComponent("Pronto Lecturers")}&body=${encodeURIComponent("Hello "+val.firstname+" "+val.lastname+". You have been (added to Pronto/removed from Pronto)")}`} data-testid="lecturerEmail">
+                                                <a href={`mailto:${val.email}?subject=${encodeURIComponent("Pronto Lecturers")}&body=${encodeURIComponent("Hello " + val.firstname + " " + val.lastname + ". You have been (added to Pronto/removed from Pronto)")}`} data-testid="lecturerEmail">
                                                     {val.email}
                                                 </a>
                                             </td>

@@ -74,18 +74,18 @@ function MyRoutes() {
         {/*Super Admin pages*/}
         <Route path="/superadmin/login" element={<SuperAdminLogin />} />
 
-        <Route path="/superadmin/admin-requests" 
-        element={
-        <RequireSuperAdminAuth>
-          <SuperApplicationRequest />
-        </RequireSuperAdminAuth>}
+        <Route path="/superadmin/admin-requests"
+          element={
+            <RequireSuperAdminAuth>
+              <SuperApplicationRequest />
+            </RequireSuperAdminAuth>}
         />
 
-        <Route path="/superadmin/view-institutions" 
-        element={
-        <RequireSuperAdminAuth>
-          <SuperAdminViewInstitutions />
-        </RequireSuperAdminAuth>} 
+        <Route path="/superadmin/view-institutions"
+          element={
+            <RequireSuperAdminAuth>
+              <SuperAdminViewInstitutions />
+            </RequireSuperAdminAuth>}
         />
 
         {/*Lecturer login/register pages*/}

@@ -97,6 +97,7 @@ export default function RecentAnnouncement() {
 
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [deleteConfirmationIndex, setDeleteConfirmationIndex] = useState(null);
+  const [deleting, setIsDeleting] = useState(false);
 
   const [infoModalOpen, setInfoModalOpen] = useState(false);
 
@@ -129,6 +130,7 @@ export default function RecentAnnouncement() {
   }
 
   const handleConfirmDelete = async (key) => {
+    setIsDeleting(true);
     try {
       let del = await API.graphql({
         query: deleteAnnouncement,
@@ -137,8 +139,10 @@ export default function RecentAnnouncement() {
       const rows = [...announcement]
       rows.splice(key, 1)
       setAnnouncement(rows)
+      setIsDeleting(false);
     } catch (e) {
-      setError("Something went wrong. Please try again later")
+      setError("Something went wrong. Please try again later");
+      setIsDeleting(false);
     }
 
     // Close the confirmation modal
@@ -364,7 +368,7 @@ export default function RecentAnnouncement() {
             Cancel
           </Button>
           <Button value={deleteConfirmationIndex} onClick={(e) => handleConfirmDelete(e.target.value)} variant="contained" color="error" sx={{ ml: 2 }}>
-            Delete
+            {deleting ? "Deleting..." : "Delete"}
           </Button>
         </DialogActions>
       </StyledDialog>
