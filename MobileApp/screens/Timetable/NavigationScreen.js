@@ -170,7 +170,7 @@ const NavigationScreen = ({navigation,route}) => {
                     setCoordinates(loc);
                 }
                 
-                if(route.params.name!==undefined )    {
+                if(route!==null && route.params!==undefined && route.params.name!==undefined )    {
                     setDestinationLocation(route.params.name)
                 }
             

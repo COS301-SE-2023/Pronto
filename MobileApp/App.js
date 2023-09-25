@@ -39,7 +39,7 @@ export default function App() {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
-      if (student===null || student.id===undefined) {
+      if ( student.id===undefined || student===null) {
         const email=authUser.attributes.email;
         let studentInfo = await API.graphql({
           query: getStudent,
@@ -51,21 +51,7 @@ export default function App() {
         if(studentInfo===null){
           
         try{
-          // let domain = email.split("@")[1]
-          // let institution = await API.graphql({
-          //   query: listInstitutions,
-          //   variables: {
-          //     filter: {
-          //       domains: {
-          //         contains: domain
-          //       }
-          //     }
-          //   }
-          // })
-
-          
-          // institution = institution.data.listInstitutions.items[0]
-
+         
           //Create student
           let name=authUser.attributes.name.split(",")
           let newStudent = {

@@ -147,15 +147,9 @@ const ScheduleTable = ({ navigation,route }) => {
     }
   }
 
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     fetchActivities()
-  //   });
-  //   return unsubscribe
-  // }, [navigation])
   const navigate = (module)=>{
   let coordinate=null
-  if(module.coordinates!==null || module.coordinates!==undefined){
+  if(module.coordinates!==null && module.coordinates!==undefined){
     let location=module.coordinates.split(";")
     coordinate={
       name:location[0],
