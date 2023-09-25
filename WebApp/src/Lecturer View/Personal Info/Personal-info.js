@@ -22,6 +22,7 @@ const PersonalInfoPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [updating, setUpdating] = useState(false);
 
     const { lecturer, setLecturer } = useLecturer();
 
@@ -46,6 +47,7 @@ const PersonalInfoPage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
+        setUpdating(true);
         try {
             if (passwordIsValid) {
                 if (newPassword === confirmPassword) {
@@ -57,14 +59,17 @@ const PersonalInfoPage = () => {
                     setError("New password does not match confirm password");
                 }
             } else {
-                setError("New password is too weak.Please ensure your password is at least 8 characters long and  includes at least one lowercase letter, one uppercase letter, one number and one special character")
+                setError("New password is too weak. Please ensure your password is at least 8 characters long and  includes at least one lowercase letter, one uppercase letter, one number and one special character")
             }
+            setUpdating(false);
         } catch (error) {
+            setUpdating(false);
             setError("Password change failed")
         }
         setOldPassword("")
         setNewPassword("")
         setConfirmPassword("")
+        setUpdating(false);
     }
 
 
@@ -204,14 +209,14 @@ const PersonalInfoPage = () => {
                                     </div>
                                 </div>
 
-                                <button style={{ borderRadius: "20px", height: "40px" ,transition: "transform 0.3s", cursor:"pointer" }}
-                                onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = "scale(1.1)";
-                                }}
-                                onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = "scale(1)";
-                                }} className="post-button">
-                                    Update</button>
+                                <button style={{ borderRadius: "20px", height: "40px", transition: "transform 0.3s", cursor: "pointer" }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.transform = "scale(1.1)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = "scale(1)";
+                                    }} className="post-button">
+                                    {updating ? "Updating..." : "Update"}</button>
                             </form>
                         </AccordionDetails>
                     </Accordion>
