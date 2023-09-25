@@ -133,23 +133,23 @@ const Register = ({ navigation }) => {
     setLoading(true);
     try {
       // navigation.navigate("ConfirmEmail", { email });
-      const studentName=name+","+surname;
-      const signUpObject={
-        username:email,
-        password:password,
-        attributes:{
-          email:email,
-          family_name:institutionId,
-          name:studentName
+      const studentName = name + "," + surname;
+      const signUpObject = {
+        username: email,
+        password: password,
+        attributes: {
+          email: email,
+          family_name: institutionId,
+          name: studentName
         },
-        clientMetadata:{
-          role:"Student",
-          instituionId:institutionId
+        clientMetadata: {
+          role: "Student",
+          instituionId: institutionId
         }
       }
-      const u =await Auth.signUp(signUpObject);
- 
-      
+      const u = await Auth.signUp(signUpObject);
+
+
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
       Alert.alert("Error", e.message);
@@ -229,7 +229,7 @@ const Register = ({ navigation }) => {
 
         <View style={styles.inputContainer}>
           <TextInput
-              testID='email-input'
+            testID='email-input'
             placeholder="Email"
             autoCapitalize="none"
             placeholderTextColor={"#666666"}
@@ -250,7 +250,7 @@ const Register = ({ navigation }) => {
 
           {isTypingEmail && !emailIsValid && (
             <View style={styles.iconContainer}>
-              <MaterialIcons name="cancel" size={24} color="red"  testID='email-error-icon'/>
+              <MaterialIcons name="cancel" size={24} color="red" testID='email-error-icon' />
             </View>
           )}
         </View>

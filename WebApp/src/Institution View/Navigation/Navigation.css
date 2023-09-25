@@ -138,7 +138,7 @@
 
 .active {
     color: #e32f45;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow to the text */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow to the text */
 }
 
 /* Add CSS styles for the SearchableDropdown component */

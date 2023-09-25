@@ -16,7 +16,7 @@ const { height } = Dimensions.get("window");
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <ImageBackground
         testID="image-background"
         style={{
@@ -77,6 +77,7 @@ const WelcomeScreen = ({ navigation }) => {
             },
             shadowOpacity: 0.25,
             shadowRadius: 8,
+            elevation: 5,
           }}
           onPress={() => navigation.navigate("Login")}
         >
