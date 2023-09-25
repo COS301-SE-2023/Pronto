@@ -104,49 +104,11 @@
   "function": {
     "announcementsHandler": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Id",
-            "Region"
-          ],
-          "category": "analytics",
-          "resourceName": "prontoNotifications"
-        },
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ],
-          "category": "api",
-          "resourceName": "prontoGraphQlApi"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
     "notificationPreferanceHandler": {
       "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "Id",
-            "Region"
-          ],
-          "category": "analytics",
-          "resourceName": "prontoNotifications"
-        },
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ],
-          "category": "api",
-          "resourceName": "prontoGraphQlApi"
-        }
-      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -197,79 +159,7 @@
     }
   },
   "parameters": {
-    "AMPLIFY_analytics_Pinpoint_Id": {
-      "usedBy": [
-        {
-          "category": "analytics",
-          "resourceName": "Pinpoint"
-        }
-      ]
-    },
-    "AMPLIFY_analytics_Pinpoint_Name": {
-      "usedBy": [
-        {
-          "category": "analytics",
-          "resourceName": "Pinpoint"
-        }
-      ]
-    },
-    "AMPLIFY_analytics_Pinpoint_Region": {
-      "usedBy": [
-        {
-          "category": "analytics",
-          "resourceName": "Pinpoint"
-        }
-      ]
-    },
-    "AMPLIFY_function_announcementsHandler_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "announcementsHandler"
-        }
-      ]
-    },
-    "AMPLIFY_function_announcementsHandler_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "announcementsHandler"
-        }
-      ]
-    },
-    "AMPLIFY_function_notificationPreferanceHandler_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "notificationPreferanceHandler"
-        }
-      ]
-    },
-    "AMPLIFY_function_notificationPreferanceHandler_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "notificationPreferanceHandler"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_adminGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoMobileClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoWebClientId": {
+    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
       "usedBy": [
         {
           "category": "function",
@@ -285,14 +175,6 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoAuthPostConfirmation_lecturerGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
     "AMPLIFY_function_prontoAuthPostConfirmation_s3Key": {
       "usedBy": [
         {
@@ -301,83 +183,35 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoAuthPostConfirmation_studentGroupName": {
+    "AMPLIFY_function_prontoAuthPreAuthentication_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
+          "resourceName": "prontoAuthPreAuthentication"
         }
       ]
     },
-    "AMPLIFY_function_prontoPreSignIn_deploymentBucketName": {
+    "AMPLIFY_function_prontoAuthPreAuthentication_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "prontoPreSignIn"
+          "resourceName": "prontoAuthPreAuthentication"
         }
       ]
     },
-    "AMPLIFY_function_prontoPreSignIn_s3Key": {
+    "AMPLIFY_function_prontoAuthPreSignup_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "prontoPreSignIn"
+          "resourceName": "prontoAuthPreSignup"
         }
       ]
     },
-    "AMPLIFY_function_prontoPreSignUp_cognitoMobileClientId": {
+    "AMPLIFY_function_prontoAuthPreSignup_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "prontoPreSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPreSignUp_cognitoWebClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPreSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPreSignUp_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPreSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoPreSignUp_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoPreSignUp"
-        }
-      ]
-    },
-    "AMPLIFY_notifications_Pinpoint_Id": {
-      "usedBy": [
-        {
-          "category": "notifications",
-          "resourceName": "Pinpoint"
-        }
-      ]
-    },
-    "AMPLIFY_notifications_Pinpoint_Name": {
-      "usedBy": [
-        {
-          "category": "notifications",
-          "resourceName": "Pinpoint"
-        }
-      ]
-    },
-    "AMPLIFY_notifications_Pinpoint_Region": {
-      "usedBy": [
-        {
-          "category": "notifications",
-          "resourceName": "Pinpoint"
+          "resourceName": "prontoAuthPreSignup"
         }
       ]
     }
