@@ -6,9 +6,5 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92"
-  },
-  "dependencies": {
-    "@aws-sdk/client-pinpoint": "^3.414.0",
-    "@aws-sdk/client-ses": "^3.414.0"
   }
 }
