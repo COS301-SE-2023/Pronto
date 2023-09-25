@@ -11,7 +11,7 @@ import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
 import CsvFileReader from "./csvReader";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from '@mui/icons-material/SearchSharp';
 
 import { API, Auth } from 'aws-amplify';
 
@@ -679,13 +679,19 @@ const AddLecturer = () => {
                     <div className="input-group-append">
                         <button onClick={handleSearch}
                             className="btn btn-outline-danger"
+                            style ={{cursor: 'pointer',
+                            transition: 'color 0.3s', // Add a smooth transition for the color change
+                            color: searchIcon ? '#FFFFFF' : '#e32f45',}}
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
+                            onMouseEnter={() => setSearchIcon(true)}
+                            onMouseLeave={() => setSearchIcon(false)}
                         //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
+                            
                             <div className="input-group-append">
-                                {searchIcon === false ? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "#e32f45" }} />}
+                                {searchIcon === false ? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "ffffff" }} />}
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}
