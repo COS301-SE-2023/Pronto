@@ -309,7 +309,7 @@ const EditInfoPage = () => {
 
                         <tr>
                             <td>Email address:</td>
-                            <td>{admin != null ? admin?.institution?.email : " "}</td>
+                            <td>{admin != null ? admin?.email : " "}</td>
                         </tr>
 
                     </tbody>

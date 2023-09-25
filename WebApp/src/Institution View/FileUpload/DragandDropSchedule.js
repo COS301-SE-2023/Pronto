@@ -45,8 +45,9 @@ function DropzoneComponent() {
         adminInfo = adminInfo.data.listAdmins.items[0];
         setAdmin(adminInfo);
       }
+      let courseList=course;
       if(course.length===0){
-        let courseList=await API.graphql({
+        courseList=await API.graphql({
           query:coursesByInstitutionId,
           variables:{
             institutionId:adminInfo.institutionId,
@@ -55,6 +56,7 @@ function DropzoneComponent() {
       
         courseList=courseList.data.coursesByInstitutionId.items;
         setCourse(courseList);
+      }
         
         let act=[];
         for(let i=0;i<courseList.length;i++){
@@ -62,12 +64,10 @@ function DropzoneComponent() {
             act.push(courseList[i].activity.items[j]);
           }
         }
-        console.log(act);
-        setActvities(act);
         
-      }
-    
-      console.log(course);
+        setActvities(act);
+        console.log(act);
+  //    }
 
     }catch(error){
 
@@ -170,7 +170,7 @@ function DropzoneComponent() {
   };
 
   return (
-    <div>
+    <div style={{maxHeight:"70%"}}>
       <h6 style={{ marginBottom: "10px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
       <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
       {/* <div
@@ -253,7 +253,7 @@ function DropzoneComponent() {
             </tr>
           </thead>
           <tbody>
-            {activities?.items?.map((activity,index)=>{
+            {activities?.map((activity,index)=>{
               return(
                 <tr key={index}>
                   <td>{activity?.course?.coursecode}</td>
@@ -265,6 +265,7 @@ function DropzoneComponent() {
                 </tr>
               )
             })}
+           
         </tbody>
         </table>
       </div>
