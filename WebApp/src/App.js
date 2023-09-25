@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useBeforeunload } from 'react-beforeunload';
 
 import LecturerLogin from "./Authentication/Lecturer/Login";
 import LecturerForgotPassword from "./Authentication/Lecturer/ForgotPassword";
@@ -40,6 +41,26 @@ Auth.configure(config);
 Amplify.configure(config);
 
 function MyRoutes() {
+useEffect(() => {
+  const unloadCallback = (event) => {
+    Auth.signOut()
+      .then(()=>{
+        event.preventDefault();
+        event.returnValue = "";
+        return "";
+      })
+    .catch((e)=>{
+
+    })  
+  };
+
+  window.addEventListener("beforeunload", unloadCallback);
+  return () => window.removeEventListener("beforeunload", unloadCallback);
+}, []);
+  
+   useBeforeunload(() => "Are you sure to close this tab?");
+
+
   return (
     <BrowserRouter>
       <Routes>

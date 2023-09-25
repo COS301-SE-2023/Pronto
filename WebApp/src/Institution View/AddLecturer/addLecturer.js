@@ -724,7 +724,7 @@ const AddLecturer = () => {
                                             <td>{val.firstname}</td>
                                             <td>{val.lastname}</td>
                                             <td>
-                                                <a href="mailto:" data-testid="lecturerEmail">
+                                                <a href={`mailto:${val.email}?subject=${encodeURIComponent("Pronto Lecturers")}&body=${encodeURIComponent("Hello "+val.firstname+" "+val.lastname+". You have been (added to Pronto/removed from Pronto)")}`} data-testid="lecturerEmail">
                                                     {val.email}
                                                 </a>
                                             </td>
