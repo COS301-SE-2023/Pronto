@@ -125,6 +125,21 @@
             },
             "STUDENT_GROUP_NAME": {
               "Ref": "studentGroupName"
+            },
+            "cognitoWebClientId": {
+              "Ref": "cognitoWebClientId"
+            },
+            "studentGroupName": {
+              "Ref": "studentGroupName"
+            },
+            "lecturerGroupName": {
+              "Ref": "lecturerGroupName"
+            },
+            "adminGroupName": {
+              "Ref": "adminGroupName"
+            },
+            "cognitoMobileClientId": {
+              "Ref": "cognitoMobileClientId"
             }
           }
         },
