@@ -64,7 +64,6 @@ function Login() {
         throw Error(fetchError);
       }
     } catch (error) {
-      console.log(error);
       await Auth.signOut();
       throw Error(fetchError);
     }
@@ -89,7 +88,7 @@ function Login() {
       }
       setInstitutions(institutionInfo);
     } catch (error) {
-      console.log(error);
+
     }
   }
 
@@ -200,7 +199,6 @@ function Login() {
       navigate("/lecturer/confirm-email", { state: { email: email } });
     } catch (e) {
       setsignUpError(e.message.split("Error: ")[1]);
-      console.log(e);
     }
     setLoading(false);
   };

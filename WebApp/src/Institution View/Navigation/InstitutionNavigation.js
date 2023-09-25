@@ -18,7 +18,7 @@ export default function InstitutionNavigation() {
             //navigate to homepage
             navigate("/");
         } catch (e) {
-            console.log(e.message);
+            
         }
     };
 

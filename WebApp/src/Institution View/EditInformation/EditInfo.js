@@ -135,7 +135,6 @@ const EditInfoPage = () => {
             setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
-            console.log(error);
             setError("Something went wrong");
         }
     }

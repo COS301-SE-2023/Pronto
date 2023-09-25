@@ -45,7 +45,7 @@ const CourseReader = (props)=>{
                 query:deleteCourse,
                 variables:{input:{id:props.courses[i].id}}
             })
-            console.log(del)
+            
        }catch(error){
 
        }
@@ -55,9 +55,7 @@ const CourseReader = (props)=>{
 
   const addCourses = async(courseList)=>{
     let courseMap=new Map();
-    //console.log("courseList");
     
-    console.log(courseList);
     let entries=0;
     for(let i=0;i<courseList.length;i++){    
         try{
@@ -88,7 +86,7 @@ const CourseReader = (props)=>{
             }
 
         }catch(error){
-          console.log(error);
+          
         }
     }
     let c=[];
@@ -109,7 +107,7 @@ const CourseReader = (props)=>{
                 query:createActivity,
                 variables:{input:key[i]}
             })
-         //   console.log(key[i]);
+        
             count+=1;  
            
         }
@@ -119,7 +117,7 @@ const CourseReader = (props)=>{
        
         
     }catch(error){
-        console.log(error);
+        
     }
   }
 

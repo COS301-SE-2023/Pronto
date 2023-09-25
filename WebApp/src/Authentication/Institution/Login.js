@@ -99,7 +99,6 @@ function Login() {
       }
       setInstitutions(institutionInfo);
     } catch (error) {
-      console.log(error);
     }
   }
 
