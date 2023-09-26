@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useBeforeunload } from 'react-beforeunload';
+
 
 import SuperAdminLogin from "./Authentication/SuperAdmin/Login";
 import SuperApplicationRequest from "./SuperAdmin View/ApplicationRequests";
@@ -46,6 +46,13 @@ Auth.configure(config);
 Amplify.configure(config);
 
 function MyRoutes() {
+
+  var timer = setInterval(function() {   
+    if(window.closed) {  
+        clearInterval(timer);  
+        alert('closed');  
+    }  
+}, 1000);
   
   return (
     <BrowserRouter>
