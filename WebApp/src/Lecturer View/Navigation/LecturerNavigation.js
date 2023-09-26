@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
 import "../../Institution View/Navigation/Navigation.css";
@@ -8,19 +8,23 @@ import { useLecturer } from "../../ContextProviders/LecturerContext";
 import { Auth, API, Storage } from "aws-amplify";
 
 export default function LecturerNavigation() {
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const { lecturer, setLecturer } = useLecturer();
+  const [signOut, setSignOut] = useState(false);
 
   const onSignOut = async (event) => {
     event.preventDefault();
+    setSignOut(true);
     try {
       await Auth.signOut();
       //navigate to homepage
       navigate("/");
+      setSignOut(false);
     } catch (e) {
       navigate("/");
+      setSignOut(false);
     }
   };
 
@@ -45,14 +49,14 @@ export default function LecturerNavigation() {
           throw Error()
         }
         lec = lec.data.listLecturers.items[0];
-        
+
         if (lec.institution.logo === null) {
           lec.institution.logoUrl = "";
         }
 
         else {
           lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
-        
+
         }
         setLecturer(lec);
 
@@ -64,7 +68,7 @@ export default function LecturerNavigation() {
 
   useEffect(() => {
     fetchLecturer();
-  },[]);
+  }, []);
 
   return (
     <div className={"grid"} >
@@ -135,7 +139,7 @@ export default function LecturerNavigation() {
             data-testid={"LogoutButton"}
             onClick={onSignOut}
           >
-            Log Out
+            {signOut ? "Logging Out..." : "Log Out"}
           </button>
         </div>
       </nav>
