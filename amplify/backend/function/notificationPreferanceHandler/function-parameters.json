@@ -14,5 +14,11 @@
         "update"
       ]
     }
-  }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "isoCountryCode",
+      "environmentVariableName": "ISO_COUNTRY_CODE"
+    }
+  ]
 }

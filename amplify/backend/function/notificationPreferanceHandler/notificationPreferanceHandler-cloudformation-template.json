@@ -35,6 +35,9 @@
     "analyticsprontoAnalyticsRegion": {
       "Type": "String",
       "Default": "analyticsprontoAnalyticsRegion"
+    },
+    "isoCountryCode": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -104,6 +107,9 @@
             },
             "ANALYTICS_PRONTOANALYTICS_REGION": {
               "Ref": "analyticsprontoAnalyticsRegion"
+            },
+            "ISO_COUNTRY_CODE": {
+              "Ref": "isoCountryCode"
             }
           }
         },
