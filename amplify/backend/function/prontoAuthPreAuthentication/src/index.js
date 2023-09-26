@@ -7,9 +7,7 @@
 	REGION
 Amplify Params - DO NOT EDIT */
 const ROLES = require("./roles.js");
-const {
-  isInstitideAdminOrLecturer,
-} = require("./helpers/assertInstitutionInfo");
+const { isUserAdminOrLecturer } = require("./helpers/assertInstitutionInfo");
 const isAppClientValid = require("./helpers/isAppClientValid");
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -34,9 +32,8 @@ exports.handler = async (event, context) => {
     );
   try {
     if (
-      !(await isInstitideAdminOrLecturer(
+      !(await isUserAdminOrLecturer(
         event.request.userAttributes.email,
-        event.request.validationData.institutionId,
         event.request.validationData.role
       )) &&
       process.env.COGNITO_WEB_CLIENT_ID === event.callerContext.clientId
