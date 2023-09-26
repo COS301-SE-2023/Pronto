@@ -87,7 +87,8 @@ Pronto is a consolidated university application that provides students with the 
 
 # Extra Information
 
-### Refer to the technical installation Manual for all information regarding how to install and run the app. 
-### For directions/clarification on how to use the app, refer to the user manual.
+<h3> Refer to the <a href ="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Technical%20Installation.pdf">Technical Installation Manual</a> for all information regarding how to install and run the app. </h3>
+
+### For directions/clarification on how to use the app, refer to the <a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/User%20Manual.pdf"> User Manual.</a>
 
 ### Feel free to contact the team via our email address: AgileArchitectsCapstone@gmail.com
