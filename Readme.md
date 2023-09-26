@@ -37,7 +37,7 @@ Pronto is a consolidated university application that provides students with the 
 <p align = "center">Click here to vistit the website for Institutional admins and Lecturers: <a href="prontotimetable.co.za"> prontotimetable.co.za </a><br> 
 Download the ExpoGo app and scan the QR code to use the student mobile application </p>
 
-<div style="display: flex; justify-content: center; align-items: center; flex-direction: row; margin: 0 auto; width:1000px" align = center>
+<div style="display: flex; justify-content: center; align-items: center; flex-direction: row; margin: 0 auto; width:1000px">
 
   <div style=" text-align: center;margin:10px ">
     <h4>Android</h4>
