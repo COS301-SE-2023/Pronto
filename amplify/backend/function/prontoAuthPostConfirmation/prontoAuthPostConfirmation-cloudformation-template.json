@@ -43,6 +43,21 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "adminGroupName": {
+      "Type": "String"
+    },
+    "lecturerGroupName": {
+      "Type": "String"
+    },
+    "studentGroupName": {
+      "Type": "String"
+    },
+    "cognitoWebClientId": {
+      "Type": "String"
+    },
+    "cognitoMobileClientId": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -95,6 +110,21 @@
             },
             "GROUP": {
               "Ref": "GROUP"
+            },
+            "ADMIN_GROUP_NAME": {
+              "Ref": "adminGroupName"
+            },
+            "LECTURER_GROUP_NAME": {
+              "Ref": "lecturerGroupName"
+            },
+            "STUDENT_GROUP_NAME": {
+              "Ref": "studentGroupName"
+            },
+            "COGNITO_WEB_CLIENT_ID": {
+              "Ref": "cognitoWebClientId"
+            },
+            "COGNITO_MOBILE_CLIENT_ID": {
+              "Ref": "cognitoMobileClientId"
             }
           }
         },

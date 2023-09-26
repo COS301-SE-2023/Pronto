@@ -12,5 +12,23 @@
   "triggerTemplate": "PreAuthentication.json.ejs",
   "triggerEventPath": "PreAuthentication.event.json",
   "roleName": "prontoAuthPreAuthentication",
-  "skipEdit": true
+  "skipEdit": true,
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "cognitoWebClientId",
+      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "cognitoMobileClientId",
+      "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "apiProntographqlapiGraphqlapiendpointoutput",
+      "environmentVariableName": "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT"
+    },
+    {
+      "cloudFormationParameterName": "apiProntoGraphqlapikeyoutput",
+      "environmentVariableName": "API_PRONTO_GRAPHQLAPIKEYOUTPUT"
+    }
+  ]
 }

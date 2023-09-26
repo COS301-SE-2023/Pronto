@@ -35,6 +35,9 @@
     "analyticsprontoAnalyticsRegion": {
       "Type": "String",
       "Default": "analyticsprontoAnalyticsRegion"
+    },
+    "prontoNotificationsEmail": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -104,6 +107,9 @@
             },
             "ANALYTICS_PRONTOANALYTICS_REGION": {
               "Ref": "analyticsprontoAnalyticsRegion"
+            },
+            "PRONTO_NOTIFICATIONS_EMAIL": {
+              "Ref": "prontoNotificationsEmail"
             }
           }
         },

@@ -20,7 +20,7 @@ console.table(cognitoIdentityServiceProviderClient);
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
 exports.handler = async (event) => {
-  console.table(event);
+  console.debug(`ADD TO GROUP EVENT ${JSON.stringify(event)}`);
   if (
     !event.request.clientMetadata.role ||
     !Object.values(ROLES).includes(event.request.clientMetadata.role)
@@ -28,8 +28,6 @@ exports.handler = async (event) => {
     throw new Error("Invalid User Role or Role not provided");
   if (!event.callerContext.clientId) throw new Error("Client Id not provided");
   let GroupName;
-  console.table(event.request);
-  console.table(process.env);
 
   switch (event.callerContext.clientId) {
     case process.env.COGNITO_MOBILE_CLIENT_ID:
