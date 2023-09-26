@@ -82,8 +82,8 @@ const ConfirmEmail = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.resendButton} onPress={onResendPressed} testID="reset-button">
-          <Text style={styles.resendButtonText}>
+        <TouchableOpacity style={styles.resendButton} onPress={onResendPressed} testID="resend-button">
+          <Text style={styles.resendButtonText} >
             {" "}
             {loadingResend ? "Resending..." : "Resend Code"}
           </Text>

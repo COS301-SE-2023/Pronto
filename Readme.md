@@ -32,7 +32,24 @@
 
 ## Description
 
-Pronto is a consolidated university application that provides students with the ability to conveniently create timetables, receive important notifications from their lecturers, and get directions to their course venues. It also enables them to access important files and documents uploaded by their institution, such as yearly calendars and schedules. Paired with its simple, clean, and user-friendly design, Pronto is the perfect application for use by Institutions, Lecturers and Students.
+Pronto is a consolidated university application that provides students with the ability to conveniently create timetables, receive important notifications from their lecturers, and get directions to their course venues. It also enables them to access important files and documents uploaded by their institution, such as yearly calendars and schedules. Paired with its simple, clean, and user-friendly design, Pronto is the perfect application for use by Institutions, Lecturers and Students.<br>
+
+<p align = "center">Click here to vistit the website for Institutional admins and Lecturers: <a href="prontotimetable.co.za"> prontotimetable.co.za </a><br> 
+Download the ExpoGo app and scan the QR code to use the student mobile application </p>
+
+<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; margin: 0 auto;">
+
+  <div style=" text-align: center;margin:10px ">
+    <h4>Android</h4>
+    <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 1" title="QR 1" style="max-width: 150px; ">
+  </div>
+
+  <div style=" text-align: center;margin:10px ">
+    <h4>IOS</h4>
+    <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 2" title="QR 2" style="max-width: 150px;">
+  </div>
+</div>
+
 
 ## Documentation
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Demo4%20SRS.pdf">🧾 SRS Document</a></div>

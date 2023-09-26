@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./Navigation.css";
 import { listAdmins } from "../../Graphql/queries";
@@ -10,15 +10,19 @@ export default function InstitutionNavigation() {
     const navigate = useNavigate();
     const { admin, setAdmin } = useAdmin();
     const location = useLocation();
+    const [signOut, setSignOut] = useState(false);
 
     const onSignOut = async (event) => {
         event.preventDefault();
+        setSignOut(true);
         try {
             await Auth.signOut();
             //navigate to homepage
+            setSignOut(false);
             navigate("/");
         } catch (e) {
-            navigate("/");   
+            setSignOut(false);
+            navigate("/");
         }
     };
 
@@ -44,7 +48,7 @@ export default function InstitutionNavigation() {
                     // if (adminData.institution.logo !== null) {
                     //     adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
                     // }
-                    setAdmin(adminData);  
+                    setAdmin(adminData);
                 }
 
             }
@@ -134,7 +138,7 @@ export default function InstitutionNavigation() {
                         data-testid={"LogoutButton"}
                         onClick={onSignOut}
                     >
-                        Log Out
+                        {signOut ? "Logging Out..." : "Log Out"}
                     </button>
                 </div>
             </nav >

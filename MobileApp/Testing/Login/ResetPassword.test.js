@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
+import {render, fireEvent, waitFor, act} from "@testing-library/react-native";
 import ResetPassword from "../../screens/Login/ResetPassword";
 import expect from "expect";
 
@@ -16,9 +16,36 @@ describe("ResetPassword Component", () => {
         expect(getByTestId("email-input")).toBeTruthy();
         expect(getByTestId("send-code-button")).toBeTruthy();
         expect(getByTestId("back-to-sign-in-button")).toBeTruthy();
+
     });
 
+    it("renders the `checkmark-icon` component when the `isTypingEmail` state variable is set to `true` and the email input is valid", () => {
+        const { getByTestId } = render(<ResetPassword />);
+        const sendCodeButton = getByTestId("send-code-button");
 
+        fireEvent.changeText(getByTestId("email-input"), "u21598267@tuks.co.za");
+        act(() => {
+            fireEvent.press(sendCodeButton);
+        });
+
+
+
+
+    });
+
+    it("hides the `checkmark-icon` component when the email input is empty", () => {
+        const { getByTestId } = render(<ResetPassword />);
+
+
+        //Change the useState value of email to empty
+        fireEvent.changeText(getByTestId("email-input"), "u21598267@tuks.co.za");
+
+        //press the send code button
+        fireEvent.press(getByTestId("send-code-button"));
+
+        //check that the input is empty
+        fireEvent.changeText(getByTestId("email-input"), "");
+    });
 
 
 });

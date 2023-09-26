@@ -60,5 +60,22 @@ describe("ConfirmEmail", () => {
         mockAlert.mockReset();
     });
 
+    //Test to press the reset button
+    it("handles successful resend", async () => {
+        const mockNavigate = jest.fn();
+        const mockAlert = jest.spyOn(Alert, "alert");
+        const mockResendSignUp = Auth.resendSignUp.mockResolvedValue();
+
+        const { getByTestId, getByPlaceholderText, getByText } = render(
+            <ConfirmEmail navigation={{ navigate: mockNavigate }} />
+        );
+
+        // ... simulate user entering code and pressing verification button
+        fireEvent.press(getByTestId("resend-button"));
+
+        await waitFor(() =>
+            expect(mockAlert).toHaveBeenCalledWith("Success", "Code was resent to: " + 'test@example.com'));
+    });
+
 
 });
