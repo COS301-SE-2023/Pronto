@@ -1,7 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`WelcomeScreen matches snapshot 1`] = `
-<RCTSafeAreaView>
+<RCTSafeAreaView
+  style={
+    {
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
   <View
     accessibilityIgnoresInvertColors={true}
     style={
@@ -105,6 +112,7 @@ exports[`WelcomeScreen matches snapshot 1`] = `
         {
           "backgroundColor": "#e32f45",
           "borderRadius": 10,
+          "elevation": 5,
           "marginRight": "4%",
           "opacity": 1,
           "paddingHorizontal": 10,
