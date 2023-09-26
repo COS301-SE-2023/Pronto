@@ -33,7 +33,19 @@ describe("ResetPassword Component", () => {
 
     });
 
+    it("hides the `checkmark-icon` component when the email input is empty", () => {
+        const { getByTestId } = render(<ResetPassword />);
 
+
+        //Change the useState value of email to empty
+        fireEvent.changeText(getByTestId("email-input"), "u21598267@tuks.co.za");
+
+        //press the send code button
+        fireEvent.press(getByTestId("send-code-button"));
+
+        //check that the input is empty
+        fireEvent.changeText(getByTestId("email-input"), "");
+    });
 
 
 });
