@@ -13,9 +13,9 @@ import {
 import React, { useState } from "react";
 import { SelectList } from "react-native-dropdown-select-list";
 import institutionInfo from "../../assets/data/universityInfo.json";
-import {listInstitutions} from "../../graphql/queries"
+import { listInstitutions } from "../../graphql/queries"
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Auth,API } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 
 const { height } = Dimensions.get("window");
 
@@ -29,7 +29,7 @@ const Login = ({ navigation }) => {
 
   //select instituition
   const [institutionId, setInstitutionId] = useState("");
-  const[instituions,setInstitutions]=useState([]);
+  const [instituions, setInstitutions] = useState([]);
 
   //Validate institutionId
   const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
@@ -45,7 +45,7 @@ const Login = ({ navigation }) => {
 
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
-  
+
   const onSignInPressed = async (data) => {
     if (loading) {
       return;
@@ -57,7 +57,7 @@ const Login = ({ navigation }) => {
         username: username,
         password: password,
         validationData: {
-          role: "Student",
+          role: process.env.REACT_APP_STUDENT_ROLE,
         }
       }
 

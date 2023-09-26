@@ -173,7 +173,7 @@ const Register = ({ navigation }) => {
           name: studentName
         },
         clientMetadata: {
-          role: "Student",
+          role: process.env.REACT_APP_STUDENT_ROLE,
           institutionId: institutionId
         }
       }
