@@ -47,12 +47,6 @@ Amplify.configure(config);
 
 function MyRoutes() {
 
-  var timer = setInterval(function() {   
-    if(window.closed) {  
-        clearInterval(timer);  
-        alert('closed');  
-    }  
-}, 1000);
   
   return (
     <BrowserRouter>
@@ -60,16 +54,16 @@ function MyRoutes() {
         <Route path="/" element={<HomePage />} />
 
         {/*Super Admin pages*/}
-        <Route path="/superadmin/login" element={<SuperAdminLogin />} />
+        <Route path="/ROYGBIV" element={<SuperAdminLogin />} />
 
-        <Route path="/superadmin/admin-requests"
+        <Route path="/ROYGBIV/1"
           element={
             <RequireSuperAdminAuth>
               <SuperApplicationRequest />
             </RequireSuperAdminAuth>}
         />
 
-        <Route path="/superadmin/view-institutions"
+        <Route path="/ROYGBIV/2"
           element={
             <RequireSuperAdminAuth>
               <SuperAdminViewInstitutions />
