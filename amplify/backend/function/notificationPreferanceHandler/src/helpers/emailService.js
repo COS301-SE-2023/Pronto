@@ -38,7 +38,7 @@ const getUpdateEmailEndpointCommandInput = (emailEndPointRequest) => {
       "email address is not provided or has an invalid email pattern"
     );
   const updateEndpointCommandInput = {
-    ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
+    ApplicationId: process.env.ANALYTICS_PRONTOANALYTICS_ID,
     EndpointId: emailEndPointRequest.user.studentId,
     EndpointRequest: {
       Address: emailEndPointRequest.user.emailAddress,

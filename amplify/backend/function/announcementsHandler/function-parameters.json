@@ -14,5 +14,11 @@
         "update"
       ]
     }
-  }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "prontoNotificationsEmail",
+      "environmentVariableName": "PRONTO_NOTIFICATIONS_EMAIL"
+    }
+  ]
 }

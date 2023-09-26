@@ -4,7 +4,7 @@ const { getEndPointAddresses } = require("./getAddresseses");
 
 const setAndGetSendMessagesCommandInput = (announcement, endpoints) => {
   const SendMessagesCommand = {
-    ApplicationId: "",
+    ApplicationId: process.env.ANALYTICS_PRONTOANALYTICS_ID,
     MessageRequest: {
       Addresses: { endpoints },
       MessageConfiguration: {

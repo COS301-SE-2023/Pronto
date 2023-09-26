@@ -10,9 +10,9 @@ const validateMobilePhoneNumberOperation = async (
   validateMobilePhoneNumberRequest
 ) => {
   const phoneNumberValidateCommandInput = {
-    ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
+    ApplicationId: process.env.ANALYTICS_PRONTOANALYTICS_ID,
     NumberValidateRequest: {
-      IsoCountryCode: process.env.IsoCountryCode,
+      IsoCountryCode: process.env.ISO_COUNTRY_CODE,
       PhoneNumber: validateMobilePhoneNumberRequest.phoneNumber,
     },
   };
@@ -54,7 +54,7 @@ const getUpdateSmsEndpointCommandInput = async (smsEndPointRequest) => {
   console.table(smsEndPointRequest);
   if (!numberValidateResponse) throw new Error("number is not validated");
   const updateEndpointInput = {
-    ApplicationId: process.env.ANALYTICS_PRONTONOTIFICATIONS_ID,
+    ApplicationId: process.env.ANALYTICS_PRONTOANALYTICS_ID,
     EndpointId: smsEndPointRequest.user.studentId,
     EndpointRequest: {
       ChannelType: PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS,

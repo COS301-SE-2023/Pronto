@@ -47,6 +47,27 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "studentGroupName": {
+      "Type": "String"
+    },
+    "lecturerGroupName": {
+      "Type": "String"
+    },
+    "adminGroupName": {
+      "Type": "String"
+    },
+    "cognitoMobileClientId": {
+      "Type": "String"
+    },
+    "cognitoWebClientId": {
+      "Type": "String"
+    },
+    "apiProntographqlapiGraphqlapiendpointoutput": {
+      "Type": "String"
+    },
+    "apiProntoGraphqlapikeyoutput": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -102,6 +123,27 @@
             },
             "DOMAINBLACKLIST": {
               "Ref": "DOMAINBLACKLIST"
+            },
+            "STUDENT_GROUP_NAME": {
+              "Ref": "studentGroupName"
+            },
+            "LECTURER_GROUP_NAME": {
+              "Ref": "lecturerGroupName"
+            },
+            "ADMIN_GROUP_NAME": {
+              "Ref": "adminGroupName"
+            },
+            "COGNITO_MOBILE_CLIENT_ID": {
+              "Ref": "cognitoMobileClientId"
+            },
+            "COGNITO_WEB_CLIENT_ID": {
+              "Ref": "cognitoWebClientId"
+            },
+            "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apiProntographqlapiGraphqlapiendpointoutput"
+            },
+            "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
+              "Ref": "apiProntoGraphqlapikeyoutput"
             }
           }
         },

@@ -210,6 +210,14 @@
         }
       ]
     },
+    "AMPLIFY_function_announcementsHandler_prontoNotificationsEmail": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "announcementsHandler"
+        }
+      ]
+    },
     "AMPLIFY_function_announcementsHandler_s3Key": {
       "usedBy": [
         {
@@ -219,6 +227,14 @@
       ]
     },
     "AMPLIFY_function_notificationPreferanceHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "notificationPreferanceHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_notificationPreferanceHandler_isoCountryCode": {
       "usedBy": [
         {
           "category": "function",
@@ -242,7 +258,39 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoAuthPostConfirmation_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_lecturerGroupName": {
       "usedBy": [
         {
           "category": "function",
@@ -255,6 +303,46 @@
         {
           "category": "function",
           "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_studentGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreAuthentication_apiProntoGraphqlapikeyoutput": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreAuthentication_apiProntographqlapiGraphqlapiendpointoutput": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreAuthentication_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreAuthentication_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication"
         }
       ]
     },
@@ -274,6 +362,46 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoAuthPreSignup_adminGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreSignup_apiProntoGraphqlapikeyoutput": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreSignup_apiProntographqlapiGraphqlapiendpointoutput": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreSignup_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreSignup_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoAuthPreSignup_deploymentBucketName": {
       "usedBy": [
         {
@@ -282,7 +410,23 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoAuthPreSignup_lecturerGroupName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoAuthPreSignup_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreSignup_studentGroupName": {
       "usedBy": [
         {
           "category": "function",
