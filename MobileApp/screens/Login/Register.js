@@ -10,10 +10,10 @@ import {
   Alert,
 } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { listInstitutions } from "../../graphql/queries";
-import { Auth,API } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 import institutionInfo from "../../assets/data/universityInfo.json";
 import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
 
@@ -27,7 +27,7 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [instituitions,setInstitutions] = useState([]);
+  const [instituitions, setInstitutions] = useState([]);
 
   //validate email input sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -94,7 +94,7 @@ const Register = ({ navigation }) => {
     setSurnameIsValid(isValidSurname);
   };
 
-   const fetchInstitutions = async () => {
+  const fetchInstitutions = async () => {
 
     try {
       let inst = await API.graphql({
@@ -117,10 +117,10 @@ const Register = ({ navigation }) => {
       console.log(error);
     }
   }
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     fetchInstitutions()
-  },[])
+  }, [])
 
   const onSignUpPressed = async () => {
     if (loading) {
@@ -182,7 +182,7 @@ const Register = ({ navigation }) => {
 
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
-      Alert.alert("Error", e.message);
+      Alert.alert("Sign up error", e.message.split(":")[1]);
       console.log(e)
     }
     setLoading(false);
