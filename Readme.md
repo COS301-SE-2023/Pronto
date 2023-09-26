@@ -41,12 +41,12 @@ Download the ExpoGo app and scan the QR code to use the student mobile applicati
 
   <div style=" text-align: center;margin:10px ">
     <h4>Android</h4>
-    <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 1" title="QR 1" style="max-width: 150px; ">
+    <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 1" title="QR 1" style="width: 150px; ">
   </div>
 
   <div style=" text-align: center;margin:10px ">
     <h4>IOS</h4>
-    <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 2" title="QR 2" style="max-width: 150px;">
+    <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 2" title="QR 2" style="width: 150px;">
   </div>
 </div>
 
