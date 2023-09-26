@@ -4,11 +4,10 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import "./SuperAdmin.css";
 import { createInstitution, createAdmin, updateInstitution, deleteInstitution } from "../Graphql/mutations";
-import { listInstitutions } from '../Graphql/queries';
+import { listInstitutions,listAdmins } from '../Graphql/queries';
 import IconButton from '@mui/material/IconButton'; // Import IconButton
 import CloseIcon from '@mui/icons-material/Close'; // Import the close icon
 import { API } from "aws-amplify"
-import { listAdmins } from '../Graphql/queries';
 import { useEffect } from 'react';
 
 // Modal component for adding institutions

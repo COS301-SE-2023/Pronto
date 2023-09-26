@@ -375,3 +375,28 @@ export const searchLecturerByCourses=`query SearchCourses(
   }
 }
 `
+
+export const listAdminApplications=`
+             query listAdminApplications(
+                  $filter: ModelAdminApplicationFilterInput, 
+                  $limit: Int, 
+                  $nextToken: String)
+                  {
+                    listAdminApplications(
+                      filter: $filter
+                      limit :$limit
+                      nextToken : $nextToken
+                    ){
+                      items{
+                        id
+                        name 
+                        email
+                        status
+                        createdAt
+                        firstname
+                        lastname
+                      }
+                      nextToken
+                    }
+                  }`
+                

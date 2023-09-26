@@ -17,7 +17,7 @@ export default function SuperAdminNavigation() {
               await Auth.signOut();
               navigate("/");
           } catch (e) {
-              console.log(e.message);
+              navigate("/");
           } 
     };
 
