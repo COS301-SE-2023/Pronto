@@ -382,10 +382,6 @@ export const getStudent=`query GetStudent($id: ID!) {
       studentTimetableId
       preference {
         type
-        enpointID
-        deviceID
-        id
-        userId
       }
       studentPreferenceId
       timetable { 
