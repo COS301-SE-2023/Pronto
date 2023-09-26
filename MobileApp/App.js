@@ -71,6 +71,7 @@ export default function App() {
             setStudent(create.data.createStudent);
 
           } catch (error) {
+            console.log(e);
           }
         }
       }
