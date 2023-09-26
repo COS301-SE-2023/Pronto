@@ -6,7 +6,7 @@ import { SeesionExpireModal } from "../Components/SessionExpireModal";
 export function RequireSuperAdminAuth({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [checkUserComplete, setCheckUserComplete] = useState(false);
-  const [expired,setExpired]=useState(false);
+  const [expired, setExpired] = useState(false);
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -34,35 +34,35 @@ export function RequireSuperAdminAuth({ children }) {
   }
 
   if (!authenticated) {
-    return <Navigate to="/404" />; //if not logged in or not a super admin, take them to the not found page
+    return <Navigate to="/404" /> //if not logged in or not a super admin, take them to the not found page
   }
-   // Add an event listener to track user activity
-let timeout;
+  // Add an event listener to track user activity
+  let timeout;
 
-const trackUserActivity= async()=>{
-  clearTimeout(timeout);
-  timeout = setTimeout(() => {
-    Auth.signOut()
-      .then(()=>{
-      
-        setExpired(true);
-        //setAuthenticated(false);
-      })
-      .catch(error=>{
+  const trackUserActivity = async () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      Auth.signOut()
+        .then(() => {
 
-      })
-  }, 30 * 60 * 1000); 
-}
+          setExpired(true);
+          //setAuthenticated(false);
+        })
+        .catch(error => {
 
-// // Attach the event listener to the desired user activity events
- window.addEventListener('mousemove', trackUserActivity);
- window.addEventListener('keydown', trackUserActivity);
+        })
+    }, 30 * 60 * 1000);
+  }
+
+  // // Attach the event listener to the desired user activity events
+  window.addEventListener('mousemove', trackUserActivity);
+  window.addEventListener('keydown', trackUserActivity);
 
 
   return (
     <div>
-      {expired && <SeesionExpireModal/>}
-      {children};
+      {expired && <SeesionExpireModal />}
+      {children}
     </div>
   )
 }

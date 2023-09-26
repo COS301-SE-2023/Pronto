@@ -6,7 +6,7 @@ import { SeesionExpireModal } from "../Components/SessionExpireModal";
 export function RequireLecturerAuth({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [checkUserComplete, setCheckUserComplete] = useState(false);
-  const [expired,setExpired] =useState(false)
+  const [expired, setExpired] = useState(false)
 
   useEffect(() => {
     const checkUser = async () => {
@@ -35,38 +35,38 @@ export function RequireLecturerAuth({ children }) {
   }
 
   if (!authenticated) {
-    return <Navigate to="/lecturer/login" />; //if not logged in or not a lecturer, take them to the lecturer login
+    return <Navigate to="/lecturer/login" /> //if not logged in or not a lecturer, take them to the lecturer login
   }
 
-//Timer to log out user if inactive
-let timeout;
+  //Timer to log out user if inactive
+  let timeout;
 
-const trackUserActivity= async()=>{
-  clearTimeout(timeout);
-  
-  timeout = setTimeout(() => {
-    
-    
-    Auth.signOut()
-      .then(()=>{
-        setExpired(true);
-        //setAuthenticated(false);
-      })
-      .catch(error=>{
+  const trackUserActivity = async () => {
+    clearTimeout(timeout);
 
-      })
-  }, 60 * 60 * 1000); // 30 minutes in milliseconds
-}
-
-// // Attach the event listener to the desired user activity events
- window.addEventListener('mousemove', trackUserActivity);
- window.addEventListener('keydown', trackUserActivity);
+    timeout = setTimeout(() => {
 
 
-    return (
+      Auth.signOut()
+        .then(() => {
+          setExpired(true);
+          //setAuthenticated(false);
+        })
+        .catch(error => {
+
+        })
+    }, 60 * 60 * 1000); // 30 minutes in milliseconds
+  }
+
+  // // Attach the event listener to the desired user activity events
+  window.addEventListener('mousemove', trackUserActivity);
+  window.addEventListener('keydown', trackUserActivity);
+
+
+  return (
     <div>
-      {expired && <SeesionExpireModal/>}
-      {children};
+      {expired && <SeesionExpireModal />}
+      {children}
     </div>
   )
 }

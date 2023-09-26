@@ -43,7 +43,7 @@ const HelpButton = ({ pdfUrl }) => {
                                 <Page
                                     renderTextLayer={false}
                                     renderAnnotationLayer={false}
-                                    customTextRenderer={false}
+
                                     key={`page_${index + 1}`}
                                     className="pdf-page"
                                     pageNumber={index + 1}
