@@ -8,13 +8,13 @@ import {
   ImageBackground,
 } from "react-native";
 import { Auth, API } from "aws-amplify";
-import { listStudents ,getStudent} from "../../graphql/queries"
+import { listStudents, getStudent } from "../../graphql/queries"
 import { deleteStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 const DeleteAccountPage = () => {
-  const {student,updateStudent}=useStudent();
+  const { student, updateStudent } = useStudent();
   const handleDeleteAccount = async () => {
-  
+
     Alert.alert(
       "Confirmation",
       "Are you sure you want to delete your account?",
@@ -28,32 +28,32 @@ const DeleteAccountPage = () => {
           onPress: async () => {
             try {
 
-              let stu=student 
-              if(student===null){
+              let stu = student
+              if (student === null) {
                 const user = await Auth.currentAuthenticatedUser()
                 let studentEmail = user.attributes.email;
                 let stu = await API.graphql({
                   query: getStudent,
-                  variables: {id:user.attributes.sub},
+                  variables: { id: user.attributes.sub },
                 })
-                stu=stu.data.getStudent
+                stu = stu.data.getStudent
               }
 
-              if(stu!==null){
-                  try{
+              if (stu !== null) {
+                try {
 
                   let del = await API.graphql({
                     query: deleteStudent,
                     variables: { input: { id: stu.id } }
                   })
-                  }catch(e){
+                } catch (e) {
 
-                  }
+                }
                 updateStudent(null)
               }
-                await Auth.currentAuthenticatedUser().then((user) => {
-                  return Auth.deleteUser(user);
-                });
+              await Auth.currentAuthenticatedUser().then((user) => {
+                return Auth.deleteUser(user);
+              });
 
               Alert.alert(
                 "Account Deleted",
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e32f45",
     paddingVertical: 12,
     paddingHorizontal: 24,
-    borderRadius: 5,
+    borderRadius: 25,
   },
   buttonText: {
     fontSize: 16,
