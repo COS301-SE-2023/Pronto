@@ -276,7 +276,6 @@ export const listInstitutions=`query ListInstitutions(
     items {
       id
       name
-      coursecodes
       domains
     }
     nextToken
@@ -434,3 +433,4 @@ export const getStudent=`query GetStudent($id: ID!) {
       }  
     }
 }`
+

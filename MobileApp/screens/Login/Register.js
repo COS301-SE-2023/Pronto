@@ -10,9 +10,10 @@ import {
   Alert,
 } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Auth } from "aws-amplify";
+import { listInstitutions } from "../../graphql/queries";
+import { Auth,API } from "aws-amplify";
 import institutionInfo from "../../assets/data/universityInfo.json";
 import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
 
@@ -26,6 +27,7 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [instituitions,setInstitutions] = useState([]);
 
   //validate email input sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -92,6 +94,34 @@ const Register = ({ navigation }) => {
     setSurnameIsValid(isValidSurname);
   };
 
+   const fetchInstitutions = async () => {
+
+    try {
+      let inst = await API.graphql({
+        query: listInstitutions,
+        variables: {},
+        authMode: "API_KEY"
+      });
+      inst = inst.data.listInstitutions.items;
+      let institutionInfo = [];
+      for (let j = 0; j < inst.length; j++) {
+        let item = {
+          key: inst[j].id,
+          value: inst[j].name
+        }
+        institutionInfo.push(item);
+      }
+      console.log(inst);
+      setInstitutions(institutionInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+  useEffect(()=>{
+    fetchInstitutions()
+  },[])
+
   const onSignUpPressed = async () => {
     if (loading) {
       return;
@@ -144,7 +174,7 @@ const Register = ({ navigation }) => {
         },
         clientMetadata: {
           role: "Student",
-          instituionId: institutionId
+          institutionId: institutionId
         }
       }
       const u = await Auth.signUp(signUpObject);
@@ -153,6 +183,7 @@ const Register = ({ navigation }) => {
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
       Alert.alert("Error", e.message);
+      console.log(e)
     }
     setLoading(false);
   };
@@ -259,7 +290,7 @@ const Register = ({ navigation }) => {
           {/* Update the boxStyles prop for SelectList */}
           <SelectList
             setSelected={(institutionId) => setInstitutionId(institutionId)}
-            data={institutionInfo}
+            data={instituitions}
             save="key"
             boxStyles={[
               styles.input,
