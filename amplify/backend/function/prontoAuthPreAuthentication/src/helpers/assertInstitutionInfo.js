@@ -95,6 +95,6 @@ const isUserAdminOrLecturer = async (email, role) => {
 };
 
 module.exports = {
-  getAndSetInstitutionDetails: getAdminAndLecturerEmails,
-  isInstitideAdminOrLecturer: isUserAdminOrLecturer,
+  getAdminAndLecturerEmails,
+  isUserAdminOrLecturer,
 };
