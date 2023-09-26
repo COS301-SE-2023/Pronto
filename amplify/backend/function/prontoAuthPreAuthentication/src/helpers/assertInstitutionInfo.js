@@ -1,32 +1,44 @@
 const ROLES = require("../roles");
 const GRAPHQL_ENDPOINT = process.env.ANALYTICS_PRONTOANALYTICS_ID;
 const GRAPHQL_API_KEY = process.env.API_PRONTO_GRAPHQLAPIKEYOUTPUT;
-let institution = {
-  details: null,
-  id: null,
+const emails = {
+  lecturers: {
+    items: [],
+  },
+  admin: {
+    items: [],
+  },
 };
 
-const getAndSetInstitutionDetails = async (institutionId) => {
-  if (!institutionId)
-    throw new Error(`Invalid Institution Id: InstitutionId = ${institutionId}`);
-  if (institution.details && institution.id == institutionId)
-    return institution.details;
-  institution.id = institutionId;
+const isEmailAddressPatternValid = (enailAddress) => {
+  const emailAddressPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  return emailAddressPattern.test(enailAddress);
+};
+
+const getAdminAndLecturerEmails = async (email) => {
+  if (!email || !isEmailAddressPatternValid(email))
+    throw new Error(`Invalid email address. Emaail: ${email}`);
+  if (
+    (emails.lecturers.items.length > 0 && emails.lecturers.items[0] == email) ||
+    (emails.admin.items.length > 0 && emails.admin.items[0] == email)
+  )
+    return emails;
   const query = /* GraphQL */ `
-    query getInstitutionQuery($input: ID!) {
-      getInstitution(id: $input) {
-        name
-        admin {
-          id
+    {
+      lecturerByEmail(email: $input) {
+        items {
           email
         }
-        domains
-        lectureremails
+      }
+      adminByEmail(email: $input) {
+        items {
+          email
+        }
       }
     }
   `;
   const variables = {
-    input: institution.id,
+    input: emails.id,
   };
   const options = {
     method: "POST",
@@ -38,41 +50,40 @@ const getAndSetInstitutionDetails = async (institutionId) => {
   };
 
   const request = new Request(GRAPHQL_ENDPOINT, options);
-  let body;
-  let response;
-
   try {
-    response = await fetch(request);
-    body = await response.json();
+    const response = await fetch(request);
+    const body = await response.json();
     console.debug(`graphQL Resonse: ${JSON.stringify(body)}`);
-    if (body.data) return (institution.details = body.data.getInstitution);
+    if (body.data) return (emails = body.data);
     throw new Error("API ERROR: Failed to retrieve data");
   } catch (getAndSetInstitutionDetailsError) {
     console.debug(getAndSetInstitutionDetailsError);
-    throw new Error(`Failed To retrieve institution details.`);
+    throw new Error(`Failed To retrieve email list details.`);
   }
 };
 
-const isInstitideAdminOrLecturer = async (email, institutionId, role) => {
-  if (!email || !institutionId)
-    throw new Error(`Invalid institution Id or email`);
+const isUserAdminOrLecturer = async (email, role) => {
+  if (!email || !isEmailAddressPatternValid(email) || !role)
+    throw new Error(`Invalid email address. Emaail: ${email}`);
   try {
-    const institutionetails = await getAndSetInstitutionDetails(institutionId);
-    if (!institutionetails)
-      throw new Error(`Failed To retrieve institution details`);
+    const emails = await getAdminAndLecturerEmails(email);
+    if (!emails) throw new Error(`Failed To retrieve institution details`);
     switch (role) {
       case ROLES.Admin:
-        if (!institutionetails.admin)
+        if (!emails.adminByEmail.items.length)
           throw new Error(`Institude does not have an admin,\n
         Please request for one on AgileArchitectsCapstone@gmail.com\n
-        More info on: {path/to/pronto/web/about/institude/admin}`);
-        return institutionetails.admin.email === mail;
+        More info on: https://www.prontotimetable.co.za/`);
+        return (
+          emails.adminByEmail.items[0] === mail &&
+          emails.adminByEmail.items.length === 1
+        );
       case ROLES.Lecture:
-        if (!institutionetails.lectureremails)
+        if (!emails.lecturers.items.length)
           throw new Error(
             "Lecture email list was not provided, please contact your institution admin"
           );
-        return institutionetails.lectureremails.includes(email);
+        return emails.lectureremails.items.includes(email);
       default:
         return false;
     }
@@ -84,6 +95,6 @@ const isInstitideAdminOrLecturer = async (email, institutionId, role) => {
 };
 
 module.exports = {
-  getAndSetInstitutionDetails,
-  isInstitideAdminOrLecturer,
+  getAndSetInstitutionDetails: getAdminAndLecturerEmails,
+  isInstitideAdminOrLecturer: isUserAdminOrLecturer,
 };
