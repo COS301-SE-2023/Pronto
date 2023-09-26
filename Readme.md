@@ -37,18 +37,18 @@ Pronto is a consolidated university application that provides students with the 
 <p align = "center">Click here to vistit the website for Institutional admins and Lecturers: <a href="prontotimetable.co.za"> prontotimetable.co.za </a><br> 
 Download the ExpoGo app and scan the QR code to use the student mobile application </p>
 
-<div style="display: flex; justify-content: center; align-items: center; flex-direction: row; margin: 0 auto; width:1000px">
-
-  <div style=" text-align: center;margin:10px ">
-    <h4>Android</h4>
-    <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 1" title="QR 1" style="width: 150px; ">
-  </div>
-
-  <div style=" text-align: center;margin:10px ">
-    <h4>IOS</h4>
-    <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 2" title="QR 2" style="width: 150px;">
-  </div>
-</div>
+  <table align="center">
+  <tr>
+    <td align: "center">
+      <h4 align: "center">Android</h4>
+      <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 1" title="QR 1" style="width: 170px; margin: 10px;">
+    </td>
+    <td align: "center">
+      <h4 align: "center">IOS</h4>
+      <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 2" title="QR 2" style="width: 170px; margin: 10px;">
+    </td>
+  </tr>
+</table>
 
 
 ## Documentation
