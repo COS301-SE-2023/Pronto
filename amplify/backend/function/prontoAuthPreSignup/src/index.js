@@ -1,13 +1,9 @@
 /* Amplify Params - DO NOT EDIT
+	API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT
+	API_PRONTO_GRAPHQLAPIIDOUTPUT
+	API_PRONTO_GRAPHQLAPIKEYOUTPUT
 	ENV
 	REGION
-	API_PRONTO_GRAPHQLAPIIDOUTPUT
-	API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT
-	API_PRONTO_GRAPHQLAPIKEYOUTPUT
-	AUTH_PRONTOAUTH_USERPOOLID
-	StudentsGroupName
-	LecturersGroupName
-	AdminGroupName
 Amplify Params - DO NOT EDIT */
 const ROLES = require("./roles.js");
 const {
@@ -23,6 +19,8 @@ exports.handler = async (event, context) => {
   console.table(event);
   if (!event.request.clientMetadata.role)
     throw new Error("Invalid User Role or Role not provided");
+  if (!event.request.clientMetadata.institutionId)
+    throw new Error("Please select an institution");
   if (
     !isAppClientValid(
       event.callerContext.clientId,
@@ -69,7 +67,7 @@ exports.handler = async (event, context) => {
     }
   } catch (preAuthError) {
     console.debug(preAuthError);
-    throw new Error(preAuthError);
+    throw new Error(preAuthError.message);
   }
   return event;
 };

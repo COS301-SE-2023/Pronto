@@ -1,7 +1,7 @@
 const ROLES = require("../roles");
-const GRAPHQL_ENDPOINT = process.env.ANALYTICS_PRONTOANALYTICS_ID;
+const GRAPHQL_ENDPOINT = process.env.API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_PRONTO_GRAPHQLAPIKEYOUTPUT;
-const emails = {
+let emails = {
   lecturers: {
     items: [],
   },
@@ -24,13 +24,13 @@ const getAdminAndLecturerEmails = async (email) => {
   )
     return emails;
   const query = /* GraphQL */ `
-    {
-      lecturerByEmail(email: $input) {
+    query ($lecturerInput: String!, $adminInput: String!) {
+      lecturerByEmail(email: $lecturerInput) {
         items {
           email
         }
       }
-      adminByEmail(email: $input) {
+      adminByEmail(email: $adminInput) {
         items {
           email
         }
@@ -38,7 +38,8 @@ const getAdminAndLecturerEmails = async (email) => {
     }
   `;
   const variables = {
-    input: emails.id,
+    lecturerInput: email,
+    adminInput: email,
   };
   const options = {
     method: "POST",
@@ -83,7 +84,7 @@ const isUserAdminOrLecturer = async (email, role) => {
           throw new Error(
             "Lecture email list was not provided, please contact your institution admin"
           );
-        return emails.lectureremails.items.includes(email);
+        return emails.lecturerByEmail.items.includes(email);
       default:
         return false;
     }

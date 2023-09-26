@@ -15,6 +15,10 @@
   "skipEdit": true,
   "environmentVariableList": [
     {
+      "cloudFormationParameterName": "apiProntoGraphqlapikeyoutput",
+      "environmentVariableName": "API_PRONTO_GRAPHQLAPIKEYOUTPUT"
+    },
+    {
       "cloudFormationParameterName": "studentGroupName",
       "environmentVariableName": "STUDENT_GROUP_NAME"
     },
@@ -37,10 +41,13 @@
     {
       "cloudFormationParameterName": "apiProntographqlapiGraphqlapiendpointoutput",
       "environmentVariableName": "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT"
-    },
-    {
-      "cloudFormationParameterName": "apiProntoGraphqlapikeyoutput",
-      "environmentVariableName": "API_PRONTO_GRAPHQLAPIKEYOUTPUT"
     }
-  ]
+  ],
+  "permissions": {
+    "api": {
+      "pronto": [
+        "Query"
+      ]
+    }
+  }
 }

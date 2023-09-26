@@ -2,7 +2,6 @@
 	API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT
 	API_PRONTO_GRAPHQLAPIIDOUTPUT
 	API_PRONTO_GRAPHQLAPIKEYOUTPUT
-	AUTH_PRONTOAUTH_USERPOOLID
 	ENV
 	REGION
 Amplify Params - DO NOT EDIT */
@@ -45,7 +44,7 @@ exports.handler = async (event, context) => {
       More details on: {path/to/pronto/web/about/institude/admin}`);
   } catch (preAuthError) {
     console.debug(preAuthError);
-    throw new Error(preAuthError);
+    throw new Error(preAuthError.message);
   }
   return event;
 };

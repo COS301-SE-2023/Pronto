@@ -1,5 +1,4 @@
-const GRAPHQL_ENDPOINT =
-  process.env.API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT;
+const GRAPHQL_ENDPOINT = process.env.API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_PRONTO_GRAPHQLAPIKEYOUTPUT;
 let institution = {
   details: null,
@@ -45,7 +44,7 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     if (body.data) return (institution.details = body.data.getInstitution);
     throw new Error("API ERROR: Failed to retrieve data");
   } catch (getEmailsQueryError) {
-    console.debug(getEmailsQueryError);
+    console.debug(JSON.stringify(getEmailsQueryError));
     throw new Error(`Failed To retrieve institution details.`);
   }
 };
@@ -55,7 +54,7 @@ const getLectureEmailsFromInstitution = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.lectureremails;
   } catch (getAndSetInstitutionDetailsError) {
-    console.debug(getAndSetInstitutionDetailsError);
+    console.debug(JSON.stringify(getAndSetInstitutionDetailsError));
     throw new Error(`Failed to retrieve list for the institution.`);
   }
 };
@@ -65,7 +64,7 @@ const getInstitutionAdminId = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.adminId;
   } catch (getInstitutionAdminIdError) {
-    console.debug({ getInstitutionAdminIdError });
+    console.debug(JSON.stringify(getInstitutionAdminIdError));
     throw new Error(`Failed to retrieve admin for the institution.`);
   }
 };
@@ -75,6 +74,7 @@ const getInstitutionEmailDomains = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.domains;
   } catch (getInstitutionEmailDomainsError) {
+    console.debug(JSON.stringify(getInstitutionEmailDomainsError));
     throw new Error(`Failed to retrieve email domains for the institution.`);
   }
 };
@@ -89,8 +89,8 @@ const isLectureEmailPartOfInstitution = async (email, institutionId) => {
       );
     return emailList.includes(email);
   } catch (getLectureEmailsFromInstitutionError) {
-    console.debug(getLectureEmailsFromInstitutionError);
-    throw new Error(getLectureEmailsFromInstitutionError);
+    console.debug(JSON.stringify(getLectureEmailsFromInstitutionError));
+    throw new Error(getLectureEmailsFromInstitutionError.message);
   }
 };
 
@@ -100,7 +100,7 @@ const isAdminAllocated = async (institutionId) => {
     return adminId != null;
   } catch (getInstitutionAdminIdError) {
     console.debug(getInstitutionAdminIdError);
-    throw new Error(getInstitutionAdminIdError);
+    throw new Error(getInstitutionAdminIdError.message);
   }
 };
 
@@ -120,7 +120,7 @@ const isStudentEmailDomainPartOfInstitution = async (
     );
   } catch (getInstitutionEmailDomainsError) {
     console.debug(getInstitutionEmailDomainsError);
-    throw new Error(getInstitutionEmailDomainsError);
+    throw new Error(getInstitutionEmailDomainsError.message);
   }
 };
 
