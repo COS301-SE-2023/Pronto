@@ -20,7 +20,7 @@ export default function LecturerNavigation() {
       //navigate to homepage
       navigate("/");
     } catch (e) {
-      
+      navigate("/");
     }
   };
 

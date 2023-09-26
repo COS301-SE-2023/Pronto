@@ -15,7 +15,6 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
     const [universityName, setUniversityName] = useState('');
     const [adminEmail, setAdminEmail] = useState('');
 
-
     const handleUniversityNameChange = (event) => {
         setUniversityName(event.target.value);
     };
@@ -53,13 +52,14 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                         }
                     }
                 })
-                if (admins.data.listAdmins.items.length > 0)
-                    console.log("This administration email is already in use");
-                return
+
+                if (admins.data.listAdmins.items.length > 0){
+                    return
+                }
             }
 
             if (institutionList.data.listInstitutions.items.length > 0) {
-                console.log("An institution with this name already exists");
+                
                 return;
             }
 
@@ -102,7 +102,7 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
             setInstitutions(institutions);
 
         } catch (e) {
-            console.log(e)
+            
         }
         setAdminEmail("")
         setUniversityName("")

@@ -5,6 +5,7 @@ import UserManual from "../HelpFiles/Schedule.pdf";
 import { listAdmins } from "../../Graphql/queries";
 import CourseReader from "./CourseReader"
 import { useAdmin } from "../../ContextProviders/AdminContext";
+import { ErrorModal } from "../../Components/ErrorModal";
 //import { useCourse } from "../../ContextProviders/CourseContext";
 import { Storage, Auth, API } from "aws-amplify";
 
@@ -15,6 +16,7 @@ function DropzoneComponent() {
   const [user, setUser] = useState(null);
   const [folderNameS3, setFolderNameS3] = useState("");
   const { admin, setAdmin } = useAdmin();
+  const [error,setError] = useState("");
   // const { course, setCourse } = useCourse();
   // const [activities, setActvities] = useState([]);
 
@@ -52,7 +54,8 @@ function DropzoneComponent() {
       anchor.download = "excel_file.xlsx"; // Specify the desired file name
       anchor.click();
     } catch (error) {
-      console.error("Error downloading Excel file", error);
+      //console.error("Error downloading Excel file", error);
+      setError("Error downloading Excel file");
     }
   };
 
@@ -93,12 +96,12 @@ function DropzoneComponent() {
              act.push(courseList[i].activity.items[j]);
            }
          }
-         console.log(act);
+         
          setActvities(act);
  
        }
  
-       console.log(course);
+      
  
      } catch (error) {
  
@@ -186,6 +189,7 @@ function DropzoneComponent() {
 
   return (
     <div>
+        {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <h6 style={{ marginBottom: "10px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
       <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
       <div

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
-import { createLecturer, deleteLecturer, updateCourse, updateInstitution } from "../../Graphql/mutations";
+import { createLecturer, deleteLecturer, updateCourse, updateInstitution, } from "../../Graphql/mutations";
 import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
@@ -84,6 +84,7 @@ const AddLecturer = () => {
 
             try {
 
+                
                 if (email !== admin.email) {
                     //let unique = admin.institution.lectureremails.filter((e) => e === email)
                     let emails = await API.graphql({
@@ -143,7 +144,7 @@ const AddLecturer = () => {
                 }
 
             } catch (error) {
-                console.log(error);
+               
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message
                     if (e.search("Network") !== -1) {
@@ -438,7 +439,7 @@ const AddLecturer = () => {
             }
         }
         catch (error) {
-            console.log(error);
+          
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {
@@ -713,7 +714,7 @@ const AddLecturer = () => {
                 </div>
                 <div
                     className="card shadow w-100"
-                    style={{ width: '500px', maxHeight: "100vh" }}
+                    style={{ width: '500px'}}
                 >
                     <div className="card-body">
                         <table
