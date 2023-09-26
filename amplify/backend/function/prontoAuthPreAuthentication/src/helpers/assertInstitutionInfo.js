@@ -64,7 +64,7 @@ const getAdminAndLecturerEmails = async (email) => {
 
 const isUserAdminOrLecturer = async (email, role) => {
   if (!email || !isEmailAddressPatternValid(email) || !role)
-    throw new Error(`Invalid email address. Emaail: ${email}`);
+    throw new Error(`Invalid email address. Email = ${email}`);
   try {
     const emails = await getAdminAndLecturerEmails(email);
     if (!emails) throw new Error(`Failed To retrieve institution details`);
