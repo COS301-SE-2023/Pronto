@@ -283,7 +283,7 @@ const EditInfoPage = () => {
                         <AccordionDetails>
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group row">
-                                    <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Old password: </label>
+                                    <label htmlFor="colFormLabel1" className="col-sm-2 col-form-label">Old password: </label>
                                     <div className="col-sm-10">
                                         <input
                                             type="password"
@@ -297,7 +297,7 @@ const EditInfoPage = () => {
                                 </div>
 
                                 <div className="form-group row">
-                                    <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">New password: </label>
+                                    <label htmlFor="colFormLabel2" className="col-sm-2 col-form-label">New password: </label>
                                     <div className="col-sm-10">
                                         <input
                                             type="password"
@@ -311,7 +311,7 @@ const EditInfoPage = () => {
                                 </div>
 
                                 <div className="form-group row">
-                                    <label htmlFor="colFormLabel" className="col-sm-2 col-form-label">Confirm password: </label>
+                                    <label htmlFor="colFormLabel3" className="col-sm-2 col-form-label">Confirm password: </label>
                                     <div className="col-sm-10">
                                         <input
                                             type="password"
