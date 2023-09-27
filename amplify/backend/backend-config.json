@@ -272,14 +272,6 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
     "AMPLIFY_function_prontoAuthPostConfirmation_adminGroupName": {
       "usedBy": [
         {

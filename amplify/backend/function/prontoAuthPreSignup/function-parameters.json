@@ -31,16 +31,16 @@
       "environmentVariableName": "ADMIN_GROUP_NAME"
     },
     {
+      "cloudFormationParameterName": "apiProntographqlapiGraphqlapiendpointoutput",
+      "environmentVariableName": "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT"
+    },
+    {
       "cloudFormationParameterName": "cognitoMobileClientId",
       "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
     },
     {
       "cloudFormationParameterName": "cognitoWebClientId",
       "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
-    },
-    {
-      "cloudFormationParameterName": "apiProntographqlapiGraphqlapiendpointoutput",
-      "environmentVariableName": "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT"
     }
   ],
   "permissions": {

@@ -59,13 +59,13 @@
     "apiProntoGraphqlapikeyoutput": {
       "Type": "String"
     },
+    "apiProntographqlapiGraphqlapiendpointoutput": {
+      "Type": "String"
+    },
     "cognitoWebClientId": {
       "Type": "String"
     },
     "cognitoMobileClientId": {
-      "Type": "String"
-    },
-    "apiProntographqlapiGraphqlapiendpointoutput": {
       "Type": "String"
     }
   },
@@ -129,14 +129,14 @@
             "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apiprontoGraphQLAPIKeyOutput"
             },
+            "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apiProntographqlapiGraphqlapiendpointoutput"
+            },
             "COGNITO_WEB_CLIENT_ID": {
               "Ref": "cognitoWebClientId"
             },
             "COGNITO_MOBILE_CLIENT_ID": {
               "Ref": "cognitoMobileClientId"
-            },
-            "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT": {
-              "Ref": "apiProntographqlapiGraphqlapiendpointoutput"
             }
           }
         },
