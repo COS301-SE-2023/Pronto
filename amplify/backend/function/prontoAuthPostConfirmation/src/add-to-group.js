@@ -14,8 +14,6 @@ const cognitoIdentityServiceProviderClient = new CognitoIdentityProviderClient(
   config
 );
 
-console.table(config);
-console.table(cognitoIdentityServiceProviderClient);
 /**
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
@@ -62,7 +60,6 @@ exports.handler = async (event) => {
     UserPoolId: event.userPoolId,
     Username: event.userName,
   };
-  console.table(groupParams);
   console.table(addUserParams);
   try {
     await cognitoIdentityServiceProviderClient.send(
