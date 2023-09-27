@@ -144,6 +144,7 @@ const ScheduleTable = ({ navigation, route }) => {
 
     } catch (e) {
       Alert.alert(error);
+      console.log(e);
     }
   }
 

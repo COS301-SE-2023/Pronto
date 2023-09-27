@@ -41,7 +41,7 @@ export default function App() {
       });
 
       console.log({ authUser });
-      if (student === null || student.id === undefined) {
+      if (student === null) {
         const email = authUser.attributes.email;
         let studentInfo = await API.graphql({
           query: getStudent,
