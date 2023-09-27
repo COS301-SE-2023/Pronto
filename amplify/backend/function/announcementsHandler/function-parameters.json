@@ -1,18 +1,24 @@
 {
+  "lambdaLayers": [],
   "permissions": {
+    "api": {
+      "pronto": [
+        "Query",
+        "Mutation"
+      ]
+    },
     "analytics": {
-      "prontoNotifications": [
+      "prontoAnalytics": [
         "create",
         "read",
         "update"
       ]
-    },
-    "api": {
-      "prontoGraphQlApi": [
-        "Query",
-        "Mutation"
-      ]
     }
   },
-  "lambdaLayers": []
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "prontoNotificationsEmail",
+      "environmentVariableName": "PRONTO_NOTIFICATIONS_EMAIL"
+    }
+  ]
 }

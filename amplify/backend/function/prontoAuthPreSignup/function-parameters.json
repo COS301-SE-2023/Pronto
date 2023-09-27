@@ -1,0 +1,46 @@
+{
+  "trigger": true,
+  "modules": [
+    "custom"
+  ],
+  "parentResource": "prontoAuth",
+  "functionName": "prontoAuthPreSignup",
+  "resourceName": "prontoAuthPreSignup",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "/snapshot/amplify-cli/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PreSignup",
+  "triggerTemplate": "PreSignup.json.ejs",
+  "triggerEventPath": "PreSignup.event.json",
+  "roleName": "prontoAuthPreSignup",
+  "skipEdit": true,
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "studentGroupName",
+      "environmentVariableName": "STUDENT_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "lecturerGroupName",
+      "environmentVariableName": "LECTURER_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "adminGroupName",
+      "environmentVariableName": "ADMIN_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "cognitoMobileClientId",
+      "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "cognitoWebClientId",
+      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "apiProntographqlapiGraphqlapiendpointoutput",
+      "environmentVariableName": "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT"
+    },
+    {
+      "cloudFormationParameterName": "apiProntoGraphqlapikeyoutput",
+      "environmentVariableName": "API_PRONTO_GRAPHQLAPIKEYOUTPUT"
+    }
+  ]
+}

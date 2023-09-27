@@ -15,14 +15,6 @@
   "skipEdit": true,
   "environmentVariableList": [
     {
-      "cloudFormationParameterName": "cognitoWebClientId",
-      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
-    },
-    {
-      "cloudFormationParameterName": "cognitoMobileClientId",
-      "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
-    },
-    {
       "cloudFormationParameterName": "adminGroupName",
       "environmentVariableName": "ADMIN_GROUP_NAME"
     },
@@ -33,6 +25,14 @@
     {
       "cloudFormationParameterName": "studentGroupName",
       "environmentVariableName": "STUDENT_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "cognitoWebClientId",
+      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "cognitoMobileClientId",
+      "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
     }
   ]
 }
