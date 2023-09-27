@@ -64,6 +64,12 @@ const ConfirmEmail = ({ navigation }) => {
           <Text style={styles.subtitle}>
             Enter the code sent to your email to confirm your account.
           </Text>
+          <ImageBackground
+            resizeMode="contain"
+            //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+            source={require("../../assets/icons/ConfirmAccount.png")}
+            style={styles.image}
+          />
         </View>
 
         <View style={styles.inputContainer}>
@@ -130,7 +136,7 @@ const styles = StyleSheet.create({
     maxWidth: "70%",
   },
   inputContainer: {
-    marginVertical: 40,
+    marginVertical: 20,
   },
   input: {
     fontSize: 15,
@@ -192,6 +198,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontWeight: "bold",
+  },
+  image: {
+    width: 200, // Specify the desired width
+    height: 200, // Specify the desired height
+    alignSelf: "center",
   },
 });
 
