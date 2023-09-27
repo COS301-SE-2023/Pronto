@@ -35,6 +35,29 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         setAdminEmail(event.target.value);
     };
 
+    const handleConfirmSignUp = () => {
+        alert("handleConfirmSignUp pressed");
+    }
+
+    const handleDisableUser = () => {
+        alert("handleDisableUser pressed");
+    }
+
+    const handleRemoveFromUserGroup = () => {
+        alert("handleRemoveFromUserGroup pressed");
+    }
+
+    const handleEnableUser = () => {
+        alert(" handleEnableUser pressed");
+    }
+
+
+    const handleGetUser = () => {
+        alert(" handleGetUser pressed");
+    }
+
+
+
     const handleAddInstitution = async (event) => {
         // Perform the action to add the institution with universityName and adminEmail
         // You can add your logic here
@@ -173,20 +196,24 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                         onChange={handleGroupNameChange}
                         style={{ marginBottom: "5%" }}
                     />
-                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                    <Button className="no-hover-color-change" onClick={handleConfirmSignUp} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
                         Confirm user sign up
                     </Button>
 
-                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                    <Button className="no-hover-color-change" onClick={handleRemoveFromUserGroup} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
                         Remove from user group
                     </Button>
 
-                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                    <Button className="no-hover-color-change" onClick={handleEnableUser} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                        Enable user
+                    </Button>
+
+                    <Button className="no-hover-color-change" onClick={handleDisableUser} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
                         Disable user
                     </Button>
 
-                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
-                        Add Institution
+                    <Button className="no-hover-color-change" onClick={handleGetUser} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                        Get user
                     </Button>
 
                     <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
