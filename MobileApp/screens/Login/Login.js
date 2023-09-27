@@ -84,7 +84,7 @@ const Login = ({ navigation }) => {
             institutionId: user.attributes.family_name,
             firstname: name[0],
             lastname: name[1],
-            userRole: process.env.REACT_APP_STUDENT_ROLE,
+            userRole: "Student",
             email: email
           }
 
