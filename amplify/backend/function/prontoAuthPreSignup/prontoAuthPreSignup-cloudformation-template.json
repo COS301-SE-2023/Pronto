@@ -62,24 +62,6 @@
     "apiprontoGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apiprontoGraphQLAPIKeyOutput"
-    },
-    "studentGroupName": {
-      "Type": "String"
-    },
-    "lecturerGroupName": {
-      "Type": "String"
-    },
-    "adminGroupName": {
-      "Type": "String"
-    },
-    "apiProntographqlapiGraphqlapiendpointoutput": {
-      "Type": "String"
-    },
-    "cognitoMobileClientId": {
-      "Type": "String"
-    },
-    "cognitoWebClientId": {
-      "Type": "String"
     }
   },
   "Conditions": {
@@ -144,24 +126,6 @@
             },
             "API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT": {
               "Ref": "apiprontoGraphQLAPIEndpointOutput"
-            },
-            "STUDENT_GROUP_NAME": {
-              "Ref": "studentGroupName"
-            },
-            "LECTURER_GROUP_NAME": {
-              "Ref": "lecturerGroupName"
-            },
-            "ADMIN_GROUP_NAME": {
-              "Ref": "adminGroupName"
-            },
-            "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT": {
-              "Ref": "apiProntographqlapiGraphqlapiendpointoutput"
-            },
-            "COGNITO_MOBILE_CLIENT_ID": {
-              "Ref": "cognitoMobileClientId"
-            },
-            "COGNITO_WEB_CLIENT_ID": {
-              "Ref": "cognitoWebClientId"
             }
           }
         },
