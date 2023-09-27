@@ -19,15 +19,15 @@ function ConfirmEmail() {
 
   const onVerifyPressed = async (event) => {
     event.preventDefault();
-    if (loading) {
-      return;
-    }
-    setLoading(true);
+    // if (loading) {
+    //   return;
+    // }
+   // setLoading(true);
     try {
       //await Auth.confirmSignUp(email, code);
-      await Auth.confirmSignUp(email, code, { clientMetadata: { role: "Admin" } })
+      //await Auth.confirmSignUp(email, code, { clientMetadata: { role: "Admin" } })
       setError("");
-      navigate("/institution/successful-apply");
+      navigate("/institution/login");
     } catch (e) {
       setError(e.message);
     }
@@ -49,25 +49,26 @@ function ConfirmEmail() {
             }}
           />
         </LogoContainer>
-        <Subtitle data-testid={"Subtitle"}>Confirm account</Subtitle>
+        <Subtitle data-testid={"Subtitle"}>Admin Application</Subtitle>
         <Subtitle
           style={{
             fontSize: "1.1rem",
           }}
         >
-          Please enter the code sent to your email to verify your account
+          {/* Please enter the code sent to your email to verify your account */}
+          Your application has been sent
         </Subtitle>
-        <Input data-testid="VerificationCode"
+        {/* <Input data-testid="VerificationCode"
           type="text"
           placeholder="Verification Code"
           value={code}
           onChange={(event) => setCode(event.target.value)}
-        />
+        /> */}
         {error && <ErrorText>{error}</ErrorText>}
 
         <Button data-testid={"btnVerify"} onClick={onVerifyPressed}>
-          {" "}
-          {loading ? "Verifying..." : "Verify Code"}
+          {" Ok"}
+          {/* {loading ? "Verifying..." : "Verify Code"} */}
         </Button>
       </Form>
     </Container>

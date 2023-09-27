@@ -18,7 +18,10 @@ function Login() {
   const [password, setPassword] = React.useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
+  const [firstname,setFirstName] = useState("");
+  const [lastname,setLastName]= useState("");
 
+  const [institutionName,setInstitutionName] = useState("")
   //sign up states
   const [name, setName] = React.useState("");
 
@@ -39,7 +42,7 @@ function Login() {
   }; 
 
   const [loading, setLoading] = useState(false);
-  const [institutionName, setInstitutionName] = useState("");
+ // const [institutionName, setInstitutionName] = useState("");
   const [institutions, setInstitutions] = useState([])
 
   const { setAdmin } = useAdmin();
@@ -157,14 +160,14 @@ function Login() {
       errors.push("Please enter a valid email address.");
     }
 
-    if (!passwordIsValid) {
-      errors.push(
-        "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
-      );
-    }
-    if (confirmPassword !== signUpPassword) {
-      errors.push("Passwords do not match");
-    }
+    // if (!passwordIsValid) {
+    //   errors.push(
+    //     "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
+    //   );
+    // }
+    // if (confirmPassword !== signUpPassword) {
+    //   errors.push("Passwords do not match");
+    // }
 
     if (errors.length > 0) {
       // Combine all error messages into a single string separated by <div> elements
@@ -185,32 +188,40 @@ function Login() {
 
     try {
 
-      await Auth.signUp({
-        username: email,
-        password: signUpPassword,
-        attributes: {
-          email: email,
-          name: name,
-          family_name: "",
-        },
-        clientMetadata: {
-          role: "Admin",
-          institutionId: institutionId
-        },
-      });
+      const n=firstname+" "+lastname
+       const application = {
+        name: institutionName,
+        firstname: n,
+        email: email,
+        status: "PENDING"
+      }
+
+      try{
+        let apply=await API.graphql({
+          query: createAdminApplication,
+          variables: {
+            input: application
+          },
+        authMode: "API_KEY"
+      })
+      console.log(apply);
+    }catch(error){
+      console.log(error);
+    }
 
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
     } catch (e) {
 
+      let n=firstname+" "+lastname;
       const application = {
-        name: name,
-        firstname: institutionId,
-        lastname: institutionName,
+        name: institutionName,
+        firstname: n,
         email: email,
         status: "PENDING"
       }
 
+      try{
       await API.graphql({
         query: createAdminApplication,
         variables: {
@@ -218,6 +229,9 @@ function Login() {
         },
         authMode: "API_KEY"
       })
+    }catch(error){
+      console.log(error);
+    }
       // setsignUpError(e.message);
       setsignUpError("Your application has been sent")
     }
@@ -306,13 +320,31 @@ function Login() {
                 </Title>
                 <Input
                   type="text"
-                  placeholder="Full Name"
-                  value={name}
+                  placeholder="Institution name"
+                  value={institutionName}
                   onChange={(event) => {
-                    setName(event.target.value);
+                    setInstitutionName(event.target.value);
+                    //validateEmail(event.target.value);
+                  }}
+                />
+                <Input
+                  type="text"
+                  placeholder="First Name"
+                  value={firstname}
+                  onChange={(event) => {
+                    setFirstName(event.target.value);
                     validateName(event.target.value);
                   }}
                   isValidName={nameIsValid}
+                />
+                 <Input
+                  type="text"
+                  placeholder="Last Name"
+                  value={lastname}
+                  onChange={(event) => {
+                    setLastName(event.target.value);
+                    validateName(event.target.value);
+                  }}
                 />
                 <Input
                   type="email"
@@ -324,7 +356,7 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-                
+{/*                 
                 <StyledSelectInput
                   options={institutions}
                   defaultValue={institutionId}
@@ -334,9 +366,9 @@ function Login() {
                   autoComplete="on"
                   spellCheck="true"
                   isSelectionValid={isInstitudeSelected}
-                ></StyledSelectInput>
+                ></StyledSelectInput> */}
                 
-                <Input
+                {/* <Input
                   type="password"
                   placeholder="Password"
                   value={signUpPassword}
@@ -357,7 +389,7 @@ function Login() {
                     validateConfirmPassword(event.target.value);
                   }}
                   passwordMatch={passwordMatch}
-                />
+                /> */}
                 {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
                 <Button onClick={onSignUpPressed}>
                   {loading ? "Applying..." : "Apply"}

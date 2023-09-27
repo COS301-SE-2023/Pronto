@@ -393,8 +393,8 @@ export const listAdminApplications=`
                         email
                         status
                         createdAt
-                        firstname
-                        lastname
+                  
+                  
                       }
                       nextToken
                     }

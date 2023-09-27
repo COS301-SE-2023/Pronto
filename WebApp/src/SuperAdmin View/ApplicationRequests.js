@@ -3,10 +3,10 @@ import SuperAdminNavigation from './SuperAdminNavigation';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
-import { API } from "aws-amplify";
+import { API,Auth } from "aws-amplify";
 import { getInstitution } from '../Graphql/queries';
-//import { getInstitution ,listAdminApplications} from '../Graphql/queries';
-import { updateAdmin, updateAdminApplication } from '../Graphql/mutations';
+import { listAdminApplications} from '../Graphql/queries';
+import { updateAdmin, updateAdminApplication,createInstitution } from '../Graphql/mutations';
 
 export default function ApplicationRequests() {
 
@@ -17,26 +17,61 @@ export default function ApplicationRequests() {
     const updatedRequests = [...requests];
 
     try {
-      let admin = await API.graphql({
-        query: getInstitution,
-        variables: { id: requests[index].firstname }
+      // let admin = await API.graphql({
+      //   query: getInstitution,
+      //   variables: { id: requests[index].firstname }
+      // })
+      // admin = admin.data.getInstitution.admin;
+      // admin.email = requests[index].email;
+      // await API.graphql({
+      //   query: updateAdmin,
+      //   variables: { input: admin }
+      // })
+      
+      let request=requests[index];
+      let institution={
+        name:request.name
+      }
+      let inst=await API.graphql({
+        query:createInstitution,
+        variables:{input:institution}
       })
-      admin = admin.data.getInstitution.admin;
-      admin.email = requests[index].email;
-      await API.graphql({
-        query: updateAdmin,
-        variables: { input: admin }
-      })
-      await API.graphql({
-        query: updateAdminApplication,
-        variables: { input: { id: requests[index].id, status: "ACCEPTED" } }
-      })
-      updatedRequests.splice(index, 1);
-      setRequests(updatedRequests);
+      console.log(inst);
+      const newAdmin= await addToAdminGroup(inst.data.createInstitution,request.email);
+      console.log(newAdmin)
+     
+      //  await API.graphql({
+      //   query: updateAdminApplication,
+      //   variables: { input: { id: requests[index].id, status: "ACCEPTED" } }
+      // })
+      // updatedRequests.splice(index, 1);
+      // setRequests(updatedRequests);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const addToAdminGroup = async(institution,email)=>{
+    try{    
+      let apiName= "AdminQueries";
+      let path= "/createInstitutionAdmin";
+
+        let myInit ={ 
+            body:{
+                "email":email,
+                "institutionId":institution.id,
+                "password":"October01!"               
+            },
+            headers:{
+                "Content-Type" : "application/json",
+                 Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+            }
+        };
+        return API.post(apiName,path,myInit);
+      }catch(error){
+        console.log(error);
+      }
+    }
 
   const declineRequest = async (index) => {
     const updatedRequests = [...requests];
@@ -53,7 +88,7 @@ export default function ApplicationRequests() {
     }
   };
 
-  /*  const fetchRequests=async()=>{
+    const fetchRequests=async()=>{
      try{
        let r=await API.graphql({
          query:listAdminApplications,
@@ -66,7 +101,7 @@ export default function ApplicationRequests() {
          }
        })
        setRequests(r.data.listAdminApplications.items);
-     
+      //console.log(r);   
      }catch(error){
        console.log(error)
      }
@@ -74,7 +109,7 @@ export default function ApplicationRequests() {
    }
    useEffect(()=>{
      fetchRequests();
-   },[]) */
+   },[]) 
 
   return (
     <div style={{ display: 'flex', maxHeight: '100vh' }}>
@@ -94,8 +129,8 @@ export default function ApplicationRequests() {
               <div className="postDate">{request.createdAt.split("T")[0]}</div>
             </div>
             <div className="card-body">
-              <h5 className="card-title">{request.lastname}</h5>
-              <p className="card-text">{request.name + " applied to be an admin"}</p>
+              <h5 className="card-title">{request.name}</h5>
+              <p className="card-text">{request.name + " applied to be an admin of"+request.name}</p>
               <p className='card-text'>Contact them at  <a href={`mailto:${request.email}?subject=${encodeURIComponent("Pronto Admins")}&body=${encodeURIComponent("Hello " + request.name + " Your request has been (rejected/accepted)")}`} > {request.email}</a></p>
 
               <div style={{ float: "right" }}>

@@ -104,10 +104,6 @@ export const createInstitution = `mutation CreateInstitution(
   createInstitution(input: $input, condition: $condition) {
     id
     name
-    admin{
-      email
-      name
-    }
     lectureremails
     coursecodes
     domains
