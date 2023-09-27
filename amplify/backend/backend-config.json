@@ -6,6 +6,28 @@
     }
   },
   "api": {
+    "AdminQueries": {
+      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "prontoAuth"
+        },
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "AdminQueries28edb2f2"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
     "pronto": {
       "dependsOn": [
         {
@@ -120,6 +142,20 @@
     }
   },
   "function": {
+    "AdminQueries28edb2f2": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "prontoAuth"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "announcementsHandler": {
       "build": true,
       "dependsOn": [
@@ -239,6 +275,22 @@
         }
       ]
     },
+    "AMPLIFY_function_AdminQueries28edb2f2_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries28edb2f2"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries28edb2f2_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries28edb2f2"
+        }
+      ]
+    },
     "AMPLIFY_function_announcementsHandler_deploymentBucketName": {
       "usedBy": [
         {
@@ -284,6 +336,14 @@
         {
           "category": "function",
           "resourceName": "notificationPreferanceHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPostConfirmation"
         }
       ]
     },
@@ -351,31 +411,15 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoAuthPreAuthentication_apiProntographqlapiGraphqlapiendpointoutput": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreAuthentication"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPreAuthentication_cognitoMobileClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreAuthentication"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPreAuthentication_cognitoWebClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreAuthentication"
-        }
-      ]
-    },
     "AMPLIFY_function_prontoAuthPreAuthentication_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreAuthentication_prontoAdminEmail": {
       "usedBy": [
         {
           "category": "function",
@@ -391,39 +435,7 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoAuthPreSignup_adminGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreSignup"
-        }
-      ]
-    },
     "AMPLIFY_function_prontoAuthPreSignup_apiProntoGraphqlapikeyoutput": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPreSignup_apiProntographqlapiGraphqlapiendpointoutput": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPreSignup_cognitoMobileClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPreSignup_cognitoWebClientId": {
       "usedBy": [
         {
           "category": "function",
@@ -439,23 +451,7 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoAuthPreSignup_lecturerGroupName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreSignup"
-        }
-      ]
-    },
     "AMPLIFY_function_prontoAuthPreSignup_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreSignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPreSignup_studentGroupName": {
       "usedBy": [
         {
           "category": "function",
