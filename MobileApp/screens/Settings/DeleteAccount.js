@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,8 +11,13 @@ import { Auth, API } from "aws-amplify";
 import { listStudents, getStudent } from "../../graphql/queries"
 import { deleteStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
+import { useNavigation } from "@react-navigation/native";
+
 const DeleteAccountPage = () => {
   const { student, updateStudent } = useStudent();
+  const [deleting, setDeleting] = useState(false);
+  const navigation = useNavigation();
+
   const handleDeleteAccount = async () => {
 
     Alert.alert(
@@ -26,6 +31,8 @@ const DeleteAccountPage = () => {
         {
           text: "Delete Account",
           onPress: async () => {
+
+            setDeleting(true);
             try {
 
               let stu = student
@@ -49,8 +56,11 @@ const DeleteAccountPage = () => {
                 } catch (e) {
 
                 }
-                updateStudent(null)
+                updateStudent(null);
+                navigation.navigate("Welcome");
+                setDeleting(false);
               }
+
               await Auth.currentAuthenticatedUser().then((user) => {
                 return Auth.deleteUser(user);
               });
@@ -59,10 +69,12 @@ const DeleteAccountPage = () => {
                 "Account Deleted",
                 "Your account has been successfully deleted."
               );
+              navigation.navigate("Welcome");
+              setDeleting(false);
               //}
             } catch (error) {
-              Alert.alert("Error", "An error occurred while deleting your account. Please try again later."
-              );
+              Alert.alert("Error", "An error occurred while deleting your account. Please try again later.");
+              setDeleting(false);
             }
           },
           style: "destructive", // This will display the button in red to indicate it's a destructive action
@@ -92,7 +104,7 @@ const DeleteAccountPage = () => {
         Are you sure you want to delete your account?
       </Text>
       <TouchableOpacity style={styles.button} onPress={handleDeleteAccount}>
-        <Text style={styles.buttonText}>Delete Account</Text>
+        <Text style={styles.buttonText}>{deleting ? "Deleting..." : "Delete Account"}</Text>
       </TouchableOpacity>
     </View>
   );
