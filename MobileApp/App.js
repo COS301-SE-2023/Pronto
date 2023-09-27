@@ -90,7 +90,7 @@ export default function App() {
   useEffect(() => {
     const listener = (data) => {
       if (data.payload.event === "signIn" || data.payload.event === "signOut") {
-        console.log(data.payload.event);
+        //console.log(data.payload.event);
         checkUser();
       }
     };

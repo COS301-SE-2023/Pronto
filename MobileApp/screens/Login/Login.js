@@ -66,11 +66,10 @@ const Login = ({ navigation }) => {
         }
 
       const user = await Auth.signIn(signInObject);
-    //  const authUser=await Auth.currentAuthenticatedUser();    
-      console.log({user});
+      let studentInfo=student;
       if (student === null) {
         const email = user.attributes.email;
-        let studentInfo = await API.graphql({
+        studentInfo = await API.graphql({
           query: getStudent,
           variables: { id: user.attributes.sub }
         });
@@ -95,11 +94,10 @@ const Login = ({ navigation }) => {
             })
 
             studentInfo=create.data.createStudent;
-            updateStudent(create.data.createStudent);
-            
+            updateStudent(create.data.createStudent); 
           }
-          navigation.navigate("Tabs",studentInfo);
       }
+      navigation.navigate("Tabs",studentInfo);
     } catch (e) {
       Alert.alert("Sign in error", e.message);
       setLoading(false);

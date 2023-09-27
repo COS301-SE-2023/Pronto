@@ -16,10 +16,11 @@ const SettingsComponent = ({ settingsOptions }) => {
   const onLogoutPressed = async() => {
     updateStudent(null);
     try{
-     await Auth.signOut();
+     Auth.signOut();
+     navigation.navigate("Welcome");
     }
     catch(error){
-      console.log(e)
+      //console.log(e)
     }
     navigation.navigate("Welcome");
   };

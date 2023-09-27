@@ -179,8 +179,6 @@ const NavigationScreen = ({ navigation, route }) => {
         }
     }
 
-
-
     // //    useEffect hook to run the requestLocationPermission function when the component is mounted
     useEffect(() => {
         requestLocationPermission();
