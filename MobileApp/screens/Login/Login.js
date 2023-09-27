@@ -61,7 +61,7 @@ const Login = ({ navigation }) => {
         username: username,
         password: password,
         validationData: {
-          role: "Student",
+          role: process.env.REACT_APP_STUDENT_ROLE,
         }
       }
 
@@ -84,7 +84,7 @@ const Login = ({ navigation }) => {
             institutionId: user.attributes.family_name,
             firstname: name[0],
             lastname: name[1],
-            userRole: "Student",
+            userRole: process.env.REACT_APP_STUDENT_ROLE,
             email: email
           }
 
