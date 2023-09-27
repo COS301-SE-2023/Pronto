@@ -71,16 +71,6 @@ Download the ExpoGo app and scan the QR code to use the student mobile applicati
   </ol>
 </details>
 
-<details>
-  <summary>Demo Recordings</summary>
-  <ol style="list-style: none">
-    <li><a href="https://drive.google.com/file/d/1HWyxFvWtt6HvSSNpiXuQ2BRM43qTEhgU/view?usp=share_link">📽️ Demo 1</a></li>
-    <li><a href="https://drive.google.com/file/d/1iLCdIK4_AjSgFtfEThRByqWEbvSH73xt/view?usp=drive_link">📽️ Demo 2</a></li>
-    <li><a href="https://drive.google.com/file/d/1ImiTyPSyAo8VTLaCVQV2lIR6TQg5sghs/view?usp=sharing">📽️ Demo 3</a></li>
-  </ol>
-</details>
-
-
 ## Project Management
 
 <div><a href="https://github.com/orgs/COS301-SE-2023/projects/24">📅 Pronto Project Board </a></div>
