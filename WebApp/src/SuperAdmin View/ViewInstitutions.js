@@ -16,6 +16,11 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
     const [adminEmail, setAdminEmail] = useState('');
     const [groupName, setGroupName] = useState('');
     const [userName, setUserName] = useState('');
+    const [universityID, setUniversityID] = useState('');
+
+    const [admin, setAdmin] = useState('');
+
+
 
     const handleUniversityNameChange = (event) => {
         setUniversityName(event.target.value);
@@ -28,6 +33,16 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
     const handleUsernameChange = (event) => {
         setUserName(event.target.value);
     };
+
+    const handleUniversityID = (event) => {
+        setUniversityID(event.target.value);
+    };
+
+    const handleAddAdmin = (event) => {
+        setAdmin(event.target.value);
+    };
+
+
 
 
 
@@ -181,6 +196,19 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                         style={{ marginBottom: "5%" }}
                     />
                     <TextField
+                        label="University ID"
+                        variant="outlined"
+                        fullWidth
+                        value={universityID}
+                        onChange={handleUniversityID}
+                        style={{ marginBottom: "5%" }}
+                    />
+                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                        Add Institution
+                    </Button>
+
+                    <h2> Add Admin</h2>
+                    <TextField
                         label="Username"
                         variant="outlined"
                         fullWidth
@@ -216,9 +244,10 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                         Get user
                     </Button>
 
-                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
-                        Add Institution
+                    <Button className="no-hover-color-change" onClick={handleAddAdmin} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                        Add Admin
                     </Button>
+
                 </div>
             </div>
         </>
@@ -312,12 +341,14 @@ export default function ViewInstitutions() {
                         style={{ backgroundColor: '#e32f45', borderRadius: '20px' }}
                         onClick={() => openModal(setInstitutions, institutions)}
                     >
-                        Add Institutions
+                        Add Institutions/Super Admins
                     </Button>
                 </div>
 
                 {/* Render the modal component */}
                 <AddInstitutionModal isOpen={isModalOpen} onClose={closeModal} institutions={institutions} setInstitutions={setInstitutions} />
+
+
             </main>
         </div>
     );
