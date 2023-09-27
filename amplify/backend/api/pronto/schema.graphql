@@ -70,7 +70,7 @@ type Lecturer
   firstname: String!
   lastname: String!
   userRole: String!
-  email: ID! @index(name: "byEmail", queryField: "lecturerByEmail")
+  email: String! @index(name: "byEmail", queryField: "lecturerByEmail")
   institution: Institution! @belongsTo(fields: ["institutionId"])
   courses: [Course] @hasMany(indexName: "bycourse", fields: ["id"])
 }

@@ -48,6 +48,21 @@
     "s3Key": {
       "Type": "String"
     },
+    "apiProntoGraphqlapikeyoutput": {
+      "Type": "String"
+    },
+    "apiprontoGraphQLAPIIdOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIIdOutput"
+    },
+    "apiprontoGraphQLAPIEndpointOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIEndpointOutput"
+    },
+    "apiprontoGraphQLAPIKeyOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIKeyOutput"
+    },
     "studentGroupName": {
       "Type": "String"
     },
@@ -57,24 +72,14 @@
     "adminGroupName": {
       "Type": "String"
     },
-    "analyticsprontoNotificationsId": {
-      "Type": "String",
-      "Default": "analyticsprontoNotificationsId"
+    "cognitoMobileClientId": {
+      "Type": "String"
     },
-<<<<<<<< HEAD:amplify/backend/function/announcementsHandler/announcementsHandler-cloudformation-template.json
-    "analyticsprontoNotificationsRegion": {
-      "Type": "String",
-      "Default": "analyticsprontoNotificationsRegion"
-========
     "cognitoWebClientId": {
       "Type": "String"
     },
     "apiProntographqlapiGraphqlapiendpointoutput": {
       "Type": "String"
-    },
-    "apiProntoGraphqlapikeyoutput": {
-      "Type": "String"
->>>>>>>> beta/release:amplify/backend/function/prontoAuthPreSignup/prontoAuthPreSignup-cloudformation-template.json
     }
   },
   "Conditions": {
@@ -99,20 +104,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-<<<<<<<< HEAD:amplify/backend/function/announcementsHandler/announcementsHandler-cloudformation-template.json
-            "announcementsHandler",
-========
             "prontoAuthPreSignup",
->>>>>>>> beta/release:amplify/backend/function/prontoAuthPreSignup/prontoAuthPreSignup-cloudformation-template.json
             {
               "Fn::Join": [
                 "",
                 [
-<<<<<<<< HEAD:amplify/backend/function/announcementsHandler/announcementsHandler-cloudformation-template.json
-                  "announcementsHandler",
-========
                   "prontoAuthPreSignup",
->>>>>>>> beta/release:amplify/backend/function/prontoAuthPreSignup/prontoAuthPreSignup-cloudformation-template.json
                   "-",
                   {
                     "Ref": "env"
@@ -139,6 +136,15 @@
             "DOMAINBLACKLIST": {
               "Ref": "DOMAINBLACKLIST"
             },
+            "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIKeyOutput"
+            },
+            "API_PRONTO_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIIdOutput"
+            },
+            "API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIEndpointOutput"
+            },
             "STUDENT_GROUP_NAME": {
               "Ref": "studentGroupName"
             },
@@ -148,22 +154,14 @@
             "ADMIN_GROUP_NAME": {
               "Ref": "adminGroupName"
             },
-            "ANALYTICS_PRONTONOTIFICATIONS_ID": {
-              "Ref": "analyticsprontoNotificationsId"
+            "COGNITO_MOBILE_CLIENT_ID": {
+              "Ref": "cognitoMobileClientId"
             },
-<<<<<<<< HEAD:amplify/backend/function/announcementsHandler/announcementsHandler-cloudformation-template.json
-            "ANALYTICS_PRONTONOTIFICATIONS_REGION": {
-              "Ref": "analyticsprontoNotificationsRegion"
-========
             "COGNITO_WEB_CLIENT_ID": {
               "Ref": "cognitoWebClientId"
             },
             "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT": {
               "Ref": "apiProntographqlapiGraphqlapiendpointoutput"
-            },
-            "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
-              "Ref": "apiProntoGraphqlapikeyoutput"
->>>>>>>> beta/release:amplify/backend/function/prontoAuthPreSignup/prontoAuthPreSignup-cloudformation-template.json
             }
           }
         },
@@ -191,20 +189,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-<<<<<<<< HEAD:amplify/backend/function/announcementsHandler/announcementsHandler-cloudformation-template.json
-            "prontoLambdaRole2d59855e",
-========
             "prontoAuthPreSignup",
->>>>>>>> beta/release:amplify/backend/function/prontoAuthPreSignup/prontoAuthPreSignup-cloudformation-template.json
             {
               "Fn::Join": [
                 "",
                 [
-<<<<<<<< HEAD:amplify/backend/function/announcementsHandler/announcementsHandler-cloudformation-template.json
-                  "prontoLambdaRole2d59855e",
-========
                   "prontoAuthPreSignup",
->>>>>>>> beta/release:amplify/backend/function/prontoAuthPreSignup/prontoAuthPreSignup-cloudformation-template.json
                   "-",
                   {
                     "Ref": "env"
@@ -274,7 +264,6 @@
           ]
         }
       }
-<<<<<<<< HEAD:amplify/backend/function/announcementsHandler/announcementsHandler-cloudformation-template.json
     },
     "AmplifyResourcesPolicy": {
       "DependsOn": [
@@ -291,58 +280,6 @@
         "PolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "mobiletargeting:Put*",
-                "mobiletargeting:Create*",
-                "mobiletargeting:Send*",
-                "mobiletargeting:Get*",
-                "mobiletargeting:List*",
-                "mobiletargeting:Update*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:mobiletargeting:",
-                      {
-                        "Ref": "analyticsprontoNotificationsRegion"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":apps/",
-                      {
-                        "Ref": "analyticsprontoNotificationsId"
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:mobiletargeting:",
-                      {
-                        "Ref": "analyticsprontoNotificationsRegion"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":apps/",
-                      {
-                        "Ref": "analyticsprontoNotificationsId"
-                      },
-                      "/*"
-                    ]
-                  ]
-                }
-              ]
-            },
             {
               "Effect": "Allow",
               "Action": [
@@ -363,29 +300,9 @@
                       },
                       ":apis/",
                       {
-                        "Ref": "apiprontoGraphQlApiGraphQLAPIIdOutput"
+                        "Ref": "apiprontoGraphQLAPIIdOutput"
                       },
                       "/types/Query/*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:appsync:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":apis/",
-                      {
-                        "Ref": "apiprontoGraphQlApiGraphQLAPIIdOutput"
-                      },
-                      "/types/Mutation/*"
                     ]
                   ]
                 }
@@ -394,8 +311,6 @@
           ]
         }
       }
-========
->>>>>>>> beta/release:amplify/backend/function/prontoAuthPreSignup/prontoAuthPreSignup-cloudformation-template.json
     }
   },
   "Outputs": {
