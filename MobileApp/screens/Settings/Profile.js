@@ -90,15 +90,6 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     textAlign: "center",
     borderRadius: 20,
-    elevation: 5, // Adjust the elevation value as needed
-    // iOS shadow
-    shadowColor: "#e32f45",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
   },
   label: {
     fontSize: 18,
