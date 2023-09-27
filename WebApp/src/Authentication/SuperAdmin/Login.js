@@ -41,7 +41,7 @@ function Login() {
 
     //add logic to sign into pronto admin account
     try {
-      await Auth.signIn(email, password), {role: "SuperAdmin"};
+      await Auth.signIn(email, password, {role: "SuperAdmin"});
       setsignInError("");
       navigate("/superadmin/admin-requests")
     } catch (e) {
