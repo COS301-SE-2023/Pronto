@@ -13,9 +13,16 @@ import { useStudent } from "../ContextProviders/StudentContext";
 const SettingsComponent = ({ settingsOptions }) => {
   const navigation = useNavigation();
   const {student,updateStudent} =useStudent();
-  const onLogoutPressed = () => {
+  const onLogoutPressed = async() => {
     updateStudent(null);
-    Auth.signOut();
+    try{
+     Auth.signOut();
+     navigation.navigate("Welcome");
+    }
+    catch(error){
+      //console.log(e)
+    }
+    navigation.navigate("Welcome");
   };
 
   const onHelpPressed = () => {

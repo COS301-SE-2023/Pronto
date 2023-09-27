@@ -174,11 +174,10 @@ const NavigationScreen = ({ navigation, route }) => {
             }
 
         } catch (e) {
-            Alert.alert(error);
+            //Alert.alert(error);
+            console.log(e);
         }
     }
-
-
 
     // //    useEffect hook to run the requestLocationPermission function when the component is mounted
     useEffect(() => {

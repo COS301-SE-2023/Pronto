@@ -91,11 +91,14 @@ const ScheduleTable = ({ navigation, route }) => {
           //updateStudent(stu);
           param = null;
         }
-        if (stu === null || stu.studentTimetableId === null) {
-          return;
-        }
+        
         updateStudent(stu);
       }
+
+      
+      if (stu === null || stu.studentTimetableId === null) {
+          return;
+        }
 
       let act = [];
       let courses = [];
@@ -143,7 +146,8 @@ const ScheduleTable = ({ navigation, route }) => {
 
 
     } catch (e) {
-      Alert.alert(error);
+      //Alert.alert(error);
+      console.log(e);
     }
   }
 

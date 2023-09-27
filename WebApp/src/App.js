@@ -47,7 +47,7 @@ Amplify.configure(config);
 
 function MyRoutes() {
 
-  
+
   return (
     <BrowserRouter>
       <Routes>
@@ -56,18 +56,17 @@ function MyRoutes() {
         {/*Super Admin pages*/}
         <Route path="/ROYGBIV" element={<SuperAdminLogin />} />
 
-        <Route path="/ROYGBIV/1"
+        <Route path="/superadmin/admin-requests"
           element={
-            <RequireSuperAdminAuth>
-              <SuperApplicationRequest />
-            </RequireSuperAdminAuth>}
+
+            <SuperApplicationRequest />
+          }
         />
 
-        <Route path="/ROYGBIV/2"
+        <Route path="/superadmin/view-institutions"
           element={
-            <RequireSuperAdminAuth>
-              <SuperAdminViewInstitutions />
-            </RequireSuperAdminAuth>}
+            <SuperAdminViewInstitutions />
+          }
         />
 
         {/*Lecturer login/register pages*/}

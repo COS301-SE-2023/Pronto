@@ -372,18 +372,11 @@ export const announcementsByDate=`query AnnouncementsByDate (
 export const getStudent=`query GetStudent($id: ID!) {
   getStudent(id: $id) {
       institutionId
-      institution{
-        name
-      }
       id
       firstname
       lastname
       email
       studentTimetableId
-      preference {
-        type
-      }
-      studentPreferenceId
       timetable { 
         id
         activities{ 
