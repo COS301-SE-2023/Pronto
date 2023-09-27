@@ -62,6 +62,12 @@
     "apiprontoGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apiprontoGraphQLAPIKeyOutput"
+    },
+    "cognitoWebClientId": {
+      "Type": "String"
+    },
+    "cognitoMobileClientId": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -126,6 +132,12 @@
             },
             "API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT": {
               "Ref": "apiprontoGraphQLAPIEndpointOutput"
+            },
+            "COGNITO_WEB_CLIENT_ID": {
+              "Ref": "cognitoWebClientId"
+            },
+            "COGNITO_MOBILE_CLIENT_ID": {
+              "Ref": "cognitoMobileClientId"
             }
           }
         },
