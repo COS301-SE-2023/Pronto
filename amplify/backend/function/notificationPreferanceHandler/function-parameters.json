@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "analytics": {
+      "prontoNotifications": [
+        "create",
+        "read",
+        "update"
+      ]
+    },
+    "api": {
+      "prontoGraphQlApi": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

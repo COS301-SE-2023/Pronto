@@ -1,0 +1,14 @@
+{
+  "userPoolId": "us-east-1_0MFceeZ4B",
+  "userName": "USERNAME",
+  "callerContext": {
+    "clientId": "WEB_CLIENTID"
+  },
+  "request": {
+    "validationData": {
+      "role": "Admin",
+      "institutionId": "INSTITUTIONID"
+    }
+  },
+  "response": {}
+}

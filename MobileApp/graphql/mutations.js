@@ -1,9 +1,8 @@
-export const createTimetable=`mutation CreateTimetable(
+export const createTimetable = `mutation CreateTimetable(
   $input: CreateTimetableInput!
   $condition: ModelTimetableConditionInput
 ) {
   createTimetable(input: $input, condition: $condition) {
-    id
     studentId
     activityId
     student {
@@ -24,7 +23,7 @@ export const createTimetable=`mutation CreateTimetable(
     createdAt
     updatedAt
   }
-}`
+}`;
 
 export const updateTimetable=`mutation UpdateTimetable(
   $input: UpdateTimetableInput!
