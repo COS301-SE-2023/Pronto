@@ -149,6 +149,8 @@ node_modules/
 
 team-provider-info.json
 
+amplify/backend/function/prontoPreSignUp/src/events
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*

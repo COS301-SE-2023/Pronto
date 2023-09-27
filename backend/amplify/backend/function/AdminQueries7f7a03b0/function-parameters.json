@@ -1,8 +1,0 @@
-{
-  "environmentVariableList": [
-    {
-      "cloudFormationParameterName": "group",
-      "environmentVariableName": "GROUP"
-    }
-  ]
-}
