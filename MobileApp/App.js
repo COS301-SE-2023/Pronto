@@ -33,12 +33,14 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-  const [student, setStudent] = useState("")
+  const [student, setStudent] = useState(null);
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
+
+      console.log({ authUser });
       if (student === null || student.id === undefined) {
         const email = authUser.attributes.email;
         let studentInfo = await API.graphql({
@@ -51,7 +53,6 @@ export default function App() {
         if (studentInfo === null) {
 
           try {
-
             //Create student
             let name = authUser.attributes.name.split(",")
             let newStudent = {
@@ -78,6 +79,7 @@ export default function App() {
       setUser(authUser);
     } catch (e) {
       setUser(null);
+      console.log(e);
     }
   };
 
@@ -88,6 +90,7 @@ export default function App() {
   useEffect(() => {
     const listener = (data) => {
       if (data.payload.event === "signIn" || data.payload.event === "signOut") {
+        console.log(data.payload.event);
         checkUser();
       }
     };
@@ -129,110 +132,95 @@ export default function App() {
       <AnnouncementProvider>
         <NavigationContainer>
           <Stack.Navigator>
-            {user ? (
-              <>
-                <Stack.Screen
-                  name="Tabs"
-                  component={Tabs}
-                  initialParams={student}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="AccountSettings"
-                  component={AccountSettings}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="Notification Preferences"
-                  component={NotificationPreferences}
-                  options={{ headerShown: true }}
-                />
-                <Stack.Screen
-                  name="Privacy Policy"
-                  component={PrivacyPolicyScreen}
-                  options={{ headerShown: true }}
-                />
-                <Stack.Screen
-                  name="Profile Page"
-                  component={ProfilePage}
-                  options={{ headerShown: true }}
-                />
 
-                <Stack.Screen
-                  name="Reset Password"
-                  component={ResetPassword}
-                  options={{ headerShown: true }}
-                />
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={Register}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ResetPassword"
+              component={ResetPassword}
+              options={{ headerShown: false }}
+            />
 
-                <Stack.Screen
-                  name="Delete Account"
-                  component={DeleteAccountPage}
-                  options={{ headerShown: true }}
-                />
+            <Stack.Screen
+              name="ConfirmEmail"
+              component={ConfirmEmail}
+              options={{ headerShown: false }}
+            />
 
-                <Stack.Screen
-                  name="About"
-                  component={AboutScreen}
-                  options={{ headerShown: true }}
-                />
+            <Stack.Screen
+              name="Tabs"
+              component={Tabs}
+              initialParams={student}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AccountSettings"
+              component={AccountSettings}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Notification Preferences"
+              component={NotificationPreferences}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Privacy Policy"
+              component={PrivacyPolicyScreen}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="Profile Page"
+              component={ProfilePage}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
+              name="Reset Password"
+              component={ResetPassword}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
+              name="Delete Account"
+              component={DeleteAccountPage}
+              options={{ headerShown: true }}
+            />
+
+            <Stack.Screen
+              name="About"
+              component={AboutScreen}
+              options={{ headerShown: true }}
+            />
 
 
-                <Stack.Screen
-                  name="Help"
-                  component={HelpScreen}
-                  options={{ headerShown: true }}
-                />
+            <Stack.Screen
+              name="Help"
+              component={HelpScreen}
+              options={{ headerShown: true }}
+            />
 
-                <Stack.Screen
-                  name="VerifyCode"
-                  component={VerifyCode}
-                  options={{ headerShown: false }}
-                />
+            <Stack.Screen
+              name="VerifyCode"
+              component={VerifyCode}
+              options={{ headerShown: false }}
+            />
 
-                <Stack.Screen
-                  name="Login"
-                  component={Login}
-                  options={{ headerShown: false }}
-                />
-
-              </>
-            ) : (
-              <>
-                <Stack.Screen
-                  name="Welcome"
-                  component={WelcomeScreen}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="Register"
-                  component={Register}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="Login"
-                  component={Login}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="ResetPassword"
-                  component={ResetPassword}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="VerifyCode"
-                  component={VerifyCode}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="ConfirmEmail"
-                  component={ConfirmEmail}
-                  options={{ headerShown: false }}
-                />
-              </>
-            )}
           </Stack.Navigator>
         </NavigationContainer>
       </AnnouncementProvider>
-    </StudentProvider>
+    </StudentProvider >
   );
 }
