@@ -7,6 +7,11 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "api": {
+    "AdminQueries": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
+    },
     "pronto": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
@@ -31,6 +36,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "AdminQueries28edb2f2": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "announcementsHandler": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
