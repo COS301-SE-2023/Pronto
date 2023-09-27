@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import "./SuperAdmin.css";
 import { createInstitution, createAdmin, updateInstitution, deleteInstitution } from "../Graphql/mutations";
-import { listInstitutions,listAdmins } from '../Graphql/queries';
+import { listInstitutions, listAdmins } from '../Graphql/queries';
 import IconButton from '@mui/material/IconButton'; // Import IconButton
 import CloseIcon from '@mui/icons-material/Close'; // Import the close icon
 import { API } from "aws-amplify"
@@ -14,10 +14,22 @@ import { useEffect } from 'react';
 function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions }) {
     const [universityName, setUniversityName] = useState('');
     const [adminEmail, setAdminEmail] = useState('');
+    const [groupName, setGroupName] = useState('');
+    const [userName, setUserName] = useState('');
 
     const handleUniversityNameChange = (event) => {
         setUniversityName(event.target.value);
     };
+
+    const handleGroupNameChange = (event) => {
+        setGroupName(event.target.value);
+    };
+
+    const handleUsernameChange = (event) => {
+        setUserName(event.target.value);
+    };
+
+
 
     const handleAdminEmailChange = (event) => {
         setAdminEmail(event.target.value);
@@ -53,13 +65,13 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                     }
                 })
 
-                if (admins.data.listAdmins.items.length > 0){
+                if (admins.data.listAdmins.items.length > 0) {
                     return
                 }
             }
 
             if (institutionList.data.listInstitutions.items.length > 0) {
-                
+
                 return;
             }
 
@@ -102,7 +114,7 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
             setInstitutions(institutions);
 
         } catch (e) {
-            
+
         }
         setAdminEmail("")
         setUniversityName("")
@@ -145,6 +157,38 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                         onChange={handleAdminEmailChange}
                         style={{ marginBottom: "5%" }}
                     />
+                    <TextField
+                        label="Username"
+                        variant="outlined"
+                        fullWidth
+                        value={userName}
+                        onChange={handleUsernameChange}
+                        style={{ marginBottom: "5%" }}
+                    />
+                    <TextField
+                        label="GroupName"
+                        variant="outlined"
+                        fullWidth
+                        value={groupName}
+                        onChange={handleGroupNameChange}
+                        style={{ marginBottom: "5%" }}
+                    />
+                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                        Confirm user sign up
+                    </Button>
+
+                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                        Remove from user group
+                    </Button>
+
+                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                        Disable user
+                    </Button>
+
+                    <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
+                        Add Institution
+                    </Button>
+
                     <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
                         Add Institution
                     </Button>
