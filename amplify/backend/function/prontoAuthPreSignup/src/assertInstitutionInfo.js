@@ -54,7 +54,7 @@ const getLectureEmailsFromInstitution = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.lectureremails;
   } catch (getAndSetInstitutionDetailsError) {
-    console.debug(getAndSetInstitutionDetailsError);
+    console.debug({ getAndSetInstitutionDetailsError });
     throw new Error(`Failed to retrieve list for the institution.`);
   }
 };
@@ -74,6 +74,7 @@ const getInstitutionEmailDomains = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.domains;
   } catch (getInstitutionEmailDomainsError) {
+    console.debug({ getInstitutionEmailDomainsError });
     throw new Error(`Failed to retrieve email domains for the institution.`);
   }
 };
@@ -88,8 +89,8 @@ const isLectureEmailPartOfInstitution = async (email, institutionId) => {
       );
     return emailList.includes(email);
   } catch (getLectureEmailsFromInstitutionError) {
-    console.debug(getLectureEmailsFromInstitutionError);
-    throw new Error(getLectureEmailsFromInstitutionError);
+    console.debug({ getLectureEmailsFromInstitutionError });
+    throw new Error(getLectureEmailsFromInstitutionError.message);
   }
 };
 
@@ -98,7 +99,7 @@ const isAdminAllocated = async (institutionId) => {
     const adminId = await getInstitutionAdminId(institutionId);
     return adminId != null;
   } catch (getInstitutionAdminIdError) {
-    console.debug(getInstitutionAdminIdError);
+    console.debug({ getInstitutionAdminIdError });
     throw new Error(getInstitutionAdminIdError);
   }
 };
@@ -118,8 +119,8 @@ const isStudentEmailDomainPartOfInstitution = async (
       studentEmail.split("@")[1]
     );
   } catch (getInstitutionEmailDomainsError) {
-    console.debug(getInstitutionEmailDomainsError);
-    throw new Error(getInstitutionEmailDomainsError);
+    console.debug({ getInstitutionEmailDomainsError });
+    throw new Error(getInstitutionEmailDomainsError.message);
   }
 };
 

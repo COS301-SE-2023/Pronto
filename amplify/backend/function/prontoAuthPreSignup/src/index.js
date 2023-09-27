@@ -16,7 +16,7 @@ const isAppClientValid = require("./isAppClientValid.js");
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event, context) => {
-  console.table(event);
+  console.debug(JSON.stringify(event));
   if (!event.request.clientMetadata.role)
     throw new Error("Invalid User Role or Role not provided");
   if (
@@ -65,7 +65,7 @@ exports.handler = async (event, context) => {
     }
   } catch (preAuthError) {
     console.debug(preAuthError);
-    throw new Error(preAuthError);
+    throw new Error(preAuthError.message);
   }
   return event;
 };
