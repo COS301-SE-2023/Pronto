@@ -2,10 +2,10 @@ const ROLES = require("../roles");
 const GRAPHQL_ENDPOINT = process.env.API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT;
 const GRAPHQL_API_KEY = process.env.API_PRONTO_GRAPHQLAPIKEYOUTPUT;
 let emails = {
-  lecturers: {
+  lecturerByEmail: {
     items: [],
   },
-  admin: {
+  adminByEmail: {
     items: [],
   },
 };
@@ -20,7 +20,8 @@ const getAdminAndLecturerEmails = async (email) => {
     throw new Error(`Invalid email address. Emaail: ${email}`);
   if (
     (emails.lecturers.items.length > 0 && emails.lecturers.items[0] == email) ||
-    (emails.admin.items.length > 0 && emails.admin.items[0] == email)
+    (emails.adminByEmail.items.length > 0 &&
+      emails.adminByEmail.items[0] == email)
   )
     return emails;
   const query = /* GraphQL */ `
