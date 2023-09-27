@@ -17,7 +17,7 @@ const awsmobile = {
         process.env.REACT_APP_ATTRIBUTE2,
         process.env.REACT_APP_ATTRIBUTE3
     ],
-    "aws_cognito_mfa_configuration": "OFF",
+    "aws_cognito_mfa_configuration": process.env.REACT_APP_CONFIG,
     "aws_cognito_mfa_types": [
         process.env.REACT_APP_ATTRIBUTE4
     ],
@@ -39,7 +39,7 @@ const awsmobile = {
     "aws_appsync_apiKey": process.env.REACT_APP_APPSYNC_API_KEY,
     "aws_user_files_s3_bucket": process.env.REACT_APP_USER_FILES_S3_BUCKET,
     "aws_user_files_s3_bucket_region": process.env.REACT_APP_AWS_PROJECT_REGION,
-    "aws_mobile_analytics_app_id": "b0903c0a9550406485140d3a536aa564",
+    "aws_mobile_analytics_app_id": process.env.REACT_APP_APP_ID,
     "aws_mobile_analytics_app_region": process.env.REACT_APP_AWS_PROJECT_REGION,
     "Analytics": {
         "AWSPinpoint": {
@@ -59,4 +59,3 @@ const awsmobile = {
 
 
 export default awsmobile;
-
