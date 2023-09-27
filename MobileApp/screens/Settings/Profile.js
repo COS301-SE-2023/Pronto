@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground ,ScrollView } from "react-native";
+import { View, Text, StyleSheet, ImageBackground, ScrollView } from "react-native";
 import { Auth } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { getStudent } from "../../graphql/queries";
@@ -7,25 +7,25 @@ import { getStudent } from "../../graphql/queries";
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const {student,updateStudent}=useStudent();
+  const { student, updateStudent } = useStudent();
   useEffect(() => {
     fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
-      if(student===null){
+      if (student === null) {
         setIsLoading(true);
         const userInfo = await Auth.currentAuthenticatedUser();
         //setUser(userInfo);
-        let studentEmail = userInfo.attributes.email; 
+        let studentEmail = userInfo.attributes.email;
         let stu = await API.graphql({
           query: getStudent,
-          variables: {id:userInfo.attributes.sub }
-          
+          variables: { id: userInfo.attributes.sub }
+
         })
-        stu=stu.data.getStudent;
-        if(stu===undefined || stu === null){
+        stu = stu.data.getStudent;
+        if (stu === undefined || stu === null) {
           throw Error();
         }
         updateStudent(stu);
@@ -64,11 +64,6 @@ const ProfilePage = () => {
         <Text style={styles.label}>Email:</Text>
         <Text style={styles.text}>{student?.email}</Text>
 
-        <Text style={styles.label}>Institution:</Text>
-        <Text style={styles.text}>{student?.institution?.name}</Text>
-
-        <Text style={styles.label}>Phone number:</Text>
-        <Text style={styles.text}></Text>
       </View>
     </View>
   );
@@ -90,11 +85,20 @@ const styles = StyleSheet.create({
     borderColor: "#e32f45",
     paddingLeft: 50,
     paddingRight: 50,
-    paddingTop:20,
-    paddingBottom:20,
+    paddingTop: 20,
+    paddingBottom: 40,
     marginBottom: 0,
     textAlign: "center",
     borderRadius: 20,
+    elevation: 5, // Adjust the elevation value as needed
+    // iOS shadow
+    shadowColor: "#e32f45",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   label: {
     fontSize: 18,
