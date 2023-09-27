@@ -1,5 +1,5 @@
 {
-  "userPoolId": "us-east-1_0MFceeZ4B",
+  "userPoolId": "userPoolId",
   "userName": "USERNAME",
   "callerContext": {
     "clientId": "WEB_CLIENTID"
