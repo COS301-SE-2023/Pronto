@@ -111,10 +111,10 @@ const Register = ({ navigation }) => {
         }
         institutionInfo.push(item);
       }
-      console.log(inst);
+      ;
       setInstitutions(institutionInfo);
     } catch (error) {
-      console.log(error);
+     
     }
   }
 
@@ -183,7 +183,7 @@ const Register = ({ navigation }) => {
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
       Alert.alert("Sign up error", e.message.split(":")[1]);
-      console.log(e)
+      
     }
     setLoading(false);
   };

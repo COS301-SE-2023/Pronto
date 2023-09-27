@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-  
+
   Alert,
   ImageBackground,
   TextInput,
@@ -162,7 +162,7 @@ const NotificationPreferences = () => {
         <Text style={styles.title}>Notification Preferences</Text>
         <Text style={{ marginBottom: 20, textAlign: "center" }}>
           This is how you will receive notifications from your lecturer. Your notification preference is currently set to
-          <Text style={styles.optionText}>{student === null ? "" : student.preference === null ? " email" : " " + student.preference.type.toLowerCase()}</Text>
+          {/* <Text style={styles.optionText}>{student === null ? "" : student.preference === null ? " email" : " " + student.preference.type.toLowerCase()}</Text>*/}
         </Text>
         <ImageBackground
           resizeMode="contain"
