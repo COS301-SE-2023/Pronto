@@ -57,12 +57,15 @@ const Login = ({ navigation }) => {
         username: username,
         password: password,
         validationData: {
-          role: process.env.REACT_APP_STUDENT_ROLE,
+          role: "Student",
         }
       }
 
+      console.log(signInObject.validationData.role);
       const user = await Auth.signIn(signInObject)
-      //  navigation.navigate("Timetable");
+      console.debug({ user });
+      setLoading(false);
+      navigation.navigate("Tabs");
     } catch (e) {
       Alert.alert("Sign in error", e.message);
       setLoading(false);
