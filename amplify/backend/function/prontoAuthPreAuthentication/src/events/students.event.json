@@ -1,8 +1,8 @@
 {
-  "userPoolId": "1phumnbv9vh2apglesevcogj1v",
-  "userName": "5418c448-50f1-7021-2fa3-40ec3a072732",
+  "userPoolId": "userPoolId",
+  "userName": "TEST",
   "callerContext": {
-    "clientId": "APP_CLIENTID"
+    "clientId": "SOMEID"
   },
   "request": {
     "clientMetadata": {

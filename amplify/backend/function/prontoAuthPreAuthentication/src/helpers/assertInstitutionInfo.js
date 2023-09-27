@@ -38,7 +38,8 @@ const getAdminAndLecturerEmails = async (email) => {
     }
   `;
   const variables = {
-    input: email,
+    adminInput: email,
+    lecturerInput: email,
   };
   const options = {
     method: "POST",
