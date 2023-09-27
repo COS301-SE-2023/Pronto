@@ -174,7 +174,8 @@ const NavigationScreen = ({ navigation, route }) => {
             }
 
         } catch (e) {
-            Alert.alert(error);
+            //Alert.alert(error);
+            console.log(e);
         }
     }
 

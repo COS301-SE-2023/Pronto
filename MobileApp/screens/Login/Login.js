@@ -16,6 +16,9 @@ import institutionInfo from "../../assets/data/universityInfo.json";
 import { listInstitutions } from "../../graphql/queries"
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth, API } from "aws-amplify";
+import { getStudent } from "../../graphql/queries";
+import { createStudent } from "../../graphql/mutations";
+import { useStudent } from "../../ContextProviders/StudentContext";
 
 const { height } = Dimensions.get("window");
 
@@ -23,6 +26,7 @@ const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const {student,updateStudent} = useStudent();
 
   //validate email input for sign in and sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -53,19 +57,49 @@ const Login = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const signInObject = {
-        username: username,
-        password: password,
-        validationData: {
-          role: "Student",
+        const signInObject = {
+          username: username,
+          password: password,
+          validationData: {
+            role: "Student",
+          }
         }
-      }
 
-      console.log(signInObject.validationData.role);
-      const user = await Auth.signIn(signInObject)
-      console.debug({ user });
-      setLoading(false);
-      navigation.navigate("Tabs");
+      const user = await Auth.signIn(signInObject);
+    //  const authUser=await Auth.currentAuthenticatedUser();    
+      console.log({user});
+      if (student === null) {
+        const email = user.attributes.email;
+        let studentInfo = await API.graphql({
+          query: getStudent,
+          variables: { id: user.attributes.sub }
+        });
+        studentInfo = studentInfo.data.getStudent;
+        updateStudent(studentInfo);
+        if (studentInfo === null) {
+
+            //Create student
+            let name = authUser.attributes.name.split(",")
+            let newStudent = {
+              id: user.attributes.sub,
+              institutionId: user.attributes.family_name,
+              firstname: name[0],
+              lastname: name[1],
+              userRole: "Student",
+              email: email
+            }
+
+            let create = await API.graphql({
+              query: createStudent,
+              variables: { input: newStudent }
+            })
+
+            studentInfo=create.data.createStudent;
+            updateStudent(create.data.createStudent);
+            
+          }
+          navigation.navigate("Tabs",studentInfo);
+      }
     } catch (e) {
       Alert.alert("Sign in error", e.message);
       setLoading(false);
