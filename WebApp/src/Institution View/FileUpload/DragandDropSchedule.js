@@ -16,7 +16,7 @@ function DropzoneComponent() {
   const [user, setUser] = useState(null);
   const [folderNameS3, setFolderNameS3] = useState("");
   const { admin, setAdmin } = useAdmin();
-  const [error,setError] = useState("");
+  const [error, setError] = useState("");
   // const { course, setCourse } = useCourse();
   // const [activities, setActvities] = useState([]);
 
@@ -45,17 +45,23 @@ function DropzoneComponent() {
   //use this function to download excel template
   const downloadExcelFile = async () => {
     try {
-      const fileKey = "path/to/your/excel/file.xlsx"; // Replace with the actual S3 file key
-      const url = await Storage.get(fileKey, { download: true });
+
+
+
+      const url = await Storage.get("Template/TemplateSchedule.csv", {
+        level: "public"
+      });
+
 
       // Create an anchor element to trigger the download
       const anchor = document.createElement("a");
       anchor.href = url;
-      anchor.download = "excel_file.xlsx"; // Specify the desired file name
+      anchor.download = "TemplateSchedule.csv"; // Specify the desired file name
       anchor.click();
     } catch (error) {
       //console.error("Error downloading Excel file", error);
       setError("Error downloading Excel file");
+      console.log(error);
     }
   };
 
@@ -189,7 +195,7 @@ function DropzoneComponent() {
 
   return (
     <div>
-        {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
+      {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <h6 style={{ marginBottom: "10px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
       <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
       <div
