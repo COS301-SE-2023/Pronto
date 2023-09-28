@@ -7,6 +7,8 @@ export const listLecturers=`query ListLecturers(
   listLecturers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      _version
+      _deleted
       institutionId
       institution{
         logo
@@ -63,6 +65,7 @@ export const listInstitutions=`query ListInstitutions(
 ) {
   listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+
       id
       logo
       name
@@ -75,6 +78,7 @@ export const listInstitutions=`query ListInstitutions(
         email
       }
       _deleted
+      _version
     }
     nextToken
   }
@@ -116,6 +120,8 @@ export const lecturersByInstitutionId=`query LecturersByInstitutionId(
       institutionId
       firstname
       lastname
+      _version
+    _deleted
       email
       courses{
         items{
@@ -157,6 +163,8 @@ export const listAdmins=`query ListAdmins(
       firstname
       lastname
       email
+      _deleted
+      _version
       institution{
         id
         name
@@ -207,6 +215,8 @@ export const getLecturer=`query GetLecturer($id: ID!) {
     firstname
     lastname
     email
+    _version
+    _deleted
     institution {
       id
       name
@@ -242,6 +252,8 @@ export const searchLecturers=`query SearchLecturers(
       firstname
       lastname
       email
+      _version
+    _deleted
       courses{
         items{
           id
@@ -280,6 +292,8 @@ export const announcementsByDate=`query AnnouncementsByDate (
                   coursecode   
                 }
                 type
+                _version
+                _deleted
               }
               nextToken
             }
@@ -306,6 +320,8 @@ export const searchCourses=`query SearchCourses(
       lecturerId
       institutionId
       coursecode
+      _deleted
+      _version
     }
     nextToken
     aggregateItems {
@@ -347,6 +363,8 @@ export const searchLecturerByCourses=`query SearchCourses(
         firstname
         lastname
         institutionId
+        _deleted
+        _version
         courses{
           items{
             coursecode
@@ -395,6 +413,8 @@ export const listAdminApplications=`
                         email
                         status
                         createdAt
+                        _version
+                        _deleted
                       }
                       nextToken
                     }
