@@ -7,6 +7,8 @@ export const listLecturers=`query ListLecturers(
   listLecturers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      _version
+      _deleted
       institutionId
       institution{
         logo
@@ -63,6 +65,7 @@ export const listInstitutions=`query ListInstitutions(
 ) {
   listInstitutions(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
+      
       id
       logo
       name
@@ -280,6 +283,8 @@ export const announcementsByDate=`query AnnouncementsByDate (
                   coursecode   
                 }
                 type
+                _version
+                _deleted
               }
               nextToken
             }
@@ -306,6 +311,7 @@ export const searchCourses=`query SearchCourses(
       lecturerId
       institutionId
       coursecode
+      _deleted
     }
     nextToken
     aggregateItems {
@@ -347,6 +353,8 @@ export const searchLecturerByCourses=`query SearchCourses(
         firstname
         lastname
         institutionId
+        _deleted
+        _version
         courses{
           items{
             coursecode
@@ -395,6 +403,8 @@ export const listAdminApplications=`
                         email
                         status
                         createdAt
+                        _version
+                        _deleted
                       }
                       nextToken
                     }
