@@ -74,7 +74,13 @@ function Login() {
     try {
       let inst = await API.graphql({
         query: listInstitutions,
-        variables: {},
+        variables: {
+          filter:{
+            _deleted:{
+              eq:null
+            }
+          }
+        },
         authMode: "API_KEY"
       });
       inst = inst.data.listInstitutions.items;
@@ -120,15 +126,18 @@ function Login() {
         password: password,
         validationData: {
           role: "Lecturer",
-          institutionId: institutionId
         }
       }
       await Auth.signIn(signInObject);
+      //  const user = await Auth.currentAuthenticatedUser();
+      //  console.log(user);
       setsignInError("");
       //navigate to lecturer home page
 
-      await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
+      //await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
+      navigate("/lecturer/dashboard")
     } catch (e) {
+      //console.log(e);
       setLoading(false);
       setsignInError(e.message);
     }
@@ -198,6 +207,7 @@ function Login() {
       });
       navigate("/lecturer/confirm-email", { state: { email: email } });
     } catch (e) {
+      console.log(e)
       setsignUpError(e.message.split("Error: ")[1]);
     }
     setLoading(false);
