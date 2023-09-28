@@ -59,6 +59,15 @@
     "apiProntoGraphqlapikeyoutput": {
       "Type": "String"
     },
+    "cognitoMobileClientId": {
+      "Type": "String"
+    },
+    "cognitoWebClientId": {
+      "Type": "String"
+    },
+    "authProntoauthUserpoolid": {
+      "Type": "String"
+    },
     "prontoAdminEmail": {
       "Type": "String"
     }
@@ -111,9 +120,6 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "AUTH_PRONTOAUTH_USERPOOLID": {
-              "Ref": "authprontoAuthUserPoolId"
-            },
             "API_PRONTO_GRAPHQLAPIIDOUTPUT": {
               "Ref": "apiprontoGraphQLAPIIdOutput"
             },
@@ -122,6 +128,15 @@
             },
             "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apiprontoGraphQLAPIKeyOutput"
+            },
+            "COGNITO_MOBILE_CLIENT_ID": {
+              "Ref": "cognitoMobileClientId"
+            },
+            "COGNITO_WEB_CLIENT_ID": {
+              "Ref": "cognitoWebClientId"
+            },
+            "AUTH_PRONTOAUTH_USERPOOLID": {
+              "Ref": "authProntoauthUserpoolid"
             },
             "PRONTO_ADMIN_EMAIL": {
               "Ref": "prontoAdminEmail"

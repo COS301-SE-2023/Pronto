@@ -14,6 +14,12 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "cognitoUserPoolId": {
+      "Type": "String"
+    },
+    "cognitoWebClientId": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -61,6 +67,12 @@
             "GROUP": "superUserGroup",
             "USERPOOL": {
               "Ref": "authprontoAuthUserPoolId"
+            },
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "cognitoUserPoolId"
+            },
+            "COGNITO_WEB_CLIENT_ID": {
+              "Ref": "cognitoWebClientId"
             }
           }
         },

@@ -19,12 +19,12 @@
       "environmentVariableName": "API_PRONTO_GRAPHQLAPIKEYOUTPUT"
     },
     {
-      "cloudFormationParameterName": "cognitoWebClientId",
-      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
-    },
-    {
       "cloudFormationParameterName": "cognitoMobileClientId",
       "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "cognitoWebClientId",
+      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
     }
   ],
   "permissions": {

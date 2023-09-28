@@ -28,33 +28,14 @@ const {
   AdminCreateUserCommand,
 } = require("@aws-sdk/client-cognito-identity-provider");
 const { createHmac } = require("crypto");
-const { CognitoIdentityServiceProvider } = require("aws-sdk");
 
-const cognitoIdentityProviderClient = new CognitoIdentityProviderClient({});
+const config = {
+  region: process.env.AWS_REGION,
+};
+
+const cognitoIdentityProviderClient = new CognitoIdentityProviderClient(config);
+
 const userPoolId = process.env.USERPOOL;
-
-async function addUserToGroup(username, groupname) {
-  const params = {
-    GroupName: groupname,
-    UserPoolId: userPoolId,
-    Username: username,
-  };
-
-  console.log(`Attempting to add ${username} to ${groupname}`);
-
-  try {
-    await cognitoIdentityProviderClient.send(
-      new AdminAddUserToGroupCommand(params)
-    );
-    console.log(`Success adding ${username} to ${groupname}`);
-    return {
-      message: `Success adding ${username} to ${groupname}`,
-    };
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
 
 async function removeUserFromGroup(username, groupname) {
   const params = {
@@ -140,152 +121,6 @@ async function enableUser(username) {
   }
 }
 
-async function getUser(username) {
-  const params = {
-    UserPoolId: userPoolId,
-    Username: username,
-  };
-
-  console.log(`Attempting to retrieve information for ${username}`);
-
-  try {
-    const result = await cognitoIdentityProviderClient.send(
-      new AdminGetUserCommand(params)
-    );
-    return result;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
-async function listUsers(Limit, PaginationToken) {
-  const params = {
-    UserPoolId: userPoolId,
-    ...(Limit && { Limit }),
-    ...(PaginationToken && { PaginationToken }),
-  };
-
-  console.log("Attempting to list users");
-
-  try {
-    const result = await cognitoIdentityProviderClient.send(
-      new ListUsersCommand(params)
-    );
-
-    // Rename to NextToken for consistency with other Cognito APIs
-    result.NextToken = result.PaginationToken;
-    delete result.PaginationToken;
-
-    return result;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
-async function listGroups(Limit, PaginationToken) {
-  const params = {
-    UserPoolId: userPoolId,
-    ...(Limit && { Limit }),
-    ...(PaginationToken && { PaginationToken }),
-  };
-
-  console.log("Attempting to list groups");
-
-  try {
-    const result = await cognitoIdentityProviderClient.send(
-      new ListGroupsCommand(params)
-    );
-
-    // Rename to NextToken for consistency with other Cognito APIs
-    result.NextToken = result.PaginationToken;
-    delete result.PaginationToken;
-
-    return result;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
-async function listGroupsForUser(username, Limit, NextToken) {
-  const params = {
-    UserPoolId: userPoolId,
-    Username: username,
-    ...(Limit && { Limit }),
-    ...(NextToken && { NextToken }),
-  };
-
-  console.log(`Attempting to list groups for ${username}`);
-
-  try {
-    const result = await cognitoIdentityProviderClient.send(
-      new AdminListGroupsForUserCommand(params)
-    );
-    /**
-     * We are filtering out the results that seem to be innapropriate for client applications
-     * to prevent any informaiton disclosure. Customers can modify if they have the need.
-     */
-    result.Groups.forEach((val) => {
-      delete val.UserPoolId,
-        delete val.LastModifiedDate,
-        delete val.CreationDate,
-        delete val.Precedence,
-        delete val.RoleArn;
-    });
-
-    return result;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
-async function listUsersInGroup(groupname, Limit, NextToken) {
-  const params = {
-    GroupName: groupname,
-    UserPoolId: userPoolId,
-    ...(Limit && { Limit }),
-    ...(NextToken && { NextToken }),
-  };
-
-  console.log(`Attempting to list users in group ${groupname}`);
-
-  try {
-    const result = await cognitoIdentityProviderClient.send(
-      new ListUsersInGroupCommand(params)
-    );
-    return result;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
-// Signs out from all devices, as an administrator.
-async function signUserOut(username) {
-  const params = {
-    UserPoolId: userPoolId,
-    Username: username,
-  };
-
-  console.log(`Attempting to signout ${username}`);
-
-  try {
-    await cognitoIdentityProviderClient.send(
-      new AdminUserGlobalSignOutCommand(params)
-    );
-    console.log(`Signed out ${username} from all devices`);
-    return {
-      message: `Signed out ${username} from all devices`,
-    };
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-
 // grab all the constant variables from the user pool
 const CLIENT_SECRET = process.env.COGNITO_CLIENT_SECRET;
 const COGNITO_WEB_CLIENT_ID = process.env.COGNITO_WEB_CLIENT_ID;
@@ -295,7 +130,6 @@ function signUp(username, password, attributes) {
   const cognito = new CognitoIdentityServiceProvider();
 
   const hasher = createHmac("sha256", CLIENT_SECRET);
-  // AWS wants `"Username" + "Client Id"`
   hasher.update(`${username}${COGNITO_WEB_CLIENT_ID}`);
   const secretHash = hasher.digest("base64");
 
@@ -317,16 +151,27 @@ function signUp(username, password, attributes) {
 }
 
 // for creating an institude admin account upon verified request
-const signAdminUp = async (email, institutionId, Password) => {
+const signAdminUp = async (name, email, institutionId, Password) => {
+  console.debug("ATTEMPTING TO CREATE ADMIN");
+  console.debug({ name, email, institutionId, Password });
   const adminCreateUserCommandInput = {
     UserPoolId: process.env.COGNITO_USER_POOL_ID,
-    UserAttributes: {
-      email: email,
-    },
-    ValidationData: { role: "Admin", institutionId: institutionId },
+    Username: email,
+    UserAttributes: [
+      {
+        Name: "name",
+        Value: name,
+      },
+      {
+        Name: "email",
+        Value: email,
+      },
+    ],
+    ValidationData: [
+      { Name: name, role: "Admin", institutionId: institutionId },
+    ],
     TemporaryPassword: Password,
     ForceAliasCreation: false,
-    MessageAction: "RESEND",
     DesiredDeliveryMediums: ["EMAIL"],
     ClientMetadata: {
       clientId: process.env.COGNITO_WEB_CLIENT_ID,
@@ -340,21 +185,20 @@ const signAdminUp = async (email, institutionId, Password) => {
   try {
     const adminCreateUserCommandOutput =
       await cognitoIdentityProviderClient.send(adminCreateUserCommand);
+    console.debug(
+      `AUTH SERVICE RESPONSE ${JSON.stringify(adminCreateUserCommandOutput)}`
+    );
     return adminCreateUserCommandOutput;
-  } catch (error) {}
+  } catch (error) {
+    console.debug(`ERROR CREATING ADMIN ACCOUNT: ${error}`);
+    throw error;
+  }
 };
 
 module.exports = {
-  addUserToGroup,
   removeUserFromGroup,
   confirmUserSignUp,
   disableUser,
   enableUser,
-  getUser,
-  listUsers,
-  listGroups,
-  listGroupsForUser,
-  listUsersInGroup,
-  signUserOut,
   signAdminUp,
 };

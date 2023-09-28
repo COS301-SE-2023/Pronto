@@ -4,7 +4,9 @@ function isAppClientValid(clientId, role) {
     throw new Error("Invalid User Role");
   switch (clientId) {
     case process.env.COGNITO_WEB_CLIENT_ID:
-      return ROLES.Lecture === role || ROLES.Admin === role;
+      return (
+        ROLES.Lecture === role || ROLES.Admin === role || ROLES.Super === role
+      );
     case process.env.COGNITO_MOBILE_CLIENT_ID:
       return ROLES.Student === role;
     default:

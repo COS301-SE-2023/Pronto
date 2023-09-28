@@ -19,7 +19,8 @@ const getAdminAndLecturerEmails = async (email) => {
   if (!email || !isEmailAddressPatternValid(email))
     throw new Error(`Invalid email address. Emaail: ${email}`);
   if (
-    (emails.lecturers.items.length > 0 && emails.lecturers.items[0] == email) ||
+    (emails.lecturerByEmail.items.length > 0 &&
+      emails.lecturerByEmail.items[0] == email) ||
     (emails.adminByEmail.items.length > 0 &&
       emails.adminByEmail.items[0] == email)
   )
@@ -77,11 +78,12 @@ const isUserAdminOrLecturer = async (email, role) => {
         Please request for one on AgileArchitectsCapstone@gmail.com\n
         More info on: https://www.prontotimetable.co.za/`);
         return (
-          emails.adminByEmail.items[0] === mail &&
+          emails.adminByEmail.items[0] &&
+          emails.adminByEmail.items[0].email === email &&
           emails.adminByEmail.items.length === 1
         );
       case ROLES.Lecture:
-        if (!emails.lecturers.items.length)
+        if (!emails.lecturerByEmail.items.length)
           throw new Error(
             "Lecture email list was not provided, please contact your institution admin"
           );

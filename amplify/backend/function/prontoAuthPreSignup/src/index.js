@@ -19,16 +19,29 @@ exports.handler = async (event, context) => {
   console.debug(JSON.stringify(event));
   if (!event.request.clientMetadata.role)
     throw new Error("Invalid User Role or Role not provided");
-  if (
-    !isAppClientValid(
-      event.callerContext.clientId,
-      event.request.clientMetadata.role
+  if (event.callerContext.clientId === "CLIENT_ID_NOT_APPLICABLE") {
+    if (
+      !isAppClientValid(
+        event.request.clientMetadata.clientId,
+        event.request.clientMetadata.role
+      )
     )
-  )
-    throw new Error(
-      `Cannot authenticate user from this app client: 
+      throw new Error(
+        `Cannot authenticate user from this app client: 
       Students Should use the mobile app and Admin/Lectures should use the web app`
-    );
+      );
+  } else {
+    if (
+      !isAppClientValid(
+        event.callerContext.clientId,
+        event.request.clientMetadata.role
+      )
+    )
+      throw new Error(
+        `Cannot authenticate user from this app client: 
+      Students Should use the mobile app and Admin/Lectures should use the web app`
+      );
+  }
 
   event.response.autoConfirmUser = false;
   try {

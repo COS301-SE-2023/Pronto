@@ -51,37 +51,6 @@ app.use((req, res, next) => {
 // Only perform tasks if the user is in a specific group
 const allowedGroup = process.env.GROUP;
 
-const checkGroup = function (req, res, next) {
-  if (req.path == "/signUserOut") {
-    return next();
-  }
-
-  if (typeof allowedGroup === "undefined" || allowedGroup === "NONE") {
-    return next();
-  }
-
-  // Fail if group enforcement is being used
-  if (req.apiGateway.event.requestContext.authorizer.claims["cognito:groups"]) {
-    const groups =
-      req.apiGateway.event.requestContext.authorizer.claims[
-        "cognito:groups"
-      ].split(",");
-    if (!(allowedGroup && groups.indexOf(allowedGroup) > -1)) {
-      const err = new Error(
-        `User does not have permissions to perform administrative tasks`
-      );
-      next(err);
-    }
-  } else {
-    const err = new Error(
-      `User does not have permissions to perform administrative tasks`
-    );
-    err.statusCode = 403;
-    next(err);
-  }
-  next();
-};
-
 app.all("*", checkGroup);
 
 app.post("/addUserToGroup", async (req, res, next) => {
@@ -165,82 +134,6 @@ app.post("/enableUser", async (req, res, next) => {
   }
 });
 
-app.get("/getUser", async (req, res, next) => {
-  if (!req.query.username) {
-    const err = new Error("username is required");
-    err.statusCode = 400;
-    return next(err);
-  }
-
-  try {
-    const response = await getUser(req.query.username);
-    res.status(200).json(response);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.get("/listUsers", async (req, res, next) => {
-  try {
-    let response;
-    if (req.query.token) {
-      response = await listUsers(req.query.limit || 25, req.query.token);
-    } else if (req.query.limit) {
-      response = await listUsers((Limit = req.query.limit));
-    } else {
-      response = await listUsers();
-    }
-    res.status(200).json(response);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.get("/listGroups", async (req, res, next) => {
-  try {
-    let response;
-    if (req.query.token) {
-      response = await listGroups(req.query.limit || 25, req.query.token);
-    } else if (req.query.limit) {
-      response = await listGroups((Limit = req.query.limit));
-    } else {
-      response = await listGroups();
-    }
-    res.status(200).json(response);
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.get("/listGroupsForUser", async (req, res, next) => {
-  if (!req.query.username) {
-    const err = new Error("username is required");
-    err.statusCode = 400;
-    return next(err);
-  }
-
-  try {
-    let response;
-    if (req.query.token) {
-      response = await listGroupsForUser(
-        req.query.username,
-        req.query.limit || 25,
-        req.query.token
-      );
-    } else if (req.query.limit) {
-      response = await listGroupsForUser(
-        req.query.username,
-        (Limit = req.query.limit)
-      );
-    } else {
-      response = await listGroupsForUser(req.query.username);
-    }
-    res.status(200).json(response);
-  } catch (err) {
-    next(err);
-  }
-});
-
 app.get("/listUsersInGroup", async (req, res, next) => {
   if (!req.query.groupname) {
     const err = new Error("groupname is required");
@@ -297,17 +190,15 @@ app.post("/signUserOut", async (req, res, next) => {
 });
 
 app.post("/createInstitutionAdmin", async (req, res, next) => {
-  if (!res.body.email || !res.body.institutionId || !res.body.Password) {
-    const err = new Error("invalid email, institution id or password");
+  const { email, institutionId, Password, name } = req.body;
+  console.debug({ email, institutionId, Password, name });
+  if (!email || !institutionId || !Password || !name) {
+    const err = new Error("invalid email, institution id,name or password");
     err.statusCode = 400;
     return next(err);
   }
   try {
-    const response = await signAdminUp(
-      res.body.email,
-      res.body.institutionId,
-      res.body.Password
-    );
+    const response = await signAdminUp(name, email, institutionId, Password);
     res.status(200).json(response);
   } catch (signAdminUp) {
     return next(signAdminUp);
