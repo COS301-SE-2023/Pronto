@@ -275,6 +275,22 @@
         }
       ]
     },
+    "AMPLIFY_function_AdminQueries28edb2f2_cognitoUserPoolId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries28edb2f2"
+        }
+      ]
+    },
+    "AMPLIFY_function_AdminQueries28edb2f2_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "AdminQueries28edb2f2"
+        }
+      ]
+    },
     "AMPLIFY_function_AdminQueries28edb2f2_deploymentBucketName": {
       "usedBy": [
         {
@@ -411,6 +427,30 @@
         }
       ]
     },
+    "AMPLIFY_function_prontoAuthPreAuthentication_authProntoauthUserpoolid": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreAuthentication_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreAuthentication_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreAuthentication"
+        }
+      ]
+    },
     "AMPLIFY_function_prontoAuthPreAuthentication_deploymentBucketName": {
       "usedBy": [
         {
@@ -436,6 +476,22 @@
       ]
     },
     "AMPLIFY_function_prontoAuthPreSignup_apiProntoGraphqlapikeyoutput": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreSignup_cognitoMobileClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "prontoAuthPreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_prontoAuthPreSignup_cognitoWebClientId": {
       "usedBy": [
         {
           "category": "function",

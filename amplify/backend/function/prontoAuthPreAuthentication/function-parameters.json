@@ -19,6 +19,18 @@
       "environmentVariableName": "API_PRONTO_GRAPHQLAPIKEYOUTPUT"
     },
     {
+      "cloudFormationParameterName": "cognitoMobileClientId",
+      "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "cognitoWebClientId",
+      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "authProntoauthUserpoolid",
+      "environmentVariableName": "AUTH_PRONTOAUTH_USERPOOLID"
+    },
+    {
       "cloudFormationParameterName": "prontoAdminEmail",
       "environmentVariableName": "PRONTO_ADMIN_EMAIL"
     }

@@ -244,7 +244,7 @@ type AdminApplication
       { allow: public, operations: [create, read] }
       {
         allow: groups
-        groups: ["superAdminUserGroup"]
+        groups: ["superUserGroup"]
         operations: [create, read, update, delete]
       }
     ]
