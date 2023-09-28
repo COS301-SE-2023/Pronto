@@ -1,17 +1,12 @@
 export type AmplifyDependentResourcesAttributes = {
   "analytics": {
-    "prontoEmailNotifications": {
+    "prontoAnalytics": {
       "Id": "string",
       "Region": "string",
       "appName": "string"
     }
   },
   "api": {
-    "AdminQueries": {
-      "ApiId": "string",
-      "ApiName": "string",
-      "RootUrl": "string"
-    },
     "pronto": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
@@ -19,7 +14,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "auth": {
-    "pronto5f713f59": {
+    "prontoAuth": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -31,25 +26,40 @@ export type AmplifyDependentResourcesAttributes = {
     "userPoolGroups": {
       "adminUserGroupGroupRole": "string",
       "lecturerUserGroupGroupRole": "string",
-      "studentUserGroupGroupRole": "string"
+      "studentsUserGroupGroupRole": "string",
+      "superUserGroupGroupRole": "string"
     }
   },
   "function": {
-    "AdminQueries7f7a03b0": {
+    "announcementsHandler": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "pronto5f713f59PostAuthentication": {
+    "notificationPreferanceHandler": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
-    "pronto5f713f59PreSignup": {
+    "prontoAuthPostConfirmation": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "prontoAuthPreAuthentication": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "prontoAuthPreSignup": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

@@ -219,26 +219,23 @@ export const deleteCourse = `mutation DeleteCourse(
 
 }`
 
-export const deleteInstitution =
-  `mutation DeleteInstitution(
+export const deleteInstitution = /* GraphQL */ `
+  mutation DeleteInstitution(
     $input: DeleteInstitutionInput!
     $condition: ModelInstitutionConditionInput
   ) {
     deleteInstitution(input: $input, condition: $condition) {
       id
       name
-      lectureremails
-      logo
-      domains
+      location
       adminId
       owner
-      courses {
-        nextToken
-      }
+      _version
       
+   
     }
   }
-;`
+`;
 
 
 
