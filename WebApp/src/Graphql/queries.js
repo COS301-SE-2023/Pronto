@@ -183,32 +183,32 @@ export const listAdmins=`query ListAdmins(
   }
 }`
 
-export const listAnnouncements=`query ListAnnouncements(
-  $filter: ModelAnnouncementFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      course{
-        coursecode
-      }
-      body
-      title
-      date
-      venue
-      title
-      type
-      _deleted
-      _version
-      course{
-        coursecode
-      }
-    }
-    nextToken
-  }
-}`
+// export const listAnnouncements=`query ListAnnouncements(
+//   $filter: ModelAnnouncementFilterInput
+//   $limit: Int
+//   $nextToken: String
+// ) {
+//   listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
+//     items {
+//       id
+//       course{
+//         coursecode
+//       }
+//       body
+//       title
+//       date
+//       venue
+//       title
+//       type
+//       _deleted
+//       _version
+//       course{
+//         coursecode
+//       }
+//     }
+//     nextToken
+//   }
+// }`
 
 export const getLecturer=`query GetLecturer($id: ID!) {
   getLecturer(id: $id) {
@@ -397,6 +397,33 @@ export const searchLecturerByCourses=`query SearchCourses(
 }
 `
 
+// export const listAnnouncements=`query ListAnnouncements(
+//   $filter: ModelAnnouncementFilterInput
+//   $limit: Int
+//   $nextToken: String
+// ) {
+//   listAnnouncements(filter: $filter, limit: $limit, nextToken: $nextToken) {
+//     items {
+//       id
+//       course{
+//         coursecode
+//       }
+//       body
+//       title
+//       date
+//       venue
+//       title
+//       type
+//       _version
+//       _deleted
+//       course{
+//         coursecode
+//       }
+//     }
+//     nextToken
+//   }
+// }`
+
 export const listAdminApplications=`
              query listAdminApplications(
                   $filter: ModelAdminApplicationFilterInput, 
@@ -460,3 +487,14 @@ export const coursesByInstitutionId =
     }
   }
 `;
+
+export const listAnnouncements =`query MyQuery {
+  listAnnouncements(filter: {courseId: {eq: "f09d001c-068e-4c5b-9ccc-eed2ef7bea7c"}}) {
+    items {
+      course {
+        id
+      }
+      venue
+    }
+  }
+}`

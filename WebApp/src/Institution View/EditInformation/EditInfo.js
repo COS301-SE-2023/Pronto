@@ -60,6 +60,16 @@ const EditInfoPage = () => {
         setConfirmPassword("")
     };
 
+    function removeDuplicates(arr) {
+    let unique = [];
+    arr.forEach(element => {
+        if (!unique.includes(element)) {
+            unique.push(element);
+        }
+    });
+    return unique;
+}
+
     const fecthUser = async () => {
         let userInfo = await Auth.currentAuthenticatedUser()
         let username = userInfo?.attributes?.name;
@@ -111,6 +121,8 @@ const EditInfoPage = () => {
         event.preventDefault();
         document.getElementById("fileInput").click();
     };
+
+    
 
     const handleDragEnter = (event) => {
         event.preventDefault();
@@ -197,6 +209,15 @@ const EditInfoPage = () => {
         setShowFileModal(false);
     };
 
+    function removeDuplicates(arr) {
+    let unique = [];
+    arr.forEach(element => {
+        if (!unique.includes(element)) {
+            unique.push(element);
+        }
+    });
+    return unique;
+}
     return (
         <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>
             {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
@@ -432,7 +453,7 @@ const EditInfoPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {admin && admin.institution && admin?.institution?.domains?.map((key, val) => {
+                                    {admin && admin?.institution && admin?.institution?.domains && removeDuplicates(admin.institution.domains).map((key, val) => {
                                         return (
                                             <tr key={val}>
                                                 <td>{key}</td>
