@@ -55,7 +55,7 @@ export default function LecturerNavigation() {
         }
 
         else {
-          lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+          lec.institution.logoUrl = await Storage.get("AndileNgwenya/Logo/UPLogoColor.png", { validateObjectExistence: true, expires: 3600 });
 
         }
         setLecturer(lec);
