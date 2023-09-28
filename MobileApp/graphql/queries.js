@@ -82,6 +82,8 @@ export const searchCourses=`query SearchCourses(
           end 
           venue
           courseId
+          _deleted
+          _version
         }
       }
     }
@@ -293,6 +295,7 @@ export const listCourses=`query ListCourses(
       id
       institutionId
       coursecode
+      _deleted
     }
     nextToken
   }
@@ -398,6 +401,8 @@ export const getStudent=`query GetStudent($id: ID!) {
         }
       enrollments { 
         items{
+          _deleted
+          _version
           id
           courseId
           course{ 

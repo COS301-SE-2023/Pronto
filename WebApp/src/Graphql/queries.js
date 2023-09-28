@@ -200,6 +200,8 @@ export const listAnnouncements=`query ListAnnouncements(
       venue
       title
       type
+      _deleted
+      _version
       course{
         coursecode
       }
@@ -253,7 +255,7 @@ export const searchLecturers=`query SearchLecturers(
       lastname
       email
       _version
-    _deleted
+      _deleted
       courses{
         items{
           id
@@ -420,3 +422,41 @@ export const listAdminApplications=`
                     }
                   }`
                 
+export const coursesByInstitutionId = 
+`query CoursesByInstitutionId(
+    $institutionId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCourseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    coursesByInstitutionId(
+      institutionId: $institutionId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        lecturerId
+        coursecode
+        _deleted
+        _version
+        activity{
+          items{
+            activityname
+            day
+            start
+            end
+            venue
+            course{
+              coursecode
+            }
+          }
+        }
+      }
+      nextToken
+    }
+  }
+`;

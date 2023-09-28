@@ -1246,10 +1246,6 @@ export const searchCourses = /* GraphQL */ `
         institutionId
         lecturerId
         coursecode
-        coursename
-        semester
-        createdAt
-        updatedAt
         _version
         _deleted
         _lastChangedAt

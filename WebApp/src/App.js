@@ -41,6 +41,7 @@ import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import config from "./Components/aws-exports";
+import { CourseProvider } from "./ContextProviders/CourseContext";
 
 Auth.configure(config);
 Amplify.configure(config);
@@ -200,6 +201,7 @@ function App() {
   }, []);
 
   return (
+    <CourseProvider>
     <LecturerProvider>
       <AnnouncementProvider>
         <AdminProvider>
@@ -211,6 +213,7 @@ function App() {
         </AdminProvider>
       </AnnouncementProvider>
     </LecturerProvider>
+    </CourseProvider>
   );
 }
 export default App;

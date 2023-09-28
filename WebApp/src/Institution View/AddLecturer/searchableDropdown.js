@@ -40,7 +40,7 @@ export default function SearchableDropdown(props) {
       }
       )
       let c = [];
-      courseList = courseList.data.searchCourses.items.filter((a) => a.lecturerId === null)
+      courseList = courseList.data.searchCourses.items.filter((a) => a.lecturerId === null && a._deleted===null)
       for (let i = 0; i < courseList.length; i++) {
         if (selectedCourses.filter((a) => a.id !== courseList[i].id)) {
           c.push(courseList[i]);

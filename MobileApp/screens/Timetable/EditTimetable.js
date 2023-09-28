@@ -86,7 +86,7 @@ const EditTimetable = ({ navigation }) => {
             }
           })
         
-        setCourses(search.data.searchCourses.items);
+        setCourses(search.data.searchCourses.items.filter((item)=>item._deleted===null));
       } catch (e) {
         Alert.alert(error);
       }
@@ -113,7 +113,7 @@ const EditTimetable = ({ navigation }) => {
 
       let c = [];
       let act= [];
-        
+      stu.enrollments.items = stu.enrollments.items.filter((item)=>item._deleted===null)  
       for (let i = 0; i < stu.enrollments.items.length; i++) {
         c.push(stu.enrollments.items[i].course);
       }
@@ -284,7 +284,7 @@ const EditTimetable = ({ navigation }) => {
                   if (student.enrollments.items[i].courseId === item.id) {
                     del = await API.graphql({
                       query: deleteEnrollment,
-                      variables: { input: { id: student.enrollments.items[i].id } }
+                      variables: { input: { id: student.enrollments.items[i].id,_version:student.enrollments.items[i]._version } }
                     });
 
                     student.enrollments.items.splice(i, 1);
