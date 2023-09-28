@@ -13,7 +13,9 @@ const isAppClientValid = require("./helpers/isAppClientValid");
  */
 
 exports.handler = async (event, context) => {
-  console.table(event);
+  console.debug(JSON.stringify(event));
+  if (!event.request.userAttributes.email)
+    throw new Error("Invalid or empty email address");
   if (
     !event.request.validationData.role ||
     !Object.values(ROLES).includes(event.request.validationData.role)

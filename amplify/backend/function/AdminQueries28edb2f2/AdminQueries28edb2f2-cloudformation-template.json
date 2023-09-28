@@ -2,41 +2,12 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.4.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-    "GROUP": {
-      "Type": "String",
-      "Default": ""
-    },
-    "modules": {
-      "Type": "String",
-      "Default": "",
-      "Description": "Comma-delimited list of modules to be executed by a lambda trigger. Sent to resource as an env variable."
-    },
-    "resourceName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "trigger": {
-      "Type": "String",
-      "Default": "true"
-    },
-    "functionName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "roleName": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentResource": {
-      "Type": "String",
-      "Default": ""
-    },
-    "parentStack": {
-      "Type": "String",
-      "Default": ""
-    },
     "env": {
       "Type": "String"
+    },
+    "authprontoAuthUserPoolId": {
+      "Type": "String",
+      "Default": "authprontoAuthUserPoolId"
     },
     "deploymentBucketName": {
       "Type": "String"
@@ -44,19 +15,10 @@
     "s3Key": {
       "Type": "String"
     },
-    "cognitoMobileClientId": {
+    "cognitoUserPoolId": {
       "Type": "String"
     },
     "cognitoWebClientId": {
-      "Type": "String"
-    },
-    "adminGroupName": {
-      "Type": "String"
-    },
-    "lecturerGroupName": {
-      "Type": "String"
-    },
-    "studentGroupName": {
       "Type": "String"
     }
   },
@@ -82,12 +44,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "prontoAuthPostConfirmation",
+            "AdminQueries28edb2f2",
             {
               "Fn::Join": [
                 "",
                 [
-                  "prontoAuthPostConfirmation",
+                  "AdminQueries28edb2f2",
                   "-",
                   {
                     "Ref": "env"
@@ -102,29 +64,15 @@
             "ENV": {
               "Ref": "env"
             },
-            "MODULES": {
-              "Ref": "modules"
+            "GROUP": "superUserGroup",
+            "USERPOOL": {
+              "Ref": "authprontoAuthUserPoolId"
             },
-            "REGION": {
-              "Ref": "AWS::Region"
-            },
-            "GROUP": {
-              "Ref": "GROUP"
-            },
-            "COGNITO_MOBILE_CLIENT_ID": {
-              "Ref": "cognitoMobileClientId"
+            "COGNITO_USER_POOL_ID": {
+              "Ref": "cognitoUserPoolId"
             },
             "COGNITO_WEB_CLIENT_ID": {
               "Ref": "cognitoWebClientId"
-            },
-            "ADMIN_GROUP_NAME": {
-              "Ref": "adminGroupName"
-            },
-            "LECTURER_GROUP_NAME": {
-              "Ref": "lecturerGroupName"
-            },
-            "STUDENT_GROUP_NAME": {
-              "Ref": "studentGroupName"
             }
           }
         },
@@ -152,12 +100,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "prontoAuthPostConfirmation",
+            "AdminQueries28edb2f2LambdaRole",
             {
               "Fn::Join": [
                 "",
                 [
-                  "prontoAuthPostConfirmation",
+                  "AdminQueries28edb2f2LambdaRole",
                   "-",
                   {
                     "Ref": "env"
@@ -223,6 +171,41 @@
                   }
                 ]
               }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "cognito-idp:ListUsersInGroup",
+                "cognito-idp:AdminUserGlobalSignOut",
+                "cognito-idp:AdminEnableUser",
+                "cognito-idp:AdminDisableUser",
+                "cognito-idp:AdminRemoveUserFromGroup",
+                "cognito-idp:AdminAddUserToGroup",
+                "cognito-idp:AdminListGroupsForUser",
+                "cognito-idp:AdminGetUser",
+                "cognito-idp:AdminConfirmSignUp",
+                "cognito-idp:ListUsers",
+                "cognito-idp:ListGroups"
+              ],
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:cognito-idp:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":userpool/",
+                    {
+                      "Ref": "authprontoAuthUserPoolId"
+                    }
+                  ]
+                ]
+              }
             }
           ]
         }
@@ -243,6 +226,11 @@
         ]
       }
     },
+    "Region": {
+      "Value": {
+        "Ref": "AWS::Region"
+      }
+    },
     "LambdaExecutionRole": {
       "Value": {
         "Ref": "LambdaExecutionRole"
@@ -254,11 +242,6 @@
           "LambdaExecutionRole",
           "Arn"
         ]
-      }
-    },
-    "Region": {
-      "Value": {
-        "Ref": "AWS::Region"
       }
     }
   }

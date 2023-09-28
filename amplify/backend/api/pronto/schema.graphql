@@ -237,6 +237,25 @@ type NotificationPreferance
   endpoint: Endpoint @function(name: "notificationPreferanceHandler-${env}")
 }
 
+type AdminApplication
+  @model
+  @auth(
+    rules: [
+      { allow: public, operations: [create, read] }
+      {
+        allow: groups
+        groups: ["superUserGroup"]
+        operations: [create, read, update, delete]
+      }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  firstname: String!
+  email: String!
+  status: String
+}
+
 type Notification {
   courseid: ID!
   status: STATUS
