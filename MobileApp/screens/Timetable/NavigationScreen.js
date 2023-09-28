@@ -36,6 +36,26 @@ const NavigationScreen = ({ navigation, route }) => {
     const [currentRegion, setCurrentRegion] = useState(initialRegion);
     const mapViewRef = useRef(null);
 
+    const mockVenues = [
+        {
+            key: 1,
+            name: "Thuto",
+            value: {
+                latitude: -25.7514675,
+                longitude: 28.2306757,
+            },
+        },
+        {
+            key: 2,
+            name: "Informatorium",
+            value: {
+                latitude: -25.7516,
+                longitude: 28.2307,
+            },
+        },
+        // Add more mock venues as needed
+    ];
+
     const { student, updateStudent } = useStudent();
     // Function to handle the data from the MapViewDirections component
     function handleOnReady(result) {
@@ -170,7 +190,7 @@ const NavigationScreen = ({ navigation, route }) => {
                     setCoordinates(loc);
                 }
 
-          
+
             }
 
         } catch (e) {
@@ -216,19 +236,16 @@ const NavigationScreen = ({ navigation, route }) => {
     //We then traverse the locations and look for the selected location details
     const setDestinationLocation = (itemValue) => {
         setMapRoute(false);
-        // const selectedItem = locationInfo.find(item => item.name === itemValue);
-
-        const selectedItem = coordinates.find(item => item.name === itemValue);
+        const selectedItem = mockVenues.find((item) => item.name === itemValue);
 
         if (selectedItem) {
             const dest = {
                 name: selectedItem.name,
-                latitude: selectedItem.value.latitude, // Use the latitude from the selected venue
-                longitude: selectedItem.value.longitude, // Use the longitude from the selected venue
-            }
+                latitude: selectedItem.value.latitude,
+                longitude: selectedItem.value.longitude,
+            };
             setDestination(dest);
 
-            // Zoom the map to the selected destination
             const newRegion = {
                 ...currentRegion,
                 latitude: selectedItem.value.latitude,
@@ -237,8 +254,7 @@ const NavigationScreen = ({ navigation, route }) => {
             setCurrentRegion(newRegion);
             mapViewRef.current.animateToRegion(newRegion, 1000);
         }
-
-    }
+    };
 
 
     return (
@@ -288,7 +304,7 @@ const NavigationScreen = ({ navigation, route }) => {
 
                     {/* Select List */}
                     <SelectList
-                        data={coordinates.map(item => item.name)}
+                        data={mockVenues.map((item) => item.name)}
                         label="Locations"
                         save={"value"}
                         search={false}

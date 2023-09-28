@@ -36,7 +36,7 @@ const BucketFilesScreen = () => {
     try {
       setIsRefreshing(true);
       setIsLoading(true);
-      let name = await setUniversityName()
+      let name = "AndileNgwenya";
 
       const response = await Storage.list(
         name + "/StudentFiles/",
@@ -99,7 +99,7 @@ const BucketFilesScreen = () => {
   };
 
   const renderFileItem = ({ item }) => {
-    const fileName = item.key.replace(studentUniversity + "/StudentFiles/", ""); // Extract file name
+    const fileName = item.key.replace("AndileNgwenya" + "/StudentFiles/", ""); // Extract file name
     if (fileName === "") {
       return null; // Skip rendering the item if the file name is empty
     }
@@ -113,7 +113,7 @@ const BucketFilesScreen = () => {
   };
 
   const handleRefresh = () => {
-    setUniversityName()
+    //setUniversityName()
     fetchFileList();
   };
 
