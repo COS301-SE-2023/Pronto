@@ -6,7 +6,6 @@ import { API,Auth } from "aws-amplify";
 import { getInstitution } from '../Graphql/queries';
 import { listAdminApplications} from '../Graphql/queries';
 import { updateAdmin, updateAdminApplication,createInstitution } from '../Graphql/mutations';
-import { request } from 'express';
 
 export default function ApplicationRequests() {
 
