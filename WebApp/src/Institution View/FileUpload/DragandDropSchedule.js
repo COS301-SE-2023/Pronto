@@ -66,6 +66,8 @@ function DropzoneComponent() {
   };
 
 
+
+
   /* const fetchCourses = async () => {
      try {
        let adminInfo = admin;
@@ -268,7 +270,7 @@ function DropzoneComponent() {
       <input
         id="fileInput"
         type="file"
-        accept=".xls, .xlsx"
+        accept=".xls, .xlsx, .csv"
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />
