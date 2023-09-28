@@ -14,6 +14,7 @@ const HelpScreen = () => {
     require('../../assets/UserManualPages/UserManual-7.png'),
     require('../../assets/UserManualPages/UserManual-8.png'),
     require('../../assets/UserManualPages/UserManual-9.png'),
+    require('../../assets/UserManualPages/UserManual-10.png'),
     // Add more images as needed
   ];
 

@@ -1,12 +1,11 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SuperAdminNavigation from './SuperAdminNavigation';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { API,Auth } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { getInstitution } from '../Graphql/queries';
-import { listAdminApplications} from '../Graphql/queries';
-import { updateAdmin, updateAdminApplication,createInstitution } from '../Graphql/mutations';
-import { request } from 'express';
+import { listAdminApplications } from '../Graphql/queries';
+import { updateAdmin, updateAdminApplication, createInstitution, createAdmin } from '../Graphql/mutations';
 
 export default function ApplicationRequests() {
 
@@ -27,18 +26,32 @@ export default function ApplicationRequests() {
       //   query: updateAdmin,
       //   variables: { input: admin }
       // })
-      
-      let request=requests[index];
-      let institution={
-        name:request.name
+
+      let request = requests[index];
+      let institution = {
+        name: request.name
       }
-      let inst=await API.graphql({
-        query:createInstitution,
-        variables:{input:institution}
+      let inst = await API.graphql({
+        query: createInstitution,
+        variables: { input: institution }
       })
-     console.log(inst);
-      const newAdmin= await addToAdminGroup(inst.data.createInstitution,request.email,request.firstname);
+      console.log(inst);
+      const newAdmin = await addToAdminGroup(inst.data.createInstitution, request.email, request.firstname);
       console.log(newAdmin)
+
+      let a = {
+        firstname: newAdmin.User.Attributes[1].name,
+        id: newAdmin.User.Attributes[0].sub,
+        lastname: "  ",
+        institutionId: request.id,
+        email: newAdmin.User.Attributes[2].email
+      }
+
+      let admin = await API.graphql({
+        query: createAdmin,
+        variables: { input: a }
+      })
+      console.log(admin)
       //  const user= await getUserHelper()
       //  console.log(user);
       //  await API.graphql({
@@ -52,46 +65,46 @@ export default function ApplicationRequests() {
     }
   };
 
-     const getUserHelper = async(username)=>{
-      try{ 
+  const getUserHelper = async (username) => {
+    try {
       let apiName = 'AdminQueries';
-        let path = '/getUser';
-        let myInit = {
-            body: {
-                "username" : "agilearchitectscapstone@gmail.com",
-            }, 
-            headers: {
-                'Content-Type' : 'application/json',
-                //Authorization: `AM`
-            } 
+      let path = '/getUser';
+      let myInit = {
+        body: {
+          "username": "agilearchitectscapstone@gmail.com",
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          //Authorization: `AM`
         }
-        return await API.post(apiName, path, myInit);
-      }catch(error){
-        console.log(error);
       }
+      return await API.post(apiName, path, myInit);
+    } catch (error) {
+      console.log(error);
     }
-  const addToAdminGroup = async(institution,email,name)=>{
-    try{    
-      let apiName= "AdminQueries";
-      let path= "/createInstitutionAdmin";
-
-        let myInit ={ 
-            body:{
-                "email":email,
-                "institutionId":institution.id,
-                "Password":"October01!",
-                name:name               
-            },
-            headers:{
-                "Content-Type" : "application/json",
-                 Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            }
-        };
-        return API.post(apiName,path,myInit);
-      }catch(error){
-        console.log(error);
-      }
+  }
+  const addToAdminGroup = async (institution, email, name) => {
+    try {
+      let apiName = "AdminQueries";
+      let path = "/createInstitutionAdmin";
+      let n = name.replace(" ", "")
+      let myInit = {
+        body: {
+          "email": email,
+          "institutionId": institution.id,
+          "Password": "October01!",
+          name: n
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+        }
+      };
+      return API.post(apiName, path, myInit);
+    } catch (error) {
+      console.log(error);
     }
+  }
 
   const declineRequest = async (index) => {
     const updatedRequests = [...requests];
@@ -108,28 +121,28 @@ export default function ApplicationRequests() {
     }
   };
 
-    const fetchRequests=async()=>{
-     try{
-       let r=await API.graphql({
-         query:listAdminApplications,
-         variables:{
-           filter:{
-             status:{
-               eq:"PENDING"
-             }
-           }
-         }
-       })
-       setRequests(r.data.listAdminApplications.items);
+  const fetchRequests = async () => {
+    try {
+      let r = await API.graphql({
+        query: listAdminApplications,
+        variables: {
+          filter: {
+            status: {
+              eq: "PENDING"
+            }
+          }
+        }
+      })
+      setRequests(r.data.listAdminApplications.items);
       //console.log(r);   
-     }catch(error){
-       console.log(error)
-     }
- 
-   }
-   useEffect(()=>{
-     fetchRequests();
-   },[]) 
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+  useEffect(() => {
+    fetchRequests();
+  }, [])
 
   return (
     <div style={{ display: 'flex', maxHeight: '100vh' }}>
@@ -150,7 +163,7 @@ export default function ApplicationRequests() {
             </div>
             <div className="card-body">
               <h5 className="card-title">{request.name}</h5>
-              <p className="card-text">{request.firstname + " applied to be an admin for institution "+request.name}</p>
+              <p className="card-text">{request.firstname + " applied to be an admin for institution " + request.name}</p>
               <p className='card-text'>Contact them at  <a href={`mailto:${request.email}?subject=${encodeURIComponent("Pronto Admins")}&body=${encodeURIComponent("Hello " + request.name + " Your request has been (rejected/accepted)")}`} > {request.email}</a></p>
 
               <div style={{ float: "right" }}>

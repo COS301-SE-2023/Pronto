@@ -114,7 +114,7 @@ const Register = ({ navigation }) => {
       ;
       setInstitutions(institutionInfo);
     } catch (error) {
-     
+
     }
   }
 
@@ -182,8 +182,8 @@ const Register = ({ navigation }) => {
 
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
-      Alert.alert("Sign up error", e.message.split(":")[1]);
-      
+      Alert.alert("Sign up error", e.message);
+
     }
     setLoading(false);
   };
