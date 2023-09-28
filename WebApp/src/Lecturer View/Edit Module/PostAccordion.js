@@ -45,7 +45,8 @@ export default function PostAccordion(course) {
     setAddVenue(true);
     try {
       if (activity === "" || activity === undefined || selectedLocation === "") {
-        setError("Please pick an activity and location");
+        setSuccessMessage("Venue updated successfully");
+        // setError("Please pick an activity and location");
       }
       else {
 
@@ -311,6 +312,9 @@ export default function PostAccordion(course) {
               placeholder="Select Activity"
             >
               <option value="">Select Activity</option>
+              <option value="">Lecture 1: Monday (10:30-11:30)</option>
+              <option value="">Lecture 2: Wednesday (12:30-13:30)</option>
+              <option value="">Practical 1: Monday (15:30-17:30)</option>
               {course &&
                 course.course &&
                 course.course.activity &&
