@@ -40,21 +40,21 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         setUniversityID(event.target.value);
     };
 
-    const handleAddAdmin = async(event) => {
+    const handleAddAdmin = async (event) => {
         setAdmin(event.target.value);
-//         let apiName = 'AdminQueries';
-//         let path = '/addUserToGroup';
-//             let myInit = {
-//                 body: {
-//                     "username" :event,
-//         "groupname": "adminUserGroup"
-//       }, 
-//       headers: {
-//         'Content-Type' : 'application/json',
-//         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-//       } 
-//   }
-//   return await API.post(apiName, path, myInit);
+        //         let apiName = 'AdminQueries';
+        //         let path = '/addUserToGroup';
+        //             let myInit = {
+        //                 body: {
+        //                     "username" :event,
+        //         "groupname": "adminUserGroup"
+        //       }, 
+        //       headers: {
+        //         'Content-Type' : 'application/json',
+        //         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+        //       } 
+        //   }
+        //   return await API.post(apiName, path, myInit);
     };
 
 
@@ -65,84 +65,84 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         setAdminEmail(event.target.value);
     };
 
-    const handleConfirmSignUp = async() => {
+    const handleConfirmSignUp = async () => {
         alert("handleConfirmSignUp pressed");
         let apiName = 'AdminQueries';
         let path = '/confirmUserSignUp';
         let myInit = {
             body: {
-                "username" : "richard",
-            }, 
+                "username": "richard",
+            },
             headers: {
-            'Content-Type' : 'application/json',
-            Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-      } 
-  }
-  return await API.post(apiName, path, myInit);
+                'Content-Type': 'application/json',
+                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+            }
+        }
+        return await API.post(apiName, path, myInit);
     }
 
-    const handleDisableUser = async() => {
+    const handleDisableUser = async () => {
         alert("handleDisableUser pressed");
         let apiName = 'AdminQueries';
         let path = '/disableUser';
         let myInit = {
             body: {
-                "username" : "richard",
-            }, 
+                "username": "richard",
+            },
             headers: {
-                'Content-Type' : 'application/json',
+                'Content-Type': 'application/json',
                 Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            } 
-        }
-        return await API.post(apiName, path, myInit);        
-    }
-
-    const handleRemoveFromUserGroup = async() => {
-        alert("handleRemoveFromUserGroup pressed");
-        let apiName = 'AdminQueries';
-        let path = '/removeUserFromGroup';
-            let myInit = {
-                body: {
-                    "username" : "richard",
-                    "groupname": "Editors"
-                }, 
-                headers: {
-                    'Content-Type' : 'application/json',
-                     Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-                } 
             }
+        }
         return await API.post(apiName, path, myInit);
     }
 
-    const handleEnableUser = async() => {
+    const handleRemoveFromUserGroup = async () => {
+        alert("handleRemoveFromUserGroup pressed");
+        let apiName = 'AdminQueries';
+        let path = '/removeUserFromGroup';
+        let myInit = {
+            body: {
+                "username": "richard",
+                "groupname": "Editors"
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+            }
+        }
+        return await API.post(apiName, path, myInit);
+    }
+
+    const handleEnableUser = async () => {
         alert(" handleEnableUser pressed");
         let apiName = 'AdminQueries';
         let path = '/enableUser';
         let myInit = {
             body: {
-                "username" : "richard",
-            }, 
+                "username": "richard",
+            },
             headers: {
-                'Content-Type' : 'application/json',
+                'Content-Type': 'application/json',
                 Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            } 
+            }
         }
         return await API.post(apiName, path, myInit);
     }
 
 
-    const handleGetUser = async() => {
+    const handleGetUser = async () => {
         alert(" handleGetUser pressed");
         let apiName = 'AdminQueries';
         let path = '/getUser';
         let myInit = {
             body: {
-                "username" : "richard",
-            }, 
+                "username": "richard",
+            },
             headers: {
-                'Content-Type' : 'application/json',
+                'Content-Type': 'application/json',
                 Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            } 
+            }
         }
         return await API.post(apiName, path, myInit);
     }
@@ -344,11 +344,12 @@ export default function ViewInstitutions() {
     };
 
     const fetchInstitutions = async () => {
+        console.log("RAN")
         try {
             let a = await API.graphql({
                 query: listInstitutions,
                 variables: {},
-                authMode:"API_KEY"
+                authMode: "API_KEY"
             })
             setInstitutions(a.data.listInstitutions.items);
         } catch (e) {

@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { API, Auth } from "aws-amplify";
 import { getInstitution } from '../Graphql/queries';
 import { listAdminApplications } from '../Graphql/queries';
-import { updateAdmin, updateAdminApplication, createInstitution, createAdmin } from '../Graphql/mutations';
+import { updateAdmin, updateAdminApplication, createInstitution, createAdmin, updateInstitution } from '../Graphql/mutations';
 
 export default function ApplicationRequests() {
 
@@ -40,26 +40,35 @@ export default function ApplicationRequests() {
       console.log(newAdmin)
 
       let a = {
-        firstname: newAdmin.User.Attributes[1].name,
-        id: newAdmin.User.Attributes[0].sub,
+        firstname: "  ",
+        userRole: "Admin",
         lastname: "  ",
         institutionId: request.id,
-        email: newAdmin.User.Attributes[2].email
+        email: request.email
       }
-
+      console.log(a);
       let admin = await API.graphql({
         query: createAdmin,
         variables: { input: a }
       })
       console.log(admin)
+      let update = {
+        id: inst.data.createInstitution.id,
+        adminId: admin.data.createAdmin.id
+      }
+      console.log(update)
+      let f = await API.graphql({
+        query: updateInstitution,
+        variables: { input: update }
+      })
       //  const user= await getUserHelper()
       //  console.log(user);
-      //  await API.graphql({
-      //   query: updateAdminApplication,
-      //   variables: { input: { id: requests[index].id, status: "ACCEPTED" } }
-      // })
-      // updatedRequests.splice(index, 1);
-      // setRequests(updatedRequests);
+      await API.graphql({
+        query: updateAdminApplication,
+        variables: { input: { id: requests[index].id, status: "ACCEPTED" } }
+      })
+      updatedRequests.splice(index, 1);
+      setRequests(updatedRequests);
     } catch (error) {
       console.log(error);
     }
@@ -109,13 +118,13 @@ export default function ApplicationRequests() {
   const declineRequest = async (index) => {
     const updatedRequests = [...requests];
     try {
-      // await API.graphql({
-      //   query: updateAdminApplication,
-      //   variables: { input: { id: requests[index].id, status: "REJECTED" } }
-      // })
+      await API.graphql({
+        query: updateAdminApplication,
+        variables: { input: { id: requests[index].id, status: "REJECTED" } }
+      })
 
-      // updatedRequests.splice(index, 1);
-      // setRequests(updatedRequests);
+      updatedRequests.splice(index, 1);
+      setRequests(updatedRequests);
     } catch (error) {
       console.log(error)
     }
