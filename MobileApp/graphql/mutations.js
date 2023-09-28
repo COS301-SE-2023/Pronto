@@ -83,6 +83,8 @@ export const createEnrollment=`mutation CreateEnrollment(
     courseId
     id
     courseId
+    _version
+    _deleted
     course{ 
       id
       coursecode
