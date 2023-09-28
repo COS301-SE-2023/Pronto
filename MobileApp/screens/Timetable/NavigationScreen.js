@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert, TextInput, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StepByStepInstructions from '../../components/StepByStepInstructions';
 import MapViewDirections from "react-native-maps-directions";
-import { GOOGLE_API_KEY } from "@env";
+import { REACT_APP_GOOGLE_API_KEY } from "@env";
+import * as Location from 'expo-location';
+import { SelectList } from "react-native-dropdown-select-list";
+import { useStudent } from "../../ContextProviders/StudentContext";
+import { API, Auth } from "aws-amplify";
+import { getStudent } from "../../graphql/queries";
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -19,22 +23,23 @@ const initialRegion = {
     longitudeDelta: LONGITUDE_DELTA,
 };
 
-const NavigationScreen = () => {
+const NavigationScreen = ({ navigation, route }) => {
 
     const [origin, setOrigin] = useState(null);
     const [destination, setDestination] = useState(null);
-    const [route, setRoute] = useState(false);
+    const [mapRoute, setMapRoute] = useState(false);
     const [distance, setDistance] = useState("");
     const [travelTime, setTravelTime] = useState("");
     const [instructions, setInstructions] = useState([]);
+    const [coordinates, setCoordinates] = useState([]);
 
+    const [currentRegion, setCurrentRegion] = useState(initialRegion);
+    const mapViewRef = useRef(null);
 
-
-
-
-    // this function will handle the data from the MapViewDirections component
+    const { student, updateStudent } = useStudent();
+    // Function to handle the data from the MapViewDirections component
     function handleOnReady(result) {
-        // extract the step-by-step instructions from the result object
+        // Extract the step-by-step instructions from the result object
         const steps = result.legs[0].steps.map((step, index) => {
             // Remove the destination part from the last instruction
             const isLastStep = index === result.legs[0].steps.length - 1;
@@ -49,12 +54,191 @@ const NavigationScreen = () => {
         });
 
         setInstructions(steps);
-        //round the distance to 2 decimal places
+        // Round the distance to 2 decimal places
         setDistance(result.distance.toFixed(2) + "km");
-        setTravelTime(result.duration.toFixed(2) + " mins");
-
+        setTravelTime(result.duration.toFixed(0) + " mins");
     }
 
+    // Request access to the user's location data
+    // This function will be called from the useEffect hook to run when it is mounted
+    const requestLocationPermission = async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status === 'granted') {
+            await getUserLocation();
+        } else {
+            // In the future, this else statement will return the user to the home page
+            Alert.alert("Location permission not granted");
+            ///navigation.navigate('ScheduleTable')
+        }
+    }
+
+    // Function that will be called to gather the user's location
+    // NOTE: the function is called only AFTER the user has granted permission and this WILL NOT change.
+    const getUserLocation = async () => {
+        try {
+            if (origin === null) {
+                const location = await Location.getCurrentPositionAsync({});
+                setOrigin(location.coords); // Set the origin to the user's current location
+                // Update the currentRegion state with the user's location
+                const newRegion = {
+                    ...currentRegion,
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                };
+                setCurrentRegion(newRegion);
+                // Use animateToRegion to zoom to the user's location
+                mapViewRef.current.animateToRegion(newRegion, 1000); // You may adjust the duration (1000 ms) as needed
+            }
+        } catch (error) {
+            Alert.alert("Please give access to your location to get directions");
+        }
+    };
+
+
+    const fetchLocations = async () => {
+        try {
+
+            let stu = student;
+            if (student === null) {
+                const user = await Auth.currentAuthenticatedUser();
+                stu = await API.graphql({
+                    query: getStudent,
+                    variables: { id: user.attributes.sub }
+                })
+
+                stu = stu.data.getStudent;
+                if (stu === null || stu === undefined) {
+                    throw Error();
+                }
+                updateStudent(stu);
+            }
+
+            if (stu.studentTimetableId !== null) {
+                let act = [];
+                let courses = [];
+                for (let i = 0; i < stu.enrollments.items.length; i++) {
+                    courses.push(stu.enrollments.items[i].course)
+                }
+
+                for (let i = 0; i < stu.timetable.activityId.length; i++) {
+                    for (let j = 0; j < courses.length; j++) {
+                        try {
+                            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+                            if (index !== undefined) {
+                                act.push(index)
+                                break;
+                            }
+                        } catch (e) {
+
+                        }
+
+                    }
+                }
+
+                let loc = [];
+                let locationNames = new Map();
+                for (let i = 0; i < act.length; i++) {
+                    if (act[i].coordinates !== null) {
+                        let location = act[i].coordinates.split(';');
+                        if (locationNames.get(location[0]) === undefined && location[0] !== "") {
+                            let coordinate = {
+                                key: i,
+                                name: location[0],
+                                value: {
+                                    latitude: parseFloat(location[1]),
+                                    longitude: parseFloat(location[2])
+                                }
+                            }
+                            loc.push(coordinate);
+                            locationNames.set(location[0], "1");
+                        }
+                    }
+                }
+                let changed = false;
+                if (coordinates.length === loc.length) {
+                    for (let i = 0; i < coordinates.length - 1; i++) {
+                        if (coordinates[i].name !== loc[i].name) {
+                            changed = true;
+
+                        }
+                    }
+                }
+                else {
+                    changed = true;
+                }
+                if (changed) {
+                    setCoordinates(loc);
+                }
+
+          
+            }
+
+        } catch (e) {
+            //Alert.alert(error);
+            console.log(e);
+        }
+    }
+
+    // //    useEffect hook to run the requestLocationPermission function when the component is mounted
+    useEffect(() => {
+        requestLocationPermission();
+        fetchLocations();
+    }, [coordinates]);
+
+
+    // Below defines styling for the location text input for the user's current location
+    // Green border will be for location gathered
+    // Red border will be for location not gathered and display different text
+    const greenStyle = {
+        ...styles.input,
+        borderWidth: 0,
+        color: 'green',
+        width: '80%',
+        justifyContent: 'center',
+        fontSize: 16,
+        fontWeight: '400',
+        paddingLeft: 19,
+
+    };
+
+    const redStyle = {
+        ...styles.input,
+        borderWidth: 0,
+        color: '#e32f45',
+        width: '80%',
+        justifyContent: 'center',
+        fontSize: 16,
+        fontWeight: '400',
+        paddingLeft: 19,
+    };
+
+    // Function to set the destination location, it is called when the user clicks the SelectedList component
+    //We then traverse the locations and look for the selected location details
+    const setDestinationLocation = (itemValue) => {
+        setMapRoute(false);
+        // const selectedItem = locationInfo.find(item => item.name === itemValue);
+
+        const selectedItem = coordinates.find(item => item.name === itemValue);
+
+        if (selectedItem) {
+            const dest = {
+                name: selectedItem.name,
+                latitude: selectedItem.value.latitude, // Use the latitude from the selected venue
+                longitude: selectedItem.value.longitude, // Use the longitude from the selected venue
+            }
+            setDestination(dest);
+
+            // Zoom the map to the selected destination
+            const newRegion = {
+                ...currentRegion,
+                latitude: selectedItem.value.latitude,
+                longitude: selectedItem.value.longitude,
+            };
+            setCurrentRegion(newRegion);
+            mapViewRef.current.animateToRegion(newRegion, 1000);
+        }
+
+    }
 
 
     return (
@@ -62,79 +246,103 @@ const NavigationScreen = () => {
             <MapView
                 style={styles.mapStyle}
                 provider={PROVIDER_GOOGLE}
-                initialRegion={initialRegion}
+                initialRegion={currentRegion}
+                ref={mapViewRef} // Set the ref to mapViewRef
             >
+
                 {origin && <Marker coordinate={origin} title="Origin" />}
                 {destination && <Marker coordinate={destination} title="Destination" />}
-                {route && origin && destination && (
+                {mapRoute && origin && destination && (
                     <MapViewDirections
                         origin={origin}
                         destination={destination}
-                        apikey={GOOGLE_API_KEY}
-                        strokeColor={'#395cda'}
+                        apikey={REACT_APP_GOOGLE_API_KEY} // Use the imported GOOGLE_API_KEY directly
+                        strokeColor="#e32f45" // Set the mapRoute color to #e32f45
                         strokeWidth={4}
-                        mode={"WALKING"}
+                        mode="WALKING"
                         onReady={handleOnReady}
                     />
+
                 )}
             </MapView>
             <View style={styles.searchContainer}>
                 {/* Input for the origin with icon */}
                 <View style={styles.inputContainer}>
                     <Icon name="location-on" size={20} color="#e32f45" style={styles.inputIcon} />
-                    <GooglePlacesAutocomplete
-                        styles={styles.input}
-                        placeholder="Your location"
-                        query={{
-                            key: GOOGLE_API_KEY,
-                            language: 'en',
-                        }}
-                        fetchDetails={true}
-                        onPress={(data, details = null) => {
-                            setOrigin({
-                                latitude: details.geometry.location.lat,
-                                longitude: details.geometry.location.lng,
-                            });
-                        }}
+                    {/* If the origin has been set, the input is filled */}
+                    <TextInput
+                        style={origin ? greenStyle : redStyle} // Apply green style if origin is set, red style otherwise
+                        placeholder="Origin"
+                        value={origin ? "Your  Location" : "Getting Location..."}
+                        editable={false}
                     />
                 </View>
 
                 <View style={styles.line} />
 
                 {/* Input for the destination with icon */}
+
                 <View style={styles.inputContainer}>
+                    {/* Icon */}
                     <Icon name="location-on" size={20} color="#e32f45" style={styles.inputIcon} />
-                    <GooglePlacesAutocomplete
-                        styles={styles.input}
-                        placeholder="Destination"
-                        query={{
-                            key: GOOGLE_API_KEY,
-                            language: 'en',
+
+                    {/* Select List */}
+                    <SelectList
+                        data={coordinates.map(item => item.name)}
+                        label="Locations"
+                        save={"value"}
+                        search={false}
+                        placeholder={destination ? destination.name : "Select venue"}
+                        // defaultOption={destination ? {key:'1',value:destination.name} : { key: '1', value: 'Select Venue'}}
+                        inputStyles={{
+                            color: 'grey', fontSize: 16
                         }}
-                        fetchDetails={true}
-                        onPress={(data, details = null) => {
-                            setDestination({
-                                latitude: details.geometry.location.lat,
-                                longitude: details.geometry.location.lng,
-                            });
+                        boxStyles={{ borderWidth: 0, marginBottom: 8, width: 300 }}
+                        dropdownTextStyles={{
+                            fontSize: 16, color: 'grey'
                         }}
+                        dropdownStyles={{
+                            width: 300, marginBottom: 10, borderWidth: 0
+                        }}
+                        setSelected={setDestinationLocation}
+                    //defaultOption={{ key: '1', value: 'Select Venue' }}
+
                     />
                 </View>
 
                 <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        setRoute(true);
+                        if (origin && destination) {
+                            // Calculate the new region that encompasses both origin and destination
+                            const coordinates = [origin, destination];
+                            mapViewRef.current.fitToCoordinates(coordinates, {
+                                edgePadding: { top: 330, bottom: 300 }, // Adjust padding as needed
+                                animated: true, // Set to true for a smooth animation
+                            });
+
+                            // Set mapRoute to true and trigger the mapRoute calculation
+                            setMapRoute(true);
+                        } else {
+                            // Handle case where origin or destination is not set
+                            Alert.alert("Origin and destination must be set.");
+                        }
                     }}
                 >
                     <Text style={[styles.buttonText, { color: 'white', fontWeight: 600 }]}>Get Directions</Text>
                 </TouchableOpacity>
+
                 {travelTime && distance && (
                     <View style={styles.infoContainer}>
-                        <Text style={styles.infoText}>Distance: {distance}</Text>
-                        <Text style={styles.infoText}>{travelTime}</Text>
+                        <Text style={styles.infoText}>
+                            <Text style={{ color: "#e32f45" }}>Distance: </Text> {distance}
+                        </Text>
+                        <Text style={styles.infoText}>
+                            <Text style={{ color: "#e32f45" }}>Travel Time: </Text> {travelTime}
+                        </Text>
                     </View>
                 )}
+
             </View>
             {instructions.length > 0 && (
                 <View style={styles.instructionsContainer}>
@@ -144,7 +352,6 @@ const NavigationScreen = () => {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -191,7 +398,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#e32f45',
         paddingVertical: 12,
-        borderRadius: 4,
+        borderRadius: 20,
     },
     buttonText: {
         textAlign: 'center',
@@ -201,6 +408,7 @@ const styles = StyleSheet.create({
     infoContainer: {
         marginTop: 16,
         alignItems: 'center',
+        justifyContent: 'center',
     },
     infoText: {
         textAlign: 'center',
@@ -215,17 +423,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 8,
+        flexDirection: 'row', // Display icon and Select List side by side
+        alignItems: 'center', // Vertically align them to the center
     },
-
-    // New style for the icon
     inputIcon: {
-        marginHorizontal: 8,
-
+        marginRight: 8, // Adjust the margin to separate the icon from the Select List
     },
-});
 
+});
 
 export default NavigationScreen;

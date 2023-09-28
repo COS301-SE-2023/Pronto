@@ -1,10 +1,14 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+
+import styled, { keyframes } from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import { Auth } from "aws-amplify";
+import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { listLecturers, listInstitutions } from "../../Graphql/queries";
+import { useLecturer } from "../../ContextProviders/LecturerContext";
+import MobileView from "../../Homepage/MobileView";
 
 function Login() {
   //sign in states
@@ -20,33 +24,86 @@ function Login() {
   const [signUpPassword, setSignUpPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
-  //university info
-  const universityInfo = [
-    {
-      value: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_ID,
-      label: process.env.REACT_APP_UNIVERSITY_JOHANNESBURG_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_PRETORIA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_PRETORIA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_WITWATERSRAND_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_ID,
-      label: process.env.REACT_APP_UNIVERSITY_MPUMALANGA_LABEL,
-    },
-    {
-      value: process.env.REACT_APP_UNIVERSITY_ZULULAND_ID,
-      label: process.env.REACT_APP_UNIVERSITY_ZULULAND_LABEL,
-    },
-  ];
+  //this is used to maintain a global state, DO NOT REMOVE
+  const { lecturer, setLecturer } = useLecturer();
+  const [institutions, setInstitutions] = useState([])
 
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+
+
+  const fetchLecturer = async () => {
+    let fetchError = "Could not find your records.If you are a Lecturer please contact your Institution's   Admin since they may have deleted your information. If you are an Admin please return to the homepage and click 'Continue as Admin'. If you are a Student please use the mobile app.";
+    try {
+      let lec = await API.graphql({
+        query: listLecturers,
+        variables: {
+          filter: {
+            email: {
+              eq: email
+            }
+          }
+        },
+      });
+
+      if (lec.data.listLecturers.items.length > 0 ) {
+        if(lec.data.listLecturers.items[0]._deleted!==true){
+        lec = lec.data.listLecturers.items[0];
+        try {
+          if (lec.institution.logo !== null) {
+            lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+
+          }
+          
+        } catch (error) {
+
+        }
+        setLecturer(lec);
+
+      }
+      else {
+        throw Error(fetchError);
+      }
+    }
+    } catch (error) {
+      await Auth.signOut();
+      throw Error(fetchError);
+    }
+
+  }
+  const fetchInstitutions = async () => {
+    console.log("fetch");
+    try {
+      let inst = await API.graphql({
+        query: listInstitutions,
+        variables: {
+          filter:{
+          }
+        },
+        authMode: "API_KEY"
+      });
+      console.log(inst)
+      inst = inst.data.listInstitutions.items.filter((item)=>item._deleted===null);
+      console.log(inst)
+      let institutionInfo = [];
+      for (let j = 0; j < inst.length; j++) {
+        let item = {
+          value: inst[j].id,
+          label: inst[j].name
+        }
+        institutionInfo.push(item);
+      }
+      setInstitutions(institutionInfo);
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(() => {
+    fetchInstitutions();
+  },[])
+
 
   const onSignInPressed = async (event) => {
     if (loading) {
@@ -63,15 +120,30 @@ function Login() {
       return;
     }
 
+
     try {
-      await Auth.signIn(email, password, { role: "Lecturer" });
+      // await Auth.signIn(email, password, { role: "Lecturer" });
+      const signInObject = {
+        username: email,
+        password: password,
+        validationData: {
+          role: "Lecturer",
+        }
+      }
+      await Auth.signIn(signInObject);
+      //  const user = await Auth.currentAuthenticatedUser();
+      //  console.log(user);
       setsignInError("");
       //navigate to lecturer home page
-      navigate("/lecture-homepage");
+
+      //await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
+      navigate("/lecturer/dashboard")
     } catch (e) {
+      //console.log(e);
+      setLoading(false);
       setsignInError(e.message);
     }
-    setLoading(false);
+    //setLoading(false);
   };
 
   const onSignUpPressed = async (event) => {
@@ -135,10 +207,10 @@ function Login() {
           institutionId: institutionId,
         },
       });
-      navigate("/lecturer-confirm-email", { state: { email: email } });
+      navigate("/lecturer/confirm-email", { state: { email: email } });
     } catch (e) {
+      console.log(e)
       setsignUpError(e.message.split("Error: ")[1]);
-      console.log(e);
     }
     setLoading(false);
   };
@@ -221,179 +293,191 @@ function Login() {
     setIsInstitudeSelected(true);
   };
 
+  const isMobileView = window.innerWidth < 768;
 
   return (
-    <Container>
-      <SignUpContainer signin={signIn}>
-        <Form>
-          <Title
-            style={{
-              marginBottom: "20px",
-            }}
-          >
-            Create Lecturer Account
-          </Title>
-          <Input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(event) => {
-              setName(event.target.value);
-              validateName(event.target.value);
-            }}
-            isValidName={nameIsValid}
-          />
-          <Input
-            type="text"
-            placeholder="Surname"
-            value={surname}
-            onChange={(event) => {
-              setSurname(event.target.value);
-              validateSurname(event.target.value);
-            }}
-            isValidSurname={surnameIsValid}
-          />
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              validateEmail(event.target.value);
-            }}
-            isValidEmail={emailIsValid}
-          />
-          <StyledSelectInput
-            options={universityInfo}
-            defaultValue={institutionId}
-            onChange={handleInstitutionSelection}
-            placeholder="Select an Institution"
-            classNamePrefix="SelectInput"
-            autoComplete="on"
-            spellCheck="true"
-            isSelectionValid={isInstitudeSelected}
-          ></StyledSelectInput>
-          <Input
-            type="password"
-            placeholder="Password"
-            value={signUpPassword}
-            onChange={(event) => {
-              setSignUpPassword(event.target.value);
-              validatePassword(event.target.value);
-            }}
-            isValidPassword={passwordIsValid}
-            onFocus={handlePasswordFocus}
-            onBlur={handlePasswordBlur}
-          />
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(event) => {
-              setConfirmPassword(event.target.value);
-              validateConfirmPassword(event.target.value);
-            }}
-            passwordMatch={passwordMatch}
-          />
-          {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
-          {/* Render error text area if error exists */}
-          <Button type="submit" onClick={onSignUpPressed}>
-            {loading ? "Signing up..." : "Sign up"}
-          </Button>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {passwordIsFocused && (
-              <>
-                <CriteriaMessage isValid={passwordCriteria.length}>
-                  {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.uppercase}>
-                  {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.lowercase}>
-                  {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.digit}>
-                  {passwordCriteria.digit ? "✓" : "x"} Digit
-                </CriteriaMessage>
-                <CriteriaMessage isValid={passwordCriteria.specialChar}>
-                  {passwordCriteria.specialChar ? "✓" : "x"} Special character
-                  (!@#$%^&*()?)
-                </CriteriaMessage>
-              </>
-            )}
-          </div>
-        </Form>
-      </SignUpContainer>
-      <SignInContainer signin={signIn}>
-        <Form>
-          <LogoContainer>
-            <img
-              src={ProntoLogo}
-              alt="Logo"
-              style={{
-                width: "50%",
-                height: "auto",
-                objectFit: "cover",
-              }}
-            />
-          </LogoContainer>
-          <Subtitle>Lecturer Login</Subtitle>
-          {/* input fields for lecturers login*/}
-          <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              validateEmail(event.target.value);
-            }}
-            isValidEmail={emailIsValid}
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value);
-            }}
-          />
-          <Button type="submit" onClick={onSignInPressed}>
-            {loading ? "Signing in..." : "Sign in"}
-          </Button>
-          <Anchor type="text/html" href="/lecturer-forgot-password">
-            Forgot your password?
-          </Anchor>
-          {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
-          {/* Render error text area if error exists */}
-        </Form>
-      </SignInContainer>
-      <OverlayContainer signin={signIn}>
-        <Overlay signin={signIn}>
-          <LeftOverlayPanel signin={signIn}>
-            <Title>Have an account?</Title>
-            <Paragraph>
-              Please sign in to access all of Pronto's features
-            </Paragraph>
-            <GhostButton type="button" onClick={() => toggle(true)}>
-              Sign In
-            </GhostButton>
-          </LeftOverlayPanel>
+    <div>
+      {
+        isMobileView ? (
+          // Display a message for mobile users
+          <MobileView />
+        ) : (
+          <Container>
+            <SignUpContainer signin={signIn}>
+              <Form>
+                <Title
+                  style={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  Create Lecturer Account
+                </Title>
+                <Input
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(event) => {
+                    setName(event.target.value);
+                    validateName(event.target.value);
+                  }}
+                  isValidName={nameIsValid}
+                />
+                <Input
+                  type="text"
+                  placeholder="Surname"
+                  value={surname}
+                  onChange={(event) => {
+                    setSurname(event.target.value);
+                    validateSurname(event.target.value);
+                  }}
+                  isValidSurname={surnameIsValid}
+                />
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    validateEmail(event.target.value);
+                  }}
+                  isValidEmail={emailIsValid}
+                />
+                
+                <StyledSelectInput
+                  defaultValue={"University of Pretoria"}
+                  options={institutions}             
+                  onChange={handleInstitutionSelection}
+                  placeholder="Select an Institution"
+                  classNamePrefix="SelectInput"
+                  autoComplete="on"
+                  spellCheck="true"
+                  isSelectionValid={isInstitudeSelected}
+                ></StyledSelectInput>
+                
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={signUpPassword}
+                  onChange={(event) => {
+                    setSignUpPassword(event.target.value);
+                    validatePassword(event.target.value);
+                  }}
+                  isValidPassword={passwordIsValid}
+                  onFocus={handlePasswordFocus}
+                  onBlur={handlePasswordBlur}
+                />
+                <Input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(event) => {
+                    setConfirmPassword(event.target.value);
+                    validateConfirmPassword(event.target.value);
+                  }}
+                  passwordMatch={passwordMatch}
+                />
+                {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
+                {/* Render error text area if error exists */}
+                <Button type="submit" onClick={onSignUpPressed}>
+                  {loading ? "Signing up..." : "Sign up"}
+                </Button>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {passwordIsFocused && (
+                    <>
+                      <CriteriaMessage isValid={passwordCriteria.length}>
+                        {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.uppercase}>
+                        {passwordCriteria.uppercase ? "✓" : "x"} Uppercase character
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.lowercase}>
+                        {passwordCriteria.lowercase ? "✓" : "x"} Lowercase character
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.digit}>
+                        {passwordCriteria.digit ? "✓" : "x"} Digit
+                      </CriteriaMessage>
+                      <CriteriaMessage isValid={passwordCriteria.specialChar}>
+                        {passwordCriteria.specialChar ? "✓" : "x"} Special character
+                        (!@#$%^&*()?)
+                      </CriteriaMessage>
+                    </>
+                  )}
+                </div>
+              </Form>
+            </SignUpContainer>
+            <SignInContainer signin={signIn}>
+              <Form>
+                <LogoContainer>
+                  <img
+                    src={ProntoLogo}
+                    alt="Logo"
+                    style={{
+                      width: "50%",
+                      height: "auto",
+                      objectFit: "cover",
+                    }}
+                  />
+                </LogoContainer>
+                <Subtitle>Lecturer Login</Subtitle>
+                {/* input fields for lecturers login*/}
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    validateEmail(event.target.value);
+                  }}
+                  isValidEmail={emailIsValid}
+                />
+    
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                  }}
+                />
+                <Button type="submit" onClick={onSignInPressed}>
+                  {loading ? "Signing in..." : "Sign in"}
+                </Button>
+                <Anchor type="text/html" href="/lecturer/forgot-password">
+                  Forgot your password?
+                </Anchor>
+                {signInError && <ErrorText>{signInError}</ErrorText>}{" "}
+                {/* Render error text area if error exists */}
+              </Form>
+            </SignInContainer>
+            <OverlayContainer signin={signIn}>
+              <Overlay signin={signIn}>
+                <LeftOverlayPanel signin={signIn}>
+                  <Title>Have an account?</Title>
+                  <Paragraph>
+                    Please sign in to access all of Pronto's features
+                  </Paragraph>
+                  <GhostButton type="button" onClick={() => toggle(true)}>
+                    Sign In
+                  </GhostButton>
+                </LeftOverlayPanel>
 
-          <RightOverlayPanel class="rightOverlay" signin={signIn}>
-            <Title>No Account?</Title>
-            <Paragraph>Click here to verify a lecturer account</Paragraph>
-            <GhostButton type="button" onClick={() => toggle(false)}>
-              Sign Up
-            </GhostButton>
-          </RightOverlayPanel>
-        </Overlay>
-      </OverlayContainer>
-    </Container>
+                <RightOverlayPanel className="rightOverlay" signin={signIn}>
+                  <Title>No Account?</Title>
+                  <Paragraph>Click here to verify a lecturer account</Paragraph>
+                  <GhostButton type="button" onClick={() => toggle(false)}>
+                    Sign Up
+                  </GhostButton>
+                </RightOverlayPanel>
+              </Overlay>
+            </OverlayContainer>
+          </Container>
+        )}
+    </div>
   );
 }
 
@@ -405,10 +489,19 @@ const Container = styled.div`
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   display: relative;
   overflow: hidden;
-  width: 700px;
-  max-width: 100%;
-  min-height: 400px;
+  width: 100%; /* Make it 100% width */
+  height: 100vh; /* Make it 100% viewport height */
 `;
+
+const slideIn = keyframes`
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
+
 
 const SignUpContainer = styled.div`
   position: absolute;
@@ -465,6 +558,7 @@ const Form = styled.form`
   padding: 0 50px;
   height: 100%;
   text-align: center;
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const Title = styled.h1`
@@ -533,6 +627,7 @@ const OverlayContainer = styled.div`
   transition: transform 0.5s ease-in-out;
   z-index: 100;
   ${(props) => (props.signin !== true ? `transform: translateX(-100%);` : null)}
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const Overlay = styled.div`
@@ -570,6 +665,7 @@ const OverlayPanel = styled.div`
 const LeftOverlayPanel = styled(OverlayPanel)`
   transform: translateX(-20%);
   ${(props) => (props.signin !== true ? `transform: translateX(0);` : null)}
+  animation: ${slideIn} 1s ease-in-out;
 `;
 
 const RightOverlayPanel = styled(OverlayPanel)`

@@ -14,7 +14,8 @@ import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { Auth, API } from "aws-amplify"
-import { listInstitutions, listStudents } from "../../graphql/queries";
+import { listStudents, getStudent } from "../../graphql/queries";
+import { useStudent } from "../../ContextProviders/StudentContext";
 
 //graphQL call to get the university of the student, which will be used to get the file from that folder.
 //let studentUniversity = "UniversityOfPretoria";
@@ -24,10 +25,10 @@ const BucketFilesScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [studentUniversity, setStudentUniversity] = useState("")
-
+  const { student, updateStudent } = useStudent();
 
   useEffect(() => {
-    setUniversityName();
+    //  setUniversityName();
     fetchFileList();
   }, []);
 
@@ -55,40 +56,37 @@ const BucketFilesScreen = () => {
     }
   };
 
-  const setUniversityName = async () => {
-
-    let error = "There appear to be network issues.Please try again later"
-    try {
-      let user = await Auth.currentAuthenticatedUser()
-      let studentEmail = user.attributes.email
-      let domain = studentEmail.split('@')[1]
-      let institution = await API.graphql({
-        query: listInstitutions,
-        variables: {
-          filter: {
-            domains: {
-              contains: domain
-            }
-          }
-        },
-        authMode: "API_KEY",
-      })
-
-      if (institution.data.listInstitutions.items.length === 0) {
-        error = "Could not determine insititution"
-        throw Error()
-      }
-      sU = institution.data.listInstitutions.items[0].name
-      const words = sU.split(/\s+/); // Split the name into words
-      sU = words
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
-        .join(""); // Join the words without spaces
-      await setStudentUniversity(sU)
-      return sU
-    } catch (e) {
-      Alert.alert(error)
-    }
-  }
+  /* const setUniversityName = async () => {
+ 
+     let error = "There appear to be network issues.Please try again later"
+     try {
+       let stu=student;
+       if(student===null){
+         const user = await Auth.currentAuthenticatedUser()
+         let studentEmail = user.attributes.email; 
+         stu = await API.graphql({
+           query: getStudent,
+           variables: {id:user.attributes.sub}
+         })
+         
+         stu=stu.data.getStudent;
+         if(stu===false || stu===undefined){
+           throw Error();
+         }
+         updateStudent(stu);
+       }
+     
+       sU = stu.institution.name
+       const words = sU.split(/\s+/); // Split the name into words
+       sU = words
+         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
+         .join(""); // Join the words without spaces
+       await setStudentUniversity(sU)
+       return sU
+     } catch (e) {
+       Alert.alert(error);
+     }
+   } */
 
 
   const openFile = async (fileKey) => {

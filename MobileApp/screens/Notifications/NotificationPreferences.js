@@ -1,11 +1,11 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+
   Alert,
   ImageBackground,
   TextInput,
@@ -14,64 +14,115 @@ import {
   Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Auth } from "aws-amplify";
+
+import { Auth, API } from "aws-amplify";
+import { getStudent } from "../../graphql/queries";
+import { useStudent } from "../../ContextProviders/StudentContext";
+import { updateStudentInfo, updateNotificationPreferance, createNotificationPreferance } from "../../graphql/mutations";
 
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [showSaveButton, setShowSaveButton] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
   const [isModalVisible, setModalVisible] = useState(false); // State to control modal visibility
   const [isVerificationModalVisible, setVerificationModalVisible] =
     useState(false); // State to control the verification modal visibility
   const [enteredVerificationCode, setEnteredVerificationCode] = useState("");
   const [email, setEmail] = useState(null);
   const [isEmailModalVisible, setEmailModalVisible] = useState(false);
-  const [isEmailVerificationModalVisible, setEmailVerificationModalVisible] =
-    useState(false);
-  const [enteredEmailVerificationCode, setEnteredEmailVerificationCode] =
-    useState("");
+  const [isEmailVerificationModalVisible, setEmailVerificationModalVisible] = useState(false);
+
+  const [enteredEmailVerificationCode, setEnteredEmailVerificationCode] = useState("");
+
+  const { student, updateStudent } = useStudent();
 
   const fetchUserEmail = async () => {
     try {
       // Replace "currentUser" with the method that retrieves the authenticated user from Cognito
       // For example, if you are using AWS Amplify, you can use Auth.currentAuthenticatedUser()
-      const currentUser = await Auth.currentAuthenticatedUser();
-      const email = currentUser.attributes.email; // Assuming that "email" is the attribute name for the email in Cognito
-      return email;
+      // let email=""
+      // if(student===null){
+      //   const currentUser = await Auth.currentAuthenticatedUser();
+      //   //const email = currentUser.attributes.email; // Assuming that "email" is the attribute name for the email in Cognito
+      //   email=currentUser.attributes.email;
+      // }
+      // else{ 
+      //   email=student.email;
+      // }
+      return student.email;
     } catch (error) {
       console.error("Error fetching user email:", error);
       return null;
     }
   };
 
+
+  const fetchStudent = async () => {
+    try {
+      if (student === null) {
+        const user = await Auth.currentAuthenticatedUser()
+        let studentEmail = user.attributes.email;
+        let stu = await API.graphql({
+          query: getStudent,
+          variables: { id: user.attributes.sub }
+        })
+
+        stu = stu.data.getStudent;
+        if (stu === null) {
+          throw Error();
+        }
+        updateStudent(student);
+      }
+    } catch (e) {
+    }
+  }
   const handleOptionSelect = async (option) => {
     setSelectedOption(option);
-    if (option === "sms") {
-      setModalVisible(true); // Show the phone number modal when "SMS" option is clicked
-    } else if (option === "email") {
+    if (option === "email") {
       // Fetch user's email from Cognito
-      const userEmail = await fetchUserEmail();
-      setEmail(userEmail); // Set the email state with the user's email
+      // const userEmail = await fetchUserEmail();
+      //const email=student.email;
+      setEmail(student.email); // Set the email state with the user's email
       setEmailModalVisible(true); // Show the "Email Modal"
-    } else {
-      setShowSaveButton(true);
-      setPhoneNumber(""); // Reset phone number state
     }
   };
 
-  const handleSavePreferences = () => {
-    Alert.alert(
-      "Preferences Updated",
-      `Preference successfully updated to ${selectedOption}`
-    );
-    setShowSaveButton(false);
+  const handleSavePreferences = async () => {
+
+    try {
+
+      if (student.preference === null) {
+
+        let pref = await API.graphql({
+          query: createNotificationPreferance,
+          variables: { input: { studentId: student.id, type: selectedOption.toUpperCase() } }
+        })
+
+        student.preference = pref.data.createNotificationPreferance;
+        student.studentPreferenceId = pref.data.createNotificationPreferance.id
+      }
+      else {
+        let pref = await API.graphql({
+          query: updateNotificationPreferance,
+          variables: { input: { id: student.studentPreferenceId, type: selectedOption.toUpperCase() } }
+        })
+
+        student.preference = pref.data.updateNotificationPreferance;
+        student.studentPreferenceId = pref.data.updateNotificationPreferance.id
+      }
+      updateStudent(student);
+      Alert.alert(
+        "Preferences Updated",
+        `Preference successfully updated to ${selectedOption}`
+      );
+    } catch (e) {
+      Alert.alert("Failed to update preference");
+
+    }
   };
 
-  const closeModalAndDeselectOption = () => {
-    setModalVisible(false);
-    setSelectedOption(null); // Deselect the "SMS" option
-    setShowSaveButton(false);
-  };
+  useEffect(() => {
+    fetchStudent();
+  }, [])
+
 
   const openEmailVerificationModal = () => {
     setEmailVerificationModalVisible(true);
@@ -81,33 +132,7 @@ const NotificationPreferences = () => {
   const closeEmailModalAndClearOption = () => {
     setEmailModalVisible(false);
     setSelectedOption(null);
-    setShowSaveButton(false);
-  };
 
-  const handleCancelEmailVerification = () => {
-    setEmailVerificationModalVisible(false);
-    setSelectedOption(null); // Clear the selected option
-    setShowSaveButton(false); // Hide the save button
-  };
-
-  const savePhoneNumber = (number) => {
-    // Regular expression to match valid South African phone numbers
-    const saPhoneNumberRegex = /^(?:\+27|0)(?:\d\s?){9}$/;
-
-    if (!saPhoneNumberRegex.test(number)) {
-      // Display an error message for invalid phone numbers
-      Alert.alert(
-        "Invalid Phone Number",
-        "Please enter a valid South African phone number."
-      );
-      return;
-    }
-
-    //if successful, move on to next step, verify phone number
-    if (saPhoneNumberRegex.test(number)) {
-      setVerificationModalVisible(true);
-      setModalVisible(false); // Close the phone number modal
-    }
   };
 
   const handleEmailConfirm = () => {
@@ -122,38 +147,22 @@ const NotificationPreferences = () => {
 
     // After successful verification, you can do any required action
     // For example, show a success message or navigate to the next step in the app
-    // For this example, let's show an alert:
-    Alert.alert(
-      "Email Verification Successful",
-      "Your email has been verified successfully."
-    );
+
 
     // Close the email verification modal and show the Save button
     setEmailVerificationModalVisible(false);
-    setShowSaveButton(true);
+    Alert.alert("Preference Updated", "Your preference has been set to email");
   };
 
-  const handleVerificationCode = (code) => {
-    // Implement your logic to verify the SMS code here
 
-    // After successful verification, you can do any required action
-    // For example, show a success message or navigate to the next step in the app
-    // For this example, let's show an alert:
-    Alert.alert(
-      "Verification Successful",
-      "Your phone number has been verified successfully."
-    );
-
-    setVerificationModalVisible(false);
-    setShowSaveButton(true);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Notification Preferences</Text>
         <Text style={{ marginBottom: 20, textAlign: "center" }}>
-          This is how you will receive notifications from your lecturer
+          This is how you will receive notifications from your lecturer. Your notification preference is currently set to
+          {/* <Text style={styles.optionText}>{student === null ? "" : student.preference === null ? " email" : " " + student.preference.type.toLowerCase()}</Text>*/}
         </Text>
         <ImageBackground
           resizeMode="contain"
@@ -168,100 +177,15 @@ const NotificationPreferences = () => {
 
         <TouchableOpacity
           style={[
-            styles.option,
-            selectedOption === "email" && styles.selectedOption,
+            styles.verificationInput,
+            selectedOption === "email" || student.preference === null
+              ? styles.selectedOption
+              : styles.option,
           ]}
           onPress={() => handleOptionSelect("email")}
         >
           <Text style={styles.optionText}>Email</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.option,
-            selectedOption === "sms" && styles.selectedOption,
-          ]}
-          onPress={() => handleOptionSelect("sms")}
-        >
-          <Text style={styles.optionText}>SMS</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.option,
-            selectedOption === "push" && styles.selectedOption,
-          ]}
-          onPress={() => handleOptionSelect("push")}
-        >
-          <Text style={styles.optionText}>Push Notifications</Text>
-        </TouchableOpacity>
-
-        {showSaveButton ? (
-          <TouchableOpacity
-            style={styles.saveButton}
-            onPress={handleSavePreferences}
-          >
-            <View style={styles.saveButtonContent}>
-              <Text style={styles.saveButtonText}>Save</Text>
-              <Icon
-                name="check"
-                size={20}
-                color="#fff"
-                style={styles.checkIcon}
-              />
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={styles.disabledSaveButton} disabled>
-            <Text style={styles.saveButtonText}>Save</Text>
-          </TouchableOpacity>
-        )}
-
-        {/* Modal for entering phone number */}
-        <Modal visible={isModalVisible} transparent animationType="fade">
-          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalBackground}>
-              <View style={styles.modalContent}>
-                <TouchableOpacity
-                  style={styles.closeModalIcon}
-                  onPress={closeModalAndDeselectOption}
-                >
-                  <Icon name="close" size={24} color="gray" />
-                </TouchableOpacity>
-                <Text style={styles.modalTitle}>Enter Your Phone Number</Text>
-
-                {/* South African flag and number format */}
-                <View style={styles.phoneNumberInputContainer}>
-                  <Image
-                    source={require("../../assets/icons/SouthAfricaFlag.png")}
-                    style={styles.flagIcon}
-                  />
-                  <Text style={styles.phoneNumberPrefix}>+27</Text>
-                  <TextInput
-                    style={styles.modalInput}
-                    placeholder="Phone Number"
-                    value={phoneNumber}
-                    onChangeText={setPhoneNumber}
-                    keyboardType="phone-pad"
-                  />
-                </View>
-
-                <TouchableOpacity
-                  style={styles.modalNextButton}
-                  onPress={() => savePhoneNumber(phoneNumber)}
-                >
-                  <Text style={styles.saveButtonText}>Next</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.modalCancelButton}
-                  onPress={closeModalAndDeselectOption} // Call the close function when canceling from the modal
-                >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
 
         <Modal
           visible={isVerificationModalVisible}
@@ -277,13 +201,12 @@ const NotificationPreferences = () => {
                   style={styles.closeModalIcon}
                   onPress={() => {
                     setSelectedOption(null);
-                    setShowSaveButton(false);
                     setVerificationModalVisible(false);
                   }}
                 >
                   <Icon name="close" size={24} color="gray" />
                 </TouchableOpacity>
-                <Text style={styles.modalTitle}>Enter Verification Code</Text>
+                <Text style={styles.modalTitle}>Confirm your email</Text>
 
                 <TextInput
                   style={styles.verificationInput}
@@ -305,7 +228,7 @@ const NotificationPreferences = () => {
                   style={styles.modalCancelButton}
                   onPress={() => {
                     setSelectedOption(null);
-                    setShowSaveButton(false);
+
                     setVerificationModalVisible(false);
                   }}
                 >
@@ -355,22 +278,16 @@ const NotificationPreferences = () => {
                   style={styles.closeModalIcon}
                   onPress={() => {
                     setSelectedOption(null);
-                    setShowSaveButton(false);
+
                     setEmailVerificationModalVisible(false);
                   }}
                 >
                   <Icon name="close" size={24} color="gray" />
                 </TouchableOpacity>
 
-                <Text style={styles.modalTitle}>Enter Verification Code</Text>
+                <Text style={styles.modalTitle}>Confirm subscription</Text>
+                <Text style={styles.subText}>An email was sent to you with a link to confirm your email subscription to notifcations.</Text>
 
-                <TextInput
-                  style={styles.verificationInput}
-                  placeholder="Verification Code"
-                  keyboardType="numeric"
-                  value={enteredEmailVerificationCode}
-                  onChangeText={setEnteredEmailVerificationCode}
-                />
 
                 <TouchableOpacity
                   style={styles.modalNextButton}
@@ -378,20 +295,14 @@ const NotificationPreferences = () => {
                     handleEmailVerificationCode(enteredEmailVerificationCode)
                   }
                 >
-                  <Text style={styles.saveButtonText}>Verify</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.modalCancelButton}
-                  onPress={handleCancelEmailVerification}
-                >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                  <Text style={styles.saveButtonText}>Okay</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </TouchableWithoutFeedback>
         </Modal>
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
@@ -418,12 +329,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 12,
     marginBottom: 12,
+    alignItems: "center"
   },
   optionText: {
     color: "#e32f45",
   },
   selectedOption: {
     borderColor: "#e32f45",
+    alignItems: "center"
   },
   saveButton: {
     backgroundColor: "#e32f45",
@@ -533,6 +446,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 20,
   },
+  subText: {
+    marginBottom: 20
+  }
 });
 
 export default NotificationPreferences;

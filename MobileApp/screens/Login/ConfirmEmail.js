@@ -15,6 +15,7 @@ import { useRoute } from "@react-navigation/native";
 import { useState } from "react";
 import { Auth } from "aws-amplify";
 
+
 const { height } = Dimensions.get("window");
 
 const ConfirmEmail = ({ navigation }) => {
@@ -31,7 +32,7 @@ const ConfirmEmail = ({ navigation }) => {
 
     setLoading(true);
     try {
-      response = await Auth.confirmSignUp(email, code);
+      response = await Auth.confirmSignUp(email, code, { clientMetadata: { role:"Student" } });
 
       //need to add user to a user group here?
       Alert.alert("Success", "Login to access your account.");
@@ -63,6 +64,12 @@ const ConfirmEmail = ({ navigation }) => {
           <Text style={styles.subtitle}>
             Enter the code sent to your email to confirm your account.
           </Text>
+          <ImageBackground
+            resizeMode="contain"
+            //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+            source={require("../../assets/icons/ConfirmAccount.png")}
+            style={styles.image}
+          />
         </View>
 
         <View style={styles.inputContainer}>
@@ -75,14 +82,14 @@ const ConfirmEmail = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity style={styles.signInButton} onPress={onVerifyPressed}>
+        <TouchableOpacity style={styles.signInButton} onPress={onVerifyPressed} testID="verify-button">
           <Text style={styles.signInButtonText}>
             {loading ? "Verifying..." : "Verify Account"}
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.resendButton} onPress={onResendPressed}>
-          <Text style={styles.resendButtonText}>
+        <TouchableOpacity style={styles.resendButton} onPress={onResendPressed} testID="resend-button">
+          <Text style={styles.resendButtonText} >
             {" "}
             {loadingResend ? "Resending..." : "Resend Code"}
           </Text>
@@ -129,7 +136,7 @@ const styles = StyleSheet.create({
     maxWidth: "70%",
   },
   inputContainer: {
-    marginVertical: 40,
+    marginVertical: 20,
   },
   input: {
     fontSize: 15,
@@ -191,6 +198,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontWeight: "bold",
+  },
+  image: {
+    width: 200, // Specify the desired width
+    height: 200, // Specify the desired height
+    alignSelf: "center",
   },
 });
 

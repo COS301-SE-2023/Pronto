@@ -37,5 +37,4 @@ amplify configure project \
 --amplify $AMPLIFY \
 --frontend $FRONTEND \
 --providers $PROVIDERS \
---codegen $CODEGEN \
---yes
+--codegen $CODEGEN 

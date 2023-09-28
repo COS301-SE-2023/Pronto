@@ -16,21 +16,25 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { searchCourses, listStudents, listInstitutions } from "../../graphql/queries"
-import { createEnrollment, createStudent, deleteEnrollment, updateStudent, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { searchCourses ,getStudent} from "../../graphql/queries"
+import { createEnrollment,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { useStudent } from "../../ContextProviders/StudentContext";
 
-const EditTimetable = ({ onSearch }) => {
+const EditTimetable = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
   const [courses, setCourses] = useState([])
-  const [lectures, setLectures] = useState(["L01", "L02", "L03", "L04", "L05", "L06", "L07", "L08", "L09"])
-  const [tutorials, setTutorials] = useState(["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"])
-  const [practicals, setPracticals] = useState(["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"])
-  const [timetable, setTimetable] = useState(null)
+  const lectures = ["L01", "L02", "L03", "L04", "L05", "L06", "L07", "L08", "L09"];
+  const tutorials = ["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"];
+  const practicals = ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"];
   const [activities, setActivities] = useState([])
-  const [student, setStudent] = useState(null)
-  const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
 
+  const{student,updateStudent} = useStudent();
+  const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
+  const [isSaving, setIsSaving] = useState(false);
+
+  const error = "There appear to be network issues.Please try again later"
+  
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module);
@@ -43,19 +47,22 @@ const EditTimetable = ({ onSearch }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-
-  const addToModules = (module) => {
+  const addToModules = async(module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [module, ...prevModules]);
+
+    } else {
+      Alert.alert("Module Already Added", "This module is already added to your selection.");
     }
     setInput("");
+    setCourses([]);
   };
+
 
   const [input, setInput] = useState("");
 
   const handleSearch = async (text) => {
-    setInput(text)
-    let error = "There appear to be network issues. Please try again later"
+    setInput(text);
 
     if (text !== null) {
       try {
@@ -63,266 +70,243 @@ const EditTimetable = ({ onSearch }) => {
           query: searchCourses,
           variables: {
             filter: {
-              coursecode: {
-                matchPhrasePrefix: text
+              and : [
+                      {
+                        coursecode: {
+                          matchPhrasePrefix: text
+                        }
+                      } ,
+                      {
+                        institutionId:{
+                          eq:student.institutionId
+                        }
+                      }
+                    ]
               }
             }
-          },
-          authMode: "API_KEY"
-        })
-        setCourses(search.data.searchCourses.items)
+          })
+        
+        setCourses(search.data.searchCourses.items);
       } catch (e) {
-        Alert.alert(error)
+        Alert.alert(error);
       }
     }
   }
 
-  const fetchCourses = async () => {
-    let error = "There appear to be network issues.Please try again later"
+  const fetchCourses = async () =>{
     try {
-      setIsLoading(true); // Set loading state to true during API call
-      let user = await Auth.currentAuthenticatedUser()
-      let studentEmail = user.attributes.email;
+      let stu=student;
+      if(student===null || student.id===undefined){
+        setIsLoading(true); // Set loading state to true during API call
+        const user = await Auth.currentAuthenticatedUser();
+        stu=await API.graphql({
+          query:getStudent,
+          variables:{id:user.attributes.sub}
+        }) 
+        stu=stu.data.getStudent;
+        if(stu===null){
+          setIsLoading(false);
+          return;
+        }
+        updateStudent(stu);
+      }
 
-      //if(student===null){
-      //  setActivities([])
-      let act = []
-      let stu = await API.graphql({
-        query: listStudents,
-        variables: {
-          filter: {
-            email: {
-              eq: studentEmail
-            }
+      let c = [];
+      let act= [];
+        
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
+        c.push(stu.enrollments.items[i].course);
+      }
+      setSelectedModules(c);
+        
+      if(stu.timetable===null){
+        setActivities([]);
+        setIsLoading(false);
+        return;
+      }
+
+      for (let i = 0; i < stu.timetable.activityId.length; i++) {
+        for (let j = 0; j < c.length; j++) {
+          let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+          if (index !== undefined) {
+            act.push(index);
+            break;
           }
-        },
-        authMode: "API_KEY"
-      })
-
-      // setStudent(stu.data.listStudents.items[0])
-      let found = false
-      for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-        if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-          stu = stu.data.listStudents.items[i]
-          found = true
-          break
         }
       }
-
-      //Student not found so create them
-      if (found === false) {
-        let domain = studentEmail.split("@")[1]
-
-        //Find Institution via domain
-        let institution = await API.graphql({
-          query: listInstitutions,
-          variables: {
-            filter: {
-              domains: {
-                contains: domain
-              }
-            }
-          },
-          authMode: "API_KEY",
-        })
-
-        //Institution not found
-        if (institution.data.listInstitutions.items.length === 0) {
-          error = "Could not determine institution"
-          throw Error("")
-        }
-
-        institution = institution.data.listInstitutions.items[0]
-
-        //Create student
-        let newStudent = {
-          institutionId: institution.id,
-          firstname: user.attributes.name,
-          lastname: user.attributes.family_name,
-          userRole: "Student",
-          email: studentEmail
-        }
-        let create = await API.graphql({
-          query: createStudent,
-          variables: { input: newStudent },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
-      }
-
-      //Student  found
-      else {
-
-        let c = []
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          c.push(stu.enrollments.items[i].course)
-        }
-
-        setSelectedModules(c)
-        setTimetable(stu.timetable)
-        if (stu.timetable !== null) {
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < c.length; j++) {
-              let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-              if (index !== undefined) {
-                act.push(index)
-                break;
-              }
-            }
-          }
-          setActivities(act)
-          //setStudent(stu)
-        }
-        setStudent(stu)
-
-      }
+        
+      setActivities(act);
       setIsLoading(false); // Set loading state to false after courses are fetched
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
-      Alert.alert(error)
+      //Alert.alert(error);
+      console.log("From edit");  
+      console.log(e); 
 
     }
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchCourses();
-  }, [])
+  },[]);
 
   const handleSave = async () => {
-
-    let error = "There appear to be network issues.Please try again later"
     try {
       //Create enrollment if it doesnt exist
-      let activityIds = []
+      setIsSaving(true);
+      let activityIds = [];
 
-
+      //Extract activity Ids
       for (let i = 0; i < activities.length; i++) {
         if (activities[i] != undefined) {
-          activityIds.push(activities[i].id)
+          activityIds.push(activities[i].id);
         }
       }
-
-
-      if (student === null) {
-        fetchCourses()
-        throw Error()
-      }
-      if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.items.filter((item) => item.courseId === selectedModule.id).length === 0) {
-        enroll = {
+        if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.items.filter((item) => item.courseId === selectedModule.id).length === 0) {
+        let enroll = {
           courseId: selectedModule.id,
           studentId: student.id,
-        }
+        };
+
         let newEnrollment = await API.graphql({
           query: createEnrollment,
-          variables: { input: enroll },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
-
-
-        let s = student
-        student.enrollments.items.push(newEnrollment.data.createEnrollment)
+          variables: { input: enroll }
+        });
+       
+        let s = student;
+      
+        student.enrollments.items.push(newEnrollment.data.createEnrollment);
+       
+       updateStudent(student);
+        
       }
-      if (timetable === null) {
+      
+      //Create a new timetable if it doesnt exist
+      if (student.studentTimetableId === null) {
         let newTimetable = {
           studentId: student.id,
           activityId: activityIds,
-        }
+        };
 
         let create = await API.graphql({
           query: createTimetable,
           variables: { input: newTimetable },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
+        })
+        let a=await API.graphql({
+          query:updateStudentInfo,
+          variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id}}
         })
 
-        let update = await API.graphql({
-          query: updateStudent,
-          variables: { input: { id: student.id, studentTimetableId: create.data.createTimetable.id } },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
         let s = student
-        s.timetable = create.data.createTimetable
-        s.timetableId = s.timetable.id
-
-        setStudent(s)
-        setTimetable(timetable)
+        s.timetable = create.data.createTimetable;
+        s.studentTimetableId = s.timetable.id;
+        student.timetable=create.data.createTimetable;
+        student.studentTimetableId=create.data.createTimetable.id;
+        student.timetable.activities=activities;
+         updateStudent(student);
+        
       }
+
+      //Update existing timetable
       else {
 
-        if (student === null) {
-          fetchCourses()
-          throw Error()
-        }
         let newTimetable = {
           id: student.studentTimetableId,
           studentId: student.id,
           activityId: activityIds
         }
 
-
         let update = await API.graphql({
           query: updateTimetable,
-          variables: { input: newTimetable },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
+          variables: { input: newTimetable }
         })
-
+        
         let s = student
-        s.timetable = update.data.updateTimetable
-        let upd = await API.graphql({
-          query: updateStudent,
-          variables: { input: { id: student.id, studentTimetableId: update.data.updateTimetable.id } },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
-        setStudent(s)
-        setTimetable(update.data.updateTimetable)
+        s.timetable = update.data.updateTimetable;
+        student.timetable=update.data.updateTimetable;
+        student.timetable.activities=activities;
+        updateStudent(student);
+        // s= await updateStudent(student);
+        // student.timetable.activities=s.timetable.activities;
       }
-      toggleModal(null)
+      setIsSaving(false);
+      toggleModal(null);
+
     } catch (e) {
-      Alert.alert(error)
+      console.log("From save");
+      console.log(e);
+      setIsSaving(false);
+      Alert.alert(error);
     }
   }
-  const addActivity = (activity) => {
+
+  const addActivity = async (activity) => {
     let rows = [...activities]
     for (let i = 0; i < activities.length; i++) {
       if (activities[i].activityname === activity.activityname && activities[i].courseId === activity.courseId) {
         rows.splice(i, 1)
       }
     }
+   
     rows.push(activity)
-    setActivities(rows)
+    //student.timetable.activities=rows;
+    //updateStudent(student);
+    //let s=await updateStudent(student);
+   // student.timetable.activities=s.timetable.activities;
+    setActivities(rows);
   }
+
+
   const oneModule = ({ item }) => {
     const handleDelete = async () => {
+      Alert.alert(
+        "Confirm Deletion",
+        "Are you sure you want to remove this module?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            style: "destructive",
+            onPress: async () => {
+              let s = student;
+              let del;
+              let act = activities.filter(
+                (activity) => activity.courseId !== item.id
+              );
+            
+              let error = "Failed to remove course. Please try again later";
 
-      let s = student
-      let del
-      let act = activities.filter((activity) => activity.courseId !== item.id)
-      let error = "Failed to remove course. Please try again later"
+              try {
+                for (let i = 0; i < student.enrollments.items.length; i++) {
+                  if (student.enrollments.items[i].courseId === item.id) {
+                    del = await API.graphql({
+                      query: deleteEnrollment,
+                      variables: { input: { id: student.enrollments.items[i].id } }
+                    });
 
-      try {
-        for (let i = 0; i < student.enrollments.items.length; i++) {
-          if (student.enrollments.items[i].courseId === item.id) {
-
-            del = await API.graphql({
-              query: deleteEnrollment,
-              variables: { input: { id: student.enrollments.items[i].id } },
-              authMode: "AMAZON_COGNITO_USER_POOLS",
-            })
-
-            student.enrollments.items.splice[i, 1]
-
-            break
-          }
-        }
-        await handleSave()
-        setStudent(student)
-        setSelectedModules((prevModules) =>
-          prevModules.filter((module) => module.id !== item.id)
-        );
-        setActivities(act)
-        setSelectedModule(null)
-      } catch (e) {
-        Alert.alert(error)
-      }
+                    student.enrollments.items.splice(i, 1);
+                    break;
+                  }
+                }
+                await handleSave();
+                //updateStudent(student);
+                setSelectedModules((prevModules) =>
+                  prevModules.filter((module) => module.id !== item.id)
+                );
+                setActivities(act);
+                setSelectedModule(null);
+              } catch (e) {
+                Alert.alert(error);
+              }
+            },
+          },
+        ]
+      );
     };
+
 
     return (
       <View style={{ margin: 20 }}>
@@ -335,7 +319,7 @@ const EditTimetable = ({ onSearch }) => {
             }}
           >
             <Card.Title
-              title={item.coursecode}
+              title={item?.coursecode}
               titleStyle={{
                 fontSize: 20,
                 fontWeight: "bold",
@@ -401,7 +385,7 @@ const EditTimetable = ({ onSearch }) => {
           value={input}
           onChangeText={(text) => handleSearch(text)}
           style={{ fontSize: 15, width: "100%" }}
-          placeholder="Search for your modules"
+          placeholder="Search for your courses"
         />
 
       </View>
@@ -433,7 +417,7 @@ const EditTimetable = ({ onSearch }) => {
                   color: "#e32f45",
                 }}
               >
-                Fetching your modules...
+                Fetching your courses...
               </Text>
             </View>
           ) : ( // Display the "You have no modules" text after loading is completed and no courses are found
@@ -453,7 +437,7 @@ const EditTimetable = ({ onSearch }) => {
                     color: "#e32f45",
                   }}
                 >
-                  You have no modules
+                  You have no courses
                 </Text>
               </View>
             ) : null
@@ -476,8 +460,8 @@ const EditTimetable = ({ onSearch }) => {
           <ScrollView contentContainerStyle={styles.modalContent}>
             {selectedModule && (
               <View key={selectedModule.id}>
-                <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
-                {/* <Text style={styles.moduleName}>{selectedModule.name}</Text>
+                <Text style={styles.moduleCode}>{selectedModule?.coursecode}</Text>
+                
                 
                 {/* Display lectures */}
                 {lectures.map((lecture, i) => (
@@ -497,6 +481,7 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===lecture)[0]}
                   />
                 ))}
 
@@ -518,12 +503,13 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===tutorial)[0]}
                   />
                 ))}
 
                 {/*Display practicals*/}
                 {practicals.map((practical, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname == practical).length > 0 &&
+                  selectedModule.activity.items.filter(item => item.activityname === practical).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Practical"}
@@ -539,6 +525,7 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===practical)[0]}
                   />
                 ))}
               </View>
@@ -549,14 +536,22 @@ const EditTimetable = ({ onSearch }) => {
             mode="contained"
             style={{
               backgroundColor: "#e32f45",
-              marginVertical: 10,
-              marginHorizontal: 20,
+              width: "70%",
+              margin: "5%",
+              textAlign: "center",
+              color: "white",
             }}
+
             outlined={true}
-            onPress={() => handleSave()}
+            disabled={isSaving}
+            onPress={async() => { await handleSave()}}
             testID="save-button"
           >
-            Save
+            {isSaving ? (
+              <Text style={{ color: "white" }}>Saving...</Text> // Set white color for "Saving..." text
+            ) : (
+              "Save"
+            )}
           </Button>
 
 

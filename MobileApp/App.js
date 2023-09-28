@@ -12,10 +12,15 @@ import ConfirmEmail from "./screens/Login/ConfirmEmail";
 import PrivacyPolicyScreen from "./screens/Settings/PrivacyPolicy";
 import ProfilePage from "./screens/Settings/Profile";
 import AboutScreen from "./screens/Settings/About";
+import HelpScreen from "./screens/Settings/HelpScreen";
 import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, View, Text } from "react-native";
-
+import { ActivityIndicator, View, ImageBackground, Text } from "react-native";
+import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext"
+import { StudentProvider, useStudent } from "./ContextProviders/StudentContext";
+import { getStudent, listInstitutions } from "./graphql/queries";
+import { createStudent } from "./graphql/mutations";
+import { API } from "aws-amplify"
 import { Amplify } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
@@ -28,15 +33,53 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState(undefined);
-
+  const [student, setStudent] = useState(null);
   const checkUser = async () => {
     try {
       const authUser = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
+
+      console.log({ authUser });
+      if (student === null) {
+        const email = authUser.attributes.email;
+        let studentInfo = await API.graphql({
+          query: getStudent,
+          variables: { id: authUser.attributes.sub }
+        });
+
+        studentInfo = studentInfo.data.getStudent;
+        setStudent(studentInfo);
+        if (studentInfo === null) {
+
+          try {
+            //Create student
+            let name = authUser.attributes.name.split(",")
+            let newStudent = {
+              id: authUser.attributes.sub,
+              institutionId: authUser.attributes.family_name,
+              firstname: name[0],
+              lastname: name[1],
+              userRole: "Student",
+              email: email
+            }
+
+            let create = await API.graphql({
+              query: createStudent,
+              variables: { input: newStudent }
+            })
+
+            setStudent(create.data.createStudent);
+
+          } catch (error) {
+            console.log(e);
+          }
+        }
+      }
       setUser(authUser);
     } catch (e) {
       setUser(null);
+      console.log(e);
     }
   };
 
@@ -47,6 +90,7 @@ export default function App() {
   useEffect(() => {
     const listener = (data) => {
       if (data.payload.event === "signIn" || data.payload.event === "signOut") {
+        //console.log(data.payload.event);
         checkUser();
       }
     };
@@ -56,36 +100,70 @@ export default function App() {
 
   if (user === undefined) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text
+      <StudentProvider>
+        <View
           style={{
-            color: "#e32f45",
-            fontSize: 24,
-            fontWeight: 200,
-            marginBottom: 20,
-            textAlign: "center",
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          Loading...
-        </Text>
-        <ActivityIndicator color={"#e32f45"} size={"large"} />
-      </View>
+
+          <ImageBackground
+            resizeMode="contain"
+
+            source={require("./assets/splash.gif")}
+            style={{ width: 403, height: 508, alignSelf: "center" }}
+          />
+
+          <View style={{ display: "flex", flexDirection: "row" }}>
+            <ActivityIndicator color={"#e32f45"} size={"small"} />
+            <Text style={{ color: "#e32f45" }}> Checking account details...</Text>
+
+          </View>
+
+
+        </View>
+      </StudentProvider>
     );
   }
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {user ? (
-          <>
+    <StudentProvider>
+      <AnnouncementProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={Register}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ResetPassword"
+              component={ResetPassword}
+              options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+              name="ConfirmEmail"
+              component={ConfirmEmail}
+              options={{ headerShown: false }}
+            />
+
             <Stack.Screen
               name="Tabs"
               component={Tabs}
+              initialParams={student}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -126,42 +204,23 @@ export default function App() {
               component={AboutScreen}
               options={{ headerShown: true }}
             />
-          </>
-        ) : (
-          <>
+
+
             <Stack.Screen
-              name="Welcome"
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
+              name="Help"
+              component={HelpScreen}
+              options={{ headerShown: true }}
             />
-            <Stack.Screen
-              name="Register"
-              component={Register}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ResetPassword"
-              component={ResetPassword}
-              options={{ headerShown: false }}
-            />
+
             <Stack.Screen
               name="VerifyCode"
               component={VerifyCode}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="ConfirmEmail"
-              component={ConfirmEmail}
-              options={{ headerShown: false }}
-            />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AnnouncementProvider>
+    </StudentProvider >
   );
 }

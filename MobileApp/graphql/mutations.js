@@ -6,23 +6,10 @@ export const createTimetable=`mutation CreateTimetable(
     id
     studentId
     activityId
-    student {
-      institutionId
-      id
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      studentTimetableId
-      owner
-    }
     activities {
       nextToken
     }
-    createdAt
-    updatedAt
+   
   }
 }`
 
@@ -34,18 +21,6 @@ export const updateTimetable=`mutation UpdateTimetable(
     id
     studentId
     activityId
-    student {
-      institutionId
-      id
-      firstname
-      lastname
-      userRole
-      email
-      createdAt
-      updatedAt
-      studentTimetableId
-      owner
-    }
     activities {
       nextToken
     }
@@ -68,11 +43,31 @@ export const createStudent=`mutation CreateStudent(
       studentId
       activityId
     }
-    enrollments {
-      nextToken
+    enrollments { 
+      items{
+        id
+        courseId
+        course{ 
+          id
+          coursecode
+          activity{
+            items{
+              courseId
+              activityname
+              coordinates
+              id
+              day
+              start
+              end
+              venue 
+              course{
+                coursecode
+              }
+            }
+          }
+        }
+      }
     }
-    createdAt
-    updatedAt
     studentTimetableId
   }
 }`
@@ -86,7 +81,29 @@ export const createEnrollment=`mutation CreateEnrollment(
     id
     studentId
     courseId
-    owner
+    id
+    courseId
+    _version
+    _deleted
+    course{ 
+      id
+      coursecode
+      activity{
+        items{
+          courseId
+          activityname
+          coordinates
+          id
+          day
+          start
+          end
+          venue
+          course {
+            coursecode
+          } 
+        }
+      }
+    }
   }
 }
 `
@@ -101,7 +118,7 @@ export const deleteEnrollment=`mutation DeleteEnrollment(
   }
 }`
 
-export const updateStudent=`mutation UpdateStudent(
+export const updateStudentInfo=`mutation UpdateStudent(
   $input: UpdateStudentInput!
   $condition: ModelStudentConditionInput
 ) {
@@ -155,3 +172,39 @@ export const deleteStudent=`mutation DeleteStudent(
     owner
   }
 }`
+
+export const createNotificationPreferance = `
+  mutation CreateNotificationPreferance(
+    $input: CreateNotificationPreferanceInput!
+    $condition: ModelNotificationPreferanceConditionInput
+  ) {
+    createNotificationPreferance(input: $input, condition: $condition) {
+      studentId
+      type
+      enpointID
+      deviceID
+      id
+      createdAt
+      updatedAt
+      userId
+    }
+  }
+`;
+
+export const updateNotificationPreferance = /* GraphQL */ `
+  mutation UpdateNotificationPreferance(
+    $input: UpdateNotificationPreferanceInput!
+    $condition: ModelNotificationPreferanceConditionInput
+  ) {
+    updateNotificationPreferance(input: $input, condition: $condition) {
+      studentId
+      type
+      enpointID
+      deviceID
+      id
+      createdAt
+      updatedAt
+      userId
+    }
+  }
+`;

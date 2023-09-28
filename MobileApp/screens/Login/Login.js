@@ -8,10 +8,17 @@ import {
   ImageBackground,
   Dimensions,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
+import { SelectList } from "react-native-dropdown-select-list";
+import institutionInfo from "../../assets/data/universityInfo.json";
+import { listInstitutions } from "../../graphql/queries"
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Auth } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
+import { getStudent } from "../../graphql/queries";
+import { createStudent } from "../../graphql/mutations";
+import { useStudent } from "../../ContextProviders/StudentContext";
 
 const { height } = Dimensions.get("window");
 
@@ -19,9 +26,20 @@ const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { student, updateStudent } = useStudent();
 
   //validate email input for sign in and sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
+
+  //select instituition
+  const [institutionId, setInstitutionId] = useState("");
+  const [instituions, setInstitutions] = useState([]);
+
+  //Validate institutionId
+  const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
+  const validateInstitutionId = () => {
+    setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
+  };
 
   const validateEmail = (value) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,6 +49,7 @@ const Login = ({ navigation }) => {
 
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
+
   const onSignInPressed = async (data) => {
     if (loading) {
       return;
@@ -38,15 +57,52 @@ const Login = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await Auth.signIn(username, password, {
-        role: "Student",
-      });
-      //  navigation.navigate("Timetable");
+      const signInObject = {
+        username: username,
+        password: password,
+        validationData: {
+          role: process.env.REACT_APP_STUDENT_ROLE,
+        }
+      }
+
+      const user = await Auth.signIn(signInObject);
+      let studentInfo = student;
+      if (student === null) {
+        const email = user.attributes.email;
+        studentInfo = await API.graphql({
+          query: getStudent,
+          variables: { id: user.attributes.sub }
+        });
+        studentInfo = studentInfo.data.getStudent;
+        updateStudent(studentInfo);
+        if (studentInfo === null) {
+
+          //Create student
+          let name = user.attributes.name.split(",")
+          let newStudent = {
+            id: user.attributes.sub,
+            institutionId: user.attributes.family_name,
+            firstname: name[0],
+            lastname: name[1],
+            userRole: "Student",
+            email: email
+          }
+
+          let create = await API.graphql({
+            query: createStudent,
+            variables: { input: newStudent }
+          })
+
+          studentInfo = create.data.createStudent;
+          updateStudent(create.data.createStudent);
+        }
+      }
+      navigation.navigate("Tabs", studentInfo);
     } catch (e) {
       Alert.alert("Sign in error", e.message);
+      setLoading(false);
     }
 
-    setLoading(false);
   };
 
   //validate password on sign in
@@ -94,6 +150,11 @@ const Login = ({ navigation }) => {
             </View>
           )}
         </View>
+        <View style={styles.inputContainer}>
+          {/* Update the boxStyles prop for SelectList */}
+
+        </View>
+
 
         <View style={styles.inputContainer}>
           <TextInput
@@ -140,6 +201,7 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center"
   },
   contentContainer: {
     flex: 1,
@@ -158,7 +220,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subtitle: {
-    fontWeight: "bold",
+    fontWeight: "600",
     textAlign: "center",
     fontSize: 15,
     maxWidth: "70%",
@@ -195,6 +257,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
+    elevation: 5,
   },
   createAccountButton: {
     padding: 10,
