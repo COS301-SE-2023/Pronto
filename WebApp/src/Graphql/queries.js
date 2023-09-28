@@ -68,12 +68,13 @@ export const listInstitutions=`query ListInstitutions(
       name
       domains
       lectureremails
-      _version
-      _deleted
-      adminId
-      admin{
+      admin { 
+        id
+        firstname
+        lastname
         email
       }
+      _deleted
     }
     nextToken
   }
