@@ -47,13 +47,15 @@ function Login() {
         },
       });
 
-      if (lec.data.listLecturers.items.length > 0) {
+      if (lec.data.listLecturers.items.length > 0 ) {
+        if(lec.data.listLecturers.items[0]._deleted!==true){
         lec = lec.data.listLecturers.items[0];
         try {
           if (lec.institution.logo !== null) {
             lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
 
           }
+          
         } catch (error) {
 
         }
@@ -63,6 +65,7 @@ function Login() {
       else {
         throw Error(fetchError);
       }
+    }
     } catch (error) {
       await Auth.signOut();
       throw Error(fetchError);
@@ -70,15 +73,12 @@ function Login() {
 
   }
   const fetchInstitutions = async () => {
-
+    console.log("fetch");
     try {
       let inst = await API.graphql({
         query: listInstitutions,
         variables: {
           filter:{
-            _deleted:{
-              eq:null
-            }
           }
         },
         authMode: "API_KEY"

@@ -12,10 +12,10 @@ import { useAdmin } from "../../ContextProviders/AdminContext";
 import MobileView from "../../Homepage/MobileView";
 
 function Login() {
-  const [signIn, toggle] = React.useState(true);
+  const [signIn, toggle] = useState(true);
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
   const [firstname,setFirstName] = useState("");
@@ -23,24 +23,16 @@ function Login() {
 
   const [institutionName,setInstitutionName] = useState("")
   //sign up states
-  const [name, setName] = React.useState("");
+  const [name, setName] = useState("");
 
-  const [signUpPassword, setSignUpPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
 
   const navigate = useNavigate();
 
 
   //select institution
-   const [institutionId, setInstitutionId] = React.useState("");
-  const [isInstitudeSelected, setIsInstitudeSelected] = React.useState(false);
-
-  const handleInstitutionSelection = (event) => {
-    setInstitutionId(event.value);
-    setInstitutionName(event.label)
-    setIsInstitudeSelected(true);
-  }; 
-
+   const [institutionId, setInstitutionId] = useState("");
+ 
   const [loading, setLoading] = useState(false);
  // const [institutionName, setInstitutionName] = useState("");
   const [institutions, setInstitutions] = useState([])
@@ -88,7 +80,9 @@ function Login() {
 
       let inst = await API.graphql({
         query: listInstitutions,
-        variables: {},
+        variables: {
+       
+        },
         authMode: "API_KEY"
       });
       inst = inst.data.listInstitutions.items;
@@ -105,9 +99,9 @@ function Login() {
     }
   }
 
-  useEffect(() => {
-    fetchInstitutions();
-  }, [])
+  // useEffect(() => {
+  //   fetchInstitutions();
+  // }, [])
 
   //function for signing in
   const onSignInPressed = async (event) => {
@@ -134,11 +128,24 @@ function Login() {
         }
       }
 
-      await Auth.signIn(signInObject);
+      const user=await Auth.signIn(signInObject);
       setsignInError("");
+      const newPassword = password
+    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      const loggedInUser = await Auth.completeNewPassword(
+        user, 
+        newPassword, 
+        {
+          family_name: "  "
+          
+        }
+      )
 
-      await fetchAdmin().then(() => navigate("/institution/dashboard"))
-      // navigate("/institution/dashboard");
+      console.log(loggedInUser);
+    }
+      console.log(user);
+      //await fetchAdmin().then(() => navigate("/institution/dashboard"))
+       navigate("/institution/dashboard");
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
@@ -208,32 +215,36 @@ function Login() {
     }catch(error){
       console.log(error);
     }
+    
+
+      //await Auth.signUp(signInObject);
 
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
     } catch (e) {
+      console.log(e);
 
-      let n=firstname+" "+lastname;
-      const application = {
-        name: institutionName,
-        firstname: n,
-        email: email,
-        status: "PENDING"
-      }
+    //   let n=firstname+" "+lastname;
+    //   const application = {
+    //     name: institutionName,
+    //     firstname: n,
+    //     email: email,
+    //     status: "PENDING"
+    //   }
 
-      try{
-      await API.graphql({
-        query: createAdminApplication,
-        variables: {
-          input: application
-        },
-        authMode: "API_KEY"
-      })
-    }catch(error){
-      console.log(error);
-    }
+    //   try{
+    //   await API.graphql({
+    //     query: createAdminApplication,
+    //     variables: {
+    //       input: application
+    //     },
+    //     authMode: "API_KEY"
+    //   })
+    // }catch(error){
+    //   console.log(error);
+    // }
       // setsignUpError(e.message);
-      setsignUpError("Your application has been sent")
+//      setsignUpError("Your application has been sent")
     }
     setLoading(false);
   };
