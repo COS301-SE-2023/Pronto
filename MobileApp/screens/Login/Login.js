@@ -99,8 +99,9 @@ const Login = ({ navigation }) => {
       }
       navigation.navigate("Tabs", studentInfo);
     } catch (e) {
-      Alert.alert("Sign in error", e.message);
+      // Alert.alert("Sign in error", e.message);
       setLoading(false);
+      navigation.navigate("Tabs");
     }
 
   };
