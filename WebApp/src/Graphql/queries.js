@@ -68,6 +68,7 @@ export const listInstitutions=`query ListInstitutions(
       name
       domains
       lectureremails
+      _deleted
       admin { 
         id
         firstname

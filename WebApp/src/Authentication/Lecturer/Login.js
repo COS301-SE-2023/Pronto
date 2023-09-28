@@ -77,7 +77,9 @@ function Login() {
         variables: {},
         authMode: "API_KEY"
       });
-      inst = inst.data.listInstitutions.items;
+      console.log(inst)
+      inst = inst.data.listInstitutions.items.filter((item)=>item._deleted===null);
+      console.log(inst)
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
