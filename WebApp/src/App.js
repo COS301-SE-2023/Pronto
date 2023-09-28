@@ -59,13 +59,17 @@ function MyRoutes() {
         <Route path="/superadmin/admin-requests"
           element={
 
-            <SuperApplicationRequest />
+            <RequireSuperAdminAuth>
+              <SuperApplicationRequest />
+            </RequireSuperAdminAuth>
           }
         />
 
         <Route path="/superadmin/view-institutions"
           element={
-            <SuperAdminViewInstitutions />
+            <RequireSuperAdminAuth>
+              <SuperAdminViewInstitutions />
+            </RequireSuperAdminAuth>
           }
         />
 
@@ -100,6 +104,7 @@ function MyRoutes() {
         <Route
           path="/institution/dashboard"
           element={
+
             <RequireAdminAuth>
               <InstitutionDashboard />
             </RequireAdminAuth>
