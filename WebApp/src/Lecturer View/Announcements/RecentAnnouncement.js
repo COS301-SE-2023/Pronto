@@ -108,7 +108,6 @@ export default function RecentAnnouncement() {
   const [pushStatus, setPushStatus] = useState("");
 
 
-
   const handleInfoModalOpen = () => {
     setInfoModalOpen(true);
     //setting them to defaults, remove once integrated
@@ -132,10 +131,6 @@ export default function RecentAnnouncement() {
   const handleConfirmDelete = async (key) => {
     setIsDeleting(true);
     try {
-      let del = await API.graphql({
-        query: deleteAnnouncement,
-        variables: { input: { id: announcement[key].id,_version:announcement[key]._version } },
-      })
       const rows = [...announcement]
       rows.splice(key, 1)
       setAnnouncement(rows)
@@ -152,60 +147,9 @@ export default function RecentAnnouncement() {
 
   let limit = 5;
   const fetchAnnouncements = async () => {
-    try {
-      let lec = lecturer;
-      //Lecturers information was not passed successfuly so fecth it again
-      if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
-        let user = await Auth.currentAuthenticatedUser();
-        let lecturer_email = user.attributes.email
-        lec = await API.graphql({
-          query: listLecturers,
-          variables: {
-            filter: {
-              email: {
-                eq: lecturer_email
-              }
-            }
-          },
-        });
-        lec = lec.data.listLecturers.items[0];
-        await setLecturer(lec);
-      }
-
-      if (lec.courses.items.length > 0) {
-        if (announcement.length === 0) {
-          setLoading(true);
-          //Build a filter based on courses
-          let courses = lec.courses.items;
-          let year = new Date().getFullYear();
-          let filter = `{"filter" : { "or" : [`;
-          for (let i = 0; i < courses.length; i++) {
-            if (i === courses.length - 1) {
-              filter += `{"courseId":{"eq":"${courses[i].id}" } }`;
-            }
-            else {
-              filter += `{"courseId":{"eq":"${courses[i].id}" } },`;
-            }
-          }
-          filter += `] },"limit":"${limit}" ,"year":"${year}","sortDirection":"DESC"}`;
-          let variables = JSON.parse(filter);
-
-          //Fecth annnouncements and order them by date
-          let announcementList = await API.graphql({
-            query: announcementsByDate,
-            variables: variables,
-          });
-          announcementList = announcementList.data.announcementsByDate;
-          setAnnouncement(announcementList.items);
-          if (announcementList.items.length < limit) {
-            setNextToken(null);
-          }
-          else {
-            setNextToken(announcementList.nextToken);
-          }
-        }
+    try{
+      
         setLoading(false);
-      }
     } catch (error) {
       if (error.errors !== undefined) {
         let e = error.errors[0].message
@@ -260,7 +204,39 @@ export default function RecentAnnouncement() {
   }
 
   useEffect(() => {
-    fetchAnnouncements();
+    const data = [  
+      {
+        id: 1,
+        course: "COS341",
+        title: "Semester Test 2",
+        body: "Please take note that Semester test 2 is this friday at 17:30, in the colabs.",
+        date: "2023-09-30",
+      },
+      {
+        id: 2,
+        course: "COS341",
+        title: "No lecture today",
+        body: "There will be no lecture today as I have a doctors appointment.",
+        date: "2023-09-29",
+      },
+      {
+        id: 3,
+        course: "COS341",
+        title: "Class test 4 results",
+        body: "Class test 4 results will be release in today's lecture.",
+        date: "2023-09-29",
+      },
+      {
+        id: 4,
+        course: "COS341",
+        title: "Practical 4 Due",
+        body: "Upload you practical 4 submission to the slot on clickup before the deadline.",
+        date: "2023-10-02",
+      },
+    ];
+    setAnnouncement(data);
+    setLoading(false);
+    //fetchAnnouncements();
   }, [])
 
 
