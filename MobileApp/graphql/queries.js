@@ -124,8 +124,7 @@ export const coursesByInstitutionId=`query CoursesByInstitutionId(
       institutionId
       lecturerId
       coursecode
-      coursename
-      semester
+      
     }
     nextToken
   }
@@ -277,6 +276,8 @@ export const listInstitutions=`query ListInstitutions(
       id
       name
       domains
+      _version
+      _deleted
     }
     nextToken
   }
