@@ -45,13 +45,15 @@ export default function InstitutionNavigation() {
                 });
                 if (adminData.data.listAdmins.items.length > 0) {
                     adminData = adminData.data.listAdmins.items[0];
-                    // if (adminData.institution.logo !== null) {
-                    //     adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-                    // }
+                    if (adminData.institution.logo !== null) {
+                        adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                     }
                     setAdmin(adminData);
+                    
                 }
 
             }
+            console.log(admin);
 
         } catch (error) {
 
