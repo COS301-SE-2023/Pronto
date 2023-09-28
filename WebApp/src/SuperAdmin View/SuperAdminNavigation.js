@@ -40,7 +40,7 @@ export default function SuperAdminNavigation() {
                 <ul className="navbar-nav">
                     <li>
                         <Link
-                            to={'/superadmin/admin-requests'}
+                            to={'/ROYGBIV/admin-requests'}
                             className={`nav-link text-center ${location.pathname === '/ROYGBIV/admin-requests' ? 'active' : ''}` }
                         >
                             <b>Application Requests</b>
