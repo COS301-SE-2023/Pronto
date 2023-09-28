@@ -252,6 +252,7 @@ const AddLecturer = () => {
             const index = lecturerToRemoveIndex;
             let lec = {
                 id: lecturer.id,
+                _version:lecturer._version
             };
             try {
                 let removeMutation = await API.graphql({

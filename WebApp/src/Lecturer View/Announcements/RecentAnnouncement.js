@@ -134,7 +134,7 @@ export default function RecentAnnouncement() {
     try {
       let del = await API.graphql({
         query: deleteAnnouncement,
-        variables: { input: { id: announcement[key].id } },
+        variables: { input: { id: announcement[key].id,_version:announcement[key]._version } },
       })
       const rows = [...announcement]
       rows.splice(key, 1)
