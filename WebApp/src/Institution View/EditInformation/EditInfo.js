@@ -81,6 +81,10 @@ const EditInfoPage = () => {
 
     const handleAddDomain = async (event) => {
         event.preventDefault()
+        if (admin.institution.domains === null || admin.institution.domains === undefined) {
+            admin.institution.domains = [];
+            admin.institution.domains.push(domain);
+        }
         if (admin.institution.domains.indexOf(domain) === -1) {
             admin.institution.domains.push(domain);
         }
