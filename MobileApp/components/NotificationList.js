@@ -31,56 +31,7 @@ const NotificationList = ({ navigation }) => {
 
     const fetchAnnouncements = async () => {
         try {
-            let stu = student;
-            setLoading(true);
-            if (student === null) {
-                const user = await Auth.currentAuthenticatedUser()
-                stu = await API.graphql({
-                    query: getStudent, variables: { id: user.attributes.sub }
-                })
-
-                stu = stu.data.getStudent;
-
-                if (stu === null || stu === undefined) {
-                    throw Error();
-                }
-                updateStudent(stu);
-            }
-
-            let courses = [];
-            for (let i = 0; i < stu.enrollments.items.length; i++) {
-                courses.push(stu.enrollments.items[i].courseId);
-            }
-
-            if (courses.length === 0) {
-                setLoading(false);
-                setAnnouncement([]);
-                return;
-            } else {
-                let filter = `{"filter" : { "or" : [`;
-                for (let i = 0; i < courses.length; i++) {
-                    if (i === courses.length - 1) {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } }`;
-                    } else {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } },`;
-                    }
-                }
-
-                filter += `] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-
-                let variables = JSON.parse(filter);
-                let announcementList = await API.graphql({
-                    query: listAnnouncements, variables: variables
-                });
-
-                setAnnouncement(announcementList.data.listAnnouncements.items);
-                if (announcementList.data.listAnnouncements.items.length < limit) {
-                    setNextToken(null);
-                } else {
-                    setNextToken(announcementList.data.listAnnouncements.nextToken);
-                }
-                setLoading(false);
-            }
+            setAnnouncement(mockAnnouncements);
         } catch (er) {
             Alert.alert(error)
             setLoading(false);

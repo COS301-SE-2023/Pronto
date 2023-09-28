@@ -5,7 +5,7 @@
       "body": "This is a reminder announcement.",
       "type": "Reminder",
       "course": {
-        "coursecode": "COURSE101"
+        "coursecode": "COS333"
       }
     },
     {
@@ -14,7 +14,7 @@
       "body": "This is a due assignment announcement.",
       "type": "Due Assignment",
       "course": {
-        "coursecode": "COURSE202"
+        "coursecode": "COS301"
       }
     },
     {
@@ -23,7 +23,7 @@
       "body": "Another reminder announcement.",
       "type": "Reminder",
       "course": {
-        "coursecode": "COURSE303"
+        "coursecode": "COS301"
       }
     },
     {
@@ -32,7 +32,7 @@
       "body": "This is an important update for all students.",
       "type": "Update",
       "course": {
-        "coursecode": "COURSE101"
+        "coursecode": "COS333"
       }
     },
     {
@@ -41,7 +41,7 @@
       "body": "Due date for Assignment 2 has been extended.",
       "type": "Update",
       "course": {
-        "coursecode": "COURSE202"
+        "coursecode": "COS333"
       }
     },
     {
@@ -50,7 +50,7 @@
       "body": "Don't forget about the midterm exam next week.",
       "type": "Reminder",
       "course": {
-        "coursecode": "COURSE303"
+        "coursecode": "COS301"
       }
     },
     {
@@ -59,7 +59,7 @@
       "body": "We have added a new course: Advanced Programming.",
       "type": "Update",
       "course": {
-        "coursecode": "COURSE404"
+        "coursecode": "COS301"
       }
     }
   ]
