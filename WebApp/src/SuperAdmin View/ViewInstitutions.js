@@ -7,7 +7,8 @@ import { createInstitution, createAdmin, updateInstitution, deleteInstitution } 
 import { listInstitutions, listAdmins } from '../Graphql/queries';
 import IconButton from '@mui/material/IconButton'; // Import IconButton
 import CloseIcon from '@mui/icons-material/Close'; // Import the close icon
-import { API } from "aws-amplify"
+import { Amplify, Auth, API } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import { useEffect } from 'react';
 
 // Modal component for adding institutions
@@ -32,14 +33,28 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
 
     const handleUsernameChange = (event) => {
         setUserName(event.target.value);
+        console.log(event);
     };
 
     const handleUniversityID = (event) => {
         setUniversityID(event.target.value);
     };
 
-    const handleAddAdmin = (event) => {
+    const handleAddAdmin = async(event) => {
         setAdmin(event.target.value);
+//         let apiName = 'AdminQueries';
+//         let path = '/addUserToGroup';
+//             let myInit = {
+//                 body: {
+//                     "username" :event,
+//         "groupname": "adminUserGroup"
+//       }, 
+//       headers: {
+//         'Content-Type' : 'application/json',
+//         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+//       } 
+//   }
+//   return await API.post(apiName, path, myInit);
     };
 
 
@@ -50,25 +65,86 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         setAdminEmail(event.target.value);
     };
 
-    const handleConfirmSignUp = () => {
+    const handleConfirmSignUp = async() => {
         alert("handleConfirmSignUp pressed");
+        let apiName = 'AdminQueries';
+        let path = '/confirmUserSignUp';
+        let myInit = {
+            body: {
+                "username" : "richard",
+            }, 
+            headers: {
+            'Content-Type' : 'application/json',
+            Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+      } 
+  }
+  return await API.post(apiName, path, myInit);
     }
 
-    const handleDisableUser = () => {
+    const handleDisableUser = async() => {
         alert("handleDisableUser pressed");
+        let apiName = 'AdminQueries';
+        let path = '/disableUser';
+        let myInit = {
+            body: {
+                "username" : "richard",
+            }, 
+            headers: {
+                'Content-Type' : 'application/json',
+                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+            } 
+        }
+        return await API.post(apiName, path, myInit);        
     }
 
-    const handleRemoveFromUserGroup = () => {
+    const handleRemoveFromUserGroup = async() => {
         alert("handleRemoveFromUserGroup pressed");
+        let apiName = 'AdminQueries';
+        let path = '/removeUserFromGroup';
+            let myInit = {
+                body: {
+                    "username" : "richard",
+                    "groupname": "Editors"
+                }, 
+                headers: {
+                    'Content-Type' : 'application/json',
+                     Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+                } 
+            }
+        return await API.post(apiName, path, myInit);
     }
 
-    const handleEnableUser = () => {
+    const handleEnableUser = async() => {
         alert(" handleEnableUser pressed");
+        let apiName = 'AdminQueries';
+        let path = '/enableUser';
+        let myInit = {
+            body: {
+                "username" : "richard",
+            }, 
+            headers: {
+                'Content-Type' : 'application/json',
+                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+            } 
+        }
+        return await API.post(apiName, path, myInit);
     }
 
 
-    const handleGetUser = () => {
+    const handleGetUser = async() => {
         alert(" handleGetUser pressed");
+        let apiName = 'AdminQueries';
+        let path = '/getUser';
+        let myInit = {
+            body: {
+                "username" : "richard",
+            }, 
+            headers: {
+                'Content-Type' : 'application/json',
+                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+            } 
+        }
+        return await API.post(apiName, path, myInit);
     }
 
 
@@ -271,7 +347,8 @@ export default function ViewInstitutions() {
         try {
             let a = await API.graphql({
                 query: listInstitutions,
-                variables: {}
+                variables: {},
+                authMode:"API_KEY"
             })
             setInstitutions(a.data.listInstitutions.items);
         } catch (e) {

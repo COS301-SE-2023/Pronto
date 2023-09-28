@@ -389,12 +389,11 @@ export const listAdminApplications=`
                     ){
                       items{
                         id
-                        name 
+                        name
+                        firstname
                         email
                         status
                         createdAt
-                  
-                  
                       }
                       nextToken
                     }

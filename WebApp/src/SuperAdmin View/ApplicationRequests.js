@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import SuperAdminNavigation from './SuperAdminNavigation';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { useEffect } from 'react';
 import { API,Auth } from "aws-amplify";
 import { getInstitution } from '../Graphql/queries';
 import { listAdminApplications} from '../Graphql/queries';
 import { updateAdmin, updateAdminApplication,createInstitution } from '../Graphql/mutations';
+import { request } from 'express';
 
 export default function ApplicationRequests() {
 
@@ -36,10 +36,11 @@ export default function ApplicationRequests() {
         query:createInstitution,
         variables:{input:institution}
       })
-      console.log(inst);
-      const newAdmin= await addToAdminGroup(inst.data.createInstitution,request.email);
+     console.log(inst);
+      const newAdmin= await addToAdminGroup(inst.data.createInstitution,request.email,request.firstname);
       console.log(newAdmin)
-     
+      //  const user= await getUserHelper()
+      //  console.log(user);
       //  await API.graphql({
       //   query: updateAdminApplication,
       //   variables: { input: { id: requests[index].id, status: "ACCEPTED" } }
@@ -51,7 +52,25 @@ export default function ApplicationRequests() {
     }
   };
 
-  const addToAdminGroup = async(institution,email)=>{
+     const getUserHelper = async(username)=>{
+      try{ 
+      let apiName = 'AdminQueries';
+        let path = '/getUser';
+        let myInit = {
+            body: {
+                "username" : "agilearchitectscapstone@gmail.com",
+            }, 
+            headers: {
+                'Content-Type' : 'application/json',
+                //Authorization: `AM`
+            } 
+        }
+        return await API.post(apiName, path, myInit);
+      }catch(error){
+        console.log(error);
+      }
+    }
+  const addToAdminGroup = async(institution,email,name)=>{
     try{    
       let apiName= "AdminQueries";
       let path= "/createInstitutionAdmin";
@@ -60,7 +79,8 @@ export default function ApplicationRequests() {
             body:{
                 "email":email,
                 "institutionId":institution.id,
-                "password":"October01!"               
+                "Password":"October01!",
+                name:name               
             },
             headers:{
                 "Content-Type" : "application/json",
@@ -76,13 +96,13 @@ export default function ApplicationRequests() {
   const declineRequest = async (index) => {
     const updatedRequests = [...requests];
     try {
-      await API.graphql({
-        query: updateAdminApplication,
-        variables: { input: { id: requests[index].id, status: "REJECTED" } }
-      })
+      // await API.graphql({
+      //   query: updateAdminApplication,
+      //   variables: { input: { id: requests[index].id, status: "REJECTED" } }
+      // })
 
-      updatedRequests.splice(index, 1);
-      setRequests(updatedRequests);
+      // updatedRequests.splice(index, 1);
+      // setRequests(updatedRequests);
     } catch (error) {
       console.log(error)
     }
@@ -130,7 +150,7 @@ export default function ApplicationRequests() {
             </div>
             <div className="card-body">
               <h5 className="card-title">{request.name}</h5>
-              <p className="card-text">{request.name + " applied to be an admin of"+request.name}</p>
+              <p className="card-text">{request.firstname + " applied to be an admin for institution "+request.name}</p>
               <p className='card-text'>Contact them at  <a href={`mailto:${request.email}?subject=${encodeURIComponent("Pronto Admins")}&body=${encodeURIComponent("Hello " + request.name + " Your request has been (rejected/accepted)")}`} > {request.email}</a></p>
 
               <div style={{ float: "right" }}>

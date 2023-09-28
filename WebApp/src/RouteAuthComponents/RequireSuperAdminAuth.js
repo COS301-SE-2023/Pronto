@@ -13,7 +13,7 @@ export function RequireSuperAdminAuth({ children }) {
         const user = await Auth.currentAuthenticatedUser({});
         const group = user.signInUserSession.idToken.payload["cognito:groups"][0];
 
-        if (group !== "superAdminUserGroup") { //if the user is not a super admin set authentication false
+        if (group !== "superUserGroup") { //if the user is not a super admin set authentication false
           setAuthenticated(false);
         } else {
           setAuthenticated(true);
@@ -51,7 +51,7 @@ export function RequireSuperAdminAuth({ children }) {
         .catch(error => {
 
         })
-    }, 30 * 60 * 1000);
+    }, 5 * 60 * 1000);
   }
 
   // // Attach the event listener to the desired user activity events

@@ -41,7 +41,7 @@ export default function SuperAdminNavigation() {
                     <li>
                         <Link
                             to={'/superadmin/admin-requests'}
-                            className={`nav-link text-center ${location.pathname === '/superadmin/admin-requests' ? 'active' : ''}`}
+                            className={`nav-link text-center ${location.pathname === '/ROYGBIV/admin-requests' ? 'active' : ''}` }
                         >
                             <b>Application Requests</b>
                         </Link>
@@ -49,7 +49,7 @@ export default function SuperAdminNavigation() {
                     <li>
                         <Link
                             to={'/superadmin/view-institutions'}
-                            className={`nav-link text-center ${location.pathname === '/superadmin/view-institutions' ? 'active' : ''}`}
+                            className={`nav-link text-center ${location.pathname === '/ROYGBIV/view-institutions' ? 'active' : ''}`}
                         >
                             <b>View Institutions</b>
                         </Link>
