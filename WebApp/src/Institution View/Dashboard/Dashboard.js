@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useAdmin } from '../../ContextProviders/AdminContext';
 import styled from "styled-components";
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import HelpButton from '../../Components/HelpButton';
@@ -11,7 +11,8 @@ import StudenFileUploadImage from "../Images/StudentFileUploadImage.png";
 import EditUniInfoImage from "../Images/EditUniInfoImage.png";
 
 const Dashboard = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+   
     return (
         <div style={{ maxHeight: "100vh" }}>
 

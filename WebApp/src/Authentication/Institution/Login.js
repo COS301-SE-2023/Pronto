@@ -4,12 +4,13 @@ import styled, { keyframes } from "styled-components";
 import Select from "react-select";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import { Auth, API, Storage } from "aws-amplify";
+import { Auth, API, Storage, DataStore } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { listAdmins, listInstitutions } from "../../Graphql/queries";
 import { createAdminApplication } from "../../Graphql/mutations";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import MobileView from "../../Homepage/MobileView";
+import { Admin } from "../../Graphql/models";
 
 function Login() {
   const [signIn, toggle] = useState(true);
@@ -42,30 +43,14 @@ function Login() {
   const fetchAdmin = async () => {
     let fetchError = "Could not find your records.If you are a Lecturer return to the homepage and click 'Continue as Lecturer'. If you are a Student please use the mobile app"
     try {
-
-      let adminData = await API.graphql({
-        query: listAdmins,
-        variables: {
-          filter: {
-            email: {
-              eq: email
-            }
-          },
-
-        },
-
-      });
-      if (adminData.data.listAdmins.items.length > 0) {
-        adminData = adminData.data.listAdmins.items[0];
-        if (adminData.institution.logo !== null) {
-          adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-        }
-
-        setAdmin(adminData);
-      }
-      else {
-        throw Error(fetchError);
-      }
+     const adminData= await DataStore.query(Admin,(a)=>a.email.eq(email))
+     console.log(adminData[0]);
+     setAdmin(adminData[0]);
+        // if (adminData[0].institution.logo !== null) {
+        //   adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
+        // }
+     //  setAdmin(adminData[0]);
+      
 
     } catch (error) {
       await Auth.signOut();
@@ -74,30 +59,30 @@ function Login() {
   }
 
 
-  const fetchInstitutions = async () => {
+  // const fetchInstitutions = async () => {
 
-    try {
+  //   try {
 
-      let inst = await API.graphql({
-        query: listInstitutions,
-        variables: {
+  //     let inst = await API.graphql({
+  //       query: listInstitutions,
+  //       variables: {
        
-        },
-        authMode: "API_KEY"
-      });
-      inst = inst.data.listInstitutions.items;
-      let institutionInfo = [];
-      for (let j = 0; j < inst.length; j++) {
-        let item = {
-          value: inst[j].id,
-          label: inst[j].name
-        }
-        institutionInfo.push(item);
-      }
-      setInstitutions(institutionInfo);
-    } catch (error) {
-    }
-  }
+  //       },
+  //       authMode: "API_KEY"
+  //     });
+  //     inst = inst.data.listInstitutions.items;
+  //     let institutionInfo = [];
+  //     for (let j = 0; j < inst.length; j++) {
+  //       let item = {
+  //         value: inst[j].id,
+  //         label: inst[j].name
+  //       }
+  //       institutionInfo.push(item);
+  //     }
+  //     setInstitutions(institutionInfo);
+  //   } catch (error) {
+  //   }
+  // }
 
   // useEffect(() => {
   //   fetchInstitutions();
@@ -141,16 +126,19 @@ function Login() {
         }
       )
 
-      console.log(loggedInUser);
-    }
-      console.log(user);
-      //await fetchAdmin().then(() => navigate("/institution/dashboard"))
-       navigate("/institution/dashboard");
-    } catch (e) {
+    //   //console.log(loggedInUser);
+     }
+
+    
+    //fetchAdmin();
+      //console.log(user);
+      await fetchAdmin().then(() => navigate("/institution/dashboard"))
+      // navigate("/institution/dashboard");
+     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
     }
-    //setLoading(false);
+    setLoading(false);
   };
 
 

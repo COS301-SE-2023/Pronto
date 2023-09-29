@@ -3,12 +3,15 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import "./Navigation.css";
 import { listAdmins } from "../../Graphql/queries";
 import { useAdmin } from "../../ContextProviders/AdminContext";
+import { DataStore } from "aws-amplify";
+import { Admin } from "../../Graphql/models";
 
 import { Auth, Storage, API } from "aws-amplify";
 
 export default function InstitutionNavigation() {
     const navigate = useNavigate();
     const { admin, setAdmin } = useAdmin();
+    const [institution,setInstitution]=useState("")
     const location = useLocation();
     const [signOut, setSignOut] = useState(false);
 
@@ -30,32 +33,29 @@ export default function InstitutionNavigation() {
     const fetchAdmin = async () => {
 
         try {
+        
             if (admin === null || admin === undefined) {
-                let user = await Auth.currentAuthenticatedUser();
-                let adminEmail = user.attributes.email
-                let adminData = await API.graphql({
-                    query: listAdmins,
-                    variables: {
-                        filter: {
-                            email: {
-                                eq: adminEmail
-                            }
-                        },
-                    },
-                });
-                if (adminData.data.listAdmins.items.length > 0) {
-                    adminData = adminData.data.listAdmins.items[0];
-                    if (adminData.institution.logo !== null) {
-                        adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
-                     }
-                    setAdmin(adminData);
-                    
-                }
+                 let user = await Auth.currentAuthenticatedUser();
+                 let adminEmail = user.attributes.email
 
+            //console.log(admin)
+            let adminData= await DataStore.query(Admin,(a)=>a.email.eq(adminEmail))
+            // const institution= adminData[0].institution.then((inst)=>{
+            //         if (inst.logo!== null) {
+            //     inst.logoUrl = Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 }).th;
+            // }
+            // });
+            
+            // let h=adminData;
+            // h.institution=institution;
+            console.log(institution)
+            setAdmin(adminData[0]);
+
+            setInstitution(institution);
+                
             }
-            console.log(admin);
-
         } catch (error) {
+            console.log(error);
 
         }
     }
@@ -71,7 +71,7 @@ export default function InstitutionNavigation() {
                 <div className="top"> {/* top holds University image and name portion*/}
 
                     <img
-                        src={admin !== undefined ? admin !== null ? admin.institution?.logoUrl : " " : "  "}
+                        src={institution !== undefined ? institution !== null ? institution?.logoUrl : " " : "  "}
                         alt=""
                         className="logo offset-2 img-fluid mr-4.5"
                         style={{ width: "155px", height: "155px" }}
@@ -80,7 +80,7 @@ export default function InstitutionNavigation() {
 
                     <div className="institution-name" style={{ paddingTop: '5%' }}>
                         <b>
-                            {admin && admin.institution && admin.institution.name}
+                            {institution?.name}
                         </b>
                     </div>
                 </div>
