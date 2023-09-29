@@ -13,7 +13,7 @@ import downloadIcon from '../../assets/icons/downloadicon.png';
 
 
 const ScheduleTable = ({ navigation, route }) => {
-  // With the following mock data
+
   const getStudent = async () => ({
     id: "1",
     enrollments: {
@@ -27,9 +27,9 @@ const ScheduleTable = ({ navigation, route }) => {
                   start: "08:00 AM",
                   end: "09:30 AM",
                   course: {
-                    coursecode: "Math 101",
+                    coursecode: "IMY 210",
                   },
-                  venue: "Room A",
+                  venue: "Thuto 2-1",
                   day: "Monday",
                   coordinates: "1,2",
                 },
@@ -38,13 +38,101 @@ const ScheduleTable = ({ navigation, route }) => {
                   start: "10:00 AM",
                   end: "11:30 AM",
                   course: {
-                    coursecode: "History 202",
+                    coursecode: "COS301",
                   },
-                  venue: "Room B",
-                  day: "Monday",
+                  venue: "Centenary",
+                  day: "Tuesday",
                   coordinates: "3,4",
                 },
                 // Add more mock activities as needed
+                {
+                  id: "3",
+                  start: "08:00 AM",
+                  end: "09:30 AM",
+                  course: {
+                    coursecode: "COS301",
+                  },
+                  venue: "IT 4-26",
+                  day: "Monday",
+                  coordinates: "5,6",
+                },
+                {
+                  id: "4",
+                  start: "08:00 AM",
+                  end: "09:30 AM",
+                  course: {
+                    coursecode: "COS333",
+                  },
+                  venue: "IT 4-4",
+                  day: "Wednesday",
+                  coordinates: "7,8",
+                },
+                {
+                  id: "5",
+                  start: "02:00 PM",
+                  end: "03:30 PM",
+                  course: {
+                    coursecode: "COS326",
+                  },
+                  venue: "HB 3-3",
+                  day: "Friday",
+                  coordinates: "9,10",
+                },
+                {
+                  id: "6",
+                  start: "09:00 AM",
+                  end: "10:30 AM",
+                  course: {
+                    coursecode: "WTW285",
+                  },
+                  venue: "EMS 1-152",
+                  day: "Monday",
+                  coordinates: "11,12",
+                },
+                {
+                  id: "7",
+                  start: "11:00 AM",
+                  end: "12:30 PM",
+                  course: {
+                    coursecode: "IMY 330",
+                  },
+                  venue: "SIT Labs",
+                  day: "Thursday",
+                  coordinates: "13,14",
+                },
+                {
+                  id: "8",
+                  start: "10:00 AM",
+                  end: "11:30 AM",
+                  course: {
+                    coursecode: "COS314",
+                  },
+                  venue: "IT 4-4",
+                  day: "Friday",
+                  coordinates: "15,16",
+                },
+                {
+                  id: "9",
+                  start: "03:00 PM",
+                  end: "04:30 PM",
+                  course: {
+                    coursecode: "COS201",
+                  },
+                  venue: "IT 2-27",
+                  day: "Wednesday",
+                  coordinates: "17,18",
+                },
+                {
+                  id: "10",
+                  start: "09:30 AM",
+                  end: "11:00 AM",
+                  course: {
+                    coursecode: "INF 354",
+                  },
+                  venue: "Brown Lab",
+                  day: "Wednesday",
+                  coordinates: "19,20",
+                }
               ],
             },
           },
@@ -52,9 +140,11 @@ const ScheduleTable = ({ navigation, route }) => {
       ],
     },
     timetable: {
-      activityId: ["1", "2"], // Use the IDs of the activities from above
+      activityId: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], // Use the IDs of the activities from above
     },
   });
+
+
 
 
   const useStudent = () => {
