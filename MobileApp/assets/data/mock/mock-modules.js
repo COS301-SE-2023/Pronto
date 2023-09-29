@@ -1,6 +1,31 @@
 const mockCourses = [
   {
-    id: "1",
+    id: "2333",
+    coursecode: "WTW 134",
+    name: "Introduction to Computer Science",
+    activity: {
+      items: [
+        {
+          id: "1",
+          activityname: "L01",
+          day: "Monday",
+          start: "09:00 AM",
+          end: "10:30 AM",
+          venue: "EMS",
+        },
+        {
+          id: "2",
+          activityname: "T01",
+          day: "Wednesday",
+          start: "11:00 AM",
+          end: "12:30 PM",
+          venue: "Room B202",
+        },
+      ],
+    },
+  },
+  {
+    id: "2222",
     coursecode: "CSE101",
     name: "Introduction to Computer Science",
     activity: {
@@ -25,7 +50,7 @@ const mockCourses = [
     },
   },
   {
-    id: "2",
+    id: "1999",
     coursecode: "IMY 210",
     name: "Information Management",
     activity: {
@@ -42,7 +67,7 @@ const mockCourses = [
     },
   },
   {
-    id: "3",
+    id: "1888",
     coursecode: "COS301",
     name: "Operating Systems",
     activity: {
@@ -59,7 +84,7 @@ const mockCourses = [
     },
   },
   {
-    id: "4",
+    id: "1777",
     coursecode: "COS333",
     name: "Data Structures",
     activity: {
@@ -76,7 +101,7 @@ const mockCourses = [
     },
   },
   {
-    id: "5",
+    id: "1666",
     coursecode: "COS326",
     name: "Algorithms",
     activity: {
@@ -93,24 +118,7 @@ const mockCourses = [
     },
   },
   {
-    id: "6",
-    coursecode: "WTW285",
-    name: "Technical Writing",
-    activity: {
-      items: [
-        {
-          id: "1",
-          activityname: "L01",
-          day: "Monday",
-          start: "09:00 AM",
-          end: "10:30 AM",
-          venue: "EMS 1-152",
-        },
-      ],
-    },
-  },
-  {
-    id: "7",
+    id: "1444",
     coursecode: "IMY 330",
     name: "Database Management",
     activity: {
@@ -127,7 +135,7 @@ const mockCourses = [
     },
   },
   {
-    id: "8",
+    id: "1333",
     coursecode: "COS314",
     name: "Software Engineering",
     activity: {
@@ -144,13 +152,13 @@ const mockCourses = [
     },
   },
   {
-    id: "9",
+    id: "1222",
     coursecode: "COS201",
     name: "Programming Fundamentals",
     activity: {
       items: [
         {
-          id: "1",
+          id: "1111",
           activityname: "L01",
           day: "Wednesday",
           start: "03:00 PM",
@@ -161,7 +169,7 @@ const mockCourses = [
     },
   },
   {
-    id: "10",
+    id: "1555",
     coursecode: "INF 354",
     name: "Information Security",
     activity: {
@@ -177,6 +185,7 @@ const mockCourses = [
       ],
     },
   },
+
 ];
 
 const mockStudent = {
@@ -186,14 +195,54 @@ const mockStudent = {
     items: [
       {
         id: "5",
-        courseId: "1",
+        courseId: "2222",
         studentId: "123",
       },
       {
         id: "6",
-        courseId: "2",
+        courseId: "1111",
         studentId: "123",
       },
+      {
+        id: "7",
+        courseId: "1222",
+        studentId: "123",
+      },
+      {
+        id: "8",
+        courseId: "1333",
+        studentId: "123",
+      },
+      {
+        id: "9",
+        courseId: "1444",
+        studentId: "123",
+      },
+      {
+        id: "10",
+        courseId: "1555",
+        studentId: "123",
+      },
+      {
+        id: "11",
+        courseId: "1666",
+        studentId: "123",
+      },
+      {
+        id: "12",
+        courseId: "1777",
+        studentId: "123",
+      },
+      {
+        id: "13",
+        courseId: "1888",
+        studentId: "123",
+      },
+      {
+        id: "14",
+        courseId: "1999",
+        studentId: "123",
+      }
     ],
   },
   timetable: {
