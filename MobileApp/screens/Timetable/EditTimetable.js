@@ -16,8 +16,8 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { searchCourses ,getStudent} from "../../graphql/queries"
-import { createEnrollment,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { searchCourses, getStudent } from "../../graphql/queries"
+import { createEnrollment, deleteEnrollment, updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
 import mockCourses from "../../assets/data/mock/mock-modules";
 import mockData from "../../assets/data/mock/mock-modules";
@@ -32,7 +32,7 @@ const EditTimetable = ({ navigation }) => {
     const practicals = ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"];
     const [activities, setActivities] = useState([])
 
-    const{student,updateStudent} = useStudent();
+    const { student, updateStudent } = useStudent();
     const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
     const [isSaving, setIsSaving] = useState(false);
 
@@ -50,7 +50,7 @@ const EditTimetable = ({ navigation }) => {
 
     const [selectedModules, setSelectedModules] = useState([]);
 
-    const addToModules = async(module) => {
+    const addToModules = async (module) => {
         if (!selectedModules.some((m) => m.id === module.id)) {
             setSelectedModules((prevModules) => [module, ...prevModules]);
 
@@ -65,7 +65,7 @@ const EditTimetable = ({ navigation }) => {
     const [input, setInput] = useState("");
 
     const handleSearch = (text) => {
-        const mockData= mockCourses;
+        const mockData = mockCourses;
         setInput(text);
 
         if (text !== null) {
@@ -84,7 +84,7 @@ const EditTimetable = ({ navigation }) => {
 
 
     const fetchCourses = async () => {
-        const  mockData = mockCourses;
+        const mockData = mockCourses;
         try {
             let stu = student;
 
@@ -126,7 +126,7 @@ const EditTimetable = ({ navigation }) => {
 
     useEffect(() => {
         fetchCourses();
-    },[]);
+    }, []);
 
     const handleSave = async (module) => {
         setIsSaving(true);
@@ -140,7 +140,7 @@ const EditTimetable = ({ navigation }) => {
         let rows = [...mockData.activities];
 
 
-       for (let i = 0; i < activities.length; i++) {
+        for (let i = 0; i < activities.length; i++) {
             if (mockData.activities[i].activityname === mockData.activities.activityname && mockData.activities[i].coursed === activity.courseId) {
                 rows.splice(i, 1)
             }
@@ -152,7 +152,7 @@ const EditTimetable = ({ navigation }) => {
         //let s=await updateStudent(student);
         // student.timetable.activities=s.timetable.activities;
         setActivities(rows);
-       console.log(rows);
+        console.log(rows);
     }
 
 
@@ -372,12 +372,12 @@ const EditTimetable = ({ navigation }) => {
                                         activity={"Lecture"}
                                         moduleContent={
                                             selectedModule.activity.items.filter(item => item.activityname === lecture).map((act, index) => (
-                                                    {
-                                                        label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
-                                                        act: act,
-                                                        value: `${index + 1}`,
-                                                    }
-                                                )
+                                                {
+                                                    label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
+                                                    act: act,
+                                                    value: `${index + 1}`,
+                                                }
+                                            )
                                             )
                                         }
                                         addActivity={addActivity}
@@ -394,12 +394,12 @@ const EditTimetable = ({ navigation }) => {
                                         activity={"Tutorial"}
                                         moduleContent={
                                             selectedModule.activity.items.filter(item => item.activityname === tutorial).map((act, index) => (
-                                                    {
-                                                        label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
-                                                        act: act,
-                                                        value: `${index + 1}`,
-                                                    }
-                                                )
+                                                {
+                                                    label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
+                                                    act: act,
+                                                    value: `${index + 1}`,
+                                                }
+                                            )
                                             )
                                         }
                                         addActivity={addActivity}
@@ -416,12 +416,12 @@ const EditTimetable = ({ navigation }) => {
                                         activity={"Practical"}
                                         moduleContent={
                                             selectedModule.activity.items.filter(item => item.activityname === practical).map((act, index) => (
-                                                    {
-                                                        label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
-                                                        act: act,
-                                                        value: `${index + 1}`,
-                                                    }
-                                                )
+                                                {
+                                                    label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
+                                                    act: act,
+                                                    value: `${index + 1}`,
+                                                }
+                                            )
                                             )
                                         }
                                         addActivity={addActivity}
@@ -445,7 +445,7 @@ const EditTimetable = ({ navigation }) => {
 
                         outlined={true}
                         disabled={isSaving}
-                        onPress={async() => { await handleSave(module)}}
+                        onPress={async () => { await handleSave(module) }}
                         testID="save-button"
                     >
                         {isSaving ? (
