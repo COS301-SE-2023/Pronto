@@ -4,6 +4,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import "../../Institution View/Navigation/Navigation.css";
 import { listLecturers } from "../../Graphql/queries";
 import { useLecturer } from "../../ContextProviders/LecturerContext";
+import UPLOGO from "./UPLogoColor.png";
 
 import { Auth, API, Storage } from "aws-amplify";
 
@@ -75,7 +76,7 @@ export default function LecturerNavigation() {
       <nav className="vertical-navbar col-4 p-4">
         <div className="top"> {/* Top holds the university image and lecturer name */}
           <img
-            src={lecturer !== undefined ? lecturer !== null ? lecturer.institution.logoUrl : " " : "  "}
+            src={UPLOGO}
             alt=""
             className="logo offset-2 img-fluid mr-1"
             style={{ width: "155px", height: "155px" }}
