@@ -208,31 +208,39 @@ export default function RecentAnnouncement() {
       {
         id: 1,
         course: "COS341",
+        title: "title",
+        body: "body.",
+        date: "2023-09-30",
+      },
+      {
+        id: 2,
+        course: "COS341",
         title: "Semester Test 2",
         body: "Please take note that Semester test 2 is this friday at 17:30, in the colabs.",
         date: "2023-09-30",
       },
       {
-        id: 2,
+        id: 3,
         course: "COS341",
         title: "No lecture today",
         body: "There will be no lecture today as I have a doctors appointment.",
         date: "2023-09-29",
       },
       {
-        id: 3,
+        id: 4,
         course: "COS341",
         title: "Class test 4 results",
         body: "Class test 4 results will be release in today's lecture.",
         date: "2023-09-29",
       },
       {
-        id: 4,
+        id: 5,
         course: "COS341",
         title: "Practical 4 Due",
         body: "Upload you practical 4 submission to the slot on clickup before the deadline.",
         date: "2023-10-02",
       },
+      
     ];
     setAnnouncement(data);
     setLoading(false);
