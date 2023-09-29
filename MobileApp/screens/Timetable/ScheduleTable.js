@@ -7,20 +7,76 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { getStudent } from "../../graphql/queries"
-import { useStudent } from "../../ContextProviders/StudentContext";
+//import { getStudent } from "../../graphql/queries"
+//import { useStudent } from "../../ContextProviders/StudentContext";
 
 
 
 const ScheduleTable = ({ navigation, route }) => {
+  // With the following mock data
+  const getStudent = async () => ({
+    id: "1",
+    enrollments: {
+      items: [
+        {
+          course: {
+            activity: {
+              items: [
+                {
+                  id: "1",
+                  start: "08:00 AM",
+                  end: "09:30 AM",
+                  course: {
+                    coursecode: "Math 101",
+                  },
+                  venue: "Room A",
+                  day: "Monday",
+                  coordinates: "1,2",
+                },
+                {
+                  id: "2",
+                  start: "10:00 AM",
+                  end: "11:30 AM",
+                  course: {
+                    coursecode: "History 202",
+                  },
+                  venue: "Room B",
+                  day: "Monday",
+                  coordinates: "3,4",
+                },
+                // Add more mock activities as needed
+              ],
+            },
+          },
+        },
+      ],
+    },
+    timetable: {
+      activityId: ["1", "2"], // Use the IDs of the activities from above
+    },
+  });
+
+
+  const useStudent = () => {
+    const student = null; // You can also initialize with mock student data if needed
+    const updateStudent = () => { };
+
+    return {
+      student,
+      updateStudent,
+    };
+  };
+
   const [activities, setActivities] = useState([]);
   const [schedule, setSchedule] = useState(null);
   const { student, updateStudent } = useStudent();
-  const [timetableLoaded, setTimetableLoaded] = useState(false);
+  const [timetableLoaded, setTimetableLoaded] = useState(true);
   const [agendaKey, setAgendaKey] = useState(0);
 
   let param = route.params;
   var scheduleArray = {}
+
+
 
   useEffect(() => {
     navigation.setOptions({
@@ -79,53 +135,26 @@ const ScheduleTable = ({ navigation, route }) => {
       let stu = student;
       if (student === null || student.id === undefined) {
         if (param === null || param.id === undefined) {
-          const user = await Auth.currentAuthenticatedUser();
-          stu = await API.graphql({
-            query: getStudent,
-            variables: { id: user.attributes.sub }
-          })
-          stu = stu.data.getStudent;
-        }
-        else {
+          // Use the mock getStudent function to get student data
+          stu = await getStudent();
+        } else {
           stu = param;
-          //updateStudent(stu);
           param = null;
         }
-        
+
         updateStudent(stu);
       }
 
-      
       if (stu === null || stu.studentTimetableId === null) {
-          return;
-        }
-
-      let act = [];
-      let courses = [];
-      for (let i = 0; i < stu.enrollments.items.length; i++) {
-        courses.push(stu.enrollments.items[i].course)
+        return;
       }
 
-      for (let i = 0; i < stu.timetable.activityId.length; i++) {
-        for (let j = 0; j < courses.length; j++) {
-          try {
-            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-            if (index !== undefined) {
-              act.push(index)
-              break;
-            }
-          } catch (e) {
-
-          }
-        }
-      }
-
-      act = act.sort((a, b) => {
-        if (a.start <= b.start)
-          return -1;
-        else
-          return 1;
-      })
+      // Extract activities from the mock data
+      const act = stu.enrollments.items[0].course.activity.items;
+      act.sort((a, b) => {
+        if (a.start <= b.start) return -1;
+        else return 1;
+      });
 
       let changed = false;
       if (act.length === activities.length) {
@@ -135,26 +164,23 @@ const ScheduleTable = ({ navigation, route }) => {
             break;
           }
         }
-      }
-      else {
+      } else {
         changed = true;
       }
       if (changed === true) {
         setActivities(act);
         createScheduleArray(act);
       }
-
-
     } catch (e) {
-      //Alert.alert(error);
       console.log(e);
     }
-  }
+  };
+
 
 
   useEffect(() => {
     fetchActivities();
-  },)
+  }, []);
 
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
@@ -448,27 +474,18 @@ const ScheduleTable = ({ navigation, route }) => {
     <View style={{ height: windowHeight, width: windowWidth }}>
       <Agenda
         key={agendaKey}
-        items={schedule}
+        items={schedule} // Use your schedule data here if needed
         selected={year + "-" + month + "-" + date}
         renderItem={renderItem}
         showOnlySelectedDayItems={true}
         renderEmptyData={renderEmptyDate}
         theme={{
-          todayTextColor: "#e32f45", // today in calendar
-          selectedDayBackgroundColor: "#e32f45", // calendar sel date
-          dotColor: "#e32f45", // dots
+          todayTextColor: "#e32f45",
+          selectedDayBackgroundColor: "#e32f45",
+          dotColor: "#e32f45",
           agendaDayTextColor: "#e32f45",
           agendaDayNumColor: "#e32f45",
           agendaTodayColor: "#e32f45",
-          //         //further styling options if needed
-          //         //  textDisabledColor: "#e32f45",
-          //         //   agendaTodayColor: "#e32f45", // today in list
-          //         //   monthTextColor: "#e32f45", // name in calendar
-          //         //    textDefaultColor: "#e32f45",
-          //         // todayBackgroundColor: "#e32f45",
-          //         // selectedDayTextColor: "#e32f45", // calendar sel date
-          //         //  dayTextColor: "#e32f45", // calendar day
-          //         //  textSectionTitleColor: "#e32f45",
         }}
       />
     </View>
