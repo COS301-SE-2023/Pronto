@@ -21,6 +21,8 @@ import { createEnrollment, deleteEnrollment, updateStudentInfo, createTimetable,
 import { useStudent } from "../../ContextProviders/StudentContext";
 import mockCourses from "../../assets/data/mock/mock-modules";
 import mockData from "../../assets/data/mock/mock-modules";
+import "../../assets/data/mock/global";
+
 
 
 const EditTimetable = ({ navigation }) => {
@@ -51,14 +53,17 @@ const EditTimetable = ({ navigation }) => {
     const [selectedModules, setSelectedModules] = useState([]);
 
     const addToModules = async (module) => {
-        if (!selectedModules.some((m) => m.id === module.id)) {
-            setSelectedModules((prevModules) => [module, ...prevModules]);
+        let stu = mockData.student ;
+        console.log("Before module added" , stu.enrollments.items);
+        const modules = selectedModules;
+        // add modules to the end of the array
+        modules.push(module);
+        setSelectedModules(modules);
+        mockData.student = stu ;
+        console.log("After module added" , stu.enrollments.items);
 
-        } else {
-            Alert.alert("Module Already Added", "This module is already added to your selection.");
-        }
-        setInput("");
-        setCourses([]);
+
+
     };
 
 
@@ -84,6 +89,7 @@ const EditTimetable = ({ navigation }) => {
 
 
     const fetchCourses = async () => {
+       mockCourses.test = "test" ;
         const mockData = mockCourses;
         try {
             let stu = student;
@@ -97,10 +103,25 @@ const EditTimetable = ({ navigation }) => {
             }
 
             // Extract courses and activities from mock data
-            const c = stu.enrollments.items.map((enrollment) =>
-                mockData.courses.find((course) => course.id === enrollment.courseId)
-            );
-            setSelectedModules(c);
+            let matchedCourses = [];
+
+// Loop through each enrollment
+            stu.enrollments.items.forEach((enrollment) => {
+
+                // Find a module that matches the courseId of the enrollment
+                let matchedModule = mockData.courses.find((module) =>module.id === enrollment.courseId);
+
+                //Check that the module does not already exist in the matchedCourses array
+                if (!matchedCourses.includes(matchedModule) && matchedModule != null) {
+                    // Add the module to the matchedCourses array
+                    matchedCourses.push(matchedModule);
+
+                }
+
+            });
+
+            setSelectedModule(null) ;
+            setSelectedModules(matchedCourses);
 
             // Check if student has a timetable in mock data
             if (stu.timetable === null) {
@@ -126,6 +147,7 @@ const EditTimetable = ({ navigation }) => {
 
     useEffect(() => {
         fetchCourses();
+        global.flag = true ;
     }, []);
 
     const handleSave = async (module) => {
@@ -211,7 +233,7 @@ const EditTimetable = ({ navigation }) => {
 
         return (
             <View style={{ margin: 20 }}>
-                <TouchableWithoutFeedback onPress={() => addToModules(item)}>
+                <TouchableWithoutFeedback onPress={() =>   addToModules(item)}>
                     <Card
                         style={{
                             height: 200,
@@ -242,7 +264,7 @@ const EditTimetable = ({ navigation }) => {
                                         {...props}
                                         icon="plus"
                                         iconColor="#e32f45"
-                                        onPress={() => toggleModal(item)}
+                                        onPress={() => {toggleModal(item)}}
                                         style={{ marginRight: 10 }}
                                     />
                                     <IconButton
