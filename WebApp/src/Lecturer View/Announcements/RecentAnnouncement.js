@@ -147,9 +147,9 @@ export default function RecentAnnouncement() {
 
   let limit = 5;
   const fetchAnnouncements = async () => {
-    try{
-      
-        setLoading(false);
+    try {
+
+      setLoading(false);
     } catch (error) {
       if (error.errors !== undefined) {
         let e = error.errors[0].message
@@ -204,10 +204,10 @@ export default function RecentAnnouncement() {
   }
 
   useEffect(() => {
-    const data = [  
+    const data = [
       {
         id: 1,
-        course: "COS341",
+        course: "COS301",
         title: "title",
         body: "body.",
         date: "2023-09-30",
@@ -240,7 +240,7 @@ export default function RecentAnnouncement() {
         body: "Upload you practical 4 submission to the slot on clickup before the deadline.",
         date: "2023-10-02",
       },
-      
+
     ];
     setAnnouncement(data);
     setLoading(false);

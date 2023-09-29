@@ -105,9 +105,18 @@ const Modules = () => {
                   </button>
                 </Link>
               ))
+
+
+
             )
+
         )}
         <br />
+        <Link to={'/lecturer/edit-module'} >
+          <button className="content-button" key={"COS 301"}>
+            COS301 <span style={{ float: "right", marginRight: 50, color: "#e32f45" }}>&#x2192;</span>
+          </button>
+        </Link>
       </main>
 
       <div>

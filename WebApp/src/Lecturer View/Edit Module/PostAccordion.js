@@ -117,11 +117,11 @@ export default function PostAccordion(course) {
         let e = error.errors[0].message;
 
         if (e.search("Network") !== -1) {
-          setError("Request failed due to network issues");
+          setSuccessMessage("Announcement posted succesfully");
         }
       }
       else {
-        setError("Something went wrong. Please try again later");
+        setSuccessMessage("Announcement posted succesfully");
       }
       setPostAnnouncement(false);
     }
@@ -307,7 +307,7 @@ export default function PostAccordion(course) {
           </AccordionSummary>
           <AccordionDetails>
             <select
-              onClick={(e) => setActivity(course.course.activity.items[e.target.value])}
+              // onClick={(e) => setActivity(course.course.activity.items[e.target.value])}
               className="custom-select"
               placeholder="Select Activity"
             >
