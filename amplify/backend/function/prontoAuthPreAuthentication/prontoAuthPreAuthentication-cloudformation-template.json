@@ -59,13 +59,10 @@
     "apiProntoGraphqlapikeyoutput": {
       "Type": "String"
     },
-    "cognitoMobileClientId": {
-      "Type": "String"
-    },
     "cognitoWebClientId": {
       "Type": "String"
     },
-    "authProntoauthUserpoolid": {
+    "cognitoMobileClientId": {
       "Type": "String"
     },
     "prontoAdminEmail": {
@@ -129,14 +126,11 @@
             "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apiprontoGraphQLAPIKeyOutput"
             },
-            "COGNITO_MOBILE_CLIENT_ID": {
-              "Ref": "cognitoMobileClientId"
-            },
             "COGNITO_WEB_CLIENT_ID": {
               "Ref": "cognitoWebClientId"
             },
-            "AUTH_PRONTOAUTH_USERPOOLID": {
-              "Ref": "authProntoauthUserpoolid"
+            "COGNITO_MOBILE_CLIENT_ID": {
+              "Ref": "cognitoMobileClientId"
             },
             "PRONTO_ADMIN_EMAIL": {
               "Ref": "prontoAdminEmail"

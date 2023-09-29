@@ -14,10 +14,10 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "PRONTO verification code",
-    "emailVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "PRONTO VERIFICATION CODE",
+    "emailVerificationMessage": "Hello, thank your for signing up for pronto, your verification code is {####}.",
     "defaultPasswordPolicy": true,
-    "passwordPolicyMinLength": "8",
+    "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [
       "Requires Lowercase",
       "Requires Uppercase",
@@ -31,7 +31,7 @@
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
-    "userpoolClientRefreshTokenValidity": "30",
+    "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
       "email",
       "family_name",
@@ -48,7 +48,6 @@
     "resourceName": "prontoAuth",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "manual",
-    "thirdPartyAuth": false,
     "usernameAttributes": [
       "email"
     ],
@@ -121,10 +120,11 @@
       "{\n  \"policyName\": \"AddToGroupCognito\",\n  \"trigger\": \"PostConfirmation\",\n  \"effect\": \"Allow\",\n  \"actions\": [\n    \"cognito-idp:AdminAddUserToGroup\",\n    \"cognito-idp:GetGroup\",\n    \"cognito-idp:CreateGroup\"\n  ],\n  \"resource\": {\n    \"paramType\": \"!GetAtt\",\n    \"keys\": [\n      \"UserPool\",\n      \"Arn\"\n    ]\n  }\n}"
     ],
     "authTriggerConnections": "[\n  {\n    \"triggerType\": \"PostConfirmation\",\n    \"lambdaFunctionName\": \"prontoAuthPostConfirmation\"\n  },\n  {\n    \"triggerType\": \"PreAuthentication\",\n    \"lambdaFunctionName\": \"prontoAuthPreAuthentication\"\n  },\n  {\n    \"triggerType\": \"PreSignUp\",\n    \"lambdaFunctionName\": \"prontoAuthPreSignup\"\n  }\n]",
-    "authProviders": [],
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "adminQueryGroup": "superUserGroup"
+    "adminQueryGroup": "superUserGroup",
+    "authProviders": [],
+    "thirdPartyAuth": false
   }
 }

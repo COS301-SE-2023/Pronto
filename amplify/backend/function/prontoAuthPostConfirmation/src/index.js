@@ -1,4 +1,4 @@
-/**
+b/**
  * @fileoverview
  *
  * This CloudFormation Trigger creates a handler which awaits the other handlers

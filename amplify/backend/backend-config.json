@@ -106,7 +106,7 @@
             "REQUIRES_NUMBERS",
             "REQUIRES_SYMBOLS"
           ],
-          "passwordPolicyMinLength": "8"
+          "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
           "EMAIL",
@@ -161,20 +161,20 @@
       "dependsOn": [
         {
           "attributes": [
+            "Id",
+            "Region"
+          ],
+          "category": "analytics",
+          "resourceName": "prontoAnalytics"
+        },
+        {
+          "attributes": [
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput",
             "GraphQLAPIKeyOutput"
           ],
           "category": "api",
           "resourceName": "pronto"
-        },
-        {
-          "attributes": [
-            "Id",
-            "Region"
-          ],
-          "category": "analytics",
-          "resourceName": "prontoAnalytics"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -185,20 +185,20 @@
       "dependsOn": [
         {
           "attributes": [
+            "Id",
+            "Region"
+          ],
+          "category": "analytics",
+          "resourceName": "prontoAnalytics"
+        },
+        {
+          "attributes": [
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput",
             "GraphQLAPIKeyOutput"
           ],
           "category": "api",
           "resourceName": "pronto"
-        },
-        {
-          "attributes": [
-            "Id",
-            "Region"
-          ],
-          "category": "analytics",
-          "resourceName": "prontoAnalytics"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -272,6 +272,22 @@
         {
           "category": "analytics",
           "resourceName": "Pinpoint"
+        }
+      ]
+    },
+    "AMPLIFY_api_pronto_ElasticSearchInstanceType": {
+      "usedBy": [
+        {
+          "category": "api",
+          "resourceName": "pronto"
+        }
+      ]
+    },
+    "AMPLIFY_auth_prontoAuth_ElasticSearchInstanceType": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "prontoAuth"
         }
       ]
     },
@@ -371,22 +387,6 @@
         }
       ]
     },
-    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoMobileClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_cognitoWebClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
-        }
-      ]
-    },
     "AMPLIFY_function_prontoAuthPostConfirmation_deploymentBucketName": {
       "usedBy": [
         {
@@ -420,14 +420,6 @@
       ]
     },
     "AMPLIFY_function_prontoAuthPreAuthentication_apiProntoGraphqlapikeyoutput": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPreAuthentication"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPreAuthentication_authProntoauthUserpoolid": {
       "usedBy": [
         {
           "category": "function",

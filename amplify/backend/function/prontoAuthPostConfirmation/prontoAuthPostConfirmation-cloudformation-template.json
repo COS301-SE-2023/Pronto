@@ -44,12 +44,6 @@
     "s3Key": {
       "Type": "String"
     },
-    "cognitoMobileClientId": {
-      "Type": "String"
-    },
-    "cognitoWebClientId": {
-      "Type": "String"
-    },
     "adminGroupName": {
       "Type": "String"
     },
@@ -110,12 +104,6 @@
             },
             "GROUP": {
               "Ref": "GROUP"
-            },
-            "COGNITO_MOBILE_CLIENT_ID": {
-              "Ref": "cognitoMobileClientId"
-            },
-            "COGNITO_WEB_CLIENT_ID": {
-              "Ref": "cognitoWebClientId"
             },
             "ADMIN_GROUP_NAME": {
               "Ref": "adminGroupName"

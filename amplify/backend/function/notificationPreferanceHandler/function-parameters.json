@@ -1,17 +1,17 @@
 {
   "lambdaLayers": [],
   "permissions": {
-    "api": {
-      "pronto": [
-        "Query",
-        "Mutation"
-      ]
-    },
     "analytics": {
       "prontoAnalytics": [
         "create",
         "read",
         "update"
+      ]
+    },
+    "api": {
+      "pronto": [
+        "Query",
+        "Mutation"
       ]
     }
   },

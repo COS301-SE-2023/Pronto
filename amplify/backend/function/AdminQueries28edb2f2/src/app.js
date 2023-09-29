@@ -16,17 +16,10 @@ const bodyParser = require("body-parser");
 const awsServerlessExpressMiddleware = require("aws-serverless-express/middleware");
 
 const {
-  addUserToGroup,
   removeUserFromGroup,
   confirmUserSignUp,
   disableUser,
   enableUser,
-  getUser,
-  listUsers,
-  listGroups,
-  listGroupsForUser,
-  listUsersInGroup,
-  signUserOut,
   signAdminUp,
 } = require("./cognitoActions");
 
@@ -35,11 +28,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(awsServerlessExpressMiddleware.eventContext());
 
-// Enable CORS for all methods
 app.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Origin",
-    "https://www.prontotimetable.co.za/superadmin/view-institutions"
+    "*" //"https://www.prontotimetable.co.za/superadmin/view-institutions"
   );
   res.header(
     "Access-Control-Allow-Headers",
@@ -48,7 +40,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Only perform tasks if the user is in a specific group
 const allowedGroup = process.env.GROUP;
 
 app.all("*", checkGroup);
