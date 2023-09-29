@@ -8,6 +8,7 @@ import {shareAsync} from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
 import '../../assets/data/mock/global.js';
+import {useFocusEffect} from "@react-navigation/native";
 //import { getStudent } from "../../graphql/queries"
 //import { useStudent } from "../../ContextProviders/StudentContext";
 
@@ -246,9 +247,18 @@ const ScheduleTable = ({navigation, route}) => {
     };
 
 
-    useEffect(() => {
-        fetchActivities();
-    }, []);
+
+    // Define your function
+    const myFunction = () => {
+        // Your function logic here.
+        console.log('Function is running when the screen is focused.');
+    };
+
+    // Use the useFocusEffect hook to run your function when the screen is focused
+    useFocusEffect(
+        React.useCallback(() => {
+           fetchActivities()}, [])
+    );
 
     const createScheduleArray = async (modules) => {
         scheduleArray = {};
