@@ -157,7 +157,7 @@ function ForgotPassword() {
           />
           {error && <ErrorText>{error}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
-          <Button onClick={handleGetCode}>
+          <Button onClick={handleGetCode} disabled={loading}>
             {loading ? "Sending code..." : "Get Code"}
           </Button>
         </Form>
@@ -202,7 +202,7 @@ function ForgotPassword() {
           {error && <ErrorText>{error}</ErrorText>}{" "}
           {/* Render error text area if error exists */}
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
-          <Button onClick={handleVerifyCode}>
+          <Button onClick={handleVerifyCode} disabled={loading}>
             {" "}
             {loading ? "Verifying..." : "Verify Code"}
           </Button>

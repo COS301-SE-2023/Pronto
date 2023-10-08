@@ -214,7 +214,7 @@ function Login() {
             passwordMatch={passwordMatch}
           />
           {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
-          <Button onClick={onSignUpPressed}>
+          <Button onClick={onSignUpPressed} disabled={loading}>
             {loading ? "Applying..." : "Apply"}
           </Button>
           <div
@@ -278,7 +278,7 @@ function Login() {
               setPassword(event.target.value);
             }}
           />
-          <Button onClick={onSignInPressed}>
+          <Button onClick={onSignInPressed} disabled={loading}>
             {" "}
             {loading ? "Signing in..." : "Sign in"}
           </Button>

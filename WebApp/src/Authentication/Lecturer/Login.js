@@ -47,25 +47,25 @@ function Login() {
         },
       });
 
-      if (lec.data.listLecturers.items.length > 0 ) {
-        if(lec.data.listLecturers.items[0]._deleted!==true){
-        lec = lec.data.listLecturers.items[0];
-        try {
-          if (lec.institution.logo !== null) {
-            lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+      if (lec.data.listLecturers.items.length > 0) {
+        if (lec.data.listLecturers.items[0]._deleted !== true) {
+          lec = lec.data.listLecturers.items[0];
+          try {
+            if (lec.institution.logo !== null) {
+              lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+
+            }
+
+          } catch (error) {
 
           }
-          
-        } catch (error) {
+          setLecturer(lec);
 
         }
-        setLecturer(lec);
-
+        else {
+          throw Error(fetchError);
+        }
       }
-      else {
-        throw Error(fetchError);
-      }
-    }
     } catch (error) {
       await Auth.signOut();
       throw Error(fetchError);
@@ -78,13 +78,13 @@ function Login() {
       let inst = await API.graphql({
         query: listInstitutions,
         variables: {
-          filter:{
+          filter: {
           }
         },
         authMode: "API_KEY"
       });
       console.log(inst)
-      inst = inst.data.listInstitutions.items.filter((item)=>item._deleted===null);
+      inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
       console.log(inst)
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
@@ -102,7 +102,7 @@ function Login() {
 
   useEffect(() => {
     fetchInstitutions();
-  },[])
+  }, [])
 
 
   const onSignInPressed = async (event) => {
@@ -342,10 +342,10 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-                
+
                 <StyledSelectInput
                   defaultValue={"University of Pretoria"}
-                  options={institutions}             
+                  options={institutions}
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"
@@ -353,7 +353,7 @@ function Login() {
                   spellCheck="true"
                   isSelectionValid={isInstitudeSelected}
                 ></StyledSelectInput>
-                
+
                 <Input
                   type="password"
                   placeholder="Password"
@@ -378,7 +378,7 @@ function Login() {
                 />
                 {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
                 {/* Render error text area if error exists */}
-                <Button type="submit" onClick={onSignUpPressed}>
+                <Button type="submit" onClick={onSignUpPressed} disabled={loading}>
                   {loading ? "Signing up..." : "Sign up"}
                 </Button>
                 <div
@@ -435,7 +435,7 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-    
+
                 <Input
                   type="password"
                   placeholder="Password"
@@ -444,7 +444,7 @@ function Login() {
                     setPassword(event.target.value);
                   }}
                 />
-                <Button type="submit" onClick={onSignInPressed}>
+                <Button type="submit" onClick={onSignInPressed} disabled={loading}>
                   {loading ? "Signing in..." : "Sign in"}
                 </Button>
                 <Anchor type="text/html" href="/lecturer/forgot-password">

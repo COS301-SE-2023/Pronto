@@ -18,10 +18,10 @@ function Login() {
   const [password, setPassword] = useState("");
   const [signInError, setsignInError] = useState("");
   const [signUpError, setsignUpError] = useState("");
-  const [firstname,setFirstName] = useState("");
-  const [lastname,setLastName]= useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
 
-  const [institutionName,setInstitutionName] = useState("")
+  const [institutionName, setInstitutionName] = useState("")
   //sign up states
   const [name, setName] = useState("");
 
@@ -31,10 +31,10 @@ function Login() {
 
 
   //select institution
-   const [institutionId, setInstitutionId] = useState("");
- 
+  const [institutionId, setInstitutionId] = useState("");
+
   const [loading, setLoading] = useState(false);
- // const [institutionName, setInstitutionName] = useState("");
+  // const [institutionName, setInstitutionName] = useState("");
   const [institutions, setInstitutions] = useState([])
 
   const { setAdmin } = useAdmin();
@@ -81,7 +81,7 @@ function Login() {
       let inst = await API.graphql({
         query: listInstitutions,
         variables: {
-       
+
         },
         authMode: "API_KEY"
       });
@@ -128,24 +128,24 @@ function Login() {
         }
       }
 
-      const user=await Auth.signIn(signInObject);
+      const user = await Auth.signIn(signInObject);
       setsignInError("");
       const newPassword = password
-    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      const loggedInUser = await Auth.completeNewPassword(
-        user, 
-        newPassword, 
-        {
-          family_name: "  "
-          
-        }
-      )
+      if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        const loggedInUser = await Auth.completeNewPassword(
+          user,
+          newPassword,
+          {
+            family_name: "  "
 
-      console.log(loggedInUser);
-    }
+          }
+        )
+
+        console.log(loggedInUser);
+      }
       console.log(user);
       //await fetchAdmin().then(() => navigate("/institution/dashboard"))
-       navigate("/institution/dashboard");
+      navigate("/institution/dashboard");
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
@@ -195,27 +195,27 @@ function Login() {
 
     try {
 
-      const n=firstname+" "+lastname
-       const application = {
+      const n = firstname + " " + lastname
+      const application = {
         name: institutionName,
         firstname: n,
         email: email,
         status: "PENDING"
       }
 
-      try{
-        let apply=await API.graphql({
+      try {
+        let apply = await API.graphql({
           query: createAdminApplication,
           variables: {
             input: application
           },
-        authMode: "API_KEY"
-      })
-      console.log(apply);
-    }catch(error){
-      console.log(error);
-    }
-    
+          authMode: "API_KEY"
+        })
+        console.log(apply);
+      } catch (error) {
+        console.log(error);
+      }
+
 
       //await Auth.signUp(signInObject);
 
@@ -224,27 +224,27 @@ function Login() {
     } catch (e) {
       console.log(e);
 
-    //   let n=firstname+" "+lastname;
-    //   const application = {
-    //     name: institutionName,
-    //     firstname: n,
-    //     email: email,
-    //     status: "PENDING"
-    //   }
+      //   let n=firstname+" "+lastname;
+      //   const application = {
+      //     name: institutionName,
+      //     firstname: n,
+      //     email: email,
+      //     status: "PENDING"
+      //   }
 
-    //   try{
-    //   await API.graphql({
-    //     query: createAdminApplication,
-    //     variables: {
-    //       input: application
-    //     },
-    //     authMode: "API_KEY"
-    //   })
-    // }catch(error){
-    //   console.log(error);
-    // }
+      //   try{
+      //   await API.graphql({
+      //     query: createAdminApplication,
+      //     variables: {
+      //       input: application
+      //     },
+      //     authMode: "API_KEY"
+      //   })
+      // }catch(error){
+      //   console.log(error);
+      // }
       // setsignUpError(e.message);
-//      setsignUpError("Your application has been sent")
+      //      setsignUpError("Your application has been sent")
     }
     setLoading(false);
   };
@@ -348,7 +348,7 @@ function Login() {
                   }}
                   isValidName={nameIsValid}
                 />
-                 <Input
+                <Input
                   type="text"
                   placeholder="Last Name"
                   value={lastname}
@@ -367,7 +367,7 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-{/*                 
+                {/*                 
                 <StyledSelectInput
                   options={institutions}
                   defaultValue={institutionId}
@@ -378,7 +378,7 @@ function Login() {
                   spellCheck="true"
                   isSelectionValid={isInstitudeSelected}
                 ></StyledSelectInput> */}
-                
+
                 {/* <Input
                   type="password"
                   placeholder="Password"
@@ -402,7 +402,7 @@ function Login() {
                   passwordMatch={passwordMatch}
                 /> */}
                 {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
-                <Button onClick={onSignUpPressed}>
+                <Button onClick={onSignUpPressed} disabled={loading}>
                   {loading ? "Applying..." : "Apply"}
                 </Button>
                 <div
@@ -458,7 +458,7 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-                
+
                 <Input
                   type="password"
                   placeholder="Password"
@@ -467,7 +467,7 @@ function Login() {
                     setPassword(event.target.value);
                   }}
                 />
-                <Button onClick={onSignInPressed}>
+                <Button onClick={onSignInPressed} disabled={loading}>
                   {" "}
                   {loading ? "Signing in..." : "Sign in"}
                 </Button>
