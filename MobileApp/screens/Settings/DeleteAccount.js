@@ -103,7 +103,7 @@ const DeleteAccountPage = () => {
       <Text style={styles.subtitle}>
         Are you sure you want to delete your account?
       </Text>
-      <TouchableOpacity style={styles.button} onPress={handleDeleteAccount}>
+      <TouchableOpacity style={styles.button} onPress={handleDeleteAccount} disabled={deleting}>
         <Text style={styles.buttonText}>{deleting ? "Deleting..." : "Delete Account"}</Text>
       </TouchableOpacity>
     </View>

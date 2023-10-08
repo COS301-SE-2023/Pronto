@@ -170,7 +170,7 @@ const NavigationScreen = ({ navigation, route }) => {
                     setCoordinates(loc);
                 }
 
-          
+
             }
 
         } catch (e) {

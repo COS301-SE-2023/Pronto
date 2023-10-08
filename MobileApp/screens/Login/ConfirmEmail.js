@@ -32,7 +32,7 @@ const ConfirmEmail = ({ navigation }) => {
 
     setLoading(true);
     try {
-      response = await Auth.confirmSignUp(email, code, { clientMetadata: { role:"Student" } });
+      response = await Auth.confirmSignUp(email, code, { clientMetadata: { role: "Student" } });
 
       //need to add user to a user group here?
       Alert.alert("Success", "Login to access your account.");
@@ -82,7 +82,7 @@ const ConfirmEmail = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity style={styles.signInButton} onPress={onVerifyPressed} testID="verify-button">
+        <TouchableOpacity style={styles.signInButton} onPress={onVerifyPressed} disabled={loading} testID="verify-button">
           <Text style={styles.signInButtonText}>
             {loading ? "Verifying..." : "Verify Account"}
           </Text>

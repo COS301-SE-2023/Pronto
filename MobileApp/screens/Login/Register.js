@@ -102,9 +102,9 @@ const Register = ({ navigation }) => {
         variables: {},
         authMode: "API_KEY"
       });
-      
+
       inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      
+
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -367,7 +367,7 @@ const Register = ({ navigation }) => {
           )}
         </View>
 
-        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} testID='sign-up-button'>
+        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} disabled={loading} testID='sign-up-button'>
           <Text style={styles.signUpButtonText}>
             {" "}
             {loading ? "Signing up..." : "Sign up"}

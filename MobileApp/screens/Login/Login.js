@@ -172,7 +172,7 @@ const Login = ({ navigation }) => {
 
         </View>
 
-        <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>
+        <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed} disabled={loading}>
           <Text style={styles.signInButtonText}>
             {loading ? "Signing in..." : "Sign in"}
           </Text>

@@ -50,72 +50,73 @@ const ResetPassword = ({ navigation }) => {
   };
 
   return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.contentContainer}>
-          <View style={styles.centered}>
-            <Text style={styles.title} testID='reset-password-title'>Reset Password</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.contentContainer}>
+        <View style={styles.centered}>
+          <Text style={styles.title} testID='reset-password-title'>Reset Password</Text>
 
-            <Text style={styles.subtitle} testID='reset-password-subtitle'>
-              Forgot your password? No problem, just reset it here!
-            </Text>
-            <ImageBackground
-                resizeMode="contain"
-                //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
-                source={require("../../assets/icons/reset-password.png")}
-                style={styles.image}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-                testID='email-input'
-                placeholder="Email"
-                autoCapitalize="none"
-                placeholderTextColor={"#666666"}
-                value={email}
-                onChangeText={(value) => {
-                  setEmail(value);
-                  validateEmail(value);
-                }}
-                style={[styles.input]}
-                onFocus={() => setIsTypingEmail(true)}
-            />
-
-            {isTypingEmail && emailIsValid && (
-                <View style={styles.iconContainer} testID="checkmark-icon">
-                  <Ionicons name="checkmark-circle" size={24} color="green"  />
-                </View>
-            )}
-
-            {isTypingEmail && !emailIsValid && (
-                <View style={styles.iconContainer} testID="cancel-icon" >
-                  <MaterialIcons name="cancel" size={24} color="red" />
-                </View>
-            )}
-          </View>
-
-          <TouchableOpacity
-              style={styles.signUpButton}
-              onPress={() => onResetPasswordPressed()}
-              testID='send-code-button'
-          >
-            <Text style={styles.signUpButtonText}>
-              {loading ? "Sending..." : "Send code"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-              style={styles.haveAccountButton}
-              onPress={() => navigation.navigate("Login")}
-              testID='back-to-sign-in-button'
-          >
-            <Text style={styles.haveAccountButtonText}>
-              {" "}
-              &#x2190; Back to sign in
-            </Text>
-          </TouchableOpacity>
+          <Text style={styles.subtitle} testID='reset-password-subtitle'>
+            Forgot your password? No problem, just reset it here!
+          </Text>
+          <ImageBackground
+            resizeMode="contain"
+            //attribution: <a href="https://storyset.com/education">Education illustrations by Storyset</a>
+            source={require("../../assets/icons/reset-password.png")}
+            style={styles.image}
+          />
         </View>
-      </SafeAreaView>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            testID='email-input'
+            placeholder="Email"
+            autoCapitalize="none"
+            placeholderTextColor={"#666666"}
+            value={email}
+            onChangeText={(value) => {
+              setEmail(value);
+              validateEmail(value);
+            }}
+            style={[styles.input]}
+            onFocus={() => setIsTypingEmail(true)}
+          />
+
+          {isTypingEmail && emailIsValid && (
+            <View style={styles.iconContainer} testID="checkmark-icon">
+              <Ionicons name="checkmark-circle" size={24} color="green" />
+            </View>
+          )}
+
+          {isTypingEmail && !emailIsValid && (
+            <View style={styles.iconContainer} testID="cancel-icon" >
+              <MaterialIcons name="cancel" size={24} color="red" />
+            </View>
+          )}
+        </View>
+
+        <TouchableOpacity
+          style={styles.signUpButton}
+          onPress={() => onResetPasswordPressed()}
+          disabled={loading}
+          testID='send-code-button'
+        >
+          <Text style={styles.signUpButtonText}>
+            {loading ? "Sending..." : "Send code"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.haveAccountButton}
+          onPress={() => navigation.navigate("Login")}
+          testID='back-to-sign-in-button'
+        >
+          <Text style={styles.haveAccountButtonText}>
+            {" "}
+            &#x2190; Back to sign in
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
