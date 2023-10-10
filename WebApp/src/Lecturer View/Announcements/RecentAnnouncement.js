@@ -141,6 +141,7 @@ export default function RecentAnnouncement() {
       setAnnouncement(rows)
       setIsDeleting(false);
     } catch (e) {
+      console.log(e)
       setError("Something went wrong. Please try again later");
       setIsDeleting(false);
     }
@@ -196,7 +197,8 @@ export default function RecentAnnouncement() {
             variables: variables,
           });
           announcementList = announcementList.data.announcementsByDate;
-          setAnnouncement(announcementList.items);
+          
+          setAnnouncement(announcementList.items.filter((item)=>item._deleted===null));
           if (announcementList.items.length < limit) {
             setNextToken(null);
           }
@@ -207,6 +209,7 @@ export default function RecentAnnouncement() {
         setLoading(false);
       }
     } catch (error) {
+      console.log(error);
       if (error.errors !== undefined) {
         let e = error.errors[0].message
         if (e.search("Network") !== -1) {
@@ -244,6 +247,7 @@ export default function RecentAnnouncement() {
       });
 
       let list = announcementList.data.announcementsByDate.items;
+      list.filter((l)=>l._deleted===null);
       for (let i = 0; i < list.length; i++) {
         announcement.push(list[i]);
       }
@@ -255,6 +259,7 @@ export default function RecentAnnouncement() {
       }
       setAnnouncement(announcement);
     } catch (error) {
+      console.log(error);
       setError("Your request could not be processed at this time");
     }
   }
@@ -262,9 +267,6 @@ export default function RecentAnnouncement() {
   useEffect(() => {
     fetchAnnouncements();
   }, [])
-
-
-
 
   return (
     <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>

@@ -45,7 +45,7 @@ export default function LecturerNavigation() {
           },
         });
 
-        if (lec.data.listLecturers.items.length === 0) {
+        if (lec.data.listLecturers.items.length === 0 || lec.data.listLecturers.items[0]._deleted===true) {
           throw Error()
         }
         lec = lec.data.listLecturers.items[0];
@@ -62,7 +62,7 @@ export default function LecturerNavigation() {
 
       }
     } catch (error) {
-
+      console.log(error);
     }
   }
 

@@ -26,6 +26,8 @@ export default function ApplicationRequests() {
       //   query: updateAdmin,
       //   variables: { input: admin }
       // })
+           updatedRequests.splice(index, 1);
+      setRequests(updatedRequests);
 
       let request = requests[index];
       let institution = {
@@ -54,7 +56,8 @@ export default function ApplicationRequests() {
       console.log(admin)
       let update = {
         id: inst.data.createInstitution.id,
-        adminId: admin.data.createAdmin.id
+        adminId: admin.data.createAdmin.id,
+        _version:inst.data.createInstitution._version
       }
       console.log(update)
       let f = await API.graphql({
@@ -63,12 +66,12 @@ export default function ApplicationRequests() {
       })
       //  const user= await getUserHelper()
       //  console.log(user);
-      await API.graphql({
+      let g=await API.graphql({
         query: updateAdminApplication,
-        variables: { input: { id: requests[index].id, status: "ACCEPTED" } }
+        variables: { input: { id: requests[index].id, status: "ACCEPTED",_version:requests[index]._version } }
       })
-      updatedRequests.splice(index, 1);
-      setRequests(updatedRequests);
+      console.log(g);
+ 
     } catch (error) {
       console.log(error);
     }
@@ -142,8 +145,8 @@ export default function ApplicationRequests() {
           }
         }
       })
-      setRequests(r.data.listAdminApplications.items);
-      //console.log(r);   
+      setRequests(r.data.listAdminApplications.items.filter((item)=>item._deleted===null && item.status==="PENDING"));
+      console.log(r);   
     } catch (error) {
       console.log(error)
     }

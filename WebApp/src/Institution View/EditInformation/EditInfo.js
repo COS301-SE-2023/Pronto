@@ -53,7 +53,8 @@ const EditInfoPage = () => {
                 setError("New password does not match confirm password");
             }
         } catch (error) {
-            setError("Password change failed")
+            console.log(error);
+            setError("Password change failed");
         }
         setOldPassword("")
         setNewPassword("")
@@ -127,6 +128,7 @@ const EditInfoPage = () => {
             let inst = {
                 id: admin.institution.id,
                 domains: admin.institution.domains,
+                _version:admin.institution._version
             };
             let update = await API.graphql({
                 query: updateInstitution,
@@ -135,6 +137,7 @@ const EditInfoPage = () => {
             //update.data.updateInstitution.logoUrl = logoUrl;
             //let newAdmin = admin;
             //newAdmin.institution = update.data.updateInstitution;
+            admin.institution._version=update.data.updateInstitution._version;
             setAdmin(admin);
             setSuccessMessage("Domains updated successfully");
 
@@ -159,7 +162,8 @@ const EditInfoPage = () => {
 
                 let inst = {
                     id: admin.institution.id,
-                    logo: fileKey
+                    logo: fileKey,
+                    _version:admin.institution._version
                 };
                 let update = await API.graphql({
                     query: updateInstitution,
@@ -253,7 +257,7 @@ const EditInfoPage = () => {
 
                         <tr>
                             <td>Institution name:</td>
-                            <td>{user !== null ? user.attributes.name : " "}</td>
+                            <td>{admin !== null ? admin?.institution?.name : " "}</td>
                         </tr>
 
                         <tr>
