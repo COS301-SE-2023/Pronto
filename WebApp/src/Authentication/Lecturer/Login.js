@@ -94,6 +94,7 @@ function Login() {
         }
         institutionInfo.push(item);
       }
+     
       setInstitutions(institutionInfo);
     } catch (error) {
       console.log(error);
@@ -130,6 +131,7 @@ function Login() {
           role: "Lecturer",
         }
       }
+      console.log(signInObject);
       await Auth.signIn(signInObject);
       //  const user = await Auth.currentAuthenticatedUser();
       //  console.log(user);

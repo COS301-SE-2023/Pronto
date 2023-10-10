@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import ScheduleUpload from '../Images/ScheduleUpload.png';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/Schedule.pdf";
-import { listAdmins } from "../../Graphql/queries";
+import { listAdmins,coursesByInstitutionId } from "../../Graphql/queries";
 import CourseReader from "./CourseReader"
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { ErrorModal } from "../../Components/ErrorModal";
-//import { useCourse } from "../../ContextProviders/CourseContext";
+import { useCourse } from "../../ContextProviders/CourseContext";
 import { Storage, Auth, API } from "aws-amplify";
 
 function DropzoneComponent() {
@@ -17,7 +17,7 @@ function DropzoneComponent() {
   const [folderNameS3, setFolderNameS3] = useState("");
   const { admin, setAdmin } = useAdmin();
   const [error, setError] = useState("");
-  // const { course, setCourse } = useCourse();
+   const { course, setCourse } = useCourse();
   // const [activities, setActvities] = useState([]);
 
   const fetchUserData = async () => {
@@ -39,6 +39,7 @@ function DropzoneComponent() {
 
   useEffect(() => {
     fetchUserData();
+    //fetchCourses();
   }, []);
 
 
@@ -68,7 +69,7 @@ function DropzoneComponent() {
 
 
 
-  /* const fetchCourses = async () => {
+  const fetchCourses = async () => {
      try {
        let adminInfo = admin;
        if (admin === null) {
@@ -95,26 +96,15 @@ function DropzoneComponent() {
            }
          })
  
+         console.log(courseList)
          courseList = courseList.data.coursesByInstitutionId.items;
-         setCourse(courseList);
- 
-         let act = [];
-         for (let i = 0; i < courseList.length; i++) {
-           for (let j = 0; j < courseList[i].activity.items.length; j++) {
-             act.push(courseList[i].activity.items[j]);
-           }
-         }
-         
-         setActvities(act);
- 
+         setCourse(courseList.filter((item)=>item._deleted===null));
        }
  
-      
- 
      } catch (error) {
- 
+        console.log(error);
      }
-   }; */
+   }; 
 
   const createFolder = async (folderName) => {
     try {
@@ -316,8 +306,8 @@ function DropzoneComponent() {
             })}
         </tbody>
         </table>
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <CourseReader institutionId={admin?.institutionId}
                       course={course}
                       setCourse={setCourse}

@@ -137,12 +137,14 @@ const EditInfoPage = () => {
             //update.data.updateInstitution.logoUrl = logoUrl;
             //let newAdmin = admin;
             //newAdmin.institution = update.data.updateInstitution;
+            console.log(update)
             admin.institution._version=update.data.updateInstitution._version;
             setAdmin(admin);
             setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
             setError("Something went wrong");
+            console.log(error);
         }
     }
 

@@ -12,11 +12,12 @@ const CourseReader = (props)=>{
     const[successMessage,setSuccessMessage]=useState("")
     const handleFile = async(data, fileInfo) => {
       setIsDisabled(true);
+      console.log(fileInfo);
       if(data.length<100){
-        props.setLoading(true);
-        deleteCourses();
+        //props.setLoading(true);
+        await deleteCourses();
         await addCourses(data);
-        props.setLoading(false);
+        //props.setLoading(false);
       }
       setIsDisabled(false);
       
@@ -38,12 +39,12 @@ const CourseReader = (props)=>{
 
   const deleteCourses =async()=>{
     //props.setCourses([]);
-    
+    console.log(props.course);
     for(let i=0;i<props.course.length;i++){
        try{
             let del= await API.graphql({
                 query:deleteCourse,
-                variables:{input:{id:props.courses[i].id,_version:props.course[i]._version}}
+                variables:{input:{id:props.course[i].id,_version:props.course[i]._version}}
             })
             console.log(del);
             
@@ -62,13 +63,16 @@ const CourseReader = (props)=>{
         try{
           
             let coursecode=courseList[i]['coursecode'] ? courseList[i]['coursecode']  : courseList[i]['course'] ? courseList[i]['course'] : courseList[i]['module']? courseList[i]['module']:
-            courseList[i]['modulecode'] ? courseList[i]['modulecode'] : undefined;
+            courseList[i]['modulecode'] ? courseList[i]['modulecode'] : courseList[i]['code'] ? courseList[i]['code'] : undefined;
             let activity={
                 activityname:courseList[i]['activity']? courseList[i]['activity'] : courseList[i]['actvityname']? courseList[i]['activityname'] : undefined,
                 day: courseList[i]['day']? courseList[i]['day']  : courseList[i]['dayofweek']?  courseList[i]['dayofweek'] : undefined,
                 start:courseList[i]['start'] ? courseList[i]['start'] : courseList[i]['starttime']? courseList[i]['starttime'] : undefined,
                 end:courseList[i]['end'] ? courseList[i]['end'] : courseList[i]['endtime']? courseList[i]['endtime'] : undefined,
                 venue:courseList[i]['venue']? courseList[i]['venue'] :courseList[i]['lecturevenue']? courseList[i]['lecturevenue'] : courseList[i]['location']? courseList[i]['location'] : "TBA",
+                frequency:1,
+                group:" ",
+                description:"  "
             }
             if(coursecode!==null || coursecode!==undefined || coursecode!==""){
                 if(activity.start!==undefined && activity.end!==undefined && activity.activityname!==undefined){
@@ -94,8 +98,10 @@ const CourseReader = (props)=>{
     try{
     
       let count=0;
+      console.log(courseMap);
         courseMap.forEach(async(key,val)=>{
       
+        try{
         let newCourse=await API.graphql({
             query:createCourse,
             variables:{input:{institutionId:props.institutionId,coursecode:val}}
@@ -112,9 +118,14 @@ const CourseReader = (props)=>{
             count+=1;  
            console.log(act);
         }
+        }catch(error){
+          console.log(error)
+        }
         if(count===entries)
           setSuccessMessage("Done");
-        })  
+     
+        })
+        
     }catch(error){
         console.log(error);
     }

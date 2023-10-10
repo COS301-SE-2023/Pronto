@@ -97,6 +97,7 @@ const AddLecturer = () => {
                             query: createLecturer,
                             variables: { input: lecturer },
                         });
+                        console.log(mutation);
 
                         lecturer = mutation.data.createLecturer
                         lecturer.courses = {
@@ -123,6 +124,7 @@ const AddLecturer = () => {
                             query: updateInstitution,
                             variables: { input: update },
                         });
+                        console.log(ins);
                         // u = u.data.updateInstitution
                         // u.logoUrl = logoUrl;
                         // let ad = admin;
@@ -434,8 +436,11 @@ const AddLecturer = () => {
 
     const handleSearch = async () => {
         try {
-            if (searchIcon === false) {
+            console.log(searchIcon);
+            if (searchIcon === true) {
+                console.log(searchValue)
                 if (searchValue !== "") {
+                    console.log(filterAttribute);
                     if (filterAttribute !== "default") {
 
                         let filter = `{"filter": { "and" : [ { "${filterAttribute}" : {"beginsWith":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
@@ -446,7 +451,10 @@ const AddLecturer = () => {
                             query: listLecturers,
                             variables: variables
                         })
+                        console.log(lecturers);
+                         setSearchIcon(false);
                         lecturers = lecturers.data.listLecturers;
+                        
                         setLecturerList(lecturers.items.filter((item)=>item._deleted===null));
                         if (lecturers.items.length < limit) {
                             setNextToken(null);
@@ -454,10 +462,10 @@ const AddLecturer = () => {
                         else {
                             setNextToken(lecturers.nextToken);
                         }
-                        setSearchIcon(!searchIcon);
+                       
                     }
+                }
             }
-        }
             else {
                 let lecturers = await API.graphql({
                     query: lecturersByInstitutionId,
@@ -467,6 +475,8 @@ const AddLecturer = () => {
                     }
                 });
                 lecturers = lecturers.data.lecturersByInstitutionId;
+                console.log(lecturers);
+                setSearchIcon(true);
                 setLecturerList(lecturers.items.filter((item)=>item._deleted===null));
                 if (lecturers.items.length < limit) {
                     setNextToken(null);
@@ -474,7 +484,7 @@ const AddLecturer = () => {
                 else {
                     setNextToken(lecturers.nextToken);
                 }
-                setSearchIcon(!searchIcon)
+                
             }
             //}
         } catch (error) {
@@ -635,13 +645,13 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            onMouseEnter={() => setSearchIcon(true)}
-                            onMouseLeave={() => setSearchIcon(false)}
+                            // onMouseEnter={() => setSearchIcon(true)}
+                            // onMouseLeave={() => setSearchIcon(false)}
                         //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
 
                             <div className="input-group-append">
-                                {searchIcon === false ? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "ffffff" }} />}
+                                {searchIcon === true? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "#e32f45" }} />}
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}

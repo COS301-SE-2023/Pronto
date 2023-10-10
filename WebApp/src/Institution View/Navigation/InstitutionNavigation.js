@@ -53,8 +53,6 @@ export default function InstitutionNavigation() {
                 }
 
             }
-            console.log(admin);
-
         } catch (error) {
 
         }

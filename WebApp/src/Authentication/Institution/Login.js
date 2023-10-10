@@ -124,7 +124,7 @@ function Login() {
         password: password,
         validationData: {
           role: "Admin",
-          institutionId: institutionId
+         // institutionId: institutionId
         }
       }
 
@@ -143,7 +143,7 @@ function Login() {
 
       console.log(loggedInUser);
     }
-      console.log(user);
+      
       //await fetchAdmin().then(() => navigate("/institution/dashboard"))
        navigate("/institution/dashboard");
     } catch (e) {

@@ -23,24 +23,29 @@ export default function SearchableDropdown(props) {
         query: listCourses,
         variables: {
           filter: {
-            and: [
-              {
-                coursecode: { beginsWith: event.target.value },
+            // and: [
+            //   {
+            //     coursecode: { eq: event.target.value },
 
-              },
-              {
-                institutionId: { eq: admin.institutionId }
-              },
-              {
-                lecturerId: { eq: null }
-              }
-            ]
+            //   },
+            //   {
+            //     institutionId: { eq: admin.institutionId }
+            //   },
+            //   {
+            //     lecturerId: { eq: null }
+            //   }
+            // ]
+            coursecode:{
+              beginsWith:event.target.value
+            }
           }
         }
       }
       )
+      console.log(courseList);
       let c = [];
-      courseList = courseList.data.listCourses.items.filter((a) => a.lecturerId === null && a._deleted===null)
+      courseList = courseList.data.listCourses.items.filter((a) => a.lecturerId === null && a._deleted===null && a.institutionId===admin.institutionId)
+
       for (let i = 0; i < courseList.length; i++) {
         if (selectedCourses.filter((a) => a.id !== courseList[i].id)) {
           c.push(courseList[i]);

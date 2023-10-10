@@ -247,7 +247,7 @@ export default function RecentAnnouncement() {
       });
 
       let list = announcementList.data.announcementsByDate.items;
-      list.filter((l)=>l._deleted===null);
+      list=list.filter((l)=>l._deleted===null);
       for (let i = 0; i < list.length; i++) {
         announcement.push(list[i]);
       }
