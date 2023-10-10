@@ -1,10 +1,4 @@
 {
-  "analytics": {
-    "prontoAnalytics": {
-      "providerPlugin": "awscloudformation",
-      "service": "Pinpoint"
-    }
-  },
   "api": {
     "AdminQueries": {
       "authorizationType": "AMAZON_COGNITO_USER_POOLS",
@@ -167,14 +161,6 @@
           ],
           "category": "api",
           "resourceName": "pronto"
-        },
-        {
-          "attributes": [
-            "Id",
-            "Region"
-          ],
-          "category": "analytics",
-          "resourceName": "prontoAnalytics"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -191,14 +177,6 @@
           ],
           "category": "api",
           "resourceName": "pronto"
-        },
-        {
-          "attributes": [
-            "Id",
-            "Region"
-          ],
-          "category": "analytics",
-          "resourceName": "prontoAnalytics"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -240,14 +218,6 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
-    }
-  },
-  "notifications": {
-    "prontoAnalytics": {
-      "channels": [
-        "Email"
-      ],
-      "service": "Pinpoint"
     }
   },
   "parameters": {
@@ -352,14 +322,6 @@
         {
           "category": "function",
           "resourceName": "notificationPreferanceHandler"
-        }
-      ]
-    },
-    "AMPLIFY_function_prontoAuthPostConfirmation_GROUP": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "prontoAuthPostConfirmation"
         }
       ]
     },

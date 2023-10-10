@@ -51,3 +51,4 @@ Errors will be thrown from the cloud function, which will be sent to the client 
 | `Cannot authenticate user from this app client: Students Should use the mobile app and Admin/Lectures should use the web app`| appClientId does not match the provided role |
 | `Institution has an admin already.`| Instution has been allocated an admin already |
 |`Lecturer email is not part of the Institution.` | The provided email by the lecturer has not been registered by the institution's admin |
+

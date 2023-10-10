@@ -19,12 +19,12 @@
       "environmentVariableName": "ADMIN_GROUP_NAME"
     },
     {
-      "cloudFormationParameterName": "lecturerGroupName",
-      "environmentVariableName": "LECTURER_GROUP_NAME"
-    },
-    {
       "cloudFormationParameterName": "studentGroupName",
       "environmentVariableName": "STUDENT_GROUP_NAME"
+    },
+    {
+      "cloudFormationParameterName": "lecturerGroupName",
+      "environmentVariableName": "LECTURER_GROUP_NAME"
     },
     {
       "cloudFormationParameterName": "cognitoWebClientId",

@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.4.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.6.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -27,14 +27,6 @@
     "apiprontoGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apiprontoGraphQLAPIKeyOutput"
-    },
-    "analyticsprontoAnalyticsId": {
-      "Type": "String",
-      "Default": "analyticsprontoAnalyticsId"
-    },
-    "analyticsprontoAnalyticsRegion": {
-      "Type": "String",
-      "Default": "analyticsprontoAnalyticsRegion"
     },
     "prontoNotificationsEmail": {
       "Type": "String"
@@ -101,12 +93,6 @@
             },
             "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apiprontoGraphQLAPIKeyOutput"
-            },
-            "ANALYTICS_PRONTOANALYTICS_ID": {
-              "Ref": "analyticsprontoAnalyticsId"
-            },
-            "ANALYTICS_PRONTOANALYTICS_REGION": {
-              "Ref": "analyticsprontoAnalyticsRegion"
             },
             "PRONTO_NOTIFICATIONS_EMAIL": {
               "Ref": "prontoNotificationsEmail"
@@ -264,58 +250,6 @@
                         "Ref": "apiprontoGraphQLAPIIdOutput"
                       },
                       "/types/Mutation/*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "mobiletargeting:Put*",
-                "mobiletargeting:Create*",
-                "mobiletargeting:Send*",
-                "mobiletargeting:Get*",
-                "mobiletargeting:List*",
-                "mobiletargeting:Update*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:mobiletargeting:",
-                      {
-                        "Ref": "analyticsprontoAnalyticsRegion"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":apps/",
-                      {
-                        "Ref": "analyticsprontoAnalyticsId"
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:mobiletargeting:",
-                      {
-                        "Ref": "analyticsprontoAnalyticsRegion"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":apps/",
-                      {
-                        "Ref": "analyticsprontoAnalyticsId"
-                      },
-                      "/*"
                     ]
                   ]
                 }

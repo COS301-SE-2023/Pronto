@@ -1,6 +1,6 @@
 const preSignIn = require("../../../../function/prontoAuthPreAuthentication/src/index");
 const {
-  isInstitideAdminOrLecturer,
+  isUserAdminOrLecturer,
 } = require("../../../../function/prontoAuthPreAuthentication/src/helpers/assertInstitutionInfo");
 const ROLES = require("../../../../function/prontoAuthPreAuthentication/src/roles");
 
@@ -31,10 +31,10 @@ describe("testing presignIn inputs", () => {
       "Invalid User Role or Role not provided"
     );
   });
-  test("should throw: Invalid institution Id or email", async () => {
+  test("should throw: Invalid email address. Email = ", async () => {
     await expect(
-      isInstitideAdminOrLecturer("", "", ROLES.Admin)
-    ).rejects.toThrowError("Invalid institution Id or email");
+      isUserAdminOrLecturer("", "", ROLES.Admin)
+    ).rejects.toThrowError("Invalid email address. Email = ");
   });
   test("should throw: Invalid role", async () => {});
 

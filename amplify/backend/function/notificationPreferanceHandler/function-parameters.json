@@ -6,13 +6,6 @@
         "Query",
         "Mutation"
       ]
-    },
-    "analytics": {
-      "prontoAnalytics": [
-        "create",
-        "read",
-        "update"
-      ]
     }
   },
   "environmentVariableList": [
