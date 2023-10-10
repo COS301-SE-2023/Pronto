@@ -1,5 +1,15 @@
 {
   "dependencies": {
     "@aws-amplify/cli": "^12.6.0"
+  },
+  "scripts": {
+    "dev:backend": "amplify env checkout dev ",
+    "beta:backend": "amplify env checkout beta",
+    "prod:backend": "amplify env checkout prod && git switch prod",
+    "deploy:backend": "amplify push",
+    "pull:backend": "amplify pull",
+    "status:backend": "amplify status",
+    "update:backend:function": "amplify update function",
+    "debug:backend:getfunction": "aws lambda get-function --function-name "
   }
 }
