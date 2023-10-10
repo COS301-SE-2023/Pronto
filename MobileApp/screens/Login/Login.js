@@ -13,7 +13,6 @@ import {
 import React, { useState } from "react";
 import { SelectList } from "react-native-dropdown-select-list";
 import institutionInfo from "../../assets/data/universityInfo.json";
-import { listInstitutions } from "../../graphql/queries"
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth, API } from "aws-amplify";
 import { getStudent } from "../../graphql/queries";

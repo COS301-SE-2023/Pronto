@@ -3,7 +3,7 @@ import { Alert, View, StyleSheet, Modal, Text, RefreshControl, IconButton, Press
 import { List, Card, Avatar, Button, Portal, PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { listStudents, getStudent, announcementsByDate, listAnnouncements } from "../graphql/queries";
+import {  getStudent, listAnnouncements } from "../graphql/queries";
 import { Auth, API } from "aws-amplify"
 import { useStudent } from "../ContextProviders/StudentContext";
 import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
@@ -40,7 +40,7 @@ const NotificationList = ({ navigation }) => {
                 })
 
                 stu = stu.data.getStudent;
-
+                stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null)
                 if (stu === null || stu === undefined) {
                     throw Error();
                 }

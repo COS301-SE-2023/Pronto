@@ -102,7 +102,7 @@ const NotificationPreferences = () => {
       else {
         let pref = await API.graphql({
           query: updateNotificationPreferance,
-          variables: { input: { id: student.studentPreferenceId, type: selectedOption.toUpperCase() } }
+          variables: { input: { id: student.studentPreferenceId, type: selectedOption.toUpperCase() ,_version:student.preference._version} }
         })
 
         student.preference = pref.data.updateNotificationPreferance;

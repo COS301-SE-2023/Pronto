@@ -8,7 +8,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { Auth, API } from "aws-amplify";
-import { listStudents, getStudent } from "../../graphql/queries"
+import {  getStudent } from "../../graphql/queries"
 import { deleteStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { useNavigation } from "@react-navigation/native";
@@ -51,10 +51,10 @@ const DeleteAccountPage = () => {
 
                   let del = await API.graphql({
                     query: deleteStudent,
-                    variables: { input: { id: stu.id } }
+                    variables: { input: { id: stu.id,_version:stu._version } }
                   })
                 } catch (e) {
-
+                    console.log(e);
                 }
                 updateStudent(null);
                 navigation.navigate("Welcome");

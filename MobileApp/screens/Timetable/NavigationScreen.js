@@ -107,6 +107,7 @@ const NavigationScreen = ({ navigation, route }) => {
                 })
 
                 stu = stu.data.getStudent;
+                stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null)
                 if (stu === null || stu === undefined) {
                     throw Error();
                 }

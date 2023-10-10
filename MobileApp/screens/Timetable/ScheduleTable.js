@@ -85,6 +85,7 @@ const ScheduleTable = ({ navigation, route }) => {
             variables: { id: user.attributes.sub }
           })
           stu = stu.data.getStudent;
+          stu.enrollments.items=stu.enrollments.items.filter((item)=>item._deleted===null);
         }
         else {
           stu = param;
@@ -115,7 +116,7 @@ const ScheduleTable = ({ navigation, route }) => {
               break;
             }
           } catch (e) {
-
+             console.log(e)
           }
         }
       }
