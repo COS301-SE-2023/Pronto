@@ -4,13 +4,13 @@ function isAppClientValid(clientId, role) {
     throw new Error("Invalid User Role");
   switch (clientId) {
     case process.env.COGNITO_WEB_CLIENT_ID:
-      return (
-        ROLES.Lecture === role || ROLES.Admin === role || ROLES.Super === role
-      );
+      return ROLES.Lecture === role || ROLES.Admin === role;
     case process.env.COGNITO_MOBILE_CLIENT_ID:
       return ROLES.Student === role;
     default:
-      throw new Error(`Unrecognised user pool app client ID`);
+      throw new Error(
+        `Cannot authenticate user from this app client. Unrecognised Client`
+      );
   }
 }
 module.exports = isAppClientValid;

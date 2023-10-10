@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.4.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.6.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "modules": {
       "Type": "String",
@@ -59,6 +59,9 @@
     "apiProntoGraphqlapikeyoutput": {
       "Type": "String"
     },
+    "prontoAdminEmail": {
+      "Type": "String"
+    },
     "cognitoMobileClientId": {
       "Type": "String"
     },
@@ -66,9 +69,6 @@
       "Type": "String"
     },
     "authProntoauthUserpoolid": {
-      "Type": "String"
-    },
-    "prontoAdminEmail": {
       "Type": "String"
     }
   },
@@ -129,6 +129,9 @@
             "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apiprontoGraphQLAPIKeyOutput"
             },
+            "PRONTO_ADMIN_EMAIL": {
+              "Ref": "prontoAdminEmail"
+            },
             "COGNITO_MOBILE_CLIENT_ID": {
               "Ref": "cognitoMobileClientId"
             },
@@ -137,9 +140,6 @@
             },
             "AUTH_PRONTOAUTH_USERPOOLID": {
               "Ref": "authProntoauthUserpoolid"
-            },
-            "PRONTO_ADMIN_EMAIL": {
-              "Ref": "prontoAdminEmail"
             }
           }
         },

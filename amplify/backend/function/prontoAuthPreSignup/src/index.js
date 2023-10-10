@@ -30,18 +30,17 @@ exports.handler = async (event, context) => {
         `Cannot authenticate user from this app client: 
       Students Should use the mobile app and Admin/Lectures should use the web app`
       );
-  } else {
-    if (
-      !isAppClientValid(
-        event.callerContext.clientId,
-        event.request.clientMetadata.role
-      )
-    )
-      throw new Error(
-        `Cannot authenticate user from this app client: 
-      Students Should use the mobile app and Admin/Lectures should use the web app`
-      );
   }
+  if (
+    !isAppClientValid(
+      event.callerContext.clientId,
+      event.request.clientMetadata.role
+    )
+  )
+    throw new Error(
+      `Cannot authenticate user from this app client: 
+      Students Should use the mobile app and Admin/Lectures should use the web app`
+    );
 
   event.response.autoConfirmUser = false;
   try {

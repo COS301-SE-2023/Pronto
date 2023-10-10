@@ -8,7 +8,9 @@ function isAppClientValid(clientId, role) {
     case process.env.COGNITO_MOBILE_CLIENT_ID:
       return ROLES.Student === role;
     default:
-      throw new Error(`Unrecognised user pool app client ID`);
+      throw new Error(
+        `Cannot authenticate user from this app client. Unrecognised Client`
+      );
   }
 }
 module.exports = isAppClientValid;

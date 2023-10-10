@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.4.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"12.6.0\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "GROUP": {
       "Type": "String",
@@ -44,19 +44,19 @@
     "s3Key": {
       "Type": "String"
     },
-    "cognitoMobileClientId": {
-      "Type": "String"
-    },
-    "cognitoWebClientId": {
-      "Type": "String"
-    },
     "adminGroupName": {
+      "Type": "String"
+    },
+    "studentGroupName": {
       "Type": "String"
     },
     "lecturerGroupName": {
       "Type": "String"
     },
-    "studentGroupName": {
+    "cognitoWebClientId": {
+      "Type": "String"
+    },
+    "cognitoMobileClientId": {
       "Type": "String"
     }
   },
@@ -111,20 +111,20 @@
             "GROUP": {
               "Ref": "GROUP"
             },
-            "COGNITO_MOBILE_CLIENT_ID": {
-              "Ref": "cognitoMobileClientId"
-            },
-            "COGNITO_WEB_CLIENT_ID": {
-              "Ref": "cognitoWebClientId"
-            },
             "ADMIN_GROUP_NAME": {
               "Ref": "adminGroupName"
+            },
+            "STUDENT_GROUP_NAME": {
+              "Ref": "studentGroupName"
             },
             "LECTURER_GROUP_NAME": {
               "Ref": "lecturerGroupName"
             },
-            "STUDENT_GROUP_NAME": {
-              "Ref": "studentGroupName"
+            "COGNITO_WEB_CLIENT_ID": {
+              "Ref": "cognitoWebClientId"
+            },
+            "COGNITO_MOBILE_CLIENT_ID": {
+              "Ref": "cognitoMobileClientId"
             }
           }
         },

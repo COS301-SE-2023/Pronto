@@ -42,15 +42,20 @@ describe("Input Validation and Error handling", () => {
     console.table(studentEventWithAdminInvalidClientId);
     await expect(
       preAuth.handler(studentEventWithAdminInvalidClientId)
-    ).rejects.toThrow(/Unrecognised user pool app client ID/);
+    ).rejects.toThrow(
+      /^Cannot authenticate user from this app client. Unrecognised Client$/
+    );
   });
-  test(`should throw "Cannot authenticate users from this app client..."`, async () => {
+  test(`should throw "Cannot authenticate user from this app client"`, async () => {
     const studentEventWithAdminRole = JSON.parse(JSON.stringify(studentsEvent));
     studentEventWithAdminRole.request.clientMetadata.role = "Admin";
     await expect(preAuth.handler(studentEventWithAdminRole)).rejects.toThrow(
-      /Cannot authenticate user from this app client/
+      /^Cannot authenticate user from this app client/
     );
   });
+});
+
+describe("Testing client enforcement", () => {
   test('should throw "Institution has an admin already. institutionId"', async () => {
     await expect(preAuth.handler(adminEvent)).rejects.toThrow(
       /Institution has an admin already./
