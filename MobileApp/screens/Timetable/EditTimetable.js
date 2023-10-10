@@ -16,7 +16,7 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { getStudent,listCourses} from "../../graphql/queries"
+import { getStudent,listCourses,coursesByInstitutionId} from "../../graphql/queries"
 import { createEnrollment,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
@@ -86,10 +86,19 @@ const EditTimetable = ({ navigation }) => {
                 beginsWith: text
               }
               }
-            }
+            },
           })
-        
+        //    let courseList = await API.graphql({
+        //    query: coursesByInstitutionId,
+        //    variables: {
+        //      institutionId: student.institutionId,
+        //    },
+        //    authMode:"API_KEY"
+        //  })
+        //console.log(search);
+        //console.log(courseList.data.coursesByInstitutionId.items);
         setCourses(search.data.listCourses.items.filter((item)=>item._deleted===null && item.institutionId===student.institutionId));
+        //console.log(student)
       } catch (e) {
         Alert.alert(error);
         console.log(e);
