@@ -115,6 +115,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "owner": {
+                    "name": "owner",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "courses": {
                     "name": "courses",
                     "isArray": true,
@@ -207,7 +214,30 @@ export const schema = {
                                 "allow": "public",
                                 "operations": [
                                     "read",
-                                    "create",
+                                    "create"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "studentsUserGroup",
+                                    "lecturerUserGroup"
+                                ],
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "adminUserGroup"
+                                ],
+                                "operations": [
+                                    "read",
                                     "update"
                                 ]
                             }
@@ -261,6 +291,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "owner": {
+                    "name": "owner",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "institution": {
                     "name": "institution",
                     "isArray": false,
@@ -301,6 +338,16 @@ export const schema = {
                     "properties": {}
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmail",
+                        "queryField": "adminByEmail",
+                        "fields": [
+                            "email"
+                        ]
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -313,6 +360,23 @@ export const schema = {
                                     "create",
                                     "update",
                                     "delete",
+                                    "read"
+                                ]
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "adminUserGroup"
+                                ],
+                                "operations": [
                                     "read"
                                 ]
                             }
@@ -393,7 +457,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "institutionId"
+                            "lecturer"
                         ]
                     }
                 },
@@ -431,15 +495,19 @@ export const schema = {
                     }
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmail",
+                        "queryField": "lecturerByEmail",
+                        "fields": [
+                            "email"
+                        ]
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "read"
-                                ]
-                            },
                             {
                                 "provider": "userPools",
                                 "ownerField": "owner",
@@ -449,6 +517,24 @@ export const schema = {
                                     "create",
                                     "update",
                                     "delete",
+                                    "read"
+                                ]
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "lecturerUserGroup",
+                                    "adminUserGroup"
+                                ],
+                                "operations": [
                                     "read"
                                 ]
                             }
@@ -500,13 +586,6 @@ export const schema = {
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
-                    "attributes": []
-                },
-                "preference": {
-                    "name": "preference",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
                     "attributes": []
                 },
                 "institution": {
@@ -599,6 +678,16 @@ export const schema = {
                     }
                 },
                 {
+                    "type": "key",
+                    "properties": {
+                        "name": "byEmail",
+                        "queryField": "studentByEmail",
+                        "fields": [
+                            "email"
+                        ]
+                    }
+                },
+                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -615,7 +704,12 @@ export const schema = {
                                 ]
                             },
                             {
-                                "allow": "public",
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "studentsUserGroup"
+                                ],
                                 "operations": [
                                     "read"
                                 ]
@@ -740,6 +834,28 @@ export const schema = {
                                 "operations": [
                                     "read"
                                 ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "lecturerUserGroup"
+                                ],
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "studentsUserGroup"
+                                ],
+                                "operations": [
+                                    "read"
+                                ]
                             }
                         ]
                     }
@@ -787,7 +903,7 @@ export const schema = {
                 "semester": {
                     "name": "semester",
                     "isArray": false,
-                    "type": "Int",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -869,6 +985,15 @@ export const schema = {
                         ]
                     }
                 },
+                "notification": {
+                    "name": "notification",
+                    "isArray": false,
+                    "type": {
+                        "nonModel": "Notification"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -894,15 +1019,20 @@ export const schema = {
                     "properties": {}
                 },
                 {
-                    "type": "searchable",
-                    "properties": {}
-                },
-                {
                     "type": "key",
                     "properties": {
                         "name": "byCourse",
                         "fields": [
                             "institutionId"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "bycourse",
+                        "fields": [
+                            "lecturerId"
                         ]
                     }
                 },
@@ -924,6 +1054,19 @@ export const schema = {
                             },
                             {
                                 "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "studentsUserGroup",
+                                    "lecturerUserGroup",
+                                    "adminUserGroup"
+                                ],
                                 "operations": [
                                     "read"
                                 ]
@@ -1030,7 +1173,12 @@ export const schema = {
                                 ]
                             },
                             {
-                                "allow": "public",
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "studentsUserGroup"
+                                ],
                                 "operations": [
                                     "read"
                                 ]
@@ -1090,6 +1238,13 @@ export const schema = {
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
+                    "attributes": []
+                },
+                "coordinates": {
+                    "name": "coordinates",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
                     "attributes": []
                 },
                 "group": {
@@ -1153,10 +1308,6 @@ export const schema = {
                     "properties": {}
                 },
                 {
-                    "type": "searchable",
-                    "properties": {}
-                },
-                {
                     "type": "key",
                     "properties": {
                         "name": "byActivity",
@@ -1182,9 +1333,27 @@ export const schema = {
                                 ]
                             },
                             {
-                                "allow": "public",
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "studentsUserGroup",
+                                    "adminUserGroup"
+                                ],
                                 "operations": [
                                     "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "lecturerUserGroup"
+                                ],
+                                "operations": [
+                                    "read",
+                                    "update"
                                 ]
                             }
                         ]
@@ -1209,25 +1378,32 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "lecturerId": {
+                    "name": "lecturerId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "description": {
                     "name": "description",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "start": {
                     "name": "start",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "end": {
                     "name": "end",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "date": {
@@ -1241,7 +1417,7 @@ export const schema = {
                     "name": "venue",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "course": {
@@ -1258,6 +1434,163 @@ export const schema = {
                             "courseId"
                         ]
                     }
+                },
+                "body": {
+                    "name": "body",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "title": {
+                    "name": "title",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "type": {
+                    "name": "type",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "year": {
+                    "name": "year",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "announcementStatus": {
+                    "name": "announcementStatus",
+                    "isArray": false,
+                    "type": {
+                        "nonModel": "Announcement_Status"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Announcements",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byAnnouncement",
+                        "fields": [
+                            "courseId"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "announcementsByDate",
+                        "queryField": "announcementsByDate",
+                        "fields": [
+                            "year",
+                            "createdAt"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "provider": "userPools",
+                                "ownerField": "lecturerId",
+                                "allow": "owner",
+                                "operations": [
+                                    "read",
+                                    "update"
+                                ],
+                                "identityClaim": "cognito:username"
+                            },
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "studentsUserGroup",
+                                    "adminUserGroup"
+                                ],
+                                "operations": [
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "lecturerUserGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "read",
+                                    "update",
+                                    "delete"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "NotificationPreferance": {
+            "name": "NotificationPreferance",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "studentId": {
+                    "name": "studentId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "endpoint": {
+                    "name": "endpoint",
+                    "isArray": false,
+                    "type": {
+                        "nonModel": "Endpoint"
+                    },
+                    "isRequired": false,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -1277,22 +1610,18 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Announcements",
+            "pluralName": "NotificationPreferances",
             "attributes": [
                 {
                     "type": "model",
                     "properties": {}
                 },
                 {
-                    "type": "searchable",
-                    "properties": {}
-                },
-                {
                     "type": "key",
                     "properties": {
-                        "name": "byAnnouncement",
+                        "name": "byStudentId",
                         "fields": [
-                            "courseId"
+                            "studentId"
                         ]
                     }
                 },
@@ -1302,7 +1631,7 @@ export const schema = {
                         "rules": [
                             {
                                 "provider": "userPools",
-                                "ownerField": "owner",
+                                "ownerField": "studentId",
                                 "allow": "owner",
                                 "identityClaim": "cognito:username",
                                 "operations": [
@@ -1322,10 +1651,261 @@ export const schema = {
                     }
                 }
             ]
+        },
+        "AdminApplication": {
+            "name": "AdminApplication",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "name": {
+                    "name": "name",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "firstname": {
+                    "name": "firstname",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "email": {
+                    "name": "email",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "AdminApplications",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "read"
+                                ]
+                            },
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "superUserGroup"
+                                ],
+                                "operations": [
+                                    "create",
+                                    "read",
+                                    "update",
+                                    "delete"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     },
-    "enums": {},
-    "nonModels": {},
-    "codegenVersion": "3.4.3",
-    "version": "4ae37ab75040a9ea4fe94670b476e14e"
+    "enums": {
+        "NotificationType": {
+            "name": "NotificationType",
+            "values": [
+                "SMS",
+                "PUSH",
+                "EMAIL"
+            ]
+        },
+        "Status": {
+            "name": "Status",
+            "values": [
+                "UPDATED",
+                "DISABLED",
+                "FAILED",
+                "OPERATIONAL"
+            ]
+        },
+        "EndpointTypeStatus": {
+            "name": "EndpointTypeStatus",
+            "values": [
+                "SENT",
+                "FAILED",
+                "UNAVAILABLE"
+            ]
+        }
+    },
+    "nonModels": {
+        "Notification": {
+            "name": "Notification",
+            "fields": {
+                "courseid": {
+                    "name": "courseid",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Status"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
+        },
+        "Announcement_Status": {
+            "name": "Announcement_Status",
+            "fields": {
+                "SMS": {
+                    "name": "SMS",
+                    "isArray": false,
+                    "type": {
+                        "enum": "EndpointTypeStatus"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "PUSH": {
+                    "name": "PUSH",
+                    "isArray": false,
+                    "type": {
+                        "enum": "EndpointTypeStatus"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EMAIL": {
+                    "name": "EMAIL",
+                    "isArray": false,
+                    "type": {
+                        "enum": "EndpointTypeStatus"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "announcement_Matrix": {
+                    "name": "announcement_Matrix",
+                    "isArray": false,
+                    "type": {
+                        "nonModel": "Announcement_Matrix"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "info": {
+                    "name": "info",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
+        },
+        "Announcement_Matrix": {
+            "name": "Announcement_Matrix",
+            "fields": {
+                "SMS": {
+                    "name": "SMS",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "PUSH": {
+                    "name": "PUSH",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "EMAIL": {
+                    "name": "EMAIL",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
+        },
+        "Endpoint": {
+            "name": "Endpoint",
+            "fields": {
+                "type": {
+                    "name": "type",
+                    "isArray": false,
+                    "type": {
+                        "enum": "NotificationType"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "endPointAddress": {
+                    "name": "endPointAddress",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Status"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "info": {
+                    "name": "info",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            }
+        }
+    },
+    "codegenVersion": "3.4.4",
+    "version": "043e71e528ca76dc5951c39cb91cc70c"
 };

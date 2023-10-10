@@ -2,9 +2,92 @@ import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncItem, AsyncCollection } from "@aws-amplify/datastore";
 
+export enum NotificationType {
+  SMS = "SMS",
+  PUSH = "PUSH",
+  EMAIL = "EMAIL"
+}
 
+export enum Status {
+  UPDATED = "UPDATED",
+  DISABLED = "DISABLED",
+  FAILED = "FAILED",
+  OPERATIONAL = "OPERATIONAL"
+}
 
+export enum EndpointTypeStatus {
+  SENT = "SENT",
+  FAILED = "FAILED",
+  UNAVAILABLE = "UNAVAILABLE"
+}
 
+type EagerNotification = {
+  readonly courseid: string;
+  readonly status?: Status | keyof typeof Status | null;
+}
+
+type LazyNotification = {
+  readonly courseid: string;
+  readonly status?: Status | keyof typeof Status | null;
+}
+
+export declare type Notification = LazyLoading extends LazyLoadingDisabled ? EagerNotification : LazyNotification
+
+export declare const Notification: (new (init: ModelInit<Notification>) => Notification)
+
+type EagerAnnouncement_Status = {
+  readonly SMS?: EndpointTypeStatus | keyof typeof EndpointTypeStatus | null;
+  readonly PUSH?: EndpointTypeStatus | keyof typeof EndpointTypeStatus | null;
+  readonly EMAIL?: EndpointTypeStatus | keyof typeof EndpointTypeStatus | null;
+  readonly announcement_Matrix?: Announcement_Matrix | null;
+  readonly info?: string | null;
+}
+
+type LazyAnnouncement_Status = {
+  readonly SMS?: EndpointTypeStatus | keyof typeof EndpointTypeStatus | null;
+  readonly PUSH?: EndpointTypeStatus | keyof typeof EndpointTypeStatus | null;
+  readonly EMAIL?: EndpointTypeStatus | keyof typeof EndpointTypeStatus | null;
+  readonly announcement_Matrix?: Announcement_Matrix | null;
+  readonly info?: string | null;
+}
+
+export declare type Announcement_Status = LazyLoading extends LazyLoadingDisabled ? EagerAnnouncement_Status : LazyAnnouncement_Status
+
+export declare const Announcement_Status: (new (init: ModelInit<Announcement_Status>) => Announcement_Status)
+
+type EagerAnnouncement_Matrix = {
+  readonly SMS?: number | null;
+  readonly PUSH?: number | null;
+  readonly EMAIL?: number | null;
+}
+
+type LazyAnnouncement_Matrix = {
+  readonly SMS?: number | null;
+  readonly PUSH?: number | null;
+  readonly EMAIL?: number | null;
+}
+
+export declare type Announcement_Matrix = LazyLoading extends LazyLoadingDisabled ? EagerAnnouncement_Matrix : LazyAnnouncement_Matrix
+
+export declare const Announcement_Matrix: (new (init: ModelInit<Announcement_Matrix>) => Announcement_Matrix)
+
+type EagerEndpoint = {
+  readonly type?: NotificationType | keyof typeof NotificationType | null;
+  readonly endPointAddress?: string | null;
+  readonly status?: Status | keyof typeof Status | null;
+  readonly info?: string | null;
+}
+
+type LazyEndpoint = {
+  readonly type?: NotificationType | keyof typeof NotificationType | null;
+  readonly endPointAddress?: string | null;
+  readonly status?: Status | keyof typeof Status | null;
+  readonly info?: string | null;
+}
+
+export declare type Endpoint = LazyLoading extends LazyLoadingDisabled ? EagerEndpoint : LazyEndpoint
+
+export declare const Endpoint: (new (init: ModelInit<Endpoint>) => Endpoint)
 
 type EagerInstitution = {
   readonly [__modelMeta__]: {
@@ -25,6 +108,7 @@ type EagerInstitution = {
   readonly domains?: (string | null)[] | null;
   readonly admin?: Admin | null;
   readonly adminId?: string | null;
+  readonly owner?: string | null;
   readonly courses?: (Course | null)[] | null;
   readonly students?: (Student | null)[] | null;
   readonly lecturer?: (Lecturer | null)[] | null;
@@ -51,6 +135,7 @@ type LazyInstitution = {
   readonly domains?: (string | null)[] | null;
   readonly admin: AsyncItem<Admin | undefined>;
   readonly adminId?: string | null;
+  readonly owner?: string | null;
   readonly courses: AsyncCollection<Course>;
   readonly students: AsyncCollection<Student>;
   readonly lecturer: AsyncCollection<Lecturer>;
@@ -75,6 +160,7 @@ type EagerAdmin = {
   readonly lastname: string;
   readonly userRole: string;
   readonly email: string;
+  readonly owner?: string | null;
   readonly institution?: Institution | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -91,6 +177,7 @@ type LazyAdmin = {
   readonly lastname: string;
   readonly userRole: string;
   readonly email: string;
+  readonly owner?: string | null;
   readonly institution: AsyncItem<Institution | undefined>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -153,7 +240,6 @@ type EagerStudent = {
   readonly lastname: string;
   readonly userRole: string;
   readonly email: string;
-  readonly preference?: string | null;
   readonly institution: Institution;
   readonly timetable?: Timetable | null;
   readonly enrollments?: (Enrollment | null)[] | null;
@@ -173,7 +259,6 @@ type LazyStudent = {
   readonly lastname: string;
   readonly userRole: string;
   readonly email: string;
-  readonly preference?: string | null;
   readonly institution: AsyncItem<Institution>;
   readonly timetable: AsyncItem<Timetable | undefined>;
   readonly enrollments: AsyncCollection<Enrollment>;
@@ -234,12 +319,13 @@ type EagerCourse = {
   readonly lecturerId?: string | null;
   readonly coursecode: string;
   readonly coursename?: string | null;
-  readonly semester?: number | null;
+  readonly semester?: string | null;
   readonly enrollments?: (Enrollment | null)[] | null;
   readonly activity?: (Activity | null)[] | null;
   readonly announcents?: (Announcement | null)[] | null;
   readonly lecturer?: Lecturer | null;
   readonly institution: Institution;
+  readonly notification?: Notification | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -254,12 +340,13 @@ type LazyCourse = {
   readonly lecturerId?: string | null;
   readonly coursecode: string;
   readonly coursename?: string | null;
-  readonly semester?: number | null;
+  readonly semester?: string | null;
   readonly enrollments: AsyncCollection<Enrollment>;
   readonly activity: AsyncCollection<Activity>;
   readonly announcents: AsyncCollection<Announcement>;
   readonly lecturer: AsyncItem<Lecturer | undefined>;
   readonly institution: AsyncItem<Institution>;
+  readonly notification?: Notification | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -316,6 +403,7 @@ type EagerActivity = {
   readonly start: string;
   readonly end: string;
   readonly venue: string;
+  readonly coordinates?: string | null;
   readonly group: string;
   readonly frequency?: number | null;
   readonly description: string;
@@ -336,6 +424,7 @@ type LazyActivity = {
   readonly start: string;
   readonly end: string;
   readonly venue: string;
+  readonly coordinates?: string | null;
   readonly group: string;
   readonly frequency?: number | null;
   readonly description: string;
@@ -353,34 +442,46 @@ export declare const Activity: (new (init: ModelInit<Activity>) => Activity) & {
 type EagerAnnouncement = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Announcement, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    readOnlyFields: 'updatedAt';
   };
   readonly id: string;
   readonly courseId: string;
-  readonly description: string;
-  readonly start: string;
-  readonly end: string;
+  readonly lecturerId?: string | null;
+  readonly description?: string | null;
+  readonly start?: string | null;
+  readonly end?: string | null;
   readonly date: string;
-  readonly venue: string;
+  readonly venue?: string | null;
   readonly course: Course;
-  readonly createdAt?: string | null;
+  readonly body?: string | null;
+  readonly title?: string | null;
+  readonly type?: string | null;
+  readonly year: string;
+  readonly createdAt: string;
+  readonly announcementStatus?: Announcement_Status | null;
   readonly updatedAt?: string | null;
 }
 
 type LazyAnnouncement = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Announcement, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
+    readOnlyFields: 'updatedAt';
   };
   readonly id: string;
   readonly courseId: string;
-  readonly description: string;
-  readonly start: string;
-  readonly end: string;
+  readonly lecturerId?: string | null;
+  readonly description?: string | null;
+  readonly start?: string | null;
+  readonly end?: string | null;
   readonly date: string;
-  readonly venue: string;
+  readonly venue?: string | null;
   readonly course: AsyncItem<Course>;
-  readonly createdAt?: string | null;
+  readonly body?: string | null;
+  readonly title?: string | null;
+  readonly type?: string | null;
+  readonly year: string;
+  readonly createdAt: string;
+  readonly announcementStatus?: Announcement_Status | null;
   readonly updatedAt?: string | null;
 }
 
@@ -388,4 +489,68 @@ export declare type Announcement = LazyLoading extends LazyLoadingDisabled ? Eag
 
 export declare const Announcement: (new (init: ModelInit<Announcement>) => Announcement) & {
   copyOf(source: Announcement, mutator: (draft: MutableModel<Announcement>) => MutableModel<Announcement> | void): Announcement;
+}
+
+type EagerNotificationPreferance = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<NotificationPreferance, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly studentId: string;
+  readonly endpoint?: Endpoint | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyNotificationPreferance = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<NotificationPreferance, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly studentId: string;
+  readonly endpoint?: Endpoint | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type NotificationPreferance = LazyLoading extends LazyLoadingDisabled ? EagerNotificationPreferance : LazyNotificationPreferance
+
+export declare const NotificationPreferance: (new (init: ModelInit<NotificationPreferance>) => NotificationPreferance) & {
+  copyOf(source: NotificationPreferance, mutator: (draft: MutableModel<NotificationPreferance>) => MutableModel<NotificationPreferance> | void): NotificationPreferance;
+}
+
+type EagerAdminApplication = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<AdminApplication, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly firstname: string;
+  readonly email: string;
+  readonly status?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyAdminApplication = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<AdminApplication, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name: string;
+  readonly firstname: string;
+  readonly email: string;
+  readonly status?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type AdminApplication = LazyLoading extends LazyLoadingDisabled ? EagerAdminApplication : LazyAdminApplication
+
+export declare const AdminApplication: (new (init: ModelInit<AdminApplication>) => AdminApplication) & {
+  copyOf(source: AdminApplication, mutator: (draft: MutableModel<AdminApplication>) => MutableModel<AdminApplication> | void): AdminApplication;
 }
