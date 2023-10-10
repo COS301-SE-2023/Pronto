@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { searchCourses } from "../../Graphql/queries";
+import { listCourses } from "../../Graphql/queries";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 
 import { API } from "aws-amplify";
@@ -20,12 +20,12 @@ export default function SearchableDropdown(props) {
     setSearchTerm(event.target.value);
     try {
       let courseList = await API.graphql({
-        query: searchCourses,
+        query: listCourses,
         variables: {
           filter: {
             and: [
               {
-                coursecode: { matchPhrasePrefix: event.target.value },
+                coursecode: { beginsWith: event.target.value },
 
               },
               {
@@ -40,7 +40,7 @@ export default function SearchableDropdown(props) {
       }
       )
       let c = [];
-      courseList = courseList.data.searchCourses.items.filter((a) => a.lecturerId === null)
+      courseList = courseList.data.listCourses.items.filter((a) => a.lecturerId === null && a._deleted===null)
       for (let i = 0; i < courseList.length; i++) {
         if (selectedCourses.filter((a) => a.id !== courseList[i].id)) {
           c.push(courseList[i]);

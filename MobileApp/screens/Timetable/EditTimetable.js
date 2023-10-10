@@ -16,7 +16,7 @@ import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
 import { API, Auth } from "aws-amplify"
-import { searchCourses ,getStudent} from "../../graphql/queries"
+import { getStudent,listCourses} from "../../graphql/queries"
 import { createEnrollment,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
 
@@ -67,13 +67,13 @@ const EditTimetable = ({ navigation }) => {
     if (text !== null) {
       try {
         let search = await API.graphql({
-          query: searchCourses,
+          query: listCourses,
           variables: {
             filter: {
               and : [
                       {
                         coursecode: {
-                          matchPhrasePrefix: text
+                          beginsWith: text
                         }
                       } ,
                       {
@@ -86,9 +86,10 @@ const EditTimetable = ({ navigation }) => {
             }
           })
         
-        setCourses(search.data.searchCourses.items);
+        setCourses(search.data.listCourses.items.filter((item)=>item._deleted===null));
       } catch (e) {
         Alert.alert(error);
+        console.log(e);
       }
     }
   }
@@ -104,6 +105,7 @@ const EditTimetable = ({ navigation }) => {
           variables:{id:user.attributes.sub}
         }) 
         stu=stu.data.getStudent;
+        stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null);
         if(stu===null){
           setIsLoading(false);
           return;
@@ -194,7 +196,7 @@ const EditTimetable = ({ navigation }) => {
         })
         let a=await API.graphql({
           query:updateStudentInfo,
-          variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id}}
+          variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id,_version:student._version}}
         })
 
         let s = student
@@ -213,6 +215,7 @@ const EditTimetable = ({ navigation }) => {
         let newTimetable = {
           id: student.studentTimetableId,
           studentId: student.id,
+          _version : student.timetable._version,
           activityId: activityIds
         }
 
@@ -223,8 +226,10 @@ const EditTimetable = ({ navigation }) => {
         
         let s = student
         s.timetable = update.data.updateTimetable;
-        student.timetable=update.data.updateTimetable;
-        student.timetable.activities=activities;
+        student.timetable.activityId=newTimetable.activityId;
+        student.timetable._version=update.data.updateTimetable._version;
+        //student.timetable=update.data.updateTimetable;
+        //student.timetable.activities=activities;
         updateStudent(student);
         // s= await updateStudent(student);
         // student.timetable.activities=s.timetable.activities;
@@ -284,7 +289,7 @@ const EditTimetable = ({ navigation }) => {
                   if (student.enrollments.items[i].courseId === item.id) {
                     del = await API.graphql({
                       query: deleteEnrollment,
-                      variables: { input: { id: student.enrollments.items[i].id } }
+                      variables: { input: { id: student.enrollments.items[i].id ,_version:student.enrollments.items[i]._version} }
                     });
 
                     student.enrollments.items.splice(i, 1);
@@ -299,6 +304,7 @@ const EditTimetable = ({ navigation }) => {
                 setActivities(act);
                 setSelectedModule(null);
               } catch (e) {
+                console.log(e);
                 Alert.alert(error);
               }
             },
