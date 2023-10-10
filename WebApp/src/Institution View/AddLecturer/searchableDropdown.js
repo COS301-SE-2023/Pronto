@@ -50,7 +50,7 @@ export default function SearchableDropdown(props) {
       setIsOpen(true);
       ;
     } catch (error) {
-
+       console.log(error);
     }
 
   };

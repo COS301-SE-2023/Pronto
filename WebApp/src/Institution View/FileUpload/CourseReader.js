@@ -36,18 +36,19 @@ const CourseReader = (props)=>{
 
   }
 
-  const deleteCourses =()=>{
+  const deleteCourses =async()=>{
     //props.setCourses([]);
     
     for(let i=0;i<props.course.length;i++){
        try{
-            let del=API.graphql({
+            let del= await API.graphql({
                 query:deleteCourse,
-                variables:{input:{id:props.courses[i].id}}
+                variables:{input:{id:props.courses[i].id,_version:props.course[i]._version}}
             })
+            console.log(del);
             
        }catch(error){
-
+         console.log(error);
        }
     }
     props.setCourse([]);
@@ -100,24 +101,22 @@ const CourseReader = (props)=>{
             variables:{input:{institutionId:props.institutionId,coursecode:val}}
         })
         newCourse=newCourse.data.createCourse;
-        
+        console.log(newCourse);
         for(let i=0;i<key.length;i++){
            key[i].courseId=newCourse.id
-            let act= API.graphql({
+            let act= await API.graphql({
                 query:createActivity,
                 variables:{input:key[i]}
             })
         
             count+=1;  
-           
+           console.log(act);
         }
         if(count===entries)
           setSuccessMessage("Done");
-        })
-       
-        
+        })  
     }catch(error){
-        
+        console.log(error);
     }
   }
 

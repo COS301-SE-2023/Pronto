@@ -271,7 +271,7 @@ const AddLecturer = () => {
 
                 }
 
-                let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
+                let newEmails = admin.institution.lectureremails.filter(item => item !== lecturer.email);
 
                 let update = {
                     id: admin.institutionId,
@@ -419,7 +419,7 @@ const AddLecturer = () => {
             }
         }
         catch (error) {
-          
+           console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {
@@ -436,7 +436,7 @@ const AddLecturer = () => {
         try {
             if (searchIcon === false) {
                 if (searchValue !== "") {
-                    if (filterAttribute !== "default" && filterAttribute !== "") {
+                    if (filterAttribute !== "default") {
 
                         let filter = `{"filter": { "and" : [ { "${filterAttribute}" : {"beginsWith":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
                         let variables = JSON.parse(filter);
