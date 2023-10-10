@@ -3,11 +3,13 @@ import { Alert, View, StyleSheet, Modal, Text, RefreshControl, IconButton, Press
 import { List, Card, Avatar, Button, Portal, PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import {  getStudent, listAnnouncements } from "../graphql/queries";
-import { Auth, API } from "aws-amplify"
+import { getStudent, listAnnouncements } from "../graphql/queries";
+import { Auth, API, DataStore, Predicates } from "aws-amplify"
 import { useStudent } from "../ContextProviders/StudentContext";
 import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Student, Announcement } from "../models";
+import '@azure/core-asynciterator-polyfill';
 
 const NotificationList = ({ navigation }) => {
 
@@ -30,17 +32,27 @@ const NotificationList = ({ navigation }) => {
     };
 
     const fetchAnnouncements = async () => {
+
         try {
             let stu = student;
             setLoading(true);
+            const user = await Auth.currentAuthenticatedUser()
+
+
             if (student === null) {
                 const user = await Auth.currentAuthenticatedUser()
-                stu = await API.graphql({
-                    query: getStudent, variables: { id: user.attributes.sub }
-                })
+
+
+                /* stu = await API.graphql({
+                     query: getStudent, variables: { id: user.attributes.sub }
+                 })*/
+                //  stu = await DataStore.query(Student, user.attributes.sub);
+                //  console.log(stu);
+
+
 
                 stu = stu.data.getStudent;
-                stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null)
+                stu.enrollments.items = stu.enrollments.items.filter((items) => items._deleted === null)
                 if (stu === null || stu === undefined) {
                     throw Error();
                 }
@@ -50,9 +62,9 @@ const NotificationList = ({ navigation }) => {
             let courses = [];
             for (let i = 0; i < stu.enrollments.items.length; i++) {
                 courses.push(stu.enrollments.items[i].courseId);
-                
+
             }
-            
+
             if (courses.length === 0) {
                 setLoading(false);
                 setAnnouncement([]);
@@ -74,8 +86,8 @@ const NotificationList = ({ navigation }) => {
                 let announcementList = await API.graphql({
                     query: listAnnouncements, variables: variables
                 });
-                
-                setAnnouncement(announcementList.data.listAnnouncements.items.filter((item)=>item._deleted===null));
+
+                setAnnouncement(announcementList.data.listAnnouncements.items.filter((item) => item._deleted === null));
                 if (announcementList.data.listAnnouncements.items.length < limit) {
                     setNextToken(null);
                 } else {
