@@ -12,10 +12,6 @@ import { Student, Announcement } from "../models";
 import '@azure/core-asynciterator-polyfill';
 
 const NotificationList = ({ navigation }) => {
-
-    //if you need to use mock data for styling
-    const mockAnnouncements = require('../assets/data/mock/mock-announcement.json');
-
     const [expanded1, setExpanded1] = useState(false);
     const [expanded2, setExpanded2] = useState(false);
     const { student, updateStudent } = useStudent();
@@ -27,43 +23,27 @@ const NotificationList = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const error = "There appear to be network issues. Please try again later";
     let limit = 3;
+
     const showFullMessage = (key) => {
         setSelectedAnnouncement(key);
     };
 
     const fetchAnnouncements = async () => {
-
         try {
             let stu = student;
             setLoading(true);
-            const user = await Auth.currentAuthenticatedUser()
-
+            const user = await Auth.currentAuthenticatedUser();
 
             if (student === null) {
-                const user = await Auth.currentAuthenticatedUser()
+                stu = await DataStore.query(Student, user.attributes.sub);
 
-
-                /* stu = await API.graphql({
-                     query: getStudent, variables: { id: user.attributes.sub }
-                 })*/
-                //  stu = await DataStore.query(Student, user.attributes.sub);
-                //  console.log(stu);
-
-
-
-                stu = stu.data.getStudent;
-                stu.enrollments.items = stu.enrollments.items.filter((items) => items._deleted === null)
                 if (stu === null || stu === undefined) {
                     throw Error();
                 }
                 updateStudent(stu);
             }
 
-            let courses = [];
-            for (let i = 0; i < stu.enrollments.items.length; i++) {
-                courses.push(stu.enrollments.items[i].courseId);
-
-            }
+            let courses = stu.enrollments.items.map((items) => items._deleted === null);
 
             if (courses.length === 0) {
                 setLoading(false);
@@ -71,88 +51,62 @@ const NotificationList = ({ navigation }) => {
                 return;
             } else {
                 setLoading(true);
-                let filter = `{"filter" : { "or" : [`;
-                for (let i = 0; i < courses.length; i++) {
-                    if (i === courses.length - 1) {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } }`;
-                    } else {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } },`;
-                    }
-                }
+                let filter = {
+                    or: courses.map((courseId) => ({ courseId: { eq: courseId } })),
+                };
 
-                filter += `] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
+                let variables = { filter, limit, sortDirection: "DESC" };
+                let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
 
-                let variables = JSON.parse(filter);
-                let announcementList = await API.graphql({
-                    query: listAnnouncements, variables: variables
-                });
-
-                setAnnouncement(announcementList.data.listAnnouncements.items.filter((item) => item._deleted === null));
-                if (announcementList.data.listAnnouncements.items.length < limit) {
+                setAnnouncement(announcementList.filter((item) => item._deleted === null));
+                if (announcementList.length < limit) {
                     setNextToken(null);
                 } else {
-                    setNextToken(announcementList.data.listAnnouncements.nextToken);
+                    setNextToken(announcementList[announcementList.length - 1].id);
                 }
                 setLoading(false);
             }
-            setLoading(false);
         } catch (er) {
             console.log(er);
-            Alert.alert(error)
+            Alert.alert(error);
             setLoading(false);
         }
     };
 
     const loadMore = async () => {
         try {
-
             let stu = student;
             let year = new Date().getFullYear();
-            let courses = [];
-
-            for (let i = 0; i < stu.enrollments.items.length; i++) {
-                courses.push(stu.enrollments.items[i].courseId);
-            }
+            let courses = stu.enrollments.items.map((items) => items._deleted === null);
 
             if (courses.length === 0) {
                 setAnnouncement([]);
                 return;
-
             } else {
-                let filter = `{"filter" : { "or" : [`;
-                for (let i = 0; i < courses.length; i++) {
-                    if (i === courses.length - 1) {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } }`;
-                    } else {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } },`;
-                    }
-                }
+                let filter = {
+                    or: courses.map((courseId) => ({ courseId: { eq: courseId } })),
+                    limit,
+                    sortDirection: "DESC",
+                    nextToken,
+                };
+                let variables = { filter, limit, sortDirection: "DESC", nextToken };
 
-                filter += `] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;
-                let variables = JSON.parse(filter)
+                let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
 
-                let announcementList = await API.graphql({
-                    query: listAnnouncements, variables: variables
-                });
-
-                let a = announcementList.data.listAnnouncements.items;
-                for (let i = 0; i < a.length; i++) {
-                    announcement.push(a[i]);
-                }
-                if (announcementList.data.listAnnouncements.items.length < limit) {
+                announcement.push(...announcementList);
+                if (announcementList.length < limit) {
                     setNextToken(null);
                 } else {
-                    setNextToken(announcementList.data.listAnnouncements.nextToken);
+                    setNextToken(announcementList[announcementList.length - 1].id);
                 }
                 setAnnouncement(announcement);
             }
-        } catch (e) {
-        }
-    }
+        } catch (e) { }
+    };
 
     useEffect(() => {
         fetchAnnouncements();
-    }, [])
+    }, []);
 
     return (<View>
 
