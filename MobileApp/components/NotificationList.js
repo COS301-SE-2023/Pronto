@@ -36,7 +36,6 @@ const NotificationList = ({ navigation }) => {
 
             if (student === null) {
                 stu = await DataStore.query(Student, user.attributes.sub);
-
                 if (stu === null || stu === undefined) {
                     throw Error();
                 }
@@ -90,9 +89,9 @@ const NotificationList = ({ navigation }) => {
                     nextToken,
                 };
                 let variables = { filter, limit, sortDirection: "DESC", nextToken };
-
+                console.log("start");
                 let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
-
+                console.log(announcementList);
                 announcement.push(...announcementList);
                 if (announcementList.length < limit) {
                     setNextToken(null);
@@ -101,7 +100,7 @@ const NotificationList = ({ navigation }) => {
                 }
                 setAnnouncement(announcement);
             }
-        } catch (e) { }
+        } catch (e) { console.log(e); }
     };
 
     useEffect(() => {
