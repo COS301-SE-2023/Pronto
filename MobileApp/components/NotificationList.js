@@ -50,13 +50,15 @@ const NotificationList = ({ navigation }) => {
             let courses = [];
             for (let i = 0; i < stu.enrollments.items.length; i++) {
                 courses.push(stu.enrollments.items[i].courseId);
+                
             }
-
+            
             if (courses.length === 0) {
                 setLoading(false);
                 setAnnouncement([]);
                 return;
             } else {
+                setLoading(true);
                 let filter = `{"filter" : { "or" : [`;
                 for (let i = 0; i < courses.length; i++) {
                     if (i === courses.length - 1) {
@@ -72,8 +74,8 @@ const NotificationList = ({ navigation }) => {
                 let announcementList = await API.graphql({
                     query: listAnnouncements, variables: variables
                 });
-
-                setAnnouncement(announcementList.data.listAnnouncements.items);
+                
+                setAnnouncement(announcementList.data.listAnnouncements.items.filter((item)=>item._deleted===null));
                 if (announcementList.data.listAnnouncements.items.length < limit) {
                     setNextToken(null);
                 } else {
@@ -81,7 +83,9 @@ const NotificationList = ({ navigation }) => {
                 }
                 setLoading(false);
             }
+            setLoading(false);
         } catch (er) {
+            console.log(er);
             Alert.alert(error)
             setLoading(false);
         }
@@ -164,7 +168,7 @@ const NotificationList = ({ navigation }) => {
                     icon="check"
                     mode="contained"
                     style={{
-                        backgroundColor: "#e32f45", width: "70%",
+                        backgroundColor: "#e32f45", width: "50vw",
 
                         textAlign: "center", color: "white", marginBottom: 50,
                     }}
@@ -246,9 +250,9 @@ const NotificationList = ({ navigation }) => {
                         style={{
                             fontSize: 30, fontWeight: 200, color: "#e32f45", textAlign: "center"
                         }}
-                    >No recent announcements</Text>) : (<View style={{ height: "80%" }}>
+                    >No recent announcements</Text>) : (<View style={{ height: "80vh" }}>
                         <Text style={{
-                            marginLeft: "auto", marginRight: "auto", marginBottom: "4%", color: "#808080"
+                            marginLeft: "auto", marginRight: "auto", marginBottom: "4vh", color: "#808080"
                         }}>Swipe down to refresh &#x2193;</Text>
                         < ScrollView
                         // refreshControl={<RefreshControl
@@ -281,7 +285,7 @@ const NotificationList = ({ navigation }) => {
                             </Card>))}
                             <Text
                                 style={{
-                                    marginBottom: "0%", marginLeft: "auto", marginRight: "auto",
+                                    marginBottom: "0vh", marginLeft: "auto", marginRight: "auto",
                                 }}
                             >
                                 {nextToken !== null ? <Button
@@ -294,9 +298,9 @@ const NotificationList = ({ navigation }) => {
                                         backgroundColor: "#e32f45",
                                         marginRight: "auto",
                                         marginLeft: "auto",
-                                        marginBottom: "20%",
+                                        marginBottom: "10vh",
                                         color: "white",
-                                        height: 10,
+                                        height: "20px",
                                         alignItems: "center",
                                         justifyContent: "center",
 
@@ -338,17 +342,17 @@ const styles = StyleSheet.create({
     }, modalView: {
         flex: 1, justifyContent: "center", // Center vertically
         alignItems: "center", // Center horizontally
-        width: "80%", height: "50%", paddingBottom: "0%",
+        width: "10vw", height: "20vh", paddingBottom: "0vh",
     }, button: {
         borderRadius: 20, padding: 10, elevation: 2,
     }, textStyle: {
-        fontSize: 15, textAlign: "center", marginBottom: "5%",
+        fontSize: 15, textAlign: "center", marginBottom: "5vh",
     }, headerStyle: {
-        fontSize: 30, fontWeight: "400", textAlign: "center", marginBottom: "2.5%",
+        fontSize: 30, fontWeight: "400", textAlign: "center", marginBottom: "2.5vh",
     },
 
     subheaderStyle: {
-        fontSize: 20, textAlign: "center", marginBottom: "5%", color: "#e32f45",
+        fontSize: 20, textAlign: "center", marginBottom: "5vh", color: "#e32f45",
     }, modalText: {
         marginBottom: 15, textAlign: 'center',
     }, closeButton: {
