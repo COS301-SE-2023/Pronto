@@ -9,6 +9,9 @@ export const getStudent = /* GraphQL */ `
       firstname
       lastname
       email
+      institution{
+        name
+      }
       preference {
         studentId
         endpoint {

@@ -40,7 +40,7 @@ export default function App() {
         bypassCache: true,
       });
 
-      console.log({ authUser });
+      // console.log({ authUser });
       if (student === null) {
         const email = authUser.attributes.email;
         let studentInfo = await API.graphql({

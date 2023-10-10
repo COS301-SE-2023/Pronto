@@ -28,8 +28,8 @@ const BucketFilesScreen = () => {
   const { student, updateStudent } = useStudent();
 
   useEffect(() => {
-    //  setUniversityName();
-    //fetchFileList();
+      setUniversityName();
+    fetchFileList();
   }, []);
 
   const fetchFileList = async () => {
@@ -56,7 +56,7 @@ const BucketFilesScreen = () => {
     }
   };
 
-  /* const setUniversityName = async () => {
+   const setUniversityName = async () => {
  
      let error = "There appear to be network issues.Please try again later"
      try {
@@ -86,7 +86,7 @@ const BucketFilesScreen = () => {
      } catch (e) {
        Alert.alert(error);
      }
-   } */
+   } 
 
 
   const openFile = async (fileKey) => {
