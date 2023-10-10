@@ -132,13 +132,14 @@ export default function RecentAnnouncement() {
   const handleConfirmDelete = async (key) => {
     setIsDeleting(true);
     try {
-      let del = await API.graphql({
-        query: deleteAnnouncement,
-        variables: { input: { id: announcement[key].id,_version:announcement[key]._version } },
-      })
-      const rows = [...announcement]
-      rows.splice(key, 1)
-      setAnnouncement(rows)
+      // let del = await API.graphql({
+      //   query: deleteAnnouncement,
+      //   variables: { input: { id: announcement[key].id,_version:announcement[key]._version } },
+      // })
+      // const rows = [...announcement]
+      // rows.splice(key, 1)
+      // setAnnouncement(rows)
+      setError("Cannot delete.Working on a fix");
       setIsDeleting(false);
     } catch (e) {
       console.log(e)
@@ -195,9 +196,10 @@ export default function RecentAnnouncement() {
           let announcementList = await API.graphql({
             query: announcementsByDate,
             variables: variables,
+            authMode:"API_KEY"
           });
           announcementList = announcementList.data.announcementsByDate;
-          
+          console.log(announcementList);
           setAnnouncement(announcementList.items.filter((item)=>item._deleted===null));
           if (announcementList.items.length < limit) {
             setNextToken(null);
