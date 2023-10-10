@@ -116,7 +116,7 @@ const Register = ({ navigation }) => {
       ;
       setInstitutions(institutionInfo);
     } catch (error) {
-
+      console.log(error)
     }
   }
 
@@ -175,15 +175,17 @@ const Register = ({ navigation }) => {
           name: studentName
         },
         clientMetadata: {
-          role: process.env.REACT_APP_STUDENT_ROLE,
+          role: "Student",
           institutionId: institutionId
         }
       }
       const u = await Auth.signUp(signUpObject);
 
 
+      console.log(u);
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
+      console.log(e);
       Alert.alert("Sign up error", e.message);
 
     }

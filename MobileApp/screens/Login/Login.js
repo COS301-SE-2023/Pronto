@@ -11,8 +11,8 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
-import { SelectList } from "react-native-dropdown-select-list";
-import institutionInfo from "../../assets/data/universityInfo.json";
+// import { SelectList } from "react-native-dropdown-select-list";
+// import institutionInfo from "../../assets/data/universityInfo.json";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Auth, API } from "aws-amplify";
 import { getStudent } from "../../graphql/queries";
@@ -31,14 +31,14 @@ const Login = ({ navigation }) => {
   const [emailIsValid, setEmailIsValid] = useState(false);
 
   //select instituition
-  const [institutionId, setInstitutionId] = useState("");
-  const [instituions, setInstitutions] = useState([]);
+  // const [institutionId, setInstitutionId] = useState("");
+  // const [instituions, setInstitutions] = useState([]);
 
   //Validate institutionId
-  const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
-  const validateInstitutionId = () => {
-    setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
-  };
+  // const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
+  // const validateInstitutionId = () => {
+  //   setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
+  // };
 
   const validateEmail = (value) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -60,11 +60,12 @@ const Login = ({ navigation }) => {
         username: username,
         password: password,
         validationData: {
-          role: process.env.REACT_APP_STUDENT_ROLE,
+          role: "Student",
         }
       }
 
       const user = await Auth.signIn(signInObject);
+      
       let studentInfo = student;
       if (student === null) {
         const email = user.attributes.email;
@@ -93,11 +94,13 @@ const Login = ({ navigation }) => {
           })
 
           studentInfo = create.data.createStudent;
+          console.log(create);
           updateStudent(create.data.createStudent);
         }
       }
       navigation.navigate("Tabs", studentInfo);
     } catch (e) {
+      console.log(e);
       Alert.alert("Sign in error", e.message);
       setLoading(false);
     }

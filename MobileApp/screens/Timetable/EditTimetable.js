@@ -70,23 +70,26 @@ const EditTimetable = ({ navigation }) => {
           query: listCourses,
           variables: {
             filter: {
-              and : [
-                      {
-                        coursecode: {
-                          beginsWith: text
-                        }
-                      } ,
-                      {
-                        institutionId:{
-                          eq:student.institutionId
-                        }
-                      }
-                    ]
+              // and : [
+              //         {
+              //           coursecode: {
+              //             beginsWith: text
+              //           }
+              //         } ,
+              //         {
+              //           institutionId:{
+              //             eq:student.institutionId
+              //           }
+              //         }
+              //       ]
+              coursecode:{
+                beginsWith: text
+              }
               }
             }
           })
         
-        setCourses(search.data.listCourses.items.filter((item)=>item._deleted===null));
+        setCourses(search.data.listCourses.items.filter((item)=>item._deleted===null && item.institutionId===student.institutionId));
       } catch (e) {
         Alert.alert(error);
         console.log(e);

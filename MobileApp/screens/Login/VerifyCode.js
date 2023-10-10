@@ -55,10 +55,12 @@ const VerifyCode = ({ navigation }) => {
 
     setLoading(true);
     try {
-      await Auth.forgotPasswordSubmit(email, code, password);
+      const yu=await Auth.forgotPasswordSubmit(email, code, password);
+      console.log(yu);
       Alert.alert("Success", "Password successfully changed!");
       navigation.navigate("Login");
     } catch (e) {
+      console.log(e);
       Alert.alert("Error", e.message);
     }
     setLoading(false);
