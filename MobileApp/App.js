@@ -41,41 +41,41 @@ export default function App() {
       });
 
       // console.log({ authUser });
-      if (student === null) {
-        const email = authUser.attributes.email;
-        let studentInfo = await API.graphql({
-          query: getStudent,
-          variables: { id: authUser.attributes.sub }
-        });
+      // if (student === null) {
+      //   const email = authUser.attributes.email;
+      //   let studentInfo = await API.graphql({
+      //     query: getStudent,
+      //     variables: { id: authUser.attributes.sub }
+      //   });
 
-        studentInfo = studentInfo.data.getStudent;
-        setStudent(studentInfo);
-        if (studentInfo === null) {
+      //   studentInfo = studentInfo.data.getStudent;
+      //   setStudent(studentInfo);
+      //   if (studentInfo === null) {
 
-          try {
-            //Create student
-            let name = authUser.attributes.name.split(",")
-            let newStudent = {
-              id: authUser.attributes.sub,
-              institutionId: authUser.attributes.family_name,
-              firstname: name[0],
-              lastname: name[1],
-              userRole: "Student",
-              email: email
-            }
+      //     try {
+      //       //Create student
+      //       // let name = authUser.attributes.name.split(",")
+      //       // let newStudent = {
+      //       //   id: authUser.attributes.sub,
+      //       //   institutionId: authUser.attributes.family_name,
+      //       //   firstname: name[0],
+      //       //   lastname: name[1],
+      //       //   userRole: "Student",
+      //       //   email: email
+      //       // }
 
-            let create = await API.graphql({
-              query: createStudent,
-              variables: { input: newStudent }
-            })
+      //       // let create = await API.graphql({
+      //       //   query: createStudent,
+      //       //   variables: { input: newStudent }
+      //       // })
 
-            setStudent(create.data.createStudent);
+      //       // setStudent(create.data.createStudent);
 
-          } catch (error) {
-            console.log(e);
-          }
-        }
-      }
+      //     } catch (error) {
+      //       console.log(e);
+      //     }
+      //   }
+      // }
       setUser(authUser);
     } catch (e) {
       setUser(null);
