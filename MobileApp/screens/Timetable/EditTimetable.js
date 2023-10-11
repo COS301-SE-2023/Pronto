@@ -309,9 +309,9 @@ const EditTimetable = ({ navigation }) => {
         
         //console.log(updatedTimetable);
         student.timetable=updatedTimetable;
-        let e=await updateStudent.enrollments.values;
+        //let e=await updateStudent.enrollments.values;
 
-        updateStudent.enrollments=e.filter((item)=>item._deleted===null);
+       // updateStudent.enrollments=e.filter((item)=>item._deleted===null);
         
         // s.timetable = update.data.updateTimetable;
         // student.timetable.activityId=newTimetable.activityId;
