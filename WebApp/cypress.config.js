@@ -12,9 +12,6 @@ module.exports = defineConfig({
     screenshotsFolder: "./cypress/screenshots",
     videosFolder: "./cypress/videos",
     baseUrl: "https://testing-fixes.d23czn68v40k1e.amplifyapp.com/",
-    env: {
-      CYPRESS_LECTURER_PASSWORD : "October01!"
-    },
     setupNodeEvents(on, config) {
 
     },

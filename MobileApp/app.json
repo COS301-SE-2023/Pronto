@@ -32,6 +32,11 @@
     "updates": {
       "url": "https://u.expo.dev/7394f491-20d8-4cbe-baad-7f60dc29f9fa"
     },
-    "owner": "jonelisecoder"
+    "owner": "jonelisecoder",
+    "extra": {
+      "eas": {
+        "projectId": "7394f491-20d8-4cbe-baad-7f60dc29f9fa"
+      }
+    }
   }
 }
