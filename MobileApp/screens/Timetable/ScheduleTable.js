@@ -78,7 +78,6 @@ const ScheduleTable = ({ navigation, route }) => {
 
   const fetchActivities = async () => {
     try {
-      console.log("fetching");
       let stu = student;
       // if (student === null || student.id === undefined) {
       //   if (param === null || param.id === undefined) {

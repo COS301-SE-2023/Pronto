@@ -65,7 +65,7 @@ const DeleteAccountPage = () => {
                 const user = await Auth.currentAuthenticatedUser();
                 const id=user.attributes.sub;
                 stu = await DataStore.query(Student, id);
-                await DataStore.delete(stu)
+                await DataStore.delete(stu);
               }catch(error){
                 console.log(error);
               }
