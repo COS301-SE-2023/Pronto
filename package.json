@@ -10,6 +10,9 @@
     "pull:backend": "amplify pull",
     "status:backend": "amplify status",
     "update:backend:function": "amplify update function",
-    "debug:backend:getfunction": "aws lambda get-function --function-name "
+    "prod:config:backend:function": "aws lambda update-function-configuration --cli-input-yaml ",
+    "status:backend:getfunction": "aws lambda get-function --function-name ",
+    "status:backend:auth:userpool": "aws cognito-idp describe-user-pool --cli-input-yaml",
+    "status:backend:auth:userpool-client": "aws cognito-idp describe-user-pool-client --cli-input-yaml"
   }
 }
