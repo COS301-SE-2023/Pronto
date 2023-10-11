@@ -94,7 +94,6 @@ jobs:
           amplify build
 
   cypress:
-    if : false
     if: false
     runs-on: ubuntu-latest
     strategy:
