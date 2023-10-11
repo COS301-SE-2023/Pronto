@@ -21,9 +21,10 @@ import { StudentProvider, useStudent } from "./ContextProviders/StudentContext";
 import { getStudent, listInstitutions } from "./graphql/queries";
 import { createStudent } from "./graphql/mutations";
 import { API } from "aws-amplify"
-import { Amplify } from "aws-amplify";
+import { Amplify,DataStore } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
+import { Student,Institution } from "./models";
 
 Auth.configure(config);
 
@@ -76,6 +77,31 @@ export default function App() {
       //     }
       //   }
       // }
+      const id=authUser.attributes.sub;
+      let studentInfo = await DataStore.query(Student, id);
+      console.log(studentInfo);
+      if (studentInfo === null || studentInfo===undefined) {
+
+        //Create student
+        let name = authUser.attributes.name.split(",")
+        const institutionId=authUser.attributes.family_name;
+        
+        const email=authUser.attributes.email;
+        const inst = await DataStore.query(Institution, institutionId);
+        let c = await DataStore.save(
+          new Student({
+            "id": id,
+            "institutionId": institutionId,
+            "firstname": name[0],
+            "lastname": name[1],
+            "userRole": "Student",
+            "email": email,
+            "institution": inst,
+          })
+        );
+        console.log(c);
+        
+      }
       setUser(authUser);
     } catch (e) {
       setUser(null);

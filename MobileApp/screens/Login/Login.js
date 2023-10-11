@@ -79,44 +79,44 @@ const Login = ({ navigation }) => {
 
       studentInfo = await DataStore.query(Student, id);
       console.log(studentInfo);
-      if (studentInfo === null || studentInfo===undefined) {
+      // if (studentInfo === null || studentInfo===undefined) {
 
-        //Create student
-        let name = user.attributes.name.split(",")
-        const institutionId = user.attributes.family_name;
+      //   //Create student
+      //   let name = user.attributes.name.split(",")
+      //   const institutionId = user.attributes.family_name;
 
-        // let newStudent = {
-        //   id: user.attributes.sub,
-        //   institutionId: user.attributes.family_name,
-        //   firstname: name[0],
-        //   lastname: name[1],
-        //   userRole: "Student",
-        //   email: email
-        // }
-        const inst = await DataStore.query(Institution, institutionId);
-        let c = await DataStore.save(
-          new Student({
-            "id": id,
-            "institutionId": institutionId,
-            "firstname": name[0],
-            "lastname": name[1],
-            "userRole": "Student",
-            "email": email,
-            "institution": inst,
-          })
-        );
-        console.log(c);
+      //   let newStudent = {
+      //     id: user.attributes.sub,
+      //     institutionId: user.attributes.family_name,
+      //     firstname: name[0],
+      //     lastname: name[1],
+      //     userRole: "Student",
+      //     email: email
+      //   }
+      //   // const inst = await DataStore.query(Institution, institutionId);
+      //   // let c = await DataStore.save(
+      //   //   new Student({
+      //   //     "id": id,
+      //   //     "institutionId": institutionId,
+      //   //     "firstname": name[0],
+      //   //     "lastname": name[1],
+      //   //     "userRole": "Student",
+      //   //     "email": email,
+      //   //     "institution": inst,
+      //   //   })
+      //   // );
+      //   // console.log(c);
 
-        // let create = await API.graphql({
-        //   query: createStudent,
-        //   variables: { input: newStudent }
-        // })
+      //   let create = await API.graphql({
+      //     query: createStudent,
+      //     variables: { input: newStudent }
+      //   })
 
         //studentInfo = create.data.createStudent;
         // console.log(create);
         // updateStudent(create.data.createStudent);
         // }
-      }
+   //   }
       //  navigation.navigate("Tabs", studentInfo);
     } catch (e) {
       console.log(e);
