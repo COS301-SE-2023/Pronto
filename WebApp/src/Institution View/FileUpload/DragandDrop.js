@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import FileUpload from '../Images/FileUpload.png';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/StudentFiles.pdf";
-
-import { Storage, Auth } from "aws-amplify";
+import { useAdmin } from "../../ContextProviders/AdminContext";
+import { Storage, Auth,API } from "aws-amplify";
+import { listAdmins } from "../../Graphql/queries";
 
 function DropzoneComponent() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -12,6 +13,7 @@ function DropzoneComponent() {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
   const [folderNameS3, setFolderNameS3] = useState("");
+  const {admin,setAdmin} = useAdmin();
 
   useEffect(() => {
     fetchUserData();
@@ -21,15 +23,40 @@ function DropzoneComponent() {
     try {
       const userInfo = await Auth.currentUserInfo();
       setUser(userInfo);
+      let adminInfo=admin
+      if(admin===null){
+        let user = await Auth.currentAuthenticatedUser();
+                let adminEmail = user.attributes.email
+                let adminData = await API.graphql({
+                    query: listAdmins,
+                    variables: {
+                        filter: {
+                            email: {
+                                eq: adminEmail
+                            }
+                        },
+                    },
+                });
+                if (adminData.data.listAdmins.items.length > 0) {
+                    adminData = adminData.data.listAdmins.items[0];
+                    if (adminData.institution.logo !== null) {
+                        adminData.institution.logoUrl = await Storage.get(adminData.institution.logo, { validateObjectExistence: true, expires: 3600 });
+                     }
+                    setAdmin(adminData);
+                }
+      }
       let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
-      const words = username.split(/\s+/); // Split the name into words
+      //const words = username.split(/\s+/); // Split the name into words
+      const words= admin.institution.name.split(/\s+/);
       username = words
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
         .join(""); // Join the words without spaces
 
       setFolderNameS3(username);
+      console.log(username);
       setMessage("");
     } catch (error) {
+      console.log(error);
       setMessage("Error fetching user data");
     }
   };
