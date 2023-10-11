@@ -106,16 +106,19 @@ function DropzoneComponent() {
   const handleSubmit = async () => {
     if (selectedFile) {
       try {
-        const fileKey = `${folderNameS3}/StudentFiles/${selectedFile.name}`;
-        await Storage.put(fileKey, selectedFile, {
+        const sf=selectedFile
+        setSelectedFile(null)
+        const fileKey = `${folderNameS3}/StudentFiles/${sf.name}`;
+        await Storage.put(fileKey, sf, {
           progressCallback: ({ loaded, total }) => {
             const progress = Math.round((loaded / total) * 100);
             setUploadProgress(progress);
-            setMessage("Uploading file: " + selectedFile.name);
+            setMessage("Uploading file: " + sf.name);
           },
         });
-
-        setMessage("File successfully uploaded: " + selectedFile.name);
+        
+        setMessage("File successfully uploaded: " + sf.name);
+        
       } catch (error) {
         setMessage("Error uploading file");
       }
