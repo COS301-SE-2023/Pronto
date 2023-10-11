@@ -85,6 +85,8 @@ export default function App() {
         //Create student
         let name = authUser.attributes.name.split(",")
         const institutionId=authUser.attributes.family_name;
+        const id=authUser.attributes.sub;
+        const email=authUser.attributes.email;
         const inst = await DataStore.query(Institution, institutionId);
         let c = await DataStore.save(
           new Student({
