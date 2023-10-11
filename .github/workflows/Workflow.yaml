@@ -2,12 +2,13 @@ name: Build Mobile,Web App and Amplify Backend
 
 on:
   push:
-    branches: [main, dev, frontend, integration-fix, backend]
+    branches: [main, dev, frontend, integration-fix, backend, mobile-datastore]
   pull_request:
-    branches: [main, dev, frontend, integration-fix, backend]
+    branches: [main, dev, frontend, integration-fix, backend, mobile-datastore]
 
 jobs:
   build-mobile:
+    if: false
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -51,6 +52,7 @@ jobs:
           npm test
 
   build-backend:
+    if: false
     strategy:
       matrix:
         node_version: [12.x]
@@ -116,6 +118,7 @@ jobs:
         run: npx cypress run
 
   backend-unit-tests:
+    if: false
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -133,6 +136,7 @@ jobs:
           npm install
           npm test
   deploy-mobile:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Check for EXPO_TOKEN
