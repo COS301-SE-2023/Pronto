@@ -31,19 +31,29 @@ const NotificationList = ({ navigation }) => {
     const fetchAnnouncements = async () => {
         try {
             let stu = student;
-            setLoading(true);
+            //setLoading(true);
             const user = await Auth.currentAuthenticatedUser();
-
-            if (student === null) {
-                stu = await DataStore.query(Student, user.attributes.sub);
-                if (stu === null || stu === undefined) {
-                    throw Error();
-                }
-                updateStudent(stu);
-            }
-
-            let courses = stu.enrollments.items.map((items) => items._deleted === null);
-
+            const id=user.attributes.sub;
+            stu = await DataStore.query(Student, id)
+            //console.log(stu)
+            //console.log(stu.enrollments);
+            // if (student === null) {
+            //     stu = await DataStore.query(Student, user.attributes.sub);
+            //     if (stu === null || stu === undefined) {
+            //         throw Error();
+            //     }
+            //     updateStudent(stu);
+            // }
+            const enrollment=await stu.enrollments.values;
+            //console.log(enrollment);
+            
+            //let courses = stu.enrollments.items.map((items) => items._deleted === null);
+             let courses=enrollment.filter((items)=>items._deleted===null)
+             console.log(courses);
+             let ids=[];
+             for(let i=0;i<courses.length;i++){
+                ids.push(courses[i].courseId);
+             }
             if (courses.length === 0) {
                 setLoading(false);
                 setAnnouncement([]);
@@ -54,17 +64,31 @@ const NotificationList = ({ navigation }) => {
                     or: courses.map((courseId) => ({ courseId: { eq: courseId } })),
                 };
 
-                let variables = { filter, limit, sortDirection: "DESC" };
-                let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
-
-                setAnnouncement(announcementList.filter((item) => item._deleted === null));
-                if (announcementList.length < limit) {
-                    setNextToken(null);
-                } else {
-                    setNextToken(announcementList[announcementList.length - 1].id);
+              //   let variables = { filter, limit, sortDirection: "DESC" };
+            //      let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
+            //    console.log(announcementList);
+                 const announcementList = await Promise.all(ids.map(id => DataStore.query(Announcement, (a)=>a.courseId.eq(id))))
+                //console.log("Listing announcements");
+                //console.log(announcementList);
+                let a=[];
+                for(let i=0;i<announcementList.length;i++){
+                    for(let j=0;j<announcementList[i].length;j++){
+                        if(announcementList[i][j]._deleted===null){
+                           a.push(announcementList[i][j]);
+                        }
+                    }
                 }
-                setLoading(false);
+                //console.log(a);
+                setAnnouncement(a);
+                // setAnnouncement(announcementList.filter((item) => item._deleted === null));
+                // if (announcementList.length < limit) {
+                //     setNextToken(null);
+                // } else {
+                //     setNextToken(announcementList[announcementList.length - 1].id);
+                // }
+                 setLoading(false);
             }
+            setLoading(false);
         } catch (er) {
             console.log(er);
             Alert.alert(error);
@@ -253,7 +277,7 @@ const NotificationList = ({ navigation }) => {
                                     marginBottom: "0vh", marginLeft: "auto", marginRight: "auto",
                                 }}
                             >
-                                {nextToken !== null ? <Button
+                                {/* {nextToken !== null ? <Button
                                     onPress={loadMore}
                                     mode="contained"
                                     icon="arrow-down"
@@ -272,7 +296,7 @@ const NotificationList = ({ navigation }) => {
                                     }}
                                 >
                                     Load More
-                                </Button> : " "}
+                                </Button> : " "} */}
                             </Text>
                             <Text style={{ marginBottom: 300 }}>{"\n\n\n\n\n\n\n"}</Text>
                         </ScrollView>
