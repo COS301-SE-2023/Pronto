@@ -7,8 +7,8 @@ import {
   Alert,
   ImageBackground,
 } from "react-native";
-import { Auth, API,DataStore } from "aws-amplify";
-import {  getStudent } from "../../graphql/queries"
+import { Auth, API, DataStore } from "aws-amplify";
+import { getStudent } from "../../graphql/queries"
 import { deleteStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { useNavigation } from "@react-navigation/native";
@@ -61,12 +61,12 @@ const DeleteAccountPage = () => {
               //   navigation.navigate("Welcome");
               //   setDeleting(false);
               // }
-              try{
+              try {
                 const user = await Auth.currentAuthenticatedUser();
-                const id=user.attributes.sub;
+                const id = user.attributes.sub;
                 stu = await DataStore.query(Student, id);
                 await DataStore.delete(stu);
-              }catch(error){
+              } catch (error) {
                 console.log(error);
               }
               await Auth.currentAuthenticatedUser().then((user) => {
@@ -77,7 +77,7 @@ const DeleteAccountPage = () => {
                 "Account Deleted",
                 "Your account has been successfully deleted."
               );
-              navigation.navigate("Welcome");
+              // navigation.navigate("Welcome");
               setDeleting(false);
               //}
             } catch (error) {
