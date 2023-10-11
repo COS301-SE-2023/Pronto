@@ -79,7 +79,7 @@ const Login = ({ navigation }) => {
 
       studentInfo = await DataStore.query(Student, id);
       console.log(studentInfo);
-      if (studentInfo === null) {
+      if (studentInfo === null || studentInfo===undefined) {
 
         //Create student
         let name = user.attributes.name.split(",")
@@ -105,7 +105,7 @@ const Login = ({ navigation }) => {
             "institution": inst,
           })
         );
-        console.log(inst);
+        console.log(c);
 
         // let create = await API.graphql({
         //   query: createStudent,
