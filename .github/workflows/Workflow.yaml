@@ -118,7 +118,6 @@ jobs:
         run: npx cypress run
 
   backend-unit-tests:
-    if: false
     runs-on: ubuntu-latest
     strategy:
       matrix:
