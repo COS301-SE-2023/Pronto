@@ -18,7 +18,7 @@ import { Auth, API, DataStore } from "aws-amplify";
 import { getStudent } from "../../graphql/queries";
 import { createStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
-import { Student,Institution } from "../../models";
+import { Student, Institution } from "../../models";
 const { height } = Dimensions.get("window");
 
 const Login = ({ navigation }) => {
@@ -65,59 +65,59 @@ const Login = ({ navigation }) => {
       }
 
       const user = await Auth.signIn(signInObject);
-      
+
       let studentInfo = student;
-     // if (student === null) {
-        const email = user.attributes.email;
-        const id=user.attributes.sub;
-        // studentInfo = await API.graphql({
-        //   query: getStudent,
-        //   variables: { id: user.attributes.sub }
-        // });
-        // studentInfo = studentInfo.data.getStudent;
-        //updateStudent(studentInfo);
+      // if (student === null) {
+      const email = user.attributes.email;
+      const id = user.attributes.sub;
+      // studentInfo = await API.graphql({
+      //   query: getStudent,
+      //   variables: { id: user.attributes.sub }
+      // });
+      // studentInfo = studentInfo.data.getStudent;
+      //updateStudent(studentInfo);
 
-        studentInfo=await DataStore.query(Student,id);
-        console.log(studentInfo);
-        if (studentInfo === null) {
+      studentInfo = await DataStore.query(Student, id);
+      console.log(studentInfo);
+      if (studentInfo === null) {
 
-          //Create student
-          let name = user.attributes.name.split(",")
-          const institutionId=user.attributes.family_name;
-          
-          // let newStudent = {
-          //   id: user.attributes.sub,
-          //   institutionId: user.attributes.family_name,
-          //   firstname: name[0],
-          //   lastname: name[1],
-          //   userRole: "Student",
-          //   email: email
-          // }
-          const inst=await DataStore.query(Institution,institutionId);
-          let c=await DataStore.save(
-              new Student({
-                "id":id,
-		            "institutionId": institutionId,
-		            "firstname": name[0],
-		            "lastname": name[1],
-		            "userRole": "Student",
-		            "email": email,
-		            "institution": inst,
-	          })
-          );
-          console.log(inst);
+        //Create student
+        let name = user.attributes.name.split(",")
+        const institutionId = user.attributes.family_name;
 
-          // let create = await API.graphql({
-          //   query: createStudent,
-          //   variables: { input: newStudent }
-          // })
+        // let newStudent = {
+        //   id: user.attributes.sub,
+        //   institutionId: user.attributes.family_name,
+        //   firstname: name[0],
+        //   lastname: name[1],
+        //   userRole: "Student",
+        //   email: email
+        // }
+        const inst = await DataStore.query(Institution, institutionId);
+        let c = await DataStore.save(
+          new Student({
+            "id": id,
+            "institutionId": institutionId,
+            "firstname": name[0],
+            "lastname": name[1],
+            "userRole": "Student",
+            "email": email,
+            "institution": inst,
+          })
+        );
+        console.log(inst);
 
-          //studentInfo = create.data.createStudent;
-         // console.log(create);
-         // updateStudent(create.data.createStudent);
-       // }
+        // let create = await API.graphql({
+        //   query: createStudent,
+        //   variables: { input: newStudent }
+        // })
+
+        //studentInfo = create.data.createStudent;
+        // console.log(create);
+        // updateStudent(create.data.createStudent);
+        // }
       }
-      navigation.navigate("Tabs", studentInfo);
+      //  navigation.navigate("Tabs", studentInfo);
     } catch (e) {
       console.log(e);
       Alert.alert("Sign in error", e.message);

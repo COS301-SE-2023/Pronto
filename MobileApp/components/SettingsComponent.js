@@ -12,17 +12,17 @@ import { useStudent } from "../ContextProviders/StudentContext";
 
 const SettingsComponent = ({ settingsOptions }) => {
   const navigation = useNavigation();
-  const {student,updateStudent} =useStudent();
-  const onLogoutPressed = async() => {
+  const { student, updateStudent } = useStudent();
+  const onLogoutPressed = async () => {
     updateStudent(null);
-    try{
-     Auth.signOut();
-     navigation.navigate("Welcome");
+    try {
+      Auth.signOut();
+      //  navigation.navigate("Welcome");
     }
-    catch(error){
+    catch (error) {
       //console.log(e)
     }
-    navigation.navigate("Welcome");
+    // navigation.navigate("Welcome");
   };
 
   const onHelpPressed = () => {
@@ -78,7 +78,7 @@ const SettingsComponent = ({ settingsOptions }) => {
               backgroundColor: "#e32f45",
               marginVertical: 20,
               marginHorizontal: 20,
-              marginBottom:"50%"
+              marginBottom: "50%"
             }}
             outlined={true}
             onPress={onLogoutPressed}
@@ -95,14 +95,14 @@ const SettingsComponent = ({ settingsOptions }) => {
               alignItems: "center",
               top: "12%", // Adjust the top position as needed
               right: "8%", // Adjust the right position as needed
-              marginBottom:"30%"
+              marginBottom: "30%"
             }}
             onPress={onHelpPressed} // Implement the function for the help action
             testID="help-button"
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ color: "black", marginRight: 5, fontWeight: "400" }}>Need help</Text>
-              <Icon name="help-circle-outline" size={50} color="#e32f45" style={{marginBottom:"0%"}}/>
+              <Icon name="help-circle-outline" size={50} color="#e32f45" style={{ marginBottom: "0%" }} />
             </View>
 
           </TouchableOpacity>
