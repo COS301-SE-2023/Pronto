@@ -136,7 +136,6 @@ jobs:
           npm install
           npm test
   deploy-mobile:
-    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Check for EXPO_TOKEN
