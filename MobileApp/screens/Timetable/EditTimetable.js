@@ -153,6 +153,7 @@ const EditTimetable = ({ navigation }) => {
       // setIsLoading(false); // Set loading state to false after courses are fetched
       setIsLoading(true);
       const user = await Auth.currentAuthenticatedUser();
+      
       const id = user.attributes.sub;
       stu = await DataStore.query(Student, id);
 
