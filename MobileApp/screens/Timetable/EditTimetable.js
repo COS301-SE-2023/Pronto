@@ -162,7 +162,8 @@ const EditTimetable = ({ navigation }) => {
     let m=[];
     setCourses([]);
     const studentTimetable= await stu.timetable;
-    const activityList=studentTimetable.activityId;
+    const activity=studentTimetable.activityId;
+    const activityList=removeDuplicates(activity)
     for(let i=0;i<enrollment.length;i++){
       if(enrollment[i]._deleted===null){
         const course=await enrollment[i].course;
@@ -302,7 +303,7 @@ const EditTimetable = ({ navigation }) => {
        updated.activityId=activityIds
       }));
         
-        console.log(updatedTimetable);
+        //console.log(updatedTimetable);
         student.timetable=updateTimetable;
         // s.timetable = update.data.updateTimetable;
         // student.timetable.activityId=newTimetable.activityId;
@@ -340,6 +341,17 @@ const EditTimetable = ({ navigation }) => {
     setActivities(rows);
   }
 
+  function removeDuplicates(arr) { 
+    let unique = []; 
+    arr.forEach(element => { 
+        if (!unique.includes(element)) { 
+            unique.push(element); 
+        } 
+    }); 
+    return unique; 
+} 
+
+
 
   const oneModule = ({ item }) => {
     const handleDelete = async () => {
@@ -370,7 +382,11 @@ const EditTimetable = ({ navigation }) => {
                     //   query: deleteEnrollment,
                     //   variables: { input: { id: student.enrollments.items[i].id ,_version:student.enrollments.items[i]._version} }
                     // });
-                    let del=await DataStore.delete(student.enrollments[i]);
+                    console.log("enrollment is:")
+                    //console.log(student.enrollments[i]);
+                    let s=await DataStore.query(Enrollment,student.enrollments[i].id);
+                   console.log(s);
+                    let del=await DataStore.delete(s);
                     console.log(del);
                     student.enrollments.splice(i, 1);
                     break;

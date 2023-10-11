@@ -106,7 +106,8 @@ const ScheduleTable = ({ navigation, route }) => {
      
     let c=[];
      const studentTimetable= await stu.timetable;
-    const activityList=studentTimetable.activityId;
+    const activity=studentTimetable.activityId;
+    const activityList=removeDuplicates(activity);
     for(let i=0;i<enrollment.length;i++){
       const course=await enrollment[i].course;
       const activity=await course.activity.values;
@@ -145,13 +146,12 @@ const ScheduleTable = ({ navigation, route }) => {
     // }
   //console.log(act);
      //console.log(studentTimetable);
-     //console.log(activityList);
-  
-
- 
+     //console.log(activityList); 
 
     
-
+     stu.enrollments=enrollment,
+     stu.timetable=studentTimetable;
+     updateStudent(stu);
       act = act.sort((a, b) => {
         if (a.start <= b.start)
           return -1;
@@ -183,10 +183,24 @@ const ScheduleTable = ({ navigation, route }) => {
     }
   }
 
+function removeDuplicates(arr) { 
+    let unique = []; 
+    arr.forEach(element => { 
+        if (!unique.includes(element)) { 
+            unique.push(element); 
+        } 
+    }); 
+    return unique; 
+} 
 
-  useEffect(() => {
-    fetchActivities();
-  },)
+useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchActivities()
+    });
+
+
+    return unsubscribe
+  }, [navigation])
 
   const createScheduleArray = async (modules) => {
     scheduleArray = {};
