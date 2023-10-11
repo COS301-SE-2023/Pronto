@@ -215,7 +215,7 @@ const EditTimetable = ({ navigation }) => {
           activityIds.push(activities[i].id);
         }
       }
-        if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.filter((item) => item.courseId === selectedModule.id).length === 0) {
+        if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.filter((item) => item.courseId === selectedModule.id && item._deleted!==null).length === 0) {
         // let enroll = {
         //   courseId: selectedModule.id,
         //   studentId: student.id,

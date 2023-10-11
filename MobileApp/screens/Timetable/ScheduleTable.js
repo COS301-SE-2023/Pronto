@@ -102,10 +102,11 @@ const ScheduleTable = ({ navigation, route }) => {
      const id=user.attributes.sub;
      stu = await DataStore.query(Student, id);
      
-     const enrollment=await stu.enrollments.values;
-     
+    const enrollmentList=await stu.enrollments.values;
+    const enrollment=enrollmentList.filter((item)=>item._deleted===null);
+    console.log(enrollment); 
     let c=[];
-     const studentTimetable= await stu.timetable;
+    const studentTimetable= await stu.timetable;
     const activity=studentTimetable.activityId;
     const activityList=removeDuplicates(activity);
     for(let i=0;i<enrollment.length;i++){
