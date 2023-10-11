@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
@@ -13,14 +13,20 @@ import { useStudent } from "../ContextProviders/StudentContext";
 const SettingsComponent = ({ settingsOptions }) => {
   const navigation = useNavigation();
   const { student, updateStudent } = useStudent();
+  const [loggingOut, setLoggingOut] = useState(false);
+
   const onLogoutPressed = async () => {
+    setLoggingOut(true);
     updateStudent(null);
+
     try {
       Auth.signOut();
       //  navigation.navigate("Welcome");
+      setLoggingOut(false);
     }
     catch (error) {
       //console.log(e)
+      setLoggingOut(false);
     }
     // navigation.navigate("Welcome");
   };
@@ -83,8 +89,9 @@ const SettingsComponent = ({ settingsOptions }) => {
             outlined={true}
             onPress={onLogoutPressed}
             testID="logout-button"
+            disabled={loggingOut}
           >
-            Logout
+            {loggingOut ? "Logging out..." : "Logout"}
           </Button>
 
           <TouchableOpacity
