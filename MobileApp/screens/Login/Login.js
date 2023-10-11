@@ -112,11 +112,11 @@ const Login = ({ navigation }) => {
       //     variables: { input: newStudent }
       //   })
 
-        //studentInfo = create.data.createStudent;
-        // console.log(create);
-        // updateStudent(create.data.createStudent);
-        // }
-   //   }
+      //studentInfo = create.data.createStudent;
+      // console.log(create);
+      // updateStudent(create.data.createStudent);
+      // }
+      //   }
       //  navigation.navigate("Tabs", studentInfo);
     } catch (e) {
       console.log(e);
@@ -193,7 +193,7 @@ const Login = ({ navigation }) => {
 
         </View>
 
-        <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>
+        <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed} disabled={loading}>
           <Text style={styles.signInButtonText}>
             {loading ? "Signing in..." : "Sign in"}
           </Text>
