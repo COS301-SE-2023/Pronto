@@ -664,13 +664,13 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            // onMouseEnter={() => setSearchIcon(true)}
-                            // onMouseLeave={() => setSearchIcon(false)}
+                            onMouseEnter={() => setSearchIcon(true)}
+                            onMouseLeave={() => setSearchIcon(false)}
                         //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
 
                             <div className="input-group-append">
-                                {searchIcon === true? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "#e32f45" }} />}
+                                {searchIcon === false? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "#ffffff" }} />}
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}
