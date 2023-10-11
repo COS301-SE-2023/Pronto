@@ -302,9 +302,13 @@ const EditTimetable = ({ navigation }) => {
     let updatedTimetable= await DataStore.save(Timetable.copyOf(student.timetable, updated => {
        updated.activityId=activityIds
       }));
+      let updateStudent=await DataStore.save(Student.copyOf(student, updated => {
+          updated.timetable=updatedTimetable,
+          updated.studentTimetableId=updatedTimetable.id  
+      }));
         
         //console.log(updatedTimetable);
-        student.timetable=updateTimetable;
+        student.timetable=updatedTimetable;
         // s.timetable = update.data.updateTimetable;
         // student.timetable.activityId=newTimetable.activityId;
         // student.timetable._version=update.data.updateTimetable._version;
