@@ -334,7 +334,13 @@ const EditInfoPage = () => {
                                     </div>
                                 </div>
 
-                                <button className="post-button button-no-border" style={{ borderRadius: "20px", cursor: "pointer" }}>Update</button>
+                                <button className="post-button button-no-border" style={{ backgroundColor: "#e32f45", color: "white", borderRadius: "20px", boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", transition: "transform 0.3s" }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.1)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}>Update</button>
                             </form>
                         </AccordionDetails>
                     </Accordion>
@@ -495,7 +501,13 @@ const EditInfoPage = () => {
                                 type="submit"
                                 onClick={handleDomainEdit}
                                 className="post-button button-no-border"
-                                style={{ borderRadius: "20px", cursor: "pointer" }}
+                                style={{ backgroundColor: "#e32f45", color: "white", borderRadius: "20px", boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", transition: "transform 0.3s" }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.1)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}
                             >
                                 Confirm
                             </button>
