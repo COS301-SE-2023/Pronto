@@ -104,7 +104,7 @@ const ScheduleTable = ({ navigation, route }) => {
      
     const enrollmentList=await stu.enrollments.values;
     const enrollment=enrollmentList.filter((item)=>item._deleted===null);
-    console.log(enrollment); 
+   
     let c=[];
     const studentTimetable= await stu.timetable;
     const activity=studentTimetable.activityId;

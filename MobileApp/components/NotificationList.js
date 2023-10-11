@@ -49,7 +49,7 @@ const NotificationList = ({ navigation }) => {
             
             //let courses = stu.enrollments.items.map((items) => items._deleted === null);
              let courses=enrollment.filter((items)=>items._deleted===null)
-             console.log(courses);
+             
              let ids=[];
              for(let i=0;i<courses.length;i++){
                 ids.push(courses[i].courseId);
@@ -74,7 +74,12 @@ const NotificationList = ({ navigation }) => {
                 for(let i=0;i<announcementList.length;i++){
                     for(let j=0;j<announcementList[i].length;j++){
                         if(announcementList[i][j]._deleted===null){
-                           a.push(announcementList[i][j]);
+                           let s=announcementList[i][j];
+                           const code =await announcementList[i][j].course;
+                           s.course={
+                            coursecode:code.coursecode,
+                           }
+                            a.push(s);
                         }
                     }
                 }
