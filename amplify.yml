@@ -13,7 +13,7 @@ frontend:
       commands:
         - cd WebApp
         - npm i
-        - npm build
+        - npm run build
 
   artifacts:
     baseDirectory: /WebApp/public
