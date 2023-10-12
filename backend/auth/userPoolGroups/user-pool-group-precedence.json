@@ -1,0 +1,18 @@
+[
+  {
+    "groupName": "superUserGroup",
+    "precedence": 1
+  },
+  {
+    "groupName": "adminUserGroup",
+    "precedence": 2
+  },
+  {
+    "groupName": "lecturerUserGroup",
+    "precedence": 3
+  },
+  {
+    "groupName": "studentsUserGroup",
+    "precedence": 4
+  }
+]

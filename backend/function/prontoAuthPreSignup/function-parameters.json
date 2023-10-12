@@ -1,0 +1,37 @@
+{
+  "trigger": true,
+  "modules": [
+    "custom"
+  ],
+  "parentResource": "prontoAuth",
+  "functionName": "prontoAuthPreSignup",
+  "resourceName": "prontoAuthPreSignup",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "/snapshot/amplify-cli/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PreSignup",
+  "triggerTemplate": "PreSignup.json.ejs",
+  "triggerEventPath": "PreSignup.event.json",
+  "roleName": "prontoAuthPreSignup",
+  "skipEdit": true,
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "apiProntoGraphqlapikeyoutput",
+      "environmentVariableName": "API_PRONTO_GRAPHQLAPIKEYOUTPUT"
+    },
+    {
+      "cloudFormationParameterName": "cognitoMobileClientId",
+      "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "cognitoWebClientId",
+      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
+    }
+  ],
+  "permissions": {
+    "api": {
+      "pronto": [
+        "Query"
+      ]
+    }
+  }
+}
