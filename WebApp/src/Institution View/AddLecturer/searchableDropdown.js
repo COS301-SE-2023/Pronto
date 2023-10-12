@@ -36,7 +36,7 @@ export default function SearchableDropdown(props) {
             //   }
             // ]
             coursecode:{
-              beginsWith:event.target.value
+              beginsWith:event.target.value.toUpperCase()
             }
           }
         }

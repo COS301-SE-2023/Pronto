@@ -15,10 +15,11 @@ import { Card, Button, IconButton } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
-import { API, Auth } from "aws-amplify"
-import { getStudent,listCourses} from "../../graphql/queries"
-import { createEnrollment,deleteEnrollment,updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { API, Auth, DataStore, Predicates } from "aws-amplify"
+import { getStudent, listCourses, coursesByInstitutionId } from "../../graphql/queries"
+import { createEnrollment, deleteEnrollment, updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
 import { useStudent } from "../../ContextProviders/StudentContext";
+import { Student, Activity, Course, Enrollment, Timetable } from "../../models";
 
 const EditTimetable = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -29,12 +30,12 @@ const EditTimetable = ({ navigation }) => {
   const practicals = ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"];
   const [activities, setActivities] = useState([])
 
-  const{student,updateStudent} = useStudent();
+  const { student, updateStudent } = useStudent();
   const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
   const [isSaving, setIsSaving] = useState(false);
 
   const error = "There appear to be network issues.Please try again later"
-  
+
   const toggleModal = (module) => {
     if (module) {
       setSelectedModule(module);
@@ -47,7 +48,7 @@ const EditTimetable = ({ navigation }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-  const addToModules = async(module) => {
+  const addToModules = async (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [module, ...prevModules]);
 
@@ -64,29 +65,37 @@ const EditTimetable = ({ navigation }) => {
   const handleSearch = async (text) => {
     setInput(text);
 
-    if (text !== null) {
+    if (text !== null && student!==null && student!==undefined) {
       try {
-        let search = await API.graphql({
-          query: listCourses,
-          variables: {
-            filter: {
-              and : [
-                      {
-                        coursecode: {
-                          beginsWith: text
-                        }
-                      } ,
-                      {
-                        institutionId:{
-                          eq:student.institutionId
-                        }
-                      }
-                    ]
-              }
-            }
-          })
-        
-        setCourses(search.data.listCourses.items.filter((item)=>item._deleted===null));
+        // let search = await API.graphql({
+        //   query: listCourses,
+        //   variables: {
+        //     filter: {
+        //       // and : [
+        //       //         {
+        //       //           coursecode: {
+        //       //             beginsWith: text
+        //       //           }
+        //       //         } ,
+        //       //         {
+        //       //           institutionId:{
+        //       //             eq:student.institutionId
+        //       //           }
+        //       //         }
+        //       //       ]
+        //       coursecode:{
+        //         beginsWith: text
+        //       }
+        //       }
+        //     },
+        //   })
+        let search = await DataStore.query(Course, (c) => c.coursecode.beginsWith(text.toUpperCase()));
+
+        for (let i = 0; i < search.length; i++) {
+          search[i].activity = await search[i].activity.values
+        }
+        setCourses(search.filter((item) => item._deleted === null && item.institutionId === student.institutionId));
+
       } catch (e) {
         Alert.alert(error);
         console.log(e);
@@ -94,63 +103,116 @@ const EditTimetable = ({ navigation }) => {
     }
   }
 
-  const fetchCourses = async () =>{
+  const fetchCourses = async () => {
     try {
-      let stu=student;
-      if(student===null || student.id===undefined){
-        setIsLoading(true); // Set loading state to true during API call
-        const user = await Auth.currentAuthenticatedUser();
-        stu=await API.graphql({
-          query:getStudent,
-          variables:{id:user.attributes.sub}
-        }) 
-        stu=stu.data.getStudent;
-        stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null);
-        if(stu===null){
-          setIsLoading(false);
-          return;
-        }
-        updateStudent(stu);
-      }
+      let stu = student;
+      // if(student===null || student.id===undefined){
+      //   setIsLoading(true); // Set loading state to true during API call
+      //   const user = await Auth.currentAuthenticatedUser();
+      //   stu=await API.graphql({
+      //     query:getStudent,
+      //     variables:{id:user.attributes.sub}
+      //   }) 
+      //   stu=stu.data.getStudent;
+      //   stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null);
+      //   if(stu===null){
+      //     setIsLoading(false);
+      //     return;
+      //   }
+      //   updateStudent(stu);
+      // }
+
+
+      // let c = [];
+      // let act= [];
+
+      // for (let i = 0; i < stu.enrollments.items.length; i++) {
+      //   if(stu.enrollments.items[i]._deleted===null){
+      //   c.push(stu.enrollments.items[i].course);
+      //   }
+      // }
+      // setSelectedModules(c);
+
+      // if(stu.timetable===null){
+      //   setActivities([]);
+      //   setIsLoading(false);
+      //   return;
+      // }
+
+      // for (let i = 0; i < stu.timetable.activityId.length; i++) {
+      //   for (let j = 0; j < c.length; j++) {
+      //     let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+      //     if (index !== undefined) {
+      //       act.push(index);
+      //       break;
+      //     }
+      //   }
+      // }
+
+      // setActivities(act);
+      // setIsLoading(false); // Set loading state to false after courses are fetched
+      setIsLoading(true);
+      const user = await Auth.currentAuthenticatedUser();
+      
+      const id = user.attributes.sub;
+      stu = await DataStore.query(Student, id);
+      if(stu===undefined)
+       return;
+      const enrollment = await stu.enrollments.values;
 
       let c = [];
-      let act= [];
-        
-      for (let i = 0; i < stu.enrollments.items.length; i++) {
-        c.push(stu.enrollments.items[i].course);
+      let m = [];
+      setCourses([]);
+      const studentTimetable = await stu.timetable;
+      let activityList=[]
+      if(studentTimetable!==undefined){
+        const activity = studentTimetable.activityId;
+        activityList = removeDuplicates(activity);
       }
-      setSelectedModules(c);
-        
-      if(stu.timetable===null){
-        setActivities([]);
-        setIsLoading(false);
-        return;
-      }
-
-      for (let i = 0; i < stu.timetable.activityId.length; i++) {
-        for (let j = 0; j < c.length; j++) {
-          let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-          if (index !== undefined) {
-            act.push(index);
-            break;
+      if(enrollment!==undefined){
+      for (let i = 0; i < enrollment.length; i++) {
+        if (enrollment[i]._deleted === null) {
+          const course = await enrollment[i].course;
+          const activity = await course.activity.values;
+          //console.log(activity);
+          course.activity = activity;
+          m.push(course);
+          for (let j = 0; j < activity.length; j++) {
+            let saveActivity = activity[j];
+            saveActivity.course = {
+              coursecode: course.coursecode
+            }
+            if (saveActivity._deleted === null && activityList.includes(saveActivity.id)) {
+              c.push(saveActivity);
+            }
           }
         }
       }
-        
-      setActivities(act);
-      setIsLoading(false); // Set loading state to false after courses are fetched
+      
+      stu.enrollments = enrollment.filter((e) => e._deleted === null);
+    
+      stu.timetable = studentTimetable;
+      updateStudent(stu);
+      //console.log("From edit");
+      //console.log(m[0].activity);
+      setActivities(c);
+      }
+      setSelectedModules(m);
+      updateStudent(stu);
+      setIsLoading(false);
+
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
       //Alert.alert(error);
-      console.log("From edit");  
-      console.log(e); 
+      console.log("From edit");
+      console.log(e);
 
     }
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchCourses();
-  },[]);
+  }, []);
 
   const handleSave = async () => {
     try {
@@ -164,70 +226,107 @@ const EditTimetable = ({ navigation }) => {
           activityIds.push(activities[i].id);
         }
       }
-        if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.items.filter((item) => item.courseId === selectedModule.id).length === 0) {
-        let enroll = {
-          courseId: selectedModule.id,
-          studentId: student.id,
-        };
+      if ((selectedModule !== null && selectedModule !== undefined)  && student.enrollments.filter((item) => item.courseId === selectedModule.id && item._deleted !== null).length === 0) {
+        // let enroll = {
+        //   courseId: selectedModule.id,
+        //   studentId: student.id,
+        // };
 
-        let newEnrollment = await API.graphql({
-          query: createEnrollment,
-          variables: { input: enroll }
-        });
-       
-        let s = student;
-      
-        student.enrollments.items.push(newEnrollment.data.createEnrollment);
-       
-       updateStudent(student);
-        
+        // let newEnrollment = await API.graphql({
+        //   query: createEnrollment,
+        //   variables: { input: enroll }
+        // });
+        let newEnrollment = await DataStore.save(
+          new Enrollment({
+            "studentId": student.id,
+            "courseId": selectedModule.id,
+            "year": new Date().getFullYear(),
+            "student": student,
+            "course": selectedModule,
+          })
+        );
+        console.log(newEnrollment);
+        student.enrollments.push(newEnrollment);
+        updateStudent(student);
+
       }
-      
-      //Create a new timetable if it doesnt exist
-      if (student.studentTimetableId === null) {
-        let newTimetable = {
-          studentId: student.id,
-          activityId: activityIds,
-        };
 
-        let create = await API.graphql({
-          query: createTimetable,
-          variables: { input: newTimetable },
-        })
-        let a=await API.graphql({
-          query:updateStudentInfo,
-          variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id,_version:student._version}}
-        })
+      //Create a new timetable if it doesnt exist
+      if (student.timetable === undefined || student.timetable===null || student.studentTimetableId===null) {
+        // let newTimetable = {
+        //   studentId: student.id,
+        //   activityId: activityIds,
+        // };
+
+        // let create = await API.graphql({
+        //   query: createTimetable,
+        //   variables: { input: newTimetable },
+        // })
+        // let a=await API.graphql({
+        //   query:updateStudentInfo,
+        //   variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id,_version:student._version}}
+        // })
+        let newTimetable = await DataStore.save(
+          new Timetable({
+            "studentId": student.id,
+            "activityId": activityIds,
+            "student": student,
+            "activities": []
+          })
+        );
+        console.log(newTimetable);
+        student.timetable = newTimetable;
+        student.studentTimetableId = newTimetable.id;
+
+        let updatingStudent = await DataStore.save(Student.copyOf(student, updated => {
+          updated.timetable = newTimetable,
+            updated.studentTimetableId = newTimetable.id
+        }));
+
+        console.log(updatingStudent);
 
         let s = student
-        s.timetable = create.data.createTimetable;
-        s.studentTimetableId = s.timetable.id;
-        student.timetable=create.data.createTimetable;
-        student.studentTimetableId=create.data.createTimetable.id;
-        student.timetable.activities=activities;
-         updateStudent(student);
-        
+        //    s.timetable = create.data.createTimetable;
+        // s.studentTimetableId = s.timetable.id;
+        // student.timetable=create.data.createTimetable;
+        // student.studentTimetableId=create.data.createTimetable.id;
+        // student.timetable.activities=activities;
+        updateStudent(student);
+
       }
 
       //Update existing timetable
       else {
 
-        let newTimetable = {
-          id: student.studentTimetableId,
-          studentId: student.id,
-          _version : student.timetable._version,
-          activityId: activityIds
-        }
+        // let newTimetable = {
+        //   id: student.studentTimetableId,
+        //   studentId: student.id,
+        //   _version : student.timetable._version,
+        //   activityId: activityIds
+        // }
 
-        let update = await API.graphql({
-          query: updateTimetable,
-          variables: { input: newTimetable }
-        })
-        
-        let s = student
-        s.timetable = update.data.updateTimetable;
-        student.timetable.activityId=newTimetable.activityId;
-        student.timetable._version=update.data.updateTimetable._version;
+        // let update = await API.graphql({
+        //   query: updateTimetable,
+        //   variables: { input: newTimetable }
+        // })
+
+        let updatedTimetable = await DataStore.save(Timetable.copyOf(student.timetable, updated => {
+          updated.activityId = activityIds
+        }));
+        let updatingStudent=await DataStore.save(Student.copyOf(student, updated => {
+            updated.timetable=updatedTimetable,
+            updated.studentTimetableId=updatedTimetable.id  
+        }));
+
+        //console.log(updatedTimetable);
+        student.timetable = updatedTimetable;
+        //let e=await updateStudent.enrollments.values;
+
+        // updateStudent.enrollments=e.filter((item)=>item._deleted===null);
+
+        // s.timetable = update.data.updateTimetable;
+        // student.timetable.activityId=newTimetable.activityId;
+        // student.timetable._version=update.data.updateTimetable._version;
         //student.timetable=update.data.updateTimetable;
         //student.timetable.activities=activities;
         updateStudent(student);
@@ -252,14 +351,25 @@ const EditTimetable = ({ navigation }) => {
         rows.splice(i, 1)
       }
     }
-   
+
     rows.push(activity)
     //student.timetable.activities=rows;
     //updateStudent(student);
     //let s=await updateStudent(student);
-   // student.timetable.activities=s.timetable.activities;
+    // student.timetable.activities=s.timetable.activities;
     setActivities(rows);
   }
+
+  function removeDuplicates(arr) {
+    let unique = [];
+    arr.forEach(element => {
+      if (!unique.includes(element)) {
+        unique.push(element);
+      }
+    });
+    return unique;
+  }
+
 
 
   const oneModule = ({ item }) => {
@@ -281,18 +391,23 @@ const EditTimetable = ({ navigation }) => {
               let act = activities.filter(
                 (activity) => activity.courseId !== item.id
               );
-            
+
               let error = "Failed to remove course. Please try again later";
 
               try {
-                for (let i = 0; i < student.enrollments.items.length; i++) {
-                  if (student.enrollments.items[i].courseId === item.id) {
-                    del = await API.graphql({
-                      query: deleteEnrollment,
-                      variables: { input: { id: student.enrollments.items[i].id ,_version:student.enrollments.items[i]._version} }
-                    });
-
-                    student.enrollments.items.splice(i, 1);
+                for (let i = 0; i < student.enrollments.length; i++) {
+                  if (student.enrollments[i].courseId === item.id) {
+                    // del = await API.graphql({
+                    //   query: deleteEnrollment,
+                    //   variables: { input: { id: student.enrollments.items[i].id ,_version:student.enrollments.items[i]._version} }
+                    // });
+                    console.log("enrollment is:")
+                    //console.log(student.enrollments[i]);
+                    let s = await DataStore.query(Enrollment, student.enrollments[i].id);
+                    console.log(s);
+                    let del = await DataStore.delete(s);
+                    console.log(del);
+                    student.enrollments.splice(i, 1);
                     break;
                   }
                 }
@@ -467,16 +582,16 @@ const EditTimetable = ({ navigation }) => {
             {selectedModule && (
               <View key={selectedModule.id}>
                 <Text style={styles.moduleCode}>{selectedModule?.coursecode}</Text>
-                
-                
+
+
                 {/* Display lectures */}
                 {lectures.map((lecture, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname == lecture).length > 0 &&
+                  selectedModule.activity.filter(item => item.activityname == lecture).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Lecture"}
                     moduleContent={
-                      selectedModule.activity.items.filter(item => item.activityname === lecture).map((act, index) => (
+                      selectedModule.activity.filter(item => item.activityname === lecture).map((act, index) => (
                         {
                           label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
                           act: act,
@@ -487,18 +602,18 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
-                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===lecture)[0]}
+                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === lecture)[0]}
                   />
                 ))}
 
                 {/*Display tutorials*/}
                 {tutorials.map((tutorial, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname == tutorial).length > 0 &&
+                  selectedModule.activity.filter(item => item.activityname == tutorial).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Tutorial"}
                     moduleContent={
-                      selectedModule.activity.items.filter(item => item.activityname === tutorial).map((act, index) => (
+                      selectedModule.activity.filter(item => item.activityname === tutorial).map((act, index) => (
                         {
                           label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
                           act: act,
@@ -509,18 +624,18 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
-                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===tutorial)[0]}
+                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === tutorial)[0]}
                   />
                 ))}
 
                 {/*Display practicals*/}
                 {practicals.map((practical, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname === practical).length > 0 &&
+                  selectedModule.activity.filter(item => item.activityname === practical).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Practical"}
                     moduleContent={
-                      selectedModule.activity.items.filter(item => item.activityname === practical).map((act, index) => (
+                      selectedModule.activity.filter(item => item.activityname === practical).map((act, index) => (
                         {
                           label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
                           act: act,
@@ -531,7 +646,7 @@ const EditTimetable = ({ navigation }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
-                    currentActivity={activities.filter((a)=>a.courseId===selectedModule.id && a.activityname===practical)[0]}
+                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === practical)[0]}
                   />
                 ))}
               </View>
@@ -550,7 +665,7 @@ const EditTimetable = ({ navigation }) => {
 
             outlined={true}
             disabled={isSaving}
-            onPress={async() => { await handleSave()}}
+            onPress={async () => { await handleSave() }}
             testID="save-button"
           >
             {isSaving ? (

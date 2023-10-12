@@ -58,7 +58,7 @@ export const createStudent = /* GraphQL */ `
             activity {
               items{
                 id
-                acivityname
+                activityname
                 day
                 start
                 end

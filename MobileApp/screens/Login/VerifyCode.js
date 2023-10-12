@@ -27,7 +27,7 @@ const VerifyCode = ({ navigation }) => {
   const [passwordSignUpIsValid, setPasswordSignUpIsValid] = useState(false);
   const validateSignUpPassword = (value) => {
     const regex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
     const isValidSignUpPassword = regex.test(value);
 
     setPasswordSignUpIsValid(isValidSignUpPassword);
@@ -55,116 +55,119 @@ const VerifyCode = ({ navigation }) => {
 
     setLoading(true);
     try {
-      await Auth.forgotPasswordSubmit(email, code, password);
+      const yu = await Auth.forgotPasswordSubmit(email, code, password);
+      console.log(yu);
       Alert.alert("Success", "Password successfully changed!");
       navigation.navigate("Login");
     } catch (e) {
+      console.log(e);
       Alert.alert("Error", e.message);
     }
     setLoading(false);
   };
   return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.contentContainer}>
-          <View style={styles.centered}>
-            <Text style={styles.title}>Reset Password</Text>
-            <Text style={styles.subtitle}>
-              Enter the code sent to your email and pick a new password.
-            </Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.contentContainer}>
+        <View style={styles.centered}>
+          <Text style={styles.title}>Reset Password</Text>
+          <Text style={styles.subtitle}>
+            Enter the code sent to your email and pick a new password.
+          </Text>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Code"
+            placeholderTextColor={"#666666"}
+            value={code}
+            onChangeText={setCode}
+            style={styles.input}
+          />
+
+          <View style={styles.inputContainer}>
+            <TextInput
+              testID='new-password'
+              placeholder="New Password"
+              autoCapitalize="none"
+              placeholderTextColor="#666666"
+              secureTextEntry={true}
+              style={[styles.input]}
+              value={password}
+              onChangeText={(value) => {
+                setPassword(value);
+                setPasswordSignUpIsValid(value);
+                validateSignUpPassword(value);
+              }}
+              onFocus={() => setIsTypingPassword(true)}
+            />
+            {isTypingPassword && passwordSignUpIsValid && (
+              <View style={styles.iconContainer}>
+                <Ionicons name="checkmark-circle" size={24} color="green" />
+              </View>
+            )}
+
+            {isTypingPassword && !passwordSignUpIsValid && (
+              <View style={styles.iconContainer} testID='cancel'>
+                <MaterialIcons name="cancel" size={24} color="red" />
+              </View>
+            )}
           </View>
 
           <View style={styles.inputContainer}>
             <TextInput
-                placeholder="Code"
-                placeholderTextColor={"#666666"}
-                value={code}
-                onChangeText={setCode}
-                style={styles.input}
+              testID='confirm-new-password'
+              placeholder="Confirm New Password"
+              autoCapitalize="none"
+              placeholderTextColor={"#666666"}
+              value={confirmPassword}
+              secureTextEntry={true}
+              onFocus={() => setIsTypingPasswordMatch(true)}
+              style={styles.input}
+              onChangeText={(value) => {
+                setConfirmPassword(value);
+                validateConfirmPassword(value);
+              }}
+              passwordMatch={passwordMatch}
             />
 
-            <View style={styles.inputContainer}>
-              <TextInput
-                  testID='new-password'
-                  placeholder="New Password"
-                  autoCapitalize="none"
-                  placeholderTextColor="#666666"
-                  secureTextEntry={true}
-                  style={[styles.input]}
-                  value={password}
-                  onChangeText={(value) => {
-                    setPassword(value);
-                    setPasswordSignUpIsValid(value);
-                    validateSignUpPassword(value);
-                  }}
-                  onFocus={() => setIsTypingPassword(true)}
-              />
-              {isTypingPassword && passwordSignUpIsValid && (
-                  <View style={styles.iconContainer}>
-                    <Ionicons name="checkmark-circle" size={24} color="green" />
-                  </View>
-              )}
+            {isTypingPasswordMatch && passwordMatch && (
+              <View style={styles.iconContainer}>
+                <Ionicons name="checkmark-circle" size={24} color="green" />
+              </View>
+            )}
 
-              {isTypingPassword && !passwordSignUpIsValid && (
-                  <View style={styles.iconContainer} testID='cancel'>
-                    <MaterialIcons name="cancel" size={24} color="red" />
-                  </View>
-              )}
-            </View>
-
-            <View style={styles.inputContainer}>
-              <TextInput
-                  testID='confirm-new-password'
-                  placeholder="Confirm New Password"
-                  autoCapitalize="none"
-                  placeholderTextColor={"#666666"}
-                  value={confirmPassword}
-                  secureTextEntry={true}
-                  onFocus={() => setIsTypingPasswordMatch(true)}
-                  style={styles.input}
-                  onChangeText={(value) => {
-                    setConfirmPassword(value);
-                    validateConfirmPassword(value);
-                  }}
-                  passwordMatch={passwordMatch}
-              />
-
-              {isTypingPasswordMatch && passwordMatch && (
-                  <View style={styles.iconContainer}>
-                    <Ionicons name="checkmark-circle" size={24} color="green" />
-                  </View>
-              )}
-
-              {isTypingPasswordMatch && !passwordMatch && (
-                  <View style={styles.iconContainer} testID='cancel'>
-                    <MaterialIcons name="cancel" size={24} color="red"/>
-                  </View>
-              )}
-            </View>
+            {isTypingPasswordMatch && !passwordMatch && (
+              <View style={styles.iconContainer} testID='cancel'>
+                <MaterialIcons name="cancel" size={24} color="red" />
+              </View>
+            )}
           </View>
-
-          <TouchableOpacity
-              testID='reset-button'
-              style={styles.signInButton}
-              onPress={onResetPasswordPressed}
-          >
-            <Text style={styles.signInButtonText}>
-              {loading ? "Resetting..." : "Reset Password"}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-              testID='back-to-sign-in'
-              style={styles.haveAccountButton}
-              onPress={() => navigation.navigate("Login")}
-
-          >
-            <Text style={styles.haveAccountButtonText}>
-              {" "}
-              &#x2190; Back to sign in
-            </Text>
-          </TouchableOpacity>
         </View>
-      </SafeAreaView>
+
+        <TouchableOpacity
+          testID='reset-button'
+          style={styles.signInButton}
+          onPress={onResetPasswordPressed}
+          disabled={loading}
+        >
+          <Text style={styles.signInButtonText}>
+            {loading ? "Resetting..." : "Reset Password"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          testID='back-to-sign-in'
+          style={styles.haveAccountButton}
+          onPress={() => navigation.navigate("Login")}
+
+        >
+          <Text style={styles.haveAccountButtonText}>
+            {" "}
+            &#x2190; Back to sign in
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 

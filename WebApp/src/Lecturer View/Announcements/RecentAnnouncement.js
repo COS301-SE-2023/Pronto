@@ -194,10 +194,9 @@ export default function RecentAnnouncement() {
           //Fecth annnouncements and order them by date
           let announcementList = await API.graphql({
             query: announcementsByDate,
-            variables: variables,
+            variables: variables
           });
           announcementList = announcementList.data.announcementsByDate;
-          
           setAnnouncement(announcementList.items.filter((item)=>item._deleted===null));
           if (announcementList.items.length < limit) {
             setNextToken(null);

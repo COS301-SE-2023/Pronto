@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ImageBackground, ScrollView } from "react-native";
-import { Auth } from "aws-amplify";
+import { Auth,DataStore } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { getStudent } from "../../graphql/queries";
+import { Student } from "../../models";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -14,24 +15,34 @@ const ProfilePage = () => {
 
   const fetchUserData = async () => {
     try {
-      if (student === null) {
-        setIsLoading(true);
-        const userInfo = await Auth.currentAuthenticatedUser();
-        //setUser(userInfo);
-        let studentEmail = userInfo.attributes.email;
-        let stu = await API.graphql({
-          query: getStudent,
-          variables: { id: userInfo.attributes.sub }
+      // if (student === null) {
+      //   setIsLoading(true);
+      //   const userInfo = await Auth.currentAuthenticatedUser();
+      //   //setUser(userInfo);
+      //   let studentEmail = userInfo.attributes.email;
+      //   let stu = await API.graphql({
+      //     query: getStudent,
+      //     variables: { id: userInfo.attributes.sub }
 
-        })
-        stu = stu.data.getStudent;
-        if (stu === undefined || stu === null) {
-          throw Error();
-        }
+      //   })
+      //   stu = stu.data.getStudent;
+      //   if (stu === undefined || stu === null) {
+      //     throw Error();
+      //   }
+      //   updateStudent(stu);
+      //   setIsLoading(false);
+      // }
+      if(student===null){
+        setIsLoading(true);
+        const user = await Auth.currentAuthenticatedUser();
+        const id=user.attributes.sub;
+        let stu = await DataStore.query(Student, id);
         updateStudent(stu);
         setIsLoading(false);
       }
+
     } catch (error) {
+      console.log(error);
     }
   };
 

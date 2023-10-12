@@ -2,6 +2,7 @@ Cypress.Commands.add("LecturerSignInFail", (email, password) => {
     //fixture the users.json file and get the 4th lecturers password
     cy.fixture("../fixtures/users.json").then((users) => {
         password = users[3].password;
+        email = "andilengwenya2001@gmail.com"
     });
     cy.visit("/lecturer/login");
 

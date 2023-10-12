@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution, } from "../../Graphql/mutations";
-import { lecturersByInstitutionId, listAdmins, listLecturers } from "../../Graphql/queries";
+import { getInstitution, lecturersByInstitutionId, listAdmins, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
 import HelpButton from '../../Components/HelpButton';
@@ -97,7 +97,7 @@ const AddLecturer = () => {
                             query: createLecturer,
                             variables: { input: lecturer },
                         });
-                        console.log(mutation);
+                        //console.log(mutation);
 
                         lecturer = mutation.data.createLecturer
                         lecturer.courses = {
@@ -114,6 +114,14 @@ const AddLecturer = () => {
                             emails.push(email);
                         }
 
+                        // let inst=await API.graphql({
+                        //     query:getInstitution,
+                        //     variables:{id:admin.institutionId}
+                        // })
+
+                        // console.log(inst);
+                        // inst=inst.data.getInstitution;
+                        // inst.lectureremails=emails;
                         let update = {
                             id: admin.institutionId,
                             lectureremails: emails,
@@ -280,6 +288,15 @@ const AddLecturer = () => {
                     _version:admin.institution._version,
                     lectureremails: newEmails
                 };
+                // let inst=await API.graphql({
+                //             query:getInstitution,
+                //             variables:{id:admin.institutionId}
+                //         })
+
+                // console.log(inst);
+                // inst=inst.data.getInstitution;
+                // inst.lectureremails=newEmails;
+
 
                 let u = await API.graphql({
                     query: updateInstitution,
@@ -289,6 +306,7 @@ const AddLecturer = () => {
                 // a.institution = u.data.updateInstitution;
                 // a.institution.logoUrl = admin.institution.logoUrl;
 
+                console.log(u);
                 admin.institution.lectureremails = newEmails;
                 admin.institution._version=u.data.updateInstitution._version;
                 const rows = [...lecturerList];
@@ -437,7 +455,7 @@ const AddLecturer = () => {
     const handleSearch = async () => {
         try {
             console.log(searchIcon);
-            if (searchIcon === true) {
+            if (searchIcon === false) {
                 console.log(searchValue)
                 if (searchValue !== "") {
                     console.log(filterAttribute);
@@ -447,12 +465,13 @@ const AddLecturer = () => {
                         let variables = JSON.parse(filter);
 
 
+                        console.log(variables);
                         let lecturers = await API.graphql({
                             query: listLecturers,
                             variables: variables
                         })
                         console.log(lecturers);
-                         setSearchIcon(false);
+                        setSearchIcon(!searchIcon);
                         lecturers = lecturers.data.listLecturers;
                         
                         setLecturerList(lecturers.items.filter((item)=>item._deleted===null));
@@ -476,7 +495,7 @@ const AddLecturer = () => {
                 });
                 lecturers = lecturers.data.lecturersByInstitutionId;
                 console.log(lecturers);
-                setSearchIcon(true);
+                setSearchIcon(!searchIcon);
                 setLecturerList(lecturers.items.filter((item)=>item._deleted===null));
                 if (lecturers.items.length < limit) {
                     setNextToken(null);
@@ -645,13 +664,13 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            // onMouseEnter={() => setSearchIcon(true)}
-                            // onMouseLeave={() => setSearchIcon(false)}
+                            onMouseEnter={() => setSearchIcon(true)}
+                            onMouseLeave={() => setSearchIcon(false)}
                         //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
 
                             <div className="input-group-append">
-                                {searchIcon === true? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "#e32f45" }} />}
+                                {searchIcon === false? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "#ffffff" }} />}
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}

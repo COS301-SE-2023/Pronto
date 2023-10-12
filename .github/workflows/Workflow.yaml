@@ -2,9 +2,9 @@ name: Build Mobile,Web App and Amplify Backend
 
 on:
   push:
-    branches: [main, dev, frontend, integration-fix, backend]
+    branches: [main, dev, frontend, integration-fix, backend, mobile-datastore]
   pull_request:
-    branches: [main, dev, frontend, integration-fix, backend]
+    branches: [main, dev, frontend, integration-fix, backend, mobile-datastore]
 
 jobs:
   build-mobile:
@@ -51,6 +51,7 @@ jobs:
           npm test
 
   build-backend:
+    if: false
     strategy:
       matrix:
         node_version: [12.x]

@@ -5,7 +5,7 @@ describe("Testing Recent Annoucements Lecturer", () => {
 
     it("should display the recent annoucements", function () {
         //navigate to the recent announcements page without using visit
-        cy.LecturerSignIn("yovab14312@tenjb.com", Cypress.env('LECTURER_PASSWORD'));
+        cy.LecturerSignIn("andilengwenya2001@gmail.com", Cypress.env('LECTURER_PASSWORD'));
         cy.visit("/lecturer/announcement");
 
         //Check that the recent announcements is displayed

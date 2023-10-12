@@ -144,8 +144,8 @@ function Login() {
       console.log(loggedInUser);
     }
       
-      //await fetchAdmin().then(() => navigate("/institution/dashboard"))
-       navigate("/institution/dashboard");
+      await fetchAdmin().then(() => navigate("/institution/dashboard"))
+       //navigate("/institution/dashboard");
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);

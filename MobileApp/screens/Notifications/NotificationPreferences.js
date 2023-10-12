@@ -15,10 +15,11 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-import { Auth, API } from "aws-amplify";
+import { Auth, API,DataStore } from "aws-amplify";
 import { getStudent } from "../../graphql/queries";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { updateStudentInfo, updateNotificationPreferance, createNotificationPreferance } from "../../graphql/mutations";
+import { Student,NotificationPreferance } from "../../models";
 
 const NotificationPreferences = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -57,21 +58,27 @@ const NotificationPreferences = () => {
 
   const fetchStudent = async () => {
     try {
-      if (student === null) {
-        const user = await Auth.currentAuthenticatedUser()
-        let studentEmail = user.attributes.email;
-        let stu = await API.graphql({
-          query: getStudent,
-          variables: { id: user.attributes.sub }
-        })
+      // if (student === null) {
+      //   const user = await Auth.currentAuthenticatedUser()
+      //   let studentEmail = user.attributes.email;
+      //   let stu = await API.graphql({
+      //     query: getStudent,
+      //     variables: { id: user.attributes.sub }
+      //   })
 
-        stu = stu.data.getStudent;
-        if (stu === null) {
-          throw Error();
-        }
-        updateStudent(student);
-      }
+      //   stu = stu.data.getStudent;
+      //   if (stu === null) {
+      //     throw Error();
+      //   }
+      //   updateStudent(student);
+      // }
+      const user = await Auth.currentAuthenticatedUser();
+      const id=user.attributes.sub;
+      stu = await DataStore.query(Student, id);
+      stu.preference=await stu.preference;
+      updateStudent(stu);
     } catch (e) {
+      console.log(e);
     }
   }
   const handleOptionSelect = async (option) => {
@@ -89,24 +96,32 @@ const NotificationPreferences = () => {
 
     try {
 
-      if (student.preference === null) {
+      if (student.preference === null || student.preference===undefined) {
 
-        let pref = await API.graphql({
-          query: createNotificationPreferance,
-          variables: { input: { studentId: student.id, type: selectedOption.toUpperCase() } }
-        })
-
-        student.preference = pref.data.createNotificationPreferance;
-        student.studentPreferenceId = pref.data.createNotificationPreferance.id
+        
+      //   let pref=await DataStore.save(
+      //               new NotificationPreferance({
+		  //                   "studentId": student.id
+      //                   "endpoint":
+	    //               })
+      //       );
+      //    console.log(pref);   
+      // let updateStudent=await DataStore.save(Student.copyOf(student, updated => {
+      //       updated.preference=pref,
+      //       updated.studentPreferenceId=pref.id
+      //   }));
+      //       console.log(updateStudent);
       }
       else {
-        let pref = await API.graphql({
-          query: updateNotificationPreferance,
-          variables: { input: { id: student.studentPreferenceId, type: selectedOption.toUpperCase() ,_version:student.preference._version} }
-        })
 
-        student.preference = pref.data.updateNotificationPreferance;
-        student.studentPreferenceId = pref.data.updateNotificationPreferance.id
+        //  let updatepref=await DataStore.save(NotificationPreferance.copyOf(student.preference, updated => {
+        //     updated.endpoint:""
+        // }));
+        //      let updateStudent=await DataStore.save(Student.copyOf(student, updated => {
+        //     updated.preference=pref,
+        //     updated.studentPreferenceId=pref.id
+        // }));
+        
       }
       updateStudent(student);
       Alert.alert(
@@ -115,7 +130,7 @@ const NotificationPreferences = () => {
       );
     } catch (e) {
       Alert.alert("Failed to update preference");
-
+      console.log(e);
     }
   };
 

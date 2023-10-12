@@ -50,6 +50,7 @@ function Login() {
       if (lec.data.listLecturers.items.length > 0 ) {
         if(lec.data.listLecturers.items[0]._deleted!==true){
         lec = lec.data.listLecturers.items[0];
+        console.log(lec);
         try {
           if (lec.institution.logo !== null) {
             lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
@@ -57,7 +58,7 @@ function Login() {
           }
           
         } catch (error) {
-
+            console.log(error);
         }
         setLecturer(lec);
 
@@ -138,8 +139,8 @@ function Login() {
       setsignInError("");
       //navigate to lecturer home page
 
-      //await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
-      navigate("/lecturer/dashboard")
+      await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
+      //navigate("/lecturer/dashboard")
     } catch (e) {
       //console.log(e);
       setLoading(false);

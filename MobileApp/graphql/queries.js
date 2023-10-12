@@ -9,6 +9,9 @@ export const getStudent = /* GraphQL */ `
       firstname
       lastname
       email
+      institution{
+        name
+      }
       preference {
         studentId
         endpoint {
@@ -166,6 +169,44 @@ export const listCourses = /* GraphQL */ `
     }
   }
 `;
+
+export const coursesByInstitutionId = /* GraphQL */ `
+  query CoursesByInstitutionId(
+    $institutionId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelCourseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    coursesByInstitutionId(
+      institutionId: $institutionId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        institutionId
+        lecturerId
+        coursecode
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+        __typename
+      }
+      nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
+
+
+
 
 export const listAnnouncements = /* GraphQL */ `
   query ListAnnouncements(
