@@ -9,7 +9,7 @@ import { useStudent } from "../ContextProviders/StudentContext";
 import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Student, Announcement } from "../models";
-import '@azure/core-asynciterator-polyfill';
+//import '@azure/core-asynciterator-polyfill';
 
 const NotificationList = ({ navigation }) => {
     const [expanded1, setExpanded1] = useState(false);

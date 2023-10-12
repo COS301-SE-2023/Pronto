@@ -65,7 +65,7 @@ const EditTimetable = ({ navigation }) => {
   const handleSearch = async (text) => {
     setInput(text);
 
-    if (text !== null) {
+    if (text !== null && student!==null && student!==undefined) {
       try {
         // let search = await API.graphql({
         //   query: listCourses,
@@ -156,15 +156,20 @@ const EditTimetable = ({ navigation }) => {
       
       const id = user.attributes.sub;
       stu = await DataStore.query(Student, id);
-
+      if(stu===undefined)
+       return;
       const enrollment = await stu.enrollments.values;
 
       let c = [];
       let m = [];
       setCourses([]);
       const studentTimetable = await stu.timetable;
-      const activity = studentTimetable.activityId;
-      const activityList = removeDuplicates(activity)
+      let activityList=[]
+      if(studentTimetable!==undefined){
+        const activity = studentTimetable.activityId;
+        activityList = removeDuplicates(activity);
+      }
+      if(enrollment!==undefined){
       for (let i = 0; i < enrollment.length; i++) {
         if (enrollment[i]._deleted === null) {
           const course = await enrollment[i].course;
@@ -183,13 +188,17 @@ const EditTimetable = ({ navigation }) => {
           }
         }
       }
+      
       stu.enrollments = enrollment.filter((e) => e._deleted === null);
+    
       stu.timetable = studentTimetable;
       updateStudent(stu);
       //console.log("From edit");
       //console.log(m[0].activity);
       setActivities(c);
+      }
       setSelectedModules(m);
+      updateStudent(stu);
       setIsLoading(false);
 
     } catch (e) {
@@ -217,7 +226,7 @@ const EditTimetable = ({ navigation }) => {
           activityIds.push(activities[i].id);
         }
       }
-      if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.filter((item) => item.courseId === selectedModule.id && item._deleted !== null).length === 0) {
+      if ((selectedModule !== null && selectedModule !== undefined)  && student.enrollments.filter((item) => item.courseId === selectedModule.id && item._deleted !== null).length === 0) {
         // let enroll = {
         //   courseId: selectedModule.id,
         //   studentId: student.id,
@@ -243,7 +252,7 @@ const EditTimetable = ({ navigation }) => {
       }
 
       //Create a new timetable if it doesnt exist
-      if (student.timetable === null) {
+      if (student.timetable === undefined || student.timetable===null || student.studentTimetableId===null) {
         // let newTimetable = {
         //   studentId: student.id,
         //   activityId: activityIds,
@@ -269,12 +278,12 @@ const EditTimetable = ({ navigation }) => {
         student.timetable = newTimetable;
         student.studentTimetableId = newTimetable.id;
 
-        let updateStudent = await DataStore.save(Student.copyOf(student, updated => {
+        let updatingStudent = await DataStore.save(Student.copyOf(student, updated => {
           updated.timetable = newTimetable,
             updated.studentTimetableId = newTimetable.id
         }));
 
-        console.log(updateStudent);
+        console.log(updatingStudent);
 
         let s = student
         //    s.timetable = create.data.createTimetable;
@@ -304,10 +313,10 @@ const EditTimetable = ({ navigation }) => {
         let updatedTimetable = await DataStore.save(Timetable.copyOf(student.timetable, updated => {
           updated.activityId = activityIds
         }));
-        // let updateStudent=await DataStore.save(Student.copyOf(student, updated => {
-        //     updated.timetable=updatedTimetable,
-        //     updated.studentTimetableId=updatedTimetable.id  
-        // }));
+        let updatingStudent=await DataStore.save(Student.copyOf(student, updated => {
+            updated.timetable=updatedTimetable,
+            updated.studentTimetableId=updatedTimetable.id  
+        }));
 
         //console.log(updatedTimetable);
         student.timetable = updatedTimetable;
