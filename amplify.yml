@@ -16,7 +16,7 @@ frontend:
         - npm run build
 
   artifacts:
-    baseDirectory: /WebApp/public
+    baseDirectory: /WebApp/build
     files:
       - "**/*"
   cache:
