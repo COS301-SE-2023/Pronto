@@ -130,18 +130,19 @@ function Login() {
 
       const user=await Auth.signIn(signInObject);
       setsignInError("");
-      const newPassword = password
+      //const newPassword = password
     if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      const loggedInUser = await Auth.completeNewPassword(
-        user, 
-        newPassword, 
-        {
-          family_name: "  "
+      navigate("/institution/change-password", { state: { user: user } })
+      // const loggedInUser = await Auth.completeNewPassword(
+      //   user, 
+      //   newPassword, 
+      //   {
+      //     family_name: "  "
           
-        }
-      )
+      //   }
+      // )
 
-      console.log(loggedInUser);
+      // console.log(loggedInUser);
     }
       
       await fetchAdmin().then(() => navigate("/institution/dashboard"))

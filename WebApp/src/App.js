@@ -13,6 +13,7 @@ import InstitutionLogin from "./Authentication/Institution/Login";
 import InstitutionForgotPassword from "./Authentication/Institution/ForgotPassword";
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
+import InstitutionChangePassword from "./Authentication/Institution/ChangePassword";
 
 import AddLecturer from "./Institution View/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution View/FileUpload/FileUploadPage";
@@ -57,7 +58,7 @@ function MyRoutes() {
         {/*Super Admin pages*/}
         <Route path="/ROYGBIV" element={<SuperAdminLogin />} />
 
-        <Route path="/superadmin/admin-requests"
+        <Route path="/ROYGBIV/admin-requests"
           element={
 
             <RequireSuperAdminAuth>
@@ -66,7 +67,7 @@ function MyRoutes() {
           }
         />
 
-        <Route path="/superadmin/view-institutions"
+        <Route path="/ROYGBIV/view-institutions"
           element={
             <RequireSuperAdminAuth>
               <SuperAdminViewInstitutions />
@@ -100,6 +101,10 @@ function MyRoutes() {
           element={<InstitutionForgotPassword />}
         />
 
+        <Route
+          path="/institution/change-password"
+          element={<InstitutionChangePassword />}
+        />
 
         {/*Protected admin routing*/}
         <Route

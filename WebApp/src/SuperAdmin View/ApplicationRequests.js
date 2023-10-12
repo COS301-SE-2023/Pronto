@@ -44,18 +44,20 @@ export default function ApplicationRequests() {
           }
         }
       })
+
       if(inst.data.listInstitutions.items.length>0){
           inst=inst.data.listInstitutions.items[0];
+          //console.log(inst);
       }
       else{
           inst = await API.graphql({
-            query: createInstitution,
-           variables: { input: institution }
-        })
+              query: createInstitution,
+              variables: { input: institution }
+            })
 
-      console.log(inst);
-      inst=inst.data.createInstitution;
-    }
+          //console.log(inst);
+          inst=inst.data.createInstitution;
+        }
       const newAdmin = await addToAdminGroup(inst, request.email, request.firstname);
       console.log(newAdmin)
 
@@ -90,11 +92,28 @@ export default function ApplicationRequests() {
       })
       console.log(g);
  
+      const group= await addUserToGroup(requests[index].email);
+      console.log(group);
     } catch (error) {
       console.log(error);
     }
   };
 
+   const addUserToGroup = async (username) => {
+        let apiName = 'AdminQueries';
+        let path = '/addUserToGroup';
+        let myInit = {
+            body: {
+                "username": username,
+                "groupname": "adminUserGroup"
+            },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+            }
+        }
+        return await API.post(apiName, path, myInit);
+    }
   const getUserHelper = async (username) => {
     try {
       let apiName = 'AdminQueries';
@@ -139,13 +158,12 @@ export default function ApplicationRequests() {
   const declineRequest = async (index) => {
     const updatedRequests = [...requests];
     try {
-      await API.graphql({
-        query: updateAdminApplication,
-        variables: { input: { id: requests[index].id, status: "REJECTED" } }
-      })
-
-      updatedRequests.splice(index, 1);
+       updatedRequests.splice(index, 1);
       setRequests(updatedRequests);
+      let rejected=await API.graphql({
+        query: updateAdminApplication,
+        variables: { input: { id: requests[index].id, status: "REJECTED",_version:requests[index]._version } }
+      })
     } catch (error) {
       console.log(error)
     }
@@ -165,7 +183,7 @@ export default function ApplicationRequests() {
       })
       setRequests(r.data.listAdminApplications.items.filter((item)=>item._deleted===null && item.status==="PENDING"));
       //setRequests(r.data.listAdminApplications.items);
-      console.log(r);   
+      //console.log(r);   
     } catch (error) {
       console.log(error)
     }

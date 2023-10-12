@@ -153,20 +153,20 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         // Perform the action to add the institution with universityName and adminEmail
         // You can add your logic here
         event.preventDefault()
-        // try {
-        //     let inst = {
-        //         name: universityName,
-        //     }
-        //     let institutionList = await API.graphql({
-        //         query: listInstitutions,
-        //         variables: {
-        //             filter: {
-        //                 name: {
-        //                     eq: universityName
-        //                 }
-        //             }
-        //         }
-        //     })
+         try {
+            let inst = {
+                name: universityName,
+            }
+            let institutionList = await API.graphql({
+                query: listInstitutions,
+                variables: {
+                    filter: {
+                        name: {
+                            eq: universityName
+                        }
+                    }
+                }
+            })
         //     if (adminEmail !== "") {
         //         let admins = await API.graphql({
         //             query: listAdmins,
@@ -184,17 +184,17 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         //         }
         //     }
 
-        //     if (institutionList.data.listInstitutions.items.length > 0) {
+            if (institutionList.data.listInstitutions.items.length > 0) {
 
-        //         return;
-        //     }
+                return;
+            }
 
-        //     let institution = await API.graphql({
-        //         query: createInstitution,
-        //         variables: {
-        //             input: inst
-        //         }
-        //     })
+            let institution = await API.graphql({
+                query: createInstitution,
+                variables: {
+                    input: inst
+                }
+            })
 
         //     institution = institution.data.createInstitution;
 
@@ -227,9 +227,9 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         //     institutions.unshift(institution);
         //     setInstitutions(institutions);
 
-        // } catch (e) {
+         } catch (e) {
 
-        // }
+         }
         setAdminEmail("")
         setUniversityName("")
         // After adding the institution, close the modal
@@ -263,22 +263,22 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                         onChange={handleUniversityNameChange}
                         style={{ marginBottom: "5%" }}
                     />
-                    <TextField
+                    {/* <TextField
                         label="Admin Email Address"
                         variant="outlined"
                         fullWidth
                         value={adminEmail}
                         onChange={handleAdminEmailChange}
                         style={{ marginBottom: "5%" }}
-                    />
-                    <TextField
+                    /> */}
+                    {/* <TextField
                         label="University ID"
                         variant="outlined"
                         fullWidth
                         value={universityID}
                         onChange={handleUniversityID}
                         style={{ marginBottom: "5%" }}
-                    />
+                    /> */}
                     <Button className="no-hover-color-change" onClick={handleAddInstitution} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
                         Add Institution
                     </Button>
@@ -344,7 +344,6 @@ export default function ViewInstitutions() {
     };
 
     const fetchInstitutions = async () => {
-        console.log("RAN")
         try {
             let a = await API.graphql({
                 query: listInstitutions,

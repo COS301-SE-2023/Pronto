@@ -48,7 +48,7 @@ export default function SuperAdminNavigation() {
                     </li>
                     <li>
                         <Link
-                            to={'/superadmin/view-institutions'}
+                            to={'/ROYGBIV/view-institutions'}
                             className={`nav-link text-center ${location.pathname === '/ROYGBIV/view-institutions' ? 'active' : ''}`}
                         >
                             <b>View Institutions</b>
