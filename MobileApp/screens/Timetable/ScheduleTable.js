@@ -78,7 +78,7 @@ const ScheduleTable = ({ navigation, route }) => {
 
   const fetchActivities = async () => {
     try {
-      let stu = student;
+      //let stu = student;
       // if (student === null || student.id === undefined) {
       //   if (param === null || param.id === undefined) {
       //     const user = await Auth.currentAuthenticatedUser();
@@ -100,12 +100,17 @@ const ScheduleTable = ({ navigation, route }) => {
      const user = await Auth.currentAuthenticatedUser();
      const id=user.attributes.sub;
      stu = await DataStore.query(Student, id);
-     
+     console.log(stu);
+     if(stu===undefined)
+      return;
     const enrollmentList=await stu.enrollments.values;
     const enrollment=enrollmentList.filter((item)=>item._deleted===null);
-   
+   console.log(enrollment);
     let c=[];
     const studentTimetable= await stu.timetable;
+    //console.log(studentTimetable)
+    if(studentTimetable===undefined)
+      return;
     const activity=studentTimetable.activityId;
     const activityList=removeDuplicates(activity);
     for(let i=0;i<enrollment.length;i++){
@@ -122,6 +127,7 @@ const ScheduleTable = ({ navigation, route }) => {
       }
     }
     let act=c;
+    console.log(act);
     //console.log(activityList)
     //console.log(c.length);
     // for (let i = 0; i < activityList.length; i++) {
@@ -171,10 +177,11 @@ const ScheduleTable = ({ navigation, route }) => {
       else {
         changed = true;
       }
-       if (changed === true) {
+      if (changed === true) {
          setActivities(act);
          createScheduleArray(act);
       }
+     // console.log(changed)
 
 
     } catch (e) {

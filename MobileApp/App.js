@@ -21,7 +21,7 @@ import { StudentProvider, useStudent } from "./ContextProviders/StudentContext";
 import { getStudent, listInstitutions } from "./graphql/queries";
 import { createStudent } from "./graphql/mutations";
 import { API } from "aws-amplify"
-import { Amplify,DataStore } from "aws-amplify";
+import { Amplify,DataStore,Predicates } from "aws-amplify";
 import { Auth, Hub } from "aws-amplify";
 import config from "./src/aws-exports";
 import { Student,Institution } from "./models";
@@ -78,28 +78,52 @@ export default function App() {
       //   }
       // }
       const id=authUser.attributes.sub;
+      console.log(id);
+      const institutionId=authUser.attributes.family_name;
       let studentInfo = await DataStore.query(Student, id);
       console.log(studentInfo);
+      // const email = authUser.attributes.email;
+      //   let stu = await API.graphql({
+      //     query: getStudent,
+      //     variables: { id: id }
+      //   });
+      //   console.log(stu.data.createStudent);
       if (studentInfo === null || studentInfo===undefined) {
 
         //Create student
         let name = authUser.attributes.name.split(",")
-        const institutionId=authUser.attributes.family_name;
         
+        //console.log(authUser.attributes);        
         const email=authUser.attributes.email;
-        const inst = await DataStore.query(Institution, institutionId);
-        let c = await DataStore.save(
-          new Student({
-            "id": id,
-            "institutionId": institutionId,
-            "firstname": name[0],
-            "lastname": name[1],
-            "userRole": "Student",
-            "email": email,
-            "institution": inst,
-          })
-        );
-        console.log(c);
+       // console.log(institutionId);
+       // const inst = await DataStore.query(Institution, institutionId);
+        //console.log(inst);
+        // let c = await DataStore.save(
+        //   new Student({
+        //     "id": "123456",
+        //     "institutionId": institutionId,
+        //     "firstname": name[0],
+        //     "lastname": name[1],
+        //     "userRole": "Student",
+        //     "email": email,
+        //     "institution": inst,
+        //   })
+        // );
+        // console.log(c);
+        let newStudent = {
+              id: id,
+              institutionId: institutionId,
+              firstname: name[0],
+              lastname: name[1],
+              userRole: "Student",
+              email: email
+            }
+
+            let create = await API.graphql({
+              query: createStudent,
+              variables: { input: newStudent }
+            })
+            console.log(create.data.createStudent);     
         
       }
       setUser(authUser);

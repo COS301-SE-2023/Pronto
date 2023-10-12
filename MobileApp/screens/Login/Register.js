@@ -98,14 +98,14 @@ const Register = ({ navigation }) => {
   const fetchInstitutions = async () => {
 
     try {
-      // let inst = await API.graphql({
-      //   query: listInstitutions,
-      //   variables: {},
-      //   authMode: "API_KEY"
-      // });
+      let inst = await API.graphql({
+        query: listInstitutions,
+        variables: {},
+        authMode: "API_KEY"
+      });
 
-      //inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      let inst = await DataStore.query(Institution, Predicates.ALL)
+      inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
+      //let inst = await DataStore.query(Institution, Predicates.ALL)
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
