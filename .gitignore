@@ -7,6 +7,7 @@ node_modules/
 *.tgz
 amplify\team-provider-info.json
 
+aws-exports.js
 # WebStorm
 .idea/
 *.iml
@@ -149,7 +150,7 @@ node_modules/
 
 team-provider-info.json
 
-amplify/backend/function/prontoPreSignUp/src/events
+WebApp/src/Components/aws-exports.js
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend

@@ -6,6 +6,8 @@ import Notifications from "../screens/Timetable/Notifications";
 import NavigationScreen from "../screens/Timetable/NavigationScreen";
 import FileView from "../screens/FileView/FileView";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { Platform } from 'react-native';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -15,27 +17,44 @@ const screenOptions = {
     bottom: 25,
     left: 20,
     right: 20,
-    elevation: 0,
     backgroundColor: "white",
     borderRadius: 15,
     height: 90,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 5,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
 };
 
-const Tabs = () => {
+const Tabs = ({ route }) => {
+  const s = route.params;
+
+
   return (
-    <Tab.Navigator {...{ screenOptions }}>
+    <Tab.Navigator {...{ screenOptions }} backBehavior="history">
       <Tab.Screen
         name="Timetable"
         testID="tabs"
         component={ScheduleTable}
+        initialParams={s}
         options={{
           tabBarIcon: ({ focused }) => (
             <View
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                top: 10,
+                ...(Platform.OS === 'ios' ? { top: 10 } : {}), // Conditionally add top: 10 for iOS
               }}
             >
               <Image
@@ -61,7 +80,7 @@ const Tabs = () => {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                top: 10,
+                ...(Platform.OS === 'ios' ? { top: 10 } : {}), // Conditionally add top: 10 for iOS
               }}
             >
               <Image
@@ -87,7 +106,7 @@ const Tabs = () => {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                top: 10,
+                ...(Platform.OS === 'ios' ? { top: 10 } : {}), // Conditionally add top: 10 for iOS
               }}
             >
               <Image
@@ -113,7 +132,7 @@ const Tabs = () => {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                top: 10,
+                ...(Platform.OS === 'ios' ? { top: 10 } : {}), // Conditionally add top: 10 for iOS
               }}
             >
               <Image
@@ -141,7 +160,7 @@ const Tabs = () => {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                top: 10,
+                ...(Platform.OS === 'ios' ? { top: 10 } : {}), // Conditionally add top: 10 for iOS
               }}
             >
               <Image
@@ -168,7 +187,7 @@ const Tabs = () => {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                top: 10,
+                ...(Platform.OS === 'ios' ? { top: 10 } : {}), // Conditionally add top: 10 for iOS
               }}
             >
               <Image

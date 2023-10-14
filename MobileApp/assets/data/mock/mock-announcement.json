@@ -1,0 +1,66 @@
+[
+    {
+      "id": "1",
+      "title": "Reminder 1",
+      "body": "This is a reminder announcement.",
+      "type": "Reminder",
+      "course": {
+        "coursecode": "COURSE101"
+      }
+    },
+    {
+      "id": "2",
+      "title": "Due Assignment 1",
+      "body": "This is a due assignment announcement.",
+      "type": "Due Assignment",
+      "course": {
+        "coursecode": "COURSE202"
+      }
+    },
+    {
+      "id": "3",
+      "title": "Reminder 2",
+      "body": "Another reminder announcement.",
+      "type": "Reminder",
+      "course": {
+        "coursecode": "COURSE303"
+      }
+    },
+    {
+      "id": "4",
+      "title": "Important Update",
+      "body": "This is an important update for all students.",
+      "type": "Update",
+      "course": {
+        "coursecode": "COURSE101"
+      }
+    },
+    {
+      "id": "5",
+      "title": "Assignment Extension",
+      "body": "Due date for Assignment 2 has been extended.",
+      "type": "Update",
+      "course": {
+        "coursecode": "COURSE202"
+      }
+    },
+    {
+      "id": "6",
+      "title": "Midterm Reminder",
+      "body": "Don't forget about the midterm exam next week.",
+      "type": "Reminder",
+      "course": {
+        "coursecode": "COURSE303"
+      }
+    },
+    {
+      "id": "7",
+      "title": "New Course Announcement",
+      "body": "We have added a new course: Advanced Programming.",
+      "type": "Update",
+      "course": {
+        "coursecode": "COURSE404"
+      }
+    }
+  ]
+  

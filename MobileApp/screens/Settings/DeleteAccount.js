@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,20 @@ import {
   Alert,
   ImageBackground,
 } from "react-native";
-import { Auth, API } from "aws-amplify";
-import { listStudents } from "../../graphql/queries"
+import { Auth, API, DataStore } from "aws-amplify";
+import { getStudent } from "../../graphql/queries"
 import { deleteStudent } from "../../graphql/mutations";
+import { useStudent } from "../../ContextProviders/StudentContext";
+import { useNavigation } from "@react-navigation/native";
+import { Student } from "../../models";
+
 const DeleteAccountPage = () => {
+  const { student, updateStudent } = useStudent();
+  const [deleting, setDeleting] = useState(false);
+  const navigation = useNavigation();
+
   const handleDeleteAccount = async () => {
+
     Alert.alert(
       "Confirmation",
       "Are you sure you want to delete your account?",
@@ -23,37 +32,42 @@ const DeleteAccountPage = () => {
         {
           text: "Delete Account",
           onPress: async () => {
+
+            setDeleting(true);
             try {
 
-              let user = await Auth.currentAuthenticatedUser()
-              let studentEmail = user.attributes.email;
-              let stu = await API.graphql({
-                query: listStudents,
-                variables: {
-                  filter: {
-                    email: {
-                      eq: studentEmail
-                    }
-                  }
-                },
-                authMode: "API_KEY"
-              })
-              //stu=stu.data.listStudents.items[0]
-              let found = false
-              for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-                if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-                  stu = stu.data.listStudents.items[i]
-                  found = true
-                  break
-                }
-              }
-              if (found) {
+              let stu = student
+              // if (student === null) {
+              //   const user = await Auth.currentAuthenticatedUser()
+              //   let studentEmail = user.attributes.email;
+              //   let stu = await API.graphql({
+              //     query: getStudent,
+              //     variables: { id: user.attributes.sub },
+              //   })
+              //   stu = stu.data.getStudent
+              // }
 
-                let del = await API.graphql({
-                  query: deleteStudent,
-                  variables: { input: { id: stu.id } },
-                  authMode: "AMAZON_COGNITO_USER_POOLS"
-                })
+              // if (stu !== null) {
+              //   // try {
+
+              //   //   let del = await API.graphql({
+              //   //     query: deleteStudent,
+              //   //     variables: { input: { id: stu.id,_version:stu._version } }
+              //   //   })
+              //   // } catch (e) {
+              //   //     console.log(e);
+              //   // }
+              //   updateStudent(null);
+              //   navigation.navigate("Welcome");
+              //   setDeleting(false);
+              // }
+              try {
+                const user = await Auth.currentAuthenticatedUser();
+                const id = user.attributes.sub;
+                stu = await DataStore.query(Student, id);
+                await DataStore.delete(stu);
+              } catch (error) {
+                console.log(error);
               }
               await Auth.currentAuthenticatedUser().then((user) => {
                 return Auth.deleteUser(user);
@@ -63,10 +77,12 @@ const DeleteAccountPage = () => {
                 "Account Deleted",
                 "Your account has been successfully deleted."
               );
+              // navigation.navigate("Welcome");
+              setDeleting(false);
+              //}
             } catch (error) {
-
-              Alert.alert("Error", "An error occurred while deleting your account. Please try again later."
-              );
+              Alert.alert("Error", "An error occurred while deleting your account. Please try again later.");
+              setDeleting(false);
             }
           },
           style: "destructive", // This will display the button in red to indicate it's a destructive action
@@ -96,7 +112,7 @@ const DeleteAccountPage = () => {
         Are you sure you want to delete your account?
       </Text>
       <TouchableOpacity style={styles.button} onPress={handleDeleteAccount}>
-        <Text style={styles.buttonText}>Delete Account</Text>
+        <Text style={styles.buttonText}>{deleting ? "Deleting..." : "Delete Account"}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -124,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e32f45",
     paddingVertical: 12,
     paddingHorizontal: 24,
-    borderRadius: 5,
+    borderRadius: 25,
   },
   buttonText: {
     fontSize: 16,

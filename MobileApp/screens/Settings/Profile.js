@@ -1,22 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
-import { Auth } from "aws-amplify";
+import { View, Text, StyleSheet, ImageBackground, ScrollView } from "react-native";
+import { Auth,DataStore } from "aws-amplify";
+import { useStudent } from "../../ContextProviders/StudentContext";
+import { getStudent } from "../../graphql/queries";
+import { Student } from "../../models";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const { student, updateStudent } = useStudent();
   useEffect(() => {
     fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
-      const userInfo = await Auth.currentUserInfo();
-      setUser(userInfo);
-      setIsLoading(false);
+      // if (student === null) {
+      //   setIsLoading(true);
+      //   const userInfo = await Auth.currentAuthenticatedUser();
+      //   //setUser(userInfo);
+      //   let studentEmail = userInfo.attributes.email;
+      //   let stu = await API.graphql({
+      //     query: getStudent,
+      //     variables: { id: userInfo.attributes.sub }
+
+      //   })
+      //   stu = stu.data.getStudent;
+      //   if (stu === undefined || stu === null) {
+      //     throw Error();
+      //   }
+      //   updateStudent(stu);
+      //   setIsLoading(false);
+      // }
+      if(student===null){
+        setIsLoading(true);
+        const user = await Auth.currentAuthenticatedUser();
+        const id=user.attributes.sub;
+        let stu = await DataStore.query(Student, id);
+        updateStudent(stu);
+        setIsLoading(false);
+      }
+
     } catch (error) {
-      console.log("Error fetching user data:", error);
+      console.log(error);
     }
   };
 
@@ -41,13 +67,14 @@ const ProfilePage = () => {
 
       <View style={styles.infoContainer}>
         <Text style={styles.label}>Name:</Text>
-        <Text style={styles.text}>{user?.attributes?.name}</Text>
+        <Text style={styles.text}>{student?.firstname}</Text>
 
         <Text style={styles.label}>Surname:</Text>
-        <Text style={styles.text}>{user?.attributes?.family_name}</Text>
+        <Text style={styles.text}>{student?.lastname}</Text>
 
         <Text style={styles.label}>Email:</Text>
-        <Text style={styles.text}>{user?.attributes?.email}</Text>
+        <Text style={styles.text}>{student?.email}</Text>
+
       </View>
     </View>
   );
@@ -67,8 +94,11 @@ const styles = StyleSheet.create({
   infoContainer: {
     borderWidth: 2,
     borderColor: "#e32f45",
-    padding: 50,
-    marginBottom: 20,
+    paddingLeft: 50,
+    paddingRight: 50,
+    paddingTop: 20,
+    paddingBottom: 40,
+    marginBottom: 0,
     textAlign: "center",
     borderRadius: 20,
   },

@@ -1,822 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const searchLecturers = /* GraphQL */ `
-  query SearchLecturers(
-    $filter: SearchableLecturerFilterInput
-    $sort: [SearchableLecturerSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableLecturerAggregationInput]
-  ) {
-    searchLecturers(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        owner
-        __typename
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-              __typename
-            }
-          }
-        }
-        __typename
-      }
-      __typename
-    }
-  }
-`;
-export const getLecturer = /* GraphQL */ `
-  query GetLecturer($id: ID!) {
-    getLecturer(id: $id) {
-      id
-      institutionId
-      firstname
-      lastname
-      userRole
-      email
-      institution {
-        id
-        name
-        location
-        pageUrl
-        campusMapUrl
-        openingTime
-        closingTime
-        minimumDuration
-        lectureremails
-        coursecodes
-        logo
-        domains
-        admin {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          owner
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        adminId
-        owner
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        students {
-          items {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          items {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      courses {
-        items {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      owner
-      __typename
-    }
-  }
-`;
-export const listLecturers = /* GraphQL */ `
-  query ListLecturers(
-    $filter: ModelLecturerFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listLecturers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        owner
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
 export const getStudent = /* GraphQL */ `
   query GetStudent($id: ID!) {
     getStudent(id: $id) {
@@ -828,14 +12,12 @@ export const getStudent = /* GraphQL */ `
       email
       preference {
         studentId
-        type
-        enpointID
-        deviceID
         id
         createdAt
         updatedAt
-        userId
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       institution {
         id
@@ -850,521 +32,36 @@ export const getStudent = /* GraphQL */ `
         coursecodes
         logo
         domains
-        admin {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          owner
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
         adminId
         owner
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        students {
-          items {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          items {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       timetable {
         id
         studentId
         activityId
-        student {
-          institutionId
-          id
-          firstname
-          lastname
-          userRole
-          email
-          preference {
-            studentId
-            type
-            enpointID
-            deviceID
-            id
-            createdAt
-            updatedAt
-            userId
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          timetable {
-            id
-            studentId
-            activityId
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            activities {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          studentPreferenceId
-          studentTimetableId
-          owner
-          __typename
-        }
-        activities {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       enrollments {
-        items {
-          id
-          studentId
-          courseId
-          year
-          student {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          course {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         nextToken
-        __typename
+        startedAt
       }
       createdAt
       updatedAt
-      studentPreferenceId
+      _version
+      _deleted
+      _lastChangedAt
       studentTimetableId
       owner
-      __typename
     }
   }
 `;
@@ -1382,253 +79,49 @@ export const listStudents = /* GraphQL */ `
         lastname
         userRole
         email
-        preference {
-          studentId
-          type
-          enpointID
-          deviceID
-          id
-          createdAt
-          updatedAt
-          userId
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        timetable {
-          id
-          studentId
-          activityId
-          student {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          activities {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        studentPreferenceId
+        _version
+        _deleted
+        _lastChangedAt
         studentTimetableId
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncStudents = /* GraphQL */ `
+  query SyncStudents(
+    $filter: ModelStudentFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncStudents(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        institutionId
+        id
+        firstname
+        lastname
+        userRole
+        email
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        studentTimetableId
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -1645,337 +138,24 @@ export const getTimetable = /* GraphQL */ `
         lastname
         userRole
         email
-        preference {
-          studentId
-          type
-          enpointID
-          deviceID
-          id
-          createdAt
-          updatedAt
-          userId
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        timetable {
-          id
-          studentId
-          activityId
-          student {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          activities {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        studentPreferenceId
+        _version
+        _deleted
+        _lastChangedAt
         studentTimetableId
         owner
-        __typename
       }
       activities {
-        items {
-          id
-          courseId
-          activityname
-          day
-          start
-          end
-          venue
-          coordinates
-          group
-          frequency
-          description
-          course {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         nextToken
-        __typename
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
-      __typename
     }
   }
 `;
@@ -1990,155 +170,44 @@ export const listTimetables = /* GraphQL */ `
         id
         studentId
         activityId
-        student {
-          institutionId
-          id
-          firstname
-          lastname
-          userRole
-          email
-          preference {
-            studentId
-            type
-            enpointID
-            deviceID
-            id
-            createdAt
-            updatedAt
-            userId
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          timetable {
-            id
-            studentId
-            activityId
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            activities {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          studentPreferenceId
-          studentTimetableId
-          owner
-          __typename
-        }
-        activities {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncTimetables = /* GraphQL */ `
+  query SyncTimetables(
+    $filter: ModelTimetableFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncTimetables(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        studentId
+        activityId
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -2163,304 +232,19 @@ export const getActivity = /* GraphQL */ `
         coursecode
         coursename
         semester
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        activity {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        announcents {
-          items {
-            id
-            courseId
-            lecturerId
-            description
-            start
-            end
-            date
-            venue
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            body
-            title
-            type
-            year
-            createdAt
-            anonouncementStatus {
-              SMS
-              PUSH
-              EMAIL
-              __typename
-            }
-            updatedAt
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        notification {
-          courseid
-          status
-          endPoinId
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
-      __typename
     }
   }
 `;
@@ -2483,601 +267,52 @@ export const listActivities = /* GraphQL */ `
         group
         frequency
         description
-        course {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
-export const getNotificationPreferance = /* GraphQL */ `
-  query GetNotificationPreferance($id: ID!) {
-    getNotificationPreferance(id: $id) {
-      studentId
-      type
-      enpointID
-      deviceID
-      id
-      createdAt
-      updatedAt
-      userId
-      __typename
-    }
-  }
-`;
-export const listNotificationPreferances = /* GraphQL */ `
-  query ListNotificationPreferances(
-    $filter: ModelNotificationPreferanceFilterInput
+export const syncActivities = /* GraphQL */ `
+  query SyncActivities(
+    $filter: ModelActivityFilterInput
     $limit: Int
     $nextToken: String
+    $lastSync: AWSTimestamp
   ) {
-    listNotificationPreferances(
+    syncActivities(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
-    ) {
-      items {
-        studentId
-        type
-        enpointID
-        deviceID
-        id
-        createdAt
-        updatedAt
-        userId
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const lecturersByInstitutionId = /* GraphQL */ `
-  query LecturersByInstitutionId(
-    $institutionId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelLecturerFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    lecturersByInstitutionId(
-      institutionId: $institutionId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
+      lastSync: $lastSync
     ) {
       items {
         id
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
+        courseId
+        activityname
+        day
+        start
+        end
+        venue
+        coordinates
+        group
+        frequency
+        description
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
-    }
-  }
-`;
-export const lecturerByEmail = /* GraphQL */ `
-  query LecturerByEmail(
-    $email: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelLecturerFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    lecturerByEmail(
-      email: $email
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        institutionId
-        firstname
-        lastname
-        userRole
-        email
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        owner
-        __typename
-      }
-      nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -3103,253 +338,16 @@ export const studentsByInstitutionId = /* GraphQL */ `
         lastname
         userRole
         email
-        preference {
-          studentId
-          type
-          enpointID
-          deviceID
-          id
-          createdAt
-          updatedAt
-          userId
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        timetable {
-          id
-          studentId
-          activityId
-          student {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          activities {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        studentPreferenceId
+        _version
+        _deleted
+        _lastChangedAt
         studentTimetableId
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -3375,253 +373,16 @@ export const studentByEmail = /* GraphQL */ `
         lastname
         userRole
         email
-        preference {
-          studentId
-          type
-          enpointID
-          deviceID
-          id
-          createdAt
-          updatedAt
-          userId
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        timetable {
-          id
-          studentId
-          activityId
-          student {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          activities {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        studentPreferenceId
+        _version
+        _deleted
+        _lastChangedAt
         studentTimetableId
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -3652,196 +413,15 @@ export const activitiesByCourseId = /* GraphQL */ `
         group
         frequency
         description
-        course {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
-    }
-  }
-`;
-export const notificationPreferancesByStudentId = /* GraphQL */ `
-  query NotificationPreferancesByStudentId(
-    $studentId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelNotificationPreferanceFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    notificationPreferancesByStudentId(
-      studentId: $studentId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        studentId
-        type
-        enpointID
-        deviceID
-        id
-        createdAt
-        updatedAt
-        userId
-        __typename
-      }
-      nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -3868,459 +448,31 @@ export const getInstitution = /* GraphQL */ `
         userRole
         email
         owner
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       adminId
       owner
       courses {
-        items {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         nextToken
-        __typename
+        startedAt
       }
       students {
-        items {
-          institutionId
-          id
-          firstname
-          lastname
-          userRole
-          email
-          preference {
-            studentId
-            type
-            enpointID
-            deviceID
-            id
-            createdAt
-            updatedAt
-            userId
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          timetable {
-            id
-            studentId
-            activityId
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            activities {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          studentPreferenceId
-          studentTimetableId
-          owner
-          __typename
-        }
         nextToken
-        __typename
+        startedAt
       }
       lecturer {
-        items {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         nextToken
-        __typename
+        startedAt
       }
       createdAt
       updatedAt
-      __typename
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -4344,234 +496,55 @@ export const listInstitutions = /* GraphQL */ `
         coursecodes
         logo
         domains
-        admin {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          owner
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
         adminId
         owner
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        students {
-          items {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          items {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncInstitutions = /* GraphQL */ `
+  query SyncInstitutions(
+    $filter: ModelInstitutionFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncInstitutions(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        logo
+        domains
+        adminId
+        owner
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -4598,235 +571,19 @@ export const getAdmin = /* GraphQL */ `
         coursecodes
         logo
         domains
-        admin {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          owner
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
         adminId
         owner
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        students {
-          items {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          items {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
-      __typename
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -4845,112 +602,46 @@ export const listAdmins = /* GraphQL */ `
         userRole
         email
         owner
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncAdmins = /* GraphQL */ `
+  query SyncAdmins(
+    $filter: ModelAdminFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncAdmins(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        owner
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -4977,112 +668,233 @@ export const adminByEmail = /* GraphQL */ `
         userRole
         email
         owner
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const getLecturer = /* GraphQL */ `
+  query GetLecturer($id: ID!) {
+    getLecturer(id: $id) {
+      id
+      institutionId
+      firstname
+      lastname
+      userRole
+      email
+      institution {
+        id
+        name
+        location
+        pageUrl
+        campusMapUrl
+        openingTime
+        closingTime
+        minimumDuration
+        lectureremails
+        coursecodes
+        logo
+        domains
+        adminId
+        owner
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      courses {
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const listLecturers = /* GraphQL */ `
+  query ListLecturers(
+    $filter: ModelLecturerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listLecturers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncLecturers = /* GraphQL */ `
+  query SyncLecturers(
+    $filter: ModelLecturerFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncLecturers(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const lecturersByInstitutionId = /* GraphQL */ `
+  query LecturersByInstitutionId(
+    $institutionId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelLecturerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    lecturersByInstitutionId(
+      institutionId: $institutionId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const lecturerByEmail = /* GraphQL */ `
+  query LecturerByEmail(
+    $email: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelLecturerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    lecturerByEmail(
+      email: $email
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const searchLecturers = /* GraphQL */ `
+  query SearchLecturers(
+    $filter: SearchableLecturerFilterInput
+    $sort: [SearchableLecturerSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableLecturerAggregationInput]
+  ) {
+    searchLecturers(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        institutionId
+        firstname
+        lastname
+        userRole
+        email
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -5100,250 +912,13 @@ export const getEnrollment = /* GraphQL */ `
         lastname
         userRole
         email
-        preference {
-          studentId
-          type
-          enpointID
-          deviceID
-          id
-          createdAt
-          updatedAt
-          userId
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        timetable {
-          id
-          studentId
-          activityId
-          student {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          activities {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        studentPreferenceId
+        _version
+        _deleted
+        _lastChangedAt
         studentTimetableId
         owner
-        __typename
       }
       course {
         id
@@ -5352,304 +927,19 @@ export const getEnrollment = /* GraphQL */ `
         coursecode
         coursename
         semester
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        activity {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        announcents {
-          items {
-            id
-            courseId
-            lecturerId
-            description
-            start
-            end
-            date
-            venue
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            body
-            title
-            type
-            year
-            createdAt
-            anonouncementStatus {
-              SMS
-              PUSH
-              EMAIL
-              __typename
-            }
-            updatedAt
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        notification {
-          courseid
-          status
-          endPoinId
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
-      __typename
     }
   }
 `;
@@ -5665,274 +955,45 @@ export const listEnrollments = /* GraphQL */ `
         studentId
         courseId
         year
-        student {
-          institutionId
-          id
-          firstname
-          lastname
-          userRole
-          email
-          preference {
-            studentId
-            type
-            enpointID
-            deviceID
-            id
-            createdAt
-            updatedAt
-            userId
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          timetable {
-            id
-            studentId
-            activityId
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            activities {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          studentPreferenceId
-          studentTimetableId
-          owner
-          __typename
-        }
-        course {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncEnrollments = /* GraphQL */ `
+  query SyncEnrollments(
+    $filter: ModelEnrollmentFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncEnrollments(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        studentId
+        courseId
+        year
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -5956,274 +1017,15 @@ export const enrollmentsByStudentId = /* GraphQL */ `
         studentId
         courseId
         year
-        student {
-          institutionId
-          id
-          firstname
-          lastname
-          userRole
-          email
-          preference {
-            studentId
-            type
-            enpointID
-            deviceID
-            id
-            createdAt
-            updatedAt
-            userId
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          timetable {
-            id
-            studentId
-            activityId
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            activities {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          studentPreferenceId
-          studentTimetableId
-          owner
-          __typename
-        }
-        course {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -6237,306 +1039,16 @@ export const getCourse = /* GraphQL */ `
       coursename
       semester
       enrollments {
-        items {
-          id
-          studentId
-          courseId
-          year
-          student {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          course {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         nextToken
-        __typename
+        startedAt
       }
       activity {
-        items {
-          id
-          courseId
-          activityname
-          day
-          start
-          end
-          venue
-          coordinates
-          group
-          frequency
-          description
-          course {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         nextToken
-        __typename
+        startedAt
       }
       announcents {
-        items {
-          id
-          courseId
-          lecturerId
-          description
-          start
-          end
-          date
-          venue
-          course {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          body
-          title
-          type
-          year
-          createdAt
-          anonouncementStatus {
-            SMS
-            PUSH
-            EMAIL
-            __typename
-          }
-          updatedAt
-          __typename
-        }
         nextToken
-        __typename
+        startedAt
       }
       lecturer {
         id
@@ -6545,175 +1057,12 @@ export const getCourse = /* GraphQL */ `
         lastname
         userRole
         email
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       institution {
         id
@@ -6728,242 +1077,24 @@ export const getCourse = /* GraphQL */ `
         coursecodes
         logo
         domains
-        admin {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          owner
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
         adminId
         owner
-        courses {
-          items {
-            id
-            institutionId
-            lecturerId
-            coursecode
-            coursename
-            semester
-            enrollments {
-              nextToken
-              __typename
-            }
-            activity {
-              nextToken
-              __typename
-            }
-            announcents {
-              nextToken
-              __typename
-            }
-            lecturer {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            notification {
-              courseid
-              status
-              endPoinId
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        students {
-          items {
-            institutionId
-            id
-            firstname
-            lastname
-            userRole
-            email
-            preference {
-              studentId
-              type
-              enpointID
-              deviceID
-              id
-              createdAt
-              updatedAt
-              userId
-              __typename
-            }
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            timetable {
-              id
-              studentId
-              activityId
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            enrollments {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            studentPreferenceId
-            studentTimetableId
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          items {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
         createdAt
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       notification {
         courseid
         status
-        endPoinId
-        __typename
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       owner
-      __typename
     }
   }
 `;
@@ -6981,302 +1112,47 @@ export const listCourses = /* GraphQL */ `
         coursecode
         coursename
         semester
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        activity {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        announcents {
-          items {
-            id
-            courseId
-            lecturerId
-            description
-            start
-            end
-            date
-            venue
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            body
-            title
-            type
-            year
-            createdAt
-            anonouncementStatus {
-              SMS
-              PUSH
-              EMAIL
-              __typename
-            }
-            updatedAt
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        notification {
-          courseid
-          status
-          endPoinId
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncCourses = /* GraphQL */ `
+  query SyncCourses(
+    $filter: ModelCourseFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncCourses(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        institutionId
+        lecturerId
+        coursecode
+        coursename
+        semester
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -7302,302 +1178,15 @@ export const coursesByInstitutionId = /* GraphQL */ `
         coursecode
         coursename
         semester
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        activity {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        announcents {
-          items {
-            id
-            courseId
-            lecturerId
-            description
-            start
-            end
-            date
-            venue
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            body
-            title
-            type
-            year
-            createdAt
-            anonouncementStatus {
-              SMS
-              PUSH
-              EMAIL
-              __typename
-            }
-            updatedAt
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        notification {
-          courseid
-          status
-          endPoinId
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -7623,302 +1212,15 @@ export const coursesByLecturerId = /* GraphQL */ `
         coursecode
         coursename
         semester
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        activity {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        announcents {
-          items {
-            id
-            courseId
-            lecturerId
-            description
-            start
-            end
-            date
-            venue
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            body
-            title
-            type
-            year
-            createdAt
-            anonouncementStatus {
-              SMS
-              PUSH
-              EMAIL
-              __typename
-            }
-            updatedAt
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        notification {
-          courseid
-          status
-          endPoinId
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -7946,299 +1248,12 @@ export const searchCourses = /* GraphQL */ `
         coursecode
         coursename
         semester
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        activity {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        announcents {
-          items {
-            id
-            courseId
-            lecturerId
-            description
-            start
-            end
-            date
-            venue
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            body
-            title
-            type
-            year
-            createdAt
-            anonouncementStatus {
-              SMS
-              PUSH
-              EMAIL
-              __typename
-            }
-            updatedAt
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        notification {
-          courseid
-          status
-          endPoinId
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       nextToken
       total
@@ -8252,13 +1267,10 @@ export const searchCourses = /* GraphQL */ `
             buckets {
               key
               doc_count
-              __typename
             }
           }
         }
-        __typename
       }
-      __typename
     }
   }
 `;
@@ -8280,313 +1292,28 @@ export const getAnnouncement = /* GraphQL */ `
         coursecode
         coursename
         semester
-        enrollments {
-          items {
-            id
-            studentId
-            courseId
-            year
-            student {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        activity {
-          items {
-            id
-            courseId
-            activityname
-            day
-            start
-            end
-            venue
-            coordinates
-            group
-            frequency
-            description
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        announcents {
-          items {
-            id
-            courseId
-            lecturerId
-            description
-            start
-            end
-            date
-            venue
-            course {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            body
-            title
-            type
-            year
-            createdAt
-            anonouncementStatus {
-              SMS
-              PUSH
-              EMAIL
-              __typename
-            }
-            updatedAt
-            __typename
-          }
-          nextToken
-          __typename
-        }
-        lecturer {
-          id
-          institutionId
-          firstname
-          lastname
-          userRole
-          email
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
-        institution {
-          id
-          name
-          location
-          pageUrl
-          campusMapUrl
-          openingTime
-          closingTime
-          minimumDuration
-          lectureremails
-          coursecodes
-          logo
-          domains
-          admin {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            owner
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          adminId
-          owner
-          courses {
-            items {
-              id
-              institutionId
-              lecturerId
-              coursecode
-              coursename
-              semester
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          students {
-            items {
-              institutionId
-              id
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              studentPreferenceId
-              studentTimetableId
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            items {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          createdAt
-          updatedAt
-          __typename
-        }
-        notification {
-          courseid
-          status
-          endPoinId
-          __typename
-        }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
         owner
-        __typename
       }
       body
       title
       type
       year
       createdAt
-      anonouncementStatus {
+      announcementStatus {
         SMS
         PUSH
         EMAIL
-        __typename
+        info
       }
       updatedAt
-      __typename
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -8606,174 +1333,55 @@ export const listAnnouncements = /* GraphQL */ `
         end
         date
         venue
-        course {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         body
         title
         type
         year
         createdAt
-        anonouncementStatus {
-          SMS
-          PUSH
-          EMAIL
-          __typename
-        }
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const syncAnnouncements = /* GraphQL */ `
+  query SyncAnnouncements(
+    $filter: ModelAnnouncementFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncAnnouncements(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        courseId
+        lecturerId
+        description
+        start
+        end
+        date
+        venue
+        body
+        title
+        type
+        year
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -8801,174 +1409,18 @@ export const announcementsByCourseId = /* GraphQL */ `
         end
         date
         venue
-        course {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         body
         title
         type
         year
         createdAt
-        anonouncementStatus {
-          SMS
-          PUSH
-          EMAIL
-          __typename
-        }
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
     }
   }
 `;
@@ -8998,174 +1450,118 @@ export const announcementsByDate = /* GraphQL */ `
         end
         date
         venue
-        course {
-          id
-          institutionId
-          lecturerId
-          coursecode
-          coursename
-          semester
-          enrollments {
-            items {
-              id
-              studentId
-              courseId
-              year
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          activity {
-            items {
-              id
-              courseId
-              activityname
-              day
-              start
-              end
-              venue
-              coordinates
-              group
-              frequency
-              description
-              createdAt
-              updatedAt
-              owner
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          announcents {
-            items {
-              id
-              courseId
-              lecturerId
-              description
-              start
-              end
-              date
-              venue
-              body
-              title
-              type
-              year
-              createdAt
-              updatedAt
-              __typename
-            }
-            nextToken
-            __typename
-          }
-          lecturer {
-            id
-            institutionId
-            firstname
-            lastname
-            userRole
-            email
-            institution {
-              id
-              name
-              location
-              pageUrl
-              campusMapUrl
-              openingTime
-              closingTime
-              minimumDuration
-              lectureremails
-              coursecodes
-              logo
-              domains
-              adminId
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            courses {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            owner
-            __typename
-          }
-          institution {
-            id
-            name
-            location
-            pageUrl
-            campusMapUrl
-            openingTime
-            closingTime
-            minimumDuration
-            lectureremails
-            coursecodes
-            logo
-            domains
-            admin {
-              id
-              institutionId
-              firstname
-              lastname
-              userRole
-              email
-              owner
-              createdAt
-              updatedAt
-              __typename
-            }
-            adminId
-            owner
-            courses {
-              nextToken
-              __typename
-            }
-            students {
-              nextToken
-              __typename
-            }
-            lecturer {
-              nextToken
-              __typename
-            }
-            createdAt
-            updatedAt
-            __typename
-          }
-          notification {
-            courseid
-            status
-            endPoinId
-            __typename
-          }
-          createdAt
-          updatedAt
-          owner
-          __typename
-        }
         body
         title
         type
         year
         createdAt
-        anonouncementStatus {
-          SMS
-          PUSH
-          EMAIL
-          __typename
-        }
         updatedAt
-        __typename
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
-      __typename
+      startedAt
+    }
+  }
+`;
+export const getNotificationPreferance = /* GraphQL */ `
+  query GetNotificationPreferance($id: ID!) {
+    getNotificationPreferance(id: $id) {
+      studentId
+      endpoint {
+        type
+        endPointAddress
+        status
+        info
+      }
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listNotificationPreferances = /* GraphQL */ `
+  query ListNotificationPreferances(
+    $filter: ModelNotificationPreferanceFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNotificationPreferances(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        studentId
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncNotificationPreferances = /* GraphQL */ `
+  query SyncNotificationPreferances(
+    $filter: ModelNotificationPreferanceFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncNotificationPreferances(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        studentId
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const notificationPreferancesByStudentId = /* GraphQL */ `
+  query NotificationPreferancesByStudentId(
+    $studentId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelNotificationPreferanceFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    notificationPreferancesByStudentId(
+      studentId: $studentId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        studentId
+        id
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;

@@ -22,9 +22,9 @@ function ConfirmEmail() {
     }
     setLoading(true);
     try {
-      await Auth.confirmSignUp(email, code, { role: "Lecturer" });
+      await Auth.confirmSignUp(email, code, {clientMetadata: { role: "Lecturer" }});
       setError("");
-      navigate("/lecturer-login");
+      navigate("/lecturer/login");
     } catch (e) {
       setError(e.message);
     }

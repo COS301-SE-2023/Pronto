@@ -15,21 +15,26 @@ import { Card, Button, IconButton } from "react-native-paper";
 import SearchFilter from "../../components/SearchFilter";
 import { FlatList } from "react-native";
 import DropdownComponent from "../../components/Dropdown";
-import { API, Auth } from "aws-amplify"
-import { searchCourses, listStudents, listInstitutions } from "../../graphql/queries"
-import { createEnrollment, createStudent, deleteEnrollment, updateStudent, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { API, Auth, DataStore, Predicates } from "aws-amplify"
+import { getStudent, listCourses, coursesByInstitutionId } from "../../graphql/queries"
+import { createEnrollment, deleteEnrollment, updateStudentInfo, createTimetable, updateTimetable } from "../../graphql/mutations"
+import { useStudent } from "../../ContextProviders/StudentContext";
+import { Student, Activity, Course, Enrollment, Timetable } from "../../models";
 
-const EditTimetable = ({ onSearch }) => {
+const EditTimetable = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
   const [courses, setCourses] = useState([])
-  const [lectures, setLectures] = useState(["L01", "L02", "L03", "L04", "L05", "L06", "L07", "L08", "L09"])
-  const [tutorials, setTutorials] = useState(["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"])
-  const [practicals, setPracticals] = useState(["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"])
-  const [timetable, setTimetable] = useState(null)
+  const lectures = ["L01", "L02", "L03", "L04", "L05", "L06", "L07", "L08", "L09"];
+  const tutorials = ["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"];
+  const practicals = ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09"];
   const [activities, setActivities] = useState([])
-  const [student, setStudent] = useState(null)
+
+  const { student, updateStudent } = useStudent();
   const [isLoading, setIsLoading] = useState(true); // New state variable for loading state
+  const [isSaving, setIsSaving] = useState(false);
+
+  const error = "There appear to be network issues.Please try again later"
 
   const toggleModal = (module) => {
     if (module) {
@@ -43,286 +48,386 @@ const EditTimetable = ({ onSearch }) => {
 
   const [selectedModules, setSelectedModules] = useState([]);
 
-
-  const addToModules = (module) => {
+  const addToModules = async (module) => {
     if (!selectedModules.some((m) => m.id === module.id)) {
       setSelectedModules((prevModules) => [module, ...prevModules]);
+
+    } else {
+      Alert.alert("Module Already Added", "This module is already added to your selection.");
     }
     setInput("");
+    setCourses([]);
   };
+
 
   const [input, setInput] = useState("");
 
   const handleSearch = async (text) => {
-    setInput(text)
-    let error = "There appear to be network issues. Please try again later"
+    setInput(text);
 
-    if (text !== null) {
+    if (text !== null && student!==null && student!==undefined) {
       try {
-        let search = await API.graphql({
-          query: searchCourses,
-          variables: {
-            filter: {
-              coursecode: {
-                matchPhrasePrefix: text
-              }
-            }
-          },
-          authMode: "API_KEY"
-        })
-        setCourses(search.data.searchCourses.items)
+        // let search = await API.graphql({
+        //   query: listCourses,
+        //   variables: {
+        //     filter: {
+        //       // and : [
+        //       //         {
+        //       //           coursecode: {
+        //       //             beginsWith: text
+        //       //           }
+        //       //         } ,
+        //       //         {
+        //       //           institutionId:{
+        //       //             eq:student.institutionId
+        //       //           }
+        //       //         }
+        //       //       ]
+        //       coursecode:{
+        //         beginsWith: text
+        //       }
+        //       }
+        //     },
+        //   })
+        let search = await DataStore.query(Course, (c) => c.coursecode.beginsWith(text.toUpperCase()));
+
+        for (let i = 0; i < search.length; i++) {
+          search[i].activity = await search[i].activity.values
+        }
+        setCourses(search.filter((item) => item._deleted === null && item.institutionId === student.institutionId));
+
       } catch (e) {
-        Alert.alert(error)
+        Alert.alert(error);
+        console.log(e);
       }
     }
   }
 
   const fetchCourses = async () => {
-    let error = "There appear to be network issues.Please try again later"
     try {
-      setIsLoading(true); // Set loading state to true during API call
-      let user = await Auth.currentAuthenticatedUser()
-      let studentEmail = user.attributes.email;
+      let stu = student;
+      // if(student===null || student.id===undefined){
+      //   setIsLoading(true); // Set loading state to true during API call
+      //   const user = await Auth.currentAuthenticatedUser();
+      //   stu=await API.graphql({
+      //     query:getStudent,
+      //     variables:{id:user.attributes.sub}
+      //   }) 
+      //   stu=stu.data.getStudent;
+      //   stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null);
+      //   if(stu===null){
+      //     setIsLoading(false);
+      //     return;
+      //   }
+      //   updateStudent(stu);
+      // }
 
-      //if(student===null){
-      //  setActivities([])
-      let act = []
-      let stu = await API.graphql({
-        query: listStudents,
-        variables: {
-          filter: {
-            email: {
-              eq: studentEmail
+
+      // let c = [];
+      // let act= [];
+
+      // for (let i = 0; i < stu.enrollments.items.length; i++) {
+      //   if(stu.enrollments.items[i]._deleted===null){
+      //   c.push(stu.enrollments.items[i].course);
+      //   }
+      // }
+      // setSelectedModules(c);
+
+      // if(stu.timetable===null){
+      //   setActivities([]);
+      //   setIsLoading(false);
+      //   return;
+      // }
+
+      // for (let i = 0; i < stu.timetable.activityId.length; i++) {
+      //   for (let j = 0; j < c.length; j++) {
+      //     let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+      //     if (index !== undefined) {
+      //       act.push(index);
+      //       break;
+      //     }
+      //   }
+      // }
+
+      // setActivities(act);
+      // setIsLoading(false); // Set loading state to false after courses are fetched
+      setIsLoading(true);
+      const user = await Auth.currentAuthenticatedUser();
+      
+      const id = user.attributes.sub;
+      stu = await DataStore.query(Student, id);
+      if(stu===undefined)
+       return;
+      const enrollment = await stu.enrollments.values;
+
+      let c = [];
+      let m = [];
+      setCourses([]);
+      const studentTimetable = await stu.timetable;
+      let activityList=[]
+      if(studentTimetable!==undefined){
+        const activity = studentTimetable.activityId;
+        activityList = removeDuplicates(activity);
+      }
+      if(enrollment!==undefined){
+      for (let i = 0; i < enrollment.length; i++) {
+        if (enrollment[i]._deleted === null) {
+          const course = await enrollment[i].course;
+          const activity = await course.activity.values;
+          //console.log(activity);
+          course.activity = activity;
+          m.push(course);
+          for (let j = 0; j < activity.length; j++) {
+            let saveActivity = activity[j];
+            saveActivity.course = {
+              coursecode: course.coursecode
+            }
+            if (saveActivity._deleted === null && activityList.includes(saveActivity.id)) {
+              c.push(saveActivity);
             }
           }
-        },
-        authMode: "API_KEY"
-      })
-
-      // setStudent(stu.data.listStudents.items[0])
-      let found = false
-      for (let i = 0; i < stu.data.listStudents.items.length; i++) {
-        if (stu.data.listStudents.items[i].owner === user.attributes.sub) {
-          stu = stu.data.listStudents.items[i]
-          found = true
-          break
         }
       }
-
-      //Student not found so create them
-      if (found === false) {
-        let domain = studentEmail.split("@")[1]
-
-        //Find Institution via domain
-        let institution = await API.graphql({
-          query: listInstitutions,
-          variables: {
-            filter: {
-              domains: {
-                contains: domain
-              }
-            }
-          },
-          authMode: "API_KEY",
-        })
-
-        //Institution not found
-        if (institution.data.listInstitutions.items.length === 0) {
-          error = "Could not determine institution"
-          throw Error("")
-        }
-
-        institution = institution.data.listInstitutions.items[0]
-
-        //Create student
-        let newStudent = {
-          institutionId: institution.id,
-          firstname: user.attributes.name,
-          lastname: user.attributes.family_name,
-          userRole: "Student",
-          email: studentEmail
-        }
-        let create = await API.graphql({
-          query: createStudent,
-          variables: { input: newStudent },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
+      
+      stu.enrollments = enrollment.filter((e) => e._deleted === null);
+    
+      stu.timetable = studentTimetable;
+      updateStudent(stu);
+      //console.log("From edit");
+      //console.log(m[0].activity);
+      setActivities(c);
       }
+      setSelectedModules(m);
+      updateStudent(stu);
+      setIsLoading(false);
 
-      //Student  found
-      else {
-
-        let c = []
-        for (let i = 0; i < stu.enrollments.items.length; i++) {
-          c.push(stu.enrollments.items[i].course)
-        }
-
-        setSelectedModules(c)
-        setTimetable(stu.timetable)
-        if (stu.timetable !== null) {
-          for (let i = 0; i < stu.timetable.activityId.length; i++) {
-            for (let j = 0; j < c.length; j++) {
-              let index = c[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-              if (index !== undefined) {
-                act.push(index)
-                break;
-              }
-            }
-          }
-          setActivities(act)
-          //setStudent(stu)
-        }
-        setStudent(stu)
-
-      }
-      setIsLoading(false); // Set loading state to false after courses are fetched
     } catch (e) {
       setIsLoading(false); // Set loading state to false if error
-      Alert.alert(error)
+      //Alert.alert(error);
+      console.log("From edit");
+      console.log(e);
 
     }
   }
 
   useEffect(() => {
     fetchCourses();
-  }, [])
+  }, []);
 
   const handleSave = async () => {
-
-    let error = "There appear to be network issues.Please try again later"
     try {
       //Create enrollment if it doesnt exist
-      let activityIds = []
+      setIsSaving(true);
+      let activityIds = [];
 
-
+      //Extract activity Ids
       for (let i = 0; i < activities.length; i++) {
         if (activities[i] != undefined) {
-          activityIds.push(activities[i].id)
+          activityIds.push(activities[i].id);
         }
       }
+      if ((selectedModule !== null && selectedModule !== undefined)  && student.enrollments.filter((item) => item.courseId === selectedModule.id && item._deleted !== null).length === 0) {
+        // let enroll = {
+        //   courseId: selectedModule.id,
+        //   studentId: student.id,
+        // };
 
+        // let newEnrollment = await API.graphql({
+        //   query: createEnrollment,
+        //   variables: { input: enroll }
+        // });
+        let newEnrollment = await DataStore.save(
+          new Enrollment({
+            "studentId": student.id,
+            "courseId": selectedModule.id,
+            "year": new Date().getFullYear(),
+            "student": student,
+            "course": selectedModule,
+          })
+        );
+        console.log(newEnrollment);
+        student.enrollments.push(newEnrollment);
+        updateStudent(student);
 
-      if (student === null) {
-        fetchCourses()
-        throw Error()
       }
-      if ((selectedModule !== null && selectedModule !== undefined) && student.enrollments.items.filter((item) => item.courseId === selectedModule.id).length === 0) {
-        enroll = {
-          courseId: selectedModule.id,
-          studentId: student.id,
-        }
-        let newEnrollment = await API.graphql({
-          query: createEnrollment,
-          variables: { input: enroll },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
 
+      //Create a new timetable if it doesnt exist
+      if (student.timetable === undefined || student.timetable===null || student.studentTimetableId===null) {
+        // let newTimetable = {
+        //   studentId: student.id,
+        //   activityId: activityIds,
+        // };
+
+        // let create = await API.graphql({
+        //   query: createTimetable,
+        //   variables: { input: newTimetable },
+        // })
+        // let a=await API.graphql({
+        //   query:updateStudentInfo,
+        //   variables:{input:{id:student.id,studentTimetableId:create.data.createTimetable.id,_version:student._version}}
+        // })
+        let newTimetable = await DataStore.save(
+          new Timetable({
+            "studentId": student.id,
+            "activityId": activityIds,
+            "student": student,
+            "activities": []
+          })
+        );
+        console.log(newTimetable);
+        student.timetable = newTimetable;
+        student.studentTimetableId = newTimetable.id;
+
+        let updatingStudent = await DataStore.save(Student.copyOf(student, updated => {
+          updated.timetable = newTimetable,
+            updated.studentTimetableId = newTimetable.id
+        }));
+
+        console.log(updatingStudent);
 
         let s = student
-        student.enrollments.items.push(newEnrollment.data.createEnrollment)
+        //    s.timetable = create.data.createTimetable;
+        // s.studentTimetableId = s.timetable.id;
+        // student.timetable=create.data.createTimetable;
+        // student.studentTimetableId=create.data.createTimetable.id;
+        // student.timetable.activities=activities;
+        updateStudent(student);
+
       }
-      if (timetable === null) {
-        let newTimetable = {
-          studentId: student.id,
-          activityId: activityIds,
-        }
 
-        let create = await API.graphql({
-          query: createTimetable,
-          variables: { input: newTimetable },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
-        })
-
-        let update = await API.graphql({
-          query: updateStudent,
-          variables: { input: { id: student.id, studentTimetableId: create.data.createTimetable.id } },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
-        let s = student
-        s.timetable = create.data.createTimetable
-        s.timetableId = s.timetable.id
-
-        setStudent(s)
-        setTimetable(timetable)
-      }
+      //Update existing timetable
       else {
 
-        if (student === null) {
-          fetchCourses()
-          throw Error()
-        }
-        let newTimetable = {
-          id: student.studentTimetableId,
-          studentId: student.id,
-          activityId: activityIds
-        }
+        // let newTimetable = {
+        //   id: student.studentTimetableId,
+        //   studentId: student.id,
+        //   _version : student.timetable._version,
+        //   activityId: activityIds
+        // }
 
+        // let update = await API.graphql({
+        //   query: updateTimetable,
+        //   variables: { input: newTimetable }
+        // })
 
-        let update = await API.graphql({
-          query: updateTimetable,
-          variables: { input: newTimetable },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
-        })
+        let updatedTimetable = await DataStore.save(Timetable.copyOf(student.timetable, updated => {
+          updated.activityId = activityIds
+        }));
+        let updatingStudent=await DataStore.save(Student.copyOf(student, updated => {
+            updated.timetable=updatedTimetable,
+            updated.studentTimetableId=updatedTimetable.id  
+        }));
 
-        let s = student
-        s.timetable = update.data.updateTimetable
-        let upd = await API.graphql({
-          query: updateStudent,
-          variables: { input: { id: student.id, studentTimetableId: update.data.updateTimetable.id } },
-          authMode: "AMAZON_COGNITO_USER_POOLS"
-        })
-        setStudent(s)
-        setTimetable(update.data.updateTimetable)
+        //console.log(updatedTimetable);
+        student.timetable = updatedTimetable;
+        //let e=await updateStudent.enrollments.values;
+
+        // updateStudent.enrollments=e.filter((item)=>item._deleted===null);
+
+        // s.timetable = update.data.updateTimetable;
+        // student.timetable.activityId=newTimetable.activityId;
+        // student.timetable._version=update.data.updateTimetable._version;
+        //student.timetable=update.data.updateTimetable;
+        //student.timetable.activities=activities;
+        updateStudent(student);
+        // s= await updateStudent(student);
+        // student.timetable.activities=s.timetable.activities;
       }
-      toggleModal(null)
+      setIsSaving(false);
+      toggleModal(null);
+
     } catch (e) {
-      Alert.alert(error)
+      console.log("From save");
+      console.log(e);
+      setIsSaving(false);
+      Alert.alert(error);
     }
   }
-  const addActivity = (activity) => {
+
+  const addActivity = async (activity) => {
     let rows = [...activities]
     for (let i = 0; i < activities.length; i++) {
       if (activities[i].activityname === activity.activityname && activities[i].courseId === activity.courseId) {
         rows.splice(i, 1)
       }
     }
+
     rows.push(activity)
-    setActivities(rows)
+    //student.timetable.activities=rows;
+    //updateStudent(student);
+    //let s=await updateStudent(student);
+    // student.timetable.activities=s.timetable.activities;
+    setActivities(rows);
   }
+
+  function removeDuplicates(arr) {
+    let unique = [];
+    arr.forEach(element => {
+      if (!unique.includes(element)) {
+        unique.push(element);
+      }
+    });
+    return unique;
+  }
+
+
+
   const oneModule = ({ item }) => {
     const handleDelete = async () => {
+      Alert.alert(
+        "Confirm Deletion",
+        "Are you sure you want to remove this module?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Delete",
+            style: "destructive",
+            onPress: async () => {
+              let s = student;
+              let del;
+              let act = activities.filter(
+                (activity) => activity.courseId !== item.id
+              );
 
-      let s = student
-      let del
-      let act = activities.filter((activity) => activity.courseId !== item.id)
-      let error = "Failed to remove course. Please try again later"
+              let error = "Failed to remove course. Please try again later";
 
-      try {
-        for (let i = 0; i < student.enrollments.items.length; i++) {
-          if (student.enrollments.items[i].courseId === item.id) {
-
-            del = await API.graphql({
-              query: deleteEnrollment,
-              variables: { input: { id: student.enrollments.items[i].id } },
-              authMode: "AMAZON_COGNITO_USER_POOLS",
-            })
-
-            student.enrollments.items.splice[i, 1]
-
-            break
-          }
-        }
-        await handleSave()
-        setStudent(student)
-        setSelectedModules((prevModules) =>
-          prevModules.filter((module) => module.id !== item.id)
-        );
-        setActivities(act)
-        setSelectedModule(null)
-      } catch (e) {
-        Alert.alert(error)
-      }
+              try {
+                for (let i = 0; i < student.enrollments.length; i++) {
+                  if (student.enrollments[i].courseId === item.id) {
+                    // del = await API.graphql({
+                    //   query: deleteEnrollment,
+                    //   variables: { input: { id: student.enrollments.items[i].id ,_version:student.enrollments.items[i]._version} }
+                    // });
+                    console.log("enrollment is:")
+                    //console.log(student.enrollments[i]);
+                    let s = await DataStore.query(Enrollment, student.enrollments[i].id);
+                    console.log(s);
+                    let del = await DataStore.delete(s);
+                    console.log(del);
+                    student.enrollments.splice(i, 1);
+                    break;
+                  }
+                }
+                await handleSave();
+                //updateStudent(student);
+                setSelectedModules((prevModules) =>
+                  prevModules.filter((module) => module.id !== item.id)
+                );
+                setActivities(act);
+                setSelectedModule(null);
+              } catch (e) {
+                console.log(e);
+                Alert.alert(error);
+              }
+            },
+          },
+        ]
+      );
     };
+
 
     return (
       <View style={{ margin: 20 }}>
@@ -335,7 +440,7 @@ const EditTimetable = ({ onSearch }) => {
             }}
           >
             <Card.Title
-              title={item.coursecode}
+              title={item?.coursecode}
               titleStyle={{
                 fontSize: 20,
                 fontWeight: "bold",
@@ -401,7 +506,7 @@ const EditTimetable = ({ onSearch }) => {
           value={input}
           onChangeText={(text) => handleSearch(text)}
           style={{ fontSize: 15, width: "100%" }}
-          placeholder="Search for your modules"
+          placeholder="Search for your courses"
         />
 
       </View>
@@ -433,7 +538,7 @@ const EditTimetable = ({ onSearch }) => {
                   color: "#e32f45",
                 }}
               >
-                Fetching your modules...
+                Fetching your courses...
               </Text>
             </View>
           ) : ( // Display the "You have no modules" text after loading is completed and no courses are found
@@ -453,7 +558,7 @@ const EditTimetable = ({ onSearch }) => {
                     color: "#e32f45",
                   }}
                 >
-                  You have no modules
+                  You have no courses
                 </Text>
               </View>
             ) : null
@@ -476,17 +581,17 @@ const EditTimetable = ({ onSearch }) => {
           <ScrollView contentContainerStyle={styles.modalContent}>
             {selectedModule && (
               <View key={selectedModule.id}>
-                <Text style={styles.moduleCode}>{selectedModule.coursecode}</Text>
-                {/* <Text style={styles.moduleName}>{selectedModule.name}</Text>
-                
+                <Text style={styles.moduleCode}>{selectedModule?.coursecode}</Text>
+
+
                 {/* Display lectures */}
                 {lectures.map((lecture, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname == lecture).length > 0 &&
+                  selectedModule.activity.filter(item => item.activityname == lecture).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Lecture"}
                     moduleContent={
-                      selectedModule.activity.items.filter(item => item.activityname === lecture).map((act, index) => (
+                      selectedModule.activity.filter(item => item.activityname === lecture).map((act, index) => (
                         {
                           label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
                           act: act,
@@ -497,17 +602,18 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === lecture)[0]}
                   />
                 ))}
 
                 {/*Display tutorials*/}
                 {tutorials.map((tutorial, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname == tutorial).length > 0 &&
+                  selectedModule.activity.filter(item => item.activityname == tutorial).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Tutorial"}
                     moduleContent={
-                      selectedModule.activity.items.filter(item => item.activityname === tutorial).map((act, index) => (
+                      selectedModule.activity.filter(item => item.activityname === tutorial).map((act, index) => (
                         {
                           label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
                           act: act,
@@ -518,17 +624,18 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === tutorial)[0]}
                   />
                 ))}
 
                 {/*Display practicals*/}
                 {practicals.map((practical, i) => (
-                  selectedModule.activity.items.filter(item => item.activityname == practical).length > 0 &&
+                  selectedModule.activity.filter(item => item.activityname === practical).length > 0 &&
                   <DropdownComponent
                     key={i}
                     activity={"Practical"}
                     moduleContent={
-                      selectedModule.activity.items.filter(item => item.activityname === practical).map((act, index) => (
+                      selectedModule.activity.filter(item => item.activityname === practical).map((act, index) => (
                         {
                           label: `${act.day}: ${act.start} - ${act.end} (${act.venue})`,
                           act: act,
@@ -539,6 +646,7 @@ const EditTimetable = ({ onSearch }) => {
                     }
                     addActivity={addActivity}
                     activityNumber={i + 1}
+                    currentActivity={activities.filter((a) => a.courseId === selectedModule.id && a.activityname === practical)[0]}
                   />
                 ))}
               </View>
@@ -549,14 +657,22 @@ const EditTimetable = ({ onSearch }) => {
             mode="contained"
             style={{
               backgroundColor: "#e32f45",
-              marginVertical: 10,
-              marginHorizontal: 20,
+              width: "70%",
+              margin: "5%",
+              textAlign: "center",
+              color: "white",
             }}
+
             outlined={true}
-            onPress={() => handleSave()}
+            disabled={isSaving}
+            onPress={async () => { await handleSave() }}
             testID="save-button"
           >
-            Save
+            {isSaving ? (
+              <Text style={{ color: "white" }}>Saving...</Text> // Set white color for "Saving..." text
+            ) : (
+              "Save"
+            )}
           </Button>
 
 

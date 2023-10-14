@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:700");
+.hero {
+  
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: "Montserrat", sans-serif;
+}
+
+.cube {
+  position: absolute;
+  top: 80vh;
+  z-index: -1;
+  left: 45vw;
+  width: 10px;
+  height: 10px;
+  border: solid 1px #e32f45;
+  transform-origin: top left;
+  transform: scale(0) rotate(0deg) translate(-50%, -50%);
+  -webkit-animation: cube 8s ease-in forwards infinite; /* Faster animation */
+  animation: cube 8s ease-in forwards infinite; /* Faster animation */
+}
+
+.cube:nth-child(2n) {
+  border-color: #e32f45;
+}
+
+/* Adjust animation delays for all cubes */
+.cube:nth-child(2) {
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+  left: 25vw;
+  top: 40vh;
+}
+
+/* Add new cubes */
+.cube:nth-child(3) {
+  -webkit-animation-delay: 0.5s; /* Earlier start */
+  animation-delay: 0.5s; /* Earlier start */
+  left: 65vw;
+  top: 10vh;
+}
+
+.cube:nth-child(4) {
+  -webkit-animation-delay: 1s; /* Earlier start */
+  animation-delay: 1s; /* Earlier start */
+  left: 90vw;
+  top: 10vh;
+}
+
+.cube:nth-child(5) {
+  -webkit-animation-delay: 1.5s; /* Earlier start */
+  animation-delay: 1.5s; /* Earlier start */
+  left: 10vw;
+  top: 85vh;
+}
+
+.cube:nth-child(6) {
+  -webkit-animation-delay: 2s; /* Earlier start */
+  animation-delay: 2s; /* Earlier start */
+  left: 15vw;
+  top: 50vh;
+}
+
+/* Add more cubes... */
+
+.cube:nth-child(7) {
+  -webkit-animation-delay: 2.5s;
+  animation-delay: 2.5s;
+  left: 80vw;
+  top: 60vh;
+}
+
+.cube:nth-child(8) {
+  -webkit-animation-delay: 3s;
+  animation-delay: 3s;
+  left: 90vw;
+  top: 90vh;
+}
+
+.cube:nth-child(9) {
+  -webkit-animation-delay: 3.5s;
+  animation-delay: 3.5s;
+  left: 10vw;
+  top: 8vh;
+}
+
+
+
+
+@keyframes cube {
+  from {
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    opacity: 1;
+  }
+  to {
+    transform: scale(15) rotate(720deg) translate(-50%, -50%);
+    opacity: 0;
+  }
+}
+
+
+.CardContainer .MuiCard-root {
+  /* Other styles... */
+  transition: opacity 0.5s ease-in-out;
+}
+
+.CardContainer .MuiCard-root.fade-out {
+  opacity: 0;
+}
+
+  
+  .CardContainer .MuiCard-root .MuiTypography-root {
+    color: #444;
+  }
+  
+  .CardContainer .MuiCard-root .MuiButton-root {
+    border-radius: 20px;
+    background-color: #e32f45;
+    color: white;
+    font-weight: bold;
+    padding: 0.8rem 2rem;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+.custom-button {
+    color: white; /* Set the desired text color */
+  }
+  
+  .custom-button:hover {
+    color: white; /* Set the desired text color on hover, to maintain the same color as the normal state */
+    /* Add any other custom styles for the button when hovering, if needed */
+  }
+  

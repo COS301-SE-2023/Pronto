@@ -14,18 +14,17 @@ export const createTimetable = `mutation CreateTimetable(
       email
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       studentTimetableId
       owner
+      __typename
     }
-    activities {
-      nextToken
-    }
-    createdAt
-    updatedAt
   }
 }`;
 
-export const updateTimetable=`mutation UpdateTimetable(
+export const updateTimetable = `mutation UpdateTimetable(
   $input: UpdateTimetableInput!
   $condition: ModelTimetableConditionInput
 ) {
@@ -49,9 +48,9 @@ export const updateTimetable=`mutation UpdateTimetable(
       nextToken
     }
   }
-}`
+}`;
 
-export const createStudent=`mutation CreateStudent(
+export const createStudent = `mutation CreateStudent(
   $input: CreateStudentInput!
   $condition: ModelStudentConditionInput
 ) {
@@ -74,10 +73,9 @@ export const createStudent=`mutation CreateStudent(
     updatedAt
     studentTimetableId
   }
-}`
+}`;
 
-
-export const createEnrollment=`mutation CreateEnrollment(
+export const createEnrollment = `mutation CreateEnrollment(
   $input: CreateEnrollmentInput!
   $condition: ModelEnrollmentConditionInput
 ) {
@@ -88,8 +86,8 @@ export const createEnrollment=`mutation CreateEnrollment(
     owner
   }
 }
-`
-export const deleteEnrollment=`mutation DeleteEnrollment(
+`;
+export const deleteEnrollment = `mutation DeleteEnrollment(
   $input: DeleteEnrollmentInput!
   $condition: ModelEnrollmentConditionInput
 ) {
@@ -98,59 +96,92 @@ export const deleteEnrollment=`mutation DeleteEnrollment(
     studentId
     courseId
   }
-}`
+}`;
 
-export const updateStudent=`mutation UpdateStudent(
-  $input: UpdateStudentInput!
-  $condition: ModelStudentConditionInput
-) {
-  updateStudent(input: $input, condition: $condition) {
-    institutionId
-    id
-    firstname
-    lastname
-    userRole
-    email
-    timetable {
+export const createTimetable = /* GraphQL */ `
+  mutation CreateTimetable(
+    $input: CreateTimetableInput!
+    $condition: ModelTimetableConditionInput
+  ) {
+    createTimetable(input: $input, condition: $condition) {
       id
       studentId
       activityId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+      __typename
     }
-    enrollments {
-      nextToken
-    }
-    createdAt
-    updatedAt
-    studentTimetableId
   }
-}`
-
-export const deleteStudent=`mutation DeleteStudent(
-  $input: DeleteStudentInput!
-  $condition: ModelStudentConditionInput
-) {
-  deleteStudent(input: $input, condition: $condition) {
-    institutionId
-    id
-    firstname
-    lastname
-    userRole
-    email
-    timetable {
+`;
+export const updateTimetable = /* GraphQL */ `
+  mutation UpdateTimetable(
+    $input: UpdateTimetableInput!
+    $condition: ModelTimetableConditionInput
+  ) {
+    updateTimetable(input: $input, condition: $condition) {
       id
       studentId
       activityId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+      __typename
     }
-    enrollments {
-      nextToken
-    }
-    createdAt
-    updatedAt
-    studentTimetableId
-    owner
   }
-}`
+`;
+
+export const createNotificationPreferance = /* GraphQL */ `
+  mutation CreateNotificationPreferance(
+    $input: CreateNotificationPreferanceInput!
+    $condition: ModelNotificationPreferanceConditionInput
+  ) {
+    createNotificationPreferance(input: $input, condition: $condition) {
+      studentId
+      endpoint {
+        type
+        endPointAddress
+        status
+        info
+        __typename
+      }
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;
+export const updateNotificationPreferance = /* GraphQL */ `
+  mutation UpdateNotificationPreferance(
+    $input: UpdateNotificationPreferanceInput!
+    $condition: ModelNotificationPreferanceConditionInput
+  ) {
+    updateNotificationPreferance(input: $input, condition: $condition) {
+      studentId
+      endpoint {
+        type
+        endPointAddress
+        status
+        info
+        __typename
+      }
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;

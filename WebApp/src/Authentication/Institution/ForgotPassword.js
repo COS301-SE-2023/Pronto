@@ -29,7 +29,7 @@ function ForgotPassword() {
   const validatePassword = (value) => {
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/;
-    const isValidPassword = regex.test(value);
+    const isValidPassword = regex.test(value); //Check that legal characters are used in password
 
     setPasswordIsValid(isValidPassword);
 
@@ -129,7 +129,7 @@ function ForgotPassword() {
   };
 
   const handleResetPassword = () => {
-    navigate("/lecturer-login");
+    navigate("/lecturer/login");
   };
 
   return (
@@ -196,7 +196,7 @@ function ForgotPassword() {
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
+            onChange={handleConfirmPasswordChange} //confirm passwords match
             passwordMatch={passwordMatch}
           />
           {error && <ErrorText>{error}</ErrorText>}{" "}
@@ -213,7 +213,7 @@ function ForgotPassword() {
               marginBottom: "1rem",
             }}
           >
-            {passwordIsFocused && (
+            {passwordIsFocused && (  //Realtime password criteria checks
               <>
                 <CriteriaMessage isValid={passwordCriteria.length}>
                   {passwordCriteria.length ? "✓" : "x"} Minimum 8 characters

@@ -7,11 +7,6 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "api": {
-    "AdminQueries": {
-      "ApiId": "string",
-      "ApiName": "string",
-      "RootUrl": "string"
-    },
     "pronto": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",

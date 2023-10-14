@@ -10,11 +10,13 @@ import {
   Alert,
 } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Auth } from "aws-amplify";
+import { listInstitutions } from "../../graphql/queries";
+import { Auth, API, DataStore, Predicates } from "aws-amplify";
 import institutionInfo from "../../assets/data/universityInfo.json";
 import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
+import { Institution } from "../../models";
 
 const { height } = Dimensions.get("window");
 
@@ -26,6 +28,7 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [instituitions, setInstitutions] = useState([]);
 
   //validate email input sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -38,10 +41,10 @@ const Register = ({ navigation }) => {
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
   //select instituition
-  const [institutionId, setInstitutionId] = React.useState("");
+  const [institutionId, setInstitutionId] = useState("");
 
   //Validate institutionId
-  const [isInstitutionIdValid, setIsInstitutionIdValid] = React.useState(false);
+  const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
   const validateInstitutionId = () => {
     setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
   };
@@ -92,6 +95,36 @@ const Register = ({ navigation }) => {
     setSurnameIsValid(isValidSurname);
   };
 
+  const fetchInstitutions = async () => {
+
+    try {
+      let inst = await API.graphql({
+        query: listInstitutions,
+        variables: {},
+        authMode: "API_KEY"
+      });
+
+      inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
+      //let inst = await DataStore.query(Institution, Predicates.ALL)
+      let institutionInfo = [];
+      for (let j = 0; j < inst.length; j++) {
+        let item = {
+          key: inst[j].id,
+          value: inst[j].name
+        }
+        institutionInfo.push(item);
+      }
+      ;
+      setInstitutions(institutionInfo);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchInstitutions()
+  }, [])
+
   const onSignUpPressed = async () => {
     if (loading) {
       return;
@@ -133,16 +166,29 @@ const Register = ({ navigation }) => {
     setLoading(true);
     try {
       // navigation.navigate("ConfirmEmail", { email });
-      await Auth.signUp({
+      const studentName = name + "," + surname;
+      const signUpObject = {
         username: email,
-        password,
-        attributes: { email, family_name: surname, name },
-        clientMetadata: { role: "Student", institutionId: institutionId },
-      });
+        password: password,
+        attributes: {
+          email: email,
+          family_name: institutionId,
+          name: studentName
+        },
+        clientMetadata: {
+          role: "Student",
+          institutionId: institutionId
+        }
+      }
+      const u = await Auth.signUp(signUpObject);
 
+
+      console.log(u);
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
-      Alert.alert("Error", e.message);
+      console.log(e);
+      Alert.alert("Sign up error", e.message);
+
     }
     setLoading(false);
   };
@@ -219,6 +265,7 @@ const Register = ({ navigation }) => {
 
         <View style={styles.inputContainer}>
           <TextInput
+            testID='email-input'
             placeholder="Email"
             autoCapitalize="none"
             placeholderTextColor={"#666666"}
@@ -239,7 +286,7 @@ const Register = ({ navigation }) => {
 
           {isTypingEmail && !emailIsValid && (
             <View style={styles.iconContainer}>
-              <MaterialIcons name="cancel" size={24} color="red" />
+              <MaterialIcons name="cancel" size={24} color="red" testID='email-error-icon' />
             </View>
           )}
         </View>
@@ -248,7 +295,7 @@ const Register = ({ navigation }) => {
           {/* Update the boxStyles prop for SelectList */}
           <SelectList
             setSelected={(institutionId) => setInstitutionId(institutionId)}
-            data={institutionInfo}
+            data={instituitions}
             save="key"
             boxStyles={[
               styles.input,
@@ -275,6 +322,7 @@ const Register = ({ navigation }) => {
               validateSignUpPassword(value);
             }}
             onFocus={() => setIsTypingPassword(true)}
+            testID={"password-input"}
           />
           {isTypingPassword && passwordSignUpIsValid && (
             <View style={styles.iconContainer}>
@@ -322,7 +370,7 @@ const Register = ({ navigation }) => {
           )}
         </View>
 
-        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed}>
+        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} testID='sign-up-button' disabled={loading}>
           <Text style={styles.signUpButtonText}>
             {" "}
             {loading ? "Signing up..." : "Sign up"}

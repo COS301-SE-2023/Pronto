@@ -1,0 +1,198 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WelcomeScreen matches snapshot 1`] = `
+<RCTSafeAreaView
+  style={
+    {
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
+  <View
+    accessibilityIgnoresInvertColors={true}
+    style={
+      {
+        "height": 533.6,
+      }
+    }
+  >
+    <Image
+      resizeMode="contain"
+      source={1}
+      style={
+        [
+          {
+            "bottom": 0,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          },
+          {
+            "height": 533.6,
+            "width": undefined,
+          },
+          undefined,
+        ]
+      }
+      testID="image-background"
+    />
+  </View>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "paddingHorizontal": 20,
+      }
+    }
+  >
+    <Text
+      style={
+        {
+          "color": "#e32f45",
+          "fontSize": 30,
+          "fontWeight": "bold",
+          "paddingBottom": 15,
+          "textAlign": "center",
+        }
+      }
+    >
+      Make your first step into university easier
+    </Text>
+    <Text
+      style={
+        {
+          "fontSize": 15,
+          "textAlign": "center",
+        }
+      }
+    >
+      Create customised timetables, find your way around campus and get notified of upcoming events
+    </Text>
+  </View>
+  <View
+    style={
+      {
+        "flexDirection": "row",
+        "paddingHorizontal": 20,
+        "paddingTop": 70,
+      }
+    }
+  >
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "backgroundColor": "#e32f45",
+          "borderRadius": 10,
+          "elevation": 5,
+          "marginRight": "4%",
+          "opacity": 1,
+          "paddingHorizontal": 10,
+          "paddingVertical": 15,
+          "shadowColor": "#e32f45",
+          "shadowOffset": {
+            "height": 10,
+            "width": 0,
+          },
+          "shadowOpacity": 0.25,
+          "shadowRadius": 8,
+          "width": "48%",
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "white",
+            "fontSize": 18,
+            "fontWeight": "bold",
+            "textAlign": "center",
+          }
+        }
+      >
+        Login
+      </Text>
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "borderRadius": 10,
+          "borderWidth": 1,
+          "opacity": 1,
+          "paddingHorizontal": 10,
+          "paddingVertical": 15,
+          "width": "48%",
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "black",
+            "fontSize": 18,
+            "fontWeight": "bold",
+            "textAlign": "center",
+          }
+        }
+      >
+        Register
+      </Text>
+    </View>
+  </View>
+</RCTSafeAreaView>
+`;

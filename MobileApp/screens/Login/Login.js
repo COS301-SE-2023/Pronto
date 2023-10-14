@@ -8,20 +8,37 @@ import {
   ImageBackground,
   Dimensions,
   Alert,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
+// import { SelectList } from "react-native-dropdown-select-list";
+// import institutionInfo from "../../assets/data/universityInfo.json";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Auth } from "aws-amplify";
-
+import { Auth, API, DataStore } from "aws-amplify";
+import { getStudent } from "../../graphql/queries";
+import { createStudent } from "../../graphql/mutations";
+import { useStudent } from "../../ContextProviders/StudentContext";
+import { Student, Institution } from "../../models";
 const { height } = Dimensions.get("window");
 
 const Login = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { student, updateStudent } = useStudent();
 
   //validate email input for sign in and sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
+
+  //select instituition
+  // const [institutionId, setInstitutionId] = useState("");
+  // const [instituions, setInstitutions] = useState([]);
+
+  //Validate institutionId
+  // const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
+  // const validateInstitutionId = () => {
+  //   setIsInstitutionIdValid(institutionId && institutionId !== "notSet");
+  // };
 
   const validateEmail = (value) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,6 +48,7 @@ const Login = ({ navigation }) => {
 
   const [isTypingEmail, setIsTypingEmail] = useState(false);
 
+
   const onSignInPressed = async (data) => {
     if (loading) {
       return;
@@ -38,15 +56,74 @@ const Login = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const response = await Auth.signIn(username, password, {
-        role: "Student",
-      });
-      //  navigation.navigate("Timetable");
+      const signInObject = {
+        username: username,
+        password: password,
+        validationData: {
+          role: "Student",
+        }
+      }
+
+      const user = await Auth.signIn(signInObject);
+
+      let studentInfo = student;
+      // if (student === null) {
+      const email = user.attributes.email;
+      const id = user.attributes.sub;
+      // studentInfo = await API.graphql({
+      //   query: getStudent,
+      //   variables: { id: user.attributes.sub }
+      // });
+      // studentInfo = studentInfo.data.getStudent;
+      //updateStudent(studentInfo);
+
+      studentInfo = await DataStore.query(Student, id);
+      console.log(studentInfo);
+      // if (studentInfo === null || studentInfo===undefined) {
+
+      //   //Create student
+      //   let name = user.attributes.name.split(",")
+      //   const institutionId = user.attributes.family_name;
+
+      //   let newStudent = {
+      //     id: user.attributes.sub,
+      //     institutionId: user.attributes.family_name,
+      //     firstname: name[0],
+      //     lastname: name[1],
+      //     userRole: "Student",
+      //     email: email
+      //   }
+      //   // const inst = await DataStore.query(Institution, institutionId);
+      //   // let c = await DataStore.save(
+      //   //   new Student({
+      //   //     "id": id,
+      //   //     "institutionId": institutionId,
+      //   //     "firstname": name[0],
+      //   //     "lastname": name[1],
+      //   //     "userRole": "Student",
+      //   //     "email": email,
+      //   //     "institution": inst,
+      //   //   })
+      //   // );
+      //   // console.log(c);
+
+      //   let create = await API.graphql({
+      //     query: createStudent,
+      //     variables: { input: newStudent }
+      //   })
+
+      //studentInfo = create.data.createStudent;
+      // console.log(create);
+      // updateStudent(create.data.createStudent);
+      // }
+      //   }
+      //  navigation.navigate("Tabs", studentInfo);
     } catch (e) {
+      console.log(e);
       Alert.alert("Sign in error", e.message);
+      setLoading(false);
     }
 
-    setLoading(false);
   };
 
   //validate password on sign in
@@ -94,6 +171,11 @@ const Login = ({ navigation }) => {
             </View>
           )}
         </View>
+        <View style={styles.inputContainer}>
+          {/* Update the boxStyles prop for SelectList */}
+
+        </View>
+
 
         <View style={styles.inputContainer}>
           <TextInput
@@ -111,7 +193,7 @@ const Login = ({ navigation }) => {
 
         </View>
 
-        <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed}>
+        <TouchableOpacity style={styles.signInButton} onPress={onSignInPressed} disabled={loading}>
           <Text style={styles.signInButtonText}>
             {loading ? "Signing in..." : "Sign in"}
           </Text>
@@ -140,6 +222,7 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center"
   },
   contentContainer: {
     flex: 1,
@@ -158,7 +241,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subtitle: {
-    fontWeight: "bold",
+    fontWeight: "600",
     textAlign: "center",
     fontSize: 15,
     maxWidth: "70%",
@@ -195,6 +278,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
+    elevation: 5,
   },
   createAccountButton: {
     padding: 10,

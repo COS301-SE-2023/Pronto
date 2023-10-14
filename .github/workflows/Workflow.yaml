@@ -1,72 +1,169 @@
-# name: Unit and Integration tests
+name: Build Mobile,Web App and Amplify Backend
 
-# on:
-#   push:
+on:
+  push:
+    branches: [main, dev, frontend, integration-fix, backend, mobile-datastore]
+  pull_request:
+    branches: [main, dev, frontend, integration-fix, backend, mobile-datastore]
 
-#     branches: []
-#   pull_request:
-#     branches: []
+jobs:
+  build-mobile:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    defaults:
+      run:
+        working-directory: ./MobileApp
 
-# jobs:
-#   build-mobile:
-#       runs-on:  ubuntu-latest
-#       strategy:
-#         matrix:
-#           node-version: [18.x]
-#       defaults:
-#         run:
-#           working-directory: ./MobileApp
-#       steps:
-#         - uses: actions/checkout@v3
-#         - name: Use Node.js ${{ matrix.node-version }}
-#           uses: actions/setup-node@v3
-#           with:
-#             node-version: ${{ matrix.node-version }}
-#         - run: npm install
-#         - run: npm run build --if-present
-#         - run: npm test -- --u
-        
-#   build-web:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         node-version: [ 18.x ]
-#     defaults:
-#       run:
-#         working-directory: "Web view/Web app"
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Use Node.js ${{matrix.node-version}}
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: ${{ matrix.node-version}}
-#       - run: |
-#           npm install
-#           npm test
-#   cypress:
-#     runs-on: ubuntu-latest
-#     strategy:
-#       matrix:
-#         node-version: [ 18.x ]
-#     defaults:
-#       run:
-#         working-directory: "Web view/Web app"
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run build --if-present
+      - run: npm test -- --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: --branch=Pipeline-Set-Up
+          directory: ./MobileApp
 
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: 14
+  build-web:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    defaults:
+      run:
+        working-directory: ./WebApp
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version}}
+      - run: |
+          npm install
+          npm test
+
+  build-backend:
+    if: false
+    strategy:
+      matrix:
+        node_version: [12.x]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -u awscliv2.zip
+          sudo ./aws/install --update
+      - name: Configure credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
+          aws configure set default.region us-east-1
+      - name: Use Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          version: ${{ matrix.node_version }}
+      - name: Remove File
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: amplify
+
+      - name: Install Amplify CLI & Building Project
+        env:
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+        run: |
+          npm install -g @aws-amplify/cli 
+          bash scripts/initialise-amplify.sh
+          amplify build
+
+  cypress:
+    if: false
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    defaults:
+      run:
+        working-directory: ./WebApp
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
 
 #       - name: Install dependencies
 #         run: npm install
 
-#       - name: Build and start the app
-#         run: |
-#           npm start &
-#           sleep 30
+      - name: Run Cypress tests
+        run: npx cypress run
 
-#       - name: Run Cypress tests
-#         run: npx cypress run
+  backend-unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version}}
+      - run: |
+          npm install
+          npm test
+  deploy-mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+          project-root: MobileApp
+
+      - name: Install dependencies
+        run: |
+          cd MobileApp  # Change to the MobileApp directory
+          npm install
+
+      - name: Publish update
+        run: |
+          cd MobileApp  # Change to the MobileApp directory
+          eas update --auto

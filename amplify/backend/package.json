@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest  --watch",
     "test:watch:silent": "jest --watch --silent",
     "test:unit": "jest unit",

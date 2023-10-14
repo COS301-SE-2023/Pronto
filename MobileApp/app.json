@@ -1,13 +1,13 @@
 {
   "expo": {
     "name": "Pronto",
-    "slug": "Pronto",
+    "slug": "prontotimetable",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash.gif",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -26,16 +26,17 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "1e4f0230-5c52-4bd5-82fb-b8b455b38130"
-      }
-    },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/1e4f0230-5c52-4bd5-82fb-b8b455b38130"
+      "url": "https://u.expo.dev/7394f491-20d8-4cbe-baad-7f60dc29f9fa"
+    },
+    "owner": "jonelisecoder",
+    "extra": {
+      "eas": {
+        "projectId": "7394f491-20d8-4cbe-baad-7f60dc29f9fa"
+      }
     }
   }
 }

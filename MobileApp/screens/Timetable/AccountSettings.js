@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View,ScrollView } from "react-native";
 import SettingsComponent from "../../components/SettingsComponent";
 import { useNavigation } from "@react-navigation/native";
 
@@ -36,7 +36,7 @@ const AccountSettings = () => {
       title: "About",
       subTitle: "About the Pronto application",
       onPress: () => navigation.navigate("About"),
-    },
+    }
   ];
 
   return (

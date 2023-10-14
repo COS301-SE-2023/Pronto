@@ -55,10 +55,12 @@ const VerifyCode = ({ navigation }) => {
 
     setLoading(true);
     try {
-      await Auth.forgotPasswordSubmit(email, code, password);
-      Alert.alert("Success", "Password succesfully changed!");
+      const yu = await Auth.forgotPasswordSubmit(email, code, password);
+      console.log(yu);
+      Alert.alert("Success", "Password successfully changed!");
       navigation.navigate("Login");
     } catch (e) {
+      console.log(e);
       Alert.alert("Error", e.message);
     }
     setLoading(false);
@@ -84,6 +86,7 @@ const VerifyCode = ({ navigation }) => {
 
           <View style={styles.inputContainer}>
             <TextInput
+              testID='new-password'
               placeholder="New Password"
               autoCapitalize="none"
               placeholderTextColor="#666666"
@@ -104,7 +107,7 @@ const VerifyCode = ({ navigation }) => {
             )}
 
             {isTypingPassword && !passwordSignUpIsValid && (
-              <View style={styles.iconContainer}>
+              <View style={styles.iconContainer} testID='cancel'>
                 <MaterialIcons name="cancel" size={24} color="red" />
               </View>
             )}
@@ -112,6 +115,7 @@ const VerifyCode = ({ navigation }) => {
 
           <View style={styles.inputContainer}>
             <TextInput
+              testID='confirm-new-password'
               placeholder="Confirm New Password"
               autoCapitalize="none"
               placeholderTextColor={"#666666"}
@@ -133,7 +137,7 @@ const VerifyCode = ({ navigation }) => {
             )}
 
             {isTypingPasswordMatch && !passwordMatch && (
-              <View style={styles.iconContainer}>
+              <View style={styles.iconContainer} testID='cancel'>
                 <MaterialIcons name="cancel" size={24} color="red" />
               </View>
             )}
@@ -141,8 +145,10 @@ const VerifyCode = ({ navigation }) => {
         </View>
 
         <TouchableOpacity
+          testID='reset-button'
           style={styles.signInButton}
           onPress={onResetPasswordPressed}
+          disabled={loading}
         >
           <Text style={styles.signInButtonText}>
             {loading ? "Resetting..." : "Reset Password"}
@@ -150,8 +156,10 @@ const VerifyCode = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
+          testID='back-to-sign-in'
           style={styles.haveAccountButton}
           onPress={() => navigation.navigate("Login")}
+
         >
           <Text style={styles.haveAccountButtonText}>
             {" "}
