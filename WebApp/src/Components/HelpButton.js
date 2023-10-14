@@ -5,7 +5,7 @@ import '../Styles/AnnotationLayer.css';
 import { pdfjs } from 'react-pdf';
 
 
-const url = `//cdn.jsdelivr.net/npm/pdfjs-dist@7.5.0/build/pdf.worker.min.js`
+const url = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 pdfjs.GlobalWorkerOptions.workerSrc = url
 
 
