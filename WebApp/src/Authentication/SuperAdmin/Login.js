@@ -43,7 +43,7 @@ function Login() {
     try {
       await Auth.signIn(email, password, { role: "SuperAdmin" });
       setsignInError("");
-      navigate("/ROYGBIV/admin-requests")
+      navigate("/superadmin/admin-requests")
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
