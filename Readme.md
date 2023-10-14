@@ -97,6 +97,36 @@ Pronto is a consolidated university application that provides students with the 
 
 <h3> Refer to the <a href ="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Technical%20Installation.pdf">Technical Installation Manual</a> for all information regarding how to install and run the app. </h3>
 
+## Deployment Instructions - Monorepo
+
+### Prerequisites
+
+1. AWS Amplify configuration for hosting a web application.
+2. Expo EAS configuration for hosting a mobile application.
+
+### GitHub Action
+
+1. Our applications are deployed using GitHub Actions. The workflow can be found in the `.github/workflows` folder.
+2. The workflow is triggered on push, pull requests to multiple branches.
+3. AWS Amplify and Expo EAS are used to deploy the web and mobile applications, respectively, automatically.
+
+### Web App Deployment (AWS Amplify)
+
+For our web app hosted on AWS Amplify, here's how it works:
+
+1. Our web app code is in the WebApp directory.
+2. We use environment variables for our AWS Amplify credentials in the hosting console.
+3. AWS Amplify was configured to auto-build and deploy on each push to our beta branch.
+
+### Mobile App Deployment (Expo EAS)
+
+For our mobile app deployed through EAS Expo, here's how it works:
+
+1. Our mobile app code is in the MobileApp directory.
+2. We set environment variables for our EAS Expo credentials in the EAS console.
+3. The workflow includes EAS Expo commands for building and deploying the mobile app.
+4. The respective command can be used to deploy locally: `eas update`.
+
 ### For directions/clarification on how to use the app, refer to the <a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/User%20Manual.pdf"> User Manual.</a>
 
 ### Feel free to contact the team via our email address: AgileArchitectsCapstone@gmail.com
