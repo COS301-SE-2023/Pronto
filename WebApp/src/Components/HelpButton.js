@@ -5,8 +5,10 @@ import '../Styles/AnnotationLayer.css';
 import { pdfjs } from 'react-pdf';
 
 
+const url = `//cdn.jsdelivr.net/npm/pdfjs-dist@7.5.0/build/pdf.worker.min.js`
+pdfjs.GlobalWorkerOptions.workerSrc = url
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
 
 const HelpButton = ({ pdfUrl }) => {
     const [showPDF, setShowPDF] = useState(false);
