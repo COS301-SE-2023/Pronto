@@ -4,11 +4,10 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import '../Styles/AnnotationLayer.css';
 import { pdfjs } from 'react-pdf';
 
-
-const url = `//cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
-pdfjs.GlobalWorkerOptions.workerSrc = url
-
-
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.min.js',
+    import.meta.url,
+).toString();
 
 const HelpButton = ({ pdfUrl }) => {
     const [showPDF, setShowPDF] = useState(false);
