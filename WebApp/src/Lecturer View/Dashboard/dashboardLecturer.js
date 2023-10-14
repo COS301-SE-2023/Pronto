@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import LecturerNavigation from "../Navigation/LecturerNavigation";
 import HelpButton from '../../Components/HelpButton';
-import UserManual from "../HelpFiles/LecturerInstructions.pdf";
+import UserManual from "./LecturerInstructions.pdf";
 import EditNoteImage from '../Images/EditModuleInfo.png';
 import AnnouncementImage from '../Images/Announcements.png';
 import PersonalInfoImage from '../Images/Personalnfo.png';
