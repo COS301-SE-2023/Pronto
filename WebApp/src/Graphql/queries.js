@@ -385,12 +385,11 @@ export const listAdminApplications = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
+        email
+        firstname
         id
         name
-        firstname
-        email
         applicationInfo {
-          status
           admin {
             email
             id
