@@ -157,13 +157,13 @@ export const listLecturers = /* GraphQL */ `
             coursecode
             lecturerId
             activity {
-              items{
+              items {
                 id
                 activityname
                 day
                 start
                 end
-                venue 
+                venue
                 coordinates
                 _version
                 _deleted
@@ -310,7 +310,6 @@ export const coursesByInstitutionId = /* GraphQL */ `
   }
 `;
 
-
 export const announcementsByDate = /* GraphQL */ `
   query AnnouncementsByDate(
     $year: String!
@@ -390,7 +389,15 @@ export const listAdminApplications = /* GraphQL */ `
         name
         firstname
         email
-        status
+        applicationInfo {
+          status
+          admin {
+            email
+            id
+            institutionId
+            name
+          }
+        }
         createdAt
         updatedAt
         _version
