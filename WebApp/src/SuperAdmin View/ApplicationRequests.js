@@ -36,6 +36,7 @@ export default function ApplicationRequests() {
       let request = requests[index];
       let institution = {
         name: request.name,
+        
       };
 
       let inst = await API.graphql({

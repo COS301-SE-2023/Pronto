@@ -289,11 +289,15 @@ export const updateAdminApplication = /* GraphQL */ `
     $condition: ModelAdminApplicationConditionInput
   ) {
     updateAdminApplication(input: $input, condition: $condition) {
-      id
-      name
-      firstname
-      email
-      applicationInfo
+      applicationInfo {
+        admin {
+          email
+          id
+          institutionId
+          name
+        }
+        status
+      }
       createdAt
       updatedAt
       _version
