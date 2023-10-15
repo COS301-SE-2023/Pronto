@@ -293,7 +293,7 @@ export const updateAdminApplication = /* GraphQL */ `
       name
       firstname
       email
-      status
+      applicationInfo
       createdAt
       updatedAt
       _version
@@ -361,13 +361,9 @@ export const createAdminApplication = /* GraphQL */ `
       name
       firstname
       email
-      status
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
+      applicationInfo {
+        status
+      }
     }
   }
 `;

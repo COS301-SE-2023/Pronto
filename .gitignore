@@ -152,6 +152,9 @@ team-provider-info.json
 
 WebApp/src/Components/aws-exports.js
 
+
+.config/
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -173,5 +176,4 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-.config/
+/Components/aws-exports
