@@ -5,13 +5,13 @@ import DragandDropSchedule from "./DragandDropSchedule";
 
 const FileUploadPage = () => {
   return (
-    <div style={{ display: "inline-flex" }}>
+    <div style={{ display: "inline-flex" ,maxHeight:"100vh" }}>
       <nav>
         {/* Navigation bar content */}
         <InstitutionNavigation />
       </nav>
       <main
-        style={{ marginLeft: "25%", maxWidth: "1200px", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", marginTop: "0px" }}
+        style={{ marginLeft: "25%", maxWidth: "1200px", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", marginTop: "5px" }}
         className={"text-center"}
       >
         <h1 style={{

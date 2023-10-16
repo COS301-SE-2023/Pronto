@@ -16,6 +16,6 @@
   },
   "devDependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.363.0",
-    "jest": "^29.6.0"
+    "jest": "^29.7.0"
   }
 }

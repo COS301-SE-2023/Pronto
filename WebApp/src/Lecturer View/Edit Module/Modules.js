@@ -36,7 +36,12 @@ const Modules = () => {
           },
         })
         if (lec.data.listLecturers.items.length > 0) {
+          if(lec.data.listLecturers.items[0]._deleted===null){
           setLecturer(lec.data.listLecturers.items[0])
+          }
+          else{
+            throw Error();
+          }
         }
       }
       // }

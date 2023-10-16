@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution, } from "../../Graphql/mutations";
-import { lecturersByInstitutionId, searchLecturers, listAdmins, searchLecturerByCourses, listLecturers } from "../../Graphql/queries";
+import { getInstitution, lecturersByInstitutionId, listAdmins, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
 import HelpButton from '../../Components/HelpButton';
@@ -44,7 +44,7 @@ const AddLecturer = () => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [courses, setCourses] = useState([]);
-    const [filterAttribute, setFilterAttribute] = useState("");
+    const [filterAttribute, setFilterAttribute] = useState("default");
     const [searchValue, setSearchValue] = useState("");
     const [isModalOpened, setIsModalOpened] = useState(false);
     const [searchIcon, setSearchIcon] = useState(false);
@@ -57,11 +57,14 @@ const AddLecturer = () => {
     const [lecturerToRemove, setLecturerToRemove] = useState(null);
     const [lecturerToRemoveIndex, setLecturerToRemoveIndex] = useState(null);
     const [isRemoving, setisRemoving] = useState(false);
+    const [loadMoreLecturers, setLoadMoreLecturers] = useState(false);
+
 
 
     const [adding, setAdding] = useState("Add")
+    const [addingLoad, setAddingLoad] = useState(false);
 
-    let limit = 7;
+    let limit = 9;
 
     const { admin, setAdmin } = useAdmin();
     const { lecturerList, setLecturerList, nextToken, setNextToken } = useLecturerList()
@@ -73,7 +76,9 @@ const AddLecturer = () => {
     const handleAdd = async (event) => {
         event.preventDefault()
         if (!isModalOpened && adding === "Add") {
+            setAddingLoad(true);
             setAdding("Adding...")
+
             let lecturer = {
                 institutionId: admin.institutionId,
                 firstname: firstName,
@@ -84,7 +89,7 @@ const AddLecturer = () => {
 
             try {
 
-                
+
                 if (email !== admin.email) {
                     //let unique = admin.institution.lectureremails.filter((e) => e === email)
                     let emails = await API.graphql({
@@ -97,6 +102,7 @@ const AddLecturer = () => {
                             query: createLecturer,
                             variables: { input: lecturer },
                         });
+                        //console.log(mutation);
 
                         lecturer = mutation.data.createLecturer
                         lecturer.courses = {
@@ -113,28 +119,39 @@ const AddLecturer = () => {
                             emails.push(email);
                         }
 
+                        // let inst=await API.graphql({
+                        //     query:getInstitution,
+                        //     variables:{id:admin.institutionId}
+                        // })
+
+                        // console.log(inst);
+                        // inst=inst.data.getInstitution;
+                        // inst.lectureremails=emails;
                         let update = {
                             id: admin.institutionId,
-                            lectureremails: emails
+                            lectureremails: emails,
+                            _version: admin.institution._version
                         };
 
-                        await API.graphql({
+                        let ins = await API.graphql({
                             query: updateInstitution,
                             variables: { input: update },
                         });
+                        console.log(ins);
                         // u = u.data.updateInstitution
                         // u.logoUrl = logoUrl;
                         // let ad = admin;
                         // ad.institution = u;
                         admin.institution.lectureremails = emails;
+                        admin.institution._version = ins.data.updateInstitution._version;
                         setAdmin(admin);
 
                         //Add lecturer to courses
                         await addCourses(lecturer, selectedCourses)
-                        if (lecturerList.length <= 10) {
-                            lecturerList.push(lecturer);
-                            setLecturerList(lecturerList);
-                        }
+                        //if (lecturerList.length <= 10) {
+                        lecturerList.unshift(lecturer);
+                        setLecturerList(lecturerList);
+                        //}
                     }
                     else {
                         setError("A lecturer with this email already exists");
@@ -144,7 +161,7 @@ const AddLecturer = () => {
                 }
 
             } catch (error) {
-               
+                console.log(error);
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message
                     if (e.search("Network") !== -1) {
@@ -156,6 +173,7 @@ const AddLecturer = () => {
                 }
             }
             setAdding("Add")
+            setAddingLoad(false);
             setFirstName("");
             setLastName("");
             setEmail("");
@@ -173,6 +191,7 @@ const AddLecturer = () => {
                 let updatedCourseData = {
                     id: courseList[i].id,
                     lecturerId: null,
+                    _version: courseList[i]._version
                 };
 
                 let update = await API.graphql({
@@ -182,7 +201,7 @@ const AddLecturer = () => {
                 lecturer.courses.items.splice(i, 1);
 
             } catch (error) {
-
+                console.log(error);
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message;
                     if (e.search("Network") !== -1) {
@@ -215,6 +234,7 @@ const AddLecturer = () => {
                 let updatedCourseData = {
                     id: courseList[i].id,
                     lecturerId: lecturer.id,
+                    _version: courseList[i]._version
                 };
 
                 let update = await API.graphql({
@@ -226,6 +246,7 @@ const AddLecturer = () => {
 
             setLecturerList(lecturerList);
         } catch (error) {
+            console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {
@@ -252,7 +273,7 @@ const AddLecturer = () => {
             const index = lecturerToRemoveIndex;
             let lec = {
                 id: lecturer.id,
-                _version:lecturer._version
+                _version: lecturer._version
             };
             try {
                 let removeMutation = await API.graphql({
@@ -266,12 +287,22 @@ const AddLecturer = () => {
 
                 }
 
-                let newEmails = admin.institution.lectureremails.filter(item => item !== removeMutation.data.deleteLecturer.email);
+                let newEmails = admin.institution.lectureremails.filter(item => item !== lecturer.email);
 
                 let update = {
                     id: admin.institutionId,
+                    _version: admin.institution._version,
                     lectureremails: newEmails
                 };
+                // let inst=await API.graphql({
+                //             query:getInstitution,
+                //             variables:{id:admin.institutionId}
+                //         })
+
+                // console.log(inst);
+                // inst=inst.data.getInstitution;
+                // inst.lectureremails=newEmails;
+
 
                 let u = await API.graphql({
                     query: updateInstitution,
@@ -281,7 +312,9 @@ const AddLecturer = () => {
                 // a.institution = u.data.updateInstitution;
                 // a.institution.logoUrl = admin.institution.logoUrl;
 
+                console.log(u);
                 admin.institution.lectureremails = newEmails;
+                admin.institution._version = u.data.updateInstitution._version;
                 const rows = [...lecturerList];
                 rows.splice(index, 1);
                 setAdmin(admin);
@@ -290,6 +323,7 @@ const AddLecturer = () => {
                 setisRemoving(false);
             }
             catch (error) {
+                console.log(error);
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message;
                     if (e.search("Network") !== -1) {
@@ -312,20 +346,23 @@ const AddLecturer = () => {
     const loadMore = async () => {
         try {
 
+
+
             if (searchIcon === true) {
                 if (filterAttribute !== "coursecode") {
-                    let filter = `{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}","nextToken":"${nextToken}"}`;
+                    let filter = `{"filter": { "and" : [ { "${filterAttribute}" : {"contains":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}","nextToken":"${nextToken}"}`;
 
                     let variables = JSON.parse(filter);
 
 
                     let lecturers = await API.graphql({
-                        query: searchLecturers,
+                        query: listLecturers,
                         variables: variables
                     })
-                    lecturers = lecturers.data.searchLecturers;
+                    lecturers = lecturers.data.listLecturers;
                     for (let i = 0; i < lecturers.items.length; i++) {
-                        lecturerList.push(lecturers.items[i]);
+                        if (lecturers.items[i]._deleted === null && lecturers.items[i].institutionId ===admin.institutionId)
+                            lecturerList.push(lecturers.items[i]);
                     }
                     setLecturerList(lecturerList);
                     if (lecturers.items.length < limit) {
@@ -335,41 +372,10 @@ const AddLecturer = () => {
                         setNextToken(lecturers.nextToken);
                     }
                 }
-                else {
-                    if (filterAttribute === "coursecode") {
-                        let lecturers = await API.graphql({
-                            query: searchLecturerByCourses,
-                            variables: {
-                                filter: {
-                                    coursecode: { matchPhrasePrefix: searchValue },
-                                    institutionId: { eq: admin.institutionId },
 
-                                },
-                                limit: limit
-                            }
-                        })
-                        let token = lecturers.data.searchCourses.nextToken;
-                        lecturers = lecturers.data.searchCourses.items;
-                        lecturers.filter((c) => c !== null && c.institutionId === admin.institutionId);
-                        lecturers = lecturers.filter((value, index, self) =>
-                            index === self.findIndex((t) => (
-                                t.id === value.id
-                            ))
-                        )
-                        if (lecturers.length < limit) {
-                            setNextToken(null);
-                        }
-                        else {
-                            setNextToken(token);
-                        }
-                        for (let i = 0; i < lecturers.length; i++) {
-                            lecturerList.push(lecturers[i].lecturer);
-                        }
-                        setLecturerList(lecturerList);
-                    }
-                }
             }
             else {
+                setLoadMoreLecturers(true);
                 let lecturers = await API.graphql({
                     query: lecturersByInstitutionId,
                     variables: {
@@ -380,7 +386,8 @@ const AddLecturer = () => {
                 });
                 lecturers = lecturers.data.lecturersByInstitutionId;
                 for (let i = 0; i < lecturers.items.length; i++) {
-                    lecturerList.push(lecturers.items[i]);
+                    if (lecturers.items[i]._deleted === null)
+                        lecturerList.push(lecturers.items[i]);
                 }
                 setLecturerList(lecturerList);
                 if (lecturers.items.length < limit) {
@@ -389,9 +396,13 @@ const AddLecturer = () => {
                 else {
                     setNextToken(lecturers.nextToken);
                 }
+
+                setLoadMoreLecturers(false);
             }
 
         } catch (error) {
+            setLoadMoreLecturers(false);
+            console.log(error);
             setError("Something went wrong. Try again later");
         }
     }
@@ -426,21 +437,21 @@ const AddLecturer = () => {
 
                 lecturers = lecturers.data.lecturersByInstitutionId;
 
-                setLecturerList(lecturers.items);
+                setLecturerList(lecturers.items.filter((item) => item._deleted === null));
                 if (lecturers.items.length < limit) {
                     setNextToken(null);
                 }
                 else {
                     setNextToken(lecturers.nextToken);
                 }
-                setNextToken(lecturers.nextToken);
-                setOfferedCourses(offeredCourses);
-                setLecturerList(lecturers.items);
+                //setNextToken(lecturers.nextToken);
+                //setOfferedCourses(offeredCourses);
+                //setLecturerList(lecturers.items);
                 // }
             }
         }
         catch (error) {
-          
+            console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {
@@ -455,60 +466,36 @@ const AddLecturer = () => {
 
     const handleSearch = async () => {
         try {
+            console.log(searchIcon);
             if (searchIcon === false) {
+                console.log(searchValue)
                 if (searchValue !== "") {
-                    if (filterAttribute === "coursecode") {
-                        let lecturers = await API.graphql({
-                            query: searchLecturerByCourses,
-                            variables: {
-                                filter: {
-                                    coursecode: { matchPhrasePrefix: searchValue },
-                                    institutionId: { eq: admin.institutionId },
-                                },
-                                limit: limit
-                            }
-                        })
+                    console.log(filterAttribute);
+                    if (filterAttribute !== "default") {
+                    
+                        let filter = `{"filter": { "and" : [ { "${filterAttribute}" : {"contains":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
 
-                        let token = lecturers.data.searchCourses.nextToken;
-                        lecturers = lecturers.data.searchCourses.items;
-                        lecturers.filter((c) => c !== null && c.institutionId === admin.institutionId);
-                        lecturers = lecturers.filter((value, index, self) =>
-                            index === self.findIndex((t) => (
-                                t.id === value.id
-                            ))
-                        )
-                        if (lecturers.length < limit) {
-                            setNextToken(null);
-                        }
-                        else {
-                            setNextToken(token);
-                        }
-                        let l = [];
-                        for (let i = 0; i < lecturers.length; i++) {
-                            l.push(lecturers[i].lecturer);
-                        }
-                        setLecturerList(l);
-                        setSearchIcon(!searchIcon);
-                    }
-                    else if (filterAttribute !== "default" && filterAttribute !== "") {
-
-                        let filter = `{"filter": { "and" : [ { "${filterAttribute}" : {"matchPhrasePrefix":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
+                        // let filter =`{"filter": {"${filterAttribute"}}`
                         let variables = JSON.parse(filter);
 
 
+                        console.log(variables);
                         let lecturers = await API.graphql({
-                            query: searchLecturers,
+                            query: listLecturers,
                             variables: variables
                         })
-                        lecturers = lecturers.data.searchLecturers;
-                        setLecturerList(lecturers.items);
+                        console.log(lecturers);
+                        setSearchIcon(!searchIcon);
+                        lecturers = lecturers.data.listLecturers;
+
+                        setLecturerList(lecturers.items.filter((item) => item._deleted === null && item.institutionId===admin.institutionId));
                         if (lecturers.items.length < limit) {
                             setNextToken(null);
                         }
                         else {
                             setNextToken(lecturers.nextToken);
                         }
-                        setSearchIcon(!searchIcon);
+
                     }
                 }
             }
@@ -521,18 +508,20 @@ const AddLecturer = () => {
                     }
                 });
                 lecturers = lecturers.data.lecturersByInstitutionId;
-                setLecturerList(lecturers.items);
+                console.log(lecturers);
+                setSearchIcon(!searchIcon);
+                setLecturerList(lecturers.items.filter((item) => item._deleted === null));
                 if (lecturers.items.length < limit) {
                     setNextToken(null);
                 }
                 else {
                     setNextToken(lecturers.nextToken);
                 }
-                setSearchIcon(!searchIcon)
+
             }
-
+            //}
         } catch (error) {
-
+            console.log(error);
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {
@@ -645,6 +634,7 @@ const AddLecturer = () => {
                                 type="submit"
                                 className="btn btn-danger w-100"
                                 style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
+                                disabled={addingLoad}
                                 data-testid="submitButton"
                             >
                                 {adding}
@@ -652,7 +642,7 @@ const AddLecturer = () => {
                         </form>
                     </div>
                 </div>
-                <div>
+                {/* <div>
 
 
 
@@ -663,7 +653,7 @@ const AddLecturer = () => {
                         institutionId={admin?.institutionId}
                     />
 
-                </div>
+                </div> */}
 
                 {/* Display content */}
                 <h1 className="text-center">Lecturers</h1>
@@ -689,13 +679,13 @@ const AddLecturer = () => {
                             type="button"
                             id="button-addon2"
                             data-testid="searchButton"
-                            onMouseEnter={() => setSearchIcon(true)}
-                            onMouseLeave={() => setSearchIcon(false)}
+                            //onMouseEnter={() => setSearchIcon(true)}
+                            //onMouseLeave={() => setSearchIcon(false)}
                         //style={{ backgroundColor: searchIcon ? "#e32f45" : "white" }}
                         >
 
                             <div className="input-group-append">
-                                {searchIcon === false ? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "ffffff" }} />}
+                                {searchIcon === false ? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "#ffffff" }} />}
                             </div>
                         </button>
                         {/* a dropdown filter for the search */}
@@ -709,13 +699,12 @@ const AddLecturer = () => {
                             <option value="firstname" >First Name</option>
                             <option value="lastname" >Last Name</option>
                             <option value="email" >Email</option>
-                            <option value="coursecode">Course Code</option>
                         </select>
                     </div>
                 </div>
                 <div
                     className="card shadow w-100"
-                    style={{ width: '500px'}}
+                    style={{ width: '500px' }}
                 >
                     <div className="card-body">
                         <table
@@ -779,7 +768,7 @@ const AddLecturer = () => {
                         </table>
                         <div>
                             <div style={{ paddingLeft: "42.5%", paddingRight: "42.5%" }}>
-                                {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore}> Load More </button>}
+                                {nextToken && <button className="btn btn-danger w-100" type="button" onClick={loadMore} disabled={loadMoreLecturers}>  {loadMoreLecturers ? 'Loading...' : 'Load More'}</button>}
                             </div>
                         </div>
                     </div>
@@ -799,11 +788,12 @@ const AddLecturer = () => {
                     <Button
                         onClick={handleConfirmation}
                         color="primary"
-                        style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "100px" }} // Add your custom styling here
+                        style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "120px" }} // Add your custom styling here
+                        disabled={isRemoving}
                     >
                         {isRemoving ? "Deleting..." : "Delete"}
                     </Button>
-                    <Button onClick={() => setOpenDialog(false)} color="primary">
+                    <Button onClick={() => setOpenDialog(false)} color="primary" disabled={isRemoving}>
                         Cancel
                     </Button>
                 </DialogActions>

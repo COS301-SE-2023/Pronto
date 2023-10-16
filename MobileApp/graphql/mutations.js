@@ -1,196 +1,234 @@
-export const createTimetable=`mutation CreateTimetable(
-  $input: CreateTimetableInput!
-  $condition: ModelTimetableConditionInput
-) {
-  createTimetable(input: $input, condition: $condition) {
-    id
-    studentId
-    activityId
-    activities {
-      nextToken
-    }
-   
-  }
-}`
+/* eslint-disable */
+// this is an auto generated file. This will be overwritten
 
-export const updateTimetable=`mutation UpdateTimetable(
-  $input: UpdateTimetableInput!
-  $condition: ModelTimetableConditionInput
-) {
-  updateTimetable(input: $input, condition: $condition) {
-    id
-    studentId
-    activityId
-    activities {
-      nextToken
-    }
-  }
-}`
 
-export const createStudent=`mutation CreateStudent(
-  $input: CreateStudentInput!
-  $condition: ModelStudentConditionInput
-) {
-  createStudent(input: $input, condition: $condition) {
-    institutionId
-    id
-    firstname
-    lastname
-    userRole
-    email
-    timetable {
+export const createStudent = /* GraphQL */ `
+  mutation CreateStudent(
+    $input: CreateStudentInput!
+    $condition: ModelStudentConditionInput
+  ) {
+    createStudent(input: $input, condition: $condition) {
+      institutionId
       id
-      studentId
-      activityId
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      __typename
     }
-    enrollments { 
-      items{
+  }
+`;
+export const updateStudentInfo = /* GraphQL */ `
+  mutation UpdateStudent(
+    $input: UpdateStudentInput!
+    $condition: ModelStudentConditionInput
+  ) {
+    updateStudent(input: $input, condition: $condition) {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      preference {
+        studentId
+        endpoint {
+          type
+          endPointAddress
+          status
+          info
+          __typename
+        }
         id
-        courseId
-        course{ 
-          id
-          coursecode
-          activity{
-            items{
-              courseId
-              activityname
-              coordinates
-              id
-              day
-              start
-              end
-              venue 
-              course{
-                coursecode
-              }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+      __typename
+    }
+  }
+`;
+export const deleteStudent = /* GraphQL */ `
+  mutation DeleteStudent(
+    $input: DeleteStudentInput!
+    $condition: ModelStudentConditionInput
+  ) {
+    deleteStudent(input: $input, condition: $condition) {
+      institutionId
+      id
+      firstname
+      lastname
+      userRole
+      email
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      studentTimetableId
+      owner
+      __typename
+    }
+  }
+`;
+export const createEnrollment = /* GraphQL */ `
+  mutation CreateEnrollment(
+    $input: CreateEnrollmentInput!
+    $condition: ModelEnrollmentConditionInput
+  ) {
+    createEnrollment(input: $input, condition: $condition) {
+      id
+      studentId
+      courseId
+      year
+      
+      course {
+        id
+        institutionId
+        coursecode
+        activity {
+          items {
+            id
+            courseId
+            activityname
+            day
+            start
+            end
+            venue
+            coordinates
+            course {
+              coursecode
             }
+            createdAt
+            updatedAt
+            _version
+            _deleted
+            _lastChangedAt
+            owner
+            __typename
           }
+          nextToken
+          startedAt
+          __typename
         }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+        __typename
       }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
     }
-    studentTimetableId
   }
-}`
+`;
 
-
-export const createEnrollment=`mutation CreateEnrollment(
-  $input: CreateEnrollmentInput!
-  $condition: ModelEnrollmentConditionInput
-) {
-  createEnrollment(input: $input, condition: $condition) {
-    id
-    studentId
-    courseId
-    id
-    courseId
-    _version
-    _deleted
-    course{ 
+export const deleteEnrollment = /* GraphQL */ `
+  mutation DeleteEnrollment(
+    $input: DeleteEnrollmentInput!
+    $condition: ModelEnrollmentConditionInput
+  ) {
+    deleteEnrollment(input: $input, condition: $condition) {
       id
-      coursecode
-      activity{
-        items{
-          courseId
-          activityname
-          coordinates
-          id
-          day
-          start
-          end
-          venue
-          course {
-            coursecode
-          } 
-        }
-      }
+      studentId
+      courseId
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+      __typename
     }
   }
-}
-`
-export const deleteEnrollment=`mutation DeleteEnrollment(
-  $input: DeleteEnrollmentInput!
-  $condition: ModelEnrollmentConditionInput
-) {
-  deleteEnrollment(input: $input, condition: $condition) {
-    id
-    studentId
-    courseId
-  }
-}`
+`;
 
-export const updateStudentInfo=`mutation UpdateStudent(
-  $input: UpdateStudentInput!
-  $condition: ModelStudentConditionInput
-) {
-  updateStudent(input: $input, condition: $condition) {
-    institutionId
-    id
-    firstname
-    lastname
-    userRole
-    email
-    timetable {
+export const createTimetable = /* GraphQL */ `
+  mutation CreateTimetable(
+    $input: CreateTimetableInput!
+    $condition: ModelTimetableConditionInput
+  ) {
+    createTimetable(input: $input, condition: $condition) {
       id
       studentId
       activityId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+      __typename
     }
-    enrollments {
-      nextToken
-    }
-    createdAt
-    updatedAt
-    studentTimetableId
   }
-}`
-
-export const deleteStudent=`mutation DeleteStudent(
-  $input: DeleteStudentInput!
-  $condition: ModelStudentConditionInput
-) {
-  deleteStudent(input: $input, condition: $condition) {
-    institutionId
-    id
-    firstname
-    lastname
-    userRole
-    email
-    timetable {
+`;
+export const updateTimetable = /* GraphQL */ `
+  mutation UpdateTimetable(
+    $input: UpdateTimetableInput!
+    $condition: ModelTimetableConditionInput
+  ) {
+    updateTimetable(input: $input, condition: $condition) {
       id
       studentId
       activityId
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+      __typename
     }
-    enrollments {
-      nextToken
-    }
-    createdAt
-    updatedAt
-    studentTimetableId
-    owner
   }
-}`
+`;
 
-export const createNotificationPreferance = `
+
+export const createNotificationPreferance = /* GraphQL */ `
   mutation CreateNotificationPreferance(
     $input: CreateNotificationPreferanceInput!
     $condition: ModelNotificationPreferanceConditionInput
   ) {
     createNotificationPreferance(input: $input, condition: $condition) {
       studentId
-      type
-      enpointID
-      deviceID
+      endpoint {
+        type
+        endPointAddress
+        status
+        info
+        __typename
+      }
       id
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
     }
   }
 `;
-
 export const updateNotificationPreferance = /* GraphQL */ `
   mutation UpdateNotificationPreferance(
     $input: UpdateNotificationPreferanceInput!
@@ -198,13 +236,22 @@ export const updateNotificationPreferance = /* GraphQL */ `
   ) {
     updateNotificationPreferance(input: $input, condition: $condition) {
       studentId
-      type
-      enpointID
-      deviceID
+      endpoint {
+        type
+        endPointAddress
+        status
+        info
+        __typename
+      }
       id
       createdAt
       updatedAt
-      userId
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
     }
   }
 `;
+
+

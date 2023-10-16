@@ -285,6 +285,10 @@
   animation: pulse 1s infinite alternate; /* Create a pulsating effect */
 }
 
+.scroll-down-icon:hover{
+  cursor: pointer;
+}
+
 .scroll-down-icon img {
   width: 30px; /* Adjust the icon size as needed */
   height: auto;

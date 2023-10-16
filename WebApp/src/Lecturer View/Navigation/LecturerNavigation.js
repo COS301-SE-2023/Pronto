@@ -33,7 +33,7 @@ export default function LecturerNavigation() {
     let lecturer_email = u.attributes.email;
     let lec = lecturer;
     try {
-      if (lecturer === null || lecturer === undefined || lecturer.courses === undefined) {
+      if (lecturer === null || lecturer === undefined) {
         lec = await API.graphql({
           query: listLecturers,
           variables: {
@@ -45,24 +45,21 @@ export default function LecturerNavigation() {
           },
         });
 
-        if (lec.data.listLecturers.items.length === 0) {
+        if (lec.data.listLecturers.items.length === 0 || lec.data.listLecturers.items[0]._deleted===true) {
           throw Error()
         }
         lec = lec.data.listLecturers.items[0];
-
         if (lec.institution.logo === null) {
           lec.institution.logoUrl = "";
         }
-
         else {
           lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
 
         }
         setLecturer(lec);
-
       }
     } catch (error) {
-
+      console.log(error);
     }
   }
 

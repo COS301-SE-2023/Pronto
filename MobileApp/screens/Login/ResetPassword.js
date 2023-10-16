@@ -97,6 +97,7 @@ const ResetPassword = ({ navigation }) => {
           <TouchableOpacity
               style={styles.signUpButton}
               onPress={() => onResetPasswordPressed()}
+              disabled={loading}
               testID='send-code-button'
           >
             <Text style={styles.signUpButtonText}>

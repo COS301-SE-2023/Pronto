@@ -3,17 +3,15 @@ import { Alert, View, StyleSheet, Modal, Text, RefreshControl, IconButton, Press
 import { List, Card, Avatar, Button, Portal, PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { listStudents, getStudent, announcementsByDate, listAnnouncements } from "../graphql/queries";
-import { Auth, API } from "aws-amplify"
+import { getStudent, listAnnouncements } from "../graphql/queries";
+import { Auth, API, DataStore, Predicates } from "aws-amplify"
 import { useStudent } from "../ContextProviders/StudentContext";
 import { useAnnouncement } from "../ContextProviders/AnnouncementContext";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Student, Announcement } from "../models";
+//import '@azure/core-asynciterator-polyfill';
 
 const NotificationList = ({ navigation }) => {
-
-    //if you need to use mock data for styling
-    const mockAnnouncements = require('../assets/data/mock/mock-announcement.json');
-
     const [expanded1, setExpanded1] = useState(false);
     const [expanded2, setExpanded2] = useState(false);
     const { student, updateStudent } = useStudent();
@@ -25,6 +23,7 @@ const NotificationList = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const error = "There appear to be network issues. Please try again later";
     let limit = 3;
+
     const showFullMessage = (key) => {
         setSelectedAnnouncement(key);
     };
@@ -32,111 +31,110 @@ const NotificationList = ({ navigation }) => {
     const fetchAnnouncements = async () => {
         try {
             let stu = student;
-            setLoading(true);
-            if (student === null) {
-                const user = await Auth.currentAuthenticatedUser()
-                stu = await API.graphql({
-                    query: getStudent, variables: { id: user.attributes.sub }
-                })
+            //setLoading(true);
+            const user = await Auth.currentAuthenticatedUser();
+            const id = user.attributes.sub;
+            stu = await DataStore.query(Student, id)
+            //console.log(stu)
+            //console.log(stu.enrollments);
+            // if (student === null) {
+            //     stu = await DataStore.query(Student, user.attributes.sub);
+            //     if (stu === null || stu === undefined) {
+            //         throw Error();
+            //     }
+            //     updateStudent(stu);
+            // }
+            const enrollment = await stu.enrollments.values;
+            //console.log(enrollment);
 
-                stu = stu.data.getStudent;
+            //let courses = stu.enrollments.items.map((items) => items._deleted === null);
+            let courses = enrollment.filter((items) => items._deleted === null)
 
-                if (stu === null || stu === undefined) {
-                    throw Error();
-                }
-                updateStudent(stu);
+            let ids = [];
+            for (let i = 0; i < courses.length; i++) {
+                ids.push(courses[i].courseId);
             }
-
-            let courses = [];
-            for (let i = 0; i < stu.enrollments.items.length; i++) {
-                courses.push(stu.enrollments.items[i].courseId);
-            }
-
             if (courses.length === 0) {
                 setLoading(false);
                 setAnnouncement([]);
                 return;
             } else {
-                let filter = `{"filter" : { "or" : [`;
-                for (let i = 0; i < courses.length; i++) {
-                    if (i === courses.length - 1) {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } }`;
-                    } else {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } },`;
+                setLoading(true);
+                let filter = {
+                    or: courses.map((courseId) => ({ courseId: { eq: courseId } })),
+                };
+
+                //   let variables = { filter, limit, sortDirection: "DESC" };
+                //      let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
+                //    console.log(announcementList);
+                const announcementList = await Promise.all(ids.map(id => DataStore.query(Announcement, (a) => a.courseId.eq(id))))
+                //console.log("Listing announcements");
+                //console.log(announcementList);
+                let a = [];
+                for (let i = 0; i < announcementList.length; i++) {
+                    for (let j = 0; j < announcementList[i].length; j++) {
+                        if (announcementList[i][j]._deleted === null) {
+                            let s = announcementList[i][j];
+                            const code = await announcementList[i][j].course;
+                            s.course = {
+                                coursecode: code.coursecode,
+                            }
+                            a.push(s);
+                        }
                     }
                 }
-
-                filter += `] },"limit":"${limit}" ,"sortDirection":"DESC"}`;
-
-                let variables = JSON.parse(filter);
-                let announcementList = await API.graphql({
-                    query: listAnnouncements, variables: variables
-                });
-
-                setAnnouncement(announcementList.data.listAnnouncements.items);
-                if (announcementList.data.listAnnouncements.items.length < limit) {
-                    setNextToken(null);
-                } else {
-                    setNextToken(announcementList.data.listAnnouncements.nextToken);
-                }
+                //console.log(a);
+                setAnnouncement(a);
+                // setAnnouncement(announcementList.filter((item) => item._deleted === null));
+                // if (announcementList.length < limit) {
+                //     setNextToken(null);
+                // } else {
+                //     setNextToken(announcementList[announcementList.length - 1].id);
+                // }
                 setLoading(false);
             }
+            setLoading(false);
         } catch (er) {
-            Alert.alert(error)
+            console.log(er);
+            Alert.alert(error);
             setLoading(false);
         }
     };
 
     const loadMore = async () => {
         try {
-
             let stu = student;
             let year = new Date().getFullYear();
-            let courses = [];
-
-            for (let i = 0; i < stu.enrollments.items.length; i++) {
-                courses.push(stu.enrollments.items[i].courseId);
-            }
+            let courses = stu.enrollments.items.map((items) => items._deleted === null);
 
             if (courses.length === 0) {
                 setAnnouncement([]);
                 return;
-
             } else {
-                let filter = `{"filter" : { "or" : [`;
-                for (let i = 0; i < courses.length; i++) {
-                    if (i === courses.length - 1) {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } }`;
-                    } else {
-                        filter += `{"courseId":{"eq":"${courses[i]}" } },`;
-                    }
-                }
-
-                filter += `] },"limit":"${limit}","sortDirection":"DESC","nextToken":"${nextToken}"}`;
-                let variables = JSON.parse(filter)
-
-                let announcementList = await API.graphql({
-                    query: listAnnouncements, variables: variables
-                });
-
-                let a = announcementList.data.listAnnouncements.items;
-                for (let i = 0; i < a.length; i++) {
-                    announcement.push(a[i]);
-                }
-                if (announcementList.data.listAnnouncements.items.length < limit) {
+                let filter = {
+                    or: courses.map((courseId) => ({ courseId: { eq: courseId } })),
+                    limit,
+                    sortDirection: "DESC",
+                    nextToken,
+                };
+                let variables = { filter, limit, sortDirection: "DESC", nextToken };
+                console.log("start");
+                let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
+                console.log(announcementList);
+                announcement.push(...announcementList);
+                if (announcementList.length < limit) {
                     setNextToken(null);
                 } else {
-                    setNextToken(announcementList.data.listAnnouncements.nextToken);
+                    setNextToken(announcementList[announcementList.length - 1].id);
                 }
                 setAnnouncement(announcement);
             }
-        } catch (e) {
-        }
-    }
+        } catch (e) { console.log(e); }
+    };
 
     useEffect(() => {
         fetchAnnouncements();
-    }, [])
+    }, []);
 
     return (<View>
 
@@ -156,8 +154,8 @@ const NotificationList = ({ navigation }) => {
                     >
                         <MaterialIcons name="close" size={24} color="black" />
                     </Pressable>
-                    <Text style={styles.headerStyle}>{selectedAnnouncement.title}</Text>
                     <Text style={styles.subheaderStyle}>{selectedAnnouncement.course.coursecode}</Text>
+                    <Text style={styles.headerStyle}>{selectedAnnouncement.title}</Text>
                     <Text style={styles.textStyle}>{selectedAnnouncement.body}</Text>
                 </View>
                 <Button
@@ -232,59 +230,66 @@ const NotificationList = ({ navigation }) => {
 
         <Card.Content>
             <List.Section title="Recent Announcements">
-                <ScrollView
-                    refreshControl={<RefreshControl
-                        refreshing={loading}
-                        onRefresh={fetchAnnouncements}
-                    />}
+                <View
+                    style={{
+                        height: 400,
+                    }}
                 >
-                    {loading ? (<Text
-                        style={{
-                            fontSize: 30, fontWeight: 200, color: "#e32f45", textAlign: "center"
-                        }}
-                    >Loading announcements...</Text>) : announcement.length === 0 ? (<Text
-                        style={{
-                            fontSize: 30, fontWeight: 200, color: "#e32f45", textAlign: "center"
-                        }}
-                    >No recent announcements</Text>) : (<View style={{ height: "80%" }}>
-                        <Text style={{
-                            marginLeft: "auto", marginRight: "auto", marginBottom: "4%", color: "#808080"
-                        }}>Swipe down to refresh &#x2193;</Text>
-                        < ScrollView
-                        // refreshControl={<RefreshControl
-                        //     refreshing={loading}
-                        //     onRefresh={fetchAnnouncements}
-                        // />}
-                        >
-                            {announcement.map((val, key) => (<Card
-                                key={key}
-                                style={{
-                                    marginBottom: 10, backgroundColor: "white",
-                                }}
-                                value={key}
-                                onPress={(e) => showFullMessage(val)}
+                    <ScrollView
+                        refreshControl={<RefreshControl
+                            refreshing={loading}
+                            onRefresh={fetchAnnouncements}
+                        />}
+
+                    >
+                        {loading ? (<Text
+                            style={{
+                                fontSize: 30, fontWeight: 200, color: "#e32f45", textAlign: "center"
+                            }}
+                        >Loading announcements...</Text>) : announcement.length === 0 ? (<Text
+                            style={{
+                                fontSize: 30, fontWeight: 200, color: "#e32f45", textAlign: "center"
+                            }}
+                        >No recent announcements</Text>) : (<View style={{ height: 450 }}>
+                            <Text style={{
+                                marginLeft: "auto", marginRight: "auto", marginBottom: 10, color: "#808080"
+                            }}>Swipe down to refresh &#x2193;</Text>
+                            < ScrollView
+                            // refreshControl={<RefreshControl
+                            //     refreshing={loading}
+                            //     onRefresh={fetchAnnouncements}
+                            // />}
                             >
-                                <Card.Content>
-                                    <Card.Title
+                                {announcement.slice()
+                                    .reverse().map((val, key) => (<Card
                                         key={key}
-                                        title={val.course.coursecode}
-                                        titleStyle={{ fontWeight: '500' }}
-                                        subtitle={val.title}
-                                        left={(props) => (<Avatar.Icon
-                                            {...props}
-                                            icon={val.type === "Reminder" ? "brain" : "clock"}
-                                            color="#e32f45"
-                                            style={{ backgroundColor: "white" }}
-                                        />)}
-                                    />
-                                </Card.Content>
-                            </Card>))}
-                            <Text
-                                style={{
-                                    marginBottom: "0%", marginLeft: "auto", marginRight: "auto",
-                                }}
-                            >
-                                {nextToken !== null ? <Button
+                                        style={{
+                                            marginBottom: 10, backgroundColor: "white",
+                                        }}
+                                        value={key}
+                                        onPress={(e) => showFullMessage(val)}
+                                    >
+                                        <Card.Content>
+                                            <Card.Title
+                                                key={key}
+                                                title={val.course.coursecode}
+                                                titleStyle={{ fontWeight: '500' }}
+                                                subtitle={val.title}
+                                                left={(props) => (<Avatar.Icon
+                                                    {...props}
+                                                    icon={val.type === "Reminder" ? "brain" : "clock"}
+                                                    color="#e32f45"
+                                                    style={{ backgroundColor: "white" }}
+                                                />)}
+                                            />
+                                        </Card.Content>
+                                    </Card>))}
+                                <Text
+                                    style={{
+                                        marginBottom: 0, marginLeft: "auto", marginRight: "auto",
+                                    }}
+                                >
+                                    {/* {nextToken !== null ? <Button
                                     onPress={loadMore}
                                     mode="contained"
                                     icon="arrow-down"
@@ -294,24 +299,26 @@ const NotificationList = ({ navigation }) => {
                                         backgroundColor: "#e32f45",
                                         marginRight: "auto",
                                         marginLeft: "auto",
-                                        marginBottom: "20%",
+                                        marginBottom: "10vh",
                                         color: "white",
-                                        height: 10,
+                                        height: "20px",
                                         alignItems: "center",
                                         justifyContent: "center",
 
                                     }}
                                 >
                                     Load More
-                                </Button> : " "}
-                            </Text>
-                            <Text style={{ marginBottom: 300 }}>{"\n\n\n\n\n\n\n"}</Text>
-                        </ScrollView>
-                    </View>
+                                </Button> : " "} */}
+                                </Text>
 
-                    )}
+                                <Text style={{ padding: 10 }}></Text>
+                            </ScrollView>
+                        </View>
 
-                </ScrollView>
+                        )}
+
+                    </ScrollView>
+                </View>
 
             </List.Section>
 
@@ -324,8 +331,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
-        marginVertical: 200,
-        marginHorizontal: 10,
+        marginVertical: 240,
+        marginHorizontal: 15,
         borderRadius: 50,
         backgroundColor: "white",
         elevation: 5,
@@ -335,16 +342,21 @@ const styles = StyleSheet.create({
             width: 0, height: 2,
         },
         shadowRadius: 4,
-    }, modalView: {
-        flex: 1, justifyContent: "center", // Center vertically
+
+    },
+    modalView: {
+        flex: 1,
+        justifyContent: "center", // Center vertically
         alignItems: "center", // Center horizontally
-        width: "80%", height: "50%", paddingBottom: "0%",
+        width: "80%",
+        height: "0%",
+        paddingBottom: "0%",
     }, button: {
         borderRadius: 20, padding: 10, elevation: 2,
     }, textStyle: {
         fontSize: 15, textAlign: "center", marginBottom: "5%",
     }, headerStyle: {
-        fontSize: 30, fontWeight: "400", textAlign: "center", marginBottom: "2.5%",
+        fontSize: 25, fontWeight: "400", textAlign: "center", marginBottom: 20,
     },
 
     subheaderStyle: {

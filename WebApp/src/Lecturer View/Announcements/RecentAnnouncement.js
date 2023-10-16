@@ -141,6 +141,7 @@ export default function RecentAnnouncement() {
       setAnnouncement(rows)
       setIsDeleting(false);
     } catch (e) {
+      console.log(e)
       setError("Something went wrong. Please try again later");
       setIsDeleting(false);
     }
@@ -150,7 +151,7 @@ export default function RecentAnnouncement() {
   }
 
 
-  let limit = 5;
+  let limit = 7;
   const fetchAnnouncements = async () => {
     try {
       let lec = lecturer;
@@ -193,10 +194,10 @@ export default function RecentAnnouncement() {
           //Fecth annnouncements and order them by date
           let announcementList = await API.graphql({
             query: announcementsByDate,
-            variables: variables,
+            variables: variables
           });
           announcementList = announcementList.data.announcementsByDate;
-          setAnnouncement(announcementList.items);
+          setAnnouncement(announcementList.items.filter((item)=>item._deleted===null));
           if (announcementList.items.length < limit) {
             setNextToken(null);
           }
@@ -207,18 +208,21 @@ export default function RecentAnnouncement() {
         setLoading(false);
       }
     } catch (error) {
-      if (error.errors !== undefined) {
-        let e = error.errors[0].message
-        if (e.search("Network") !== -1) {
-          setError("Request failed due to network issues");
-        }
-        else {
-          setError("Something went wrong.Please try again later");
-        }
-      }
-      else {
-        setError("Your request could not be processed at this time");
-      }
+      console.log(error);
+      setAnnouncement([]);
+      setError("Announcement could not be posted");
+      // if (error.errors !== undefined) {
+      //   let e = error.errors[0].message
+      //   if (e.search("Network") !== -1) {
+      //     setError("Request failed due to network issues");
+      //   }
+      //   else {
+      //     setError("Something went wrong.Please try again later");
+      //   }
+      // }
+      // else {
+      //   setError("Your request could not be processed at this time");
+      // }
     }
   }
 
@@ -244,6 +248,7 @@ export default function RecentAnnouncement() {
       });
 
       let list = announcementList.data.announcementsByDate.items;
+      list=list.filter((l)=>l._deleted===null);
       for (let i = 0; i < list.length; i++) {
         announcement.push(list[i]);
       }
@@ -255,6 +260,7 @@ export default function RecentAnnouncement() {
       }
       setAnnouncement(announcement);
     } catch (error) {
+      console.log(error);
       setError("Your request could not be processed at this time");
     }
   }
@@ -262,9 +268,6 @@ export default function RecentAnnouncement() {
   useEffect(() => {
     fetchAnnouncements();
   }, [])
-
-
-
 
   return (
     <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>

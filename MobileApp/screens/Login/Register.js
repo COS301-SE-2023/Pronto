@@ -13,9 +13,11 @@ import { SelectList } from "react-native-dropdown-select-list";
 import React, { useState, useEffect } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { listInstitutions } from "../../graphql/queries";
-import { Auth, API } from "aws-amplify";
+import { Auth, API, DataStore, Predicates } from "aws-amplify";
 import institutionInfo from "../../assets/data/universityInfo.json";
+import { createStudent } from "../../graphql/mutations";
 import PasswordCriteriaMessage from "./PasswordCriteriaMessage";
+import { Institution } from "../../models";
 
 const { height } = Dimensions.get("window");
 
@@ -102,9 +104,9 @@ const Register = ({ navigation }) => {
         variables: {},
         authMode: "API_KEY"
       });
-      
+
       inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      
+      //let inst = await DataStore.query(Institution, Predicates.ALL)
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -116,7 +118,7 @@ const Register = ({ navigation }) => {
       ;
       setInstitutions(institutionInfo);
     } catch (error) {
-
+      console.log(error)
     }
   }
 
@@ -175,15 +177,32 @@ const Register = ({ navigation }) => {
           name: studentName
         },
         clientMetadata: {
-          role: process.env.REACT_APP_STUDENT_ROLE,
+          role: "Student",
           institutionId: institutionId
         }
       }
       const u = await Auth.signUp(signUpObject);
+        const id=u.userSub;
+        let newStudent = {
+              id: id,
+              institutionId: institutionId,
+              firstname: name,
+              lastname: surname,
+              userRole: "Student",
+              email: email
+            }
 
-
+            let create = await API.graphql({
+              query: createStudent,
+              variables: { input: newStudent },
+              authMode:"API_KEY"
+            })
+            console.log(create.data.createStudent);
+      
+      console.log(u);
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
+      console.log(e);
       Alert.alert("Sign up error", e.message);
 
     }
@@ -367,7 +386,7 @@ const Register = ({ navigation }) => {
           )}
         </View>
 
-        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} testID='sign-up-button'>
+        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} testID='sign-up-button' disabled={loading}>
           <Text style={styles.signUpButtonText}>
             {" "}
             {loading ? "Signing up..." : "Sign up"}

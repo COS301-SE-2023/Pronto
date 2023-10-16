@@ -53,7 +53,8 @@ const EditInfoPage = () => {
                 setError("New password does not match confirm password");
             }
         } catch (error) {
-            setError("Password change failed")
+            console.log(error);
+            setError("Password change failed");
         }
         setOldPassword("")
         setNewPassword("")
@@ -61,12 +62,19 @@ const EditInfoPage = () => {
     };
 
     const fecthUser = async () => {
-        let userInfo = await Auth.currentAuthenticatedUser()
-        let username = userInfo?.attributes?.name;
-        const words = username.split(/\s+/);
-        username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
-        setUser(userInfo);
-        setFolderNameS3(username);
+        try{
+            let userInfo = await Auth.currentAuthenticatedUser();
+            setUser(userInfo);
+            let username = userInfo?.attributes?.name;
+            //const words = username.split(/\s+/);
+            const words=admin.institution.name.split(/\s+/)
+            username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
+         
+            setFolderNameS3(username);
+            console.log(username)
+        }catch(error){
+           console.log(error);
+        }
     }
 
     const handleFileSelect = (event) => {
@@ -127,6 +135,7 @@ const EditInfoPage = () => {
             let inst = {
                 id: admin.institution.id,
                 domains: admin.institution.domains,
+                _version:admin.institution._version
             };
             let update = await API.graphql({
                 query: updateInstitution,
@@ -135,19 +144,30 @@ const EditInfoPage = () => {
             //update.data.updateInstitution.logoUrl = logoUrl;
             //let newAdmin = admin;
             //newAdmin.institution = update.data.updateInstitution;
+            console.log(update)
+            admin.institution._version=update.data.updateInstitution._version;
             setAdmin(admin);
             setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
             setError("Something went wrong");
+            console.log(error);
         }
     }
 
     const handleFileSubmit = async (event) => {
         setShowFileModal(false);
         if (selectedFile) {
+            let folder=folderNameS3;
+            if(folderNameS3===""){
+                const words=admin.institution.name.split(/\s+/);
+                folder = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
+                setFolderNameS3(folder);
+            }
             try {
-                const fileKey = `${folderNameS3}/Logo/${selectedFile.name}`;
+            
+                const fileKey = `${folder}/Logo/${selectedFile.name}`;
+                console.log(fileKey);
                 let path = await Storage.put(fileKey, selectedFile, {
                     contentType: "image/png",
                     progressCallback: ({ loaded, total }) => {
@@ -159,7 +179,8 @@ const EditInfoPage = () => {
 
                 let inst = {
                     id: admin.institution.id,
-                    logo: fileKey
+                    logo: fileKey,
+                    _version:admin.institution._version
                 };
                 let update = await API.graphql({
                     query: updateInstitution,
@@ -184,6 +205,18 @@ const EditInfoPage = () => {
             setUploadProgress(0);
             window.location.reload()
         }
+    }
+
+    function removeDuplicates(arr) { 
+        let unique = []; 
+        if(arr===null || arr===undefined)
+            return unique;
+        arr.forEach(element => { 
+            if (!unique.includes(element)) { 
+                unique.push(element); 
+            } 
+        }); 
+        return unique; 
     }
 
     useEffect(() => {
@@ -253,7 +286,7 @@ const EditInfoPage = () => {
 
                         <tr>
                             <td>Institution name:</td>
-                            <td>{user !== null ? user.attributes.name : " "}</td>
+                            <td>{admin !== null ? admin?.institution?.name : " "}</td>
                         </tr>
 
                         <tr>
@@ -263,7 +296,7 @@ const EditInfoPage = () => {
 
                         <tr>
                             <td>Email address:</td>
-                            <td>{user != null ? user.attributes.email : " "}</td>
+                            <td>{admin != null ? admin?.email : " "}</td>
                         </tr>
 
                     </tbody>
@@ -328,7 +361,13 @@ const EditInfoPage = () => {
                                     </div>
                                 </div>
 
-                                <button className="post-button button-no-border" style={{ borderRadius: "20px", cursor: "pointer" }}>Update</button>
+                                <button className="post-button button-no-border" style={{ backgroundColor: "#e32f45", color: "white", borderRadius: "20px", boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", transition: "transform 0.3s" }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.1)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}>Update</button>
                             </form>
                         </AccordionDetails>
                     </Accordion>
@@ -432,7 +471,7 @@ const EditInfoPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {admin && admin.institution && admin?.institution?.domains?.map((key, val) => {
+                                    {admin && admin.institution && admin?.institution?.domains && removeDuplicates(admin.institution.domains).map((key, val) => {
                                         return (
                                             <tr key={val}>
                                                 <td>{key}</td>
@@ -489,7 +528,13 @@ const EditInfoPage = () => {
                                 type="submit"
                                 onClick={handleDomainEdit}
                                 className="post-button button-no-border"
-                                style={{ borderRadius: "20px", cursor: "pointer" }}
+                                style={{ backgroundColor: "#e32f45", color: "white", borderRadius: "20px", boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", transition: "transform 0.3s" }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.1)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+        }}
                             >
                                 Confirm
                             </button>

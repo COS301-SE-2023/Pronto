@@ -7,6 +7,7 @@ node_modules/
 *.tgz
 amplify\team-provider-info.json
 
+aws-exports.js
 # WebStorm
 .idea/
 *.iml
@@ -149,14 +150,16 @@ node_modules/
 
 team-provider-info.json
 
+WebApp/src/Components/aws-exports.js
+
 #amplify-do-not-edit-begin
-backend/amplify/\#current-cloud-backend
-backend/amplify/.config/local-*
-backend/amplify/logs
-backend/amplify/mock-data
-backend/amplify/mock-api-resources
-backend/amplify/backend/amplify-meta.json
-backend/amplify/backend/.temp
+amplify/\#current-cloud-backend
+amplify/.config/local-*
+amplify/logs
+amplify/mock-data
+amplify/mock-api-resources
+amplify/backend/amplify-meta.json
+amplify/backend/.temp
 build/
 dist/
 node_modules/
@@ -170,4 +173,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-WebApp/src/Components/aws-exports.js

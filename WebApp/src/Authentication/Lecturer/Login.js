@@ -34,7 +34,7 @@ function Login() {
 
 
   const fetchLecturer = async () => {
-    let fetchError = "Could not find your records.If you are a Lecturer please contact your Institution's   Admin since they may have deleted your information. If you are an Admin please return to the homepage and click 'Continue as Admin'. If you are a Student please use the mobile app.";
+    let fetchError = "This account has been deleted by an Admin.";
     try {
       let lec = await API.graphql({
         query: listLecturers,
@@ -47,25 +47,26 @@ function Login() {
         },
       });
 
-      if (lec.data.listLecturers.items.length > 0 ) {
-        if(lec.data.listLecturers.items[0]._deleted!==true){
-        lec = lec.data.listLecturers.items[0];
-        try {
-          if (lec.institution.logo !== null) {
-            lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+      if (lec.data.listLecturers.items.length > 0) {
+        if (lec.data.listLecturers.items[0]._deleted === null) {
+          lec = lec.data.listLecturers.items[0];
+          console.log(lec);
+          try {
+            if (lec.institution.logo !== null) {
+              lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
 
+            }
+
+          } catch (error) {
+            console.log(error);
           }
-          
-        } catch (error) {
+          setLecturer(lec);
 
         }
-        setLecturer(lec);
-
+        else {
+          throw Error(fetchError);
+        }
       }
-      else {
-        throw Error(fetchError);
-      }
-    }
     } catch (error) {
       await Auth.signOut();
       throw Error(fetchError);
@@ -78,13 +79,13 @@ function Login() {
       let inst = await API.graphql({
         query: listInstitutions,
         variables: {
-          filter:{
+          filter: {
           }
         },
         authMode: "API_KEY"
       });
       console.log(inst)
-      inst = inst.data.listInstitutions.items.filter((item)=>item._deleted===null);
+      inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
       console.log(inst)
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
@@ -94,15 +95,16 @@ function Login() {
         }
         institutionInfo.push(item);
       }
+
       setInstitutions(institutionInfo);
     } catch (error) {
-
+      console.log(error);
     }
   }
 
   useEffect(() => {
     fetchInstitutions();
-  },[])
+  }, [])
 
 
   const onSignInPressed = async (event) => {
@@ -130,14 +132,15 @@ function Login() {
           role: "Lecturer",
         }
       }
+      console.log(signInObject);
       await Auth.signIn(signInObject);
       //  const user = await Auth.currentAuthenticatedUser();
       //  console.log(user);
       setsignInError("");
       //navigate to lecturer home page
 
-      //await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
-      navigate("/lecturer/dashboard")
+      await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
+      //navigate("/lecturer/dashboard")
     } catch (e) {
       //console.log(e);
       setLoading(false);
@@ -342,10 +345,10 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-                
+
                 <StyledSelectInput
                   defaultValue={"University of Pretoria"}
-                  options={institutions}             
+                  options={institutions}
                   onChange={handleInstitutionSelection}
                   placeholder="Select an Institution"
                   classNamePrefix="SelectInput"
@@ -353,7 +356,7 @@ function Login() {
                   spellCheck="true"
                   isSelectionValid={isInstitudeSelected}
                 ></StyledSelectInput>
-                
+
                 <Input
                   type="password"
                   placeholder="Password"
@@ -435,7 +438,7 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-    
+
                 <Input
                   type="password"
                   placeholder="Password"
@@ -602,6 +605,9 @@ const Button = styled.button`
   }
   &:focus {
     outline: none;
+  }
+  &:hover{
+    cursor: pointer;
   }
 `;
 

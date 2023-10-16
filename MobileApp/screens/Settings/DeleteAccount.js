@@ -7,11 +7,12 @@ import {
   Alert,
   ImageBackground,
 } from "react-native";
-import { Auth, API } from "aws-amplify";
-import { listStudents, getStudent } from "../../graphql/queries"
+import { Auth, API, DataStore } from "aws-amplify";
+import { getStudent } from "../../graphql/queries"
 import { deleteStudent } from "../../graphql/mutations";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { useNavigation } from "@react-navigation/native";
+import { Student } from "../../models";
 
 const DeleteAccountPage = () => {
   const { student, updateStudent } = useStudent();
@@ -36,31 +37,39 @@ const DeleteAccountPage = () => {
             try {
 
               let stu = student
-              if (student === null) {
-                const user = await Auth.currentAuthenticatedUser()
-                let studentEmail = user.attributes.email;
-                let stu = await API.graphql({
-                  query: getStudent,
-                  variables: { id: user.attributes.sub },
-                })
-                stu = stu.data.getStudent
+              // if (student === null) {
+              //   const user = await Auth.currentAuthenticatedUser()
+              //   let studentEmail = user.attributes.email;
+              //   let stu = await API.graphql({
+              //     query: getStudent,
+              //     variables: { id: user.attributes.sub },
+              //   })
+              //   stu = stu.data.getStudent
+              // }
+
+              // if (stu !== null) {
+              //   // try {
+
+              //   //   let del = await API.graphql({
+              //   //     query: deleteStudent,
+              //   //     variables: { input: { id: stu.id,_version:stu._version } }
+              //   //   })
+              //   // } catch (e) {
+              //   //     console.log(e);
+              //   // }
+              //   updateStudent(null);
+              //   navigation.navigate("Welcome");
+              //   setDeleting(false);
+              // }
+              try {
+                const user = await Auth.currentAuthenticatedUser();
+                const id = user.attributes.sub;
+                stu = await DataStore.query(Student, id);
+                await DataStore.delete(stu);
+                await DataStore.clear();
+              } catch (error) {
+                console.log(error);
               }
-
-              if (stu !== null) {
-                try {
-
-                  let del = await API.graphql({
-                    query: deleteStudent,
-                    variables: { input: { id: stu.id } }
-                  })
-                } catch (e) {
-
-                }
-                updateStudent(null);
-                navigation.navigate("Welcome");
-                setDeleting(false);
-              }
-
               await Auth.currentAuthenticatedUser().then((user) => {
                 return Auth.deleteUser(user);
               });
@@ -69,7 +78,7 @@ const DeleteAccountPage = () => {
                 "Account Deleted",
                 "Your account has been successfully deleted."
               );
-              navigation.navigate("Welcome");
+              // navigation.navigate("Welcome");
               setDeleting(false);
               //}
             } catch (error) {
@@ -103,7 +112,7 @@ const DeleteAccountPage = () => {
       <Text style={styles.subtitle}>
         Are you sure you want to delete your account?
       </Text>
-      <TouchableOpacity style={styles.button} onPress={handleDeleteAccount}>
+      <TouchableOpacity style={styles.button} onPress={handleDeleteAccount} disabled={deleting}>
         <Text style={styles.buttonText}>{deleting ? "Deleting..." : "Delete Account"}</Text>
       </TouchableOpacity>
     </View>

@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import SuperAdminNavigation from './SuperAdminNavigation';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { ErrorModal } from "../Components/ErrorModal";
+import {SuccessModal} from "../Components/SuccessModal";
 import { API, Auth } from "aws-amplify";
-import { getInstitution } from '../Graphql/queries';
+import { getInstitution, listAdmins, listInstitutions } from '../Graphql/queries';
 import { listAdminApplications } from '../Graphql/queries';
 import { updateAdmin, updateAdminApplication, createInstitution, createAdmin, updateInstitution } from '../Graphql/mutations';
 
 export default function ApplicationRequests() {
 
   const [requests, setRequests] = useState([]);
-
+  const [error,setError]=useState("");
+  const [successMessage,setSuccessMessage]=useState("");
 
   const acceptRequest = async (index) => {
     const updatedRequests = [...requests];
@@ -26,105 +29,232 @@ export default function ApplicationRequests() {
       //   query: updateAdmin,
       //   variables: { input: admin }
       // })
+      updatedRequests.splice(index, 1);
+      setRequests(updatedRequests);
 
       let request = requests[index];
       let institution = {
         name: request.name
       }
-      let inst = await API.graphql({
-        query: createInstitution,
-        variables: { input: institution }
-      })
-      console.log(inst);
-      const newAdmin = await addToAdminGroup(inst.data.createInstitution, request.email, request.firstname);
-      console.log(newAdmin)
+      // const group= await addToGroup(request.email);
+      // console.log(group);
 
+      let inst=await API.graphql({
+        query:listInstitutions,
+        variables:{
+          filter:{
+            name:{
+              eq:request.name
+            }
+          }
+        }
+      })
+      
+      if(inst.data.listInstitutions.items.length>0){
+          inst=inst.data.listInstitutions.items[0];
+      }
+      else{
+          inst = await API.graphql({
+            query: createInstitution,
+           variables: { input: institution }
+        })
+
+      console.log(inst);
+      inst=inst.data.createInstitution;
+    }
+    //   const newAdmin = await addToAdminGroup(inst, request.email, request.firstname);
+    //   console.log(newAdmin)
+
+     let admin = await API.graphql({
+      query:listAdmins,
+      variables:{
+        filter:{
+          email:{
+            eq:request.email
+          }
+        }
+      }
+     })
+     console.log(admin)
+     if(admin.data.listAdmins.items.length>0){
+       admin=admin.data.listAdmins.items[0];
+       let updatedAdmin={
+        id:admin.id,
+        institutionId:inst.id,
+        _version:admin._version
+       }
+       try{
+
+            let update=await API.graphql({
+              query:updateAdmin,
+              variables:{input:updatedAdmin}
+            })
+            console.log(update)
+       }catch(e){
+            console.log(e)
+       }
+     }
+     else{
+      let adminname=request.firstname.split(" ");
       let a = {
         firstname: "  ",
         userRole: "Admin",
         lastname: "  ",
-        institutionId: request.id,
+        institutionId: inst.id,
         email: request.email
       }
       console.log(a);
-      let admin = await API.graphql({
+      admin = await API.graphql({
         query: createAdmin,
         variables: { input: a }
       })
       console.log(admin)
+      admin=admin.data.createAdmin;
+    }
+
       let update = {
-        id: inst.data.createInstitution.id,
-        adminId: admin.data.createAdmin.id
+        id: inst.id,
+        adminId:admin.id,
+        _version: inst._version,
+        lectureremails:request.email
       }
       console.log(update)
       let f = await API.graphql({
         query: updateInstitution,
         variables: { input: update }
       })
-      //  const user= await getUserHelper()
-      //  console.log(user);
-      await API.graphql({
+      // //  const user= await getUserHelper()
+         console.log(f);
+      let g=await API.graphql({
         query: updateAdminApplication,
-        variables: { input: { id: requests[index].id, status: "ACCEPTED" } }
+        variables: { input: { id: requests[index].id, status: "ACCEPTED",_version:requests[index]._version } }
       })
-      updatedRequests.splice(index, 1);
-      setRequests(updatedRequests);
+       console.log(g);
+ 
+     const password=generateRandomString();
+     const user= await Auth.signUp({
+        username: request.email,
+        password: password,
+        attributes: {
+          email: request.email,
+          name: request.firstname,
+          family_name: " ",
+        },
+        clientMetadata: {
+          role: "Lecturer",
+          institutionId: inst.id,
+        },
+      });
+      console.log(user);
+      setSuccessMessage("Admin account created");
     } catch (error) {
       console.log(error);
+      setError("Something went wrong");
     }
   };
 
-  const getUserHelper = async (username) => {
-    try {
-      let apiName = 'AdminQueries';
-      let path = '/getUser';
-      let myInit = {
-        body: {
-          "username": "agilearchitectscapstone@gmail.com",
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          //Authorization: `AM`
-        }
-      }
-      return await API.post(apiName, path, myInit);
-    } catch (error) {
-      console.log(error);
+  const generateRandomString=()=>{
+    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    const specialChars = '!@#$%^&*()_+';
+
+    function getRandomChar(charSet) {
+      const randomIndex = Math.floor(Math.random() * charSet.length);
+      return charSet[randomIndex];
     }
-  }
-  const addToAdminGroup = async (institution, email, name) => {
-    try {
-      let apiName = "AdminQueries";
-      let path = "/createInstitutionAdmin";
-      let n = name.replace(" ", "")
-      let myInit = {
-        body: {
-          "email": email,
-          "institutionId": institution.id,
-          "Password": "October01!",
-          name: n
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-        }
-      };
-      return API.post(apiName, path, myInit);
-    } catch (error) {
-      console.log(error);
+
+    const randomLowercase = getRandomChar(lowercaseChars);
+    const randomUppercase = getRandomChar(uppercaseChars);
+    const randomNumber = getRandomChar(numbers);
+    const randomSpecialChar = getRandomChar(specialChars);
+
+    const remainingChars = lowercaseChars + uppercaseChars + numbers + specialChars;
+
+    let generatedString = randomLowercase + randomUppercase + randomNumber + randomSpecialChar;
+
+    for (let i = 0; i < 4; i++) {
+      const randomChar = getRandomChar(remainingChars);
+      generatedString += randomChar;
     }
+
+    // Shuffle the generated string to randomize the order of characters
+    generatedString = generatedString.split('').sort(() => Math.random() - 0.5).join('');
+
+    return generatedString;
   }
+
+
+  //  const addToGroup = async (email) => {
+        
+  //       let apiName = 'AdminQueries';
+  //       let path = '/addUserToGroup';
+  //       let myInit = {
+  //           body: {
+  //               "username": email,
+  //               "groupname":"adminUserGroup"
+  //           },
+  //           headers: {
+  //               'Content-Type': 'application/json',
+  //               Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+  //           }
+  //       }
+  //       return await API.post(apiName, path, myInit);
+  //   }
+
+  // const getUserHelper = async (username) => {
+  //   try {
+  //     let apiName = 'AdminQueries';
+  //     let path = '/getUser';
+  //     let myInit = {
+  //       body: {
+  //         "username": "agilearchitectscapstone@gmail.com",
+  //       },
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         //Authorization: `AM`
+  //       }
+  //     }
+  //     return await API.post(apiName, path, myInit);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+  // const addToAdminGroup = async (institution, email, name) => {
+  //   try {
+  //     let apiName = "AdminQueries";
+  //     let path = "/createInstitutionAdmin";
+  //     let n = name.replace(" ", "")
+  //     let myInit = {
+  //       body: {
+  //         "email": email,
+  //         "institutionId": institution.id,
+  //         "Password": "October01!",
+  //         name: n
+  //       },
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
+  //       }
+  //     };
+  //     return API.post(apiName, path, myInit);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const declineRequest = async (index) => {
     const updatedRequests = [...requests];
     try {
-      await API.graphql({
-        query: updateAdminApplication,
-        variables: { input: { id: requests[index].id, status: "REJECTED" } }
-      })
-
-      updatedRequests.splice(index, 1);
+     updatedRequests.splice(index, 1);
       setRequests(updatedRequests);
+      let reject= await API.graphql({
+        query: updateAdminApplication,
+        variables: { input: { id: requests[index].id, status: "REJECTED" ,_version:requests[index]._version} }
+      })
+      console.log(reject)
+
+      
     } catch (error) {
       console.log(error)
     }
@@ -142,8 +272,9 @@ export default function ApplicationRequests() {
           }
         }
       })
-      setRequests(r.data.listAdminApplications.items);
-      //console.log(r);   
+      setRequests(r.data.listAdminApplications.items.filter((item)=>item._deleted===null && item.status==="PENDING"));
+      //setRequests(r.data.listAdminApplications.items);
+      console.log(r);   
     } catch (error) {
       console.log(error)
     }
@@ -155,6 +286,8 @@ export default function ApplicationRequests() {
 
   return (
     <div style={{ display: 'flex', maxHeight: '100vh' }}>
+       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
+      {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
       <nav style={{ width: '20%' }}>
         <SuperAdminNavigation />
       </nav>

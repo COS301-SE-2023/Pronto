@@ -13,9 +13,10 @@ import {
 import { Card } from "react-native-paper";
 import { Storage } from "aws-amplify";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-import { Auth, API } from "aws-amplify"
-import { listStudents, getStudent } from "../../graphql/queries";
+import { Auth, API, DataStore } from "aws-amplify"
+import { getStudent } from "../../graphql/queries";
 import { useStudent } from "../../ContextProviders/StudentContext";
+import { Student, Institution } from "../../models";
 
 //graphQL call to get the university of the student, which will be used to get the file from that folder.
 //let studentUniversity = "UniversityOfPretoria";
@@ -28,7 +29,7 @@ const BucketFilesScreen = () => {
   const { student, updateStudent } = useStudent();
 
   useEffect(() => {
-    //  setUniversityName();
+    setUniversityName();
     fetchFileList();
   }, []);
 
@@ -38,6 +39,7 @@ const BucketFilesScreen = () => {
       setIsLoading(true);
       let name = await setUniversityName()
 
+      console.log(name);
       const response = await Storage.list(
         name + "/StudentFiles/",
         {
@@ -56,37 +58,41 @@ const BucketFilesScreen = () => {
     }
   };
 
-  /* const setUniversityName = async () => {
- 
-     let error = "There appear to be network issues.Please try again later"
-     try {
-       let stu=student;
-       if(student===null){
-         const user = await Auth.currentAuthenticatedUser()
-         let studentEmail = user.attributes.email; 
-         stu = await API.graphql({
-           query: getStudent,
-           variables: {id:user.attributes.sub}
-         })
-         
-         stu=stu.data.getStudent;
-         if(stu===false || stu===undefined){
-           throw Error();
-         }
-         updateStudent(stu);
-       }
-     
-       sU = stu.institution.name
-       const words = sU.split(/\s+/); // Split the name into words
-       sU = words
-         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
-         .join(""); // Join the words without spaces
-       await setStudentUniversity(sU)
-       return sU
-     } catch (e) {
-       Alert.alert(error);
-     }
-   } */
+  const setUniversityName = async () => {
+
+    let error = "There appear to be network issues.Please try again later"
+    try {
+      let stu = student;
+      //  if(student===null){
+      //    const user = await Auth.currentAuthenticatedUser()
+      //    let studentEmail = user.attributes.email; 
+      //    stu = await API.graphql({
+      //      query: getStudent,
+      //      variables: {id:user.attributes.sub}
+      //    })
+
+      //    stu=stu.data.getStudent;
+      //    if(stu===false || stu===undefined){
+      //      throw Error();
+      //    }
+      //    updateStudent(stu);
+      //  }
+      const user = await Auth.currentAuthenticatedUser();
+      const id = user.attributes.sub;
+      stu = await DataStore.query(Student, id);
+      let sU = await stu.institution;
+      sU = sU.name;
+      const words = sU.split(/\s+/); // Split the name into words
+      sU = words
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
+        .join(""); // Join the words without spaces
+      setStudentUniversity(sU)
+      return sU
+    } catch (e) {
+      console.log(e);
+      Alert.alert(error);
+    }
+  }
 
 
   const openFile = async (fileKey) => {
@@ -120,6 +126,7 @@ const BucketFilesScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
+
         <MaterialCommunityIcons
           name="file-document"
           size={24}
@@ -145,6 +152,7 @@ const BucketFilesScreen = () => {
           style={styles.image}
         />
       </View>
+      <Text style={styles.swipeToRefresh}>Swipe down to refresh &#x2193;</Text>
 
       {isLoading ? (
         <View style={styles.loadingContainer}>
@@ -166,7 +174,7 @@ const BucketFilesScreen = () => {
           }
         />
       )}
-      <Text style={styles.swipeToRefresh}>Swipe down to refresh &#x2193;</Text>
+
     </View>
   );
 };
@@ -175,6 +183,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    marginBottom: 110,
   },
   headingContainer: {
     flexDirection: "row",
@@ -211,7 +220,7 @@ const styles = StyleSheet.create({
   },
   swipeToRefresh: {
     alignSelf: "center",
-    marginBottom: 120,
+    marginBottom: 20,
   },
   image: {
     width: 200, // Specify the desired width

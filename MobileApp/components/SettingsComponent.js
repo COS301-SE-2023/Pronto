@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
@@ -12,17 +12,24 @@ import { useStudent } from "../ContextProviders/StudentContext";
 
 const SettingsComponent = ({ settingsOptions }) => {
   const navigation = useNavigation();
-  const {student,updateStudent} =useStudent();
-  const onLogoutPressed = async() => {
+  const { student, updateStudent } = useStudent();
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const onLogoutPressed = async () => {
+    setLoggingOut(true);
     updateStudent(null);
-    try{
-     Auth.signOut();
-     navigation.navigate("Welcome");
+
+    try {
+      await DataStore.clear();
+      await Auth.signOut();
+      //  navigation.navigate("Welcome");
+      setLoggingOut(false);
     }
-    catch(error){
+    catch (error) {
       //console.log(e)
+      setLoggingOut(false);
     }
-    navigation.navigate("Welcome");
+    // navigation.navigate("Welcome");
   };
 
   const onHelpPressed = () => {
@@ -78,13 +85,14 @@ const SettingsComponent = ({ settingsOptions }) => {
               backgroundColor: "#e32f45",
               marginVertical: 20,
               marginHorizontal: 20,
-              marginBottom:"50%"
+              marginBottom: "50%"
             }}
             outlined={true}
             onPress={onLogoutPressed}
             testID="logout-button"
+            disabled={loggingOut}
           >
-            Logout
+            {loggingOut ? "Logging out..." : "Logout"}
           </Button>
 
           <TouchableOpacity
@@ -95,14 +103,14 @@ const SettingsComponent = ({ settingsOptions }) => {
               alignItems: "center",
               top: "12%", // Adjust the top position as needed
               right: "8%", // Adjust the right position as needed
-              marginBottom:"30%"
+              marginBottom: "30%"
             }}
             onPress={onHelpPressed} // Implement the function for the help action
             testID="help-button"
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ color: "black", marginRight: 5, fontWeight: "400" }}>Need help</Text>
-              <Icon name="help-circle-outline" size={50} color="#e32f45" style={{marginBottom:"0%"}}/>
+              <Icon name="help-circle-outline" size={50} color="#e32f45" style={{ marginBottom: "0%" }} />
             </View>
 
           </TouchableOpacity>

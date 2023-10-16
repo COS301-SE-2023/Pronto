@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import ScheduleUpload from '../Images/ScheduleUpload.png';
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/Schedule.pdf";
-import { listAdmins } from "../../Graphql/queries";
+import { listAdmins, coursesByInstitutionId } from "../../Graphql/queries";
 import CourseReader from "./CourseReader"
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { ErrorModal } from "../../Components/ErrorModal";
-//import { useCourse } from "../../ContextProviders/CourseContext";
+import { useCourse } from "../../ContextProviders/CourseContext";
 import { Storage, Auth, API } from "aws-amplify";
 
 function DropzoneComponent() {
@@ -17,7 +17,9 @@ function DropzoneComponent() {
   const [folderNameS3, setFolderNameS3] = useState("");
   const { admin, setAdmin } = useAdmin();
   const [error, setError] = useState("");
-  // const { course, setCourse } = useCourse();
+  const { course, setCourse } = useCourse();
+  const [downloadingTemplate, setDownloadingTemplate] = useState(false);
+  const [submitSchedule, setSubmitSchedule] = useState(false);
   // const [activities, setActvities] = useState([]);
 
   const fetchUserData = async () => {
@@ -39,15 +41,15 @@ function DropzoneComponent() {
 
   useEffect(() => {
     fetchUserData();
+    //fetchCourses();
   }, []);
 
 
   //use this function to download excel template
   const downloadExcelFile = async () => {
+
+    setDownloadingTemplate(true);
     try {
-
-
-
       const url = await Storage.get("Template/TemplateSchedule.csv", {
         level: "public"
       });
@@ -58,8 +60,10 @@ function DropzoneComponent() {
       anchor.href = url;
       anchor.download = "TemplateSchedule.csv"; // Specify the desired file name
       anchor.click();
+      setDownloadingTemplate(false);
     } catch (error) {
       //console.error("Error downloading Excel file", error);
+      setDownloadingTemplate(false);
       setError("Error downloading Excel file");
       console.log(error);
     }
@@ -68,53 +72,42 @@ function DropzoneComponent() {
 
 
 
-  /* const fetchCourses = async () => {
-     try {
-       let adminInfo = admin;
-       if (admin === null) {
-         let user = await Auth.currentAuthenticatedUser();
-         let adminEmail = user.attributes.email;
-         adminInfo = await API.graphql({
-           query: listAdmins,
-           variables: {
-             filter: {
-               email: {
-                 eq: adminEmail
-               }
-             }
-           }
-         })
-         adminInfo = adminInfo.data.listAdmins.items[0];
-         setAdmin(adminInfo);
-       }
-       if (course.length === 0) {
-         let courseList = await API.graphql({
-           query: coursesByInstitutionId,
-           variables: {
-             institutionId: adminInfo.institutionId,
-           }
-         })
- 
-         courseList = courseList.data.coursesByInstitutionId.items;
-         setCourse(courseList);
- 
-         let act = [];
-         for (let i = 0; i < courseList.length; i++) {
-           for (let j = 0; j < courseList[i].activity.items.length; j++) {
-             act.push(courseList[i].activity.items[j]);
-           }
-         }
-         
-         setActvities(act);
- 
-       }
- 
-      
- 
-     } catch (error) {
- 
-     }
-   }; */
+  const fetchCourses = async () => {
+    try {
+      let adminInfo = admin;
+      if (admin === null) {
+        let user = await Auth.currentAuthenticatedUser();
+        let adminEmail = user.attributes.email;
+        adminInfo = await API.graphql({
+          query: listAdmins,
+          variables: {
+            filter: {
+              email: {
+                eq: adminEmail
+              }
+            }
+          }
+        })
+        adminInfo = adminInfo.data.listAdmins.items[0];
+        setAdmin(adminInfo);
+      }
+      if (course.length === 0) {
+        let courseList = await API.graphql({
+          query: coursesByInstitutionId,
+          variables: {
+            institutionId: adminInfo.institutionId,
+          }
+        })
+
+        console.log(courseList)
+        courseList = courseList.data.coursesByInstitutionId.items;
+        setCourse(courseList.filter((item) => item._deleted === null));
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const createFolder = async (folderName) => {
     try {
@@ -159,6 +152,7 @@ function DropzoneComponent() {
 
   // When submit is pressed
   const handleSubmit = async () => {
+    submitSchedule(true);
     if (selectedFile) {
       try {
         const fileKey = `${folderNameS3}/Schedule/${selectedFile.name}`;
@@ -171,13 +165,16 @@ function DropzoneComponent() {
         });
 
         setMessage("File successfully uploaded: " + selectedFile.name);
+        submitSchedule(false);
       } catch (error) {
         setMessage("Error uploading file");
+        submitSchedule(false);
       }
 
       // Reset the selected file and upload progress
       setSelectedFile(null);
       setUploadProgress(0);
+      submitSchedule(false);
     }
   };
 
@@ -196,11 +193,11 @@ function DropzoneComponent() {
   };
 
   return (
-    <div>
+    <div style={{maxHeight:"100%"}}>
       {error && <ErrorModal className="error" errorMessage={error} setError={setError}> {error} </ErrorModal>}
       <h6 style={{ marginBottom: "10px" }}>This page serves as the centralised platform for uploading your comprehensive university schedule, encompassing essential details such as venues, times, and more. Students will use this to create their timetable from the mobile app.</h6>
       <img src={ScheduleUpload} style={{ maxWidth: "300px", maxHeight: "200px" }} alt="ScheduleUpload" />
-      <div
+      {/* <div
         className="dropzone text-center"
         onDrop={handleFileDrop}
         onDragOver={handleDragOver}
@@ -232,8 +229,10 @@ function DropzoneComponent() {
               onClick={handleSubmit}
               className={"btn m-3"}
               style={{ backgroundColor: "#e32f45", color: "white" }}
+              disabled={submitSchedule}
             >
-              Submit
+
+              {submitSchedule ? 'Submitting' : "Submit"}
             </button>
           </div>
         ) : (
@@ -273,9 +272,9 @@ function DropzoneComponent() {
         accept=".xls, .xlsx, .csv"
         onChange={handleFileSelect}
         style={{ display: "none" }}
-      />
+      /> */}
 
-      <p style={{ marginTop: "50px" }}>...or download template to get started</p>
+      <p style={{ marginTop: "10px" }}>Download template to get started</p>
       <button
         onClick={downloadExcelFile}
         className="btn m-3"
@@ -286,8 +285,10 @@ function DropzoneComponent() {
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = "scale(1)";
         }}
+        disabled={downloadingTemplate}
       >
-        Download template
+
+        {downloadingTemplate ? 'Downloading...' : 'Download template'}
       </button>
       {/* <div>
         <table>
@@ -316,13 +317,13 @@ function DropzoneComponent() {
             })}
         </tbody>
         </table>
-      </div>
+      </div> */}
       <div>
         <CourseReader institutionId={admin?.institutionId}
-                      course={course}
-                      setCourse={setCourse}
+                      //course={course}
+                      //setCourse={setCourse}
                       />
-      </div>  */}
+      </div> 
       < div >
         < HelpButton pdfUrl={UserManual} />
       </div>
