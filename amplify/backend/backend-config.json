@@ -6,28 +6,6 @@
     }
   },
   "api": {
-    "AdminQueries": {
-      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "prontoAuth"
-        },
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "pronto": {
       "dependsOn": [
         {
@@ -156,6 +134,29 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "SuperAdminApiHandler": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "pronto"
+        },
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "prontoAuth"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "announcementsHandler": {
       "build": true,
       "dependsOn": [
@@ -190,6 +191,17 @@
     },
     "prontoAuthPostConfirmation": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "pronto"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -224,6 +236,14 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "notifications": {
+    "analytics": {
+      "channels": [
+        "Email"
+      ],
+      "service": "Pinpoint"
     }
   },
   "parameters": {
@@ -280,6 +300,30 @@
         {
           "category": "function",
           "resourceName": "AdminQueries28edb2f2"
+        }
+      ]
+    },
+    "AMPLIFY_function_SuperAdminApiHandler_cognitoWebClientId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SuperAdminApiHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_SuperAdminApiHandler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SuperAdminApiHandler"
+        }
+      ]
+    },
+    "AMPLIFY_function_SuperAdminApiHandler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "SuperAdminApiHandler"
         }
       ]
     },
