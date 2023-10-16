@@ -120,20 +120,6 @@
     }
   },
   "function": {
-    "AdminQueries28edb2f2": {
-      "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "prontoAuth"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "SuperAdminApiHandler": {
       "build": true,
       "dependsOn": [
@@ -268,38 +254,6 @@
         {
           "category": "analytics",
           "resourceName": "Pinpoint"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueries28edb2f2_cognitoUserPoolId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueries28edb2f2_cognitoWebClientId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueries28edb2f2_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueries28edb2f2_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
         }
       ]
     },

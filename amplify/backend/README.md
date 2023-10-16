@@ -1,8 +1,9 @@
 # Deploying the backend
 
 # Requirements
+
 1. Amplify CLI version 12+
-`npm install `
+   `npm install `
 
 ## 1. intitialize existing Pronto project
 
@@ -49,7 +50,9 @@ the "{will-be-changed-later}" values will be changed later at step 5
 ### 3.6. AdminQueries28edb2f2
 
 ## 4. Configure resource permissions
-`amplify update function` 
+
+`amplify update function`
+
 - this will allow you to manually confirm all preset permissions by selecting `Resource access permissions` and approving each by pressing `enter`
 - on the background, this attaches all the necessary roles to allow your backend to use all the shared resources accordingly
 - it alos configures some of the needed environment variables for it
@@ -59,4 +62,4 @@ the "{will-be-changed-later}" values will be changed later at step 5
 - `amplify push` will deploy the backend
 - CLI will give you more options, you can choose any here
 - the deployed version will not be fully functional here, as we still need more variables
-- once deployed, head over to 
+- once deployed, head over to
