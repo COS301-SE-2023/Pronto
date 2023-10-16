@@ -96,34 +96,34 @@ const Register = ({ navigation }) => {
   };
 
   const fetchInstitutions = async () => {
-
     try {
       let inst = await API.graphql({
         query: listInstitutions,
         variables: {},
-        authMode: "API_KEY"
+        authMode: "API_KEY",
       });
 
-      inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
+      inst = inst.data.listInstitutions.items.filter(
+        (item) => item._deleted === null
+      );
       //let inst = await DataStore.query(Institution, Predicates.ALL)
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
           key: inst[j].id,
-          value: inst[j].name
-        }
+          value: inst[j].name,
+        };
         institutionInfo.push(item);
       }
-      ;
       setInstitutions(institutionInfo);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchInstitutions()
-  }, [])
+    fetchInstitutions();
+  }, []);
 
   const onSignUpPressed = async () => {
     if (loading) {
@@ -173,22 +173,20 @@ const Register = ({ navigation }) => {
         attributes: {
           email: email,
           family_name: institutionId,
-          name: studentName
+          name: studentName,
         },
         clientMetadata: {
           role: "Student",
-          institutionId: institutionId
-        }
-      }
+          institutionId: institutionId,
+        },
+      };
       const u = await Auth.signUp(signUpObject);
 
-
       console.log(u);
-      navigation.navigate("ConfirmEmail", { email });
+      navigation.navigate("ConfirmEmail", { email, institutionId });
     } catch (e) {
       console.log(e);
       Alert.alert("Sign up error", e.message);
-
     }
     setLoading(false);
   };
@@ -202,7 +200,9 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1, justifyContent: "center" }}
+    >
       <View style={styles.contentContainer}>
         <View style={styles.centered}>
           <Text style={styles.title}>Create Account</Text>
@@ -265,7 +265,7 @@ const Register = ({ navigation }) => {
 
         <View style={styles.inputContainer}>
           <TextInput
-            testID='email-input'
+            testID="email-input"
             placeholder="Email"
             autoCapitalize="none"
             placeholderTextColor={"#666666"}
@@ -286,7 +286,12 @@ const Register = ({ navigation }) => {
 
           {isTypingEmail && !emailIsValid && (
             <View style={styles.iconContainer}>
-              <MaterialIcons name="cancel" size={24} color="red" testID='email-error-icon' />
+              <MaterialIcons
+                name="cancel"
+                size={24}
+                color="red"
+                testID="email-error-icon"
+              />
             </View>
           )}
         </View>
@@ -299,7 +304,12 @@ const Register = ({ navigation }) => {
             save="key"
             boxStyles={[
               styles.input,
-              { paddingVertical: 16, backgroundColor: "#E7DADA", opacity: 0.7, textAlignVertical: "center" },
+              {
+                paddingVertical: 16,
+                backgroundColor: "#E7DADA",
+                opacity: 0.7,
+                textAlignVertical: "center",
+              },
             ]}
             defaultOption={{ key: "notSet", value: "Select University" }}
             placeholder="Select University"
@@ -370,7 +380,12 @@ const Register = ({ navigation }) => {
           )}
         </View>
 
-        <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPressed} testID='sign-up-button' disabled={loading}>
+        <TouchableOpacity
+          style={styles.signUpButton}
+          onPress={onSignUpPressed}
+          testID="sign-up-button"
+          disabled={loading}
+        >
           <Text style={styles.signUpButtonText}>
             {" "}
             {loading ? "Signing up..." : "Sign up"}
