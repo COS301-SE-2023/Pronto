@@ -1,7 +1,6 @@
 const {
   CognitoIdentityProviderClient,
   AdminAddUserToGroupCommand,
-  GetGroupCommand,
 } = require("@aws-sdk/client-cognito-identity-provider");
 const ROLES = require("./roles");
 
@@ -52,29 +51,12 @@ exports.handler = async (event) => {
         "Unrecognised Client. Cannot authenticate user from this app client."
       );
   }
-
-  const groupParams = {
-    GroupName: GroupName,
-    UserPoolId: event.userPoolId,
-  };
   const addUserParams = {
     GroupName: GroupName,
     UserPoolId: event.userPoolId,
     Username: event.userName,
   };
   console.table(addUserParams);
-  try {
-    await cognitoIdentityServiceProviderClient.send(
-      new GetGroupCommand(groupParams)
-    );
-  } catch (getGroupError) {
-    console.debug(
-      `Failed to get User Group with userGroupName = ${
-        addUserParams.GroupName
-      }. INFO: ${JSON.stringify(getGroupError)}`
-    );
-    throw new Error(`failed to add user to user group`);
-  }
   try {
     await cognitoIdentityServiceProviderClient.send(
       new AdminAddUserToGroupCommand(addUserParams)
