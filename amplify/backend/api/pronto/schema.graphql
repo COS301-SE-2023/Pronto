@@ -2,18 +2,45 @@ type Institution
   @model
   @auth(
     rules: [
-      { allow: owner, ownerField: "owner" }
-      { allow: public, operations: [read, create] }
+      { allow: owner, ownerField: "adminId", operations: [read, update] }
+      { allow: public, operations: [read, update, create, delete] }
       {
         allow: groups
-        groups: ["studentUserGroup", "lecturerUserGroup"]
+        groups: ["studentsUserGroup", "lecturerUserGroup"]
         operations: [read]
       }
       { allow: groups, groups: ["adminUserGroup"], operations: [read, update] }
+      { allow: groups, groups: ["superUserGroup"] }
     ]
   ) {
   id: ID!
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "adminId", operations: [read] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["studentsUserGroup", "lecturerUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["adminUserGroup"], operations: [read] }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
   name: String!
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "adminId", operations: [read] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["studentsUserGroup", "lecturerUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["adminUserGroup"], operations: [read] }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
   location: String
   pageUrl: String
   campusMapUrl: String
@@ -26,7 +53,14 @@ type Institution
   domains: [String]
   admin: Admin @hasOne(fields: ["adminId"])
   adminId: ID
-  owner: String
+    @index(name: "institutionName", queryField: "institutionByName")
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "adminId", operations: [read] }
+        { allow: public, operations: [read] }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
   courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
   students: [Student] @hasMany(indexName: "byStudent", fields: ["id"])
   lecturer: [Lecturer] @hasMany(indexName: "byLecturer", fields: ["id"])
@@ -36,19 +70,109 @@ type Admin
   @model
   @auth(
     rules: [
-      { allow: owner, ownerField: "owner" }
-      { allow: public, operations: [read] }
-      { allow: groups, groups: ["adminUserGroup"], operations: [read] }
+      { allow: owner, ownerField: "id" }
+      { allow: public, operations: [read, create] }
+      {
+        allow: groups
+        groups: ["adminUserGroup", "lecturerUserGroup", "studentsUserGroup"]
+        operations: [read]
+      }
+      { allow: groups, groups: ["superUserGroup"] }
     ]
   ) {
   id: ID!
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "id", operations: [read] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["adminUserGroup", "lecturerUserGroup", "studentsUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
   institutionId: ID
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "id", operations: [read] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["adminUserGroup", "lecturerUserGroup", "studentsUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
   firstname: String!
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "id", operations: [read, update] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["adminUserGroup", "lecturerUserGroup", "studentsUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
   lastname: String!
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "id", operations: [read, update] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["adminUserGroup", "lecturerUserGroup", "studentsUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
   userRole: String!
-  email: String! @index(name: "byEmail", queryField: "adminByEmail")
-  owner: String
-  institution: Institution @belongsTo(fields: ["institutionId"])
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "id", operations: [read] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["adminUserGroup", "lecturerUserGroup", "studentsUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
+  email: String!
+    @index(name: "byEmail", queryField: "adminByEmail")
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "id", operations: [read, update] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["adminUserGroup", "lecturerUserGroup", "studentsUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
+  institution: Institution
+    @belongsTo(fields: ["institutionId"])
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "id", operations: [read] }
+        { allow: public, operations: [read, create] }
+        {
+          allow: groups
+          groups: ["adminUserGroup", "lecturerUserGroup", "studentsUserGroup"]
+          operations: [read]
+        }
+        { allow: groups, groups: ["superUserGroup"] }
+      ]
+    )
 }
 
 type Lecturer
@@ -59,7 +183,7 @@ type Lecturer
       { allow: public, operations: [read] }
       {
         allow: groups
-        groups: ["lecturerUserGroup", "adminUserGroup"]
+        groups: ["lecturerUserGroup", "adminUserGroup", "studentsUserGroup"]
         operations: [read]
       }
     ]
@@ -79,7 +203,7 @@ type Student
   @auth(
     rules: [
       { allow: owner }
-      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+      { allow: groups, groups: ["studentsUserGroup"], operations: [read] }
     ]
   ) {
   institutionId: ID! @index(name: "byStudent")
@@ -88,7 +212,7 @@ type Student
   lastname: String!
   userRole: String!
   email: String! @index(name: "byEmail", queryField: "studentByEmail")
-  preference: NotificationPreferance @auth(rules: [{ allow: owner }])
+  notifications: Endpoint @auth(rules: [{ allow: owner }]) @hasOne
   institution: Institution! @belongsTo(fields: ["institutionId"])
   timetable: Timetable @hasOne
   enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
@@ -101,7 +225,7 @@ type Enrollment
       { allow: owner }
       { allow: public, operations: [read] }
       { allow: groups, groups: ["lecturerUserGroup"], operations: [read] }
-      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+      { allow: groups, groups: ["studentsUserGroup"], operations: [read] }
     ]
   ) {
   id: ID!
@@ -120,7 +244,7 @@ type Course
       { allow: public, operations: [read] }
       {
         allow: groups
-        groups: ["studentUserGroup", "lecturerUserGroup", "adminUserGroup"]
+        groups: ["studentsUserGroup", "lecturerUserGroup", "adminUserGroup"]
         operations: [read]
       }
     ]
@@ -137,7 +261,13 @@ type Course
     @hasMany(indexName: "byAnnouncement", fields: ["id"])
   lecturer: Lecturer @belongsTo(fields: ["lecturerId"])
   institution: Institution! @belongsTo(fields: ["institutionId"])
-  notification: Notification @auth(rules: [{ allow: owner }])
+  notification: Notification
+    @auth(
+      rules: [
+        { allow: owner }
+        { allow: groups, groups: ["studentsUserGroup"], operations: [read] }
+      ]
+    )
 }
 
 type Timetable
@@ -145,7 +275,7 @@ type Timetable
   @auth(
     rules: [
       { allow: owner }
-      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+      { allow: groups, groups: ["studentsUserGroup"], operations: [read] }
     ]
   ) {
   id: ID!
@@ -162,7 +292,7 @@ type Activity
       { allow: owner }
       {
         allow: groups
-        groups: ["studentUserGroup", "adminUserGroup"]
+        groups: ["studentsUserGroup", "adminUserGroup"]
         operations: [read]
       }
       {
@@ -194,10 +324,14 @@ type Announcement
       { allow: public, operations: [read] }
       {
         allow: groups
-        groups: ["studentUserGroup", "adminUserGroup"]
+        groups: ["studentsUserGroup", "adminUserGroup"]
         operations: [read]
       }
-      { allow: groups, groups: ["lecturerUserGroup"], operations: [create] }
+      {
+        allow: groups
+        groups: ["lecturerUserGroup"]
+        operations: [create, read, delete]
+      }
     ]
   ) {
   id: ID!
@@ -223,18 +357,6 @@ type Announcement
     @function(name: "announcementsHandler-${env}")
 }
 
-type NotificationPreferance
-  @model
-  @auth(
-    rules: [
-      { allow: owner, ownerField: "studentId" }
-      { allow: public, operations: [read] }
-    ]
-  ) {
-  studentId: ID! @index(name: "byStudentId")
-  endpoint: Endpoint @function(name: "notificationPreferanceHandler-${env}")
-}
-
 type AdminApplication
   @model
   @auth(
@@ -247,11 +369,102 @@ type AdminApplication
       }
     ]
   ) {
-  id: ID!
-  name: String!
+  institutionName: String!
+    @auth(
+      rules: [
+        { allow: public, operations: [create] }
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
   firstname: String!
+    @auth(
+      rules: [
+        { allow: public, operations: [create] }
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
+  lastname: String!
+    @auth(
+      rules: [
+        { allow: public, operations: [create] }
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
   email: String!
-  status: String
+    @auth(
+      rules: [
+        { allow: public, operations: [create] }
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
+  adminId: ID
+    @auth(
+      rules: [
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
+  admin: Admin
+    @hasOne(fields: ["adminId"])
+    @auth(
+      rules: [
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
+  institutionId: ID
+    @auth(
+      rules: [
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
+  tempPassword: String!
+    @auth(
+      rules: [
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
+  applicationInfo: ADMIN_APPLICATION_INFO
+    @function(name: "SuperAdminApiHandler-${env}")
+    @auth(
+      rules: [
+        {
+          allow: groups
+          groups: ["superUserGroup"]
+          operations: [create, read, update, delete]
+        }
+      ]
+    )
 }
 
 type Notification {
@@ -291,9 +504,59 @@ type Announcement_Matrix {
   EMAIL: Int
 }
 
-type Endpoint {
-  type: NOTIFICATION_TYPE
-  endPointAddress: ID
+type Endpoint
+  @model
+  @auth(
+    rules: [
+      {
+        allow: owner
+        ownerField: "studentId"
+        operations: [create, read, update]
+      }
+    ]
+  ) {
+  type: NOTIFICATION_TYPE!
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "studentId", operations: [create, read] }
+      ]
+    )
+  studentId: ID!
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "studentId", operations: [create, read] }
+      ]
+    )
   status: STATUS
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "studentId", operations: [create, read] }
+      ]
+    )
   info: String
+    @auth(
+      rules: [
+        { allow: owner, ownerField: "studentId", operations: [create, read] }
+      ]
+    )
+}
+
+type TEMP_ADMIN {
+  id: ID!
+  institutionId: ID!
+  name: String!
+  email: AWSEmail!
+}
+type ADMIN_APPLICATION_INFO {
+  status: ADMIN_APPLICAION_STATUS
+  admin: TEMP_ADMIN
+}
+
+enum ADMIN_APPLICAION_STATUS {
+  APPLIED
+  PENDING
+  APPROVED
+  REJECTED
+  APPROVAL_FAILED
+  GET_STATUS_FAILED
 }
