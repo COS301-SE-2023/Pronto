@@ -387,8 +387,9 @@ export const listAdminApplications = /* GraphQL */ `
       items {
         email
         firstname
+        lastname
         id
-        name
+        institutionName
         applicationInfo {
           admin {
             email
@@ -396,6 +397,7 @@ export const listAdminApplications = /* GraphQL */ `
             institutionId
             name
           }
+          status
         }
         createdAt
         updatedAt

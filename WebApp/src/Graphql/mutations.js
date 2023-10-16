@@ -298,6 +298,8 @@ export const updateAdminApplication = /* GraphQL */ `
         }
         status
       }
+      firstname
+      lastname
       createdAt
       updatedAt
       _version
@@ -314,10 +316,6 @@ export const deleteAdminApplication = /* GraphQL */ `
   ) {
     deleteAdminApplication(input: $input, condition: $condition) {
       id
-      _version
-      _deleted
-      _lastChangedAt
-      __typename
     }
   }
 `;
@@ -362,11 +360,18 @@ export const createAdminApplication = /* GraphQL */ `
   ) {
     createAdminApplication(input: $input, condition: $condition) {
       id
-      name
+      institutionName
       firstname
+      lastname
       email
       applicationInfo {
         status
+        admin {
+          email
+          id
+          institutionId
+          name
+        }
       }
     }
   }

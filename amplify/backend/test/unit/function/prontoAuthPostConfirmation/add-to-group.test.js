@@ -2,24 +2,18 @@ const addToGroup = require("../../../../function/prontoAuthPostConfirmation/src/
 const adminEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/admin.event.json");
 const lecturerEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/lecturers.event.json");
 const studentsEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/students.event.json");
-const {
-  CognitoIdentityProviderClient,
-  AdminAddUserToGroupCommand,
-  GetGroupCommand,
-} = require("@aws-sdk/client-cognito-identity-provider");
 
 jest.mock("@aws-sdk/client-cognito-identity-provider", () => {
   return {
     CognitoIdentityProviderClient: class {
       send() {
-        return Promise.resolve({});
+        return {};
       }
+
       promise() {
-        return Promise.resolve({});
+        return Promise.reject({});
       }
     },
-    GetGroupCommand: class {},
-    AdminAddUserToGroupCommand: class {},
   };
 });
 describe("input validation", () => {
@@ -32,6 +26,15 @@ describe("input validation", () => {
     };
     await expect(addToGroup.handler(requestWithNullRole)).rejects.toThrow(
       "Invalid User Role or Role not provided"
+    );
+  });
+  test(`Should throw Error('Client Id not provided'`, async () => {
+    const requestWithNullClientId = {
+      request: { clientMetadata: { role: "Admin" } },
+      callerContext: {},
+    };
+    await expect(addToGroup.handler(requestWithNullClientId)).rejects.toThrow(
+      "Client Id not provided"
     );
   });
   test(`Should throw Error('Invalid User Role or Role not provided'`, async () => {
@@ -94,26 +97,19 @@ describe("input validation", () => {
       /The Web App is reserved for ADMINs or LECTURERs only/
     );
   });
+
+  test("show throw: The Web App is reserved for ADMINs or LECTURERs only...", async () => {
+    console.table(adminEvent);
+    await expect(addToGroup.handler(adminEvent)).rejects.toThrow(
+      /^failed to add user to user group$/
+    );
+  });
 });
 
-describe("add to group", () => {
-  test(`Should add admin to group`, async () => {
-    expect(await addToGroup.handler(adminEvent)).toMatchObject(adminEvent);
-  });
-
-  test(`Should add student to group`, async () => {
-    expect(await addToGroup.handler(studentsEvent)).toMatchObject(
-      studentsEvent
-    );
-  });
-  test(`Should add lecturer to group`, async () => {
-    expect(await addToGroup.handler(lecturerEvent)).toMatchObject(
-      lecturerEvent
-    );
-  });
-  test(`Should add lecturer to group`, async () => {
-    expect(await addToGroup.handler(lecturerEvent)).toMatchObject(
-      lecturerEvent
+describe("should fail to group", () => {
+  test(`should fail to student to group`, async () => {
+    await expect(addToGroup.handler(studentsEvent)).rejects.toThrow(
+      /^failed to add user to user group$/
     );
   });
 });

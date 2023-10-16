@@ -180,10 +180,10 @@ function Login() {
     setLoading(true);
 
     try {
-      const n = firstname + " " + lastname;
       const application = {
-        name: institutionName,
-        firstname: n,
+        institutionName: institutionName,
+        firstname: firstname,
+        lastname: lastname,
         email: email,
       };
 
@@ -196,8 +196,8 @@ function Login() {
           authMode: "API_KEY",
         });
         console.log(apply);
-      } catch (error) {
-        console.log(error);
+      } catch (applicationError) {
+        console.log({ applicationError });
       }
 
       //await Auth.signUp(signInObject);

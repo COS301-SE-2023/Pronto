@@ -2,23 +2,68 @@ import React, { useState, useEffect } from "react";
 import SuperAdminNavigation from "./SuperAdminNavigation";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import { API, Auth } from "aws-amplify";
-import { getInstitution, listInstitutions } from "../Graphql/queries";
+import { API } from "aws-amplify";
+import { listInstitutions } from "../Graphql/queries";
 import { listAdminApplications } from "../Graphql/queries";
 import {
-  updateAdmin,
   updateAdminApplication,
   createInstitution,
   createAdmin,
   updateInstitution,
+  deleteAdminApplication,
 } from "../Graphql/mutations";
 
 export default function ApplicationRequests() {
   const [requests, setRequests] = useState([]);
 
+  const processApplication = async (request, inst) => {
+    console.debug({ request });
+
+    const createAdminResponse = await addToAdminGroup(
+      request.id,
+      inst,
+      request.email,
+      request.firstname,
+      request.lastname
+    );
+    console.debug({ createAdminResponse });
+
+    if (
+      !createAdminResponse ||
+      !createAdminResponse.applicationInfo ||
+      !createAdminResponse.applicationInfo.admin
+    )
+      throw new Error("failed to create admin");
+    const { admin } = createAdminResponse.applicationInfo;
+    console.debug({ inst });
+    const createAdminReponse = await API.graphql({
+      query: createAdmin,
+      variables: {
+        input: {
+          email: request.email,
+          firstname: request.firstname,
+          lastname: request.lastname,
+          userRole: "Admin",
+          id: admin.id,
+        },
+      },
+    });
+    console.debug({ createAdminReponse });
+    const updateInst = API.graphql({
+      query: updateInstitution,
+      variables: {
+        input: {
+          adminId: createAdminReponse.data.createAdmin.id,
+          id: inst.id,
+        },
+      },
+    });
+    console.log(inst);
+    console.debug({ admin });
+    console.debug({ updateInst });
+  };
   const acceptRequest = async (index) => {
     const updatedRequests = [...requests];
-
     try {
       // let admin = await API.graphql({
       //   query: getInstitution,
@@ -33,11 +78,7 @@ export default function ApplicationRequests() {
       updatedRequests.splice(index, 1);
       setRequests(updatedRequests);
 
-      let request = requests[index];
-      let institution = {
-        name: request.name,
-        
-      };
+      const request = requests[index];
 
       let inst = await API.graphql({
         query: listInstitutions,
@@ -49,62 +90,28 @@ export default function ApplicationRequests() {
           },
         },
       });
+
       if (inst.data.listInstitutions.items.length > 0) {
         inst = inst.data.listInstitutions.items[0];
+        const deleteAdminApplicationResponse = await API.graphql({
+          query: deleteAdminApplication,
+          variables: { input: { id: request.id, _version: request._version } },
+        });
+        console.debug({ deleteAdminApplicationResponse });
       } else {
         inst = await API.graphql({
           query: createInstitution,
-          variables: { input: institution },
+          variables: {
+            input: {
+              name: request.institutionName,
+            },
+          },
         });
 
-        console.log(inst);
-        inst = inst.data.createInstitution;
+        await processApplication(request, inst.data.createInstitution);
       }
-      const newAdmin = await addToAdminGroup(
-        inst,
-        request.email,
-        request.firstname
-      );
-      console.log(newAdmin);
-
-      let a = {
-        firstname: " ",
-        userRole: "Admin",
-        lastname: " ",
-        institutionId: inst.id,
-        email: request.email,
-      };
-      console.log(a);
-      let admin = await API.graphql({
-        query: createAdmin,
-        variables: { input: a },
-      });
-      console.log(admin);
-      let update = {
-        id: inst.id,
-        adminId: admin.data.createAdmin.id,
-        _version: inst._version,
-      };
-      console.log(update);
-      let f = await API.graphql({
-        query: updateInstitution,
-        variables: { input: update },
-      });
-      //  const user= await getUserHelper()
-      console.log(f);
-      let g = await API.graphql({
-        query: updateAdminApplication,
-        variables: {
-          input: {
-            id: requests[index].id,
-            status: "ACCEPTED",
-            _version: requests[index]._version,
-          },
-        },
-      });
-      console.log(g);
-    } catch (error) {
-      console.log(error);
+    } catch (acceptRequestError) {
+      console.debug({ acceptRequestError });
     }
   };
 
@@ -126,22 +133,39 @@ export default function ApplicationRequests() {
       console.log(error);
     }
   };
-  const addToAdminGroup = async (applicationId, institution, email, name) => {
+  const addToAdminGroup = async (
+    applicationId,
+    institution,
+    email,
+    firstname,
+    lastname
+  ) => {
     try {
-      return API.graphql({
+      console.debug({
+        id: applicationId,
+        email: email,
+        firstname: firstname,
+        lastname: lastname,
+        institutionId: institution.id,
+        tempPassword: "October01!",
+      });
+      const updateAdminApplicationResponse = await API.graphql({
         query: updateAdminApplication,
         variables: {
           input: {
             id: applicationId,
             email: email,
+            firstname: firstname,
+            lastname: lastname,
             institutionId: institution.id,
             tempPassword: "October01!",
-            name: name,
           },
         },
       });
-    } catch (error) {
-      console.log(error);
+      console.debug({ updateAdminApplicationResponse });
+      return updateAdminApplicationResponse.data.updateAdminApplication;
+    } catch (addToAdminGroupError) {
+      console.log(addToAdminGroupError);
     }
   };
 
@@ -155,25 +179,23 @@ export default function ApplicationRequests() {
 
       updatedRequests.splice(index, 1);
       setRequests(updatedRequests);
-    } catch (error) {
-      console.log(error);
+    } catch (declineRequestError) {
+      console.debug({ declineRequestError });
     }
   };
 
   const fetchRequests = async () => {
+    console.log("waht");
     try {
       let r = await API.graphql({
         query: listAdminApplications,
       });
       setRequests(
-        r.data.listAdminApplications.items.filter(
-          (item) => item._deleted === null && !item.applicationInfo
-        )
+        r.data.listAdminApplications.items.filter((item) => !item._deleted)
       );
-      //setRequests(r.data.listAdminApplications.items);
       console.debug({ r });
-    } catch (error) {
-      console.log(error);
+    } catch (fetchRequestsError) {
+      console.log({ fetchRequestsError });
     }
   };
   useEffect(() => {
@@ -193,7 +215,6 @@ export default function ApplicationRequests() {
         >
           Application Requests
         </h1>
-
         {requests.map((request, index) => (
           <div className="card" key={index}>
             <div className="card-header">
@@ -214,7 +235,7 @@ export default function ApplicationRequests() {
                     "Pronto Admins"
                   )}&body=${encodeURIComponent(
                     "Hello " +
-                      request.name +
+                      request.firstname +
                       " Your request has been (rejected/accepted)"
                   )}`}
                 >
