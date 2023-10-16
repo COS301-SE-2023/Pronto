@@ -177,3 +177,6 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 /Components/aws-exports
+**/src/ui-components
+**/WebApp/ui-components
+**/coverage
