@@ -38,7 +38,7 @@ const isInstitutionIdValid = async (institutionId) => {
 
 exports.handler = async (event) => {
   console.log(`ADD INSTITUTION ATTRIBUTE EVENT: ${JSON.stringify(event)}`);
-  const institutionId = event.request.ClientMetadata;
+  const institutionId = event.request.ClientMetadata.institutionId;
   try {
     if (!isInstitutionIdValid(institutionId)) {
       const invalidInstitutionError = new Error("Invalid institution");
