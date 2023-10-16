@@ -49,8 +49,12 @@ exports.handler = async (event) => {
       UserPoolId: event.userPoolId,
       Username: event.userName,
     };
+    const adminUpdateUserAttributesCommand =
+      new AdminUpdateUserAttributesCommand(
+        adminUpdateUserAttributesCommandInput
+      );
     const $metadata = await cognitoIdentityProviderClient.send(
-      adminUpdateUserAttributesCommandInput
+      adminUpdateUserAttributesCommand
     );
     if ($metadata.httpStatusCode === 200) return event;
     else {
