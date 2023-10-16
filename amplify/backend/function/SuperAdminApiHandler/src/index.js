@@ -17,7 +17,7 @@ const {
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
 const { GRAPHQL, APPLICATION_STATUS } = require("./constants");
-const { signAdminUp } = require("./cognitoActions");
+const { signAdminUp } = require("./userManagement");
 
 const config = {
   region: process.env.AWS_REGION,
