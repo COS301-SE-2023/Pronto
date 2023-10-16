@@ -13,7 +13,7 @@ AWSCLOUDFORMATIONCONFIG="{\
 }"
 AMPLIFY="{\
 \"projectName\":\"pronto\",\
-\"appId\":\"d20q0958evgy5c\",\
+\"appId\":\"dd1v64s62g4erwa\",\
 
 \"envName\":\"dev\",\
 \"defaultEditor\":\"code\"\
