@@ -5,7 +5,7 @@ describe("Testing Recent Annoucements Lecturer", () => {
 
     it("should display the recent annoucements", function () {
         //navigate to the recent announcements page without using visit
-        cy.LecturerSignIn("yovab14312@tenjb.com", Cypress.env('LECTURER_PASSWORD'));
+        cy.LecturerSignIn("andilengwenya2001@gmail.com", Cypress.env('LECTURER_PASSWORD'));
         cy.visit("/lecturer/announcement");
 
         //Check that the recent announcements is displayed
@@ -23,7 +23,7 @@ describe("Testing Recent Annoucements Lecturer", () => {
 
     //The test below checks that the navigation bar is present and has a logout button
     it("asserts nav bar structure", function () {
-        cy.LecturerSignIn("yovab14312@tenjb.com", Cypress.env('LECTURER_PASSWORD'));
+        cy.LecturerSignIn("andilengwenya2001@gmail.com", Cypress.env('LECTURER_PASSWORD'));
         cy.visit("/lecturer/announcement");
         //Check that the duv with classes vertical-navbar and col-4 and p-4 is present and has a Log Out button
         cy.contains("Log Out");

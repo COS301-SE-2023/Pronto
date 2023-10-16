@@ -4,7 +4,7 @@ describe("Lecturer - Edit Personal Info", () => {
 
     //Test to make sure that all the elements are present
     it("should display all the elements", () => {
-        cy.LecturerSignIn("yovab14312@tenjb.com", Cypress.env('LECTURER_PASSWORD'));
+        cy.LecturerSignIn("andilengwenya2001@gmail.com", Cypress.env('LECTURER_PASSWORD'));
         cy.visit("/lecturer/personal-info");
         cy.wait(10000);
         //Check that the header is present

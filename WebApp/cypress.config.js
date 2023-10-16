@@ -11,10 +11,14 @@ module.exports = defineConfig({
     fixturesFolder: "./cypress/fixtures",
     screenshotsFolder: "./cypress/screenshots",
     videosFolder: "./cypress/videos",
-    baseUrl: "https://testing-fixes.d23czn68v40k1e.amplifyapp.com/",
+    baseUrl: "https://mobile-datastore.d2kif3nhx7o2zb.amplifyapp.com/",
     setupNodeEvents(on, config) {
 
     },
+    env :
+        {
+            CYPRESS_LECTURER_PASSWORD: "October01!",
+        }
   },
 
   component: {
