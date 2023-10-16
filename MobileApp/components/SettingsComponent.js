@@ -20,7 +20,7 @@ const SettingsComponent = ({ settingsOptions }) => {
     updateStudent(null);
 
     try {
-      await DataStore.clear();
+      // await DataStore.clear();
       await Auth.signOut();
       //  navigation.navigate("Welcome");
       setLoggingOut(false);
