@@ -41,9 +41,9 @@ exports.handler = async (event, context) => {
     )
       throw new Error(`Only admins/lecturer are allowed to use the web app\n
       Please Use the mobile if you are student, or sign up as a lecturer/admin
-      Request for an account as an institude admin\n
-      Or contact your institude admin if you are a lecture\n
-      More details on: {path/to/pronto/web/about/institude/admin}`);
+      Request for an account as an Institute admin\n
+      Or contact your Institute admin if you are a lecture\n
+      More details on: http://prontotimetable.co.za`);
   } catch (preAuthError) {
     console.debug(preAuthError);
     throw new Error(preAuthError);
