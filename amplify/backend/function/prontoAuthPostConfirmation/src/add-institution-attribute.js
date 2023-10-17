@@ -2,50 +2,26 @@ const {
   AdminUpdateUserAttributesCommand,
   CognitoIdentityProviderClient,
 } = require("@aws-sdk/client-cognito-identity-provider");
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
 
 const config = {
-  region: process.env.AWS_REGION,
+  region: process.env.REGION,
 };
-const dynamoDBClient = new DynamoDBClient(config);
-const documentClient = new DynamoDBDocumentClient(dynamoDBClient);
 
 const cognitoIdentityProviderClient = new CognitoIdentityProviderClient(config);
 
-const isInstitutionIdValid = async (institutionId) => {
-  if (!institutionId)
-    throw new Error("Invalid institution, please select a valid institution");
-  const institutionTableName = `institution-${process.env.API_PRONTO_GRAPHQLAPIIDOUTPUT}-${process.env.ENV}`;
-  const GetCommandInput = {
-    TableName: institutionTableName,
-    Key: institutionId,
-  };
-  const getCommand = new GetCommand(GetCommandInput);
-  try {
-    const response = await documentClient.send(getCommand);
-    console.log(response);
-    return (
-      response.item && response.item.Record.institutionId === institutionId
-    );
-  } catch (getInstitutionError) {
-    console.debug(`FAILED TO GET INSTITUTION. INFO: ${getInstitutionError}`);
-    throw new Error(
-      "failed to validate the institution you selected\n please contact your admin"
-    );
-  }
-};
-
 exports.handler = async (event) => {
   console.log(`ADD INSTITUTION ATTRIBUTE EVENT: ${JSON.stringify(event)}`);
-  const institutionId = event.request.ClientMetadata.institutionId;
+
+  const institutionId = event.request.clientMetadata.institutionId;
+
   try {
-    if (!isInstitutionIdValid(institutionId)) {
-      const invalidInstitutionError = new Error("Invalid institution");
-      throw invalidInstitutionError;
-    }
     const adminUpdateUserAttributesCommandInput = {
-      UserAttributes: [{ Name: "custom:institutionId", Value: institutionId }],
+      UserAttributes: [
+        {
+          Name: "custom:inst-id",
+          Value: institutionId,
+        },
+      ],
       UserPoolId: event.userPoolId,
       Username: event.userName,
     };
@@ -53,26 +29,21 @@ exports.handler = async (event) => {
       new AdminUpdateUserAttributesCommand(
         adminUpdateUserAttributesCommandInput
       );
-    const $metadata = await cognitoIdentityProviderClient.send(
-      adminUpdateUserAttributesCommand
-    );
+    const adminUpdateUserAttributesCommandOutput =
+      await cognitoIdentityProviderClient.send(
+        adminUpdateUserAttributesCommand
+      );
+    const { $metadata } = adminUpdateUserAttributesCommandOutput;
     if ($metadata.httpStatusCode === 200) return event;
     else {
-      const failedToAddInstitutionAttributeError = new Error(
-        "failed to add you to an institution, please contact your admin"
-      );
-      throw failedToAddInstitutionAttributeError;
+      throw new Error("failed to update user attribute using admin api");
     }
   } catch (addInstitutionIdAttributeError) {
     console.debug(
-      `failed to institution on username = ${
+      `failed add to InstitutionId = ${institutionId}. To username = ${
         event.userName
-      }. InstitutionId = ${institutionId}. INFO: ${JSON.stringify(
-        addInstitutionIdAttributeError
-      )}`
+      }\n INFO: ${JSON.stringify(addInstitutionIdAttributeError)}`
     );
-    throw new Error(
-      "failed to add you to an institution, please contact your admin"
-    );
+    throw new Error("failed to add you to an institution, go back and login");
   }
 };

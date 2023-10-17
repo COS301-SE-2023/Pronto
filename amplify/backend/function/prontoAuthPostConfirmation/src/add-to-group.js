@@ -5,7 +5,7 @@ const {
 const ROLES = require("./roles");
 
 const config = {
-  region: process.env.AWS_REGION,
+  region: process.env.REGION,
 };
 
 const cognitoIdentityServiceProviderClient = new CognitoIdentityProviderClient(
