@@ -13,7 +13,7 @@ exports.handler = async (event) => {
   console.log(`ADD INSTITUTION ATTRIBUTE EVENT: ${JSON.stringify(event)}`);
 
   const institutionId = event.request.clientMetadata.institutionId;
-
+  if (!institutionId) throw new Error("Invalid institution");
   try {
     const adminUpdateUserAttributesCommandInput = {
       UserAttributes: [
@@ -33,6 +33,7 @@ exports.handler = async (event) => {
       await cognitoIdentityProviderClient.send(
         adminUpdateUserAttributesCommand
       );
+    console.table(adminUpdateUserAttributesCommandOutput);
     const { $metadata } = adminUpdateUserAttributesCommandOutput;
     if ($metadata.httpStatusCode === 200) return event;
     else {
