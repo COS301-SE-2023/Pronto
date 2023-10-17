@@ -1,6 +1,7 @@
 # Info
 
 - This cloud function adds a user to a user group post sign-up.
+- It also adds the institutionId to the user's ID Token
 
 # Trigger
 
@@ -21,7 +22,8 @@
   },
   "request": {
     "clientMetadata": {
-      "role": "USERROLE" // A custom input indicating the role to differentite lecture/admin from web client
+      "role": "USERROLE", // A custom input indicating the role to differentite lecture/admin from web client
+      "institutionId": "INSTITUTIONID" //the id to which a student is enrolled
     }
   }
 }
