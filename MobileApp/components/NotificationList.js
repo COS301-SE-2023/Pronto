@@ -52,7 +52,9 @@ const NotificationList = ({ navigation }) => {
 
             let ids = [];
             for (let i = 0; i < courses.length; i++) {
-                ids.push(courses[i].courseId);
+                if(courses[i]._deleted===null){
+                    ids.push(courses[i].courseId);
+                }
             }
             if (courses.length === 0) {
                 setLoading(false);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
-import { Auth } from "aws-amplify";
+import { Auth,DataStore } from "aws-amplify";
 import { NavigationContainer } from "@react-navigation/native";
 import NotificationPreferences from "../screens/Notifications/NotificationPreferences";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -20,13 +20,13 @@ const SettingsComponent = ({ settingsOptions }) => {
     updateStudent(null);
 
     try {
-      // await DataStore.clear();
+     // await DataStore.clear();
       await Auth.signOut();
-      //  navigation.navigate("Welcome");
+     // navigation.navigate("Welcome");
       setLoggingOut(false);
     }
     catch (error) {
-      //console.log(e)
+      console.log(error)
       setLoggingOut(false);
     }
     // navigation.navigate("Welcome");

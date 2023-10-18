@@ -115,14 +115,16 @@ const ScheduleTable = ({ navigation, route }) => {
     const activityList=removeDuplicates(activity);
     for(let i=0;i<enrollment.length;i++){
       const course=await enrollment[i].course;
-      const activity=await course.activity.values;
-      for(let j=0;j<activity.length;j++){
-        let saveActivity= activity[j];
-        saveActivity.course={
-          coursecode:course.coursecode
-        }
-        if(saveActivity._deleted===null && activityList.includes(saveActivity.id)){
-          c.push(saveActivity);
+      if(course._deleted===null){
+        const activity=await course.activity.values;
+        for(let j=0;j<activity.length;j++){
+          let saveActivity= activity[j];
+          saveActivity.course={
+            coursecode:course.coursecode
+          }
+          if(saveActivity._deleted===null && activityList.includes(saveActivity.id)){
+            c.push(saveActivity);
+          }
         }
       }
     }

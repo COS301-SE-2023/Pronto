@@ -167,6 +167,7 @@ const Register = ({ navigation }) => {
     setLoading(true);
     try {
       // navigation.navigate("ConfirmEmail", { email });
+      //await DataStore.clear()
       const studentName = name + "," + surname;
       const signUpObject = {
         username: email,

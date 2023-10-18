@@ -65,16 +65,46 @@ const Login = ({ navigation }) => {
       }
 
       const user = await Auth.signIn(signInObject);
-      const group = user.signInUserSession.idToken.payload["cognito:groups"][0];
-      console.log(group) 
+      const group = user.signInUserSession.idToken.payload["cognito:groups"][0]; 
       if(group!=="studentsUserGroup"){
           Alert.alert("Admins and Lecturers should use the Web App");
           await Auth.signOut();
           navigation.navigate("Register");
           setLoading(false);
        }
+      // await DataStore.start();
+
+    //   const email=user.attributes.email;
+    //   const id=user.attributes.sub
+    //   let stu =await DataStore.query(Student,(s) => s.email.eq(email));
+    //   console.log(stu);
+    //   if(stu!==undefined && stu!==null && stu.length>0){
+    //     console.log("Student",stu);
+    //     stu=stu.filter((s)=>s._deleted===null && s.owner===id);
+    //     let temp=stu;
+    //     for(let i=0;i<stu.length;i++){
+    //       if(temp.createdAt>stu[i].createdAt){
+    //          temp=stu[i]
+    //       }
+    //     }
+    //     console.log("Final ",stu);
       
-      
+    // }
+    //if(stu===null || stu===undefined || stu.length===0){
+      //const institutionId = user.attributes.family_name;
+      //const inst = await DataStore.query(Institution, institutionId); 
+      //let name = user.attributes.name.split(",")
+      // let c = await DataStore.save(
+      //   //   new Student({
+      //   //     "institutionId": institutionId,
+      //   //     "firstname": name[0],
+      //   //     "lastname": name[1],
+      //   //     "userRole": "Student",
+      //   //     "email": email,
+      //   //     "institution": inst,
+      //   //   })
+      //   // );
+   // }
      // let studentInfo = student;
       // if (student === null) {
      // const email = user.attributes.email;
@@ -126,7 +156,7 @@ const Login = ({ navigation }) => {
       // updateStudent(create.data.createStudent);
       // }
       //   }
-      //  navigation.navigate("Tabs", studentInfo);
+       //navigation.navigate("Tabs");
     } catch (e) {
       console.log(e);
       Alert.alert("Sign in error", e.message);

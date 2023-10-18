@@ -86,24 +86,35 @@ export default function App() {
       //     }
       //   }
       // }
-      const id=authUser.attributes.sub;
-      console.log(id);
-      const institutionId=authUser.attributes.family_name;
-      let studentInfo = await DataStore.query(Student, id);
-      console.log(studentInfo);
+      // const id=authUser.attributes.sub;
+      // console.log(id);
+      // const email=authUser.attributes.email;
+      // let stu =await DataStore.query(Student,(s) => s.email.eq(email));
+      // console.log("Student",stu);
+      // stu=stu.filter((s)=>s._deleted===null && s.owner===id);
+      // let temp=stu;
+      // for(let i=0;i<stu.length;i++){
+      //   if(temp.createdAt>stu[i].createdAt){
+      //     temp=stu[i]
+      //   }
+      // }
+      // console.log("Final ",stu);
+      // const institutionId=authUser.attributes.family_name;
+      // let studentInfo = await DataStore.query(Student, id);
+      // console.log(studentInfo);
       // const email = authUser.attributes.email;
       //   let stu = await API.graphql({
       //     query: getStudent,
       //     variables: { id: id }
       //   });
       //   console.log(stu.data.createStudent);
-      if (studentInfo === null || studentInfo===undefined) {
+     // if (studentInfo === null || studentInfo===undefined) {
 
         //Create student
-        let name = authUser.attributes.name.split(",")
+       // let name = authUser.attributes.name.split(",")
         
         //console.log(authUser.attributes);        
-        const email=authUser.attributes.email;
+      //  const email=authUser.attributes.email;
        // console.log(institutionId);
        //const inst = await DataStore.query(Institution, institutionId);
         //console.log(inst);
@@ -133,9 +144,9 @@ export default function App() {
         //       variables: { input: newStudent }
         //     })
         //     console.log(create.data.createStudent); 
-        throw Error("Information could not be found");    
+       // throw Error("Information could not be found");    
         
-      }
+     // }
       setUser(authUser);
     } catch (e) {
       setUser(null);

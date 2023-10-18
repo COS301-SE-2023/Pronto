@@ -178,20 +178,22 @@ const EditTimetable = ({ navigation }) => {
         activityList = removeDuplicates(activity);
       }
       if(enrollment!==undefined){
-      for (let i = 0; i < enrollment.length; i++) {
-        if (enrollment[i]._deleted === null) {
-          const course = await enrollment[i].course;
-          const activity = await course.activity.values;
-          //console.log(activity);
-          course.activity = activity;
-          m.push(course);
-          for (let j = 0; j < activity.length; j++) {
-            let saveActivity = activity[j];
-            saveActivity.course = {
-              coursecode: course.coursecode
-            }
-            if (saveActivity._deleted === null && activityList.includes(saveActivity.id)) {
-              c.push(saveActivity);
+        for (let i = 0; i < enrollment.length; i++) {
+          if (enrollment[i]._deleted === null) {
+            const course = await enrollment[i].course;
+            if(course._deleted===null){
+              const activity = await course.activity.values;
+              //console.log(activity);
+              course.activity = activity;
+              m.push(course);
+              for (let j = 0; j < activity.length; j++) {
+                let saveActivity = activity[j];
+                saveActivity.course = {
+                  coursecode: course.coursecode
+                }
+              if (saveActivity._deleted === null && activityList.includes(saveActivity.id)) {
+                c.push(saveActivity);
+              }
             }
           }
         }
