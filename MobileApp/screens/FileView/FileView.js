@@ -43,7 +43,7 @@ const BucketFilesScreen = () => {
       const response = await Storage.list(
         name + "/StudentFiles/",
         {
-          pageSize: 1000,
+          pageSize: 100,
         }
       );
       const files = response.results;
@@ -143,7 +143,7 @@ const BucketFilesScreen = () => {
             marginBottom: "2%",
           }}
         >
-          Click the files from your unviersity to download and view them
+          Click the files from your university to download and view them
         </Text>
         <ImageBackground
           resizeMode="contain"

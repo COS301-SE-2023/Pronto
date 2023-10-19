@@ -202,6 +202,10 @@ const ScheduleTable = ({ navigation, route }) => {
     }
     let act=c;
     console.log(act);
+    if(act.length===0){
+     setActivities([]);
+     createScheduleArray(act);
+    }
     //console.log(activityList)
     //console.log(c.length);
     // for (let i = 0; i < activityList.length; i++) {
@@ -238,7 +242,7 @@ const ScheduleTable = ({ navigation, route }) => {
         else
           return 1;
       })
-
+      
       let changed = false;
       if (act.length === activities.length) {
         for (let i = 0; i < act.length; i++) {
@@ -251,10 +255,10 @@ const ScheduleTable = ({ navigation, route }) => {
       else {
         changed = true;
       }
-      if (changed === true) {
-         setActivities(act);
+      //if (changed === true) {
+        // setActivities(act);
          createScheduleArray(act);
-      }
+     // }
      // console.log(changed)
 
 
