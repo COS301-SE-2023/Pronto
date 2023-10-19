@@ -17,17 +17,16 @@ import DeleteAccountPage from "./screens/Settings/DeleteAccount";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View, ImageBackground, Text,Alert } from "react-native";
 import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext"
-import { StudentProvider, useStudent } from "./ContextProviders/StudentContext";
+import { StudentProvider } from "./ContextProviders/StudentContext";
 import { getStudent, listInstitutions } from "./graphql/queries";
 import { createStudent } from "./graphql/mutations";
 import { API } from "aws-amplify"
 import { Amplify,DataStore,Predicates } from "aws-amplify";
-import { Auth, Hub } from "aws-amplify";
+import { Auth, Hub} from "aws-amplify";
 import config from "./src/aws-exports";
-import { Student,Institution } from "./models";
+import { Student } from "./models";
 
 Auth.configure(config);
-
 Amplify.configure(config);
 
 const Stack = createNativeStackNavigator();

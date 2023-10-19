@@ -12,23 +12,6 @@ export const getStudent = /* GraphQL */ `
       institution{
         name
       }
-      preference {
-        studentId
-        endpoint {
-          type
-          endPointAddress
-          status
-          info
-          __typename
-        }
-        id
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        __typename
-      }
       timetable {
         id
         studentId

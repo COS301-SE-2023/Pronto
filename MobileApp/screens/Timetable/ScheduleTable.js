@@ -75,6 +75,73 @@ const ScheduleTable = ({ navigation, route }) => {
   }
 
   let error = "There appear to be network issues.Please try again later";
+ const loadTimetable= async()=>{
+  try {
+      let stu = student;
+          const user = await Auth.currentAuthenticatedUser();
+          stu = await API.graphql({
+            query: getStudent,
+            variables: { id: user.attributes.sub }
+          })
+          stu = stu.data.getStudent;
+        updateStudent(stu);
+
+      
+      if (stu === null || stu.studentTimetableId === null) {
+          return;
+        }
+
+      let act = [];
+      let courses = [];
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
+        if(stu.enrollments.items[i]._deleted===null)
+          courses.push(stu.enrollments.items[i].course)
+      }
+
+      for (let i = 0; i < stu.timetable.activityId.length; i++) {
+        for (let j = 0; j < courses.length; j++) {
+          try {
+            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+            if (index !== undefined) {
+              act.push(index)
+              break;
+            }
+          } catch (e) {
+
+          }
+        }
+      }
+
+      act = act.sort((a, b) => {
+        if (a.start <= b.start)
+          return -1;
+        else
+          return 1;
+      })
+
+      let changed = false;
+      if (act.length === activities.length) {
+        for (let i = 0; i < act.length; i++) {
+          if (act[i].id !== activities[i].id) {
+            changed = true;
+            break;
+          }
+        }
+      }
+      else {
+        changed = true;
+      }
+      if (changed === true) {
+        setActivities(act);
+        createScheduleArray(act);
+      }
+
+
+    } catch (e) {
+      //Alert.alert(error);
+      console.log(e);
+    }
+  }
 
   const fetchActivities = async () => {
     try {
@@ -99,10 +166,15 @@ const ScheduleTable = ({ navigation, route }) => {
      // }
      const user = await Auth.currentAuthenticatedUser();
      const id=user.attributes.sub;
+    
      stu = await DataStore.query(Student, id);
+    
      console.log(stu);
-     if(stu===undefined)
+    if(stu===undefined){
+      await loadTimetable(); 
       return;
+
+    }
     const enrollmentList=await stu.enrollments.values;
     const enrollment=enrollmentList.filter((item)=>item._deleted===null);
    console.log(enrollment);
