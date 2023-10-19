@@ -74,8 +74,7 @@ Pronto is a consolidated university application that provides students with the 
 
 ## Project Day 
 <div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Demo%204%20Slideshow.pptx">🧾 Demo 4 presentation </a></div>
-<div><a href="#">📽️ Final demo </a></div>
-<div><a href="#">📽️ Prize motivations</a></div>
+<div><a href="https://drive.google.com/file/d/1q_wdfhEcvd-2q57qGJwGEQJCW_CXGDG1/view">📽️ Final demo </a></div>
 
 ## Project Management
 
