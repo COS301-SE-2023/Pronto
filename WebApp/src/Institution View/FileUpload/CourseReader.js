@@ -153,9 +153,7 @@ const CourseReader = (props) => {
   return (
 
     <div>
-      {message && (
-        <div style={{ marginTop: "5%", color: "green" }}>{message}</div>
-      )}
+    
       {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
       {/*  
       <div    style={{
@@ -186,7 +184,7 @@ const CourseReader = (props) => {
         </div>
         <div className='csv_component'>
           <label className="csv-reader-label">
-            <p className="csv-reader-text">Drag and drop or click to upload your schedule</p>
+            <p className="csv-reader-text">Click Here</p>
 
             <CSVReader
               label=""
@@ -200,6 +198,9 @@ const CourseReader = (props) => {
           </label>
         </div>
       </div >
+        {message && (
+        <div style={{ marginTop: "5%", color: "green" }}>{message}</div>
+      )}
     </div>
   );
 }
