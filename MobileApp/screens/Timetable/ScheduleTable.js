@@ -84,7 +84,9 @@ const ScheduleTable = ({ navigation, route }) => {
             variables: { id: user.attributes.sub }
           })
           stu = stu.data.getStudent;
-        updateStudent(stu);
+          console.log("From get");
+          //console.log(stu);
+        //updateStudent(stu);
 
       
       if (stu === null || stu.studentTimetableId === null) {
@@ -93,15 +95,21 @@ const ScheduleTable = ({ navigation, route }) => {
 
       let act = [];
       let courses = [];
-      for (let i = 0; i < stu.enrollments.items.length; i++) {
-        if(stu.enrollments.items[i]._deleted===null)
-          courses.push(stu.enrollments.items[i].course)
-      }
 
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
+        if(stu.enrollments.items[i]._deleted===null){
+            courses.push(stu.enrollments.items[i].course)
+        }
+        console.log(stu.enrollments.items[i]);
+      }
+      console.log(courses);
+
+      //console.log(stu.timetable);
       for (let i = 0; i < stu.timetable.activityId.length; i++) {
         for (let j = 0; j < courses.length; j++) {
           try {
             let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+             
             if (index !== undefined) {
               act.push(index)
               break;
@@ -131,10 +139,11 @@ const ScheduleTable = ({ navigation, route }) => {
       else {
         changed = true;
       }
-      if (changed === true) {
-        setActivities(act);
+      //if (changed === true) {
+       // setActivities(act);
         createScheduleArray(act);
-      }
+        console.log(act)
+      //}
 
 
     } catch (e) {
@@ -173,9 +182,9 @@ const ScheduleTable = ({ navigation, route }) => {
     if(stu===undefined){
       await loadTimetable(); 
       return;
-
     }
     const enrollmentList=await stu.enrollments.values;
+    console.log(enrollmentList);
     const enrollment=enrollmentList.filter((item)=>item._deleted===null);
    console.log(enrollment);
     let c=[];
@@ -201,7 +210,7 @@ const ScheduleTable = ({ navigation, route }) => {
       }
     }
     let act=c;
-    console.log(act);
+    //console.log(act);
     if(act.length===0){
      setActivities([]);
      createScheduleArray(act);

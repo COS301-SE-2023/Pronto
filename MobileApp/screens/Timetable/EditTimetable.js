@@ -164,6 +164,7 @@ const EditTimetable = ({ navigation }) => {
       
       const id = user.attributes.sub;
       stu = await DataStore.query(Student, id);
+      console.log(stu);
       if(stu===undefined)
        return;
       const enrollment = await stu.enrollments.values;
@@ -418,10 +419,21 @@ const EditTimetable = ({ navigation }) => {
                     let del = await DataStore.delete(s);
                     console.log(del);
                     student.enrollments.splice(i, 1);
+                    // let updatingStudent=await DataStore.save(Student.copyOf(student, updated => {
+                    //     updated.enrollments=student.enrollments
+                    //  }));
+                    //  console.log(updatingStudent)
                     break;
                   }
                 }
-                await handleSave();
+                let updatedActs=[]
+                for(let i=0;i<act.length;i++){
+                  updatedActs.push(act[i].id);
+                }
+                 let updatedTimetable = await DataStore.save(Timetable.copyOf(student.timetable, updated => {
+                    updated.activityId = updatedActs
+                }));
+                //await handleSave();
                 //updateStudent(student);
                 setSelectedModules((prevModules) =>
                   prevModules.filter((module) => module.id !== item.id)
