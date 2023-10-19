@@ -86,7 +86,7 @@ export default function App() {
       //     }
       //   }
       // }
-      // const id=authUser.attributes.sub;
+       const id=authUser.attributes.sub;
       // console.log(id);
       // const email=authUser.attributes.email;
       // let stu =await DataStore.query(Student,(s) => s.email.eq(email));
@@ -100,8 +100,8 @@ export default function App() {
       // }
       // console.log("Final ",stu);
       // const institutionId=authUser.attributes.family_name;
-      // let studentInfo = await DataStore.query(Student, id);
-      // console.log(studentInfo);
+       let studentInfo = await DataStore.query(Student, id);
+       console.log(studentInfo);
       // const email = authUser.attributes.email;
       //   let stu = await API.graphql({
       //     query: getStudent,
