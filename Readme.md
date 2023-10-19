@@ -16,7 +16,7 @@
 [![codecov](https://codecov.io/github/COS301-SE-2023/Pronto/graph/badge.svg?token=E5XAZ3LOGP)](https://codecov.io/github/COS301-SE-2023/Pronto)
 [![Open Issues](https://img.shields.io/github/issues/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues?q=is%3Aissue+is%3Aclosed)
-[![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595?style=flat-square)](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595)
+[![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m795377531-7f273a838020de6010a5b5ff?style=flat-square)](https://img.shields.io/uptimerobot/ratio/7/m795377531-7f273a838020de6010a5b5ff)
 
 ![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37)
 ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
