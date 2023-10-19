@@ -84,6 +84,7 @@ const DashboardLecturer = () => {
         </RightContainer >
         <div>
             <HelpButton pdfUrl={UserManual} />  {/* Help menu */}
+
         </div>
     </div >)
 }

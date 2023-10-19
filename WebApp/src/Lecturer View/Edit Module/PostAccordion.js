@@ -15,6 +15,7 @@ import styled from "styled-components";
 import { createAnnouncement, updateActivity } from '../../Graphql/mutations';
 import { ErrorModal } from "../../Components/ErrorModal";
 import { SuccessModal } from "../../Components/SuccessModal";
+import { useAnnouncement } from '../../ContextProviders/AnnouncementContext';
 
 import { API } from 'aws-amplify';
 
@@ -27,6 +28,7 @@ export default function PostAccordion(course) {
   const [error, setError] = useState("");
   const [activity, setActivity] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const { announcement, setAnnouncement, nextToken, setNextToken } = useAnnouncement();
   const [selectedLocation, setSelectedLocation] = useState("");
   const [latLng, setLatLng] = useState("");
   const [lat, setLat] = useState(59.955413);
@@ -50,10 +52,18 @@ export default function PostAccordion(course) {
       else {
 
         let coordinate = selectedLocation + ";" + latLng.lat + ";" + latLng.lng;
-        await API.graphql({
+        let newAct=await API.graphql({
           query: updateActivity,
-          variables: { input: { id: activity.id, coordinates: coordinate } }
+          variables: { input: { id: activity.id, coordinates: coordinate ,_version:activity._version} }
         })
+        console.log(newAct);
+        newAct=newAct.data.updateActivity;
+        for(let i=0;i<course.course.activity.items.length;i++){
+          if(course.course.activity.items[i].id===activity.id){
+            course.course.activity.items[i]._version=newAct._version;
+            break;
+          }
+        }
         setSuccessMessage("Venue updated successfully");
       }
       setAddVenue(false);
@@ -95,7 +105,7 @@ export default function PostAccordion(course) {
     setPostAnnouncement(true);
     try {
       event.preventDefault()
-      let announcement = {
+      let announcementInput = {
         courseId: course.course.id,
         body: body,
         title: title,
@@ -104,10 +114,15 @@ export default function PostAccordion(course) {
         type: type
       };
 
-      await API.graphql({
+      let newAnnouncement=await API.graphql({
         query: createAnnouncement,
-        variables: { input: announcement },
+        variables: { input: announcementInput },
       });
+      newAnnouncement=newAnnouncement.data.createAnnouncement;
+      if(announcement.length>0){
+        announcement.unshift(newAnnouncement);
+        setAnnouncement(announcement)
+      }
 
       setSuccessMessage("Announcement posted succesfully");
     } catch (error) {

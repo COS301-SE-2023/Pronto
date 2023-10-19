@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, Dimensions, Alert, StyleSheet, Image } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
-import { API, Auth } from 'aws-amplify'
+import { API, Auth,DataStore,Predicates } from 'aws-amplify'
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { getStudent } from "../../graphql/queries"
+import { getStudent, listCourses } from "../../graphql/queries"
 import { useStudent } from "../../ContextProviders/StudentContext";
+import { Student,Activity,Enrollment,Course } from "../../models";
+import '@azure/core-asynciterator-polyfill';
 
 
 
@@ -73,27 +75,18 @@ const ScheduleTable = ({ navigation, route }) => {
   }
 
   let error = "There appear to be network issues.Please try again later";
-
-  const fetchActivities = async () => {
-    try {
+ const loadTimetable= async()=>{
+  try {
       let stu = student;
-      if (student === null || student.id === undefined) {
-        if (param === null || param.id === undefined) {
           const user = await Auth.currentAuthenticatedUser();
           stu = await API.graphql({
             query: getStudent,
             variables: { id: user.attributes.sub }
           })
           stu = stu.data.getStudent;
-        }
-        else {
-          stu = param;
-          //updateStudent(stu);
-          param = null;
-        }
-        
-        updateStudent(stu);
-      }
+          console.log("From get");
+          //console.log(stu);
+        //updateStudent(stu);
 
       
       if (stu === null || stu.studentTimetableId === null) {
@@ -102,14 +95,21 @@ const ScheduleTable = ({ navigation, route }) => {
 
       let act = [];
       let courses = [];
-      for (let i = 0; i < stu.enrollments.items.length; i++) {
-        courses.push(stu.enrollments.items[i].course)
-      }
 
+      for (let i = 0; i < stu.enrollments.items.length; i++) {
+        if(stu.enrollments.items[i]._deleted===null){
+            courses.push(stu.enrollments.items[i].course)
+        }
+        console.log(stu.enrollments.items[i]);
+      }
+      console.log(courses);
+
+      //console.log(stu.timetable);
       for (let i = 0; i < stu.timetable.activityId.length; i++) {
         for (let j = 0; j < courses.length; j++) {
           try {
             let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
+             
             if (index !== undefined) {
               act.push(index)
               break;
@@ -139,10 +139,11 @@ const ScheduleTable = ({ navigation, route }) => {
       else {
         changed = true;
       }
-      if (changed === true) {
-        setActivities(act);
+      //if (changed === true) {
+       // setActivities(act);
         createScheduleArray(act);
-      }
+        console.log(act)
+      //}
 
 
     } catch (e) {
@@ -151,10 +152,149 @@ const ScheduleTable = ({ navigation, route }) => {
     }
   }
 
+  const fetchActivities = async () => {
+    try {
+      //let stu = student;
+      // if (student === null || student.id === undefined) {
+      //   if (param === null || param.id === undefined) {
+      //     const user = await Auth.currentAuthenticatedUser();
+      //     stu = await API.graphql({
+      //       query: getStudent,
+      //       variables: { id: user.attributes.sub }
+      //     })
+      //     stu = stu.data.getStudent;
+      //     stu.enrollments.items=stu.enrollments.items.filter((item)=>item._deleted===null);
+      //   }
+      //   else {
+      //     stu = param;
+      //     //updateStudent(stu);
+      //     param = null;
+      //   }
+        
+       // updateStudent(stu);
+     // }
+     const user = await Auth.currentAuthenticatedUser();
+     const id=user.attributes.sub;
+    
+     stu = await DataStore.query(Student, id);
+    
+     console.log(stu);
+    if(stu===undefined){
+      await loadTimetable(); 
+      return;
+    }
+    const enrollmentList=await stu.enrollments.values;
+    console.log(enrollmentList);
+    const enrollment=enrollmentList.filter((item)=>item._deleted===null);
+   console.log(enrollment);
+    let c=[];
+    const studentTimetable= await stu.timetable;
+    //console.log(studentTimetable)
+    if(studentTimetable===undefined)
+      return;
+    const activity=studentTimetable.activityId;
+    const activityList=removeDuplicates(activity);
+    for(let i=0;i<enrollment.length;i++){
+      const course=await enrollment[i].course;
+      if(course._deleted===null){
+        const activity=await course.activity.values;
+        for(let j=0;j<activity.length;j++){
+          let saveActivity= activity[j];
+          saveActivity.course={
+            coursecode:course.coursecode
+          }
+          if(saveActivity._deleted===null && activityList.includes(saveActivity.id)){
+            c.push(saveActivity);
+          }
+        }
+      }
+    }
+    let act=c;
+    //console.log(act);
+    if(act.length===0){
+     setActivities([]);
+     createScheduleArray(act);
+    }
+    //console.log(activityList)
+    //console.log(c.length);
+    // for (let i = 0; i < activityList.length; i++) {
+    //   for(let j=0;j<c.length;j++){
+    //       if(c[j].id===activityList[i]){
+    //          act.push(c[j]);
+    //       }
+    //       console.log(c[j]);
+    //       console.log(activityList[i]); 
+    //       //console.log(c[j].id===activityList[i]);
+    //       //console.log(activityList[i]);
+    //     // try {
+    //     //     let index = c.find(item => item.id === activityList[i])
+    //     //     console.log(index)
+    //     //     if (index !== undefined) {
+    //     //       act.push(index)
+    //     //     }
+    //     //   } catch (e) {
+    //     //      console.log(e)
+    //     //   }
+    //     }
+    // }
+  //console.log(act);
+     //console.log(studentTimetable);
+     //console.log(activityList); 
 
-  useEffect(() => {
-    fetchActivities();
-  },)
+    
+     stu.enrollments=enrollment,
+     stu.timetable=studentTimetable;
+     updateStudent(stu);
+      act = act.sort((a, b) => {
+        if (a.start <= b.start)
+          return -1;
+        else
+          return 1;
+      })
+      
+      let changed = false;
+      if (act.length === activities.length) {
+        for (let i = 0; i < act.length; i++) {
+          if (act[i].id !== activities[i].id) {
+            changed = true;
+            break;
+          }
+        }
+      }
+      else {
+        changed = true;
+      }
+      //if (changed === true) {
+        // setActivities(act);
+         createScheduleArray(act);
+     // }
+     // console.log(changed)
+
+
+    } catch (e) {
+      //Alert.alert(error);
+      console.log(e);
+    }
+  }
+
+function removeDuplicates(arr) { 
+    let unique = []; 
+    arr.forEach(element => { 
+        if (!unique.includes(element)) { 
+            unique.push(element); 
+        } 
+    }); 
+    return unique; 
+} 
+
+useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchActivities()
+    });
+
+
+    return unsubscribe
+  }, [navigation])
 
   const createScheduleArray = async (modules) => {
     scheduleArray = {};

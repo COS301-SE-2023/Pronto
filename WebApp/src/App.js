@@ -13,6 +13,8 @@ import InstitutionLogin from "./Authentication/Institution/Login";
 import InstitutionForgotPassword from "./Authentication/Institution/ForgotPassword";
 import InstitutionSuccessfulApply from "./Authentication/Institution/SuccessfulApply";
 import InstitutionConfirmEmail from "./Authentication/Institution/ConfirmEmail";
+import InstitutionTemporaryPassword from "./Authentication/Institution/TemporaryPassword"
+import InstitutionVerificationCode from "./Authentication/Institution/VerficationCode"
 
 import AddLecturer from "./Institution View/AddLecturer/addLecturer";
 import FileUploadPage from "./Institution View/FileUpload/FileUploadPage";
@@ -36,6 +38,7 @@ import { LecturerProvider } from "./ContextProviders/LecturerContext";
 import { AdminProvider } from "./ContextProviders/AdminContext";
 import { LecturerListProvider } from "./ContextProviders/LecturerListContext";
 import { AnnouncementProvider } from "./ContextProviders/AnnouncementContext";
+import { CourseProvider } from "./ContextProviders/CourseContext";
 
 import { Amplify, Auth } from "aws-amplify";
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -56,7 +59,7 @@ function MyRoutes() {
         {/*Super Admin pages*/}
         <Route path="/ROYGBIV" element={<SuperAdminLogin />} />
 
-        <Route path="/superadmin/admin-requests"
+        <Route path="/ROYGBIV/admin-requests"
           element={
 
             <RequireSuperAdminAuth>
@@ -65,7 +68,7 @@ function MyRoutes() {
           }
         />
 
-        <Route path="/superadmin/view-institutions"
+        <Route path="/ROYGBIV/view-institutions"
           element={
             <RequireSuperAdminAuth>
               <SuperAdminViewInstitutions />
@@ -98,7 +101,15 @@ function MyRoutes() {
           path="/institution/forgot-password"
           element={<InstitutionForgotPassword />}
         />
-
+        
+        <Route
+          path="/institution/temporary-password"
+          element={<InstitutionTemporaryPassword />}
+        />
+        <Route
+          path="/institution/verification-code"
+          element={<InstitutionVerificationCode />}
+        />
 
         {/*Protected admin routing*/}
         <Route
@@ -200,6 +211,7 @@ function App() {
   }, []);
 
   return (
+    <CourseProvider>
     <LecturerProvider>
       <AnnouncementProvider>
         <AdminProvider>
@@ -211,6 +223,7 @@ function App() {
         </AdminProvider>
       </AnnouncementProvider>
     </LecturerProvider>
+    </CourseProvider>
   );
 }
 export default App;

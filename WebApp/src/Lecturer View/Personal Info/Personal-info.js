@@ -84,7 +84,7 @@ const PersonalInfoPage = () => {
 
     const fetchLecturer = async () => {
         await Auth.currentAuthenticatedUser()
-        if (lecturer !== null) {
+        if (lecturer === null ) {
             const user = await Auth.currentAuthenticatedUser();
             let lecturer_email = user.attributes.email;
             let lec = await API.graphql({
@@ -97,13 +97,22 @@ const PersonalInfoPage = () => {
                     }
                 },
             });
-            setLecturer(lec.data.listLecturers.items[0]);
+            //setLecturer(lec.data.listLecturers.items[0]);
+            lec = lec.data.listLecturers.items[0];
+        if (lec.institution.logo === null) {
+          lec.institution.logoUrl = "";
+        }
+        else {
+          lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
+
+        }
+        setLecturer(lec);
         }
     }
 
 
     useEffect(() => {
-        fetchLecturer()
+       // fetchLecturer()
         //fetchUser();
     }, [])
 

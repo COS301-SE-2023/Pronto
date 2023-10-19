@@ -16,7 +16,7 @@
 [![codecov](https://codecov.io/github/COS301-SE-2023/Pronto/graph/badge.svg?token=E5XAZ3LOGP)](https://codecov.io/github/COS301-SE-2023/Pronto)
 [![Open Issues](https://img.shields.io/github/issues/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues)
 [![Closed Issues](https://img.shields.io/github/issues-closed/COS301-SE-2023/Pronto.svg?style=flat-square)](https://github.com/COS301-SE-2023/Pronto/issues?q=is%3Aissue+is%3Aclosed)
-[![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595?style=flat-square)](https://img.shields.io/uptimerobot/ratio/7/m794371847-738190ed660788defde4f595)
+[![Uptime Robot status](https://img.shields.io/uptimerobot/ratio/7/m795377531-7f273a838020de6010a5b5ff?style=flat-square)](https://img.shields.io/uptimerobot/ratio/7/m795377531-7f273a838020de6010a5b5ff)
 
 ![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37)
 ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
@@ -34,8 +34,9 @@
 
 Pronto is a consolidated university application that provides students with the ability to conveniently create timetables, receive important notifications from their lecturers, and get directions to their course venues. It also enables them to access important files and documents uploaded by their institution, such as yearly calendars and schedules. Paired with its simple, clean, and user-friendly design, Pronto is the perfect application for use by Institutions, Lecturers and Students.<br>
 
-<p align = "center">Click here to vistit the website for Institutional admins and Lecturers: <a href="https://prontotimetable.co.za"> prontotimetable.co.za </a><br> 
-Download the ExpoGo app and scan the QR code to use the student mobile application </p>
+<p align = "center">Click here to vistit the website for Institutional admins and Lecturers: <a href="https://www.prontotimetable.co.za"> prontotimetable.co.za </a></p> 
+ <p align = "center" >Download Expo from the <a href="https://itunes.apple.com/app/apple-store/id982107779">App store</a> on IOS, or get it from <a href="https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www">Google Play</a> if you are on Android. After downloading the Expo app, scan the relevant QR code to use the student mobile application. </p>
+
 
   <table align="center">
   <tr>
@@ -70,6 +71,10 @@ Download the ExpoGo app and scan the QR code to use the student mobile applicati
     <li><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%202%20documents/Demo2%20SRS.pdf">🧾 Demo 2: SRS Document</a></li>
   </ol>
 </details>
+
+## Project Day 
+<div><a href="https://github.com/COS301-SE-2023/Pronto/blob/main/Documentation/Demo%204%20documents/Demo%204%20Slideshow.pptx">🧾 Demo 4 presentation </a></div>
+<div><a href="https://drive.google.com/file/d/1q_wdfhEcvd-2q57qGJwGEQJCW_CXGDG1/view">📽️ Final demo </a></div>
 
 ## Project Management
 

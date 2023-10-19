@@ -153,83 +153,83 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         // Perform the action to add the institution with universityName and adminEmail
         // You can add your logic here
         event.preventDefault()
-        try {
-            let inst = {
-                name: universityName,
-            }
-            let institutionList = await API.graphql({
-                query: listInstitutions,
-                variables: {
-                    filter: {
-                        name: {
-                            eq: universityName
-                        }
-                    }
-                }
-            })
-            if (adminEmail !== "") {
-                let admins = await API.graphql({
-                    query: listAdmins,
-                    variables: {
-                        filter: {
-                            email: {
-                                eq: adminEmail
-                            }
-                        }
-                    }
-                })
+        // try {
+        //     let inst = {
+        //         name: universityName,
+        //     }
+        //     let institutionList = await API.graphql({
+        //         query: listInstitutions,
+        //         variables: {
+        //             filter: {
+        //                 name: {
+        //                     eq: universityName
+        //                 }
+        //             }
+        //         }
+        //     })
+        //     if (adminEmail !== "") {
+        //         let admins = await API.graphql({
+        //             query: listAdmins,
+        //             variables: {
+        //                 filter: {
+        //                     email: {
+        //                         eq: adminEmail
+        //                     }
+        //                 }
+        //             }
+        //         })
 
-                if (admins.data.listAdmins.items.length > 0) {
-                    return
-                }
-            }
+        //         if (admins.data.listAdmins.items.length > 0) {
+        //             return
+        //         }
+        //     }
 
-            if (institutionList.data.listInstitutions.items.length > 0) {
+        //     if (institutionList.data.listInstitutions.items.length > 0) {
 
-                return;
-            }
+        //         return;
+        //     }
 
-            let institution = await API.graphql({
-                query: createInstitution,
-                variables: {
-                    input: inst
-                }
-            })
+        //     let institution = await API.graphql({
+        //         query: createInstitution,
+        //         variables: {
+        //             input: inst
+        //         }
+        //     })
 
-            institution = institution.data.createInstitution;
+        //     institution = institution.data.createInstitution;
 
-            let email = adminEmail === "" ? "email" : adminEmail;
-            let admin = await API.graphql({
-                query: createAdmin,
-                variables: {
-                    input: {
-                        firstname: "",
-                        lastname: "",
-                        userRole: "Admin",
-                        institutionId: institution.id,
-                        email: email
-                    }
-                }
-            })
+        //     let email = adminEmail === "" ? "email" : adminEmail;
+        //     let admin = await API.graphql({
+        //         query: createAdmin,
+        //         variables: {
+        //             input: {
+        //                 firstname: "",
+        //                 lastname: "",
+        //                 userRole: "Admin",
+        //                 institutionId: institution.id,
+        //                 email: email
+        //             }
+        //         }
+        //     })
 
-            const u = {
-                id: institution.id,
-                adminId: admin.data.createAdmin.id
-            }
+        //     const u = {
+        //         id: institution.id,
+        //         adminId: admin.data.createAdmin.id
+        //     }
 
-            await API.graphql({
-                query: updateInstitution,
-                variables: {
-                    input: u
-                }
-            })
+        //     await API.graphql({
+        //         query: updateInstitution,
+        //         variables: {
+        //             input: u
+        //         }
+        //     })
 
-            institutions.unshift(institution);
-            setInstitutions(institutions);
+        //     institutions.unshift(institution);
+        //     setInstitutions(institutions);
 
-        } catch (e) {
+        // } catch (e) {
 
-        }
+        // }
         setAdminEmail("")
         setUniversityName("")
         // After adding the institution, close the modal
@@ -283,7 +283,7 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                         Add Institution
                     </Button>
 
-                    <h2> Add Admin</h2>
+                    {/* <h2> Add Admin</h2>
                     <TextField
                         label="Username"
                         variant="outlined"
@@ -322,7 +322,7 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
 
                     <Button className="no-hover-color-change" onClick={handleAddAdmin} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
                         Add Admin
-                    </Button>
+                    </Button> */}
 
                 </div>
             </div>
@@ -351,7 +351,7 @@ export default function ViewInstitutions() {
                 variables: {},
                 authMode: "API_KEY"
             })
-            setInstitutions(a.data.listInstitutions.items);
+            setInstitutions(a.data.listInstitutions.items.filter((item)=>item._deleted===null));
         } catch (e) {
             console.log(e);
         }
@@ -360,7 +360,7 @@ export default function ViewInstitutions() {
         try {
             await API.graphql({
                 query: deleteInstitution,
-                variables: { input: { id: institution.id } }
+                variables: { input: { id: institution.id,_version:institution._version } }
             })
 
             const rows = [...institutions];

@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { Auth } from "aws-amplify";
 
 function ForgotPassword() {
-  const [email, setEmail] = React.useState("");
+  const location=useLocation();
+  
   const [code, setCode] = React.useState("");
   const [error, setError] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [step, setStep] = React.useState(1);
+  
+  const [step, setStep] = React.useState(location.state? 2:1);
+  const [email, setEmail] = React.useState(location.state ? location.state.email :" " );
   const navigate = useNavigate();
 
   //validate email
@@ -114,12 +117,25 @@ function ForgotPassword() {
     }
 
     try {
+    
       e.preventDefault();
       if (loading) {
         return;
       }
+      if(code===""){
+        return;
+      }
       setLoading(true);
-      await Auth.forgotPasswordSubmit(email, code, password);
+      //await Auth.forgotPasswordSubmit(email, code, password);
+      
+      
+      const clientMetadata={
+        role:"Admin"
+      }
+      console.log(code);
+      
+      const user=await Auth.forgotPasswordSubmit(email, code,password,clientMetadata);
+      console.log(user);
       setStep(3);
       setError("");
     } catch (error) {
@@ -129,7 +145,7 @@ function ForgotPassword() {
   };
 
   const handleResetPassword = () => {
-    navigate("/lecturer/login");
+    navigate("/institution/login");
   };
 
   return (
@@ -147,7 +163,7 @@ function ForgotPassword() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Forgot Password</Subtitle>
+          <Subtitle>Password</Subtitle>
           <Input
             type="email"
             placeholder="Email"
@@ -176,7 +192,7 @@ function ForgotPassword() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Verify Code</Subtitle>
+          <Subtitle>Set Password</Subtitle>
           <Input
             type="text"
             placeholder="Verification Code"
@@ -250,7 +266,7 @@ function ForgotPassword() {
               }}
             />
           </LogoContainer>
-          <Subtitle>Your password has been succesfully reset</Subtitle>
+          <Subtitle>Your password has been succesfully set</Subtitle>
 
           <Button onClick={handleResetPassword}>Go to login</Button>
         </Form>

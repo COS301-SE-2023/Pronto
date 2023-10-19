@@ -119,7 +119,10 @@ function ForgotPassword() {
         return;
       }
       setLoading(true);
-      await Auth.forgotPasswordSubmit(email, code, password);
+      const clientMetadata={
+        role:"Lecturer"
+      }
+      await Auth.forgotPasswordSubmit(email, code, password,clientMetadata);
       setStep(3);
       setError("");
     } catch (error) {

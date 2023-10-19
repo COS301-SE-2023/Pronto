@@ -5,7 +5,7 @@ describe("Testing lecturer home page", () => {
     it("access the modules page and ensure all renders correctly", function () {
         cy.fixture("lecture-view-nav-attributes.json").as("navAttributes");
         //sign in to start the tests
-        cy.LecturerSignIn("yovab14312@tenjb.com", Cypress.env('LECTURER_PASSWORD'));
+        cy.LecturerSignIn("andilengwenya2001@gmail.com", Cypress.env('LECTURER_PASSWORD'));
 
         cy.get(`a[href="/lecturer/modules"]`).click();
         cy.url({timeout: 10 * 1000}).should("eq", `${Cypress.config().baseUrl + 'lecturer/modules'}`);
@@ -27,11 +27,9 @@ describe("Testing lecturer home page", () => {
 
         //Check that the modules belonging to the lecturer are present after loading
         cy.get(`button[class="content-button"]`)
-            .should("have.length", 2)
-            .contains("MOD 202");
-        cy.get(`button[class="content-button"]`)
-            .should("have.length", 2)
-            .contains("MOD 303");
+            .should("have.length", 1)
+            .contains("COS314");
+
 
         cy.get(`button[class="content-button"]`).first().click();
 

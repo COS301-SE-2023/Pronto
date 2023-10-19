@@ -8,8 +8,9 @@ import { REACT_APP_GOOGLE_API_KEY } from "@env";
 import * as Location from 'expo-location';
 import { SelectList } from "react-native-dropdown-select-list";
 import { useStudent } from "../../ContextProviders/StudentContext";
-import { API, Auth } from "aws-amplify";
+import { API, Auth, DataStore } from "aws-amplify";
 import { getStudent } from "../../graphql/queries";
+import { Student } from '../../models';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -99,79 +100,95 @@ const NavigationScreen = ({ navigation, route }) => {
         try {
 
             let stu = student;
-            if (student === null) {
-                const user = await Auth.currentAuthenticatedUser();
-                stu = await API.graphql({
-                    query: getStudent,
-                    variables: { id: user.attributes.sub }
-                })
+            // if (student === null) {
+            //     const user = await Auth.currentAuthenticatedUser();
+            //     stu = await API.graphql({
+            //         query: getStudent,
+            //         variables: { id: user.attributes.sub }
+            //     })
 
-                stu = stu.data.getStudent;
-                if (stu === null || stu === undefined) {
-                    throw Error();
+            //     stu = stu.data.getStudent;
+            //     stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null)
+            //     if (stu === null || stu === undefined) {
+            //         throw Error();
+            //     }
+            //     updateStudent(stu);
+            // }
+
+            const user = await Auth.currentAuthenticatedUser();
+            const id = user.attributes.sub;
+            stu = await DataStore.query(Student, id);
+
+            const enrollment = await stu.enrollments.values;
+
+            let c = [];
+            let m = [];
+            const studentTimetable = await stu.timetable;
+            if (studentTimetable === null || studentTimetable === undefined)
+                return;
+            const activity = studentTimetable.activityId;
+            const activityList = removeDuplicates(activity)
+
+            for (let i = 0; i < enrollment.length; i++) {
+                if (enrollment[i]._deleted === null) {
+                    const course = await enrollment[i].course;
+                    const activity = await course.activity.values;
+                    course.activity = activity;
+                    m.push(course);
+                    for (let j = 0; j < activity.length; j++) {
+                        let saveActivity = activity[j];
+                        saveActivity.course = {
+                            coursecode: course.coursecode
+                        }
+                        if (saveActivity._deleted === null && activityList.includes(saveActivity.id)) {
+                            c.push(saveActivity);
+                        }
+                    }
                 }
-                updateStudent(stu);
+            }
+            stu.enrollments = enrollment.filter((e) => e._deleted === null);
+            stu.timetable = studentTimetable;
+            updateStudent(stu);
+            //setActivities(c);
+            let act = c;
+
+            let loc = [];
+            let locationNames = new Map();
+            //console.log(act.length);
+            for (let i = 0; i < act.length; i++) {
+                //console.log(act[i].coordinates);
+                if (act[i].coordinates !== null) {
+                    let location = act[i].coordinates.split(';');
+                    if (locationNames.get(location[0]) === undefined && location[0] !== "") {
+                        let coordinate = {
+                            key: i,
+                            name: location[0],
+                            value: {
+                                latitude: parseFloat(location[1]),
+                                longitude: parseFloat(location[2])
+                            }
+                        }
+                        loc.push(coordinate);
+                        locationNames.set(location[0], "1");
+                    }
+                }
+            }
+            let changed = false;
+            if (coordinates.length === loc.length) {
+                for (let i = 0; i < coordinates.length; i++) {
+                    if (coordinates[i].name !== loc[i].name) {
+                        changed = true;
+                    }
+                }
+            }
+            else {
+                changed = true;
+            }
+            if (changed) {
+                setCoordinates(loc);
             }
 
-            if (stu.studentTimetableId !== null) {
-                let act = [];
-                let courses = [];
-                for (let i = 0; i < stu.enrollments.items.length; i++) {
-                    courses.push(stu.enrollments.items[i].course)
-                }
-
-                for (let i = 0; i < stu.timetable.activityId.length; i++) {
-                    for (let j = 0; j < courses.length; j++) {
-                        try {
-                            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-                            if (index !== undefined) {
-                                act.push(index)
-                                break;
-                            }
-                        } catch (e) {
-
-                        }
-
-                    }
-                }
-
-                let loc = [];
-                let locationNames = new Map();
-                for (let i = 0; i < act.length; i++) {
-                    if (act[i].coordinates !== null) {
-                        let location = act[i].coordinates.split(';');
-                        if (locationNames.get(location[0]) === undefined && location[0] !== "") {
-                            let coordinate = {
-                                key: i,
-                                name: location[0],
-                                value: {
-                                    latitude: parseFloat(location[1]),
-                                    longitude: parseFloat(location[2])
-                                }
-                            }
-                            loc.push(coordinate);
-                            locationNames.set(location[0], "1");
-                        }
-                    }
-                }
-                let changed = false;
-                if (coordinates.length === loc.length) {
-                    for (let i = 0; i < coordinates.length - 1; i++) {
-                        if (coordinates[i].name !== loc[i].name) {
-                            changed = true;
-
-                        }
-                    }
-                }
-                else {
-                    changed = true;
-                }
-                if (changed) {
-                    setCoordinates(loc);
-                }
-
-          
-            }
+            //}
 
         } catch (e) {
             //Alert.alert(error);
@@ -179,12 +196,30 @@ const NavigationScreen = ({ navigation, route }) => {
         }
     }
 
+    function removeDuplicates(arr) {
+        let unique = [];
+        arr.forEach(element => {
+            if (!unique.includes(element)) {
+                unique.push(element);
+            }
+        });
+        return unique;
+    }
+
     // //    useEffect hook to run the requestLocationPermission function when the component is mounted
     useEffect(() => {
         requestLocationPermission();
         fetchLocations();
-    }, [coordinates]);
+    }, []);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchLocations()
+        });
+
+
+        return unsubscribe
+    }, [navigation])
 
     // Below defines styling for the location text input for the user's current location
     // Green border will be for location gathered

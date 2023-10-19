@@ -38,6 +38,7 @@ export default function AddModal(course) {
       setSelectedCourses(selectedCourses);
     } catch (e) {
       //alert("No courses found")
+      console.log(e);
     }
   }
 
