@@ -44,7 +44,7 @@ const DeleteAccountPage = () => {
                 await DataStore.delete(stu);
                 await DataStore.clear();
               } catch (error) {
-                console.log(error);
+                
               }
               await Auth.currentAuthenticatedUser().then((user) => {
                 return Auth.deleteUser(user);

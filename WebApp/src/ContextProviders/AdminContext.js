@@ -9,10 +9,6 @@ export const useAdmin = () => {
 export const AdminProvider = ({ children }) => {
   const [admin, setAdmin] = useState(null);
 
-  /*const updateAdmin = (newAdmin) => {
-    setAdmin(newAdmin);
-  };*/
-
   return (
     <AdminContext.Provider value={{ admin, setAdmin }}>
       {children}

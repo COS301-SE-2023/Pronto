@@ -101,8 +101,6 @@ const ScheduleTable = ({ navigation, route }) => {
        
       }
    
-
-      //console.log(stu.timetable);
       for (let i = 0; i < stu.timetable.activityId.length; i++) {
         for (let j = 0; j < courses.length; j++) {
           try {

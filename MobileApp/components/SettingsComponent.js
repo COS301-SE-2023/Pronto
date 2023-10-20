@@ -24,7 +24,7 @@ const SettingsComponent = ({ settingsOptions }) => {
       setLoggingOut(false);
     }
     catch (error) {
-      console.log(error)
+      
       setLoggingOut(false);
     }
     

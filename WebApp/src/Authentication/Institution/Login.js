@@ -88,29 +88,18 @@ function Login() {
         password: password,
         validationData: {
           role: "Admin",
-          // institutionId: institutionId
         }
       }
 
       const user = await Auth.signIn(signInObject);
       setsignInError("");
-      //const newPassword = password
+      
       if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
         navigate("/institution/temporary-password", { state: { user: user } })
-        // const loggedInUser = await Auth.completeNewPassword(
-        //   user,
-        //   newPassword,
-        //   {
-        //     family_name: "  "
-
-        //   }
-        // )
-
-        // console.log(loggedInUser);
+        
       }
-
       await fetchAdmin().then(() => navigate("/institution/dashboard"))
-      //navigate("/institution/dashboard");
+    
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);

@@ -25,13 +25,12 @@ function VerificationCode() {
     try {
 
       const confirm=await Auth.confirmSignUp(email, code, {clientMetadata: { role:"Admin" }});
-      console.log(confirm);
       const forgot=await Auth.forgotPassword(email);
-      console.log(forgot);
+    
       setError("");
       navigate("/institution/forgot-password",{ state: { email: email } });
     } catch (e) {
-      console.log(e);
+      
       setError(e.message);
     }
     setLoading(false);

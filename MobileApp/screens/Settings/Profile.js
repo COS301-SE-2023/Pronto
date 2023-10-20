@@ -26,7 +26,7 @@ const ProfilePage = () => {
       }
 
     } catch (error) {
-      console.log(error);
+      
     }
   };
 

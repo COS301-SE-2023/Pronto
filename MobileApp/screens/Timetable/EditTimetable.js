@@ -293,16 +293,8 @@ const EditTimetable = () => {
               try {
                 for (let i = 0; i < student.enrollments.length; i++) {
                   if (student.enrollments[i].courseId === item.id) {
-                    // del = await API.graphql({
-                    //   query: deleteEnrollment,
-                    //   variables: { input: { id: student.enrollments.items[i].id ,_version:student.enrollments.items[i]._version} }
-                    // });
-                   
-                    //console.log(student.enrollments[i]);
                     let s = await DataStore.query(Enrollment, student.enrollments[i].id);
-                    
                     let del = await DataStore.delete(s);
-                   
                     student.enrollments.splice(i, 1);
                     
                     break;

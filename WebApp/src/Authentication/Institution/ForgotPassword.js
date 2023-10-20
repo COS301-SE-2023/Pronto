@@ -132,10 +132,9 @@ function ForgotPassword() {
       const clientMetadata={
         role:"Admin"
       }
-      console.log(code);
-      
+    
       const user=await Auth.forgotPasswordSubmit(email, code,password,clientMetadata);
-      console.log(user);
+      
       setStep(3);
       setError("");
     } catch (error) {

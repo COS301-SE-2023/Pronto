@@ -135,14 +135,13 @@ const NavigationScreen = ({ navigation, route }) => {
             stu.enrollments = enrollment.filter((e) => e._deleted === null);
             stu.timetable = studentTimetable;
             updateStudent(stu);
-            //setActivities(c);
+           
             let act = c;
 
             let loc = [];
             let locationNames = new Map();
-            //console.log(act.length);
             for (let i = 0; i < act.length; i++) {
-                //console.log(act[i].coordinates);
+                
                 if (act[i].coordinates !== null) {
                     let location = act[i].coordinates.split(';');
                     if (locationNames.get(location[0]) === undefined && location[0] !== "") {
