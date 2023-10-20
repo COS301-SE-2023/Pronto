@@ -100,7 +100,7 @@ export default function LecturerNavigation() {
               to={'/lecturer/modules'}
               className={`nav-link text-center ${location.pathname === '/lecturer/edit-module' ? 'active' : location.pathname === '/lecturer/modules' ? 'active' : ''}`}
             >
-              <b>Edit Module Information</b>
+              <b>Edit Course Information</b>
             </Link>
 
           </li>
