@@ -14,16 +14,14 @@ Amplify Params - DO NOT EDIT */
 const {
   CognitoIdentityProviderClient,
 } = require("@aws-sdk/client-cognito-identity-provider");
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
+const { GetItemCommand, DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { GRAPHQL, APPLICATION_STATUS } = require("./constants");
 const { signAdminUp } = require("./userManagement");
 
 const config = {
-  region: process.env.AWS_REGION,
+  region: process.env.REGION,
 };
 const dynamoDBClient = new DynamoDBClient(config);
-const documentClient = new DynamoDBDocumentClient(dynamoDBClient);
 
 const cognitoIdentityProviderClient = new CognitoIdentityProviderClient(config);
 
@@ -31,16 +29,17 @@ const getAdminApplicationStatus = async (applicationId) => {
   if (!applicationId)
     throw new Error("Invalid applicationId, please select a valid institution");
   const TableName = `AdminApplication-${process.env.API_PRONTO_GRAPHQLAPIIDOUTPUT}-${process.env.ENV}`;
-  const GetCommandInput = {
+  const GetItemCommandInput = {
     TableName: TableName,
     Key: { id: { S: applicationId } },
   };
-  const getCommand = new GetCommand(GetCommandInput);
+  const getCommand = new GetItemCommand(GetItemCommandInput);
   try {
-    const response = await documentClient.send(getCommand);
+    const response = await dynamoDBClient.send(getCommand);
     console.log(response);
-    if (response.item && response.item.applicationInfo)
-      return response.item.applicationInfo.status;
+    if (response.Item && response.Item.applicationInfo)
+      return response.Item.applicationInfo.status.S;
+    throw new Error("application not found");
   } catch (getInstitutionError) {
     console.debug(`FAILED TO GET INSTITUTION. INFO: ${getInstitutionError}`);
     throw new Error("failed to get application status");
