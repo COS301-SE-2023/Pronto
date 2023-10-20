@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
-import { Auth } from "aws-amplify";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function ConfirmEmail() {
@@ -19,13 +18,9 @@ function ConfirmEmail() {
 
   const onVerifyPressed = async (event) => {
     event.preventDefault();
-    // if (loading) {
-    //   return;
-    // }
-   // setLoading(true);
+    
     try {
-      //await Auth.confirmSignUp(email, code);
-      //await Auth.confirmSignUp(email, code, { clientMetadata: { role: "Admin" } })
+     
       setError("");
       navigate("/institution/login");
     } catch (e) {
@@ -55,20 +50,15 @@ function ConfirmEmail() {
             fontSize: "1.1rem",
           }}
         >
-          {/* Please enter the code sent to your email to verify your account */}
+          
           Your application has been sent
         </Subtitle>
-        {/* <Input data-testid="VerificationCode"
-          type="text"
-          placeholder="Verification Code"
-          value={code}
-          onChange={(event) => setCode(event.target.value)}
-        /> */}
+       
         {error && <ErrorText>{error}</ErrorText>}
 
         <Button data-testid={"btnVerify"} onClick={onVerifyPressed}>
           {" Ok"}
-          {/* {loading ? "Verifying..." : "Verify Code"} */}
+       
         </Button>
       </Form>
     </Container>

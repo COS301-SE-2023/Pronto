@@ -34,8 +34,7 @@ const ConfirmEmail = ({ navigation }) => {
     try {
       response = await Auth.confirmSignUp(email, code, { clientMetadata: { role: "Student" } });
 
-      //need to add user to a user group here?
-      console.log(response);
+     
       Alert.alert("Success", "Login to access your account.");
       navigation.navigate("Login");
     } catch (e) {

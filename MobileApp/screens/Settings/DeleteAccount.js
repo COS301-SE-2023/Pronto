@@ -7,9 +7,7 @@ import {
   Alert,
   ImageBackground,
 } from "react-native";
-import { Auth, API, DataStore } from "aws-amplify";
-import { getStudent } from "../../graphql/queries"
-import { deleteStudent } from "../../graphql/mutations";
+import { Auth, DataStore } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { useNavigation } from "@react-navigation/native";
 import { Student } from "../../models";
@@ -37,30 +35,8 @@ const DeleteAccountPage = () => {
             try {
 
               let stu = student
-              // if (student === null) {
-              //   const user = await Auth.currentAuthenticatedUser()
-              //   let studentEmail = user.attributes.email;
-              //   let stu = await API.graphql({
-              //     query: getStudent,
-              //     variables: { id: user.attributes.sub },
-              //   })
-              //   stu = stu.data.getStudent
-              // }
-
-              // if (stu !== null) {
-              //   // try {
-
-              //   //   let del = await API.graphql({
-              //   //     query: deleteStudent,
-              //   //     variables: { input: { id: stu.id,_version:stu._version } }
-              //   //   })
-              //   // } catch (e) {
-              //   //     console.log(e);
-              //   // }
-              //   updateStudent(null);
-              //   navigation.navigate("Welcome");
-              //   setDeleting(false);
-              // }
+              
+              
               try {
                 const user = await Auth.currentAuthenticatedUser();
                 const id = user.attributes.sub;
@@ -78,9 +54,9 @@ const DeleteAccountPage = () => {
                 "Account Deleted",
                 "Your account has been successfully deleted."
               );
-              // navigation.navigate("Welcome");
+              
               setDeleting(false);
-              //}
+              
             } catch (error) {
               Alert.alert("Error", "An error occurred while deleting your account. Please try again later.");
               setDeleting(false);

@@ -42,7 +42,7 @@ export default function SearchableDropdown(props) {
         }
       }
       )
-      console.log(courseList);
+      
       let c = [];
       courseList = courseList.data.listCourses.items.filter((a) => a.lecturerId === null && a._deleted===null && a.institutionId===admin.institutionId)
 
@@ -55,7 +55,7 @@ export default function SearchableDropdown(props) {
       setIsOpen(true);
       ;
     } catch (error) {
-       console.log(error);
+      
     }
 
   };

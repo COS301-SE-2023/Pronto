@@ -7,18 +7,13 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
-  Alert,
-  ScrollView,
+  Alert
 } from "react-native";
 import React, { useState } from "react";
-// import { SelectList } from "react-native-dropdown-select-list";
-// import institutionInfo from "../../assets/data/universityInfo.json";
+
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Auth, API, DataStore } from "aws-amplify";
-import { getStudent } from "../../graphql/queries";
-import { createStudent } from "../../graphql/mutations";
+import { Auth } from "aws-amplify";
 import { useStudent } from "../../ContextProviders/StudentContext";
-import { Student, Institution } from "../../models";
 const { height } = Dimensions.get("window");
 
 const Login = ({ navigation }) => {
@@ -65,6 +60,7 @@ const Login = ({ navigation }) => {
       }
 
       const user = await Auth.signIn(signInObject);
+    
       const group = user.signInUserSession.idToken.payload["cognito:groups"][0]; 
       if(group!=="studentsUserGroup"){
           Alert.alert("Admins and Lecturers should use the Web App");
@@ -72,93 +68,9 @@ const Login = ({ navigation }) => {
           navigation.navigate("Register");
           setLoading(false);
        }
-      // await DataStore.start();
-
-    //   const email=user.attributes.email;
-    //   const id=user.attributes.sub
-    //   let stu =await DataStore.query(Student,(s) => s.email.eq(email));
-    //   console.log(stu);
-    //   if(stu!==undefined && stu!==null && stu.length>0){
-    //     console.log("Student",stu);
-    //     stu=stu.filter((s)=>s._deleted===null && s.owner===id);
-    //     let temp=stu;
-    //     for(let i=0;i<stu.length;i++){
-    //       if(temp.createdAt>stu[i].createdAt){
-    //          temp=stu[i]
-    //       }
-    //     }
-    //     console.log("Final ",stu);
       
-    // }
-    //if(stu===null || stu===undefined || stu.length===0){
-      //const institutionId = user.attributes.family_name;
-      //const inst = await DataStore.query(Institution, institutionId); 
-      //let name = user.attributes.name.split(",")
-      // let c = await DataStore.save(
-      //   //   new Student({
-      //   //     "institutionId": institutionId,
-      //   //     "firstname": name[0],
-      //   //     "lastname": name[1],
-      //   //     "userRole": "Student",
-      //   //     "email": email,
-      //   //     "institution": inst,
-      //   //   })
-      //   // );
-   // }
-     // let studentInfo = student;
-      // if (student === null) {
-     // const email = user.attributes.email;
-     // const id = user.attributes.sub;
-      // studentInfo = await API.graphql({
-      //   query: getStudent,
-      //   variables: { id: user.attributes.sub }
-      // });
-      // studentInfo = studentInfo.data.getStudent;
-      //updateStudent(studentInfo);
-
-      //studentInfo = await DataStore.query(Student, id);
-      //console.log(studentInfo);
-      // if (studentInfo === null || studentInfo===undefined) {
-
-      //   //Create student
-      //   let name = user.attributes.name.split(",")
-      //   const institutionId = user.attributes.family_name;
-
-      //   let newStudent = {
-      //     id: user.attributes.sub,
-      //     institutionId: user.attributes.family_name,
-      //     firstname: name[0],
-      //     lastname: name[1],
-      //     userRole: "Student",
-      //     email: email
-      //   }
-      //   // const inst = await DataStore.query(Institution, institutionId);
-      //   // let c = await DataStore.save(
-      //   //   new Student({
-      //   //     "id": id,
-      //   //     "institutionId": institutionId,
-      //   //     "firstname": name[0],
-      //   //     "lastname": name[1],
-      //   //     "userRole": "Student",
-      //   //     "email": email,
-      //   //     "institution": inst,
-      //   //   })
-      //   // );
-      //   // console.log(c);
-
-      //   let create = await API.graphql({
-      //     query: createStudent,
-      //     variables: { input: newStudent }
-      //   })
-
-      //studentInfo = create.data.createStudent;
-      // console.log(create);
-      // updateStudent(create.data.createStudent);
-      // }
-      //   }
-       //navigation.navigate("Tabs");
     } catch (e) {
-      console.log(e);
+      
       Alert.alert("Sign in error", e.message);
       setLoading(false);
     }

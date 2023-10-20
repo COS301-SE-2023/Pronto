@@ -53,7 +53,7 @@ const EditInfoPage = () => {
                 setError("New password does not match confirm password");
             }
         } catch (error) {
-            console.log(error);
+            
             setError("Password change failed");
         }
         setOldPassword("")
@@ -66,14 +66,14 @@ const EditInfoPage = () => {
             let userInfo = await Auth.currentAuthenticatedUser();
             setUser(userInfo);
             let username = userInfo?.attributes?.name;
-            //const words = username.split(/\s+/);
+        
             const words=admin.institution.name.split(/\s+/)
             username = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("");
          
             setFolderNameS3(username);
-            console.log(username)
+           
         }catch(error){
-           console.log(error);
+          
         }
     }
 
@@ -127,10 +127,7 @@ const EditInfoPage = () => {
     const handleDomainEdit = async (event) => {
         event.preventDefault();
         try {
-            // let logoUrl = null;
-            // if (admin.institution.logoUrl !== undefined && admin.institution.logoUrl !== null) {
-            //     logoUrl = admin.institution.logoUrl;
-            // };
+           
 
             let inst = {
                 id: admin.institution.id,
@@ -141,17 +138,15 @@ const EditInfoPage = () => {
                 query: updateInstitution,
                 variables: { input: inst },
             });
-            //update.data.updateInstitution.logoUrl = logoUrl;
-            //let newAdmin = admin;
-            //newAdmin.institution = update.data.updateInstitution;
-            console.log(update)
+            
+            
             admin.institution._version=update.data.updateInstitution._version;
             setAdmin(admin);
             setSuccessMessage("Domains updated successfully");
 
         } catch (error) {
             setError("Something went wrong");
-            console.log(error);
+           
         }
     }
 
@@ -167,7 +162,7 @@ const EditInfoPage = () => {
             try {
             
                 const fileKey = `${folder}/Logo/${selectedFile.name}`;
-                console.log(fileKey);
+               
                 let path = await Storage.put(fileKey, selectedFile, {
                     contentType: "image/png",
                     progressCallback: ({ loaded, total }) => {

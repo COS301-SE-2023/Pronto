@@ -106,7 +106,7 @@ const Register = ({ navigation }) => {
       });
 
       inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      //let inst = await DataStore.query(Institution, Predicates.ALL)
+      
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -118,7 +118,7 @@ const Register = ({ navigation }) => {
       ;
       setInstitutions(institutionInfo);
     } catch (error) {
-      console.log(error)
+      
     }
   }
 
@@ -166,8 +166,7 @@ const Register = ({ navigation }) => {
 
     setLoading(true);
     try {
-      // navigation.navigate("ConfirmEmail", { email });
-      //await DataStore.clear()
+      
       const studentName = name + "," + surname;
       const signUpObject = {
         username: email,
@@ -198,12 +197,9 @@ const Register = ({ navigation }) => {
               variables: { input: newStudent },
               authMode:"API_KEY"
             })
-            console.log(create.data.createStudent);
       
-      console.log(u);
       navigation.navigate("ConfirmEmail", { email });
     } catch (e) {
-      console.log(e);
       Alert.alert("Sign up error", e.message);
 
     }

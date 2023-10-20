@@ -31,23 +31,12 @@ const NotificationList = ({ navigation }) => {
     const fetchAnnouncements = async () => {
         try {
             let stu = student;
-            //setLoading(true);
             const user = await Auth.currentAuthenticatedUser();
             const id = user.attributes.sub;
             stu = await DataStore.query(Student, id)
-            //console.log(stu)
-            //console.log(stu.enrollments);
-            // if (student === null) {
-            //     stu = await DataStore.query(Student, user.attributes.sub);
-            //     if (stu === null || stu === undefined) {
-            //         throw Error();
-            //     }
-            //     updateStudent(stu);
-            // }
+            
             const enrollment = await stu.enrollments.values;
-            //console.log(enrollment);
-
-            //let courses = stu.enrollments.items.map((items) => items._deleted === null);
+           
             let courses = enrollment.filter((items) => items._deleted === null)
 
             let ids = [];
@@ -66,12 +55,9 @@ const NotificationList = ({ navigation }) => {
                     or: courses.map((courseId) => ({ courseId: { eq: courseId } })),
                 };
 
-                //   let variables = { filter, limit, sortDirection: "DESC" };
-                //      let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
-                //    console.log(announcementList);
+               
                 const announcementList = await Promise.all(ids.map(id => DataStore.query(Announcement, (a) => a.courseId.eq(id))))
-                //console.log("Listing announcements");
-                //console.log(announcementList);
+                
                 let a = [];
                 for (let i = 0; i < announcementList.length; i++) {
                     for (let j = 0; j < announcementList[i].length; j++) {
@@ -85,54 +71,20 @@ const NotificationList = ({ navigation }) => {
                         }
                     }
                 }
-                //console.log(a);
+                
                 setAnnouncement(a);
-                // setAnnouncement(announcementList.filter((item) => item._deleted === null));
-                // if (announcementList.length < limit) {
-                //     setNextToken(null);
-                // } else {
-                //     setNextToken(announcementList[announcementList.length - 1].id);
-                // }
+                
                 setLoading(false);
             }
             setLoading(false);
         } catch (er) {
-            console.log(er);
+          
             Alert.alert(error);
             setLoading(false);
         }
     };
 
-    const loadMore = async () => {
-        try {
-            let stu = student;
-            let year = new Date().getFullYear();
-            let courses = stu.enrollments.items.map((items) => items._deleted === null);
-
-            if (courses.length === 0) {
-                setAnnouncement([]);
-                return;
-            } else {
-                let filter = {
-                    or: courses.map((courseId) => ({ courseId: { eq: courseId } })),
-                    limit,
-                    sortDirection: "DESC",
-                    nextToken,
-                };
-                let variables = { filter, limit, sortDirection: "DESC", nextToken };
-                console.log("start");
-                let announcementList = await DataStore.query(Announcement, Predicates.ALL, variables);
-                console.log(announcementList);
-                announcement.push(...announcementList);
-                if (announcementList.length < limit) {
-                    setNextToken(null);
-                } else {
-                    setNextToken(announcementList[announcementList.length - 1].id);
-                }
-                setAnnouncement(announcement);
-            }
-        } catch (e) { console.log(e); }
-    };
+    
 
     useEffect(() => {
         fetchAnnouncements();
@@ -256,12 +208,7 @@ const NotificationList = ({ navigation }) => {
                             <Text style={{
                                 marginLeft: "auto", marginRight: "auto", marginBottom: 10, color: "#808080"
                             }}>Swipe down to refresh &#x2193;</Text>
-                            < ScrollView
-                            // refreshControl={<RefreshControl
-                            //     refreshing={loading}
-                            //     onRefresh={fetchAnnouncements}
-                            // />}
-                            >
+                            < ScrollView>
                                 {announcement.slice()
                                     .reverse().map((val, key) => (<Card
                                         key={key}
@@ -291,26 +238,7 @@ const NotificationList = ({ navigation }) => {
                                         marginBottom: 0, marginLeft: "auto", marginRight: "auto",
                                     }}
                                 >
-                                    {/* {nextToken !== null ? <Button
-                                    onPress={loadMore}
-                                    mode="contained"
-                                    icon="arrow-down"
-                                    outlined={true}
-                                    testID="load-more-button"
-                                    style={{
-                                        backgroundColor: "#e32f45",
-                                        marginRight: "auto",
-                                        marginLeft: "auto",
-                                        marginBottom: "10vh",
-                                        color: "white",
-                                        height: "20px",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-
-                                    }}
-                                >
-                                    Load More
-                                </Button> : " "} */}
+                                    
                                 </Text>
 
                                 <Text style={{ padding: 10 }}></Text>

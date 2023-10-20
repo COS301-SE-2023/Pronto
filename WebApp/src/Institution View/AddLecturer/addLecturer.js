@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-
 import InstitutionNavigation from "../Navigation/InstitutionNavigation";
 import { createLecturer, deleteLecturer, updateCourse, updateInstitution, } from "../../Graphql/mutations";
-import { getInstitution, lecturersByInstitutionId, listAdmins, listLecturers } from "../../Graphql/queries";
+import {  lecturersByInstitutionId, listAdmins, listLecturers } from "../../Graphql/queries";
 import AddModal from './addCourse';
 import { ErrorModal } from "../../Components/ErrorModal";
 import HelpButton from '../../Components/HelpButton';
 import UserManual from "../HelpFiles/AddLecturer.pdf";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
-import CsvFileReader from "./csvReader";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import ClearIcon from '@mui/icons-material/SearchSharp';
 
@@ -91,7 +89,7 @@ const AddLecturer = () => {
 
 
                 if (email !== admin.email) {
-                    //let unique = admin.institution.lectureremails.filter((e) => e === email)
+                  
                     let emails = await API.graphql({
                         query: listLecturers,
                         variables: { filter: { email: { eq: lecturer.email } } }
@@ -102,7 +100,7 @@ const AddLecturer = () => {
                             query: createLecturer,
                             variables: { input: lecturer },
                         });
-                        //console.log(mutation);
+                        
 
                         lecturer = mutation.data.createLecturer
                         lecturer.courses = {
@@ -119,14 +117,7 @@ const AddLecturer = () => {
                             emails.push(email);
                         }
 
-                        // let inst=await API.graphql({
-                        //     query:getInstitution,
-                        //     variables:{id:admin.institutionId}
-                        // })
-
-                        // console.log(inst);
-                        // inst=inst.data.getInstitution;
-                        // inst.lectureremails=emails;
+                       
                         let update = {
                             id: admin.institutionId,
                             lectureremails: emails,
@@ -137,21 +128,18 @@ const AddLecturer = () => {
                             query: updateInstitution,
                             variables: { input: update },
                         });
-                        console.log(ins);
-                        // u = u.data.updateInstitution
-                        // u.logoUrl = logoUrl;
-                        // let ad = admin;
-                        // ad.institution = u;
+                       
+                        
                         admin.institution.lectureremails = emails;
                         admin.institution._version = ins.data.updateInstitution._version;
                         setAdmin(admin);
 
                         //Add lecturer to courses
                         await addCourses(lecturer, selectedCourses)
-                        //if (lecturerList.length <= 10) {
+                        
                         lecturerList.unshift(lecturer);
                         setLecturerList(lecturerList);
-                        //}
+                        
                     }
                     else {
                         setError("A lecturer with this email already exists");
@@ -161,7 +149,7 @@ const AddLecturer = () => {
                 }
 
             } catch (error) {
-                console.log(error);
+               
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message
                     if (e.search("Network") !== -1) {
@@ -201,8 +189,7 @@ const AddLecturer = () => {
                 lecturer.courses.items.splice(i, 1);
 
             } catch (error) {
-                console.log(error);
-                if (error.errors !== undefined) {
+                               if (error.errors !== undefined) {
                     let e = error.errors[0].message;
                     if (e.search("Network") !== -1) {
                         setError("Request failed due to network issues");
@@ -246,7 +233,7 @@ const AddLecturer = () => {
 
             setLecturerList(lecturerList);
         } catch (error) {
-            console.log(error);
+           
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {
@@ -294,25 +281,16 @@ const AddLecturer = () => {
                     _version: admin.institution._version,
                     lectureremails: newEmails
                 };
-                // let inst=await API.graphql({
-                //             query:getInstitution,
-                //             variables:{id:admin.institutionId}
-                //         })
-
-                // console.log(inst);
-                // inst=inst.data.getInstitution;
-                // inst.lectureremails=newEmails;
+               
 
 
                 let u = await API.graphql({
                     query: updateInstitution,
                     variables: { input: update },
                 });
-                // let a = admin;
-                // a.institution = u.data.updateInstitution;
-                // a.institution.logoUrl = admin.institution.logoUrl;
+                
 
-                console.log(u);
+                
                 admin.institution.lectureremails = newEmails;
                 admin.institution._version = u.data.updateInstitution._version;
                 const rows = [...lecturerList];
@@ -323,7 +301,7 @@ const AddLecturer = () => {
                 setisRemoving(false);
             }
             catch (error) {
-                console.log(error);
+               
                 if (error.errors !== undefined) {
                     let e = error.errors[0].message;
                     if (e.search("Network") !== -1) {
@@ -402,7 +380,7 @@ const AddLecturer = () => {
 
         } catch (error) {
             setLoadMoreLecturers(false);
-            console.log(error);
+            
             setError("Something went wrong. Try again later");
         }
     }
@@ -444,14 +422,11 @@ const AddLecturer = () => {
                 else {
                     setNextToken(lecturers.nextToken);
                 }
-                //setNextToken(lecturers.nextToken);
-                //setOfferedCourses(offeredCourses);
-                //setLecturerList(lecturers.items);
-                // }
+               
             }
         }
         catch (error) {
-            console.log(error);
+           
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {
@@ -466,25 +441,23 @@ const AddLecturer = () => {
 
     const handleSearch = async () => {
         try {
-            console.log(searchIcon);
+           
             if (searchIcon === false) {
-                console.log(searchValue)
+               
                 if (searchValue !== "") {
-                    console.log(filterAttribute);
+                    
                     if (filterAttribute !== "default") {
                     
                         let filter = `{"filter": { "and" : [ { "${filterAttribute}" : {"contains":"${searchValue}"}}, {"institutionId":{"eq":"${admin.institutionId}"} }] },"limit":"${limit}"}`;
 
-                        // let filter =`{"filter": {"${filterAttribute"}}`
+                        
                         let variables = JSON.parse(filter);
-
-
-                        console.log(variables);
+                       
                         let lecturers = await API.graphql({
                             query: listLecturers,
                             variables: variables
                         })
-                        console.log(lecturers);
+                        
                         setSearchIcon(!searchIcon);
                         lecturers = lecturers.data.listLecturers;
 
@@ -508,7 +481,7 @@ const AddLecturer = () => {
                     }
                 });
                 lecturers = lecturers.data.lecturersByInstitutionId;
-                console.log(lecturers);
+                
                 setSearchIcon(!searchIcon);
                 setLecturerList(lecturers.items.filter((item) => item._deleted === null));
                 if (lecturers.items.length < limit) {
@@ -521,7 +494,7 @@ const AddLecturer = () => {
             }
             //}
         } catch (error) {
-            console.log(error);
+           
             if (error.errors !== undefined) {
                 let e = error.errors[0].message;
                 if (e.search("Network") !== -1) {

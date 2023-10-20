@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, Dimensions, Alert, StyleSheet, Image } from "react-native";
+import { View, TouchableOpacity, Text, Dimensions, StyleSheet, Image } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
-import { API, Auth,DataStore,Predicates } from 'aws-amplify'
+import { API, Auth,DataStore } from 'aws-amplify'
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import downloadIcon from '../../assets/icons/downloadicon.png';
-import { getStudent, listCourses } from "../../graphql/queries"
+import { getStudent } from "../../graphql/queries"
 import { useStudent } from "../../ContextProviders/StudentContext";
-import { Student,Activity,Enrollment,Course } from "../../models";
+import { Student } from "../../models";
 import '@azure/core-asynciterator-polyfill';
 
 
@@ -84,9 +84,7 @@ const ScheduleTable = ({ navigation, route }) => {
             variables: { id: user.attributes.sub }
           })
           stu = stu.data.getStudent;
-          console.log("From get");
-          //console.log(stu);
-        //updateStudent(stu);
+      
 
       
       if (stu === null || stu.studentTimetableId === null) {
@@ -100,9 +98,9 @@ const ScheduleTable = ({ navigation, route }) => {
         if(stu.enrollments.items[i]._deleted===null){
             courses.push(stu.enrollments.items[i].course)
         }
-        console.log(stu.enrollments.items[i]);
+       
       }
-      console.log(courses);
+   
 
       //console.log(stu.timetable);
       for (let i = 0; i < stu.timetable.activityId.length; i++) {
@@ -139,57 +137,38 @@ const ScheduleTable = ({ navigation, route }) => {
       else {
         changed = true;
       }
-      //if (changed === true) {
-       // setActivities(act);
+   
         createScheduleArray(act);
-        console.log(act)
-      //}
+       
+      
 
 
     } catch (e) {
-      //Alert.alert(error);
-      console.log(e);
+      
+     
     }
   }
 
   const fetchActivities = async () => {
     try {
-      //let stu = student;
-      // if (student === null || student.id === undefined) {
-      //   if (param === null || param.id === undefined) {
-      //     const user = await Auth.currentAuthenticatedUser();
-      //     stu = await API.graphql({
-      //       query: getStudent,
-      //       variables: { id: user.attributes.sub }
-      //     })
-      //     stu = stu.data.getStudent;
-      //     stu.enrollments.items=stu.enrollments.items.filter((item)=>item._deleted===null);
-      //   }
-      //   else {
-      //     stu = param;
-      //     //updateStudent(stu);
-      //     param = null;
-      //   }
-        
-       // updateStudent(stu);
-     // }
+      
      const user = await Auth.currentAuthenticatedUser();
      const id=user.attributes.sub;
     
      stu = await DataStore.query(Student, id);
     
-     console.log(stu);
+    
     if(stu===undefined){
       await loadTimetable(); 
       return;
     }
     const enrollmentList=await stu.enrollments.values;
-    console.log(enrollmentList);
+   
     const enrollment=enrollmentList.filter((item)=>item._deleted===null);
-   console.log(enrollment);
+  
     let c=[];
     const studentTimetable= await stu.timetable;
-    //console.log(studentTimetable)
+    
     if(studentTimetable===undefined)
       return;
     const activity=studentTimetable.activityId;
@@ -210,36 +189,11 @@ const ScheduleTable = ({ navigation, route }) => {
       }
     }
     let act=c;
-    //console.log(act);
+    
     if(act.length===0){
      setActivities([]);
      createScheduleArray(act);
     }
-    //console.log(activityList)
-    //console.log(c.length);
-    // for (let i = 0; i < activityList.length; i++) {
-    //   for(let j=0;j<c.length;j++){
-    //       if(c[j].id===activityList[i]){
-    //          act.push(c[j]);
-    //       }
-    //       console.log(c[j]);
-    //       console.log(activityList[i]); 
-    //       //console.log(c[j].id===activityList[i]);
-    //       //console.log(activityList[i]);
-    //     // try {
-    //     //     let index = c.find(item => item.id === activityList[i])
-    //     //     console.log(index)
-    //     //     if (index !== undefined) {
-    //     //       act.push(index)
-    //     //     }
-    //     //   } catch (e) {
-    //     //      console.log(e)
-    //     //   }
-    //     }
-    // }
-  //console.log(act);
-     //console.log(studentTimetable);
-     //console.log(activityList); 
 
     
      stu.enrollments=enrollment,
@@ -264,16 +218,11 @@ const ScheduleTable = ({ navigation, route }) => {
       else {
         changed = true;
       }
-      //if (changed === true) {
-        // setActivities(act);
-         createScheduleArray(act);
-     // }
-     // console.log(changed)
-
-
+    
+      createScheduleArray(act);
+    
     } catch (e) {
-      //Alert.alert(error);
-      console.log(e);
+         
     }
   }
 
@@ -600,15 +549,7 @@ useEffect(() => {
           agendaDayTextColor: "#e32f45",
           agendaDayNumColor: "#e32f45",
           agendaTodayColor: "#e32f45",
-          //         //further styling options if needed
-          //         //  textDisabledColor: "#e32f45",
-          //         //   agendaTodayColor: "#e32f45", // today in list
-          //         //   monthTextColor: "#e32f45", // name in calendar
-          //         //    textDefaultColor: "#e32f45",
-          //         // todayBackgroundColor: "#e32f45",
-          //         // selectedDayTextColor: "#e32f45", // calendar sel date
-          //         //  dayTextColor: "#e32f45", // calendar day
-          //         //  textSectionTitleColor: "#e32f45",
+         
         }}
       />
     </View>

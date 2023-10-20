@@ -37,20 +37,10 @@ const NotificationPreferences = () => {
 
   const fetchUserEmail = async () => {
     try {
-      // Replace "currentUser" with the method that retrieves the authenticated user from Cognito
-      // For example, if you are using AWS Amplify, you can use Auth.currentAuthenticatedUser()
-      // let email=""
-      // if(student===null){
-      //   const currentUser = await Auth.currentAuthenticatedUser();
-      //   //const email = currentUser.attributes.email; // Assuming that "email" is the attribute name for the email in Cognito
-      //   email=currentUser.attributes.email;
-      // }
-      // else{ 
-      //   email=student.email;
-      // }
+    
       return student.email;
     } catch (error) {
-      console.error("Error fetching user email:", error);
+    
       return null;
     }
   };
@@ -58,35 +48,20 @@ const NotificationPreferences = () => {
 
   const fetchStudent = async () => {
     try {
-      // if (student === null) {
-      //   const user = await Auth.currentAuthenticatedUser()
-      //   let studentEmail = user.attributes.email;
-      //   let stu = await API.graphql({
-      //     query: getStudent,
-      //     variables: { id: user.attributes.sub }
-      //   })
-
-      //   stu = stu.data.getStudent;
-      //   if (stu === null) {
-      //     throw Error();
-      //   }
-      //   updateStudent(student);
-      // }
+      
       const user = await Auth.currentAuthenticatedUser();
       const id=user.attributes.sub;
       stu = await DataStore.query(Student, id);
       stu.preference=await stu.preference;
       updateStudent(stu);
     } catch (e) {
-      console.log(e);
+    
     }
   }
   const handleOptionSelect = async (option) => {
     setSelectedOption(option);
     if (option === "email") {
-      // Fetch user's email from Cognito
-      // const userEmail = await fetchUserEmail();
-      //const email=student.email;
+     
       setEmail(student.email); // Set the email state with the user's email
       setEmailModalVisible(true); // Show the "Email Modal"
     }
@@ -99,28 +74,11 @@ const NotificationPreferences = () => {
       if (student.preference === null || student.preference===undefined) {
 
         
-      //   let pref=await DataStore.save(
-      //               new NotificationPreferance({
-		  //                   "studentId": student.id
-      //                   "endpoint":
-	    //               })
-      //       );
-      //    console.log(pref);   
-      // let updateStudent=await DataStore.save(Student.copyOf(student, updated => {
-      //       updated.preference=pref,
-      //       updated.studentPreferenceId=pref.id
-      //   }));
-      //       console.log(updateStudent);
+      
       }
       else {
 
-        //  let updatepref=await DataStore.save(NotificationPreferance.copyOf(student.preference, updated => {
-        //     updated.endpoint:""
-        // }));
-        //      let updateStudent=await DataStore.save(Student.copyOf(student, updated => {
-        //     updated.preference=pref,
-        //     updated.studentPreferenceId=pref.id
-        // }));
+       
         
       }
       updateStudent(student);
@@ -130,7 +88,7 @@ const NotificationPreferences = () => {
       );
     } catch (e) {
       Alert.alert("Failed to update preference");
-      console.log(e);
+     
     }
   };
 

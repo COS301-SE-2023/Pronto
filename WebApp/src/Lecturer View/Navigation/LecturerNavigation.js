@@ -59,7 +59,7 @@ export default function LecturerNavigation() {
         setLecturer(lec);
       }
     } catch (error) {
-      console.log(error);
+      
     }
   }
 

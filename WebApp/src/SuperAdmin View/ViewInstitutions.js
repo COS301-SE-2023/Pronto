@@ -3,20 +3,18 @@ import SuperAdminNavigation from './SuperAdminNavigation';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import "./SuperAdmin.css";
-import { createInstitution, createAdmin, updateInstitution, deleteInstitution } from "../Graphql/mutations";
-import { listInstitutions, listAdmins } from '../Graphql/queries';
+import { createInstitution, deleteInstitution } from "../Graphql/mutations";
+import { listInstitutions } from '../Graphql/queries';
 import IconButton from '@mui/material/IconButton'; // Import IconButton
 import CloseIcon from '@mui/icons-material/Close'; // Import the close icon
-import { Amplify, Auth, API } from 'aws-amplify';
-import { withAuthenticator } from '@aws-amplify/ui-react';
+import {  API } from 'aws-amplify';
 import { useEffect } from 'react';
 
 // Modal component for adding institutions
 function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions }) {
     const [universityName, setUniversityName] = useState('');
     const [adminEmail, setAdminEmail] = useState('');
-    const [groupName, setGroupName] = useState('');
-    const [userName, setUserName] = useState('');
+    
     const [universityID, setUniversityID] = useState('');
 
     const [admin, setAdmin] = useState('');
@@ -27,209 +25,60 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
         setUniversityName(event.target.value);
     };
 
-    const handleGroupNameChange = (event) => {
-        setGroupName(event.target.value);
-    };
 
-    const handleUsernameChange = (event) => {
-        setUserName(event.target.value);
-        console.log(event);
-    };
 
     const handleUniversityID = (event) => {
         setUniversityID(event.target.value);
     };
 
-    const handleAddAdmin = async (event) => {
-        setAdmin(event.target.value);
-        //         let apiName = 'AdminQueries';
-        //         let path = '/addUserToGroup';
-        //             let myInit = {
-        //                 body: {
-        //                     "username" :event,
-        //         "groupname": "adminUserGroup"
-        //       }, 
-        //       headers: {
-        //         'Content-Type' : 'application/json',
-        //         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-        //       } 
-        //   }
-        //   return await API.post(apiName, path, myInit);
-    };
-
-
-
+   
 
 
     const handleAdminEmailChange = (event) => {
         setAdminEmail(event.target.value);
     };
 
-    const handleConfirmSignUp = async () => {
-        alert("handleConfirmSignUp pressed");
-        let apiName = 'AdminQueries';
-        let path = '/confirmUserSignUp';
-        let myInit = {
-            body: {
-                "username": "richard",
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            }
-        }
-        return await API.post(apiName, path, myInit);
-    }
-
-    const handleDisableUser = async () => {
-        alert("handleDisableUser pressed");
-        let apiName = 'AdminQueries';
-        let path = '/disableUser';
-        let myInit = {
-            body: {
-                "username": "richard",
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            }
-        }
-        return await API.post(apiName, path, myInit);
-    }
-
-    const handleRemoveFromUserGroup = async () => {
-        alert("handleRemoveFromUserGroup pressed");
-        let apiName = 'AdminQueries';
-        let path = '/removeUserFromGroup';
-        let myInit = {
-            body: {
-                "username": "richard",
-                "groupname": "Editors"
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            }
-        }
-        return await API.post(apiName, path, myInit);
-    }
-
-    const handleEnableUser = async () => {
-        alert(" handleEnableUser pressed");
-        let apiName = 'AdminQueries';
-        let path = '/enableUser';
-        let myInit = {
-            body: {
-                "username": "richard",
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            }
-        }
-        return await API.post(apiName, path, myInit);
-    }
-
-
-    const handleGetUser = async () => {
-        alert(" handleGetUser pressed");
-        let apiName = 'AdminQueries';
-        let path = '/getUser';
-        let myInit = {
-            body: {
-                "username": "richard",
-            },
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-            }
-        }
-        return await API.post(apiName, path, myInit);
-    }
-
+   
 
 
     const handleAddInstitution = async (event) => {
-        // Perform the action to add the institution with universityName and adminEmail
-        // You can add your logic here
+        
         event.preventDefault()
-        // try {
-        //     let inst = {
-        //         name: universityName,
-        //     }
-        //     let institutionList = await API.graphql({
-        //         query: listInstitutions,
-        //         variables: {
-        //             filter: {
-        //                 name: {
-        //                     eq: universityName
-        //                 }
-        //             }
-        //         }
-        //     })
-        //     if (adminEmail !== "") {
-        //         let admins = await API.graphql({
-        //             query: listAdmins,
-        //             variables: {
-        //                 filter: {
-        //                     email: {
-        //                         eq: adminEmail
-        //                     }
-        //                 }
-        //             }
-        //         })
+        try {
+            let inst = {
+                name: universityName,
+            }
+            let institutionList = await API.graphql({
+                query: listInstitutions,
+                variables: {
+                    filter: {
+                        name: {
+                            eq: universityName
+                        }
+                    }
+                }
+            })
+            
 
-        //         if (admins.data.listAdmins.items.length > 0) {
-        //             return
-        //         }
-        //     }
+            if (institutionList.data.listInstitutions.items.length > 0) {
 
-        //     if (institutionList.data.listInstitutions.items.length > 0) {
+                return;
+            }
 
-        //         return;
-        //     }
+            let institution = await API.graphql({
+                query: createInstitution,
+                variables: {
+                    input: inst
+                }
+            })
 
-        //     let institution = await API.graphql({
-        //         query: createInstitution,
-        //         variables: {
-        //             input: inst
-        //         }
-        //     })
+            institution = institution.data.createInstitution;
+            institutions.unshift(institution);
+            setInstitutions(institutions);
 
-        //     institution = institution.data.createInstitution;
+        } catch (e) {
 
-        //     let email = adminEmail === "" ? "email" : adminEmail;
-        //     let admin = await API.graphql({
-        //         query: createAdmin,
-        //         variables: {
-        //             input: {
-        //                 firstname: "",
-        //                 lastname: "",
-        //                 userRole: "Admin",
-        //                 institutionId: institution.id,
-        //                 email: email
-        //             }
-        //         }
-        //     })
-
-        //     const u = {
-        //         id: institution.id,
-        //         adminId: admin.data.createAdmin.id
-        //     }
-
-        //     await API.graphql({
-        //         query: updateInstitution,
-        //         variables: {
-        //             input: u
-        //         }
-        //     })
-
-        //     institutions.unshift(institution);
-        //     setInstitutions(institutions);
-
-        // } catch (e) {
-
-        // }
+        }
         setAdminEmail("")
         setUniversityName("")
         // After adding the institution, close the modal
@@ -283,47 +132,7 @@ function AddInstitutionModal({ isOpen, onClose, institutions, setInstitutions })
                         Add Institution
                     </Button>
 
-                    {/* <h2> Add Admin</h2>
-                    <TextField
-                        label="Username"
-                        variant="outlined"
-                        fullWidth
-                        value={userName}
-                        onChange={handleUsernameChange}
-                        style={{ marginBottom: "5%" }}
-                    />
-                    <TextField
-                        label="GroupName"
-                        variant="outlined"
-                        fullWidth
-                        value={groupName}
-                        onChange={handleGroupNameChange}
-                        style={{ marginBottom: "5%" }}
-                    />
-                    <Button className="no-hover-color-change" onClick={handleConfirmSignUp} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
-                        Confirm user sign up
-                    </Button>
-
-                    <Button className="no-hover-color-change" onClick={handleRemoveFromUserGroup} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
-                        Remove from user group
-                    </Button>
-
-                    <Button className="no-hover-color-change" onClick={handleEnableUser} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
-                        Enable user
-                    </Button>
-
-                    <Button className="no-hover-color-change" onClick={handleDisableUser} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
-                        Disable user
-                    </Button>
-
-                    <Button className="no-hover-color-change" onClick={handleGetUser} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
-                        Get user
-                    </Button>
-
-                    <Button className="no-hover-color-change" onClick={handleAddAdmin} variant="contained" color="primary" style={{ marginBottom: "5%", borderRadius: "20px" }}>
-                        Add Admin
-                    </Button> */}
-
+            
                 </div>
             </div>
         </>
@@ -344,7 +153,7 @@ export default function ViewInstitutions() {
     };
 
     const fetchInstitutions = async () => {
-        console.log("RAN")
+        
         try {
             let a = await API.graphql({
                 query: listInstitutions,
@@ -353,7 +162,7 @@ export default function ViewInstitutions() {
             })
             setInstitutions(a.data.listInstitutions.items.filter((item)=>item._deleted===null));
         } catch (e) {
-            console.log(e);
+           
         }
     }
     const handleDelete = async (institution, index) => {
@@ -367,7 +176,7 @@ export default function ViewInstitutions() {
             rows.splice(index, 1);
             setInstitutions(rows);
         } catch (error) {
-            console.log(error)
+           
         }
     }
     useEffect(() => {

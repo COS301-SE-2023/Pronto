@@ -2,15 +2,9 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
-  SafeAreaView,
-  TextInput,
-  ImageBackground,
-  Dimensions,
-  Alert,
 } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
 
 const PasswordCriteriaMessage = ({ criteria }) => {
   const { length, uppercase, lowercase, digit, specialChar } = criteria;

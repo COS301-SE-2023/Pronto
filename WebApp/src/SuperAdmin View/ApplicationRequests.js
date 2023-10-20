@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ErrorModal } from "../Components/ErrorModal";
 import {SuccessModal} from "../Components/SuccessModal";
 import { API, Auth } from "aws-amplify";
-import { getInstitution, listAdmins, listInstitutions } from '../Graphql/queries';
+import {  listAdmins, listInstitutions } from '../Graphql/queries';
 import { listAdminApplications } from '../Graphql/queries';
 import { updateAdmin, updateAdminApplication, createInstitution, createAdmin, updateInstitution } from '../Graphql/mutations';
 
@@ -19,16 +19,7 @@ export default function ApplicationRequests() {
     const updatedRequests = [...requests];
 
     try {
-      // let admin = await API.graphql({
-      //   query: getInstitution,
-      //   variables: { id: requests[index].firstname }
-      // })
-      // admin = admin.data.getInstitution.admin;
-      // admin.email = requests[index].email;
-      // await API.graphql({
-      //   query: updateAdmin,
-      //   variables: { input: admin }
-      // })
+      
       updatedRequests.splice(index, 1);
       setRequests(updatedRequests);
 
@@ -36,8 +27,7 @@ export default function ApplicationRequests() {
       let institution = {
         name: request.name
       }
-      // const group= await addToGroup(request.email);
-      // console.log(group);
+
 
       let inst=await API.graphql({
         query:listInstitutions,
@@ -59,11 +49,10 @@ export default function ApplicationRequests() {
            variables: { input: institution }
         })
 
-      console.log(inst);
+     
       inst=inst.data.createInstitution;
     }
-    //   const newAdmin = await addToAdminGroup(inst, request.email, request.firstname);
-    //   console.log(newAdmin)
+  
 
      let admin = await API.graphql({
       query:listAdmins,
@@ -75,7 +64,7 @@ export default function ApplicationRequests() {
         }
       }
      })
-     console.log(admin)
+    
      if(admin.data.listAdmins.items.length>0){
        admin=admin.data.listAdmins.items[0];
        let updatedAdmin={
@@ -89,9 +78,9 @@ export default function ApplicationRequests() {
               query:updateAdmin,
               variables:{input:updatedAdmin}
             })
-            console.log(update)
+          
        }catch(e){
-            console.log(e)
+          
        }
      }
      else{
@@ -103,12 +92,12 @@ export default function ApplicationRequests() {
         institutionId: inst.id,
         email: request.email
       }
-      console.log(a);
+     
       admin = await API.graphql({
         query: createAdmin,
         variables: { input: a }
       })
-      console.log(admin)
+     
       admin=admin.data.createAdmin;
     }
 
@@ -118,18 +107,17 @@ export default function ApplicationRequests() {
         _version: inst._version,
         lectureremails:request.email
       }
-      console.log(update)
+     
       let f = await API.graphql({
         query: updateInstitution,
         variables: { input: update }
       })
-      // //  const user= await getUserHelper()
-         console.log(f);
+ 
       let g=await API.graphql({
         query: updateAdminApplication,
         variables: { input: { id: requests[index].id, status: "ACCEPTED",_version:requests[index]._version } }
       })
-       console.log(g);
+      
  
      const password=generateRandomString();
      const user= await Auth.signUp({
@@ -145,10 +133,12 @@ export default function ApplicationRequests() {
           institutionId: inst.id,
         },
       });
-      console.log(user);
+     
       setSuccessMessage("Admin account created");
+     
+   
     } catch (error) {
-      console.log(error);
+     
       setError("Something went wrong");
     }
   };
@@ -185,63 +175,6 @@ export default function ApplicationRequests() {
   }
 
 
-  //  const addToGroup = async (email) => {
-        
-  //       let apiName = 'AdminQueries';
-  //       let path = '/addUserToGroup';
-  //       let myInit = {
-  //           body: {
-  //               "username": email,
-  //               "groupname":"adminUserGroup"
-  //           },
-  //           headers: {
-  //               'Content-Type': 'application/json',
-  //               Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-  //           }
-  //       }
-  //       return await API.post(apiName, path, myInit);
-  //   }
-
-  // const getUserHelper = async (username) => {
-  //   try {
-  //     let apiName = 'AdminQueries';
-  //     let path = '/getUser';
-  //     let myInit = {
-  //       body: {
-  //         "username": "agilearchitectscapstone@gmail.com",
-  //       },
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         //Authorization: `AM`
-  //       }
-  //     }
-  //     return await API.post(apiName, path, myInit);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-  // const addToAdminGroup = async (institution, email, name) => {
-  //   try {
-  //     let apiName = "AdminQueries";
-  //     let path = "/createInstitutionAdmin";
-  //     let n = name.replace(" ", "")
-  //     let myInit = {
-  //       body: {
-  //         "email": email,
-  //         "institutionId": institution.id,
-  //         "Password": "October01!",
-  //         name: n
-  //       },
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `${(await Auth.currentSession()).getAccessToken().getJwtToken()}`
-  //       }
-  //     };
-  //     return API.post(apiName, path, myInit);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
 
   const declineRequest = async (index) => {
     const updatedRequests = [...requests];
@@ -252,11 +185,11 @@ export default function ApplicationRequests() {
         query: updateAdminApplication,
         variables: { input: { id: requests[index].id, status: "REJECTED" ,_version:requests[index]._version} }
       })
-      console.log(reject)
+     
 
       
     } catch (error) {
-      console.log(error)
+     
     }
   };
 
@@ -272,11 +205,21 @@ export default function ApplicationRequests() {
           }
         }
       })
+      const inst = await API.graphql({
+        query:listInstitutions,
+        variables:{}
+      })
+    
+       const ad = await API.graphql({
+        query:listAdmins,
+        variables:{}
+      })
+    
       setRequests(r.data.listAdminApplications.items.filter((item)=>item._deleted===null && item.status==="PENDING"));
-      //setRequests(r.data.listAdminApplications.items);
-      console.log(r);   
+ 
+         
     } catch (error) {
-      console.log(error)
+      
     }
 
   }

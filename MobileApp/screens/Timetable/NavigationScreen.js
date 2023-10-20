@@ -8,8 +8,7 @@ import { REACT_APP_GOOGLE_API_KEY } from "@env";
 import * as Location from 'expo-location';
 import { SelectList } from "react-native-dropdown-select-list";
 import { useStudent } from "../../ContextProviders/StudentContext";
-import { API, Auth, DataStore } from "aws-amplify";
-import { getStudent } from "../../graphql/queries";
+import {  Auth, DataStore } from "aws-amplify";
 import { Student } from '../../models';
 
 const { width, height } = Dimensions.get('window');
@@ -100,20 +99,7 @@ const NavigationScreen = ({ navigation, route }) => {
         try {
 
             let stu = student;
-            // if (student === null) {
-            //     const user = await Auth.currentAuthenticatedUser();
-            //     stu = await API.graphql({
-            //         query: getStudent,
-            //         variables: { id: user.attributes.sub }
-            //     })
-
-            //     stu = stu.data.getStudent;
-            //     stu.enrollments.items=stu.enrollments.items.filter((items)=>items._deleted===null)
-            //     if (stu === null || stu === undefined) {
-            //         throw Error();
-            //     }
-            //     updateStudent(stu);
-            // }
+           
 
             const user = await Auth.currentAuthenticatedUser();
             const id = user.attributes.sub;
@@ -188,11 +174,10 @@ const NavigationScreen = ({ navigation, route }) => {
                 setCoordinates(loc);
             }
 
-            //}
+            
 
         } catch (e) {
-            //Alert.alert(error);
-            console.log(e);
+            
         }
     }
 

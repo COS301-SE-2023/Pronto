@@ -56,7 +56,7 @@ export default function PostAccordion(course) {
           query: updateActivity,
           variables: { input: { id: activity.id, coordinates: coordinate ,_version:activity._version} }
         })
-        console.log(newAct);
+        
         newAct=newAct.data.updateActivity;
         for(let i=0;i<course.course.activity.items.length;i++){
           if(course.course.activity.items[i].id===activity.id){
@@ -68,7 +68,7 @@ export default function PostAccordion(course) {
       }
       setAddVenue(false);
     } catch (e) {
-      console.log(e);
+      
       setError("Something went wrong.Please try again later");
       setAddVenue(false);
     }
@@ -85,7 +85,7 @@ export default function PostAccordion(course) {
       setLat(latLngValue.lat);
       setLng(latLngValue.lng);
     } catch (error) {
-      console.error("Error fetching coordinates:", error);
+      
     }
   };
 
@@ -126,7 +126,7 @@ export default function PostAccordion(course) {
 
       setSuccessMessage("Announcement posted succesfully");
     } catch (error) {
-      console.log(error);
+     
       if (error.errors !== undefined) {
         let e = error.errors[0].message;
 
