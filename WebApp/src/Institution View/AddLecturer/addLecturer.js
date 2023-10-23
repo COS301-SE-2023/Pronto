@@ -725,7 +725,7 @@ const AddLecturer = () => {
                                                     onClick={() => handleRemove(val, key)}
                                                     type="button"
                                                     className="btn btn-danger w-100"
-                                                    style={{ backgroundColor: '#e32f45', borderRadius: "30px", color: "white", width: "90px" }}
+                                                    style={{ backgroundColor: '#e32f45', color: "white", width: "90px" }}
                                                     data-testid="deleteButton"
                                                 >
                                                     Remove
