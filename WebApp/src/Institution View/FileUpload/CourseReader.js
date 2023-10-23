@@ -157,7 +157,7 @@ const CourseReader = (props) => {
         </div>
         <div className='csv_component'>
           <label className="csv-reader-label">
-            <p className="csv-reader-text">Click Here</p>
+            <p className="csv-reader-text">Click here to upload</p>
 
             <CSVReader
               label=""
