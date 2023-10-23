@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Select from "react-select";
 import "./styles.css";
 import ProntoLogo from "./ProntoLogo.png";
 import { Auth, API, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import { listAdmins, listInstitutions } from "../../Graphql/queries";
+import { listAdmins } from "../../Graphql/queries";
 import { createAdminApplication } from "../../Graphql/mutations";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import MobileView from "../../Homepage/MobileView";
@@ -29,14 +28,8 @@ function Login() {
 
   const navigate = useNavigate();
 
-
-  //select institution
-  const [institutionId, setInstitutionId] = useState("");
-
   const [loading, setLoading] = useState(false);
-  // const [institutionName, setInstitutionName] = useState("");
-  const [institutions, setInstitutions] = useState([])
-
+  
   const { setAdmin } = useAdmin();
 
   const fetchAdmin = async () => {
@@ -74,35 +67,6 @@ function Login() {
   }
 
 
-  // const fetchInstitutions = async () => {
-
-  //   try {
-
-  //     let inst = await API.graphql({
-  //       query: listInstitutions,
-  //       variables: {
-
-  //       },
-  //       authMode: "API_KEY"
-  //     });
-  //     inst = inst.data.listInstitutions.items;
-  //     let institutionInfo = [];
-  //     for (let j = 0; j < inst.length; j++) {
-  //       let item = {
-  //         value: inst[j].id,
-  //         label: inst[j].name
-  //       }
-  //       institutionInfo.push(item);
-  //     }
-  //     setInstitutions(institutionInfo);
-  //   } catch (error) {
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchInstitutions();
-  // }, [])
-
   //function for signing in
   const onSignInPressed = async (event) => {
     if (loading) {
@@ -124,29 +88,18 @@ function Login() {
         password: password,
         validationData: {
           role: "Admin",
-          // institutionId: institutionId
         }
       }
 
       const user = await Auth.signIn(signInObject);
       setsignInError("");
-      //const newPassword = password
+      
       if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
         navigate("/institution/temporary-password", { state: { user: user } })
-        // const loggedInUser = await Auth.completeNewPassword(
-        //   user,
-        //   newPassword,
-        //   {
-        //     family_name: "  "
-
-        //   }
-        // )
-
-        // console.log(loggedInUser);
+        
       }
-
       await fetchAdmin().then(() => navigate("/institution/dashboard"))
-      //navigate("/institution/dashboard");
+    
     } catch (e) {
       setLoading(false);
       setsignInError(e.message);
@@ -168,15 +121,7 @@ function Login() {
       errors.push("Please enter a valid email address.");
     }
 
-    // if (!passwordIsValid) {
-    //   errors.push(
-    //     "Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*()?)."
-    //   );
-    // }
-    // if (confirmPassword !== signUpPassword) {
-    //   errors.push("Passwords do not match");
-    // }
-
+   
     if (errors.length > 0) {
       // Combine all error messages into a single string separated by <div> elements
       const errorMessage = errors.map((error, index) => (
@@ -212,40 +157,16 @@ function Login() {
           },
           authMode: "API_KEY"
         })
-        console.log(apply);
       } catch (error) {
-        console.log(error);
+        
       }
-
-
-      //await Auth.signUp(signInObject);
+      
 
       setsignUpError("");
       navigate("/institution/confirm-email", { state: { email: email } });
     } catch (e) {
-      console.log(e);
-
-      //   let n=firstname+" "+lastname;
-      //   const application = {
-      //     name: institutionName,
-      //     firstname: n,
-      //     email: email,
-      //     status: "PENDING"
-      //   }
-
-      //   try{
-      //   await API.graphql({
-      //     query: createAdminApplication,
-      //     variables: {
-      //       input: application
-      //     },
-      //     authMode: "API_KEY"
-      //   })
-      // }catch(error){
-      //   console.log(error);
-      // }
-      // setsignUpError(e.message);
-      //      setsignUpError("Your application has been sent")
+      
+      setsignUpError("Your application could not be sent")
     }
     setLoading(false);
   };
@@ -368,40 +289,8 @@ function Login() {
                   }}
                   isValidEmail={emailIsValid}
                 />
-                {/*                 
-                <StyledSelectInput
-                  options={institutions}
-                  defaultValue={institutionId}
-                  onChange={handleInstitutionSelection}
-                  placeholder="Select an Institution"
-                  classNamePrefix="SelectInput"
-                  autoComplete="on"
-                  spellCheck="true"
-                  isSelectionValid={isInstitudeSelected}
-                ></StyledSelectInput> */}
-
-                {/* <Input
-                  type="password"
-                  placeholder="Password"
-                  value={signUpPassword}
-                  onChange={(event) => {
-                    setSignUpPassword(event.target.value);
-                    validatePassword(event.target.value);
-                  }}
-                  isValidPassword={passwordIsValid}
-                  onFocus={handlePasswordFocus}
-                  onBlur={handlePasswordBlur}
-                />
-                <Input
-                  type="password"
-                  placeholder="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(event) => {
-                    setConfirmPassword(event.target.value);
-                    validateConfirmPassword(event.target.value);
-                  }}
-                  passwordMatch={passwordMatch}
-                /> */}
+               
+               
                 {signUpError && <ErrorText>{signUpError}</ErrorText>}{" "}
                 <Button onClick={onSignUpPressed}>
                   {loading ? "Applying..." : "Apply"}

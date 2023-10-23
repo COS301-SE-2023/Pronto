@@ -15,7 +15,7 @@ const CourseReader = (props) => {
   const [successMessage, setSuccessMessage] = useState("")
   const handleFile = async (data, fileInfo) => {
     //setIsDisabled(true);
-    console.log(fileInfo);
+  
     if (data.length < 100) {
       //props.setLoading(true);
       setMessage("Processing...")
@@ -58,10 +58,10 @@ const CourseReader = (props) => {
           query: deleteCourse,
           variables: { input: { id: courseList[i].id, _version: courseList[i]._version } }
         })
-        console.log(del);
+        
 
       } catch (error) {
-        console.log(error);
+        
       }
     }
     //props.setCourse([]);
@@ -110,7 +110,7 @@ const CourseReader = (props) => {
     try {
 
       let count = 0;
-      console.log(courseMap);
+      
       courseMap.forEach(async (key, val) => {
 
         try {
@@ -119,7 +119,7 @@ const CourseReader = (props) => {
             variables: { input: { institutionId: props.institutionId, coursecode: val } }
           })
           newCourse = newCourse.data.createCourse;
-          console.log(newCourse);
+          
           for (let i = 0; i < key.length; i++) {
             key[i].courseId = newCourse.id
             let act = await API.graphql({
@@ -128,10 +128,10 @@ const CourseReader = (props) => {
             })
 
             count += 1;
-            console.log(act);
+            
           }
         } catch (error) {
-          console.log(error)
+         
         }
         if (count === entries)
           setMessage("")
@@ -141,7 +141,7 @@ const CourseReader = (props) => {
 
     } catch (error) {
       setMessage("");
-      console.log(error);
+     
     }
   }
 

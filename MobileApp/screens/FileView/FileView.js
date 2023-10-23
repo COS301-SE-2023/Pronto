@@ -18,8 +18,6 @@ import { getStudent } from "../../graphql/queries";
 import { useStudent } from "../../ContextProviders/StudentContext";
 import { Student, Institution } from "../../models";
 
-//graphQL call to get the university of the student, which will be used to get the file from that folder.
-//let studentUniversity = "UniversityOfPretoria";
 
 const BucketFilesScreen = () => {
   const [fileList, setFileList] = useState([]);
@@ -39,7 +37,7 @@ const BucketFilesScreen = () => {
       setIsLoading(true);
       let name = await setUniversityName()
 
-      console.log(name);
+     
       const response = await Storage.list(
         name + "/StudentFiles/",
         {
@@ -63,20 +61,7 @@ const BucketFilesScreen = () => {
     let error = "There appear to be network issues.Please try again later"
     try {
       let stu = student;
-      //  if(student===null){
-      //    const user = await Auth.currentAuthenticatedUser()
-      //    let studentEmail = user.attributes.email; 
-      //    stu = await API.graphql({
-      //      query: getStudent,
-      //      variables: {id:user.attributes.sub}
-      //    })
-
-      //    stu=stu.data.getStudent;
-      //    if(stu===false || stu===undefined){
-      //      throw Error();
-      //    }
-      //    updateStudent(stu);
-      //  }
+   
       const user = await Auth.currentAuthenticatedUser();
       const id = user.attributes.sub;
       stu = await DataStore.query(Student, id);
@@ -89,7 +74,7 @@ const BucketFilesScreen = () => {
       setStudentUniversity(sU)
       return sU
     } catch (e) {
-      console.log(e);
+   
       Alert.alert(error);
     }
   }
@@ -100,7 +85,7 @@ const BucketFilesScreen = () => {
       const fileURL = await Storage.get(fileKey);
       Linking.openURL(fileURL);
     } catch (error) {
-      console.error("Error opening file:", error);
+      
     }
   };
 

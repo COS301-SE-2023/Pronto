@@ -9,15 +9,11 @@ import UploadCSV from "../../Images/UploadCSV.png";
 
 
 const CsvFileReader = (props) => {
-  //console.log(props)
+  
   const { admin, setAdmin } = useAdmin();
   const handleFile = async (data, fileInfo) => {
-    //console.log(props);
-    //console.log('Parsed CSV data:', data);
-    //console.log(data[0]['First Name']);
+   
     addLecturers(data);
-    //console.log('File info:', fileInfo);
-
 
   };
 
@@ -48,7 +44,7 @@ const CsvFileReader = (props) => {
           userRole: "Lecturer"
         }
         if (lecturer.firstname === undefined || lecturer.lastname === undefined || lecturer.email === undefined) {
-          console.log("unrecognized field");
+          
         } else {
           if (props.adminEmail !== lecturer.email) {
             let emails = await API.graphql({
@@ -80,21 +76,17 @@ const CsvFileReader = (props) => {
                 filter += `] }}`;
 
                 let variables = JSON.parse(filter);
-                console.log(variables);
+                
 
                 try {
                   let courseList = await API.graphql({
                     query: listCourses,
                     variables: variables
                   })
-                  // let list=await API.graphql({
-                  //   query:listCourses,
-                  //   variables:{}
-                  // })
-
+                 
                   courseList = courseList.data.listCourses.items;
                   for (let i = 0; i < courseList.length; i++) {
-                    console.log("adding courses");
+                    
                     let a = await API.graphql({
                       query: updateCourse,
                       variables: { input: { id: courseList[i].id, lecturerId: newLecturer.id } }
@@ -103,14 +95,14 @@ const CsvFileReader = (props) => {
                   }
 
                 } catch (e) {
-                  console.log(e)
+                 
                 }
               }
             }
           }
         }
       } catch (error) {
-        console.log(error);
+        
       }
       let ins = API.graphql({
         query: updateInstitution,

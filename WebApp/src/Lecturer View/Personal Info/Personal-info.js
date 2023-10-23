@@ -73,50 +73,6 @@ const PersonalInfoPage = () => {
     }
 
 
-    // const fetchUser = async () => {
-    //     try {
-    //         let u = await Auth.currentAuthenticatedUser();
-    //         setUser(u);
-    //     } catch (error) {
-    //         setError("Something went wrong");
-    //     }
-    // }
-
-    const fetchLecturer = async () => {
-        await Auth.currentAuthenticatedUser()
-        if (lecturer === null ) {
-            const user = await Auth.currentAuthenticatedUser();
-            let lecturer_email = user.attributes.email;
-            let lec = await API.graphql({
-                query: listLecturers,
-                variables: {
-                    filter: {
-                        email: {
-                            eq: lecturer_email
-                        }
-                    }
-                },
-            });
-            //setLecturer(lec.data.listLecturers.items[0]);
-            lec = lec.data.listLecturers.items[0];
-        if (lec.institution.logo === null) {
-          lec.institution.logoUrl = "";
-        }
-        else {
-          lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
-
-        }
-        setLecturer(lec);
-        }
-    }
-
-
-    useEffect(() => {
-       // fetchLecturer()
-        //fetchUser();
-    }, [])
-
-
     return (
 
         <div style={{ display: 'inline-flex', maxHeight: "100vh" }}>

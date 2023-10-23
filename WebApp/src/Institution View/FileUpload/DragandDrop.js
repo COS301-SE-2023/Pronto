@@ -23,11 +23,11 @@ function DropzoneComponent() {
     try {
       const userInfo = await Auth.currentUserInfo();
       setUser(userInfo);
-      let adminInfo = admin
+      let adminData = admin
       if (admin === null) {
         let user = await Auth.currentAuthenticatedUser();
         let adminEmail = user.attributes.email
-        let adminData = await API.graphql({
+        adminData = await API.graphql({
           query: listAdmins,
           variables: {
             filter: {
@@ -46,49 +46,21 @@ function DropzoneComponent() {
         }
       }
       let username = userInfo?.attributes?.name; // Get the name of the signed-in uni
-      //const words = username.split(/\s+/); // Split the name into words
-      const words = admin.institution.name.split(/\s+/);
+
+      const words = adminData.institution.name.split(/\s+/);
       username = words
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Convert each word to camel case
         .join(""); // Join the words without spaces
 
       setFolderNameS3(username);
-      console.log(username);
+     
       setMessage("");
     } catch (error) {
-      console.log(error);
+      
       setMessage("Error fetching user data");
     }
   };
 
-  const createFolder = async (folderName) => {
-    try {
-      const studentFilesKey = `${folderName}/StudentFiles/`; // Include the trailing slash for "StudentFiles" folder
-
-      // Check if "StudentFiles" folder exists
-      const studentFilesExists = await Storage.list(studentFilesKey);
-
-      if (!studentFilesExists || studentFilesExists.length === 0) {
-        // If "StudentFiles" folder does not exist, create it
-        await Storage.put(studentFilesKey, "", {
-          contentType: "application/octet-stream",
-        });
-      }
-
-      // Add the file to the "StudentFiles" folder
-      await Storage.put(studentFilesKey + selectedFile.name, selectedFile, {
-        progressCallback: ({ loaded, total }) => {
-          const progress = Math.round((loaded / total) * 100);
-          setUploadProgress(progress);
-          setMessage("Uploading file: " + selectedFile.name);
-        },
-      });
-
-      setMessage("File successfully uploaded: " + selectedFile.name);
-    } catch (error) {
-      setMessage("Error uploading file");
-    }
-  };
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
@@ -106,8 +78,7 @@ function DropzoneComponent() {
   const handleSubmit = async () => {
     if (selectedFile) {
       try {
-        //const sf = selectedFile
-        //setSelectedFile(null)
+       
         const fileKey = `${folderNameS3}/StudentFiles/${selectedFile.name}`;
         await Storage.put(fileKey, selectedFile, {
           progressCallback: ({ loaded, total }) => {

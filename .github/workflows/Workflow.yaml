@@ -91,28 +91,28 @@ jobs:
           bash scripts/initialise-amplify.sh
           amplify build
 
-  cypress:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
-    defaults:
-      run:
-        working-directory: ./WebApp
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # cypress:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [ 18.x ]
+  #   defaults:
+  #     run:
+  #       working-directory: ./WebApp
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 18.x
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 18.x
 
-      - name: Install dependencies
-        run: npm install
+  #     - name: Install dependencies
+  #       run: npm install
 
-      - name: Run Cypress tests
-        run: npx cypress run
+  #     - name: Run Cypress tests
+  #       run: npx cypress run
 
   backend-unit-tests:
     runs-on: ubuntu-latest

@@ -50,7 +50,7 @@ function Login() {
       if (lec.data.listLecturers.items.length > 0) {
         if (lec.data.listLecturers.items[0]._deleted === null) {
           lec = lec.data.listLecturers.items[0];
-          console.log(lec);
+          
           try {
             if (lec.institution.logo !== null) {
               lec.institution.logoUrl = await Storage.get(lec.institution.logo, { validateObjectExistence: true, expires: 3600 });
@@ -58,7 +58,7 @@ function Login() {
             }
 
           } catch (error) {
-            console.log(error);
+            
           }
           setLecturer(lec);
 
@@ -74,7 +74,7 @@ function Login() {
 
   }
   const fetchInstitutions = async () => {
-    console.log("fetch");
+    
     try {
       let inst = await API.graphql({
         query: listInstitutions,
@@ -84,9 +84,9 @@ function Login() {
         },
         authMode: "API_KEY"
       });
-      console.log(inst)
+     
       inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      console.log(inst)
+      
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -98,7 +98,7 @@ function Login() {
 
       setInstitutions(institutionInfo);
     } catch (error) {
-      console.log(error);
+     
     }
   }
 
@@ -124,7 +124,7 @@ function Login() {
 
 
     try {
-      // await Auth.signIn(email, password, { role: "Lecturer" });
+      
       const signInObject = {
         username: email,
         password: password,
@@ -132,17 +132,14 @@ function Login() {
           role: "Lecturer",
         }
       }
-      console.log(signInObject);
+      
       await Auth.signIn(signInObject);
-      //  const user = await Auth.currentAuthenticatedUser();
-      //  console.log(user);
+      
       setsignInError("");
       //navigate to lecturer home page
 
       await fetchLecturer().then(() => navigate("/lecturer/dashboard"));
-      //navigate("/lecturer/dashboard")
     } catch (e) {
-      //console.log(e);
       setLoading(false);
       setsignInError(e.message);
     }
@@ -212,7 +209,7 @@ function Login() {
       });
       navigate("/lecturer/confirm-email", { state: { email: email } });
     } catch (e) {
-      console.log(e)
+      
       setsignUpError(e.message.split("Error: ")[1]);
     }
     setLoading(false);

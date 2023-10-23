@@ -37,7 +37,7 @@ const DashboardLecturer = () => {
                                     navigate("/lecturer/modules");
                                 }}
                             />
-                            <span style={{ fontSize: "30px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Edit Module Info</span>
+                            <span style={{ fontSize: "30px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>Edit Course Info</span>
                         </HoverableIcon>
                     </div>
 

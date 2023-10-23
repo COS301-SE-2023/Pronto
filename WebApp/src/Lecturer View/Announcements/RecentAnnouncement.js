@@ -141,7 +141,7 @@ export default function RecentAnnouncement() {
       setAnnouncement(rows)
       setIsDeleting(false);
     } catch (e) {
-      console.log(e)
+      
       setError("Something went wrong. Please try again later");
       setIsDeleting(false);
     }
@@ -208,21 +208,10 @@ export default function RecentAnnouncement() {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
-      setAnnouncement([]);
-      setError("Announcement could not be posted");
-      // if (error.errors !== undefined) {
-      //   let e = error.errors[0].message
-      //   if (e.search("Network") !== -1) {
-      //     setError("Request failed due to network issues");
-      //   }
-      //   else {
-      //     setError("Something went wrong.Please try again later");
-      //   }
-      // }
-      // else {
-      //   setError("Your request could not be processed at this time");
-      // }
+      
+      
+      setError("Error fetching announcements");
+
     }
   }
 
@@ -260,7 +249,7 @@ export default function RecentAnnouncement() {
       }
       setAnnouncement(announcement);
     } catch (error) {
-      console.log(error);
+      
       setError("Your request could not be processed at this time");
     }
   }

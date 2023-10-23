@@ -20,16 +20,14 @@ const SettingsComponent = ({ settingsOptions }) => {
     updateStudent(null);
 
     try {
-     // await DataStore.clear();
       await Auth.signOut();
-     // navigation.navigate("Welcome");
       setLoggingOut(false);
     }
     catch (error) {
-      console.log(error)
+      
       setLoggingOut(false);
     }
-    // navigation.navigate("Welcome");
+    
   };
 
   const onHelpPressed = () => {

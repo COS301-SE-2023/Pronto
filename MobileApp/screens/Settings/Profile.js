@@ -15,23 +15,7 @@ const ProfilePage = () => {
 
   const fetchUserData = async () => {
     try {
-      // if (student === null) {
-      //   setIsLoading(true);
-      //   const userInfo = await Auth.currentAuthenticatedUser();
-      //   //setUser(userInfo);
-      //   let studentEmail = userInfo.attributes.email;
-      //   let stu = await API.graphql({
-      //     query: getStudent,
-      //     variables: { id: userInfo.attributes.sub }
-
-      //   })
-      //   stu = stu.data.getStudent;
-      //   if (stu === undefined || stu === null) {
-      //     throw Error();
-      //   }
-      //   updateStudent(stu);
-      //   setIsLoading(false);
-      // }
+     
       if(student===null){
         setIsLoading(true);
         const user = await Auth.currentAuthenticatedUser();
@@ -42,7 +26,7 @@ const ProfilePage = () => {
       }
 
     } catch (error) {
-      console.log(error);
+      
     }
   };
 

@@ -59,11 +59,11 @@ const VerifyCode = ({ navigation }) => {
         role:"Student"
       }
       const yu = await Auth.forgotPasswordSubmit(email, code, password,clientMetadata);
-      console.log(yu);
+     
       Alert.alert("Success", "Password successfully changed!");
       navigation.navigate("Login");
     } catch (e) {
-      console.log(e);
+     
       Alert.alert("Error", e.message);
     }
     setLoading(false);
