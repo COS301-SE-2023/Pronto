@@ -137,9 +137,6 @@ const ScheduleTable = ({ navigation, route }) => {
       }
    
         createScheduleArray(act);
-       
-      
-
 
     } catch (e) {
       
@@ -314,6 +311,21 @@ useEffect(() => {
     setTimetableLoaded(true);
   };
 
+  const navigate = (module)=>{
+  let coordinate=null
+  if(module.coordinates!==null || module.coordinates!==undefined){
+    let location=module.coordinates.split(";")
+    coordinate={
+      name:location[0],
+      value:{
+              latitude:parseFloat(location[1]),
+              longitude:parseFloat(location[2])
+        }
+     }
+    }
+    navigation.navigate("Navigation",coordinate)
+  }
+
 
   const renderItem = (module) => {
     const cardStyle = module.isClash
@@ -326,7 +338,8 @@ useEffect(() => {
 
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
-        <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}>
+        <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}
+                    onPress={()=>navigate(module)}>
           <Card.Content>
             <View
               style={{

@@ -172,11 +172,14 @@ const NavigationScreen = ({ navigation, route }) => {
             if (changed) {
                 setCoordinates(loc);
             }
-
-            
-
+            try{  
+            if(route!==null && route!==undefined && route.params!==undefined && route.params!==null && route.params.name!==undefined )    {
+                    setDestinationLocation(route.params.name)
+                }
+            }catch(error){
+    
+            }
         } catch (e) {
-            
         }
     }
 
