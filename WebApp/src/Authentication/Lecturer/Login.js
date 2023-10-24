@@ -196,20 +196,7 @@ function Login() {
 
     try {
 
-      let instituion;
-      console.log(institutions)
       
-      for(let i=0;i<institutionList.length;i++){
-        if(institutionList[i].id===institutionId){
-          instituion=institutionList[i];
-        }
-      }
-      console.log(instituion);
-
-      let lectureremails=instituion.lectureremails;
-      if(!lectureremails.includes(email)){
-        throw Error("This email is not a part of this Institution");
-      }
      
       await Auth.signUp({
         username: email,
@@ -224,7 +211,7 @@ function Login() {
           institutionId: institutionId,
         },
       });
-      navigate("/lecturer/confirm-email", { state: { email: email } });
+      navigate("/lecturer/confirm-email", { state: { email: email,institutionId:institutionId } });
     } catch (e) {
       
       setsignUpError(e.message.split("Error: ")[1]);

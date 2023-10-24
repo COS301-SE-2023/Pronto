@@ -175,48 +175,36 @@ const Register = ({ navigation }) => {
         password: password,
         attributes: {
           email: email,
-          family_name: institutionId,
-          name: studentName
+          family_name: surname,
+          name: name
         },
         clientMetadata: {
           role: "Student",
           institutionId: institutionId
         }
       }
-      //let domains=
-      let instituition;
-      for(let i=0;i<institutionList.length;i++){
-        if(institutionList[i].id===institutionId){
-          instituition=institutionList[i];
-          break;
-        }
-      }
-      let domains=instituition.domains;
-      let domain=email.split("@")[1];
-      if(!domains.includes(domain)){
-        throw Error("Invalid domain for Institution");
-      }
-  
+      
 
-     const u = await Auth.signUp(signUpObject);
-        const id=u.userSub;
-        let newStudent = {
-              id: id,
+      const u = await Auth.signUp(signUpObject);
+      const id=u.userSub;
+      let newStudent = {
+          id: id,
               institutionId: institutionId,
               firstname: name,
               lastname: surname,
               userRole: "Student",
               email: email
-            }
+      }
 
-            let create = await API.graphql({
-              query: createStudent,
-              variables: { input: newStudent },
-              authMode:"API_KEY"
-            })
+      let create = await API.graphql({
+        query: createStudent,
+        variables: { input: newStudent },
+        authMode:"API_KEY"
+      })
       
-      navigation.navigate("ConfirmEmail", { email });
+     navigation.navigate("ConfirmEmail", { email,institutionId });
     } catch (e) {
+      console.log(e);
       Alert.alert("Sign up error", e.message);
 
     }
