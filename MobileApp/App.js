@@ -2,7 +2,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Tabs from "./navigation/tabs";
 import WelcomeScreen from "./screens/Login/Welcome";
-import NotificationPreferences from "./screens/Notifications/NotificationPreferences";
 import Register from "./screens/Login/Register";
 import Login from "./screens/Login/Login";
 import ResetPassword from "./screens/Login/ResetPassword";
@@ -113,11 +112,6 @@ export default function App() {
                   name="AccountSettings"
                   component={AccountSettings}
                   options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="Notification Preferences"
-                  component={NotificationPreferences}
-                  options={{ headerShown: true }}
                 />
                 <Stack.Screen
                   name="Privacy Policy"

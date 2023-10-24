@@ -4,7 +4,6 @@ import { ScrollView } from "react-native";
 import { Button, Modal, Portal, PaperProvider } from "react-native-paper";
 import { Auth } from "aws-amplify";
 import { NavigationContainer } from "@react-navigation/native";
-import NotificationPreferences from "../screens/Notifications/NotificationPreferences";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
