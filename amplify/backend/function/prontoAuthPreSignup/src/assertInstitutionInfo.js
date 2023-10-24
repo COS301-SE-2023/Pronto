@@ -32,7 +32,6 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     },
     body: JSON.stringify({ query, variables }),
   };
-
   const request = new Request(GRAPHQL_ENDPOINT, options);
   let body;
   let response;

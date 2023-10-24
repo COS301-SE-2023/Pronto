@@ -87,7 +87,9 @@ const isUserAdminOrLecturer = async (email, role) => {
           throw new Error(
             "Lecture email list was not provided, please contact your institution admin"
           );
-        return emails.lecturerByEmail.items.includes(email);
+        return emails.lecturerByEmail.items.some(
+          (item) => item.email === email
+        );
       case ROLES.Super:
         return process.env.PRONTO_ADMIN_EMAIL === email;
       default:

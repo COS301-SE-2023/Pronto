@@ -1,6 +1,26 @@
 [
   {
-    "Action": [],
-    "Resource": []
+    "Action": ["cognito-idp:AdminUpdateUserAttributes"],
+    "Resource": [
+      {
+        "Fn::Join": [
+          "",
+          [
+            "arn:aws:cognito-idp:",
+            {
+              "Ref": "AWS::Region"
+            },
+            ":",
+            {
+              "Ref": "AWS::AccountId"
+            },
+            ":userpool/",
+            {
+              "Ref": "authprontoAuthUserPoolId"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]

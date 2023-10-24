@@ -10,7 +10,7 @@
       "institutionId": "INSTITUTIONID"
     },
     "userAttributes": {
-      "email": "EMAIL"
+      "email": "EMAIL@domain.com"
     }
   },
   "response": {}

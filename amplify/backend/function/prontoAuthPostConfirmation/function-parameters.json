@@ -34,5 +34,12 @@
       "cloudFormationParameterName": "cognitoMobileClientId",
       "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
     }
-  ]
+  ],
+  "permissions": {
+    "api": {
+      "pronto": [
+        "Query"
+      ]
+    }
+  }
 }
