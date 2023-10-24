@@ -30,6 +30,7 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [instituitions, setInstitutions] = useState([]);
+  const [institutionList,setInstitutionList] =useState([]);;
 
   //validate email input sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -43,6 +44,7 @@ const Register = ({ navigation }) => {
 
   //select instituition
   const [institutionId, setInstitutionId] = useState("");
+  const[institution,setInstitution] =useState("");
 
   //Validate institutionId
   const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
@@ -106,7 +108,7 @@ const Register = ({ navigation }) => {
       });
 
       inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      
+      setInstitutionList(inst);
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -181,7 +183,22 @@ const Register = ({ navigation }) => {
           institutionId: institutionId
         }
       }
-      const u = await Auth.signUp(signUpObject);
+      //let domains=
+      let instituition;
+      for(let i=0;i<institutionList.length;i++){
+        if(institutionList[i].id===institutionId){
+          instituition=institutionList[i];
+          break;
+        }
+      }
+      let domains=instituition.domains;
+      let domain=email.split("@")[1];
+      if(!domains.includes(domain)){
+        throw Error("Invalid domain for Institution");
+      }
+  
+
+     const u = await Auth.signUp(signUpObject);
         const id=u.userSub;
         let newStudent = {
               id: id,

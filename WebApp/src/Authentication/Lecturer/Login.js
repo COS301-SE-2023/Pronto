@@ -27,6 +27,7 @@ function Login() {
   //this is used to maintain a global state, DO NOT REMOVE
   const { lecturer, setLecturer } = useLecturer();
   const [institutions, setInstitutions] = useState([])
+  const[institutionList,setInstitutionList]=useState([]);
 
   const navigate = useNavigate();
 
@@ -86,7 +87,7 @@ function Login() {
       });
      
       inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      
+      setInstitutionList(inst);    
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -194,6 +195,22 @@ function Login() {
     setLoading(true);
 
     try {
+
+      let instituion;
+      console.log(institutions)
+      
+      for(let i=0;i<institutionList.length;i++){
+        if(institutionList[i].id===institutionId){
+          instituion=institutionList[i];
+        }
+      }
+      console.log(instituion);
+
+      let lectureremails=instituion.lectureremails;
+      if(!lectureremails.includes(email)){
+        throw Error("This email is not a part of this Institution");
+      }
+     
       await Auth.signUp({
         username: email,
         password: signUpPassword,

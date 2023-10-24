@@ -154,7 +154,7 @@ const ScheduleTable = ({ navigation, route }) => {
     
     
     if(stu===undefined){
-      await loadTimetable(); 
+     // await loadTimetable(); 
       return;
     }
     const enrollmentList=await stu.enrollments.values;

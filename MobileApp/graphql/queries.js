@@ -90,6 +90,7 @@ export const listInstitutions = /* GraphQL */ `
         name
         createdAt
         updatedAt
+        domains
         _version
         _deleted
         _lastChangedAt
