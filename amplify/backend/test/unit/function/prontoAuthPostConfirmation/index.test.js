@@ -23,7 +23,7 @@ describe("testing module iterator", () => {
   });
   test("should throw", async () => {
     await expect(moduleIterator.handler(studentsEvent)).rejects.toThrow(
-      /^failed to add user to user group$/
+      /^Invalid institution$/
     );
   });
   test("should return the event", async () => {

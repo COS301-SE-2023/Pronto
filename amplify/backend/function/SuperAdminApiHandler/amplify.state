@@ -1,6 +1,9 @@
 {
   "pluginId": "amplify-nodejs-function-runtime-provider",
   "functionRuntime": "nodejs",
+  "useLegacyBuild": true,
   "defaultEditorFile": "src/index.js",
-  "useLegacyBuild": true
+  "scripts": {
+    "build": "yarn --no-bin-links --production"
+  }
 }

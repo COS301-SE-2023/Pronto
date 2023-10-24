@@ -39,40 +39,53 @@ const setAndGetSendMessagesCommandInput = (announcement, endpoints) => {
 };
 
 const processBatchsendMessageOperation = async (
-  sendMessageOperationInput,
+  announcement,
   startIndex,
   batchSize,
   endpoints,
   messageDeliveredCount,
   pinpointClient
 ) => {
-  const endIndex = Math.min(startIndex + batchSize, endpoints.length);
-  const batch = endpoints.slice(startIndex, endIndex);
-  console.log(`Processing batch ${startIndex + 1}-${endIndex}:`, batch);
-  let batchProcessingErrorMessage;
-  const sendMessageCommandInput = setAndGetSendMessagesCommandInput(
-    announcement,
-    endpoints
-  );
-  const sendMessagesCommand = new SendMessagesCommand(sendMessageCommandInput);
-  const sendMessagesCommandOutput = await pinpointClient.send(
-    sendMessagesCommand
-  );
-  const { $metadata, MessageResponse } = sendMessagesCommandOutput.$metadata;
-  console.debug(
-    `SEND  MESSAGE RESPONSE: ${JSON.stringify(sendMessagesCommandOutput)}`
-  );
-  if ($metadata.httpStatusCode !== 200)
-    (batchProcessingErrorMessage = `an error occured,notifications may have not been sent to all students.
-      Please try again or contact your admin. `),
-      MessageResponse.Result.map((MessageResult) => {
+  const SIZE = Math.min(startIndex + batchSize, endpoints.length);
+  for (let batchIndex = 0; batchIndex < SIZE; batchIndex + batchSize) {
+    console.log(
+      `Processing batch ${batchIndex + 1}-${
+        endbatchIndex + batchSizeIndex
+      }:, ${JSON.stringify(batch)}`
+    );
+    const batchEndPoints = endpoints.slice(batchIndex, batchIndex + batchSize);
+    let batchProcessingErrorMessage = "";
+    const sendMessageCommandInput = setAndGetSendMessagesCommandInput(
+      announcement,
+      batchEndPoints
+    );
+    const sendMessagesCommand = new SendMessagesCommand(
+      sendMessageCommandInput
+    );
+    const sendMessagesCommandOutput = await pinpointClient.send(
+      sendMessagesCommand
+    );
+    const { $metadata, MessageResponse } = sendMessagesCommandOutput.$metadata;
+    console.debug(
+      `SEND  MESSAGE RESPONSE: ${JSON.stringify(sendMessagesCommandOutput)}`
+    );
+    if ($metadata.httpStatusCode === 200)
+      MessageResponse.Result.forEach((MessageResult) => {
         if (MessageResult.DeliveryStatus === "SUCCESSFUL")
           messageDeliveredCount++;
       });
-  if (endIndex < addresses.length) {
-    setTimeout(() => {
-      processBatch(sendMessageOperationInput, endIndex, batchSize);
-    }, 1000);
+    else if ($metadata.httpStatusCode !== 200)
+      batchProcessingErrorMessage = `an error occured,notifications may have not been sent to all students.
+    Please try again or contact your admin. `;
+    if (batchIndex < addresses.length) {
+      setTimeout(
+        () =>
+          console.log(
+            `Processed batch ${batchIndex + 1}-${batchIndex + batchSize}:`
+          ),
+        1000
+      );
+    }
   }
   console.log("Processing complete.");
   return {
@@ -84,13 +97,14 @@ const processBatchsendMessageOperation = async (
       : batchProcessingErrorMessage,
   };
 };
+
 const sendMessageOperation = async (sendMessageOperationInput) => {
   const { announcement, pinpointClient } = sendMessageOperationInput;
-  const endpoints = getEndPointAddresses(announcement.courseId);
   let messageDeliveredCount = 0;
   try {
+    const endpoints = getEndPointAddresses(announcement.courseId);
     await processBatchsendMessageOperation(
-      sendMessageOperationInput,
+      announcement,
       0,
       100,
       endpoints,

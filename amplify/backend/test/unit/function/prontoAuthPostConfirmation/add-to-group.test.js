@@ -2,26 +2,24 @@ const addToGroup = require("../../../../function/prontoAuthPostConfirmation/src/
 const adminEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/admin.event.json");
 const lecturerEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/lecturers.event.json");
 const studentsEvent = require("../../../../function/prontoAuthPostConfirmation/src/events/students.event.json");
-const {
-  CognitoIdentityProviderClient,
-  AdminAddUserToGroupCommand,
-  GetGroupCommand,
-} = require("@aws-sdk/client-cognito-identity-provider");
 
-jest.mock("@aws-sdk/client-cognito-identity-provider", () => {
-  return {
-    CognitoIdentityProviderClient: class {
-      send() {
-        return Promise.resolve({});
-      }
-      promise() {
-        return Promise.resolve({});
-      }
-    },
-    GetGroupCommand: class {},
-    AdminAddUserToGroupCommand: class {},
-  };
-});
+jest.mock(
+  "../../../../function/prontoAuthPostConfirmation/src/node_modules/@aws-sdk/client-cognito-identity-provider",
+  () => {
+    return {
+      CognitoIdentityProviderClient: class {
+        send() {
+          return {};
+        }
+
+        promise() {
+          return Promise.reject({});
+        }
+      },
+      AdminAddUserToGroupCommand: class {},
+    };
+  }
+);
 describe("input validation", () => {
   test(`Should throw Error('Invalid User Role or Role not provided'`, async () => {
     const requestWithNullRole = {
@@ -32,6 +30,15 @@ describe("input validation", () => {
     };
     await expect(addToGroup.handler(requestWithNullRole)).rejects.toThrow(
       "Invalid User Role or Role not provided"
+    );
+  });
+  test(`Should throw Error('Client Id not provided'`, async () => {
+    const requestWithNullClientId = {
+      request: { clientMetadata: { role: "Admin" } },
+      callerContext: {},
+    };
+    await expect(addToGroup.handler(requestWithNullClientId)).rejects.toThrow(
+      "Client Id not provided"
     );
   });
   test(`Should throw Error('Invalid User Role or Role not provided'`, async () => {

@@ -30,8 +30,7 @@ exports.handler = async (event, context) => {
         `Cannot authenticate user from this app client: 
       Students Should use the mobile app and Admin/Lectures should use the web app`
       );
-  }
-  if (
+  } else if (
     !isAppClientValid(
       event.callerContext.clientId,
       event.request.clientMetadata.role
@@ -43,6 +42,7 @@ exports.handler = async (event, context) => {
     );
 
   event.response.autoConfirmUser = false;
+  event.response.autoVerifyEmails = false;
   try {
     switch (event.request.clientMetadata.role) {
       case ROLES.Admin:

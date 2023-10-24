@@ -1,27 +1,11 @@
 {
-  "api": {
-    "AdminQueries": {
-      "authorizationType": "AMAZON_COGNITO_USER_POOLS",
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "prontoAuth"
-        },
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
-        }
-      ],
+  "analytics": {
+    "analytics": {
       "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
+      "service": "Pinpoint"
+    }
+  },
+  "api": {
     "pronto": {
       "dependsOn": [
         {
@@ -136,9 +120,18 @@
     }
   },
   "function": {
-    "AdminQueries28edb2f2": {
+    "SuperAdminApiHandler": {
       "build": true,
       "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "pronto"
+        },
         {
           "attributes": [
             "UserPoolId"
@@ -184,6 +177,17 @@
     },
     "prontoAuthPostConfirmation": {
       "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "pronto"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -220,6 +224,14 @@
       "service": "Lambda"
     }
   },
+  "notifications": {
+    "analytics": {
+      "channels": [
+        "Email"
+      ],
+      "service": "Pinpoint"
+    }
+  },
   "parameters": {
     "AMPLIFY_analytics_Pinpoint_Id": {
       "usedBy": [
@@ -245,35 +257,27 @@
         }
       ]
     },
-    "AMPLIFY_function_AdminQueries28edb2f2_cognitoUserPoolId": {
+    "AMPLIFY_function_SuperAdminApiHandler_cognitoWebClientId": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
+          "resourceName": "SuperAdminApiHandler"
         }
       ]
     },
-    "AMPLIFY_function_AdminQueries28edb2f2_cognitoWebClientId": {
+    "AMPLIFY_function_SuperAdminApiHandler_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
+          "resourceName": "SuperAdminApiHandler"
         }
       ]
     },
-    "AMPLIFY_function_AdminQueries28edb2f2_deploymentBucketName": {
+    "AMPLIFY_function_SuperAdminApiHandler_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
-        }
-      ]
-    },
-    "AMPLIFY_function_AdminQueries28edb2f2_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "AdminQueries28edb2f2"
+          "resourceName": "SuperAdminApiHandler"
         }
       ]
     },
