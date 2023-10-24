@@ -43,6 +43,7 @@ export const listInstitutions = /* GraphQL */ `
         name
         createdAt
         updatedAt
+        lectureremails
         _version
         _deleted
         _lastChangedAt

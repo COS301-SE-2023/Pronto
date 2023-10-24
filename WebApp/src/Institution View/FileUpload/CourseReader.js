@@ -10,23 +10,21 @@ import "./CourseReader.css";
 
 const CourseReader = (props) => {
 
-  const [isDisabled, setIsDisabled] = useState(false);
   const [message, setMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("")
   const handleFile = async (data, fileInfo) => {
-    //setIsDisabled(true);
-  
-    if (data.length < 100) {
-      //props.setLoading(true);
-      setMessage("Processing...")
+    
+    if (data.length < 500) {
+      
+      setMessage("Processing...");
       await deleteCourses();
       await addCourses(data);
-      //props.setLoading(false);
+    
     }
-    //setIsDisabled(false);
-
-    //Display error message etc file too large/long
-
+    else{
+      setMessage("File too large to be processed");
+    }
+    
   };
 
   const papaparseOptions = {
@@ -42,8 +40,7 @@ const CourseReader = (props) => {
   }
 
   const deleteCourses = async () => {
-    //props.setCourses([]);
-
+    
     let courseList = await API.graphql({
       query: coursesByInstitutionId,
       variables: {
@@ -64,7 +61,6 @@ const CourseReader = (props) => {
         
       }
     }
-    //props.setCourse([]);
   }
 
   const addCourses = async (courseList) => {
@@ -110,7 +106,6 @@ const CourseReader = (props) => {
     try {
 
       let count = 0;
-      
       courseMap.forEach(async (key, val) => {
 
         try {
@@ -118,6 +113,7 @@ const CourseReader = (props) => {
             query: createCourse,
             variables: { input: { institutionId: props.institutionId, coursecode: val } }
           })
+          
           newCourse = newCourse.data.createCourse;
           
           for (let i = 0; i < key.length; i++) {
@@ -126,17 +122,16 @@ const CourseReader = (props) => {
               query: createActivity,
               variables: { input: key[i] }
             })
-
             count += 1;
             
           }
         } catch (error) {
          
         }
-        if (count === entries)
-          setMessage("")
-        setSuccessMessage("Done");
-
+        if (count === entries){
+          setMessage("");
+          setSuccessMessage("Done");
+          }
       })
 
     } catch (error) {
@@ -146,7 +141,6 @@ const CourseReader = (props) => {
   }
 
   const dispayError = () => {
-    // props.setError("File could not be read");
     setMessage("File could not be processed");
   }
 
@@ -155,28 +149,7 @@ const CourseReader = (props) => {
     <div>
     
       {successMessage && <SuccessModal successMessage={successMessage} setSuccessMessage={setSuccessMessage}> {successMessage} </SuccessModal>}
-      {/*  
-      <div    style={{
-          height: "100px",
-          width: "100%",
-          padding:"0px",
-          justifyContent: "center",
-          alignItems: "center",
-          display: "flex",
-          cursor: "pointer",
-        }}>
-         <CSVReader
-          label="Click here"
-          cssClass="form-control" 
-          onFileLoaded={handleFile}
-          inputStyle={{opacity:"0",width:"100%",height:"100%",border:"1px solid #ddd"}} 
-          parserOptions={papaparseOptions}
-          onError={dispayError}
-          strict={true}
-          //disabled={isDisabled}
-
-        />
-      </div> */}
+      
       <div className='csv-container'>
         <p>Note that uploading a schedule will delete your previous schedule</p>
         <div style={{ display: "flex", alignItems: 'center', justifyContent: "center" }}>
@@ -184,7 +157,7 @@ const CourseReader = (props) => {
         </div>
         <div className='csv_component'>
           <label className="csv-reader-label">
-            <p className="csv-reader-text">Click Here</p>
+            <p className="csv-reader-text">Click here to upload</p>
 
             <CSVReader
               label=""

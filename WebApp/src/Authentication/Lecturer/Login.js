@@ -27,6 +27,7 @@ function Login() {
   //this is used to maintain a global state, DO NOT REMOVE
   const { lecturer, setLecturer } = useLecturer();
   const [institutions, setInstitutions] = useState([])
+  const[institutionList,setInstitutionList]=useState([]);
 
   const navigate = useNavigate();
 
@@ -86,7 +87,7 @@ function Login() {
       });
      
       inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      
+      setInstitutionList(inst);    
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -194,6 +195,9 @@ function Login() {
     setLoading(true);
 
     try {
+
+      
+     
       await Auth.signUp({
         username: email,
         password: signUpPassword,
@@ -207,7 +211,7 @@ function Login() {
           institutionId: institutionId,
         },
       });
-      navigate("/lecturer/confirm-email", { state: { email: email } });
+      navigate("/lecturer/confirm-email", { state: { email: email,institutionId:institutionId } });
     } catch (e) {
       
       setsignUpError(e.message.split("Error: ")[1]);
