@@ -313,7 +313,8 @@ useEffect(() => {
 
   const navigate = (module)=>{
   let coordinate=null
-  if(module.coordinates!==null || module.coordinates!==undefined){
+  
+  if(module.coordinates!==null && module.coordinates!==undefined){
     let location=module.coordinates.split(";")
     coordinate={
       name:location[0],
