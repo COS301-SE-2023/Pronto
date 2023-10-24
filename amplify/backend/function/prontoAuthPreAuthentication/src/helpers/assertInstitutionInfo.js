@@ -64,45 +64,45 @@ const getAdminAndLecturerEmails = async (email) => {
     throw new Error(`Failed To retrieve email list details.`);
   }
 };
-
-const isUserAdminOrLecturer = async (email, role) => {
-  if (!email || !isEmailAddressPatternValid(email) || !role)
-    throw new Error(`Invalid email address. Email = ${email}`);
-  try {
-    const emails = await getAdminAndLecturerEmails(email);
-    if (!emails) throw new Error(`emails not provided for lectuerer or admins`);
-    switch (role) {
-      case ROLES.Admin:
-        if (!emails.adminByEmail.items.length)
-          throw new Error(`Institude does not have an admin,\n
-        Please request for one on AgileArchitectsCapstone@gmail.com\n
-        More info on: https://www.prontotimetable.co.za/`);
-        return (
-          emails.adminByEmail.items[0] &&
-          emails.adminByEmail.items[0].email === email &&
-          emails.adminByEmail.items.length === 1
-        );
-      case ROLES.Lecture:
-        if (!emails.lecturerByEmail.items.length)
-          throw new Error(
-            "Lecture email list was not provided, please contact your institution admin"
+  
+  const isUserAdminOrLecturer = async (email, role) => {
+    if (!email || !isEmailAddressPatternValid(email) || !role)
+      throw new Error(`Invalid email address. Email = ${email}`);
+    try {
+      const emails = await getAdminAndLecturerEmails(email);
+      if (!emails) throw new Error(`emails not provided for lectuerer or admins`);
+      switch (role) {
+        case ROLES.Admin:
+          if (!emails.adminByEmail.items.length)
+            throw new Error(`Institude does not have an admin,\n
+          Please request for one on AgileArchitectsCapstone@gmail.com\n
+          More info on: https://www.prontotimetable.co.za/`);
+          return (
+            emails.adminByEmail.items[0] &&
+            emails.adminByEmail.items[0].email === email &&
+            emails.adminByEmail.items.length === 1
           );
-        return emails.lecturerByEmail.items.some(
-          (item) => item.email === email
-        );
-      case ROLES.Super:
-        return process.env.PRONTO_ADMIN_EMAIL === email;
-      default:
-        return false;
+        case ROLES.Lecture:
+          if (!emails.lecturerByEmail.items.length)
+            throw new Error(
+              "Lecture email list was not provided, please contact your institution admin"
+            );
+          return emails.lecturerByEmail.items.some(
+            (item) => item.email === email
+          );
+        case ROLES.Super:
+          return process.env.PRONTO_ADMIN_EMAIL === email;
+        default:
+          return false;
+      }
+    } catch (isUserAdminOrLecturerError) {
+      console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
+      DETAILS: ${isUserAdminOrLecturerError}`);
+      throw isUserAdminOrLecturerError;
     }
-  } catch (isUserAdminOrLecturerError) {
-    console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
-    DETAILS: ${isUserAdminOrLecturerError}`);
-    throw isUserAdminOrLecturerError;
-  }
-};
-
-module.exports = {
-  getAdminAndLecturerEmails,
-  isUserAdminOrLecturer,
-};
+  };
+  
+  module.exports = {
+    getAdminAndLecturerEmails,
+    isUserAdminOrLecturer,
+  };
