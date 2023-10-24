@@ -9,7 +9,7 @@ import UserManual from "../HelpFiles/AddLecturer.pdf";
 import { useAdmin } from "../../ContextProviders/AdminContext";
 import { useLecturerList } from "../../ContextProviders/LecturerListContext";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
-import ClearIcon from '@mui/icons-material/SearchSharp';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import { API, Auth } from 'aws-amplify';
 
@@ -23,7 +23,6 @@ import Button from '@mui/material/Button';
 
 import AddLecturerImage from "../../Images/AddLecturer.png";
 
-
 const StyledDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialog-paper': {
         minWidth: '400px',
@@ -33,7 +32,6 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
         backdropFilter: "blur(5px)",
     },
 }));
-
 
 
 const AddLecturer = () => {
@@ -492,7 +490,7 @@ const AddLecturer = () => {
                 }
 
             }
-            //}
+            
         } catch (error) {
            
             if (error.errors !== undefined) {
@@ -615,19 +613,7 @@ const AddLecturer = () => {
                         </form>
                     </div>
                 </div>
-                {/* <div>
-
-
-
-                    <CsvFileReader
-                        adding={adding}
-                        setAdding={setAdding}
-                        adminEmail={admin?.email}
-                        institutionId={admin?.institutionId}
-                    />
-
-                </div> */}
-
+               
                 {/* Display content */}
                 <h1 className="text-center">Lecturers</h1>
                 <h6 style={{ marginBottom: "10px", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center" }}>Use this to search, edit, view and delete lecturers from your institution. Note that removing a lecturer prevents them from creating an account.</h6>
@@ -645,14 +631,9 @@ const AddLecturer = () => {
                         <button
                         onClick={handleSearch}
                         className="btn btn-outline-danger"
-                        // ...other attributes remain unchanged
-                        onMouseEnter={() => setSearchIcon(true)}
-                        onMouseLeave={() => {
-                            setSearchIcon(false);
-                        }}
                     >
                         <div className="input-group-append">
-                                {searchIcon === false ? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "#ffffff" }} />}
+                                {searchIcon === false ? <SearchSharpIcon style={{ "color": "#e32f45" }} /> : <ClearIcon style={{ "color": "e32f45" }}/>}
                         </div>
                     </button>
                         {/* a dropdown filter for the search */}
