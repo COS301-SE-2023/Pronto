@@ -70,7 +70,7 @@ const isUserAdminOrLecturer = async (email, role) => {
     throw new Error(`Invalid email address. Email = ${email}`);
   try {
     const emails = await getAdminAndLecturerEmails(email);
-    if (!emails) throw new Error(`Failed To retrieve institution details`);
+    if (!emails) throw new Error(`emails not provided for lectuerer or admins`);
     switch (role) {
       case ROLES.Admin:
         if (!emails.adminByEmail.items.length)
@@ -95,10 +95,10 @@ const isUserAdminOrLecturer = async (email, role) => {
       default:
         return false;
     }
-  } catch (getAndSetInstitutionDetailsError) {
+  } catch (isUserAdminOrLecturerError) {
     console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
-    DETAILS: ${getAndSetInstitutionDetailsError}`);
-    throw new Error("FAILED TO VALIDATE ADMIN or LECTURER USER ROLE TYPE");
+    DETAILS: ${isUserAdminOrLecturerError}`);
+    throw isUserAdminOrLecturerError;
   }
 };
 
