@@ -14,6 +14,7 @@ function ConfirmEmail() {
   const [loading, setLoading] = useState(false);
 
   let email = location.state.email;
+  let institutionId=location.state.instituionId;
 
   const onVerifyPressed = async (event) => {
     event.preventDefault();
@@ -22,7 +23,7 @@ function ConfirmEmail() {
     }
     setLoading(true);
     try {
-      await Auth.confirmSignUp(email, code, {clientMetadata: { role: "Lecturer" }});
+      await Auth.confirmSignUp(email, code, {clientMetadata: { role: "Lecturer",institutionId:institutionId }});
       setError("");
       navigate("/lecturer/login");
     } catch (e) {

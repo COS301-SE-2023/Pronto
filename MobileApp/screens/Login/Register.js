@@ -30,6 +30,7 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [instituitions, setInstitutions] = useState([]);
+  const [institutionList,setInstitutionList] =useState([]);;
 
   //validate email input sign up
   const [emailIsValid, setEmailIsValid] = useState(false);
@@ -43,6 +44,7 @@ const Register = ({ navigation }) => {
 
   //select instituition
   const [institutionId, setInstitutionId] = useState("");
+  const[institution,setInstitution] =useState("");
 
   //Validate institutionId
   const [isInstitutionIdValid, setIsInstitutionIdValid] = useState(false);
@@ -106,7 +108,7 @@ const Register = ({ navigation }) => {
       });
 
       inst = inst.data.listInstitutions.items.filter((item) => item._deleted === null);
-      
+      setInstitutionList(inst);
       let institutionInfo = [];
       for (let j = 0; j < inst.length; j++) {
         let item = {
@@ -173,33 +175,36 @@ const Register = ({ navigation }) => {
         password: password,
         attributes: {
           email: email,
-          family_name: institutionId,
-          name: studentName
+          family_name: surname,
+          name: name
         },
         clientMetadata: {
           role: "Student",
           institutionId: institutionId
         }
       }
+      
+
       const u = await Auth.signUp(signUpObject);
-        const id=u.userSub;
-        let newStudent = {
-              id: id,
+      const id=u.userSub;
+      let newStudent = {
+          id: id,
               institutionId: institutionId,
               firstname: name,
               lastname: surname,
               userRole: "Student",
               email: email
-            }
+      }
 
-            let create = await API.graphql({
-              query: createStudent,
-              variables: { input: newStudent },
-              authMode:"API_KEY"
-            })
+      let create = await API.graphql({
+        query: createStudent,
+        variables: { input: newStudent },
+        authMode:"API_KEY"
+      })
       
-      navigation.navigate("ConfirmEmail", { email });
+     navigation.navigate("ConfirmEmail", { email,institutionId });
     } catch (e) {
+      console.log(e);
       Alert.alert("Sign up error", e.message);
 
     }

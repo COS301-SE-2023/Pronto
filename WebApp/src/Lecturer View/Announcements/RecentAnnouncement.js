@@ -314,23 +314,25 @@ export default function RecentAnnouncement() {
                     <div className="subjectCode">{val.course.coursecode}</div>
                     <div className="postDate">{val.date}</div>
                   </div>
-                  <div className="card-body">
-                    <h5 className="card-title">{val.title}</h5>
-                    <p className="card-text">{val.body}</p>
 
-                    <div style={{ display: 'flex', alignItems: 'center', float: "right", cursor: "pointer" }}>
-                      <InfoIcon
-                        style={{ marginRight: '8px', color: "#2da2e1", cursor: "pointer" }}
-                        onClick={handleInfoModalOpen}
-                      />
-
-                      <DeleteIcon
-                        style={{ marginRight: '8px', color: "#e32f45", cursor: "pointer" }}
-                        onClick={() => handleDelete(key)} // delete an announcement
-                      />
+                  <div className="card-body" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <h5 className="card-title">{val.title}</h5>
+                      <p className="card-text">{val.body}</p>
                     </div>
 
+                    <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                      {/*<InfoIcon
+                        style={{ marginRight: '8px', color: "#2da2e1", cursor: "pointer" }}
+                        onClick={handleInfoModalOpen}
+                        />*/}
+                      <DeleteIcon
+                        style={{ marginRight: '8px', color: '#e32f45' }}
+                        onClick={() => handleDelete(key)}
+                      />
+                    </div>
                   </div>
+
                 </div>
 
               );
@@ -365,7 +367,7 @@ export default function RecentAnnouncement() {
         </DialogActions>
       </StyledDialog>
 
-      <Dialog
+      {/* <Dialog
         open={infoModalOpen}
         onClose={handleInfoModalClose}
         aria-labelledby="info-dialog-title"
@@ -446,7 +448,7 @@ export default function RecentAnnouncement() {
             </Button>
           </DialogActions>
         </DialogContent>
-      </Dialog>
+          </Dialog> */}
 
 
       <div>

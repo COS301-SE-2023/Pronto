@@ -13,11 +13,6 @@ const AccountSettings = () => {
       onPress: () => navigation.navigate("Profile Page"),
     },
     {
-      title: "Notification Preferences",
-      subTitle: "Change your notification preferences",
-      onPress: () => navigation.navigate("Notification Preferences"),
-    },
-    {
       title: "Security",
       subTitle: "Change your password",
       onPress: () => navigation.navigate("Reset Password"),

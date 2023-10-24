@@ -475,7 +475,7 @@ const EditInfoPage = () => {
                                                         type="button"
                                                         onClick={(e) => handleRemoveDomain(e, val)}
                                                         className="btn btn-danger"
-                                                        style={{ borderRadius: "20px", width: "100px", float: "right" }}
+                                                        style={{ width: "100px", float: "right" }}
                                                     >
                                                         Remove
                                                     </button>

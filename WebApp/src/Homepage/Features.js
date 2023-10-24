@@ -12,7 +12,7 @@ const featureData = [
     },
     {
         title: 'Important Updates',
-        description: 'Students can recieve important reminders and due assignment notifications from their Lecturers. Select your preferred notification preference, and never miss an important update again.',
+        description: 'Students can recieve important reminders and due assignment notifications from their Lecturers. Never miss an important update again.',
         imageUrl: updates,
     },
     {
