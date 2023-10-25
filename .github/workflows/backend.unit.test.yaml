@@ -1,26 +1,26 @@
 name: Backend Unit Tests
 on:
   push:
-    branches: [main, dev, restoreBackend,  backend, pre-main]
+    branches: [main, dev, restoreBackend, backend, pre-main]
   pull_request:
-    branches: [main, dev, frontend, pre-main, backend]
+    branches: [main, dev, restoreBackend, backend, pre-main]
 
 jobs:
   backend-unit-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 18.x ]
+        node-version: [18.x]
     defaults:
       run:
-        working-directory: ./amplify/backend
+        working-directory: ./backend
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{matrix.node-version}}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version}}
-      - run: |
+      - run: echo "Insalling Test Dependancies"
           cd function/prontoAuthPostConfirmation/src
           npm install
           cd ../../prontoAuthPreAuthentication/src
@@ -29,4 +29,5 @@ jobs:
           npm install
           cd ../../../
           npm install
+          echo "Running Tests"
           npm test
