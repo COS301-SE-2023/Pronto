@@ -205,15 +205,7 @@ export default function ApplicationRequests() {
           }
         }
       })
-      const inst = await API.graphql({
-        query:listInstitutions,
-        variables:{}
-      })
-    
-       const ad = await API.graphql({
-        query:listAdmins,
-        variables:{}
-      })
+     
     
       setRequests(r.data.listAdminApplications.items.filter((item)=>item._deleted===null && item.status==="PENDING"));
  

@@ -42,11 +42,11 @@ Pronto is a consolidated university application that provides students with the 
   <tr>
     <td align: "center">
       <h4 align: "center">Android</h4>
-      <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 1" title="QR 1" style="width: 170px; margin: 10px;">
+      <img src="Documentation/ReadME Resources/Images/AndroidQR.png" alt="QR code 1" title="Android" style="width: 175px; margin: 10px;">
     </td>
     <td align: "center">
       <h4 align: "center">IOS</h4>
-      <img src="Documentation/ReadME Resources/Images/IOSQR.png" alt="QR code 2" title="QR 2" style="width: 170px; margin: 10px;">
+      <img src="Documentation/ReadME Resources/Images/IOSQR.png" alt="QR code 2" title="IOS" style="width: 175px; margin: 10px;">
     </td>
   </tr>
 </table>

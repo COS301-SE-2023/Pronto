@@ -75,75 +75,7 @@ const ScheduleTable = ({ navigation, route }) => {
   }
 
   let error = "There appear to be network issues.Please try again later";
- const loadTimetable= async()=>{
-  try {
-      let stu = student;
-          const user = await Auth.currentAuthenticatedUser();
-          stu = await API.graphql({
-            query: getStudent,
-            variables: { id: user.attributes.sub }
-          })
-          stu = stu.data.getStudent;
-      
-
-      
-      if (stu === null || stu.studentTimetableId === null) {
-          return;
-        }
-
-      let act = [];
-      let courses = [];
-
-      for (let i = 0; i < stu.enrollments.items.length; i++) {
-        if(stu.enrollments.items[i]._deleted===null){
-            courses.push(stu.enrollments.items[i].course)
-        }
-       
-      }
-   
-      for (let i = 0; i < stu.timetable.activityId.length; i++) {
-        for (let j = 0; j < courses.length; j++) {
-          try {
-            let index = courses[j].activity.items.find(item => item.id === stu.timetable.activityId[i])
-             
-            if (index !== undefined) {
-              act.push(index)
-              break;
-            }
-          } catch (e) {
-
-          }
-        }
-      }
-
-      act = act.sort((a, b) => {
-        if (a.start <= b.start)
-          return -1;
-        else
-          return 1;
-      })
-
-      let changed = false;
-      if (act.length === activities.length) {
-        for (let i = 0; i < act.length; i++) {
-          if (act[i].id !== activities[i].id) {
-            changed = true;
-            break;
-          }
-        }
-      }
-      else {
-        changed = true;
-      }
-   
-        createScheduleArray(act);
-
-    } catch (e) {
-      
-     
-    }
-  }
-
+ 
   const fetchActivities = async () => {
     try {
       
@@ -153,8 +85,7 @@ const ScheduleTable = ({ navigation, route }) => {
      stu = await DataStore.query(Student, id);
     
     
-    if(stu===undefined){
-     // await loadTimetable(); 
+    if(stu===undefined){ 
       return;
     }
     const enrollmentList=await stu.enrollments.values;
@@ -313,7 +244,8 @@ useEffect(() => {
 
   const navigate = (module)=>{
   let coordinate=null
-  if(module.coordinates!==null || module.coordinates!==undefined){
+  
+  if(module.coordinates!==null && module.coordinates!==undefined){
     let location=module.coordinates.split(";")
     coordinate={
       name:location[0],
