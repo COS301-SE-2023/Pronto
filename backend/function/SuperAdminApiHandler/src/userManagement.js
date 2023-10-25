@@ -30,9 +30,11 @@ async function removeUserFromGroup(
     return {
       message: `Removed ${username} from ${groupname}`,
     };
-  } catch (err) {
-    console.log(err);
-    throw err;
+  } catch (adminRemoveUserFromGroupError) {
+    console.error(
+      `FAILED TO REMOVE USER FROM GROUP. INFO: ${adminRemoveUserFromGroupError}`
+    );
+    throw adminRemoveUserFromGroupError;
   }
 }
 
@@ -51,9 +53,9 @@ async function confirmUserSignUp(cognitoIdentityProviderClient, username) {
     return {
       message: `Confirmed ${username} registration`,
     };
-  } catch (err) {
-    console.error(err);
-    throw err;
+  } catch (adminConfirmSignUpError) {
+    console.error(`FAILED TO CONFRIM USER. INFO: ${adminConfirmSignUpError}`);
+    throw adminConfirmSignUpError;
   }
 }
 
@@ -71,9 +73,9 @@ async function disableUser(cognitoIdentityProviderClient, username) {
     return {
       message: `Disabled ${username}`,
     };
-  } catch (err) {
-    console.error(err);
-    throw err;
+  } catch (adminDisableUserError) {
+    console.error(`FAILED TO DISABLE USER. INFO: ${adminDisableUserError}`);
+    throw adminDisableUserErrors;
   }
 }
 
@@ -91,9 +93,9 @@ async function enableUser(cognitoIdentityProviderClient, username) {
     return {
       message: `Enabled ${username}`,
     };
-  } catch (err) {
-    console.error(err);
-    throw err;
+  } catch (adminEnableUserError) {
+    console.error(`FAILED TO ENABLE USER. INFO: ${adminEnableUserError}`);
+    throw adminEnableUserError;
   }
 }
 
@@ -175,8 +177,10 @@ async function signAdminUp(
     return {
       status: APPLICATION_STATUS.APPROVAL_FAILED,
     };
-  } catch (error) {
-    console.error(`ADMIN ACCOUNT FAILED. INFO: ${error}`);
+  } catch (adminCreateUserError) {
+    console.error(
+      `ADMIN ACCOUNT CREATION FAILED. INFO: ${adminCreateUserError}`
+    );
     return {
       status: APPLICATION_STATUS.APPROVAL_FAILED,
     };

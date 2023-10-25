@@ -60,7 +60,9 @@ const getAdminAndLecturerEmails = async (email) => {
     if (body.data) return (emails = body.data);
     throw new Error("API ERROR: INSTITUTION HAS NO ADMIN AND/OR LECTURERS");
   } catch (getAndSetInstitutionDetailsError) {
-    console.error({ getAndSetInstitutionDetailsError });
+    console.error(
+      `FAILED TO GET INSTITUTION DETAILS. INFO: ${getAndSetInstitutionDetailsError}`
+    );
     throw new Error(`Failed To retrieve email list details.`);
   }
 };
@@ -97,7 +99,7 @@ const isUserAdminOrLecturer = async (email, role) => {
     }
   } catch (isUserAdminOrLecturerError) {
     console.error(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
-      DETAILS: ${JSON.stringify(isUserAdminOrLecturerError)}`);
+      DETAILS: ${isUserAdminOrLecturerError}`);
     throw isUserAdminOrLecturerError;
   }
 };
