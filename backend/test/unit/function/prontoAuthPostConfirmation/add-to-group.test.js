@@ -9,7 +9,7 @@ jest.mock(
     return {
       CognitoIdentityProviderClient: class {
         send() {
-          return {};
+          return Promise.resolve({ $metadata: { httpStatusCode: 200 } });
         }
 
         promise() {
@@ -107,7 +107,6 @@ describe("add to group", () => {
   test(`Should add admin to group`, async () => {
     expect(await addToGroup.handler(adminEvent)).toMatchObject(adminEvent);
   });
-
   test(`Should add student to group`, async () => {
     expect(await addToGroup.handler(studentsEvent)).toMatchObject(
       studentsEvent
