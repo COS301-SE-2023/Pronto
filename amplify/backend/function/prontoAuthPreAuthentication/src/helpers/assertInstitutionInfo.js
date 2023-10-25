@@ -17,7 +17,7 @@ const isEmailAddressPatternValid = (enailAddress) => {
 
 const getAdminAndLecturerEmails = async (email) => {
   if (!email || !isEmailAddressPatternValid(email))
-    throw new Error(`Invalid email address. Emaail: ${email}`);
+    throw new Error(`Invalid email address. Email: ${email}`);
   if (
     (emails.lecturerByEmail.items.length > 0 &&
       emails.lecturerByEmail.items[0] == email) ||
@@ -56,53 +56,53 @@ const getAdminAndLecturerEmails = async (email) => {
   try {
     const response = await fetch(request);
     const body = await response.json();
-    console.debug(`graphQL Resonse: ${JSON.stringify(body)}`);
+    console.log(`graphQL Resonse: ${JSON.stringify(body)}`);
     if (body.data) return (emails = body.data);
-    throw new Error("API ERROR: Failed to retrieve data");
+    throw new Error("API ERROR: INSTITUTION HAS NO ADMIN AND/OR LECTURERS");
   } catch (getAndSetInstitutionDetailsError) {
-    console.debug(getAndSetInstitutionDetailsError);
+    console.error({ getAndSetInstitutionDetailsError });
     throw new Error(`Failed To retrieve email list details.`);
   }
 };
-  
-  const isUserAdminOrLecturer = async (email, role) => {
-    if (!email || !isEmailAddressPatternValid(email) || !role)
-      throw new Error(`Invalid email address. Email = ${email}`);
-    try {
-      const emails = await getAdminAndLecturerEmails(email);
-      if (!emails) throw new Error(`emails not provided for lectuerer or admins`);
-      switch (role) {
-        case ROLES.Admin:
-          if (!emails.adminByEmail.items.length)
-            throw new Error(`Institude does not have an admin,\n
+
+const isUserAdminOrLecturer = async (email, role) => {
+  if (!email || !isEmailAddressPatternValid(email) || !role)
+    throw new Error(`Invalid email address. Email = ${email}`);
+  try {
+    const emails = await getAdminAndLecturerEmails(email);
+    if (!emails) throw new Error(`emails not provided for lectuerer or admins`);
+    switch (role) {
+      case ROLES.Admin:
+        if (!emails.adminByEmail.items.length)
+          throw new Error(`Institute does not have an admin,\n
           Please request for one on AgileArchitectsCapstone@gmail.com\n
           More info on: https://www.prontotimetable.co.za/`);
-          return (
-            emails.adminByEmail.items[0] &&
-            emails.adminByEmail.items[0].email === email &&
-            emails.adminByEmail.items.length === 1
+        return (
+          emails.adminByEmail.items[0] &&
+          emails.adminByEmail.items[0].email === email &&
+          emails.adminByEmail.items.length === 1
+        );
+      case ROLES.Lecture:
+        if (!emails.lecturerByEmail.items.length)
+          throw new Error(
+            "Lecture email list was not provided, please contact your institution admin"
           );
-        case ROLES.Lecture:
-          if (!emails.lecturerByEmail.items.length)
-            throw new Error(
-              "Lecture email list was not provided, please contact your institution admin"
-            );
-          return emails.lecturerByEmail.items.some(
-            (item) => item.email === email
-          );
-        case ROLES.Super:
-          return process.env.PRONTO_ADMIN_EMAIL === email;
-        default:
-          return false;
-      }
-    } catch (isUserAdminOrLecturerError) {
-      console.debug(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
-      DETAILS: ${isUserAdminOrLecturerError}`);
-      throw isUserAdminOrLecturerError;
+        return emails.lecturerByEmail.items.some(
+          (item) => item.email === email
+        );
+      case ROLES.Super:
+        return process.env.PRONTO_ADMIN_EMAIL === email;
+      default:
+        return false;
     }
-  };
-  
-  module.exports = {
-    getAdminAndLecturerEmails,
-    isUserAdminOrLecturer,
-  };
+  } catch (isUserAdminOrLecturerError) {
+    console.error(`ERROR CONFIRMING ADMIN OR LECTURER PRESIGNIP INFORMATION.\n
+      DETAILS: ${JSON.stringify(isUserAdminOrLecturerError)}`);
+    throw isUserAdminOrLecturerError;
+  }
+};
+
+module.exports = {
+  getAdminAndLecturerEmails,
+  isUserAdminOrLecturer,
+};

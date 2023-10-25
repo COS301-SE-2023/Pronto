@@ -1,4 +1,3 @@
-
 /* Amplify Params - DO NOT EDIT
 	API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT
 	API_PRONTO_GRAPHQLAPIIDOUTPUT
@@ -21,48 +20,27 @@ const config = {
 const pinpointClient = new PinpointClient(config);
 
 exports.handler = async (event) => {
-  console.debug(`AnnouncementsHandler Event: BEGIN`);
+  console.log(`AnnouncementsHandler Event: ${JSON.stringify(event)}`);
   const { typeName, fieldName, identity, source, request } = event;
   const announcement = source;
   const graphQlRootObjectType = typeName;
   const sourceTypeName = source["__typename"];
   const sourceOperationName = source["__operation"];
-  console.debug(JSON.stringify(event));
-  console.debug(`AnnouncementsHandler Event: END`);
 
-  if (graphQlObject === GRAPHQL.OBJECT_TYPES.MUTATION) {
-    switch (fieldName) {
-      case GRAPHQL.FIELD_TYPES.CREATE_ANNOUNCEMENT:
-        const sendMessageOperationInput = {
-          announcement: announcement,
-          pinpointClient,
-        };
-        console.debug("send announcement");
-        return await sendMessageOperation(sendMessageOperationInput);
-
-      case GRAPHQL.FIELD_TYPES.UPDATE_ANNOUNCEMENT:
-        return {
-          SMS: NOTIFICATIONS_STATUS.DISABLED,
-          EMAIL: NOTIFICATIONS_STATUS.DISABLED,
-          PUSH: NOTIFICATIONS_STATUS.DISABLED,
-        };
-      case GRAPHQL.FIELD_TYPES.DELETE_ANNOUNCEMENT:
-        console.debug("sedele announcement: disabled");
-        return {
-          SMS: NOTIFICATIONS_STATUS.DISABLED,
-          EMAIL: NOTIFICATIONS_STATUS.DISABLED,
-          PUSH: NOTIFICATIONS_STATUS.DISABLED,
-        };
-      default:
-        console.debug("invalid field name");
-        return {
-          SMS: NOTIFICATIONS_STATUS.FAILED,
-          EMAIL: NOTIFICATIONS_STATUS.FAILED,
-          PUSH: NOTIFICATIONS_STATUS.FAILED,
-        };
-    }
+  if (
+    graphQlRootObjectType === GRAPHQL.ROOT_OBJECT &&
+    fieldName === GRAPHQL.FIELDNAME &&
+    sourceTypeName === GRAPHQL.ROOT_OBJECT &&
+    sourceOperationName === GRAPHQL.OPERATION_TYPES.MUTATION
+  ) {
+    const sendMessageOperationInput = {
+      announcement: announcement,
+      pinpointClient,
+    };
+    console.log("sending announcement");
+    return await sendMessageOperation(sendMessageOperationInput);
   }
-  console.debug("invalid graphql object type");
+  console.error("invalid graphql object type");
 
   return {
     SMS: NOTIFICATIONS_STATUS.FAILED,

@@ -5,15 +5,14 @@ const ROLES = require("../../../../function/prontoAuthPreAuthentication/src/role
 global.Request = jest.fn((input, options) => null);
 
 describe("tests isUserAdminOrLecturer", () => {
-  test("should throw: FAILED TO VALIDATE ADMIN or LECTURER USER ROLE TYPE", async () => {
-    const getAndSetInstitutionDetails = jest
-      .fn()
-      .mockRejectedValue(new Error("Failed to retrieve institution details"));
-
+  test("should throw: Failed To retrieve email list details", async () => {
     await expect(
-      isUserAdminOrLecturer("admin@example.com", "institutionId", ROLES.Admin)
-    ).rejects.toThrowError(
-      "FAILED TO VALIDATE ADMIN or LECTURER USER ROLE TYPE"
+      isUserAdminOrLecturer("admin@example.com", ROLES.Admin)
+    ).rejects.toThrowError("Failed To retrieve email list details");
+  });
+  test("should throw: Invalid email address. Email = ", async () => {
+    await expect(isUserAdminOrLecturer(null, ROLES.Admin)).rejects.toThrowError(
+      /Invalid email address. Email = /
     );
   });
 });

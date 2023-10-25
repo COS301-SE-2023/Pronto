@@ -52,7 +52,7 @@ async function confirmUserSignUp(cognitoIdentityProviderClient, username) {
       message: `Confirmed ${username} registration`,
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw err;
   }
 }
@@ -72,7 +72,7 @@ async function disableUser(cognitoIdentityProviderClient, username) {
       message: `Disabled ${username}`,
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw err;
   }
 }
@@ -92,7 +92,7 @@ async function enableUser(cognitoIdentityProviderClient, username) {
       message: `Enabled ${username}`,
     };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw err;
   }
 }

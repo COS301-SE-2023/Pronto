@@ -5,13 +5,12 @@ const isEmailAddressPatternValid = (enailAddress) => {
   return emailAddressPattern.test(enailAddress);
 };
 const verifyEmailAddressOperation = async (verifyEmailAddressRequst) => {
-  console.table(verifyEmailAddressRequst);
+  console.log({ verifyEmailAddressRequst });
   const { user, sesClient } = verifyEmailAddressRequst;
   const emailAddress = user.emailAddress;
-  if (!emailAddress || !sesClient)
-    throw new Error("NULL EMAIL ADDRESS OR SES CLIENT");
+  if (!emailAddress) throw new Error("please enter a valid email address");
   try {
-    console.debug(`ATTEMPTING TO VERIFY EMAIL ADDRESS: ${emailAddress}`);
+    console.log(`ATTEMPTING TO VERIFY EMAIL ADDRESS: ${emailAddress}`);
     const sendCustomVerificationEmailCommandInput = {
       EmailAddress: emailAddress,
       TemplateName: "SampleTemplates",
@@ -27,8 +26,8 @@ const verifyEmailAddressOperation = async (verifyEmailAddressRequst) => {
     const { $metadata } = VerifyDomainIdentityCommandOutput;
     if ($metadata.httpStatusCode === 200) return true;
   } catch (verifyEmailAddressOperationError) {
-    console.debug(`ERROR VERIFYING EMAIL: ${verifyEmailAddressOperationError}`);
-    return false;
+    console.error(`ERROR VERIFYING EMAIL: ${verifyEmailAddressOperationError}`);
+    throw new Error("Email verification failed");
   }
 };
 

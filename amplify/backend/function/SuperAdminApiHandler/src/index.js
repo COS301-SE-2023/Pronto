@@ -41,7 +41,7 @@ const getAdminApplicationStatus = async (applicationId) => {
       return response.Item.applicationInfo.status.S;
     throw new Error("application not found");
   } catch (getInstitutionError) {
-    console.debug(`FAILED TO GET INSTITUTION. INFO: ${getInstitutionError}`);
+    console.error(`FAILED TO GET INSTITUTION. INFO: ${getInstitutionError}`);
     throw new Error("failed to get application status");
   }
 };

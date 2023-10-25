@@ -16,7 +16,7 @@ const cognitoIdentityServiceProviderClient = new CognitoIdentityProviderClient(
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
 exports.handler = async (event) => {
-  console.debug(`ADD TO GROUP EVENT ${JSON.stringify(event)}`);
+  console.log(`ADD TO GROUP EVENT ${JSON.stringify(event)}`);
   if (
     !event.request.clientMetadata.role ||
     !Object.values(ROLES).includes(event.request.clientMetadata.role)
@@ -44,7 +44,7 @@ exports.handler = async (event) => {
           : process.env.ADMIN_GROUP_NAME;
       break;
     default:
-      console.debug(
+      console.error(
         `Unrecognised user pool app client ID=${event.callerContext.clientId}`
       );
       throw new Error(
@@ -56,13 +56,13 @@ exports.handler = async (event) => {
     UserPoolId: event.userPoolId,
     Username: event.userName,
   };
-  console.table(addUserParams);
+  console.log({ addUserParams });
   try {
     await cognitoIdentityServiceProviderClient.send(
       new AdminAddUserToGroupCommand(addUserParams)
     );
   } catch (adminAddUserToGroupError) {
-    console.debug(
+    console.error(
       `failed to add user to userGroupName = ${
         addUserParams.GroupName
       }. INFO: ${JSON.stringify(adminAddUserToGroupError)}`

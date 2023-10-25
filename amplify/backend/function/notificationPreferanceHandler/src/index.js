@@ -25,14 +25,12 @@ const pinpointClient = new PinpointClient(config);
 const sesClient = new SESClient(config);
 
 exports.handler = async (event) => {
-  console.debug(`notificationPreferanceHandler Event: BEGIN`);
+  console.log(`notificationPreferanceHandler Event: ${JSON.stringify(event)}`);
   const { typeName, fieldName, identity, source, request } = event;
   const student = source;
   const graphQlRootObjectType = typeName;
   const sourceTypeName = source["__typename"];
   const sourceOperationName = source["__operation"];
-  console.debug(JSON.stringify(event));
-  console.debug(`notificationPreferanceHandler Event: END`);
 
   const user = {
     studentId: student.id,
@@ -48,7 +46,7 @@ exports.handler = async (event) => {
       case PINPOINT_CONSTANTS.CHANNEL_TYPES.EMAIL:
         if (!pinpointClient || !sesClient)
           throw new Error("UNDEFINED NOTIFICATION SERVICE");
-        console.debug("BEGIN: UPDATE TO EMAIL PREFERANCE");
+        console.log("BEGIN: UPDATE TO EMAIL PREFERANCE");
 
         return await updateEndPointOperation({
           user: user,
@@ -59,7 +57,7 @@ exports.handler = async (event) => {
 
       case PINPOINT_CONSTANTS.CHANNEL_TYPES.SMS:
         if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
-        console.debug("BEGIN: UPDATE TO SMS PREFERANCE");
+        console.log("BEGIN: UPDATE TO SMS PREFERANCE");
 
         return await updateEndPointOperation({
           user: user,
@@ -69,7 +67,7 @@ exports.handler = async (event) => {
 
       case PINPOINT_CONSTANTS.CHANNEL_TYPES.PUSH:
         if (!pinpointClient) throw new Error("UNDEFINED NOTIFICATION SERVICE");
-        console.debug("BEGIN: UPDATE TO PUSH PREFERANCE");
+        console.log("BEGIN: UPDATE TO PUSH PREFERANCE");
 
         return await updateEndPointOperation({
           user: user,
@@ -79,6 +77,7 @@ exports.handler = async (event) => {
         });
 
       default:
+        console.error("unsupported notification preference type");
         return {
           status: NOTIFICATIONS_STATUS.FAILED,
           info: "failed to process request: unsupported notification preference type",

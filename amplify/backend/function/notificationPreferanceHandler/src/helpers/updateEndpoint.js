@@ -160,7 +160,7 @@ const updateEndPointOperation = async (updateEndPointRequest) => {
         );
     }
   } catch (UpdateEndpointError) {
-    console.debug(`FAILED TO UPDATE ENDPOINT. DETAILS: ${UpdateEndpointError}`);
+    console.error(`FAILED TO UPDATE ENDPOINT. DETAILS: ${UpdateEndpointError}`);
     return {
       status: NOTIFICATIONS_STATUS.FAILED,
       info: UpdateEndpointError.message,

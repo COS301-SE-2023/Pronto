@@ -41,11 +41,11 @@ const getEndPointsByCourseId = async (courseId) => {
   try {
     const response = await fetch(request);
     const body = await response.json();
-    console.debug(`graphQL Resonse: ${JSON.stringify(body)}`);
+    console.log(`graphQL Resonse: ${JSON.stringify(body)}`);
     if (body.data) return (institution.details = body.data.getCourse);
     throw new Error("API ERROR: Failed to retrieve data");
   } catch (getAndSetEndPointsByCourseIdError) {
-    console.debug(getAndSetEndPointsByCourseIdError);
+    console.error(getAndSetEndPointsByCourseIdError);
     throw new Error(`Failed To retrieve institution details.`);
   }
 };
