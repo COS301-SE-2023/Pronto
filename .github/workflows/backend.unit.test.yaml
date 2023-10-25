@@ -20,8 +20,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version}}
-      - name: Insalling Test Dependancies
-        run: cd function/prontoAuthPostConfirmation/src
+      - run: |
+          cd function/prontoAuthPostConfirmation/src
           npm install
           cd ../../prontoAuthPreAuthentication/src
           npm install
