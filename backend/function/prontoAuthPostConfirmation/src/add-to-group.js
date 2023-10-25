@@ -58,9 +58,12 @@ exports.handler = async (event) => {
   };
   console.log({ addUserParams });
   try {
-    await cognitoIdentityServiceProviderClient.send(
-      new AdminAddUserToGroupCommand(addUserParams)
-    );
+    const adminAddUserToGroupCommandOutput =
+      await cognitoIdentityServiceProviderClient.send(
+        new AdminAddUserToGroupCommand(addUserParams)
+      );
+    if (adminAddUserToGroupCommandOutput.$metadata.httpStatusCode === 200)
+      return event;
   } catch (adminAddUserToGroupError) {
     console.error(
       `failed to add user to userGroupName = ${
@@ -69,6 +72,4 @@ exports.handler = async (event) => {
     );
     throw new Error(`failed to add user to user group`);
   }
-
-  return event;
 };
