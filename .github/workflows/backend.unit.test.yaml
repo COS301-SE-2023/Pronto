@@ -21,5 +21,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version}}
       - run: |
+          cd function/prontoAuthPostConfirmation/src
           npm install
+          cd ../../prontoAuthPreAuthentication/src
+          npm install
+          cd ../../prontoAuthPreSignup/src
+          npm install
+          cd ../../../
           npm test
