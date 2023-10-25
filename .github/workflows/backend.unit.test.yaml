@@ -29,6 +29,6 @@ jobs:
           cd ../../prontoAuthPreSignup/src
           yarn
           cd ../../../
-          yarn
+          npm install
       - name: Running Backend Tests
         run: npm test
