@@ -39,7 +39,6 @@ describe("Input Validation and Error handling", () => {
       JSON.stringify(studentsEvent)
     );
     studentEventWithAdminInvalidClientId.callerContext.clientId = "Invalid";
-    console.table(studentEventWithAdminInvalidClientId);
     await expect(
       preAuth.handler(studentEventWithAdminInvalidClientId)
     ).rejects.toThrow(
