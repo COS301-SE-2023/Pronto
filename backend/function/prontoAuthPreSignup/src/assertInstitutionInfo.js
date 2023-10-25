@@ -43,7 +43,9 @@ const getAndSetInstitutionDetails = async (institutionId) => {
     if (body.data) return (institution.details = body.data.getInstitution);
     throw new Error("API ERROR: INSTITUTION HAS NO DETAILS");
   } catch (getEmailsQueryError) {
-    console.error(JSON.stringify(getEmailsQueryError));
+    console.error(
+      `FAILED TO GET ADMIN/LECTURER EMAIL LISTS. INFO: ${getEmailsQueryError}`
+    );
     throw new Error(`Failed To retrieve institution details.`);
   }
 };
@@ -53,7 +55,9 @@ const getLectureEmailsFromInstitution = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.lectureremails;
   } catch (getAndSetInstitutionDetailsError) {
-    console.debug({ getAndSetInstitutionDetailsError });
+    console.error(
+      `FAILED TO GET INSTITITUTION DETAILS. INFO: ${getAndSetInstitutionDetailsError}`
+    );
     throw new Error(`Failed to retrieve list for the institution.`);
   }
 };
@@ -63,7 +67,7 @@ const getInstitutionAdminId = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.adminId;
   } catch (getInstitutionAdminIdError) {
-    console.error(JSON.stringify(getInstitutionAdminIdError));
+    console.error(`FAILED TO GET ADMIN. INFO: ${getInstitutionAdminIdError}`);
     throw new Error(`Failed to retrieve admin for the institution.`);
   }
 };
@@ -73,7 +77,9 @@ const getInstitutionEmailDomains = async (institutionId) => {
     const institutionetails = await getAndSetInstitutionDetails(institutionId);
     return institutionetails.domains;
   } catch (getInstitutionEmailDomainsError) {
-    console.error(JSON.stringify(getInstitutionEmailDomainsError));
+    console.error(
+      `FAILED TO GET INSTITUTION EMAIL DOMAIN LIST. INFO: ${getInstitutionEmailDomainsError}`
+    );
     throw new Error(`Failed to retrieve email domains for the institution.`);
   }
 };
@@ -88,8 +94,10 @@ const isLectureEmailPartOfInstitution = async (email, institutionId) => {
       );
     return emailList.includes(email);
   } catch (getLectureEmailsFromInstitutionError) {
-    console.error(JSON.stringify(getLectureEmailsFromInstitutionError));
-    throw new Error(getLectureEmailsFromInstitutionError.message);
+    console.error(
+      `FAILED TO VALIDATE LECTURER EMAIL. INFO: ${getLectureEmailsFromInstitutionError}`
+    );
+    throw getLectureEmailsFromInstitutionError;
   }
 };
 
@@ -98,8 +106,10 @@ const isAdminAllocated = async (institutionId) => {
     const adminId = await getInstitutionAdminId(institutionId);
     return adminId != null;
   } catch (getInstitutionAdminIdError) {
-    console.error(JSON.stringify(getInstitutionAdminIdError));
-    throw new Error(getInstitutionAdminIdError);
+    console.error(
+      `FAILED TO VALIDATE ADMIN EMAIL. INFO: ${getInstitutionAdminIdError}`
+    );
+    throw getInstitutionAdminIdError;
   }
 };
 
@@ -118,8 +128,10 @@ const isStudentEmailDomainPartOfInstitution = async (
       studentEmail.split("@")[1]
     );
   } catch (getInstitutionEmailDomainsError) {
-    console.error(JSON.stringify(getInstitutionEmailDomainsError));
-    throw new Error(getInstitutionEmailDomainsError.message);
+    console.error(
+      `FAILED TO VALIDATE STUDENT EMAIL DOMAIN. INFO: ${getInstitutionEmailDomainsError}`
+    );
+    throw getInstitutionEmailDomainsError;
   }
 };
 

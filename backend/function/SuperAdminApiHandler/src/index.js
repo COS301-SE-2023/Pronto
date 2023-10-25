@@ -74,10 +74,8 @@ exports.handler = async (event) => {
     try {
       return await getAdminApplicationStatus(AdminApplication.institutionId);
     } catch (getAdminApplicationStatusError) {
-      console.log(
-        `FAILED TO GET APPLICATION STATUS. INFO ${JSON.stringify(
-          getAdminApplicationStatusError
-        )}`
+      console.error(
+        `FAILED TO GET APPLICATION STATUS. INFO ${getAdminApplicationStatusError}`
       );
       return {
         status: APPLICATION_STATUS.GET_STATUS_FAILED,

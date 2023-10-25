@@ -76,8 +76,8 @@ exports.handler = async (event, context) => {
         break;
     }
   } catch (preAuthError) {
-    console.error(JSON.stringify(preAuthError));
-    throw new Error(preAuthError.message);
+    console.error(`PREAUTHENTICATION FAILED. INFO: ${preAuthError}`);
+    throw preAuthError;
   }
   return event;
 };

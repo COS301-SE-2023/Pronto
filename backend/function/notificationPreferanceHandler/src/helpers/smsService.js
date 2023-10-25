@@ -38,7 +38,7 @@ const validateMobilePhoneNumberOperation = async (
       return NumberValidateResponse;
     return null;
   } catch (phoneNumberValidateError) {
-    console.debug(`ERROR VALIDATING PHONE NUMBER: ${phoneNumberValidateError}`);
+    console.error(`ERROR VALIDATING PHONE NUMBER: ${phoneNumberValidateError}`);
     throw new Error("failed to verify phone number");
   }
 };

@@ -45,7 +45,7 @@ exports.handler = async (event, context) => {
       Or contact your Institute admin if you are a lecture\n
       More details on: http://prontotimetable.co.za`);
   } catch (preAuthError) {
-    console.error(preAuthError);
+    console.error(`PREAUTHENTICATION FAILED. INFO: ${preAuthError}`);
     throw new Error(preAuthError);
   }
   return event;

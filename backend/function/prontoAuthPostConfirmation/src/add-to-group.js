@@ -66,9 +66,7 @@ exports.handler = async (event) => {
       return event;
   } catch (adminAddUserToGroupError) {
     console.error(
-      `failed to add user to userGroupName = ${
-        addUserParams.GroupName
-      }. INFO: ${JSON.stringify(adminAddUserToGroupError)}`
+      `failed to add user to userGroupName = ${addUserParams.GroupName}. INFO: ${adminAddUserToGroupError}`
     );
     throw new Error(`failed to add user to user group`);
   }
