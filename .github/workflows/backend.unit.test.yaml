@@ -23,12 +23,12 @@ jobs:
       - name: Insalling Test Dependancies
         run: |
           cd function/prontoAuthPostConfirmation/src
-          npm install
+          yarn
           cd ../../prontoAuthPreAuthentication/src
-          npm install
+          yarn
           cd ../../prontoAuthPreSignup/src
-          npm install
+          yarn
           cd ../../../
-          npm install
+          yarn
       - name: Running Backend Tests
         run: npm test
