@@ -20,8 +20,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version}}
-      - run: echo "Insalling Test Dependancies"
-          cd function/prontoAuthPostConfirmation/src
+      - name: Insalling Test Dependancies
+        run: cd function/prontoAuthPostConfirmation/src
           npm install
           cd ../../prontoAuthPreAuthentication/src
           npm install
@@ -29,5 +29,5 @@ jobs:
           npm install
           cd ../../../
           npm install
-          echo "Running Tests"
-          npm test
+      - name: Running Backend Tests
+        run: npm test
