@@ -2,27 +2,32 @@ const studentsEvent = require("../../../../function/prontoAuthPostConfirmation/s
 const moduleIterator = require("../../../../function/prontoAuthPostConfirmation/src/index");
 const addToGroup = require("../../../../function/prontoAuthPostConfirmation/src/add-to-group");
 
-describe("testing module iterator", () => {
-  const OLD_ENV = process.env;
-  beforeEach(() => {
-    process.env = { ...OLD_ENV };
-    const mockAddToGroupHandler = jest
-      .fn(addToGroup.handler)
-      .mockResolvedValue(studentsEvent);
-    jest.mock(
-      "../../../../function/prontoAuthPostConfirmation/src/index",
-      () => ({
-        handler: mockAddToGroupHandler,
-      })
-    );
-  });
+jest.mock(
+  "../../../../function/prontoAuthPostConfirmation/src/node_modules/@aws-sdk/client-cognito-identity-provider",
+  () => {
+    return {
+      CognitoIdentityProviderClient: class {
+        send() {
+          return Promise.resolve({ $metadata: { httpStatusCode: 200 } });
+        }
 
-  afterAll(() => {
-    process.env = OLD_ENV;
+        promise() {
+          return Promise.reject({});
+        }
+      },
+      AdminAddUserToGroupCommand: class {},
+      AdminUpdateUserAttributesCommand: class {},
+    };
+  }
+);
+describe("testing module iterator", () => {
+  beforeEach(() => {
     jest.restoreAllMocks();
   });
-  test("should throw", async () => {
-    await expect(moduleIterator.handler(studentsEvent)).rejects.toThrow(
+  test("should throw Invalid institution", async () => {
+    const invalidStudentEvent = JSON.parse(JSON.stringify(studentsEvent));
+    invalidStudentEvent.request.clientMetadata.institutionId = null;
+    await expect(moduleIterator.handler(invalidStudentEvent)).rejects.toThrow(
       /^Invalid institution$/
     );
   });
