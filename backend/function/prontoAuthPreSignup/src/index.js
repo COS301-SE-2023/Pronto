@@ -42,7 +42,7 @@ exports.handler = async (event, context) => {
     );
 
   event.response.autoConfirmUser = false;
-  event.response.autoVerifyEmails = false;
+  event.response.autoVerifyEmail = false;
   try {
     switch (event.request.clientMetadata.role) {
       case ROLES.Admin:
