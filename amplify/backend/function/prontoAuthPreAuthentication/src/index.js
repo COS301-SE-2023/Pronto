@@ -13,7 +13,7 @@ const isAppClientValid = require("./helpers/isAppClientValid");
  */
 
 exports.handler = async (event, context) => {
-  console.debug(JSON.stringify(event));
+  console.log(JSON.stringify(event));
   if (!event.request.userAttributes.email)
     throw new Error("Invalid or empty email address");
   if (
@@ -45,7 +45,7 @@ exports.handler = async (event, context) => {
       Or contact your Institute admin if you are a lecture\n
       More details on: http://prontotimetable.co.za`);
   } catch (preAuthError) {
-    console.debug(preAuthError);
+    console.error(preAuthError);
     throw new Error(preAuthError);
   }
   return event;

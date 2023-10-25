@@ -33,18 +33,20 @@ exports.handler = async (event) => {
       await cognitoIdentityProviderClient.send(
         adminUpdateUserAttributesCommand
       );
-    console.table(adminUpdateUserAttributesCommandOutput);
+    console.log(JSON.stringify(adminUpdateUserAttributesCommandOutput));
     const { $metadata } = adminUpdateUserAttributesCommandOutput;
     if ($metadata.httpStatusCode === 200) return event;
     else {
       throw new Error("failed to update user attribute using admin api");
     }
   } catch (addInstitutionIdAttributeError) {
-    console.debug(
+    console.error(
       `failed add to InstitutionId = ${institutionId}. To username = ${
         event.userName
       }\n INFO: ${JSON.stringify(addInstitutionIdAttributeError)}`
     );
-    throw new Error("failed to add you to an institution, go back and login");
+    throw new Error(
+      "failed to add you to an institution,please retry by navigating back and login"
+    );
   }
 };

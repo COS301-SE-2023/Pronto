@@ -1,4 +1,3 @@
-
 /* Amplify Params - DO NOT EDIT
 	API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT
 	API_PRONTO_GRAPHQLAPIIDOUTPUT
@@ -21,14 +20,12 @@ const config = {
 const pinpointClient = new PinpointClient(config);
 
 exports.handler = async (event) => {
-  console.debug(`AnnouncementsHandler Event: BEGIN`);
+  console.log(`AnnouncementsHandler Event: ${JSON.stringify(event)}`);
   const { typeName, fieldName, identity, source, request } = event;
   const announcement = source;
   const graphQlRootObjectType = typeName;
   const sourceTypeName = source["__typename"];
   const sourceOperationName = source["__operation"];
-  console.debug(JSON.stringify(event));
-  console.debug(`AnnouncementsHandler Event: END`);
 
   if (
     graphQlRootObjectType === GRAPHQL.ROOT_OBJECT &&
@@ -40,10 +37,10 @@ exports.handler = async (event) => {
       announcement: announcement,
       pinpointClient,
     };
-    console.debug("send announcement");
+    console.log("sending announcement");
     return await sendMessageOperation(sendMessageOperationInput);
   }
-  console.debug("invalid graphql object type");
+  console.error("invalid graphql object type");
 
   return {
     SMS: NOTIFICATIONS_STATUS.FAILED,

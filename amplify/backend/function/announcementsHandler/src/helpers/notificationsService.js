@@ -66,7 +66,7 @@ const processBatchsendMessageOperation = async (
       sendMessagesCommand
     );
     const { $metadata, MessageResponse } = sendMessagesCommandOutput.$metadata;
-    console.debug(
+    console.log(
       `SEND  MESSAGE RESPONSE: ${JSON.stringify(sendMessagesCommandOutput)}`
     );
     if ($metadata.httpStatusCode === 200)
@@ -112,7 +112,7 @@ const sendMessageOperation = async (sendMessageOperationInput) => {
       pinpointClient
     );
   } catch (sendMessagesError) {
-    console.debug(
+    console.error(
       `ERRO SENDING MESSAGES FOR ${announcement}. INFO: ${sendMessagesError}`
     );
     return {
