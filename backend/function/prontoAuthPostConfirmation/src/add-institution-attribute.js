@@ -41,9 +41,7 @@ exports.handler = async (event) => {
     }
   } catch (addInstitutionIdAttributeError) {
     console.error(
-      `failed add to InstitutionId = ${institutionId}. To username = ${
-        event.userName
-      }\n INFO: ${JSON.stringify(addInstitutionIdAttributeError)}`
+      `failed add to InstitutionId = ${institutionId}. To username = ${event.userName}\n INFO: ${addInstitutionIdAttributeError}`
     );
     throw new Error(
       "failed to add you to an institution,please retry by navigating back and login"
