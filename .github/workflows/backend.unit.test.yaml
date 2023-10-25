@@ -28,4 +28,5 @@ jobs:
           cd ../../prontoAuthPreSignup/src
           npm install
           cd ../../../
+          npm install
           npm test
