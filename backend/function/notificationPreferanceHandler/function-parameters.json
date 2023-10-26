@@ -1,0 +1,17 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "api": {
+      "pronto": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "isoCountryCode",
+      "environmentVariableName": "ISO_COUNTRY_CODE"
+    }
+  ]
+}

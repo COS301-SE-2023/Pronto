@@ -1,0 +1,15 @@
+{
+  "userPoolId": "userPoolId",
+  "userName": "USERNAME",
+  "callerContext": {
+    "clientId": "WEB_CLIENTID"
+  },
+  "request": {
+    "userAttributes": { "email": "email@address.com" },
+    "validationData": {
+      "role": "Admin",
+      "institutionId": "INSTITUTIONID"
+    }
+  },
+  "response": {}
+}
