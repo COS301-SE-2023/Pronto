@@ -1,0 +1,26 @@
+{
+  "resourceName": "prontoBlobeStore",
+  "policyUUID": "84b3bf7f",
+  "bucketName": "pronto-bucket",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [],
+  "groupAccess": {
+    "superUserGroup": [
+      "CREATE_AND_UPDATE",
+      "READ",
+      "DELETE"
+    ],
+    "adminUserGroup": [
+      "CREATE_AND_UPDATE",
+      "READ",
+      "DELETE"
+    ],
+    "lecturerUserGroup": [
+      "READ"
+    ],
+    "studentsUserGroup": [
+      "READ"
+    ]
+  }
+}

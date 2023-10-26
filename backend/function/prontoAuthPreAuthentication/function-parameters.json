@@ -1,0 +1,45 @@
+{
+  "trigger": true,
+  "modules": [
+    "custom"
+  ],
+  "parentResource": "prontoAuth",
+  "functionName": "prontoAuthPreAuthentication",
+  "resourceName": "prontoAuthPreAuthentication",
+  "parentStack": "auth",
+  "triggerEnvs": "[]",
+  "triggerDir": "/snapshot/amplify-cli/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PreAuthentication",
+  "triggerTemplate": "PreAuthentication.json.ejs",
+  "triggerEventPath": "PreAuthentication.event.json",
+  "roleName": "prontoAuthPreAuthentication",
+  "skipEdit": true,
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "apiProntoGraphqlapikeyoutput",
+      "environmentVariableName": "API_PRONTO_GRAPHQLAPIKEYOUTPUT"
+    },
+    {
+      "cloudFormationParameterName": "prontoAdminEmail",
+      "environmentVariableName": "PRONTO_ADMIN_EMAIL"
+    },
+    {
+      "cloudFormationParameterName": "cognitoMobileClientId",
+      "environmentVariableName": "COGNITO_MOBILE_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "cognitoWebClientId",
+      "environmentVariableName": "COGNITO_WEB_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "authProntoauthUserpoolid",
+      "environmentVariableName": "AUTH_PRONTOAUTH_USERPOOLID"
+    }
+  ],
+  "permissions": {
+    "api": {
+      "pronto": [
+        "Query"
+      ]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+name: Backend Unit Tests
+on:
+  push:
+    branches: [main, dev, restoreBackend, backend, pre-main]
+  pull_request:
+    branches: [main, dev, restoreBackend, backend, pre-main]
+
+jobs:
+  backend-unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{matrix.node-version}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version}}
+      - name: Insalling Test Dependancies
+        run: |
+          cd function/prontoAuthPostConfirmation/src
+          yarn
+          cd ../../prontoAuthPreAuthentication/src
+          yarn
+          cd ../../prontoAuthPreSignup/src
+          yarn
+          cd ../../../
+          npm install
+      - name: Running Backend Tests
+        run: npm test
