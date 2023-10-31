@@ -1,7 +1,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-
 export const createStudent = /* GraphQL */ `
   mutation CreateStudent(
     $input: CreateStudentInput!
@@ -97,7 +96,7 @@ export const createEnrollment = /* GraphQL */ `
       studentId
       courseId
       year
-      
+
       course {
         id
         institutionId
@@ -204,7 +203,6 @@ export const updateTimetable = /* GraphQL */ `
   }
 `;
 
-
 export const createNotificationPreferance = /* GraphQL */ `
   mutation CreateNotificationPreferance(
     $input: CreateNotificationPreferanceInput!
@@ -253,5 +251,3 @@ export const updateNotificationPreferance = /* GraphQL */ `
     }
   }
 `;
-
-

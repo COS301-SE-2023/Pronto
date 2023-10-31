@@ -1,0 +1,284 @@
+type Institution
+  @model
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "owner" }
+      { allow: public, operations: [read, create] }
+      {
+        allow: groups
+        groups: ["studentUserGroup", "lecturerUserGroup"]
+        operations: [read]
+      }
+      { allow: groups, groups: ["adminUserGroup"], operations: [read, update] }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  location: String
+  pageUrl: String
+  campusMapUrl: String
+  openingTime: String
+  closingTime: String
+  minimumDuration: Int
+  lectureremails: [String]
+  coursecodes: [String]
+  logo: String
+  domains: [String]
+  admin: Admin @hasOne(fields: ["adminId"])
+  adminId: ID
+  owner: String
+  courses: [Course] @hasMany(indexName: "byCourse", fields: ["id"])
+  students: [Student] @hasMany(indexName: "byStudent", fields: ["id"])
+  lecturer: [Lecturer] @hasMany(indexName: "byLecturer", fields: ["id"])
+}
+
+type Admin
+  @model
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "owner" }
+      { allow: public, operations: [read] }
+      { allow: groups, groups: ["adminUserGroup"], operations: [read] }
+    ]
+  ) {
+  id: ID!
+  institutionId: ID
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: String! @index(name: "byEmail", queryField: "adminByEmail")
+  owner: String
+  institution: Institution @belongsTo(fields: ["institutionId"])
+}
+
+type Lecturer
+  @model
+  @searchable
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      {
+        allow: groups
+        groups: ["lecturerUserGroup", "adminUserGroup"]
+        operations: [read]
+      }
+    ]
+  ) {
+  id: ID!
+  institutionId: ID! @index(name: "byLecturer")
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: ID! @index(name: "byEmail", queryField: "lecturerByEmail")
+  institution: Institution! @belongsTo(fields: ["institutionId"])
+  courses: [Course] @hasMany(indexName: "bycourse", fields: ["id"])
+}
+
+type Student
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+    ]
+  ) {
+  institutionId: ID! @index(name: "byStudent")
+  id: ID!
+  firstname: String!
+  lastname: String!
+  userRole: String!
+  email: String! @index(name: "byEmail", queryField: "studentByEmail")
+  preference: NotificationPreferance @auth(rules: [{ allow: owner }])
+  institution: Institution! @belongsTo(fields: ["institutionId"])
+  timetable: Timetable @hasOne
+  enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
+}
+
+type Enrollment
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: groups, groups: ["lecturerUserGroup"], operations: [read] }
+      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+    ]
+  ) {
+  id: ID!
+  studentId: ID! @index(name: "byEnrollment")
+  courseId: ID!
+  year: Int
+  student: Student! @belongsTo(fields: ["studentId"])
+  course: Course! @belongsTo(fields: ["courseId"])
+}
+
+type Course
+  @model
+  @searchable
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      {
+        allow: groups
+        groups: ["studentUserGroup", "lecturerUserGroup", "adminUserGroup"]
+        operations: [read]
+      }
+    ]
+  ) {
+  id: ID!
+  institutionId: ID! @index(name: "byCourse")
+  lecturerId: ID @index(name: "bycourse")
+  coursecode: String!
+  coursename: String
+  semester: String
+  enrollments: [Enrollment] @hasMany(indexName: "byEnrollment", fields: ["id"])
+  activity: [Activity] @hasMany(indexName: "byActivity", fields: ["id"])
+  announcents: [Announcement]
+    @hasMany(indexName: "byAnnouncement", fields: ["id"])
+  lecturer: Lecturer @belongsTo(fields: ["lecturerId"])
+  institution: Institution! @belongsTo(fields: ["institutionId"])
+  notification: Notification @auth(rules: [{ allow: owner }])
+}
+
+type Timetable
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: groups, groups: ["studentUserGroup"], operations: [read] }
+    ]
+  ) {
+  id: ID!
+  studentId: ID!
+  activityId: [String]!
+  student: Student! @belongsTo(fields: ["studentId"])
+  activities: [Activity]! @hasMany(indexName: "byActivity", fields: ["id"])
+}
+
+type Activity
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      {
+        allow: groups
+        groups: ["studentUserGroup", "adminUserGroup"]
+        operations: [read]
+      }
+      {
+        allow: groups
+        groups: ["lecturerUserGroup"]
+        operations: [read, update]
+      }
+    ]
+  ) {
+  id: ID!
+  courseId: ID! @index(name: "byActivity")
+  activityname: String!
+  day: String!
+  start: String!
+  end: String!
+  venue: String!
+  coordinates: String
+  group: String!
+  frequency: Int
+  description: String!
+  course: Course @belongsTo(fields: ["courseId"])
+}
+
+type Announcement
+  @model
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "lecturerId", operations: [read, update] }
+      { allow: public, operations: [read] }
+      {
+        allow: groups
+        groups: ["studentUserGroup", "adminUserGroup"]
+        operations: [read]
+      }
+      { allow: groups, groups: ["lecturerUserGroup"], operations: [create] }
+    ]
+  ) {
+  id: ID!
+  courseId: ID! @index(name: "byAnnouncement")
+  lecturerId: ID
+  description: String
+  start: String
+  end: String
+  date: String!
+  venue: String
+  course: Course! @belongsTo(fields: ["courseId"])
+  body: String
+  title: String
+  type: String
+  year: String!
+    @index(
+      name: "announcementsByDate"
+      queryField: "announcementsByDate"
+      sortKeyFields: ["createdAt"]
+    )
+  createdAt: String!
+  anonouncementStatus: Announcement_Status
+    @function(name: "announcementsHandler-${env}")
+}
+
+type NotificationPreferance
+  @model
+  @auth(
+    rules: [
+      { allow: owner, ownerField: "studentId" }
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  studentId: ID! @index(name: "byStudentId")
+  endpoint: Endpoint @function(name: "notificationPreferanceHandler-${env}")
+}
+
+type Notification {
+  courseid: ID!
+  status: STATUS
+  endPoinId: ID
+}
+
+enum NOTIFICATION_TYPE {
+  SMS
+  PUSH
+  EMAIL
+}
+
+enum STATUS {
+  UPDATED
+  DISABLED
+  FAILED
+  OPERATIONAL
+}
+
+enum ENDPOINT_TYPE_STATUS {
+  SENT
+  FAILED
+  UNAVAILABLE
+}
+type Announcement_Status {
+  SMS: ENDPOINT_TYPE_STATUS
+  PUSH: ENDPOINT_TYPE_STATUS
+  EMAIL: ENDPOINT_TYPE_STATUS
+  announcement_Matrix: Announcement_Matrix
+  info: String
+}
+
+type Announcement_Matrix {
+  SMS: Int
+  PUSH: Int
+  EMAIL: Int
+}
+
+type Endpoint {
+  type: NOTIFICATION_TYPE
+  endPointAddress: ID
+  status: STATUS
+  info: String
+}
+

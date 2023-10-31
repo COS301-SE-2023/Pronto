@@ -1,0 +1,17 @@
+{
+  "userPoolId": "userPoolId",
+  "userName": "TEST",
+  "callerContext": {
+    "clientId": "SOMEID"
+  },
+  "request": {
+    "validationData": {
+      "role": "Student",
+      "institutionId": "INSTITUTIONID"
+    },
+    "userAttributes": {
+      "email": "EMAIL@domain.com"
+    }
+  },
+  "response": {}
+}
