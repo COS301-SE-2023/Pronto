@@ -2,7 +2,7 @@
 <img src="Documentation/ReadME Resources/Images/ProntoLogo.svg" alt="Alt text" title="Logo">
 </p>
 
-<p align ='center'> <h3>Agile Architects - Capstone Project 2023 </h3></p>
+<h3 align ='center'> Agile Architects - Capstone Project 2023 </h3>
 <p align = 'center'>Partnered with AWS</p>
 <p align = 'center'>Architectural Awareness Award Winners</p>
 
