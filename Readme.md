@@ -81,6 +81,7 @@ Pronto is a consolidated university application that provides students with the 
 ## Project Management
 
 <div><a href="https://github.com/orgs/COS301-SE-2023/projects/24">📅 Pronto Project Board </a></div>
+<br>
 
 <p align = "center">
 <img src="Documentation/ReadME Resources/Images/FinalPoster.png" alt="poster" title="poster" style="width: 700px">
