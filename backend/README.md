@@ -1,5 +1,3 @@
-# Deploying the backend
-
 # Requirements
 
 1. Amplify CLI version 12+
