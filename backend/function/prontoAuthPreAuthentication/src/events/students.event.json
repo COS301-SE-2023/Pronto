@@ -5,7 +5,7 @@
     "clientId": "SOMEID"
   },
   "request": {
-    "clientMetadata": {
+    "validationData": {
       "role": "Student",
       "institutionId": "INSTITUTIONID"
     },
