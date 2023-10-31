@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, Dimensions, StyleSheet, Image } from "react-native";
 import { Agenda } from "react-native-calendars";
 import { Card } from "react-native-paper";
-import { API, Auth,DataStore } from 'aws-amplify'
+import { API, Auth, DataStore } from 'aws-amplify'
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
@@ -75,63 +75,63 @@ const ScheduleTable = ({ navigation, route }) => {
   }
 
   let error = "There appear to be network issues.Please try again later";
- 
+
   const fetchActivities = async () => {
     try {
-      
-     const user = await Auth.currentAuthenticatedUser();
-     const id=user.attributes.sub;
-    
-     stu = await DataStore.query(Student, id);
-    
-    
-    if(stu===undefined){ 
-      return;
-    }
-    const enrollmentList=await stu.enrollments.values;
-   
-    const enrollment=enrollmentList.filter((item)=>item._deleted===null);
-  
-    let c=[];
-    const studentTimetable= await stu.timetable;
-    
-    if(studentTimetable===undefined)
-      return;
-    const activity=studentTimetable.activityId;
-    const activityList=removeDuplicates(activity);
-    for(let i=0;i<enrollment.length;i++){
-      const course=await enrollment[i].course;
-      if(course._deleted===null){
-        const activity=await course.activity.values;
-        for(let j=0;j<activity.length;j++){
-          let saveActivity= activity[j];
-          saveActivity.course={
-            coursecode:course.coursecode
-          }
-          if(saveActivity._deleted===null && activityList.includes(saveActivity.id)){
-            c.push(saveActivity);
+
+      const user = await Auth.currentAuthenticatedUser();
+      const id = user.attributes.sub;
+
+      stu = await DataStore.query(Student, id);
+
+
+      if (stu === undefined) {
+        return;
+      }
+      const enrollmentList = await stu.enrollments.values;
+
+      const enrollment = enrollmentList.filter((item) => item._deleted === null);
+
+      let c = [];
+      const studentTimetable = await stu.timetable;
+
+      if (studentTimetable === undefined)
+        return;
+      const activity = studentTimetable.activityId;
+      const activityList = removeDuplicates(activity);
+      for (let i = 0; i < enrollment.length; i++) {
+        const course = await enrollment[i].course;
+        if (course._deleted === null) {
+          const activity = await course.activity.values;
+          for (let j = 0; j < activity.length; j++) {
+            let saveActivity = activity[j];
+            saveActivity.course = {
+              coursecode: course.coursecode
+            }
+            if (saveActivity._deleted === null && activityList.includes(saveActivity.id)) {
+              c.push(saveActivity);
+            }
           }
         }
       }
-    }
-    let act=c;
-    
-    if(act.length===0){
-     setActivities([]);
-     createScheduleArray(act);
-    }
+      let act = c;
 
-    
-     stu.enrollments=enrollment,
-     stu.timetable=studentTimetable;
-     updateStudent(stu);
+      if (act.length === 0) {
+        setActivities([]);
+        createScheduleArray(act);
+      }
+
+
+      stu.enrollments = enrollment,
+        stu.timetable = studentTimetable;
+      updateStudent(stu);
       act = act.sort((a, b) => {
         if (a.start <= b.start)
           return -1;
         else
           return 1;
       })
-      
+
       let changed = false;
       if (act.length === activities.length) {
         for (let i = 0; i < act.length; i++) {
@@ -144,25 +144,26 @@ const ScheduleTable = ({ navigation, route }) => {
       else {
         changed = true;
       }
-    
+
       createScheduleArray(act);
-    
+      setActivities(act);
+
     } catch (e) {
-         
+
     }
   }
 
-function removeDuplicates(arr) { 
-    let unique = []; 
-    arr.forEach(element => { 
-        if (!unique.includes(element)) { 
-            unique.push(element); 
-        } 
-    }); 
-    return unique; 
-} 
+  function removeDuplicates(arr) {
+    let unique = [];
+    arr.forEach(element => {
+      if (!unique.includes(element)) {
+        unique.push(element);
+      }
+    });
+    return unique;
+  }
 
-useEffect(() => {
+  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchActivities()
     });
@@ -242,20 +243,20 @@ useEffect(() => {
     setTimetableLoaded(true);
   };
 
-  const navigate = (module)=>{
-  let coordinate=null
-  
-  if(module.coordinates!==null && module.coordinates!==undefined){
-    let location=module.coordinates.split(";")
-    coordinate={
-      name:location[0],
-      value:{
-              latitude:parseFloat(location[1]),
-              longitude:parseFloat(location[2])
+  const navigate = (module) => {
+    let coordinate = null
+
+    if (module.coordinates !== null && module.coordinates !== undefined) {
+      let location = module.coordinates.split(";")
+      coordinate = {
+        name: location[0],
+        value: {
+          latitude: parseFloat(location[1]),
+          longitude: parseFloat(location[2])
         }
-     }
+      }
     }
-    navigation.navigate("Navigation",coordinate)
+    navigation.navigate("Navigation", coordinate)
   }
 
 
@@ -271,7 +272,7 @@ useEffect(() => {
     return (
       <TouchableOpacity style={{ marginRight: 20, marginTop: 30 }}>
         <Card style={[cardStyle, { elevation: module.isClash ? 4 : 2 }]}
-                    onPress={()=>navigate(module)}>
+          onPress={() => navigate(module)}>
           <Card.Content>
             <View
               style={{
@@ -378,6 +379,7 @@ useEffect(() => {
         end,
         venue, // Include 'venue' here
       });
+
     });
 
     let tableHTML = `
@@ -416,6 +418,7 @@ useEffect(() => {
 
       tableHTML += `</tr>`;
     });
+
 
     return tableHTML;
   };
@@ -492,7 +495,7 @@ useEffect(() => {
           agendaDayTextColor: "#e32f45",
           agendaDayNumColor: "#e32f45",
           agendaTodayColor: "#e32f45",
-         
+
         }}
       />
     </View>
