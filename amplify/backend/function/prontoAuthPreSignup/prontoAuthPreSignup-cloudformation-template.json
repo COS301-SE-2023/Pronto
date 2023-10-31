@@ -48,6 +48,21 @@
     "s3Key": {
       "Type": "String"
     },
+    "apiProntoGraphqlapikeyoutput": {
+      "Type": "String"
+    },
+    "apiprontoGraphQLAPIIdOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIIdOutput"
+    },
+    "apiprontoGraphQLAPIEndpointOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIEndpointOutput"
+    },
+    "apiprontoGraphQLAPIKeyOutput": {
+      "Type": "String",
+      "Default": "apiprontoGraphQLAPIKeyOutput"
+    },
     "studentGroupName": {
       "Type": "String"
     },
@@ -59,14 +74,13 @@
     },
     "cognitoMobileClientId": {
       "Type": "String"
+    "cognitoMobileClientId": {
+      "Type": "String"
     },
     "cognitoWebClientId": {
       "Type": "String"
     },
     "apiProntographqlapiGraphqlapiendpointoutput": {
-      "Type": "String"
-    },
-    "apiProntoGraphqlapikeyoutput": {
       "Type": "String"
     }
   },
@@ -124,6 +138,15 @@
             "DOMAINBLACKLIST": {
               "Ref": "DOMAINBLACKLIST"
             },
+            "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIKeyOutput"
+            },
+            "API_PRONTO_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIIdOutput"
+            },
+            "API_PRONTO_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apiprontoGraphQLAPIEndpointOutput"
+            },
             "STUDENT_GROUP_NAME": {
               "Ref": "studentGroupName"
             },
@@ -141,9 +164,6 @@
             },
             "API_PRONTOGRAPHQLAPI_GRAPHQLAPIENDPOINTOUTPUT": {
               "Ref": "apiProntographqlapiGraphqlapiendpointoutput"
-            },
-            "API_PRONTO_GRAPHQLAPIKEYOUTPUT": {
-              "Ref": "apiProntoGraphqlapikeyoutput"
             }
           }
         },
@@ -242,6 +262,53 @@
                   }
                 ]
               }
+            }
+          ]
+        }
+      }
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "appsync:GraphQL"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apiprontoGraphQLAPIIdOutput"
+                      },
+                      "/types/Query/*"
+                    ]
+                  ]
+                }
+              ]
             }
           ]
         }
