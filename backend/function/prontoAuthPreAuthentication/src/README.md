@@ -18,23 +18,18 @@
   "callerContext": {
     "clientId": "WEB/MOBILE CLIENT ID"
   },
-  "triggerSource": "PreSignUp_SignUp",
+  "triggerSource": "PreAuthentication_Authentication",
   "request": {
     "userAttributes": {
       "name": "NAMEn",
       "family_name": "FAMILY NAME",
       "email": "EMAIL@DOMAIN.COM"
     },
-    "validationData": null,
-    "clientMetadata": {
+    "clientMetadata": null,
+    "validationData": {
       "role": "USER ROLE",
       "institutionId": "INSTITUTIONID"
     }
-  },
-  "response": {
-    "autoConfirmUser": false,
-    "autoVerifyEmail": false,
-    "autoVerifyPhone": false
   }
 }
 ```
